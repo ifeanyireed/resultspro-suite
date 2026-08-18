@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { IconArrowUpRight as ArrowUpRight } from '@tabler/icons-react';
 
 interface StatCardProps {
   title: string;

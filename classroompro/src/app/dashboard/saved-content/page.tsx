@@ -1,15 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Bookmark, 
-  BookOpen,
-  BrainCircuit,
-  Layers,
-  ChevronRight,
-  Trash2,
-  Loader2
-} from "lucide-react";
+import { IconBookmark as Bookmark, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconChevronRight as ChevronRight, IconTrash2 as Trash2, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import React, { useEffect, useState } from "react";
 import api from "@/lib/api";
 import { formatDistanceToNow } from "date-fns";

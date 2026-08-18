@@ -2,16 +2,7 @@
 
 import React, { useState } from 'react';
 import { Navbar } from '@/components/Navbar';
-import {
-  GraduationCap,
-  CheckCircle2,
-  XCircle,
-  Video,
-  Sparkles,
-  AlertTriangle,
-  Send,
-  ExternalLink,
-} from 'lucide-react';
+import { IconGraduationCap as GraduationCap, IconCheckCircle2 as CheckCircle2, IconXCircle as XCircle, IconVideo as Video, IconSparkles as Sparkles, IconAlertTriangle as AlertTriangle, IconSend as Send, IconExternalLink as ExternalLink } from '@tabler/icons-react';
 
 export default function MentorPage() {
   const [reviews, setReviews] = useState([

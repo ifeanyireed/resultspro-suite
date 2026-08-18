@@ -1,16 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from 'react';
-import { 
-  Timer, 
-  Users, 
-  Trophy, 
-  CheckCircle2, 
-  Zap,
-  Star,
-  ChevronRight,
-  Loader2
-} from 'lucide-react';
+import { IconTimer as Timer, IconUsers as Users, IconTrophy as Trophy, IconCheckCircle2 as CheckCircle2, IconZap as Zap, IconStar as Star, IconChevronRight as ChevronRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useLiveGame } from '@/hooks/useLiveGame';
 import { useAuthStore } from '@/store/useAuthStore';

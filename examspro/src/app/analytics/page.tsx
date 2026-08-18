@@ -1,17 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Target, 
-  Coins, 
-  Trophy, 
-  Calendar,
-  AlertCircle,
-  ArrowUpRight,
-  ArrowDownRight,
-  Brain,
-  Loader2
-} from 'lucide-react';
+import { IconTarget as Target, IconCoins as Coins, IconTrophy as Trophy, IconCalendar as Calendar, IconAlertCircle as AlertCircle, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconBrain as Brain, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';

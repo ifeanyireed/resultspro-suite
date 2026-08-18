@@ -1,16 +1,6 @@
 "use client";
 
-import { 
-  ShieldCheck, 
-  FileText, 
-  Video, 
-  CheckCircle2, 
-  XCircle, 
-  MoreVertical,
-  Search,
-  ExternalLink,
-  ChevronRight
-} from 'lucide-react';
+import { IconShieldCheck as ShieldCheck, IconFileText as FileText, IconVideo as Video, IconCheckCircle2 as CheckCircle2, IconXCircle as XCircle, IconMoreVertical as MoreVertical, IconSearch as Search, IconExternalLink as ExternalLink, IconChevronRight as ChevronRight } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { getTutorVerifications, updateTutorVerificationStatus } from '@/lib/platform.api';

@@ -2,7 +2,7 @@
 
 import { useEffect, Suspense } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { IconLoader2 as Loader2 } from '@tabler/icons-react';
 
 function ReferralRedirect() {
   const router = useRouter();

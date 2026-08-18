@@ -2,17 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  MessageSquare, 
-  Send,
-  Globe,
-  Twitter,
-  Instagram,
-  Facebook
-} from "lucide-react";
+import { IconMail as Mail, IconPhone as Phone, IconMapPin as MapPin, IconMessageSquare as MessageSquare, IconSend as Send, IconGlobe as Globe, IconTwitter as Twitter, IconInstagram as Instagram, IconFacebook as Facebook } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

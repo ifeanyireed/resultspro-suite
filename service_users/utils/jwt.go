@@ -7,12 +7,13 @@ import (
 	"service_users.resultspro.ng/config"
 )
 
-func GenerateAccessToken(userID string) (string, error) {
+func GenerateAccessToken(userID string, roles []string) (string, error) {
 	claims := jwt.MapClaims{
-		"sub": userID,
-		"exp": time.Now().Add(time.Hour * 24).Unix(), // 24 hours access token
-		"iat": time.Now().Unix(),
-		"iss": "service_users.resultspro.ng",
+		"sub":   userID,
+		"roles": roles,
+		"exp":   time.Now().Add(time.Hour * 24).Unix(), // 24 hours access token
+		"iat":   time.Now().Unix(),
+		"iss":   "service_users.resultspro.ng",
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

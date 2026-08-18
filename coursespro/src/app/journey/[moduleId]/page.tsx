@@ -2,17 +2,7 @@
 
 import React, { useState } from 'react';
 import { Navbar } from '@/components/Navbar';
-import {
-  PlayCircle,
-  Sparkles,
-  BookOpen,
-  HelpCircle,
-  CheckCircle2,
-  ArrowLeft,
-  ArrowRight,
-  Send,
-  Award,
-} from 'lucide-react';
+import { IconPlayCircle as PlayCircle, IconSparkles as Sparkles, IconBookOpen as BookOpen, IconHelpCircle as HelpCircle, IconCheckCircle2 as CheckCircle2, IconArrowLeft as ArrowLeft, IconArrowRight as ArrowRight, IconSend as Send, IconAward as Award } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function LessonPlayerPage() {

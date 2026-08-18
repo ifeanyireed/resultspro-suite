@@ -1,19 +1,6 @@
 "use client";
 
-import { 
-  Lock, 
-  Plus, 
-  ShieldCheck, 
-  Search, 
-  MoreVertical, 
-  Users, 
-  Eye, 
-  Edit,
-  Trash2,
-  ChevronRight,
-  ShieldAlert,
-  Loader2
-} from 'lucide-react';
+import { IconLock as Lock, IconPlus as Plus, IconShieldCheck as ShieldCheck, IconSearch as Search, IconMoreVertical as MoreVertical, IconUsers as Users, IconEye as Eye, IconEdit as Edit, IconTrash2 as Trash2, IconChevronRight as ChevronRight, IconShieldAlert as ShieldAlert, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { getPermissions } from '@/lib/superadmin.api';
 

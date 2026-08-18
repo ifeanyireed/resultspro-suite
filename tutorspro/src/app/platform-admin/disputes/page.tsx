@@ -1,18 +1,6 @@
 "use client";
 
-import { 
-  AlertCircle, 
-  MessageSquare, 
-  Search, 
-  Filter, 
-  MoreVertical, 
-  CheckCircle2, 
-  XCircle,
-  Clock,
-  ChevronRight,
-  Gavel,
-  Loader2
-} from 'lucide-react';
+import { IconAlertCircle as AlertCircle, IconMessageSquare as MessageSquare, IconSearch as Search, IconFilter as Filter, IconMoreVertical as MoreVertical, IconCheckCircle2 as CheckCircle2, IconXCircle as XCircle, IconClock as Clock, IconChevronRight as ChevronRight, IconGavel as Gavel, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { getDisputes } from '@/lib/platform.api';
 

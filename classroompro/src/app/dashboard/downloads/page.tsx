@@ -1,16 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Download, 
-  Trash2, 
-  WifiOff, 
-  CheckCircle2, 
-  FileText,
-  Clock,
-  ExternalLink,
-  ShieldCheck
-} from "lucide-react";
+import { IconDownload as Download, IconTrash2 as Trash2, IconWifiOff as WifiOff, IconCheckCircle2 as CheckCircle2, IconFileText as FileText, IconClock as Clock, IconExternalLink as ExternalLink, IconShieldCheck as ShieldCheck } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

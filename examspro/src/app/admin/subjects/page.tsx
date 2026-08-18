@@ -1,23 +1,6 @@
 "use client";
 
-import { 
-  Folder, 
-  ChevronRight, 
-  ChevronDown, 
-  Plus, 
-  BookOpen, 
-  Edit2,
-  Trash2,
-  Search,
-  Loader2,
-  AlertTriangle,
-  Eye,
-  X,
-  FileText,
-  FileUp,
-  Download,
-  Type
-} from 'lucide-react';
+import { IconFolder as Folder, IconChevronRight as ChevronRight, IconChevronDown as ChevronDown, IconPlus as Plus, IconBookOpen as BookOpen, IconEdit2 as Edit2, IconTrash2 as Trash2, IconSearch as Search, IconLoader2 as Loader2, IconAlertTriangle as AlertTriangle, IconEye as Eye, IconX as X, IconFileText as FileText, IconFileUp as FileUp, IconDownload as Download, IconType as Type } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useState, useEffect, useRef } from 'react';

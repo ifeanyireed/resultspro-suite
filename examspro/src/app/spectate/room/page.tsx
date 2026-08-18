@@ -1,17 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from 'react';
-import { 
-  Users, 
-  MessageSquare, 
-  Clock, 
-  Zap, 
-  Send,
-  ShieldCheck,
-  ChevronLeft,
-  Loader2,
-  Trophy
-} from 'lucide-react';
+import { IconUsers as Users, IconMessageSquare as MessageSquare, IconClock as Clock, IconZap as Zap, IconSend as Send, IconShieldCheck as ShieldCheck, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2, IconTrophy as Trophy } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';

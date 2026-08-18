@@ -1,21 +1,6 @@
 "use client";
 
-import { 
-  ArrowLeft, 
-  BookOpen, 
-  Share2, 
-  Download, 
-  BrainCircuit, 
-  Layers,
-  ChevronRight,
-  ChevronLeft,
-  CheckCircle2,
-  Clock,
-  Eye,
-  Loader2,
-  Bookmark,
-  BookmarkCheck
-} from "lucide-react";
+import { IconArrowLeft as ArrowLeft, IconBookOpen as BookOpen, IconShare2 as Share2, IconDownload as Download, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconCheckCircle2 as CheckCircle2, IconClock as Clock, IconEye as Eye, IconLoader2 as Loader2, IconBookmark as Bookmark, IconBookmarkCheck as BookmarkCheck } from '@tabler/icons-react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";

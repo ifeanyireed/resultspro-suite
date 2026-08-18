@@ -1,17 +1,6 @@
 "use client";
 
-import { 
-  Users, 
-  LayoutDashboard,
-  Clock,
-  LineChart,
-  MessageSquare,
-  Bell,
-  CreditCard,
-  HelpCircle,
-  Settings,
-  LogOut
-} from 'lucide-react';
+import { IconUsers as Users, IconLayoutDashboard as LayoutDashboard, IconClock as Clock, IconLineChart as LineChart, IconMessageSquare as MessageSquare, IconBell as Bell, IconCreditCard as CreditCard, IconHelpCircle as HelpCircle, IconSettings as Settings, IconLogOut as LogOut } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Logo from '../Logo';

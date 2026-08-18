@@ -1,20 +1,6 @@
 "use client";
 
-import { 
-  ScrollText, 
-  Search, 
-  Filter, 
-  Download, 
-  Calendar, 
-  User, 
-  ShieldAlert, 
-  ShieldCheck,
-  ChevronRight,
-  MoreVertical,
-  Clock,
-  ExternalLink,
-  Loader2
-} from 'lucide-react';
+import { IconScrollText as ScrollText, IconSearch as Search, IconFilter as Filter, IconDownload as Download, IconCalendar as Calendar, IconUser as User, IconShieldAlert as ShieldAlert, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconMoreVertical as MoreVertical, IconClock as Clock, IconExternalLink as ExternalLink, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { getAuditLogs } from '@/lib/superadmin.api';
 

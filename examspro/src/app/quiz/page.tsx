@@ -3,19 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { 
-  Timer, 
-  Coins, 
-  ChevronRight, 
-  X,
-  AlertCircle,
-  CheckCircle2,
-  Brain,
-  Loader2,
-  Check,
-  Zap,
-  Sword
-} from 'lucide-react';
+import { IconTimer as Timer, IconCoins as Coins, IconChevronRight as ChevronRight, IconX as X, IconAlertCircle as AlertCircle, IconCheckCircle2 as CheckCircle2, IconBrain as Brain, IconLoader2 as Loader2, IconCheck as Check, IconZap as Zap, IconSword as Sword } from '@tabler/icons-react';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import api from '@/lib/api';

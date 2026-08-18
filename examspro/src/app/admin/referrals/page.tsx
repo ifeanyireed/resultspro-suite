@@ -1,17 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { 
-  Users, 
-  TrendingUp, 
-  Coins, 
-  Download,
-  MousePointer2,
-  Loader2,
-  Clock,
-  CheckCircle2,
-  AlertCircle
-} from 'lucide-react';
+import { IconUsers as Users, IconTrendingUp as TrendingUp, IconCoins as Coins, IconDownload as Download, IconMousePointer2 as MousePointer2, IconLoader2 as Loader2, IconClock as Clock, IconCheckCircle2 as CheckCircle2, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import AdminHeader from '@/components/admin/AdminHeader';
 import api from '@/lib/api';

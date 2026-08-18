@@ -2,14 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  TrendingUp, 
-  ChevronRight,
-  Clock,
-  AlertCircle,
-  Award,
-  ChevronLeft
-} from "lucide-react";
+import { IconTrendingUp as TrendingUp, IconChevronRight as ChevronRight, IconClock as Clock, IconAlertCircle as AlertCircle, IconAward as Award, IconChevronLeft as ChevronLeft } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";

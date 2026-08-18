@@ -1,16 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Trophy, 
-  Users, 
-  Timer, 
-  ChevronRight, 
-  Sword,
-  Target,
-  Zap,
-  Info
-} from 'lucide-react';
+import { IconTrophy as Trophy, IconUsers as Users, IconTimer as Timer, IconChevronRight as ChevronRight, IconSword as Sword, IconTarget as Target, IconZap as Zap, IconInfo as Info } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
 export default function TournamentPage() {

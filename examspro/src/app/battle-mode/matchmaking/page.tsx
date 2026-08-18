@@ -2,21 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  Sword, 
-  Users, 
-  Shield, 
-  Zap, 
-  Coins, 
-  ChevronRight,
-  User,
-  Search,
-  Sparkles,
-  Loader2,
-  Copy,
-  Check,
-  Trophy
-} from 'lucide-react';
+import { IconSword as Sword, IconUsers as Users, IconShield as Shield, IconZap as Zap, IconCoins as Coins, IconChevronRight as ChevronRight, IconUser as User, IconSearch as Search, IconSparkles as Sparkles, IconLoader2 as Loader2, IconCopy as Copy, IconCheck as Check, IconTrophy as Trophy } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useBattle } from '@/hooks/useBattle';
 import { useAuthStore } from '@/store/useAuthStore';

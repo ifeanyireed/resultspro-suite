@@ -22,7 +22,7 @@ export function Badge({ status }: BadgeProps) {
 
   return (
     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${colorClasses}`}>
-      {status.replace(/_/g, ' ')}
+      {s === 'PENDING_VERIFICATION' ? 'PENDING' : status.replace(/_/g, ' ')}
     </span>
   );
 }

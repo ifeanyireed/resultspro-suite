@@ -1,17 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  BookOpen, 
-  BrainCircuit, 
-  Layers, 
-  ChevronRight,
-  Play,
-  CheckCircle2,
-  Clock,
-  ArrowLeft,
-  Download
-} from "lucide-react";
+import { IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconChevronRight as ChevronRight, IconPlay as Play, IconCheckCircle2 as CheckCircle2, IconClock as Clock, IconArrowLeft as ArrowLeft, IconDownload as Download } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";

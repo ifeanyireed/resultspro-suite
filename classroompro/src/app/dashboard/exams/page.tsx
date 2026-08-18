@@ -1,21 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  GraduationCap, 
-  Search,
-  Filter,
-  ChevronRight,
-  Clock,
-  Calendar,
-  AlertCircle,
-  Loader2,
-  ChevronLeft,
-  CheckCircle,
-  Trophy,
-  Activity,
-  HelpCircle
-} from "lucide-react";
+import { IconGraduationCap as GraduationCap, IconSearch as Search, IconFilter as Filter, IconChevronRight as ChevronRight, IconClock as Clock, IconCalendar as Calendar, IconAlertCircle as AlertCircle, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconCheckCircle as CheckCircle, IconTrophy as Trophy, IconActivity as Activity, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";

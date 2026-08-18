@@ -3,27 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
-import {
-  LayoutGrid,
-  ClipboardList,
-  Phone,
-  ShieldCheck,
-  Camera,
-  CreditCard,
-  ArrowRight,
-  User,
-  School,
-  Handshake,
-  GraduationCap,
-  Calendar,
-  Layers,
-  Users,
-  Wallet,
-  Share2,
-  Key,
-  Search,
-  BookOpen
-} from 'lucide-react';
+import { IconLayoutGrid as LayoutGrid, IconClipboardList as ClipboardList, IconPhone as Phone, IconShieldCheck as ShieldCheck, IconCamera as Camera, IconCreditCard as CreditCard, IconArrowRight as ArrowRight, IconUser as User, IconSchool as School, IconHandshake as Handshake, IconGraduationCap as GraduationCap, IconCalendar as Calendar, IconLayers as Layers, IconUsers as Users, IconWallet as Wallet, IconShare2 as Share2, IconKey as Key, IconSearch as Search, IconBookOpen as BookOpen } from '@tabler/icons-react';
 
 const defaultSteps = [
   { id: 'ROLE', icon: LayoutGrid, label: 'ROLE' },

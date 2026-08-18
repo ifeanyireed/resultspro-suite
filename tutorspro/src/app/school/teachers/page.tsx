@@ -1,16 +1,6 @@
 "use client";
 
-import { 
-  Users, 
-  UserPlus, 
-  Search, 
-  MoreVertical, 
-  Mail, 
-  ShieldCheck,
-  Trash2,
-  ExternalLink,
-  X
-} from 'lucide-react';
+import { IconUsers as Users, IconUserPlus as UserPlus, IconSearch as Search, IconMoreVertical as MoreVertical, IconMail as Mail, IconShieldCheck as ShieldCheck, IconTrash2 as Trash2, IconExternalLink as ExternalLink, IconX as X } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { getSchoolTeachers, inviteTeacher, InviteTeacherData } from '@/lib/school.api';

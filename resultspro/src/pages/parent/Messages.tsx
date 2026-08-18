@@ -1,11 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Search, 
-  Send, 
-  MessageCircle, 
-  ArrowLeft,
-  Loader2
-} from 'lucide-react';
+import { IconSearch as Search, IconSend as Send, IconMessageCircle as MessageCircle, IconArrowLeft as ArrowLeft, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { axiosInstance as axios } from '@/lib/axiosConfig';
 import { useToast } from '@/hooks/use-toast';
 import { formatDistanceToNow } from 'date-fns';

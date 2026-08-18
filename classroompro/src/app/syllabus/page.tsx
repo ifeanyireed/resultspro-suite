@@ -4,24 +4,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { 
-  Search, 
-  BookOpen, 
-  Loader2,
-  ChevronRight,
-  ChevronLeft,
-  CheckCircle2,
-  Circle,
-  Calendar,
-  Layers,
-  BrainCircuit,
-  Lock,
-  ArrowRight,
-  Clock,
-  Sparkles,
-  ChevronDown,
-  ChevronUp
-} from "lucide-react";
+import { IconSearch as Search, IconBookOpen as BookOpen, IconLoader2 as Loader2, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconCheckCircle2 as CheckCircle2, IconCircle as Circle, IconCalendar as Calendar, IconLayers as Layers, IconBrainCircuit as BrainCircuit, IconLock as Lock, IconArrowRight as ArrowRight, IconClock as Clock, IconSparkles as Sparkles, IconChevronDown as ChevronDown, IconChevronUp as ChevronUp } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 

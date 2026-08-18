@@ -7,7 +7,7 @@ import {
   ArrowUp,
   ArrowDown,
 } from '@/lib/hugeicons-compat';
-import { TrendingUp, MessageSquare } from 'lucide-react';
+import { IconTrendingUp as TrendingUp, IconMessageSquare as MessageSquare } from '@tabler/icons-react';
 import axios from 'axios';
 
 interface SubjectPerformance {

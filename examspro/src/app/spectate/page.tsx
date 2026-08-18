@@ -2,19 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
-import { 
-  Eye, 
-  Users, 
-  Play, 
-  Search, 
-  ChevronRight, 
-  Monitor, 
-  ShieldCheck,
-  Globe,
-  Clock,
-  Zap,
-  Loader2
-} from 'lucide-react';
+import { IconEye as Eye, IconUsers as Users, IconPlay as Play, IconSearch as Search, IconChevronRight as ChevronRight, IconMonitor as Monitor, IconShieldCheck as ShieldCheck, IconGlobe as Globe, IconClock as Clock, IconZap as Zap, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import api from '@/lib/api';

@@ -1,6 +1,6 @@
 "use client";
 
-import { WifiOff, RefreshCcw, BookOpen, BrainCircuit, Home } from "lucide-react";
+import { IconWifiOff as WifiOff, IconRefreshCcw as RefreshCcw, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconHome as Home } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Logo from "@/components/Logo";

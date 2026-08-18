@@ -1,4 +1,4 @@
-import { Video, Mic, MessageSquare, Hand, Layout, Settings, LogOut, Users, Share, Maximize, Play, Square, Loader2 } from 'lucide-react';
+import { IconVideo as Video, IconMic as Mic, IconMessageSquare as MessageSquare, IconHand as Hand, IconLayout as Layout, IconSettings as Settings, IconLogOut as LogOut, IconUsers as Users, IconShare as Share, IconMaximize as Maximize, IconPlay as Play, IconSquare as Square, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';

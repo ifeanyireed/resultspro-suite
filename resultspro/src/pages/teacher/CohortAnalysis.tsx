@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Users, Award } from '@/lib/hugeicons-compat';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { IconTrendingUp as TrendingUp, IconTrendingDown as TrendingDown } from '@tabler/icons-react';
 import { axiosInstance as axios } from '@/lib/axiosConfig';
 
 interface CohortTier {

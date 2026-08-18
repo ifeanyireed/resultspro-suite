@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { AlertTriangle, Send } from '@/lib/hugeicons-compat';
-import { TrendingDown } from 'lucide-react';
+import { IconTrendingDown as TrendingDown } from '@tabler/icons-react';
 import { axiosInstance as axios } from '@/lib/axiosConfig';
 
 interface AtRiskStudent {

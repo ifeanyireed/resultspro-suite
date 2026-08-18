@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { IconArrowLeft as ArrowLeft, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useState, useEffect, Suspense } from 'react';
 import api from '@/lib/api';

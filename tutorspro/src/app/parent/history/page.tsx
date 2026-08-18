@@ -2,19 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { 
-  History, 
-  Calendar, 
-  Search, 
-  Filter, 
-  Play, 
-  FileText, 
-  MoreVertical,
-  User,
-  CheckCircle2,
-  XCircle,
-  Loader2
-} from 'lucide-react';
+import { IconHistory as History, IconCalendar as Calendar, IconSearch as Search, IconFilter as Filter, IconPlay as Play, IconFileText as FileText, IconMoreVertical as MoreVertical, IconUser as User, IconCheckCircle2 as CheckCircle2, IconXCircle as XCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 

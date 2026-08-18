@@ -1,19 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  User, 
-  Bell, 
-  Shield, 
-  CreditCard, 
-  LogOut, 
-  Smartphone, 
-  Globe,
-  Check,
-  ChevronRight,
-  Camera,
-  Loader2
-} from 'lucide-react';
+import { IconUser as User, IconBell as Bell, IconShield as Shield, IconCreditCard as CreditCard, IconLogOut as LogOut, IconSmartphone as Smartphone, IconGlobe as Globe, IconCheck as Check, IconChevronRight as ChevronRight, IconCamera as Camera, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';

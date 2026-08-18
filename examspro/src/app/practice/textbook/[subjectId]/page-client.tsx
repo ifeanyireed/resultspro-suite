@@ -1,17 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from 'next/navigation';
-import { 
-  ArrowLeft, 
-  Loader2,
-  AlertCircle,
-  Book,
-  Plus,
-  Minus,
-  Maximize,
-  Type,
-  FileText
-} from 'lucide-react';
+import { IconArrowLeft as ArrowLeft, IconLoader2 as Loader2, IconAlertCircle as AlertCircle, IconBook as Book, IconPlus as Plus, IconMinus as Minus, IconMaximize as Maximize, IconType as Type, IconFileText as FileText } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';
 

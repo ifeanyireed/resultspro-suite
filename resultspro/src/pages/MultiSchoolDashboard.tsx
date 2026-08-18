@@ -1,18 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Building2,
-  Users,
-  TrendingUp,
-  AlertTriangle,
-  Download,
-  Filter,
-  Search,
-  ChevronRight,
-  CheckCircle,
-  Clock,
-  XCircle,
-  DollarSign,
-} from 'lucide-react';
+import { IconBuilding2 as Building2, IconUsers as Users, IconTrendingUp as TrendingUp, IconAlertTriangle as AlertTriangle, IconDownload as Download, IconFilter as Filter, IconSearch as Search, IconChevronRight as ChevronRight, IconCheckCircle as CheckCircle, IconClock as Clock, IconXCircle as XCircle, IconDollarSign as DollarSign } from '@tabler/icons-react';
 import axios from '@/lib/axiosConfig';
 import { useToast } from '@/hooks/use-toast';
 

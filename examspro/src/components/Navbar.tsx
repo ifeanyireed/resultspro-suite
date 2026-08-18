@@ -6,7 +6,7 @@ import Logo from './Logo';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';
-import { Bell, ChevronDown, Zap, Sword, Brain, BookText, Home, User, Trophy, LayoutDashboard, ShoppingBag } from 'lucide-react';
+import { IconBell as Bell, IconChevronDown as ChevronDown, IconZap as Zap, IconSword as Sword, IconBrain as Brain, IconBookText as BookText, IconHome as Home, IconUser as User, IconTrophy as Trophy, IconLayoutDashboard as LayoutDashboard, IconShoppingBag as ShoppingBag } from '@tabler/icons-react';
 import { getUnreadCount } from '@/lib/notifications.api';
 
 const Navbar = () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect } from 'react';
-import { Bold, Italic, List, ListOrdered, Heading1, Heading2, Quote, Undo, Redo, Link as LinkIcon } from 'lucide-react';
+import { IconBold as Bold, IconItalic as Italic, IconList as List, IconListOrdered as ListOrdered, IconHeading1 as Heading1, IconHeading2 as Heading2, IconQuote as Quote, IconUndo as Undo, IconRedo as Redo, IconLink as LinkIcon } from '@tabler/icons-react';
 
 interface WYSIWYGEditorProps {
   value: string;

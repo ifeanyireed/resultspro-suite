@@ -2,18 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import {
-  ArrowLeft,
-  BookOpen,
-  ChevronRight,
-  Sparkles,
-  Book,
-  ChevronDown,
-  ChevronUp,
-  Maximize2,
-  Minimize2,
-  FileText
-} from 'lucide-react';
+import { IconArrowLeft as ArrowLeft, IconBookOpen as BookOpen, IconChevronRight as ChevronRight, IconSparkles as Sparkles, IconBook as Book, IconChevronDown as ChevronDown, IconChevronUp as ChevronUp, IconMaximize2 as Maximize2, IconMinimize2 as Minimize2, IconFileText as FileText } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';

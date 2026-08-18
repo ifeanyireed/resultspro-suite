@@ -1,16 +1,6 @@
 "use client";
 
-import { 
-  ArrowLeft, 
-  RotateCcw,
-  CheckCircle,
-  XCircle,
-  HelpCircle,
-  Layers,
-  Loader2,
-  Trophy,
-  Zap
-} from "lucide-react";
+import { IconArrowLeft as ArrowLeft, IconRotateCcw as RotateCcw, IconCheckCircle as CheckCircle, IconXCircle as XCircle, IconHelpCircle as HelpCircle, IconLayers as Layers, IconLoader2 as Loader2, IconTrophy as Trophy, IconZap as Zap } from '@tabler/icons-react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";

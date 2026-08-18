@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Search, Bell, Settings, HelpCircle, LogOut } from 'lucide-react';
+import { IconSearch as Search, IconBell as Bell, IconSettings as Settings, IconHelpCircle as HelpCircle, IconLogOut as LogOut } from '@tabler/icons-react';
 import Image from 'next/image';
 
 export interface SidebarLink {

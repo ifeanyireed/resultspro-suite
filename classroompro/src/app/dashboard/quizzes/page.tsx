@@ -1,19 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  BrainCircuit, 
-  Clock, 
-  Trophy, 
-  Search, 
-  Play,
-  Loader2,
-  ChevronLeft,
-  ChevronRight,
-  Activity,
-  CheckCircle,
-  HelpCircle
-} from "lucide-react";
+import { IconBrainCircuit as BrainCircuit, IconClock as Clock, IconTrophy as Trophy, IconSearch as Search, IconPlay as Play, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconActivity as Activity, IconCheckCircle as CheckCircle, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";

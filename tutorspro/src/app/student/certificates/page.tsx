@@ -1,17 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Trophy, 
-  Download, 
-  ExternalLink, 
-  Award, 
-  ShieldCheck, 
-  Calendar,
-  Search,
-  ChevronRight,
-  Loader2
-} from 'lucide-react';
+import { IconTrophy as Trophy, IconDownload as Download, IconExternalLink as ExternalLink, IconAward as Award, IconShieldCheck as ShieldCheck, IconCalendar as Calendar, IconSearch as Search, IconChevronRight as ChevronRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { RoleGate } from '@/components/RoleGate';
 import api from '@/lib/api';

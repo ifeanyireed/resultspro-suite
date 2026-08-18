@@ -2,21 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { 
-  Plus, 
-  FileText, 
-  Paperclip, 
-  Calendar, 
-  CheckCircle2, 
-  MoreVertical,
-  ChevronRight,
-  BookOpen,
-  Target,
-  Clock,
-  Save,
-  Trash2,
-  Loader2
-} from 'lucide-react';
+import { IconPlus as Plus, IconFileText as FileText, IconPaperclip as Paperclip, IconCalendar as Calendar, IconCheckCircle2 as CheckCircle2, IconMoreVertical as MoreVertical, IconChevronRight as ChevronRight, IconBookOpen as BookOpen, IconTarget as Target, IconClock as Clock, IconSave as Save, IconTrash2 as Trash2, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 

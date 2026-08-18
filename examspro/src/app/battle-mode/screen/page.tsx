@@ -2,18 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  Timer, 
-  Coins, 
-  Sword, 
-  Zap, 
-  Target,
-  CheckCircle2,
-  AlertCircle,
-  Trophy,
-  Loader2,
-  Flag
-} from 'lucide-react';
+import { IconTimer as Timer, IconCoins as Coins, IconSword as Sword, IconZap as Zap, IconTarget as Target, IconCheckCircle2 as CheckCircle2, IconAlertCircle as AlertCircle, IconTrophy as Trophy, IconLoader2 as Loader2, IconFlag as Flag } from '@tabler/icons-react';
 import { useBattle } from '@/hooks/useBattle';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Button } from '@/components/ui/button';

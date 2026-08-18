@@ -2,17 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Navbar from '@/components/Navbar';
-import { 
-  Coins, 
-  Zap, 
-  ShieldCheck, 
-  History, 
-  Sparkles,
-  Gift,
-  Loader2,
-  Info,
-  CheckCircle2
-} from 'lucide-react';
+import { IconCoins as Coins, IconZap as Zap, IconShieldCheck as ShieldCheck, IconHistory as History, IconSparkles as Sparkles, IconGift as Gift, IconLoader2 as Loader2, IconInfo as Info, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';

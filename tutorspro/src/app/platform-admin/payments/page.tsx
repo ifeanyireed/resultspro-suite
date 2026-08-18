@@ -1,18 +1,6 @@
 "use client";
 
-import { 
-  DollarSign, 
-  ArrowUpRight, 
-  ArrowDownRight, 
-  Search, 
-  Filter, 
-  Download,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  MoreVertical,
-  ChevronRight
-} from 'lucide-react';
+import { IconDollarSign as DollarSign, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconSearch as Search, IconFilter as Filter, IconDownload as Download, IconCheckCircle2 as CheckCircle2, IconClock as Clock, IconXCircle as XCircle, IconMoreVertical as MoreVertical, IconChevronRight as ChevronRight } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { getPayments, updatePaymentStatus } from '@/lib/platform.api';

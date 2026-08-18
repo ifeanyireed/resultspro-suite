@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from 'react';
-import { X, Zap, Trophy, BarChart3, Chrome, ArrowRight, Loader2 } from 'lucide-react';
+import { IconX as X, IconZap as Zap, IconTrophy as Trophy, IconBarChart3 as BarChart3, IconChrome as Chrome, IconArrowRight as ArrowRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useGoogleLogin } from '@react-oauth/google';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';

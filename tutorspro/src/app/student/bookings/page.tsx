@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { Calendar, Clock, User, ChevronRight, CheckCircle2, Wallet, Plus, Loader2 } from 'lucide-react';
+import { IconCalendar as Calendar, IconClock as Clock, IconUser as User, IconChevronRight as ChevronRight, IconCheckCircle2 as CheckCircle2, IconWallet as Wallet, IconPlus as Plus, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';

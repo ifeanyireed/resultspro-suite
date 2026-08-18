@@ -1,13 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  TrendingUp, 
-  Target, 
-  Award,
-  ArrowLeft,
-  Calendar
-} from "lucide-react";
+import { IconTrendingUp as TrendingUp, IconTarget as Target, IconAward as Award, IconArrowLeft as ArrowLeft, IconCalendar as Calendar } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";

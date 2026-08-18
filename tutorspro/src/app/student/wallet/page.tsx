@@ -1,18 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Wallet, 
-  Plus, 
-  ArrowUpRight, 
-  ArrowDownLeft, 
-  CreditCard, 
-  History,
-  TrendingUp,
-  ShieldCheck,
-  ChevronRight,
-  Loader2
-} from 'lucide-react';
+import { IconWallet as Wallet, IconPlus as Plus, IconArrowUpRight as ArrowUpRight, IconArrowDownLeft as ArrowDownLeft, IconCreditCard as CreditCard, IconHistory as History, IconTrendingUp as TrendingUp, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';

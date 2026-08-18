@@ -1,7 +1,7 @@
 "use client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Mail, Phone, MapPin, Send, MessageCircle, Loader2 } from "lucide-react";
+import { IconMail as Mail, IconPhone as Phone, IconMapPin as MapPin, IconSend as Send, IconMessageCircle as MessageCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Users, AlertTriangle, Target } from '@/lib/hugeicons-compat';
-import { TrendingUp } from 'lucide-react';
+import { IconTrendingUp as TrendingUp } from '@tabler/icons-react';
 import axios from 'axios';
 
 interface HolisticDevelopmentData {

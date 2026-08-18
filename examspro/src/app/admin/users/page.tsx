@@ -1,16 +1,6 @@
 "use client";
 
-import { 
-  Search, 
-  Filter, 
-  MoreVertical, 
-  UserPlus,
-  Loader2,
-  Upload,
-  Download,
-  X,
-  CheckCircle2
-} from 'lucide-react';
+import { IconSearch as Search, IconFilter as Filter, IconMoreVertical as MoreVertical, IconUserPlus as UserPlus, IconLoader2 as Loader2, IconUpload as Upload, IconDownload as Download, IconX as X, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useState, useEffect, useRef } from 'react';

@@ -1,18 +1,6 @@
 "use client";
 
-import { 
-  Users, 
-  Search, 
-  Filter, 
-  MoreVertical, 
-  ShieldCheck, 
-  ShieldAlert, 
-  UserMinus,
-  Eye,
-  Mail,
-  Building2,
-  GraduationCap
-} from 'lucide-react';
+import { IconUsers as Users, IconSearch as Search, IconFilter as Filter, IconMoreVertical as MoreVertical, IconShieldCheck as ShieldCheck, IconShieldAlert as ShieldAlert, IconUserMinus as UserMinus, IconEye as Eye, IconMail as Mail, IconBuilding2 as Building2, IconGraduationCap as GraduationCap } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { getUsers, updateUserStatus } from '@/lib/platform.api';

@@ -1,18 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Send, 
-  Paperclip, 
-  Search, 
-  MoreVertical, 
-  Phone, 
-  Video, 
-  Info,
-  ChevronLeft,
-  CheckCheck,
-  Loader2
-} from 'lucide-react';
+import { IconSend as Send, IconPaperclip as Paperclip, IconSearch as Search, IconMoreVertical as MoreVertical, IconPhone as Phone, IconVideo as Video, IconInfo as Info, IconChevronLeft as ChevronLeft, IconCheckCheck as CheckCheck, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';

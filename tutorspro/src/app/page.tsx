@@ -3,7 +3,7 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
-import { ChevronRight, Brain, Users, Target, Trophy, Sparkles, ShieldCheck, Zap, Star, Loader2 } from 'lucide-react';
+import { IconChevronRight as ChevronRight, IconBrain as Brain, IconUsers as Users, IconTarget as Target, IconTrophy as Trophy, IconSparkles as Sparkles, IconShieldCheck as ShieldCheck, IconZap as Zap, IconStar as Star, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';

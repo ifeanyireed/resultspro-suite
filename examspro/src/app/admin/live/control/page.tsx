@@ -1,19 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from 'react';
-import { 
-  Play, 
-  Square, 
-  MessageSquare, 
-  Activity,
-  BarChart2,
-  AlertCircle,
-  ArrowRight,
-  ShieldCheck,
-  Loader2,
-  UserX,
-  Trophy
-} from 'lucide-react';
+import { IconPlay as Play, IconSquare as Square, IconMessageSquare as MessageSquare, IconActivity as Activity, IconBarChart2 as BarChart2, IconAlertCircle as AlertCircle, IconArrowRight as ArrowRight, IconShieldCheck as ShieldCheck, IconLoader2 as Loader2, IconUserX as UserX, IconTrophy as Trophy } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import AdminHeader from '@/components/admin/AdminHeader';

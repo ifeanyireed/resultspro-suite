@@ -1,20 +1,6 @@
 "use client";
 
-import { 
-  Database, 
-  HardDrive, 
-  ShieldCheck, 
-  RefreshCw, 
-  Activity, 
-  Search, 
-  ChevronRight, 
-  ArrowUpRight,
-  Clock,
-  Layers,
-  Archive,
-  Trash2,
-  Loader2
-} from 'lucide-react';
+import { IconDatabase as Database, IconHardDrive as HardDrive, IconShieldCheck as ShieldCheck, IconRefreshCw as RefreshCw, IconActivity as Activity, IconSearch as Search, IconChevronRight as ChevronRight, IconArrowUpRight as ArrowUpRight, IconClock as Clock, IconLayers as Layers, IconArchive as Archive, IconTrash2 as Trash2, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { getInfrastructure } from '@/lib/superadmin.api';
 

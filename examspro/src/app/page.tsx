@@ -1,7 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
-import { ChevronRight, Coins, Target, Users, Trophy } from 'lucide-react';
+import { IconChevronRight as ChevronRight, IconCoins as Coins, IconTarget as Target, IconUsers as Users, IconTrophy as Trophy } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function Home() {

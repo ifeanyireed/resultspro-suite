@@ -1,14 +1,6 @@
 "use client";
 
-import { 
-  Palette, 
-  Upload, 
-  Globe, 
-  Layout, 
-  Type, 
-  CheckCircle2,
-  Image as ImageIcon
-} from 'lucide-react';
+import { IconPalette as Palette, IconUpload as Upload, IconGlobe as Globe, IconLayout as Layout, IconType as Type, IconCheckCircle2 as CheckCircle2, IconImage as ImageIcon } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { getBranding, updateBranding } from '@/lib/school.api';

@@ -1,13 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  BookOpen, 
-  Plus, 
-  Search, 
-  MoreVertical, 
-  Filter
-} from "lucide-react";
+import { IconBookOpen as BookOpen, IconPlus as Plus, IconSearch as Search, IconMoreVertical as MoreVertical, IconFilter as Filter } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";

@@ -1,18 +1,6 @@
 "use client";
 
-import { 
-  Activity, 
-  Server, 
-  Cpu, 
-  Database, 
-  Zap, 
-  ShieldCheck, 
-  AlertTriangle,
-  RefreshCw,
-  Search,
-  ChevronRight,
-  Loader2
-} from 'lucide-react';
+import { IconActivity as Activity, IconServer as Server, IconCpu as Cpu, IconDatabase as Database, IconZap as Zap, IconShieldCheck as ShieldCheck, IconAlertTriangle as AlertTriangle, IconRefreshCw as RefreshCw, IconSearch as Search, IconChevronRight as ChevronRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { getSystemHealth } from '@/lib/superadmin.api';
 

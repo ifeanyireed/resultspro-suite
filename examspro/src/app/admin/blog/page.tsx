@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
-import { Plus, Edit2, Trash2, Eye, EyeOff, Search, Loader2, FileText, Calendar, User, FolderPlus, X, MessageSquare, CheckCircle } from "lucide-react";
+import { IconPlus as Plus, IconEdit2 as Edit2, IconTrash2 as Trash2, IconEye as Eye, IconEyeOff as EyeOff, IconSearch as Search, IconLoader2 as Loader2, IconFileText as FileText, IconCalendar as Calendar, IconUser as User, IconFolderPlus as FolderPlus, IconX as X, IconMessageSquare as MessageSquare, IconCheckCircle as CheckCircle } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
 import Link from "next/link";

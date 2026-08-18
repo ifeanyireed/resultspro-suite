@@ -2,18 +2,7 @@
 
 import React, { useState } from 'react';
 import { Navbar } from '@/components/Navbar';
-import {
-  BookOpen,
-  CheckCircle2,
-  Clock,
-  Upload,
-  Link2,
-  MessageSquare,
-  Star,
-  Sparkles,
-  ArrowRight,
-  ExternalLink,
-} from 'lucide-react';
+import { IconBookOpen as BookOpen, IconCheckCircle2 as CheckCircle2, IconClock as Clock, IconUpload as Upload, IconLink2 as Link2, IconMessageSquare as MessageSquare, IconStar as Star, IconSparkles as Sparkles, IconArrowRight as ArrowRight, IconExternalLink as ExternalLink } from '@tabler/icons-react';
 import { mockProjects } from '@/lib/data';
 
 export default function ProjectsPage() {

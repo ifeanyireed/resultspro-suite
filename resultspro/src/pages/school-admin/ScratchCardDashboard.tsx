@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, AlertCircle, Gift, Clock } from 'lucide-react';
+import { IconTrendingUp as TrendingUp, IconAlertCircle as AlertCircle, IconGift as Gift, IconClock as Clock } from '@tabler/icons-react';
 
 interface DashboardStats {
   totalAllocated: number;

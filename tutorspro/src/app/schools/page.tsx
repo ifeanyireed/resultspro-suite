@@ -2,7 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Check, ShieldCheck, BarChart3, Users, Layout, Zap, ArrowRight, Loader2 } from "lucide-react";
+import { IconCheck as Check, IconShieldCheck as ShieldCheck, IconBarChart3 as BarChart3, IconUsers as Users, IconLayout as Layout, IconZap as Zap, IconArrowRight as ArrowRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import api from "@/lib/api";

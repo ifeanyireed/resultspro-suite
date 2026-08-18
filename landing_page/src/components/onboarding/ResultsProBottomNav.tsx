@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, ArrowLeft } from 'lucide-react';
+import { IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft } from '@tabler/icons-react';
 
 interface Props {
   href?: string;

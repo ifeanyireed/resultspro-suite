@@ -1,13 +1,6 @@
 "use client";
 
-import { 
-  Users, 
-  ShieldCheck,
-  HelpCircle,
-  Eye,
-  MessageSquare,
-  Loader2
-} from 'lucide-react';
+import { IconUsers as Users, IconShieldCheck as ShieldCheck, IconHelpCircle as HelpCircle, IconEye as Eye, IconMessageSquare as MessageSquare, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useSearchParams } from 'next/navigation';

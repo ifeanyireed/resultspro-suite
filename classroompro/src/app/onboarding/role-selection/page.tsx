@@ -3,15 +3,7 @@
 import { useState } from "react";
 import { AuthLayout } from "@/components/AuthLayout";
 import { Button } from "@/components/ui/button";
-import { 
-  GraduationCap, 
-  School, 
-  UserCircle, 
-  ShieldCheck, 
-  Users,
-  ArrowRight,
-  Heart
-} from "lucide-react";
+import { IconGraduationCap as GraduationCap, IconSchool as School, IconUserCircle as UserCircle, IconShieldCheck as ShieldCheck, IconUsers as Users, IconArrowRight as ArrowRight, IconHeart as Heart } from '@tabler/icons-react';
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 

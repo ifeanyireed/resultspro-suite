@@ -1,17 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Trophy, 
-  CheckCircle2, 
-  XCircle, 
-  Clock, 
-  ArrowRight, 
-  RotateCcw,
-  Share2,
-  ChevronLeft,
-  Loader2
-} from "lucide-react";
+import { IconTrophy as Trophy, IconCheckCircle2 as CheckCircle2, IconXCircle as XCircle, IconClock as Clock, IconArrowRight as ArrowRight, IconRotateCcw as RotateCcw, IconShare2 as Share2, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";

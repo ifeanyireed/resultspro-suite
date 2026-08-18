@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
-import { Check } from 'lucide-react';
+import { IconCheck as Check } from '@tabler/icons-react';
 
 const PSYCHOMOTOR_SKILLS = [
   'Handling of Tools',

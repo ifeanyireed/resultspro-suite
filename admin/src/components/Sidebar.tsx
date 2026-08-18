@@ -2,23 +2,9 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import {
-  LayoutDashboard,
-  Building2,
-  CheckCircle2,
-  Users,
-  CreditCard,
-  Briefcase,
-  FileCheck2,
-  Sparkles,
-  BookOpen,
-  GraduationCap,
-  FileText,
-  Mail,
-  Settings,
-  ShieldCheck,
-} from 'lucide-react';
+import { LayoutDashboard, Building2, CheckCircle2, Users, CreditCard, Briefcase, FileCheck2, Sparkles, BookOpen, GraduationCap, FileText, Mail, Settings, ShieldCheck } from 'lucide-react';
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -61,15 +47,13 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 min-h-screen border-r border-slate-800">
+    <aside className="w-64 bg-white text-slate-600 flex flex-col flex-shrink-0 min-h-screen border-r border-slate-200 shadow-sm z-10">
       {/* Brand Header */}
-      <div className="h-16 flex items-center px-6 border-b border-slate-800 space-x-3">
-        <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center font-black text-white text-lg shadow-md shadow-blue-500/30">
-          R
-        </div>
+      <div className="h-16 flex items-center px-6 border-b border-slate-100 space-x-3">
+        <Image src="/logo.png" alt="ResultsPRO Suite Logo" width={48} height={48} className="object-contain" priority />
         <div>
-          <h1 className="font-bold text-white tracking-tight text-sm">ResultsPRO Suite</h1>
-          <p className="text-[11px] text-blue-400 font-semibold tracking-wider uppercase">Admin Control Hub</p>
+          <h1 className="font-bold text-slate-900 tracking-tight text-sm">ResultsPRO Suite</h1>
+          <p className="text-[11px] text-blue-600 font-bold tracking-wider uppercase">Admin Control Hub</p>
         </div>
       </div>
 
@@ -88,19 +72,19 @@ export function Sidebar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
                       isActive
-                        ? 'bg-blue-600 text-white font-semibold shadow-sm'
-                        : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                        ? 'bg-blue-50 text-blue-700 font-bold'
+                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                     }`}
                   >
                     <div className="flex items-center space-x-2.5">
-                      <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+                      <Icon className={`w-4 h-4 ${isActive ? 'text-blue-600' : 'text-slate-400'}`} />
                       <span>{link.label}</span>
                     </div>
                     {link.badge && (
                       <span className={`px-1.5 py-0.5 text-[10px] font-bold rounded-full ${
-                        isActive ? 'bg-white text-blue-600' : 'bg-blue-600/30 text-blue-300 border border-blue-500/30'
+                        isActive ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-500 border border-slate-200'
                       }`}>
                         {link.badge}
                       </span>
@@ -114,14 +98,14 @@ export function Sidebar() {
       </div>
 
       {/* Admin User Info */}
-      <div className="p-4 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between">
+      <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between">
         <div className="flex items-center space-x-2.5">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold text-xs">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold text-xs shadow-md shadow-blue-500/20">
             SA
           </div>
           <div className="overflow-hidden">
-            <p className="text-xs font-bold text-white truncate">Super Administrator</p>
-            <p className="text-[10px] text-slate-400 truncate">superadmin@resultspro.ng</p>
+            <p className="text-xs font-bold text-slate-900 truncate">Super Administrator</p>
+            <p className="text-[10px] text-slate-500 truncate font-medium">superadmin@resultspro.ng</p>
           </div>
         </div>
       </div>

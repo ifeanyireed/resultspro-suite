@@ -1,18 +1,6 @@
 "use client";
 
-import { 
-  ShieldAlert, 
-  Search, 
-  Filter, 
-  MoreVertical, 
-  CheckCircle2, 
-  XCircle,
-  Eye,
-  MessageSquare,
-  FileText,
-  AlertTriangle,
-  Loader2
-} from 'lucide-react';
+import { IconShieldAlert as ShieldAlert, IconSearch as Search, IconFilter as Filter, IconMoreVertical as MoreVertical, IconCheckCircle2 as CheckCircle2, IconXCircle as XCircle, IconEye as Eye, IconMessageSquare as MessageSquare, IconFileText as FileText, IconAlertTriangle as AlertTriangle, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { getModeration } from '@/lib/platform.api';
 

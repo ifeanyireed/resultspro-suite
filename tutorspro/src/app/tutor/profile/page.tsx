@@ -2,21 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { 
-  Camera, 
-  User, 
-  BookOpen, 
-  Zap, 
-  Globe, 
-  DollarSign, 
-  ShieldCheck,
-  ChevronRight,
-  Plus,
-  Trash2,
-  Save,
-  Check,
-  Loader2
-} from 'lucide-react';
+import { IconCamera as Camera, IconUser as User, IconBookOpen as BookOpen, IconZap as Zap, IconGlobe as Globe, IconDollarSign as DollarSign, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconPlus as Plus, IconTrash2 as Trash2, IconSave as Save, IconCheck as Check, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { toast } from 'react-hot-toast';

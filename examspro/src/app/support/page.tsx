@@ -3,21 +3,7 @@
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { 
-  Mail, 
-  MessageCircle, 
-  HelpCircle, 
-  Info, 
-  Target, 
-  Users, 
-  ShieldCheck,
-  Zap,
-  ChevronRight,
-  Globe,
-  Instagram,
-  Twitter,
-  Facebook
-} from 'lucide-react';
+import { IconMail as Mail, IconMessageCircle as MessageCircle, IconHelpCircle as HelpCircle, IconInfo as Info, IconTarget as Target, IconUsers as Users, IconShieldCheck as ShieldCheck, IconZap as Zap, IconChevronRight as ChevronRight, IconGlobe as Globe, IconInstagram as Instagram, IconTwitter as Twitter, IconFacebook as Facebook } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 

@@ -5,7 +5,7 @@ import { AuthLayout } from "@/components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { User, Camera, Mail, Phone, ArrowRight } from "lucide-react";
+import { IconUser as User, IconCamera as Camera, IconMail as Mail, IconPhone as Phone, IconArrowRight as ArrowRight } from '@tabler/icons-react';
 
 export default function ProfileSetupPage() {
   const [isLoading, setIsLoading] = useState(false);

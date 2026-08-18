@@ -2,19 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { 
-  Wallet, 
-  TrendingUp, 
-  Calendar, 
-  ChevronRight, 
-  ArrowUpRight, 
-  Download, 
-  History,
-  DollarSign,
-  PieChart,
-  Target,
-  Loader2
-} from 'lucide-react';
+import { IconWallet as Wallet, IconTrendingUp as TrendingUp, IconCalendar as Calendar, IconChevronRight as ChevronRight, IconArrowUpRight as ArrowUpRight, IconDownload as Download, IconHistory as History, IconDollarSign as DollarSign, IconPieChart as PieChart, IconTarget as Target, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 

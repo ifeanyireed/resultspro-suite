@@ -1,20 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  TrendingUp, 
-  BarChart3, 
-  Target, 
-  Award,
-  ChevronRight,
-  Clock,
-  BookOpen,
-  BrainCircuit,
-  Layers,
-  ArrowLeft,
-  Calendar,
-  Loader2
-} from "lucide-react";
+import { IconTrendingUp as TrendingUp, IconBarChart3 as BarChart3, IconTarget as Target, IconAward as Award, IconChevronRight as ChevronRight, IconClock as Clock, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconArrowLeft as ArrowLeft, IconCalendar as Calendar, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";

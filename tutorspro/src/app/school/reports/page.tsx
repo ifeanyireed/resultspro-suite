@@ -1,16 +1,6 @@
 "use client";
 
-import { 
-  FileText, 
-  Download, 
-  Calendar, 
-  Filter, 
-  Search,
-  ChevronRight,
-  BarChart3,
-  Clock,
-  CheckCircle2
-} from 'lucide-react';
+import { IconFileText as FileText, IconDownload as Download, IconCalendar as Calendar, IconFilter as Filter, IconSearch as Search, IconChevronRight as ChevronRight, IconBarChart3 as BarChart3, IconClock as Clock, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { getReports, generateReport } from '@/lib/school.api';

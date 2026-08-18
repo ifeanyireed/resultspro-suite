@@ -2,15 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Plus, 
-  Trash2, 
-  Save,
-  ChevronLeft,
-  BookOpen,
-  Sparkles,
-  FileText
-} from "lucide-react";
+import { IconPlus as Plus, IconTrash2 as Trash2, IconSave as Save, IconChevronLeft as ChevronLeft, IconBookOpen as BookOpen, IconSparkles as Sparkles, IconFileText as FileText } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

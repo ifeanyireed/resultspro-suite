@@ -1,20 +1,6 @@
 "use client";
 
-import { 
-  BarChart3, 
-  TrendingUp, 
-  Users, 
-  Globe, 
-  DollarSign, 
-  ArrowUpRight, 
-  ArrowDownRight,
-  Download,
-  Calendar,
-  Filter,
-  PieChart,
-  Layout,
-  Loader2
-} from 'lucide-react';
+import { IconBarChart3 as BarChart3, IconTrendingUp as TrendingUp, IconUsers as Users, IconGlobe as Globe, IconDollarSign as DollarSign, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconDownload as Download, IconCalendar as Calendar, IconFilter as Filter, IconPieChart as PieChart, IconLayout as Layout, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { getSystemAnalytics } from '@/lib/superadmin.api';
 

@@ -1,15 +1,6 @@
 "use client";
 
-import { 
-  Building2, 
-  ArrowRight, 
-  CheckCircle2, 
-  Mail, 
-  Lock,
-  Globe,
-  MapPin,
-  User
-} from 'lucide-react';
+import { IconBuilding2 as Building2, IconArrowRight as ArrowRight, IconCheckCircle2 as CheckCircle2, IconMail as Mail, IconLock as Lock, IconGlobe as Globe, IconMapPin as MapPin, IconUser as User } from '@tabler/icons-react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';

@@ -1,16 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Search, 
-  MoreVertical,
-  UserCheck,
-  UserX,
-  Mail,
-  Activity,
-  ChevronLeft,
-  ChevronRight
-} from "lucide-react";
+import { IconSearch as Search, IconMoreVertical as MoreVertical, IconUserCheck as UserCheck, IconUserX as UserX, IconMail as Mail, IconActivity as Activity, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";

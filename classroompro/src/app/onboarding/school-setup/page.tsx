@@ -5,7 +5,7 @@ import { AuthLayout } from "@/components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { School, MapPin, Globe, Phone, ArrowRight, Building2 } from "lucide-react";
+import { IconSchool as School, IconMapPin as MapPin, IconGlobe as Globe, IconPhone as Phone, IconArrowRight as ArrowRight, IconBuilding2 as Building2 } from '@tabler/icons-react';
 import { cn } from "@/lib/utils";
 
 export default function SchoolSetupPage() {

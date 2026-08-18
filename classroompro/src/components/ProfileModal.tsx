@@ -1,20 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { 
-  User as UserIcon, 
-  Lock, 
-  Shield, 
-  Camera, 
-  Save, 
-  Loader2,
-  X,
-  Phone,
-  Mail,
-  Calendar,
-  MapPin,
-  CheckCircle2
-} from "lucide-react";
+import { IconUser as UserIcon, IconLock as Lock, IconShield as Shield, IconCamera as Camera, IconSave as Save, IconLoader2 as Loader2, IconX as X, IconPhone as Phone, IconMail as Mail, IconCalendar as Calendar, IconMapPin as MapPin, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

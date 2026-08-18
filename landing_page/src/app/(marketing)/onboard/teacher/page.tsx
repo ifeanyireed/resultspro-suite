@@ -2,37 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Key,
-  User,
-  BookOpen,
-  ArrowRight,
-  ArrowLeft,
-  CheckCircle2,
-  Upload,
-  AlertCircle,
-  LayoutGrid,
-  Eye,
-  EyeOff,
-  Phone,
-  Compass,
-  Check,
-  RotateCw,
-  Scissors,
-  Mail,
-  ShieldCheck,
-  Send,
-  Sparkles,
-  ChevronDown,
-  School,
-  Plus,
-  Camera,
-  X,
-  Calculator,
-  FlaskConical,
-  Globe,
-  BookText
-} from 'lucide-react';
+import { IconKey as Key, IconUser as User, IconBookOpen as BookOpen, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCheckCircle2 as CheckCircle2, IconUpload as Upload, IconAlertCircle as AlertCircle, IconLayoutGrid as LayoutGrid, IconEye as Eye, IconEyeOff as EyeOff, IconPhone as Phone, IconCompass as Compass, IconCheck as Check, IconRotateCw as RotateCw, IconScissors as Scissors, IconMail as Mail, IconShieldCheck as ShieldCheck, IconSend as Send, IconSparkles as Sparkles, IconChevronDown as ChevronDown, IconSchool as School, IconPlus as Plus, IconCamera as Camera, IconX as X, IconCalculator as Calculator, IconFlaskConical as FlaskConical, IconGlobe as Globe, IconBookText as BookText } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
 import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';

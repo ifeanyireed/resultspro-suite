@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axiosInstance from '@/lib/axiosConfig';
-import { ChevronLeft, Heart, MessageCircle, Share2, Calendar, User, Eye, Sun, Moon } from 'lucide-react';
+import { IconChevronLeft as ChevronLeft, IconHeart as Heart, IconMessageCircle as MessageCircle, IconShare2 as Share2, IconCalendar as Calendar, IconUser as User, IconEye as Eye, IconSun as Sun, IconMoon as Moon } from '@tabler/icons-react';
 import { toast } from 'sonner';
 import Navigation from '@/components/Navigation';
 import 'react-quill/dist/quill.snow.css';

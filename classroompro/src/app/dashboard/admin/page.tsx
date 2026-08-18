@@ -1,18 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Users, 
-  UserCheck, 
-  GraduationCap, 
-  BookOpen, 
-  TrendingUp, 
-  Plus,
-  ArrowUpRight,
-  MoreVertical,
-  School,
-  Calendar
-} from "lucide-react";
+import { IconUsers as Users, IconUserCheck as UserCheck, IconGraduationCap as GraduationCap, IconBookOpen as BookOpen, IconTrendingUp as TrendingUp, IconPlus as Plus, IconArrowUpRight as ArrowUpRight, IconMoreVertical as MoreVertical, IconSchool as School, IconCalendar as Calendar } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";

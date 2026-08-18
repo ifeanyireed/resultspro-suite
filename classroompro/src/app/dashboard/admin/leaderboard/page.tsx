@@ -1,12 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Trophy, 
-  Crown, 
-  TrendingUp, 
-  Target,
-} from "lucide-react";
+import { IconTrophy as Trophy, IconCrown as Crown, IconTrendingUp as TrendingUp, IconTarget as Target } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";

@@ -1,13 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  CreditCard, 
-  Clock, 
-  Calendar,
-  ArrowRight,
-  AlertCircle
-} from "lucide-react";
+import { IconCreditCard as CreditCard, IconClock as Clock, IconCalendar as Calendar, IconArrowRight as ArrowRight, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";

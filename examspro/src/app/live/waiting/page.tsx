@@ -2,16 +2,7 @@
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
-import { 
-  Users as UsersIcon, 
-  MessageSquare as MessageIcon, 
-  Send as SendIcon, 
-  Smile as SmileIcon, 
-  ShieldCheck as ShieldIcon,
-  Coins as CoinsIcon,
-  ArrowLeft as ArrowLeftIcon,
-  Loader2
-} from 'lucide-react';
+import { IconUsers as UsersIcon, IconMessageSquare as MessageIcon, IconSend as SendIcon, IconSmile as SmileIcon, IconShieldCheck as ShieldIcon, IconCoins as CoinsIcon, IconArrowLeft as ArrowLeftIcon, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';

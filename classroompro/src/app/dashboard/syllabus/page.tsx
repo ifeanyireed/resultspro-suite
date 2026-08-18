@@ -1,17 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  BookOpen, 
-  ChevronRight, 
-  CheckCircle2, 
-  Circle,
-  Play,
-  ArrowLeft,
-  Filter,
-  BrainCircuit,
-  Layers
-} from "lucide-react";
+import { IconBookOpen as BookOpen, IconChevronRight as ChevronRight, IconCheckCircle2 as CheckCircle2, IconCircle as Circle, IconPlay as Play, IconArrowLeft as ArrowLeft, IconFilter as Filter, IconBrainCircuit as BrainCircuit, IconLayers as Layers } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";

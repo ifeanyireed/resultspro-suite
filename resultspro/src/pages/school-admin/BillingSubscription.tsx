@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, CreditCard, AlertCircle, Check, RefreshCw, ArrowUpCircle, FileText, Users, X } from 'lucide-react';
+import { IconCheckCircle as CheckCircle, IconCreditCard as CreditCard, IconAlertCircle as AlertCircle, IconCheck as Check, IconRefreshCw as RefreshCw, IconArrowUpCircle as ArrowUpCircle, IconFileText as FileText, IconUsers as Users, IconX as X } from '@tabler/icons-react';
 import { LoadingSpinner, InlineLoadingSpinner } from '@/components/LoadingSpinner';
 import axiosInstance from '@/lib/axiosConfig';
 import { useToast } from '@/hooks/use-toast';

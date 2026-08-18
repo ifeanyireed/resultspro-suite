@@ -1,21 +1,6 @@
 "use client";
 
-import { 
-  Users, 
-  TrendingUp, 
-  LayoutDashboard,
-  BookOpen,
-  DollarSign,
-  Settings,
-  ShieldAlert,
-  Gift,
-  Target,
-  Sword,
-  Radio,
-  Trophy,
-  Bell,
-  FileText
-} from 'lucide-react';
+import { IconUsers as Users, IconTrendingUp as TrendingUp, IconLayoutDashboard as LayoutDashboard, IconBookOpen as BookOpen, IconDollarSign as DollarSign, IconSettings as Settings, IconShieldAlert as ShieldAlert, IconGift as Gift, IconTarget as Target, IconSword as Sword, IconRadio as Radio, IconTrophy as Trophy, IconBell as Bell, IconFileText as FileText } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from '../Logo';

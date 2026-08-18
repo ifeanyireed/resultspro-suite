@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import { Users2, HeartHandshake, MessageSquare, ExternalLink, Sparkles } from 'lucide-react';
+import { IconUsers2 as Users2, IconHeartHandshake as HeartHandshake, IconMessageSquare as MessageSquare, IconExternalLink as ExternalLink, IconSparkles as Sparkles } from '@tabler/icons-react';
 import { mockPeers } from '@/lib/data';
 
 export default function PeersPage() {

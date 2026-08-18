@@ -5,35 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
 import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
-import {
-  LayoutGrid,
-  ClipboardList,
-  ShieldCheck,
-  Wallet,
-  Share2,
-  ArrowRight,
-  ArrowLeft,
-  CheckCircle2,
-  Upload,
-  User,
-  Phone,
-  Mail,
-  MapPin,
-  Loader2,
-  Copy,
-  Check,
-  Sparkles,
-  FileText,
-  X,
-  Building2,
-  TrendingUp,
-  Percent,
-  ImageIcon,
-  Camera,
-  Plus,
-  Link,
-  CreditCard
-} from 'lucide-react';
+import { IconLayoutGrid as LayoutGrid, IconClipboardList as ClipboardList, IconShieldCheck as ShieldCheck, IconWallet as Wallet, IconShare2 as Share2, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCheckCircle2 as CheckCircle2, IconUpload as Upload, IconUser as User, IconPhone as Phone, IconMail as Mail, IconMapPin as MapPin, IconLoader2 as Loader2, IconCopy as Copy, IconCheck as Check, IconSparkles as Sparkles, IconFileText as FileText, IconX as X, IconBuilding2 as Building2, IconTrendingUp as TrendingUp, IconPercent as Percent, IconImageIcon as ImageIcon, IconCamera as Camera, IconPlus as Plus, IconLink as Link, IconCreditCard as CreditCard } from '@tabler/icons-react';
 const steps = [
   { id: 1, label: 'ROLE', icon: LayoutGrid },
   { id: 2, label: 'REGISTER', icon: ClipboardList },

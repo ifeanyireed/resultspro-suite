@@ -168,7 +168,20 @@ func HandleMFAChallenge(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	accessToken, err := utils.GenerateAccessToken(input.UserID)
+	// Fetch user roles for RBAC
+	var roles []string
+	rows, dbErr := db.DB.Query("SELECT role FROM user_school_roles WHERE user_id = ? AND status = 'active'", input.UserID)
+	if dbErr == nil {
+		defer rows.Close()
+		for rows.Next() {
+			var role string
+			if err := rows.Scan(&role); err == nil {
+				roles = append(roles, role)
+			}
+		}
+	}
+
+	accessToken, err := utils.GenerateAccessToken(input.UserID, roles)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to generate access token")
 		return

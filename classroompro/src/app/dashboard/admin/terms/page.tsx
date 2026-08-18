@@ -1,13 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Calendar, 
-  Plus, 
-  Clock,
-  Settings,
-  MoreVertical
-} from "lucide-react";
+import { IconCalendar as Calendar, IconPlus as Plus, IconClock as Clock, IconSettings as Settings, IconMoreVertical as MoreVertical } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";

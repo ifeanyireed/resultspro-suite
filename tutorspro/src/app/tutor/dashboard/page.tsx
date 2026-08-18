@@ -1,20 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Calendar, 
-  Users, 
-  Wallet, 
-  ChevronRight, 
-  Play, 
-  Clock, 
-  Star,
-  CheckCircle2,
-  LayoutDashboard,
-  ArrowUpRight,
-  Plus,
-  Loader2
-} from 'lucide-react';
+import { IconCalendar as Calendar, IconUsers as Users, IconWallet as Wallet, IconChevronRight as ChevronRight, IconPlay as Play, IconClock as Clock, IconStar as Star, IconCheckCircle2 as CheckCircle2, IconLayoutDashboard as LayoutDashboard, IconArrowUpRight as ArrowUpRight, IconPlus as Plus, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';

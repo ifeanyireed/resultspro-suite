@@ -1,20 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { 
-  Check, 
-  ChevronRight, 
-  ChevronLeft, 
-  User, 
-  BookOpen, 
-  FileText, 
-  Video, 
-  Clock, 
-  ShieldCheck,
-  Upload,
-  Plus,
-  Loader2
-} from 'lucide-react';
+import { IconCheck as Check, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconUser as User, IconBookOpen as BookOpen, IconFileText as FileText, IconVideo as Video, IconClock as Clock, IconShieldCheck as ShieldCheck, IconUpload as Upload, IconPlus as Plus, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';

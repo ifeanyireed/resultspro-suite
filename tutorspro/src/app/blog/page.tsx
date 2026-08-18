@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
-import { Loader2, Calendar, User, ArrowRight, Search, Tag } from "lucide-react";
+import { IconLoader2 as Loader2, IconCalendar as Calendar, IconUser as User, IconArrowRight as ArrowRight, IconSearch as Search, IconTag as Tag } from '@tabler/icons-react';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";

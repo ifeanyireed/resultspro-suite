@@ -3,21 +3,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { 
-  Users, 
-  Gift, 
-  Copy, 
-  Share2, 
-  Coins, 
-  ChevronRight,
-  TrendingUp,
-  MessageSquare,
-  Twitter,
-  Loader2,
-  CheckCircle2,
-  AlertCircle,
-  Lock
-} from 'lucide-react';
+import { IconUsers as Users, IconGift as Gift, IconCopy as Copy, IconShare2 as Share2, IconCoins as Coins, IconChevronRight as ChevronRight, IconTrendingUp as TrendingUp, IconMessageSquare as MessageSquare, IconTwitter as Twitter, IconLoader2 as Loader2, IconCheckCircle2 as CheckCircle2, IconAlertCircle as AlertCircle, IconLock as Lock } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/useAuthStore';
 import api from '@/lib/api';

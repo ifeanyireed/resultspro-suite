@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { User, Mail, Lock, School, Loader2, Chrome } from "lucide-react";
+import { IconUser as User, IconMail as Mail, IconLock as Lock, IconSchool as School, IconLoader2 as Loader2, IconChrome as Chrome } from '@tabler/icons-react';
 import { useState, useEffect } from "react";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "@/lib/msal";

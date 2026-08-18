@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Flame, Zap, Bell, Search, Radio } from 'lucide-react';
+import { IconFlame as Flame, IconZap as Zap, IconBell as Bell, IconSearch as Search, IconRadio as Radio } from '@tabler/icons-react';
 import Link from 'next/link';
 
 interface NavbarProps {

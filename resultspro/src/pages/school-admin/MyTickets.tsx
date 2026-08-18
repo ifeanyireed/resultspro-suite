@@ -1,20 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SchoolAdminLayout from '@/components/SchoolAdminLayout';
 import TicketSubmissionModal from '@/components/TicketSubmissionModal';
-import {
-  MessageCircle,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  XCircle,
-  Eye,
-  Send,
-  Upload,
-  FileText,
-  X,
-  Star,
-  Plus,
-} from 'lucide-react';
+import { IconMessageCircle as MessageCircle, IconClock as Clock, IconCheckCircle as CheckCircle, IconAlertCircle as AlertCircle, IconXCircle as XCircle, IconEye as Eye, IconSend as Send, IconUpload as Upload, IconFileText as FileText, IconX as X, IconStar as Star, IconPlus as Plus } from '@tabler/icons-react';
 import {
   Dialog,
   DialogContent,

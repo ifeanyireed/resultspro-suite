@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
-import { Plus, Trash2 } from 'lucide-react';
+import { IconPlus as Plus, IconTrash2 as Trash2 } from '@tabler/icons-react';
 
 interface Student {
   id: string;

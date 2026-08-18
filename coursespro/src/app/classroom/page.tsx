@@ -2,17 +2,7 @@
 
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import {
-  Radio,
-  Users2,
-  Mic,
-  Headphones,
-  Video,
-  MessageSquare,
-  Sparkles,
-  ArrowRight,
-  Plus,
-} from 'lucide-react';
+import { IconRadio as Radio, IconUsers2 as Users2, IconMic as Mic, IconHeadphones as Headphones, IconVideo as Video, IconMessageSquare as MessageSquare, IconSparkles as Sparkles, IconArrowRight as ArrowRight, IconPlus as Plus } from '@tabler/icons-react';
 import { mockPresence } from '@/lib/data';
 
 export default function ClassroomPage() {

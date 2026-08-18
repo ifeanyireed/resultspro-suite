@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { BarChart01, Mail, Phone } from '@/lib/hugeicons-compat';
-import { TrendingUp } from 'lucide-react';
+import { IconTrendingUp as TrendingUp } from '@tabler/icons-react';
 import { axiosInstance as axios } from '@/lib/axiosConfig';
 import { useToast } from '@/hooks/use-toast';
 

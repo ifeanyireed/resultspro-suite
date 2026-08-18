@@ -3,18 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { 
-  Search, 
-  Filter, 
-  BookOpen, 
-  User, 
-  Clock,
-  TrendingUp,
-  Loader2,
-  ChevronRight,
-  ChevronLeft,
-  ChevronDown
-} from "lucide-react";
+import { IconSearch as Search, IconFilter as Filter, IconBookOpen as BookOpen, IconUser as User, IconClock as Clock, IconTrendingUp as TrendingUp, IconLoader2 as Loader2, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconChevronDown as ChevronDown } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 

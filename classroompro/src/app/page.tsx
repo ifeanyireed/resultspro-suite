@@ -4,16 +4,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { 
-  BookOpen, 
-  BrainCircuit, 
-  Layers, 
-  School, 
-  TrendingUp, 
-  ShieldCheck, 
-  ChevronRight,
-  ArrowRight
-} from "lucide-react";
+import { IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconSchool as School, IconTrendingUp as TrendingUp, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconArrowRight as ArrowRight } from '@tabler/icons-react';
 import Link from "next/link";
 
 export default function LandingPage() {

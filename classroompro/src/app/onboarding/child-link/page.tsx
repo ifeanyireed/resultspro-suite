@@ -5,7 +5,7 @@ import { AuthLayout } from "@/components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UserPlus, Search, ArrowRight, ShieldCheck, Heart } from "lucide-react";
+import { IconUserPlus as UserPlus, IconSearch as Search, IconArrowRight as ArrowRight, IconShieldCheck as ShieldCheck, IconHeart as Heart } from '@tabler/icons-react';
 import { cn } from "@/lib/utils";
 
 export default function ChildLinkPage() {

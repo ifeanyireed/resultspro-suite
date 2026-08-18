@@ -2,16 +2,7 @@
 
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import {
-  Layers,
-  CheckCircle2,
-  Lock,
-  PlayCircle,
-  Clock,
-  BookOpen,
-  Sparkles,
-  ArrowRight,
-} from 'lucide-react';
+import { IconLayers as Layers, IconCheckCircle2 as CheckCircle2, IconLock as Lock, IconPlayCircle as PlayCircle, IconClock as Clock, IconBookOpen as BookOpen, IconSparkles as Sparkles, IconArrowRight as ArrowRight } from '@tabler/icons-react';
 import Link from 'next/link';
 import { mockJourneyStages } from '@/lib/data';
 

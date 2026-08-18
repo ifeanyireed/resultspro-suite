@@ -5,19 +5,7 @@ import Link from 'next/link';
 import Logo from './Logo';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useEffect, useState, useCallback } from 'react';
-import { 
-  Bell, 
-  Menu, 
-  X, 
-  Home, 
-  Info, 
-  Users, 
-  CreditCard, 
-  GraduationCap, 
-  BookText, 
-  HelpCircle, 
-  MessageSquare 
-} from 'lucide-react';
+import { IconBell as Bell, IconMenu as Menu, IconX as X, IconHome as Home, IconInfo as Info, IconUsers as Users, IconCreditCard as CreditCard, IconGraduationCap as GraduationCap, IconBookText as BookText, IconHelpCircle as HelpCircle, IconMessageSquare as MessageSquare } from '@tabler/icons-react';
 import { getUnreadCount } from '@/lib/notifications.api';
 
 const Navbar = () => {

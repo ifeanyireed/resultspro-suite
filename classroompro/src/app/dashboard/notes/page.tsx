@@ -1,18 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  BookOpen, 
-  Search,
-  Filter,
-  ChevronRight,
-  Loader2,
-  ChevronLeft,
-  Clock,
-  CheckCircle,
-  Activity,
-  Layers
-} from "lucide-react";
+import { IconBookOpen as BookOpen, IconSearch as Search, IconFilter as Filter, IconChevronRight as ChevronRight, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconClock as Clock, IconCheckCircle as CheckCircle, IconActivity as Activity, IconLayers as Layers } from '@tabler/icons-react';
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";

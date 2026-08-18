@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { Search, Filter, Star, Clock, Heart, SlidersHorizontal, Loader2 } from 'lucide-react';
+import { IconSearch as Search, IconFilter as Filter, IconStar as Star, IconClock as Clock, IconHeart as Heart, IconSlidersHorizontal as SlidersHorizontal, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { RoleGate } from '@/components/RoleGate';
 import api from '@/lib/api';

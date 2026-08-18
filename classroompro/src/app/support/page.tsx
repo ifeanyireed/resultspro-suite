@@ -2,17 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { 
-  Search, 
-  BookOpen, 
-  HelpCircle, 
-  ShieldCheck, 
-  Zap, 
-  Users,
-  ChevronRight,
-  MessageSquare,
-  LifeBuoy
-} from "lucide-react";
+import { IconSearch as Search, IconBookOpen as BookOpen, IconHelpCircle as HelpCircle, IconShieldCheck as ShieldCheck, IconZap as Zap, IconUsers as Users, IconChevronRight as ChevronRight, IconMessageSquare as MessageSquare, IconLifeBuoy as LifeBuoy } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 

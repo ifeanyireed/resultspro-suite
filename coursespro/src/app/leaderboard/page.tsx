@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import { Trophy, Flame, Award, Zap, Star } from 'lucide-react';
+import { IconTrophy as Trophy, IconFlame as Flame, IconAward as Award, IconZap as Zap, IconStar as Star } from '@tabler/icons-react';
 import { mockLeaderboard } from '@/lib/data';
 
 export default function LeaderboardPage() {

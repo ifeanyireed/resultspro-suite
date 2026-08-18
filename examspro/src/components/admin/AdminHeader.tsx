@@ -1,11 +1,6 @@
 "use client";
 
-import { 
-  Search,
-  Bell,
-  Menu,
-  LogOut
-} from 'lucide-react';
+import { IconSearch as Search, IconBell as Bell, IconMenu as Menu, IconLogOut as LogOut } from '@tabler/icons-react';
 import Logo from '../Logo';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useRouter } from 'next/navigation';

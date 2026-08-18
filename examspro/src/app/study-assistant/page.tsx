@@ -2,17 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/Navbar';
-import { 
-  Send, 
-  Sparkles, 
-  BookOpen, 
-  Zap, 
-  ChevronLeft,
-  Loader2,
-  AlertCircle,
-  History,
-  MessageSquare
-} from 'lucide-react';
+import { IconSend as Send, IconSparkles as Sparkles, IconBookOpen as BookOpen, IconZap as Zap, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2, IconAlertCircle as AlertCircle, IconHistory as History, IconMessageSquare as MessageSquare } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/useAuthStore';
 import api from '@/lib/api';

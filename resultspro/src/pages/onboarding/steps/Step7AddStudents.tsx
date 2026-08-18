@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import axiosInstance from '@/lib/axiosConfig';
-import { Plus, Trash2 } from 'lucide-react';
+import { IconPlus as Plus, IconTrash2 as Trash2 } from '@tabler/icons-react';
 import { useOnboardingStore, Step7Data } from '@/stores/onboardingStore';
 
 interface Student {

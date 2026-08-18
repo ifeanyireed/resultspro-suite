@@ -1,23 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Users, 
-  BookOpen, 
-  Settings, 
-  ChevronRight, 
-  BarChart3, 
-  ShieldCheck,
-  Building2,
-  UserPlus,
-  ArrowRight,
-  GraduationCap,
-  FileText,
-  CreditCard,
-  Palette,
-  Bell,
-  Loader2
-} from 'lucide-react';
+import { IconUsers as Users, IconBookOpen as BookOpen, IconSettings as Settings, IconChevronRight as ChevronRight, IconBarChart3 as BarChart3, IconShieldCheck as ShieldCheck, IconBuilding2 as Building2, IconUserPlus as UserPlus, IconArrowRight as ArrowRight, IconGraduationCap as GraduationCap, IconFileText as FileText, IconCreditCard as CreditCard, IconPalette as Palette, IconBell as Bell, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';

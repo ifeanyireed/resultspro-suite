@@ -2,17 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
-import { 
-  Coins, 
-  ArrowRightLeft, 
-  Banknote, 
-  History, 
-  AlertCircle,
-  CheckCircle2,
-  Building2,
-  User,
-  Hash
-} from 'lucide-react';
+import { IconCoins as Coins, IconArrowRightLeft as ArrowRightLeft, IconBanknote as Banknote, IconHistory as History, IconAlertCircle as AlertCircle, IconCheckCircle2 as CheckCircle2, IconBuilding2 as Building2, IconUser as User, IconHash as Hash } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import api from '@/lib/api';

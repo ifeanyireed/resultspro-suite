@@ -1,13 +1,6 @@
 "use client";
 
-import { 
-  TrendingUp, 
-  Target, 
-  Download,
-  Clock,
-  Brain,
-  Loader2
-} from 'lucide-react';
+import { IconTrendingUp as TrendingUp, IconTarget as Target, IconDownload as Download, IconClock as Clock, IconBrain as Brain, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useEffect, useState } from 'react';

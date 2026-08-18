@@ -1,21 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  FolderPlus, 
-  FileText, 
-  Image as ImageIcon, 
-  Video, 
-  Search, 
-  Filter, 
-  MoreVertical, 
-  Download, 
-  Share2,
-  Trash2,
-  Folder,
-  ChevronRight,
-  Plus
-} from 'lucide-react';
+import { IconFolderPlus as FolderPlus, IconFileText as FileText, IconImage as ImageIcon, IconVideo as Video, IconSearch as Search, IconFilter as Filter, IconMoreVertical as MoreVertical, IconDownload as Download, IconShare2 as Share2, IconTrash2 as Trash2, IconFolder as Folder, IconChevronRight as ChevronRight, IconPlus as Plus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
 export default function TutorResources() {

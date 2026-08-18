@@ -3,7 +3,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useState } from "react";
-import { Plus, Minus, Search, HelpCircle, Loader2 } from "lucide-react";
+import { IconPlus as Plus, IconMinus as Minus, IconSearch as Search, IconHelpCircle as HelpCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
 
 export default function FAQPage() {
   const [searchTerm, setSearchTerm] = useState("");

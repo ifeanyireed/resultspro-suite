@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Save, Copy, Check, ExternalLink, Upload, X, Palette } from 'lucide-react';
+import { IconSave as Save, IconCopy as Copy, IconCheck as Check, IconExternalLink as ExternalLink, IconUpload as Upload, IconX as X, IconPalette as Palette } from '@tabler/icons-react';
 import axiosInstance from '@/lib/axiosConfig';
 import { toast } from '@/hooks/use-toast';
 

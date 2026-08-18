@@ -1,14 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Heart, 
-  UserPlus,
-  ShieldCheck,
-  Settings,
-  Mail,
-  GraduationCap
-} from "lucide-react";
+import { IconHeart as Heart, IconUserPlus as UserPlus, IconShieldCheck as ShieldCheck, IconSettings as Settings, IconMail as Mail, IconGraduationCap as GraduationCap } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";

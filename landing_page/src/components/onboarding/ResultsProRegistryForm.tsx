@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, AlertCircle, Eye, EyeOff, Mail, Phone, User, MapPin, Map, Lock } from 'lucide-react';
+import { IconCheck as Check, IconAlertCircle as AlertCircle, IconEye as Eye, IconEyeOff as EyeOff, IconMail as Mail, IconPhone as Phone, IconUser as User, IconMapPin as MapPin, IconMap as Map, IconLock as Lock } from '@tabler/icons-react';
 import { NIGERIA_STATES_LGAS } from '../../utils/nigeriaStatesLgas';
 
 export interface RegistryFormData {

@@ -1,17 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Trophy, 
-  Coins, 
-  ChevronRight, 
-  RotateCcw, 
-  Share2,
-  CheckCircle2,
-  XCircle,
-  Zap,
-  Star
-} from 'lucide-react';
+import { IconTrophy as Trophy, IconCoins as Coins, IconChevronRight as ChevronRight, IconRotateCcw as RotateCcw, IconShare2 as Share2, IconCheckCircle2 as CheckCircle2, IconXCircle as XCircle, IconZap as Zap, IconStar as Star } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft } from 'lucide-react';
+import { IconArrowLeft as ArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import QuestionForm from '@/components/admin/QuestionForm';

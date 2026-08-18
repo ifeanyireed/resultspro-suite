@@ -5,7 +5,7 @@ import { AuthLayout } from "@/components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Lock, Eye, EyeOff, CheckCircle2 } from "lucide-react";
+import { IconLock as Lock, IconEye as Eye, IconEyeOff as EyeOff, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import api from "@/lib/api";

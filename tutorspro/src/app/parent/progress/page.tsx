@@ -2,18 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { 
-  TrendingUp, 
-  User, 
-  Brain, 
-  BarChart3, 
-  ChevronRight, 
-  ArrowUpRight,
-  Target,
-  Clock,
-  LayoutDashboard,
-  Loader2
-} from 'lucide-react';
+import { IconTrendingUp as TrendingUp, IconUser as User, IconBrain as Brain, IconBarChart3 as BarChart3, IconChevronRight as ChevronRight, IconArrowUpRight as ArrowUpRight, IconTarget as Target, IconClock as Clock, IconLayoutDashboard as LayoutDashboard, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 

@@ -1,17 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Trophy, 
-  Award, 
-  Star, 
-  Zap, 
-  Target, 
-  Lock, 
-  CheckCircle2,
-  TrendingUp,
-  Crown
-} from 'lucide-react';
+import { IconTrophy as Trophy, IconAward as Award, IconStar as Star, IconZap as Zap, IconTarget as Target, IconLock as Lock, IconCheckCircle2 as CheckCircle2, IconTrendingUp as TrendingUp, IconCrown as Crown } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
 export default function AchievementsPage() {

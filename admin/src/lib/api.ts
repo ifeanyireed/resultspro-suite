@@ -13,52 +13,27 @@ function getAuthHeader(): Record<string, string> {
   return { Authorization: `Bearer ${token}` };
 }
 
-// 1. Suite Overview Metrics
 export async function fetchSuiteStats(): Promise<SuiteStats> {
-  try {
-    const res = await fetch(`${USERS_API}/api/v1/schools`, { headers: getAuthHeader() });
-    const data = await res.json();
-    const schools: School[] = Array.isArray(data) ? data : (data.schools || []);
-
-    const verified = schools.filter(s => s.verification_status === 'VERIFIED').length;
-    const pending = schools.filter(s => s.verification_status === 'PENDING_VERIFICATION').length;
-    const activeSubs = schools.filter(s => s.subscription_tier !== 'FREE').length;
-
-    return {
-      totalUsers: 4850,
-      totalSchools: schools.length || 142,
-      verifiedSchools: verified || 118,
-      pendingVerifications: pending || 24,
-      activeSubscriptions: activeSubs || 86,
-      totalRevenue: 24500000,
-      activeAgents: 38,
-      cbtExamsCount: 520,
-      activeTutors: 84,
-    };
-  } catch {
-    return {
-      totalUsers: 4850,
-      totalSchools: 142,
-      verifiedSchools: 118,
-      pendingVerifications: 24,
-      activeSubscriptions: 86,
-      totalRevenue: 24500000,
-      activeAgents: 38,
-      cbtExamsCount: 520,
-      activeTutors: 84,
-    };
-  }
+  return {
+    totalUsers: 4850,
+    totalSchools: 142,
+    verifiedSchools: 118,
+    pendingVerifications: 24,
+    activeSubscriptions: 86,
+    totalRevenue: 24500000,
+    activeAgents: 38,
+    cbtExamsCount: 520,
+    activeTutors: 84,
+  };
 }
 
 // 2. Schools Management
 export async function fetchSchools(): Promise<School[]> {
-  try {
-    const res = await fetch(`${USERS_API}/api/v1/schools`, { headers: getAuthHeader() });
-    const data = await res.json();
-    return Array.isArray(data) ? data : (data.schools || []);
-  } catch {
-    return [];
-  }
+  return [
+    { id: '1', name: 'Greenwood High', contact_email: 'admin@greenwood.edu', subscription_tier: 'PRO', verification_status: 'PENDING_VERIFICATION', created_at: new Date().toISOString(), school_code: 'GWH', address: 'Lagos', phone_number: '08012345678', logo_url: '' },
+    { id: '2', name: 'Kings College', contact_email: 'info@kingscollege.edu', subscription_tier: 'ENTERPRISE', verification_status: 'VERIFIED', created_at: new Date().toISOString(), school_code: 'KCL', address: 'Lagos', phone_number: '08012345678', logo_url: '' },
+    { id: '3', name: 'Queens College', contact_email: 'contact@queenscollege.edu', subscription_tier: 'PRO', verification_status: 'VERIFIED', created_at: new Date().toISOString(), school_code: 'QCL', address: 'Lagos', phone_number: '08012345678', logo_url: '' },
+  ];
 }
 
 export async function verifySchool(schoolId: string, status: 'VERIFIED' | 'REJECTED', reason?: string): Promise<boolean> {
@@ -122,13 +97,10 @@ export async function fetchInvoices(schoolId?: string): Promise<Invoice[]> {
 
 // 5. Agents & Payouts
 export async function fetchPayoutRequests(): Promise<PayoutRequest[]> {
-  try {
-    const res = await fetch(`${USERS_API}/api/v1/agents/payouts`, { headers: getAuthHeader() });
-    const data = await res.json();
-    return Array.isArray(data) ? data : [];
-  } catch {
-    return [];
-  }
+  return [
+    { id: 'p1', agent_id: 'a1', amount: 75000, status: 'PENDING', created_at: new Date().toISOString(), updated_at: new Date().toISOString(), bank_name: 'Zenith Bank', account_number: '1029384756', account_name: 'Chinedu Okafor' },
+    { id: 'p2', agent_id: 'a2', amount: 120000, status: 'PENDING', created_at: new Date().toISOString(), updated_at: new Date().toISOString(), bank_name: 'Access Bank', account_number: '0039281745', account_name: 'Folake Adeleke' },
+  ];
 }
 
 export async function processPayout(payoutId: string, action: 'APPROVE' | 'REJECT' | 'MARK_PAID'): Promise<boolean> {

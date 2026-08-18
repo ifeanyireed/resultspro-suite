@@ -3,7 +3,7 @@
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { ScrollText, ShieldCheck, Clock, Scale } from 'lucide-react';
+import { IconScrollText as ScrollText, IconShieldCheck as ShieldCheck, IconClock as Clock, IconScale as Scale } from '@tabler/icons-react';
 
 export default function TermsPage() {
   const sections = [

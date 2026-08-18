@@ -2,19 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  School, 
-  Search, 
-  Plus, 
-  Filter, 
-  MoreVertical,
-  ChevronLeft,
-  ChevronRight,
-  Globe,
-  Mail,
-  Phone,
-  Calendar
-} from "lucide-react";
+import { IconSchool as School, IconSearch as Search, IconPlus as Plus, IconFilter as Filter, IconMoreVertical as MoreVertical, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconGlobe as Globe, IconMail as Mail, IconPhone as Phone, IconCalendar as Calendar } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";

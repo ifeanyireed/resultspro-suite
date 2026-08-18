@@ -5,7 +5,7 @@ import { AuthLayout } from "@/components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Search, School, GraduationCap, ArrowRight, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { IconSearch as Search, IconSchool as School, IconGraduationCap as GraduationCap, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 

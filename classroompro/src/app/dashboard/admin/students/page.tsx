@@ -1,14 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  GraduationCap, 
-  Search, 
-  MoreVertical, 
-  Filter,
-  Download,
-  UserPlus
-} from "lucide-react";
+import { IconGraduationCap as GraduationCap, IconSearch as Search, IconMoreVertical as MoreVertical, IconFilter as Filter, IconDownload as Download, IconUserPlus as UserPlus } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";

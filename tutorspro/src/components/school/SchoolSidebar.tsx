@@ -1,18 +1,6 @@
 "use client";
 
-import { 
-  Users, 
-  TrendingUp, 
-  LayoutDashboard,
-  BookOpen,
-  Settings,
-  Bell,
-  FileText,
-  CreditCard,
-  Palette,
-  GraduationCap,
-  LogOut
-} from 'lucide-react';
+import { IconUsers as Users, IconTrendingUp as TrendingUp, IconLayoutDashboard as LayoutDashboard, IconBookOpen as BookOpen, IconSettings as Settings, IconBell as Bell, IconFileText as FileText, IconCreditCard as CreditCard, IconPalette as Palette, IconGraduationCap as GraduationCap, IconLogOut as LogOut } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Logo from '../Logo';

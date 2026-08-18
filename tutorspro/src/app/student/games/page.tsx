@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { Gamepad2, Trophy, Users, Zap, Play, Star, Sparkles, Loader2 } from 'lucide-react';
+import { IconGamepad2 as Gamepad2, IconTrophy as Trophy, IconUsers as Users, IconZap as Zap, IconPlay as Play, IconStar as Star, IconSparkles as Sparkles, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { RoleGate } from '@/components/RoleGate';

@@ -1,15 +1,6 @@
 "use client";
 
-import { 
-  Search, 
-  MessageSquare, 
-  Send, 
-  CheckCircle2,
-  Phone,
-  Video,
-  ArrowLeft,
-  MoreVertical
-} from "lucide-react";
+import { IconSearch as Search, IconMessageSquare as MessageSquare, IconSend as Send, IconCheckCircle2 as CheckCircle2, IconPhone as Phone, IconVideo as Video, IconArrowLeft as ArrowLeft, IconMoreVertical as MoreVertical } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";

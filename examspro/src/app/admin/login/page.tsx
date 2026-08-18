@@ -2,14 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  Lock, 
-  Mail, 
-  ShieldCheck, 
-  ArrowRight, 
-  Fingerprint,
-  Loader2
-} from 'lucide-react';
+import { IconLock as Lock, IconMail as Mail, IconShieldCheck as ShieldCheck, IconArrowRight as ArrowRight, IconFingerprint as Fingerprint, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import api from '@/lib/api';

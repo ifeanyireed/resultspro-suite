@@ -2,17 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Plus, 
-  Search, 
-  Trash2, 
-  Edit, 
-  BookOpen,
-  CheckCircle2,
-  Filter,
-  ChevronLeft,
-  ChevronRight
-} from "lucide-react";
+import { IconPlus as Plus, IconSearch as Search, IconTrash2 as Trash2, IconEdit as Edit, IconBookOpen as BookOpen, IconCheckCircle2 as CheckCircle2, IconFilter as Filter, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 

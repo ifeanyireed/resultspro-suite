@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Navbar } from '@/components/Navbar';
-import { Kanban, Plus, MessageSquare, Paperclip, CheckCircle2, Star } from 'lucide-react';
+import { IconKanban as Kanban, IconPlus as Plus, IconMessageSquare as MessageSquare, IconPaperclip as Paperclip, IconCheckCircle2 as CheckCircle2, IconStar as Star } from '@tabler/icons-react';
 
 export default function WorkspacePage() {
   const [tasks, setTasks] = useState([

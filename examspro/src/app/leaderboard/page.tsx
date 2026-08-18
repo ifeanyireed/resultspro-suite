@@ -1,12 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Trophy, 
-  Crown, 
-  TrendingUp, 
-  Target
-} from 'lucide-react';
+import { IconTrophy as Trophy, IconCrown as Crown, IconTrendingUp as TrendingUp, IconTarget as Target } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';

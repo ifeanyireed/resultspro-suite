@@ -2,17 +2,7 @@
 
 import { useParams, useRouter, usePathname } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import {
-  ArrowLeft,
-  Sparkles,
-  MessageSquare,
-  Send,
-  Loader2,
-  Coins,
-  ChevronRight,
-  BookOpen,
-  BrainCircuit
-} from 'lucide-react';
+import { IconArrowLeft as ArrowLeft, IconSparkles as Sparkles, IconMessageSquare as MessageSquare, IconSend as Send, IconLoader2 as Loader2, IconCoins as Coins, IconChevronRight as ChevronRight, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 import api from '@/lib/api';

@@ -2,18 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { 
-  Users, 
-  Plus, 
-  UserPlus, 
-  Settings, 
-  ShieldCheck, 
-  ChevronRight,
-  UserCircle2,
-  Trash2,
-  ExternalLink,
-  Loader2
-} from 'lucide-react';
+import { IconUsers as Users, IconPlus as Plus, IconUserPlus as UserPlus, IconSettings as Settings, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconUserCircle2 as UserCircle2, IconTrash2 as Trash2, IconExternalLink as ExternalLink, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 

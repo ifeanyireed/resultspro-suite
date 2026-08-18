@@ -3,17 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { 
-  Search, 
-  Filter, 
-  Layers, 
-  Brain, 
-  Eye,
-  TrendingUp,
-  ChevronRight,
-  ChevronLeft,
-  Loader2
-} from "lucide-react";
+import { IconSearch as Search, IconFilter as Filter, IconLayers as Layers, IconBrain as Brain, IconEye as Eye, IconTrendingUp as TrendingUp, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 

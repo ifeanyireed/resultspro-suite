@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import { Briefcase, ExternalLink, Github, CheckCircle2, Star, Award } from 'lucide-react';
+import { IconBriefcase as Briefcase, IconExternalLink as ExternalLink, IconGithub as Github, IconCheckCircle2 as CheckCircle2, IconStar as Star, IconAward as Award } from '@tabler/icons-react';
 import { mockPortfolio } from '@/lib/data';
 
 export default function PortfolioPage() {

@@ -5,16 +5,7 @@ import Link from 'next/link';
 import Logo from '@/components/Logo';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { 
-  Mail, 
-  Lock, 
-  ArrowRight, 
-  User as UserIcon,
-  Ticket,
-  Chrome,
-  Zap,
-  Loader2
-} from 'lucide-react';
+import { IconMail as Mail, IconLock as Lock, IconArrowRight as ArrowRight, IconUser as UserIcon, IconTicket as Ticket, IconChrome as Chrome, IconZap as Zap, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "@/lib/msal";

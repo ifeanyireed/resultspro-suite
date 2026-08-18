@@ -2,18 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { 
-  HelpCircle, 
-  Search, 
-  MessageCircle, 
-  FileText, 
-  ChevronRight, 
-  Mail, 
-  MessageSquare,
-  ShieldQuestion,
-  LifeBuoy,
-  Loader2
-} from 'lucide-react';
+import { IconHelpCircle as HelpCircle, IconSearch as Search, IconMessageCircle as MessageCircle, IconFileText as FileText, IconChevronRight as ChevronRight, IconMail as Mail, IconMessageSquare as MessageSquare, IconShieldQuestion as ShieldQuestion, IconLifeBuoy as LifeBuoy, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 

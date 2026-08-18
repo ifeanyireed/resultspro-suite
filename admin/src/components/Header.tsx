@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Search, Bell, Activity, ShieldCheck } from 'lucide-react';
+import { IconSearch as Search, IconBell as Bell, IconActivity as Activity, IconShieldCheck as ShieldCheck } from '@tabler/icons-react';
 
 interface HeaderProps {
   title: string;
@@ -17,13 +17,6 @@ export function Header({ title, subtitle }: HeaderProps) {
       </div>
 
       <div className="flex items-center space-x-4">
-        {/* Microservices Live Health Badge */}
-        <div className="flex items-center space-x-2 bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-full text-xs font-semibold">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <Activity className="w-3.5 h-3.5" />
-          <span>5/5 Microservices Healthy</span>
-        </div>
-
         {/* Global Search Bar */}
         <div className="relative w-64">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
@@ -39,12 +32,6 @@ export function Header({ title, subtitle }: HeaderProps) {
           <Bell className="w-4 h-4" />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-blue-600 rounded-full"></span>
         </button>
-
-        {/* SuperAdmin Authority Badge */}
-        <div className="flex items-center space-x-1.5 bg-slate-900 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">
-          <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-          <span>Master Admin</span>
-        </div>
       </div>
     </header>
   );

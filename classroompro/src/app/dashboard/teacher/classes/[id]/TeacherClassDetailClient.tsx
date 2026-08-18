@@ -2,18 +2,7 @@
 
 import Link from "next/link";
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Users, 
-  ArrowLeft,
-  BookOpen,
-  BrainCircuit,
-  GraduationCap,
-  BarChart3,
-  Search,
-  MoreVertical,
-  Mail,
-  FilePlus
-} from "lucide-react";
+import { IconUsers as Users, IconArrowLeft as ArrowLeft, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconGraduationCap as GraduationCap, IconBarChart3 as BarChart3, IconSearch as Search, IconMoreVertical as MoreVertical, IconMail as Mail, IconFilePlus as FilePlus } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";

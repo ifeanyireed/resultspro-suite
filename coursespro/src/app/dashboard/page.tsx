@@ -2,19 +2,7 @@
 
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import {
-  Compass,
-  ArrowRight,
-  Flame,
-  CheckCircle2,
-  Calendar,
-  Radio,
-  Sparkles,
-  TrendingUp,
-  Award,
-  Video,
-  PlayCircle,
-} from 'lucide-react';
+import { IconCompass as Compass, IconArrowRight as ArrowRight, IconFlame as Flame, IconCheckCircle2 as CheckCircle2, IconCalendar as Calendar, IconRadio as Radio, IconSparkles as Sparkles, IconTrendingUp as TrendingUp, IconAward as Award, IconVideo as Video, IconPlayCircle as PlayCircle } from '@tabler/icons-react';
 import Link from 'next/link';
 import { mockPresence, mockProjects } from '@/lib/data';
 

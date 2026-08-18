@@ -1,20 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Users, 
-  ShieldCheck, 
-  AlertCircle, 
-  ShieldAlert, 
-  DollarSign, 
-  TrendingUp,
-  ArrowUpRight,
-  ArrowDownRight,
-  ChevronRight,
-  Search,
-  Bell,
-  Loader2
-} from 'lucide-react';
+import { IconUsers as Users, IconShieldCheck as ShieldCheck, IconAlertCircle as AlertCircle, IconShieldAlert as ShieldAlert, IconDollarSign as DollarSign, IconTrendingUp as TrendingUp, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconChevronRight as ChevronRight, IconSearch as Search, IconBell as Bell, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';

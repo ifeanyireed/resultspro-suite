@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Send, X, AlertCircle, CheckCircle, CreditCard, Loader2, Info, TrendingDown } from 'lucide-react';
+import { IconPlus as Plus, IconSend as Send, IconX as X, IconAlertCircle as AlertCircle, IconCheckCircle as CheckCircle, IconCreditCard as CreditCard, IconLoader2 as Loader2, IconInfo as Info, IconTrendingDown as TrendingDown } from '@tabler/icons-react';
 import { toast } from 'sonner';
 
 interface BatchRequest {

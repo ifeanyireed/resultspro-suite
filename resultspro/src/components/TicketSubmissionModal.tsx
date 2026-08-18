@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { MessageCircle, Upload, X, FileText } from 'lucide-react';
+import { IconMessageCircle as MessageCircle, IconUpload as Upload, IconX as X, IconFileText as FileText } from '@tabler/icons-react';
 import { InlineLoadingSpinner } from '@/components/LoadingSpinner';
 import axios from 'axios';
 import { useToast } from '@/hooks/use-toast';

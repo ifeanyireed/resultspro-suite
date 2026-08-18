@@ -1,4 +1,4 @@
-import { CheckCircle, Calendar, Settings, Heart, Zap, Upload, FileText } from 'lucide-react';
+import { IconCheckCircle as CheckCircle, IconCalendar as Calendar, IconSettings as Settings, IconHeart as Heart, IconZap as Zap, IconUpload as Upload, IconFileText as FileText } from '@tabler/icons-react';
 
 interface StepIndicatorProps {
   currentStep: number;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Upload, Link as LinkIcon, CheckCircle, AlertCircle } from 'lucide-react';
+import { IconUpload as Upload, IconLink as LinkIcon, IconCheckCircle as CheckCircle, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
 import { LoadingSpinner, InlineLoadingSpinner } from '@/components/LoadingSpinner';
 import axiosInstance from '@/lib/axiosConfig';
 

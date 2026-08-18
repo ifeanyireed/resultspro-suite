@@ -1,13 +1,7 @@
 "use client";
 
 import { Button } from '@/components/ui/button';
-import { 
-  Coins, 
-  Sparkles,
-  ArrowLeft,
-  BookOpen,
-  HelpCircle
-} from 'lucide-react';
+import { IconCoins as Coins, IconSparkles as Sparkles, IconArrowLeft as ArrowLeft, IconBookOpen as BookOpen, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function ExplanationPage() {

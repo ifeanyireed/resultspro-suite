@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BarChart01, Users, AlertTriangle } from '@/lib/hugeicons-compat';
-import { TrendingUp } from 'lucide-react';
+import { IconTrendingUp as TrendingUp } from '@tabler/icons-react';
 import { axiosInstance as axios } from '@/lib/axiosConfig';
 
 interface TeacherClass {

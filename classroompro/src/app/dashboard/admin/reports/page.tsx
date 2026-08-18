@@ -1,14 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  TrendingUp, 
-  Users, 
-  BookOpen, 
-  BrainCircuit,
-  Download,
-  Calendar,
-} from "lucide-react";
+import { IconTrendingUp as TrendingUp, IconUsers as Users, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconDownload as Download, IconCalendar as Calendar } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";

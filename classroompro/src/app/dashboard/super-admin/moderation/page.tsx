@@ -1,20 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  ShieldAlert, 
-  CheckCircle, 
-  XCircle, 
-  Eye, 
-  BookOpen, 
-  BrainCircuit, 
-  Layers,
-  Flag,
-  Search,
-  Filter,
-  ChevronLeft,
-  ChevronRight
-} from "lucide-react";
+import { IconShieldAlert as ShieldAlert, IconCheckCircle as CheckCircle, IconXCircle as XCircle, IconEye as Eye, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconFlag as Flag, IconSearch as Search, IconFilter as Filter, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect, useMemo } from "react";

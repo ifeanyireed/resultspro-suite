@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import { Layers, Calendar, Users2, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { IconLayers as Layers, IconCalendar as Calendar, IconUsers2 as Users2, IconArrowRight as ArrowRight, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
 
 export default function CoursesCatalogPage() {
   const cohorts = [

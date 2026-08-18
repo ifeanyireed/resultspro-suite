@@ -1,18 +1,6 @@
 "use client";
 
-import { 
-  Activity, 
-  LayoutDashboard,
-  Flag,
-  Database,
-  Link2,
-  ScrollText,
-  Lock,
-  BarChart3,
-  Settings,
-  Server,
-  LogOut
-} from 'lucide-react';
+import { IconActivity as Activity, IconLayoutDashboard as LayoutDashboard, IconFlag as Flag, IconDatabase as Database, IconLink2 as Link2, IconScrollText as ScrollText, IconLock as Lock, IconBarChart3 as BarChart3, IconSettings as Settings, IconServer as Server, IconLogOut as LogOut } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Logo from '../Logo';

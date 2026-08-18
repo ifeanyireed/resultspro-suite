@@ -1,16 +1,6 @@
 "use client";
 
-import { 
-  TrendingUp, 
-  Users, 
-  BookOpen, 
-  Clock, 
-  ArrowUpRight, 
-  ArrowDownRight,
-  Filter,
-  Calendar,
-  Download
-} from 'lucide-react';
+import { IconTrendingUp as TrendingUp, IconUsers as Users, IconBookOpen as BookOpen, IconClock as Clock, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconFilter as Filter, IconCalendar as Calendar, IconDownload as Download } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { getAnalytics } from '@/lib/school.api';

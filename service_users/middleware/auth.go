@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/golang-jwt/jwt/v5"
 	"service_users.resultspro.ng/db"
 	"service_users.resultspro.ng/utils"
 )
@@ -45,5 +46,65 @@ func RequireAppAuth(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		next(w, r)
+	}
+}
+
+// RequireRole enforces Role-Based Access Control by checking the JWT claims
+func RequireRole(allowedRoles ...string) func(http.HandlerFunc) http.HandlerFunc {
+	return func(next http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			userID, err := utils.GetUserIDFromRequest(r)
+			if err != nil || userID == "" {
+				utils.JSONError(w, http.StatusUnauthorized, "Unauthorized: valid Bearer token required")
+				return
+			}
+
+			// We need to decode the token again to check roles (or fetch from DB). Since GetUserIDFromRequest handles verification, we can just extract the token from header.
+			authHeader := r.Header.Get("Authorization")
+			tokenString := authHeader[7:] // len("Bearer ")
+			token, _ := utils.VerifyToken(tokenString)
+
+			claims, ok := token.Claims.(jwt.MapClaims)
+			if !ok {
+				utils.JSONError(w, http.StatusForbidden, "Forbidden: Invalid token claims")
+				return
+			}
+
+			rolesInterface, ok := claims["roles"].([]interface{})
+			if !ok {
+				utils.JSONError(w, http.StatusForbidden, "Forbidden: No roles assigned")
+				return
+			}
+
+			hasRole := false
+			for _, userRole := range rolesInterface {
+				roleStr, ok := userRole.(string)
+				if !ok {
+					continue
+				}
+				// Super-admin has access to everything
+				if roleStr == "super-admin" || roleStr == "platform-admin" {
+					hasRole = true
+					break
+				}
+				for _, allowed := range allowedRoles {
+					if roleStr == allowed {
+						hasRole = true
+						break
+					}
+				}
+				if hasRole {
+					break
+				}
+			}
+
+			if !hasRole {
+				utils.JSONError(w, http.StatusForbidden, "Forbidden: Insufficient permissions")
+				return
+			}
+
+			ctx := context.WithValue(r.Context(), UserContextKey, userID)
+			next(w, r.WithContext(ctx))
+		}
 	}
 }

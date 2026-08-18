@@ -1,23 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Sword, 
-  Users, 
-  Trophy, 
-  Search, 
-  Play, 
-  Zap, 
-  Plus,
-  ChevronRight,
-  Shield,
-  Coins,
-  Loader2,
-  Globe,
-  Lock,
-  Copy,
-  Check
-} from 'lucide-react';
+import { IconSword as Sword, IconUsers as Users, IconTrophy as Trophy, IconSearch as Search, IconPlay as Play, IconZap as Zap, IconPlus as Plus, IconChevronRight as ChevronRight, IconShield as Shield, IconCoins as Coins, IconLoader2 as Loader2, IconGlobe as Globe, IconLock as Lock, IconCopy as Copy, IconCheck as Check } from '@tabler/icons-react';
 import { 
   Dialog, 
   DialogContent, 

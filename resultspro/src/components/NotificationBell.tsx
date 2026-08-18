@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Bell, X, CheckCircle, Clock } from 'lucide-react';
+import { IconBell as Bell, IconX as X, IconCheckCircle as CheckCircle, IconClock as Clock } from '@tabler/icons-react';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import axios from 'axios';
 

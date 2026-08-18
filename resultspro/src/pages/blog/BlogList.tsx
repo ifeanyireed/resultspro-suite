@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import axiosInstance from '@/lib/axiosConfig';
-import { Search, ChevronLeft, ChevronRight, Heart, Eye, FileText } from 'lucide-react';
+import { IconSearch as Search, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconHeart as Heart, IconEye as Eye, IconFileText as FileText } from '@tabler/icons-react';
 import Navigation from '@/components/Navigation';
 
 interface BlogPost {

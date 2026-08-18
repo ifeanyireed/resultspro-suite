@@ -2,17 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { 
-  Bell, 
-  Moon, 
-  Globe, 
-  User, 
-  Shield, 
-  CreditCard, 
-  LogOut, 
-  ChevronRight,
-  ArrowLeft
-} from 'lucide-react';
+import { IconBell as Bell, IconMoon as Moon, IconGlobe as Globe, IconUser as User, IconShield as Shield, IconCreditCard as CreditCard, IconLogOut as LogOut, IconChevronRight as ChevronRight, IconArrowLeft as ArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function SettingsPage() {

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Search, Filter, Star, MapPin, Loader2, User } from "lucide-react";
+import { IconSearch as Search, IconFilter as Filter, IconStar as Star, IconMapPin as MapPin, IconLoader2 as Loader2, IconUser as User } from '@tabler/icons-react';
 import Link from "next/link";
 import api from "@/lib/api";
 

@@ -2,17 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
-import { 
-  Flame, 
-  Coins, 
-  Trophy, 
-  ChevronRight, 
-  Play, 
-  Sword,
-  BookOpen,
-  Loader2,
-  Zap
-  } from 'lucide-react';import Link from 'next/link';
+import { IconFlame as Flame, IconCoins as Coins, IconTrophy as Trophy, IconChevronRight as ChevronRight, IconPlay as Play, IconSword as Sword, IconBookOpen as BookOpen, IconLoader2 as Loader2, IconZap as Zap } from '@tabler/icons-react';import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';

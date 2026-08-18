@@ -1,14 +1,6 @@
 "use client";
 
-import { 
-  CreditCard, 
-  Check, 
-  Zap, 
-  ShieldCheck, 
-  Calendar,
-  ChevronRight,
-  Plus
-} from 'lucide-react';
+import { IconCreditCard as CreditCard, IconCheck as Check, IconZap as Zap, IconShieldCheck as ShieldCheck, IconCalendar as Calendar, IconChevronRight as ChevronRight, IconPlus as Plus } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { getSubscription, updateSubscription } from '@/lib/school.api';

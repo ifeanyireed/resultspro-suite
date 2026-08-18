@@ -1,18 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Settings, 
-  Globe, 
-  Shield, 
-  CreditCard, 
-  Bell, 
-  Database,
-  Layout,
-  Save,
-  CheckCircle2,
-  AlertTriangle
-} from "lucide-react";
+import { IconSettings as Settings, IconGlobe as Globe, IconShield as Shield, IconCreditCard as CreditCard, IconBell as Bell, IconDatabase as Database, IconLayout as Layout, IconSave as Save, IconCheckCircle2 as CheckCircle2, IconAlertTriangle as AlertTriangle } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

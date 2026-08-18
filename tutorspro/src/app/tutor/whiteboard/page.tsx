@@ -1,23 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  PenTool, 
-  Square, 
-  Circle, 
-  Type, 
-  Image as ImageIcon, 
-  Undo2, 
-  Redo2, 
-  Trash2, 
-  Download, 
-  Share2,
-  Settings,
-  ChevronRight,
-  Maximize2,
-  MousePointer2,
-  Eraser
-} from 'lucide-react';
+import { IconPenTool as PenTool, IconSquare as Square, IconCircle as Circle, IconType as Type, IconImage as ImageIcon, IconUndo2 as Undo2, IconRedo2 as Redo2, IconTrash2 as Trash2, IconDownload as Download, IconShare2 as Share2, IconSettings as Settings, IconChevronRight as ChevronRight, IconMaximize2 as Maximize2, IconMousePointer2 as MousePointer2, IconEraser as Eraser } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
 export default function TutorWhiteboard() {

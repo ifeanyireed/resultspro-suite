@@ -1,15 +1,6 @@
 "use client";
 
-import { 
-  GraduationCap, 
-  Upload, 
-  Search, 
-  FileSpreadsheet, 
-  Download,
-  MoreVertical,
-  CheckCircle2,
-  AlertCircle
-} from 'lucide-react';
+import { IconGraduationCap as GraduationCap, IconUpload as Upload, IconSearch as Search, IconFileSpreadsheet as FileSpreadsheet, IconDownload as Download, IconMoreVertical as MoreVertical, IconCheckCircle2 as CheckCircle2, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { getSchoolStudents, importStudents } from '@/lib/school.api';

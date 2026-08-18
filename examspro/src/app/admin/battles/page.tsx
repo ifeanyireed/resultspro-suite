@@ -1,21 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { 
-  Sword, 
-  Users, 
-  Coins, 
-  TrendingUp, 
-  Search,
-  Filter,
-  ArrowUpRight,
-  Clock,
-  ShieldAlert,
-  ChevronRight,
-  Activity,
-  Zap,
-  Loader2
-} from 'lucide-react';
+import { IconSword as Sword, IconUsers as Users, IconCoins as Coins, IconTrendingUp as TrendingUp, IconSearch as Search, IconFilter as Filter, IconArrowUpRight as ArrowUpRight, IconClock as Clock, IconShieldAlert as ShieldAlert, IconChevronRight as ChevronRight, IconActivity as Activity, IconZap as Zap, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import AdminHeader from '@/components/admin/AdminHeader';

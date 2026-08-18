@@ -1,20 +1,6 @@
 "use client";
 
-import { 
-  Link2, 
-  RefreshCw, 
-  Search, 
-  Filter, 
-  MoreVertical, 
-  CheckCircle2, 
-  XCircle, 
-  ExternalLink,
-  ShieldAlert,
-  Key,
-  Globe,
-  Settings,
-  Loader2
-} from 'lucide-react';
+import { IconLink2 as Link2, IconRefreshCw as RefreshCw, IconSearch as Search, IconFilter as Filter, IconMoreVertical as MoreVertical, IconCheckCircle2 as CheckCircle2, IconXCircle as XCircle, IconExternalLink as ExternalLink, IconShieldAlert as ShieldAlert, IconKey as Key, IconGlobe as Globe, IconSettings as Settings, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { getIntegrations } from '@/lib/superadmin.api';
 

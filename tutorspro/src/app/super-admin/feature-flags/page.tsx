@@ -1,20 +1,6 @@
 "use client";
 
-import { 
-  Flag, 
-  Search, 
-  Filter, 
-  Plus, 
-  ToggleRight, 
-  Users, 
-  Globe, 
-  AlertCircle,
-  MoreVertical,
-  ChevronRight,
-  ShieldCheck,
-  Settings,
-  Loader2
-} from 'lucide-react';
+import { IconFlag as Flag, IconSearch as Search, IconFilter as Filter, IconPlus as Plus, IconToggleRight as ToggleRight, IconUsers as Users, IconGlobe as Globe, IconAlertCircle as AlertCircle, IconMoreVertical as MoreVertical, IconChevronRight as ChevronRight, IconShieldCheck as ShieldCheck, IconSettings as Settings, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { getFeatureFlags } from '@/lib/superadmin.api';
 

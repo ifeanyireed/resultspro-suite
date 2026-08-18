@@ -1,16 +1,6 @@
 "use client";
 
-import { 
-  Users, 
-  ShieldCheck, 
-  LayoutDashboard,
-  DollarSign,
-  AlertCircle,
-  ShieldAlert,
-  MessageSquare,
-  Settings,
-  LogOut
-} from 'lucide-react';
+import { IconUsers as Users, IconShieldCheck as ShieldCheck, IconLayoutDashboard as LayoutDashboard, IconDollarSign as DollarSign, IconAlertCircle as AlertCircle, IconShieldAlert as ShieldAlert, IconMessageSquare as MessageSquare, IconSettings as Settings, IconLogOut as LogOut } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Logo from '../Logo';

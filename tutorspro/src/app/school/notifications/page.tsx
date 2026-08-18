@@ -1,16 +1,6 @@
 "use client";
 
-import { 
-  Bell, 
-  Search, 
-  MoreVertical, 
-  CheckCircle2, 
-  AlertCircle, 
-  Info,
-  Trash2,
-  Mail,
-  Send
-} from 'lucide-react';
+import { IconBell as Bell, IconSearch as Search, IconMoreVertical as MoreVertical, IconCheckCircle2 as CheckCircle2, IconAlertCircle as AlertCircle, IconInfo as Info, IconTrash2 as Trash2, IconMail as Mail, IconSend as Send } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { getSchoolNotifications, createSchoolNotification } from '@/lib/school.api';

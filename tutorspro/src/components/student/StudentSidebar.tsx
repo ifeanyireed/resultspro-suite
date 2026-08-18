@@ -1,21 +1,6 @@
 "use client";
 
-import { 
-  LayoutDashboard,
-  Calendar,
-  Video,
-  FileText,
-  Brain,
-  Layers,
-  Gamepad2,
-  LineChart,
-  Award,
-  MessageSquare,
-  Wallet,
-  Settings,
-  Search,
-  LogOut
-} from 'lucide-react';
+import { IconLayoutDashboard as LayoutDashboard, IconCalendar as Calendar, IconVideo as Video, IconFileText as FileText, IconBrain as Brain, IconLayers as Layers, IconGamepad2 as Gamepad2, IconLineChart as LineChart, IconAward as Award, IconMessageSquare as MessageSquare, IconWallet as Wallet, IconSettings as Settings, IconSearch as Search, IconLogOut as LogOut } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Logo from '../Logo';

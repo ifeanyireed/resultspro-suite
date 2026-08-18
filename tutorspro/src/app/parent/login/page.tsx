@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Shield, Mail, Lock, ChevronRight, UserCircle2, Loader2 } from 'lucide-react';
+import { IconShield as Shield, IconMail as Mail, IconLock as Lock, IconChevronRight as ChevronRight, IconUserCircle2 as UserCircle2, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';

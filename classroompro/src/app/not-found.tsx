@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Home, Search, AlertCircle } from "lucide-react";
+import { IconArrowLeft as ArrowLeft, IconHome as Home, IconSearch as Search, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/Logo";
 

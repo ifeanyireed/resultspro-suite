@@ -1,19 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Layers, 
-  Search, 
-  Unlock,
-  Plus,
-  TrendingUp,
-  Brain,
-  Loader2,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  Zap
-} from "lucide-react";
+import { IconLayers as Layers, IconSearch as Search, IconUnlock as Unlock, IconPlus as Plus, IconTrendingUp as TrendingUp, IconBrain as Brain, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconClock as Clock, IconZap as Zap } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";

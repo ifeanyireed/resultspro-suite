@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
-import { Camera, Image as ImageIcon, Globe, ArrowRight, ArrowLeft, CheckCircle2, Building2, Palette, BookOpen, Quote, Plus, Calendar, Layers, Users, GraduationCap, Upload, Check, CreditCard, Lock, Link } from 'lucide-react';
+import { IconCamera as Camera, IconImage as ImageIcon, IconGlobe as Globe, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCheckCircle2 as CheckCircle2, IconBuilding2 as Building2, IconPalette as Palette, IconBookOpen as BookOpen, IconQuote as Quote, IconPlus as Plus, IconCalendar as Calendar, IconLayers as Layers, IconUsers as Users, IconGraduationCap as GraduationCap, IconUpload as Upload, IconCheck as Check, IconCreditCard as CreditCard, IconLock as Lock, IconLink as Link } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
 

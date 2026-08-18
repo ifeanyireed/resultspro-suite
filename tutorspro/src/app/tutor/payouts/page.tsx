@@ -2,19 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { 
-  Building2, 
-  CreditCard, 
-  ChevronRight, 
-  Plus, 
-  CheckCircle2, 
-  Clock, 
-  AlertCircle,
-  ArrowUpRight,
-  ShieldCheck,
-  Smartphone,
-  Loader2
-} from 'lucide-react';
+import { IconBuilding2 as Building2, IconCreditCard as CreditCard, IconChevronRight as ChevronRight, IconPlus as Plus, IconCheckCircle2 as CheckCircle2, IconClock as Clock, IconAlertCircle as AlertCircle, IconArrowUpRight as ArrowUpRight, IconShieldCheck as ShieldCheck, IconSmartphone as Smartphone, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 

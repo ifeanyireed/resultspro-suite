@@ -1,5 +1,5 @@
 import React from 'react';
-import { LucideIcon } from 'lucide-react';
+import { Icon as LucideIcon } from '@tabler/icons-react';
 
 export interface Step {
   id: string | number;

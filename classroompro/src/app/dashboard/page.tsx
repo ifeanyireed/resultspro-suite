@@ -1,20 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  BookOpen, 
-  BrainCircuit, 
-  Layers, 
-  ChevronRight,
-  Clock,
-  Trophy,
-  Flame,
-  Zap,
-  Target,
-  Award,
-  Eye,
-  EyeOff
-} from "lucide-react";
+import { IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconChevronRight as ChevronRight, IconClock as Clock, IconTrophy as Trophy, IconFlame as Flame, IconZap as Zap, IconTarget as Target, IconAward as Award, IconEye as Eye, IconEyeOff as EyeOff } from '@tabler/icons-react';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";

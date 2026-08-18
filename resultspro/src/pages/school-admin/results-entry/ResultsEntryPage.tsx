@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import axiosInstance from '@/lib/axiosConfig';
-import { Archive, Trash2, Eye, Download, Clock, CheckCircle, AlertCircle, X, FileText, Plus } from 'lucide-react';
+import { IconArchive as Archive, IconTrash2 as Trash2, IconEye as Eye, IconDownload as Download, IconClock as Clock, IconCheckCircle as CheckCircle, IconAlertCircle as AlertCircle, IconX as X, IconFileText as FileText, IconPlus as Plus } from '@tabler/icons-react';
 import { Share01 } from '@/lib/hugeicons-compat';
 import { useNavigate } from 'react-router-dom';
 import { CompactGradebook } from '@/components/gradebook/CompactGradebook';

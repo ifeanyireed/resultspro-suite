@@ -1,20 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Server, 
-  Activity, 
-  ShieldAlert, 
-  Settings, 
-  Database, 
-  Globe, 
-  Terminal,
-  Cpu,
-  Lock,
-  LineChart,
-  ChevronRight,
-  Loader2
-} from 'lucide-react';
+import { IconServer as Server, IconActivity as Activity, IconShieldAlert as ShieldAlert, IconSettings as Settings, IconDatabase as Database, IconGlobe as Globe, IconTerminal as Terminal, IconCpu as Cpu, IconLock as Lock, IconLineChart as LineChart, IconChevronRight as ChevronRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';

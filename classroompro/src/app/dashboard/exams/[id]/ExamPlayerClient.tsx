@@ -1,16 +1,6 @@
 "use client";
 
-import { 
-  ArrowLeft, 
-  Clock, 
-  ChevronRight, 
-  ChevronLeft,
-  Flag,
-  Send,
-  Loader2,
-  CheckCircle2,
-  GraduationCap
-} from "lucide-react";
+import { IconArrowLeft as ArrowLeft, IconClock as Clock, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconFlag as Flag, IconSend as Send, IconLoader2 as Loader2, IconCheckCircle2 as CheckCircle2, IconGraduationCap as GraduationCap } from '@tabler/icons-react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";

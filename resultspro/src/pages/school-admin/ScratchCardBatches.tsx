@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Eye, Download, Edit, X, AlertCircle } from 'lucide-react';
+import { IconEye as Eye, IconDownload as Download, IconEdit as Edit, IconX as X, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
 
 interface Card {
   id: string;

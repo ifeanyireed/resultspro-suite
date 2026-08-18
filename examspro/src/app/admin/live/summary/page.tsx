@@ -1,15 +1,6 @@
 "use client";
 
-import { 
-  Coins, 
-  Download, 
-  Users, 
-  Target, 
-  TrendingUp, 
-  Search, 
-  Filter,
-  Loader2
-} from 'lucide-react';
+import { IconCoins as Coins, IconDownload as Download, IconUsers as Users, IconTarget as Target, IconTrendingUp as TrendingUp, IconSearch as Search, IconFilter as Filter, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useSearchParams } from 'next/navigation';

@@ -1,16 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { 
-  Trophy, 
-  Crown,
-  TrendingUp,
-  Target,
-  Users,
-  School,
-  Globe,
-  Loader2
-} from "lucide-react";
+import { IconTrophy as Trophy, IconCrown as Crown, IconTrendingUp as TrendingUp, IconTarget as Target, IconUsers as Users, IconSchool as School, IconGlobe as Globe, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import React, { useEffect, useState } from "react";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/useAuthStore";

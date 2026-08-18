@@ -1,5 +1,5 @@
 import React from 'react';
-import { LucideIcon } from 'lucide-react';
+import { IconPoint as LucideIcon } from '@tabler/icons-react';
 
 interface StatCardProps {
   title: string;

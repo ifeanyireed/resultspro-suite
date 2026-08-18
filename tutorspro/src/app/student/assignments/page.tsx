@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { FileText, Clock, CheckCircle2, AlertCircle, ChevronRight, Upload, Loader2 } from 'lucide-react';
+import { IconFileText as FileText, IconClock as Clock, IconCheckCircle2 as CheckCircle2, IconAlertCircle as AlertCircle, IconChevronRight as ChevronRight, IconUpload as Upload, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';
 import { RoleGate } from '@/components/RoleGate';

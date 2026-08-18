@@ -2,29 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
-  LayoutDashboard, 
-  BookOpen, 
-  BrainCircuit, 
-  Layers, 
-  GraduationCap, 
-  TrendingUp, 
-  Download, 
-  Settings, 
-  LogOut,
-  Bell,
-  Users,
-  School,
-  FilePlus,
-  BarChart3,
-  Calendar,
-  Trophy,
-  Bookmark,
-  Library,
-  Heart,
-  MessageSquare,
-  CreditCard
-} from "lucide-react";
+import { IconLayoutDashboard as LayoutDashboard, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconGraduationCap as GraduationCap, IconTrendingUp as TrendingUp, IconDownload as Download, IconSettings as Settings, IconLogOut as LogOut, IconBell as Bell, IconUsers as Users, IconSchool as School, IconFilePlus as FilePlus, IconBarChart3 as BarChart3, IconCalendar as Calendar, IconTrophy as Trophy, IconBookmark as Bookmark, IconLibrary as Library, IconHeart as Heart, IconMessageSquare as MessageSquare, IconCreditCard as CreditCard } from '@tabler/icons-react';
 import Logo from "@/components/Logo";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";

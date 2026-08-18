@@ -4,16 +4,7 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { usePathname } from 'next/navigation';
 import { getActivePopups, PopupNotification } from '@/lib/notifications.api';
 import { useAuthStore } from '@/store/useAuthStore';
-import { 
-  X, 
-  Bell, 
-  Info, 
-  AlertTriangle, 
-  CheckCircle2, 
-  Trophy, 
-  Sword, 
-  Coins 
-} from 'lucide-react';
+import { IconX as X, IconBell as Bell, IconInfo as Info, IconAlertTriangle as AlertTriangle, IconCheckCircle2 as CheckCircle2, IconTrophy as Trophy, IconSword as Sword, IconCoins as Coins } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
 interface PopupContextType {

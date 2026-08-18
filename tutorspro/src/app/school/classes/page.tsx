@@ -1,15 +1,6 @@
 "use client";
 
-import { 
-  BookOpen, 
-  Plus, 
-  Search, 
-  Users, 
-  Clock, 
-  ChevronRight,
-  Filter,
-  X
-} from 'lucide-react';
+import { IconBookOpen as BookOpen, IconPlus as Plus, IconSearch as Search, IconUsers as Users, IconClock as Clock, IconChevronRight as ChevronRight, IconFilter as Filter, IconX as X } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { getSchoolClasses, createSchoolClass, CreateClassData, getSchoolTeachers } from '@/lib/school.api';

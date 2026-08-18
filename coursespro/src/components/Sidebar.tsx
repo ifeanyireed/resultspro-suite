@@ -3,19 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  Compass,
-  Layers,
-  Kanban,
-  Radio,
-  Users2,
-  GraduationCap,
-  Trophy,
-  Briefcase,
-  Flame,
-  BookOpen,
-  LucideIcon,
-} from 'lucide-react';
+import { IconCompass as Compass, IconLayers as Layers, IconKanban as Kanban, IconRadio as Radio, IconUsers2 as Users2, IconGraduationCap as GraduationCap, IconTrophy as Trophy, IconBriefcase as Briefcase, IconFlame as Flame, IconBookOpen as BookOpen, Icon as LucideIcon } from '@tabler/icons-react';
 
 interface NavLinkItem {
   label: string;

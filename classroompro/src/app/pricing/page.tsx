@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { Check, ShieldCheck, Zap, School, Building2, Heart } from "lucide-react";
+import { IconCheck as Check, IconShieldCheck as ShieldCheck, IconZap as Zap, IconSchool as School, IconBuilding2 as Building2, IconHeart as Heart } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

@@ -1,17 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { 
-  Archive, 
-  Search, 
-  Download, 
-  Play, 
-  BookOpen, 
-  Clock, 
-  Filter,
-  ChevronRight,
-  FileText
-} from 'lucide-react';
+import { IconArchive as Archive, IconSearch as Search, IconDownload as Download, IconPlay as Play, IconBookOpen as BookOpen, IconClock as Clock, IconFilter as Filter, IconChevronRight as ChevronRight, IconFileText as FileText } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 

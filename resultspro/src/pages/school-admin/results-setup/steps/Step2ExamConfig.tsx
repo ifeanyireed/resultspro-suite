@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { Trash2, Plus } from 'lucide-react';
+import { IconTrash2 as Trash2, IconPlus as Plus } from '@tabler/icons-react';
 
 interface ExamComponent {
   id: string;

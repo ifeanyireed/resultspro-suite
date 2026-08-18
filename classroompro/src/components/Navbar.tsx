@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Logo from './Logo';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useEffect, useState } from 'react';
-import { Bell, Home, BookOpen, BrainCircuit, Layers, DollarSign, LayoutDashboard, GraduationCap } from 'lucide-react';
+import { IconBell as Bell, IconHome as Home, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconDollarSign as DollarSign, IconLayoutDashboard as LayoutDashboard, IconGraduationCap as GraduationCap } from '@tabler/icons-react';
 
 const Navbar = () => {
   const { user, isAuthenticated } = useAuthStore();

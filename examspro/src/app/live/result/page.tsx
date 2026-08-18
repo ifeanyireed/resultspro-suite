@@ -2,15 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
-import { 
-  Trophy, 
-  Share2, 
-  ArrowRight, 
-  Medal,
-  Star,
-  Home,
-  Loader2
-} from 'lucide-react';
+import { IconTrophy as Trophy, IconShare2 as Share2, IconArrowRight as ArrowRight, IconMedal as Medal, IconStar as Star, IconHome as Home, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useLiveGame } from '@/hooks/useLiveGame';

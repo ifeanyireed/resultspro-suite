@@ -1,18 +1,6 @@
 "use client";
 
-import { 
-  MessageSquare, 
-  Search, 
-  Filter, 
-  MoreVertical, 
-  CheckCircle2, 
-  Clock,
-  User,
-  Plus,
-  Send,
-  Flag,
-  Loader2
-} from 'lucide-react';
+import { IconMessageSquare as MessageSquare, IconSearch as Search, IconFilter as Filter, IconMoreVertical as MoreVertical, IconCheckCircle2 as CheckCircle2, IconClock as Clock, IconUser as User, IconPlus as Plus, IconSend as Send, IconFlag as Flag, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { getSupportTickets } from '@/lib/platform.api';
 
