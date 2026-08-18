@@ -74,7 +74,7 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-slate-500 font-semibold mb-1">examsPRO CBT Service (Go)</label>
+                <label className="block text-slate-500 font-semibold mb-1">ExamsPRO CBT Service (Go)</label>
                 <input
                   type="text"
                   defaultValue="http://localhost:8080"

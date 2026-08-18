@@ -31,9 +31,9 @@ export function Sidebar() {
       title: 'MODULAR SUITE CONTROLS',
       links: [
         { label: 'ResultPRO', href: '/resultspro', icon: FileCheck2 },
-        { label: 'examsPRO (CBT)', href: '/examspro', icon: Sparkles },
-        { label: 'ClassroomPRO (LMS)', href: '/classroompro', icon: BookOpen },
-        { label: 'TutorsPRO Marketplace', href: '/tutorspro', icon: GraduationCap },
+        { label: 'ExamsPRO', href: '/exampro', icon: Sparkles },
+        { label: 'ClassroomPRO', href: '/classroompro', icon: BookOpen },
+        { label: 'TutorsPRO', href: '/tutorspro', icon: GraduationCap },
       ],
     },
     {

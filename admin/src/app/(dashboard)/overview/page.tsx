@@ -101,7 +101,7 @@ export default function OverviewPage() {
                   <Sparkles size={18} color="#9333ea" />
                 </div>
                 <div>
-                  <h2 style={{ fontSize: '1.1rem', marginBottom: '0.1rem' }}>examsPRO</h2>
+                  <h2 style={{ fontSize: '1.1rem', marginBottom: '0.1rem' }}>ExamsPRO</h2>
                   <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: '600' }}>CBT Tests</span>
                 </div>
               </div>
@@ -109,7 +109,7 @@ export default function OverviewPage() {
             <div style={{ padding: '1rem', textAlign: 'center' }}>
               <div style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b' }}>520</div>
               <p style={{ color: '#64748b', marginTop: '0.5rem' }}>Exams taken today</p>
-              <Link href="/examspro" className="mt-4 inline-block text-purple-600 font-bold text-sm hover:underline">Control Center &rarr;</Link>
+              <Link href="/exampro" className="mt-4 inline-block text-purple-600 font-bold text-sm hover:underline">Control Center &rarr;</Link>
             </div>
           </div>
         </div>
