@@ -1,0 +1,715 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.5rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Reduced from 1.5rem to pull elements closer */
+}
+
+/* Progress Bar Styles */
+.progressContainer {
+  width: 100%;
+  height: 2px; /* Ultra-thin as requested */
+  background: #f1f5f9;
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+.childHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.childAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.childInfo h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: black;
+}
+
+.childInfo p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.trendIndicator {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.4rem;
+  margin-left: auto;
+}
+
+.trendUp { background: #dcfce7; color: #166534; }
+.trendDown { background: #fee2e2; color: #991b1b; }
+
+/* Welcome Banner */
+.welcomeBanner {
+  background: #146ef5;
+  border-radius: 2rem;
+  padding: 0.6rem 3rem;
+  color: white;
+  position: sticky;
+  top: 80px; /* Stick right under the header */
+  z-index: 110; /* Above header to allow monster overlap */
+  overflow: visible;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.welcomeText h1 {
+  font-size: 1.6rem;
+  margin: 0 0 0.2rem 0;
+  color: white;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.welcomeText p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  max-width: 450px;
+  color: white;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.monsterContainer {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin-top: -35px;
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.statCard {
+  background: white;
+  padding: 1rem;
+  border-radius: 1.5rem;
+  border: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.statTitle {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statContent {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.statIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.statIcon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.statInfo h3 {
+  font-size: 1.25rem;
+  color: black;
+  margin: 0;
+  font-weight: 700;
+}
+
+.statInfo p {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.statLink {
+  color: #146ef5;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: underline;
+  margin-top: 0.25rem;
+}
+
+/* Bottom Widgets Grid */
+.bottomGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.widget {
+  background: white;
+  padding: 1.5rem 1rem;
+  border-radius: 1.75rem;
+  border: 1px solid #f1f5f9;
+}
+
+.widgetHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.widgetHeader h2 {
+  font-size: 1.1rem;
+  color: black;
+  font-weight: 700;
+  margin: 0;
+}
+
+.widgetDate {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Timetable Styles */
+.timetable {
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.daysRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.day {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.dayName {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.dayDate {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.activeDay {
+  background: #146ef5;
+  color: white;
+}
+
+.activeDay .dayName {
+  opacity: 1;
+}
+
+/* Calendar View Styles */
+.calendarView {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-top: 0.5rem;
+}
+
+.hourRow {
+  position: relative;
+  height: 100px; /* Spacious hour height */
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+}
+
+.hourLabel {
+  width: 50px;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-top: -8px; /* Center with the line */
+  background: white;
+  padding-right: 0.5rem;
+}
+
+.hourContent {
+  flex: 1;
+  position: relative;
+}
+
+.eventsOverlay {
+  position: absolute;
+  top: 0;
+  left: 50px; /* Aligned with the end of the hourLabel */
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.calendarEvent {
+  position: absolute;
+  left: 0px; /* Starts exactly at the 50px boundary */
+  right: 0px;
+  padding: 1.25rem;
+  background: #eff6ff; /* Light blue background for all blocks */
+  border: 1px solid #dbeafe;
+  border-radius: 1.25rem;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.eventHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.studentAvatars {
+  display: flex;
+  align-items: center;
+}
+
+.avatarMini {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid white;
+  margin-left: -10px;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.avatarMini:first-child {
+  margin-left: 0;
+}
+
+.eventFooter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.currentTimeIndicator {
+  position: absolute;
+  left: 0px;
+  right: 0;
+  height: 2px;
+  background: #146ef5;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+}
+
+.currentTimeBubble {
+  position: absolute;
+  left: 0;
+  width: 50px; /* Match the exact width of the hourLabel axis */
+  display: flex;
+  justify-content: center;
+  background: #146ef5;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0;
+  border-radius: 2rem;
+  z-index: 11;
+  box-shadow: 0 4px 6px -1px rgba(20, 110, 245, 0.2);
+}
+
+.calendarEvent .className {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: black;
+}
+
+.calendarEvent .classTime {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.calendarEvent .subjectTag {
+  padding: 0.2rem 0.75rem;
+  border-radius: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  color: white; /* White text for solid tags */
+}
+
+/* Assessment & List Item Styles */
+.assessmentItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border: 1px solid #f1f5f9;
+  border-radius: 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.assessmentItem:hover {
+  background: #f8fafc;
+  border-color: #dbeafe;
+}
+
+.assessmentIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.headerIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.assessmentInfo {
+  flex: 1;
+}
+
+.assessmentTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: black;
+  margin: 0 0 0.15rem 0;
+}
+
+.assessmentSub {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.assessmentBadge {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.badgeValue {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #10b981;
+}
+
+.badgeLabel {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Event Card Styles */
+.eventsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.eventCard {
+  position: relative;
+  height: 130px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.eventCard:hover {
+  transform: scale(1.02);
+}
+
+.eventCard:hover Image {
+  transform: scale(1.1);
+}
+
+.eventDateBadge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: white;
+  padding: 0.4rem;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 40px;
+  z-index: 5;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dateMonth {
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: #146ef5;
+  text-transform: uppercase;
+}
+
+.dateDay {
+  font-size: 1rem;
+  font-weight: 800;
+  color: black;
+  margin-top: -2px;
+}
+
+.eventOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+  padding: 1.25rem 1.25rem 1.25rem 4.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: white;
+  transition: background 0.3s ease;
+}
+
+.eventCard:hover .eventOverlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+}
+
+.eventTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.eventMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.eventTime {
+  font-size: 0.7rem;
+  opacity: 0.9;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.moreDetails {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  background: rgba(255,255,255,0.2);
+  padding: 0.25rem 0.6rem;
+  border-radius: 2rem;
+  backdrop-filter: blur(4px);
+}
+
+/* Right Sidebar (Task Progress) */
+.sidebarArea {
+  background: white;
+  padding: 2rem 1.25rem;
+  border-radius: 2.25rem;
+  border: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 80px;
+  height: calc(100vh - 96px); /* Fill screen vertically under the header */
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.sidebarArea::-webkit-scrollbar {
+  width: 2px;
+}
+
+.sidebarArea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebarArea::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 10px;
+}
+
+.sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.sidebarHeader h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: black;
+  margin: 0;
+}
+
+.sectionTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 1.25rem;
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2.5rem;
+}
+
+.taskItem {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.taskItem:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid #146ef5;
+  background: #eff6ff; /* Light blue subtle fill */
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.checkbox.completed {
+  background: #146ef5;
+  border-color: #146ef5;
+}
+
+.taskInfo {
+  flex: 1;
+}
+
+.taskHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.taskInfo h4 {
+  font-size: 0.9rem;
+  color: black;
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.taskDate {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.taskMeta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.taskDeadline {
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+@media (max-width: 1200px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}

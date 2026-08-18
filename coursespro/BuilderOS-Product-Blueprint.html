@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuilderOS — Product Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#FAF9F6;
+  --surface:#FFFFFF;
+  --surface-2:#F2F0E9;
+  --ink:#14151F;
+  --ink-soft:#5C5E6B;
+  --ink-faint:#9A9CAA;
+  --line:#E7E4DC;
+  --signal:#5546E0;
+  --signal-2:#7A6FF0;
+  --signal-soft:#EEEBFC;
+  --ember:#EF8B3C;
+  --ember-soft:#FCEBDA;
+  --growth:#1E9E6B;
+  --growth-soft:#E3F5EC;
+  --rose:#D9555C;
+  --rose-soft:#FBEAEA;
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:24px;
+  --shadow-sm:0 1px 2px rgba(20,21,31,.05), 0 1px 1px rgba(20,21,31,.03);
+  --shadow-md:0 10px 26px rgba(20,21,31,.07), 0 2px 8px rgba(20,21,31,.04);
+  --shadow-lg:0 28px 64px rgba(20,21,31,.12), 0 10px 22px rgba(20,21,31,.06);
+}
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:.001ms !important; transition-duration:.001ms !important;} }
+body{
+  margin:0; background:var(--canvas); color:var(--ink);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{ font-family:'Space Grotesk',sans-serif; font-weight:600; letter-spacing:-0.01em; color:var(--ink); line-height:1.15; }
+p{ margin:0; }
+a{ color:inherit; text-decoration:none; }
+.mono{ font-family:'IBM Plex Mono',monospace; }
+ul{ margin:0; padding:0; }
+img,svg{ display:block; max-width:100%; }
+::selection{ background:var(--signal-soft); color:var(--signal); }
+:focus-visible{ outline:2px solid var(--signal); outline-offset:2px; border-radius:4px; }
+
+/* ---------- Layout shell ---------- */
+.shell{ display:grid; grid-template-columns:272px 1fr; max-width:1440px; margin:0 auto; }
+.sidebar{
+  position:sticky; top:0; align-self:start; height:100vh; overflow-y:auto;
+  padding:28px 20px 40px; border-right:1px solid var(--line);
+  scrollbar-width:thin;
+}
+.sidebar::-webkit-scrollbar{ width:6px; }
+.sidebar::-webkit-scrollbar-thumb{ background:var(--line); border-radius:6px; }
+.brand{ display:flex; align-items:center; gap:10px; padding:6px 10px 22px; }
+.brand-mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,var(--signal),var(--signal-2)); position:relative; flex:none; }
+.brand-mark::after{ content:""; position:absolute; inset:8px; border:2px solid rgba(255,255,255,.85); border-radius:4px; }
+.brand-name{ font-family:'Space Grotesk'; font-weight:700; font-size:15px; letter-spacing:-0.01em; }
+.brand-sub{ font-family:'IBM Plex Mono'; font-size:10px; color:var(--ink-faint); letter-spacing:.04em; }
+
+.nav-group{ margin-bottom:22px; }
+.nav-group-label{ font-family:'IBM Plex Mono'; font-size:10px; text-transform:uppercase; letter-spacing:.09em; color:var(--ink-faint); padding:0 10px; margin-bottom:8px; display:block; }
+.nav-link{
+  display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:9px;
+  font-size:13.5px; color:var(--ink-soft); font-weight:500; transition:background .15s ease,color .15s ease;
+  border-left:2px solid transparent;
+}
+.nav-link .dot{ width:5px; height:5px; border-radius:50%; background:var(--ink-faint); flex:none; transition:background .15s ease,transform .15s ease; }
+.nav-link:hover{ background:var(--surface-2); color:var(--ink); }
+.nav-link.active{ background:var(--signal-soft); color:var(--signal); font-weight:600; }
+.nav-link.active .dot{ background:var(--signal); transform:scale(1.4); }
+
+.mobile-bar{ display:none; }
+
+.main{ padding:0 56px 140px; min-width:0; }
+.section{ padding:68px 0; border-bottom:1px solid var(--line); scroll-margin-top:20px; }
+.section:last-of-type{ border-bottom:none; }
+.section-head{ margin-bottom:36px; }
+.eyebrow{ display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono'; font-size:11.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+.eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--signal); }
+.eyebrow.ember .dot{ background:var(--ember); }
+.eyebrow.growth .dot{ background:var(--growth); }
+.section h2{ font-size:clamp(1.55rem,2.6vw,2.1rem); margin-bottom:14px; }
+.section-lede{ color:var(--ink-soft); max-width:70ch; font-size:1.02rem; }
+
+.reveal{ opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease; }
+.reveal.in-view{ opacity:1; transform:translateY(0); }
+
+/* ---------- Hero ---------- */
+.hero{ padding:64px 0 56px; border-bottom:1px solid var(--line); display:grid; grid-template-columns:1.15fr .85fr; gap:52px; align-items:center; }
+.hero-eyebrow{ display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono'; font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--signal); background:var(--signal-soft); padding:7px 13px; border-radius:999px; }
+.hero-eyebrow .pulse{ width:6px; height:6px; border-radius:50%; background:var(--signal); animation:pulse 2s infinite; }
+@keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
+.hero h1{ font-size:clamp(2.3rem,4vw,3.5rem); margin:20px 0 18px; }
+.hero h1 em{ font-style:normal; color:var(--signal); }
+.hero .lede{ font-size:1.13rem; color:var(--ink-soft); max-width:56ch; }
+.hero-meta{ display:flex; gap:10px; margin-top:30px; flex-wrap:wrap; }
+.meta-chip{ border:1px solid var(--line); background:var(--surface); border-radius:10px; padding:9px 14px; font-size:12.5px; font-family:'IBM Plex Mono'; color:var(--ink-soft); }
+.meta-chip b{ color:var(--ink); }
+
+/* dashboard preview signature widget */
+.dash-preview{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); padding:18px; position:relative; }
+.dash-chrome{ display:flex; align-items:center; gap:6px; margin-bottom:14px; padding:0 2px; }
+.dash-chrome .cdot{ width:8px; height:8px; border-radius:50%; background:var(--line); }
+.dash-chrome .clabel{ margin-left:8px; font-family:'IBM Plex Mono'; font-size:10.5px; color:var(--ink-faint); letter-spacing:.05em; }
+.dash-card{ background:var(--surface-2); border-radius:var(--radius-md); padding:14px 16px; }
+.dash-row{ display:flex; gap:10px; margin-bottom:10px; }
+.dash-row:last-child{ margin-bottom:0; }
+.avatar-stack{ display:flex; align-items:center; }
+.avatar{ width:26px; height:26px; border-radius:50%; border:2px solid var(--surface-2); margin-left:-8px; position:relative; flex:none; }
+.avatar:first-child{ margin-left:0; }
+.avatar.a1{ background:var(--signal); } .avatar.a2{ background:var(--ember); } .avatar.a3{ background:var(--growth); } .avatar.a4{ background:#B7B2E8; }
+.avatar .live{ position:absolute; bottom:-1px; right:-1px; width:8px; height:8px; border-radius:50%; background:var(--growth); border:2px solid var(--surface-2); }
+.presence-text{ font-size:12px; color:var(--ink-soft); margin-left:10px; align-self:center; }
+.presence-text b{ color:var(--ink); }
+.dash-card.split{ flex:1; display:flex; flex-direction:column; gap:2px; }
+.streak-flame{ display:flex; align-items:center; gap:8px; }
+.streak-num{ font-family:'Space Grotesk'; font-size:22px; font-weight:700; color:var(--ink); }
+.streak-label{ font-size:11px; color:var(--ink-soft); }
+.ring{ width:52px; height:52px; border-radius:50%; background:conic-gradient(var(--signal) 0 68%, var(--surface) 68% 100%); display:flex; align-items:center; justify-content:center; flex:none; }
+.ring-inner{ width:38px; height:38px; border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono'; font-size:10.5px; font-weight:600; color:var(--signal); }
+.ring-row{ display:flex; align-items:center; gap:12px; }
+.ring-row .rl{ font-size:11px; color:var(--ink-soft); line-height:1.4; }
+.lb-row{ display:flex; justify-content:space-between; font-size:12px; padding:5px 0; color:var(--ink-soft); }
+.lb-row.me{ background:var(--signal-soft); border-radius:8px; padding:5px 8px; color:var(--signal); font-weight:600; margin:0 -8px; }
+.mentor-quote{ font-size:12.5px; color:var(--ink-soft); font-style:italic; line-height:1.5; }
+.mentor-who{ display:flex; align-items:center; gap:8px; margin-top:8px; }
+.mentor-who .avatar{ margin-left:0; width:20px; height:20px; }
+.mentor-who span{ font-size:11px; color:var(--ink-faint); }
+
+/* ---------- Reusable components ---------- */
+.grid-2{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+.grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:24px; box-shadow:var(--shadow-sm); transition:transform .18s ease, box-shadow .18s ease; }
+.card:hover{ transform:translateY(-2px); box-shadow:var(--shadow-md); }
+.card h3{ font-size:1.02rem; margin-bottom:8px; }
+.card p{ color:var(--ink-soft); font-size:.92rem; }
+.card .card-tag{ display:inline-block; font-family:'IBM Plex Mono'; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--signal); background:var(--signal-soft); padding:3px 9px; border-radius:6px; margin-bottom:12px; }
+
+.tag{ display:inline-block; font-family:'IBM Plex Mono'; font-size:11px; padding:4px 10px; border-radius:6px; background:var(--surface-2); color:var(--ink-soft); margin:0 6px 6px 0; }
+
+table{ width:100%; border-collapse:collapse; font-size:.9rem; }
+th,td{ padding:13px 14px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+th{ font-family:'IBM Plex Mono'; font-size:10.5px; text-transform:uppercase; color:var(--ink-faint); letter-spacing:.06em; font-weight:500; }
+tr:last-child td{ border-bottom:none; }
+.table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius-md); background:var(--surface); }
+.table-wrap table{ min-width:640px; }
+.table-wrap .table-wrap{ border:none; }
+
+.chip{ font-family:'IBM Plex Mono'; font-size:10.5px; padding:3px 9px; border-radius:6px; display:inline-block; white-space:nowrap; }
+.chip.high{ background:var(--rose-soft); color:var(--rose); }
+.chip.med{ background:var(--ember-soft); color:var(--ember); }
+.chip.low{ background:var(--growth-soft); color:var(--growth); }
+.check{ color:var(--growth); font-weight:700; }
+.cross{ color:var(--rose); font-weight:700; }
+.partial{ color:var(--ember); font-weight:700; }
+
+footer{ padding:56px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+footer .fbrand{ display:flex; align-items:center; gap:10px; }
+footer p{ color:var(--ink-faint); font-size:12.5px; font-family:'IBM Plex Mono'; }
+
+/* ---------- Flows ---------- */
+.flow{ display:flex; align-items:stretch; gap:0; margin-top:20px; }
+.flow-step{ flex:1; min-width:140px; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:16px 16px; }
+.flow-step .num{ font-family:'IBM Plex Mono'; font-size:11px; color:var(--signal); margin-bottom:6px; display:block; }
+.flow-step p{ font-size:.82rem; color:var(--ink-soft); margin-top:6px; }
+.flow-arrow{ display:flex; align-items:center; justify-content:center; width:30px; color:var(--ink-faint); font-size:16px; flex:none; }
+.flow-branch-label{ font-family:'IBM Plex Mono'; font-size:11px; text-transform:uppercase; letter-spacing:.06em; margin:22px 0 4px; display:block; }
+
+/* ---------- Screens directory ---------- */
+.screen-category{ margin-bottom:38px; }
+.screen-category:last-child{ margin-bottom:0; }
+.screen-category-head{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+.screen-category-head .num-badge{ width:26px; height:26px; border-radius:8px; background:var(--signal-soft); color:var(--signal); font-family:'IBM Plex Mono'; font-size:11px; display:flex; align-items:center; justify-content:center; flex:none; }
+.screen-category-head h3{ font-size:1.02rem; }
+.screen-list{ display:grid; grid-template-columns:repeat(2,1fr); gap:0 32px; margin-top:10px; }
+.screen-item{ display:flex; gap:14px; padding:11px 0; border-bottom:1px dashed var(--line); }
+.screen-item .name{ min-width:168px; max-width:168px; font-weight:600; font-size:.86rem; flex:none; }
+.screen-item .desc{ color:var(--ink-soft); font-size:.85rem; }
+
+/* ---------- Modules ---------- */
+.module-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:22px; margin-bottom:16px; }
+.module-card-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:10px; flex-wrap:wrap; }
+.module-card h3{ font-size:1.05rem; }
+.module-card .desc{ color:var(--ink-soft); font-size:.9rem; margin-bottom:14px; }
+.module-feature-list{ list-style:none; display:grid; grid-template-columns:repeat(2,1fr); gap:6px 24px; }
+.module-feature-list li{ font-size:.84rem; color:var(--ink-soft); padding-left:14px; position:relative; }
+.module-feature-list li::before{ content:"–"; position:absolute; left:0; color:var(--ink-faint); }
+
+/* ---------- Schema ---------- */
+.schema-domain{ margin-bottom:36px; }
+.schema-domain:last-child{ margin-bottom:0; }
+.schema-domain-label{ font-family:'IBM Plex Mono'; font-size:11.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-faint); margin-bottom:14px; display:block; }
+.schema-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.schema-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:18px; }
+.schema-card h4{ font-family:'IBM Plex Mono'; font-size:.88rem; color:var(--signal); margin-bottom:4px; font-weight:600; }
+.schema-card .schema-desc{ font-size:.76rem; color:var(--ink-faint); margin-bottom:10px; }
+.schema-fields{ list-style:none; font-family:'IBM Plex Mono'; font-size:.74rem; color:var(--ink-soft); line-height:1.85; }
+.schema-fields b{ color:var(--ink); font-weight:600; }
+
+/* ---------- Architecture ---------- */
+.arch-diagram{ display:flex; flex-direction:column; gap:8px; margin-top:24px; }
+.arch-layer{ border:1px solid var(--line); border-radius:var(--radius-md); padding:16px 20px; background:var(--surface); }
+.arch-layer .layer-label{ font-family:'IBM Plex Mono'; font-size:10.5px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px; display:block; }
+.arch-layer .layer-items{ display:flex; gap:8px; flex-wrap:wrap; }
+.arch-layer .layer-items span{ font-family:'IBM Plex Mono'; font-size:11.5px; background:var(--surface-2); border-radius:6px; padding:5px 10px; color:var(--ink); }
+.arch-layer.accent{ border-color:var(--signal); background:var(--signal-soft); }
+.arch-layer.accent .layer-items span{ background:var(--surface); }
+.stack-col-title{ font-size:.82rem; font-weight:600; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.stack-col-title .sw{ width:8px; height:8px; border-radius:2px; }
+
+/* ---------- Monetization ---------- */
+.price-card{ border:1px solid var(--line); border-radius:var(--radius-lg); padding:26px; background:var(--surface); position:relative; }
+.price-card.featured{ border-color:var(--signal); box-shadow:var(--shadow-md); }
+.price-card .fplan{ position:absolute; top:-11px; right:22px; background:var(--signal); color:#fff; font-family:'IBM Plex Mono'; font-size:10px; padding:4px 10px; border-radius:999px; letter-spacing:.04em; }
+.price-card .plan-name{ font-family:'IBM Plex Mono'; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint); }
+.price-card .price{ font-family:'Space Grotesk'; font-size:1.8rem; margin:10px 0 4px; }
+.price-card .price span{ font-size:.85rem; color:var(--ink-faint); font-family:'Inter'; font-weight:400; }
+.price-card .price-note{ font-size:.75rem; color:var(--ink-faint); margin-bottom:16px; display:block; }
+.price-card ul{ list-style:none; font-size:.84rem; color:var(--ink-soft); line-height:2.15; }
+.price-card ul li::before{ content:"✓"; color:var(--growth); margin-right:8px; font-weight:700; }
+
+/* ---------- Roadmap timeline ---------- */
+.timeline{ position:relative; margin-top:30px; padding-left:34px; border-left:2px solid var(--line); }
+.timeline-item{ position:relative; padding-bottom:42px; }
+.timeline-item:last-child{ padding-bottom:0; }
+.timeline-item::before{ content:""; position:absolute; left:-42px; top:3px; width:14px; height:14px; border-radius:50%; background:var(--signal); box-shadow:0 0 0 4px var(--signal-soft); }
+.timeline-item .phase-tag{ font-family:'IBM Plex Mono'; font-size:11.5px; color:var(--signal); font-weight:600; letter-spacing:.03em; }
+.timeline-item h3{ margin:6px 0 6px; font-size:1.08rem; }
+.timeline-item .when{ color:var(--ink-faint); font-size:.8rem; margin-bottom:12px; font-family:'IBM Plex Mono'; }
+.timeline-item .desc{ color:var(--ink-soft); font-size:.9rem; margin-bottom:12px; max-width:70ch; }
+
+/* ---------- GTM funnel ---------- */
+.funnel{ display:flex; flex-direction:column; gap:8px; margin-top:22px; }
+.funnel-row{ background:var(--signal-soft); border-radius:9px; padding:13px 20px; font-size:.86rem; display:flex; justify-content:space-between; color:var(--signal); font-weight:600; }
+.funnel-row span:last-child{ font-family:'IBM Plex Mono'; font-weight:400; color:var(--ink-soft); font-size:.8rem; }
+.channel-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:20px; }
+.channel-card .ch-tag{ font-family:'IBM Plex Mono'; font-size:10.5px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px; display:block; }
+
+/* ---------- Financials ---------- */
+.bar-chart{ display:flex; align-items:flex-end; gap:28px; height:230px; margin-top:26px; padding:0 12px 0; border-bottom:1px solid var(--line); }
+.bar-col{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; max-width:120px; }
+.bar-col .value{ font-family:'IBM Plex Mono'; font-size:12px; margin-bottom:8px; color:var(--ink); font-weight:600; }
+.bar{ width:100%; background:linear-gradient(180deg,var(--signal-2),var(--signal)); border-radius:8px 8px 0 0; }
+.bar-col .label{ margin-top:10px; font-size:.8rem; color:var(--ink-soft); font-family:'IBM Plex Mono'; }
+.unit-econ-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:18px; text-align:center; }
+.unit-econ-card .ue-val{ font-family:'Space Grotesk'; font-size:1.5rem; color:var(--signal); }
+.unit-econ-card .ue-label{ font-size:.76rem; color:var(--ink-soft); margin-top:4px; }
+
+/* ---------- KPIs ---------- */
+.kpi-card{ border:1px solid var(--line); border-radius:var(--radius-md); padding:20px; background:var(--surface); }
+.kpi-card .kpi-value{ font-family:'Space Grotesk'; font-size:1.7rem; color:var(--signal); }
+.kpi-card .kpi-label{ font-size:.82rem; color:var(--ink-soft); margin-top:4px; }
+.kpi-card .kpi-target{ font-family:'IBM Plex Mono'; font-size:.7rem; color:var(--ink-faint); margin-top:10px; padding-top:10px; border-top:1px dashed var(--line); }
+
+/* ---------- Glossary ---------- */
+.glossary-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:0 32px; }
+.glossary-item{ padding:14px 0; border-bottom:1px dashed var(--line); }
+.glossary-item .term{ font-weight:600; font-size:.9rem; margin-bottom:3px; }
+.glossary-item .def{ font-size:.84rem; color:var(--ink-soft); }
+.glossary-item .not{ font-family:'IBM Plex Mono'; font-size:.72rem; color:var(--ink-faint); }
+
+@media (max-width:980px){
+  .shell{ grid-template-columns:1fr; }
+  .sidebar{ position:fixed; top:0; left:0; right:0; height:auto; max-height:100vh; z-index:50; background:var(--canvas); border-right:none; border-bottom:1px solid var(--line); transform:translateY(-100%); transition:transform .25s ease; padding-top:70px; }
+  .sidebar.open{ transform:translateY(0); overflow-y:auto; }
+  .mobile-bar{ display:flex; position:fixed; top:0; left:0; right:0; height:56px; background:var(--canvas); border-bottom:1px solid var(--line); z-index:60; align-items:center; justify-content:space-between; padding:0 18px; }
+  .mobile-bar .brand{ padding:0; }
+  .menu-btn{ width:36px; height:36px; border-radius:9px; border:1px solid var(--line); background:var(--surface); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; }
+  .menu-btn span{ width:16px; height:2px; background:var(--ink); border-radius:2px; }
+  .main{ padding:70px 22px 100px; }
+  .hero{ grid-template-columns:1fr; padding-top:24px; }
+  .grid-2,.grid-3,.grid-4{ grid-template-columns:1fr; }
+  .screen-list{ grid-template-columns:1fr; }
+  .screen-item .name{ min-width:130px; max-width:130px; }
+  .module-feature-list{ grid-template-columns:1fr; }
+  .schema-grid{ grid-template-columns:1fr; }
+  .glossary-grid{ grid-template-columns:1fr; }
+  .flow{ flex-direction:column; }
+  .flow-arrow{ width:100%; height:22px; transform:rotate(90deg); }
+  .bar-chart{ gap:14px; }
+  footer{ padding:32px 22px; }
+}
+</style>
+</head>
+<body>
+
+<div class="mobile-bar">
+  <div class="brand"><div class="brand-mark"></div><div><div class="brand-name">BuilderOS</div></div></div>
+  <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+</div>
+
+<div class="shell">
+<nav class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div>
+      <div class="brand-name">BuilderOS</div>
+      <div class="brand-sub">PRODUCT BLUEPRINT</div>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <span class="nav-group-label">Foundation</span>
+    <a class="nav-link" href="#vision"><span class="dot"></span>Vision &amp; philosophy</a>
+    <a class="nav-link" href="#audience"><span class="dot"></span>Audience &amp; personas</a>
+    <a class="nav-link" href="#design-language"><span class="dot"></span>Design language</a>
+  </div>
+
+  <div class="nav-group">
+    <span class="nav-group-label">People</span>
+    <a class="nav-link" href="#roles"><span class="dot"></span>Roles &amp; responsibilities</a>
+  </div>
+
+  <div class="nav-group">
+    <span class="nav-group-label">Product</span>
+    <a class="nav-link" href="#ia"><span class="dot"></span>Information architecture</a>
+    <a class="nav-link" href="#screens"><span class="dot"></span>Screens directory</a>
+    <a class="nav-link" href="#modules"><span class="dot"></span>Core modules</a>
+    <a class="nav-link" href="#flows"><span class="dot"></span>User flows</a>
+  </div>
+
+  <div class="nav-group">
+    <span class="nav-group-label">Engineering</span>
+    <a class="nav-link" href="#schema"><span class="dot"></span>Data schema</a>
+    <a class="nav-link" href="#architecture"><span class="dot"></span>Tech architecture</a>
+    <a class="nav-link" href="#ai-layer"><span class="dot"></span>AI layer</a>
+  </div>
+
+  <div class="nav-group">
+    <span class="nav-group-label">Business</span>
+    <a class="nav-link" href="#monetization"><span class="dot"></span>Monetization</a>
+    <a class="nav-link" href="#roadmap"><span class="dot"></span>Roadmap</a>
+    <a class="nav-link" href="#gtm"><span class="dot"></span>Go-to-market</a>
+    <a class="nav-link" href="#competitive"><span class="dot"></span>Competitive landscape</a>
+    <a class="nav-link" href="#risks"><span class="dot"></span>Risks &amp; mitigation</a>
+    <a class="nav-link" href="#financials"><span class="dot"></span>Financial projections</a>
+    <a class="nav-link" href="#kpis"><span class="dot"></span>Success metrics</a>
+    <a class="nav-link" href="#glossary"><span class="dot"></span>Glossary</a>
+  </div>
+</nav>
+
+<main class="main">
+
+  <section class="hero">
+    <div>
+      <span class="hero-eyebrow"><span class="pulse"></span>Product Blueprint · v1.0</span>
+      <h1>BuilderOS is the operating system for <em>mentor-guided</em> transformation.</h1>
+      <p class="lede">Not an LMS. A Mentorship Operating System — cohort-driven, project-based, and built so every working professional who logs in feels one thing before anything else: <strong>people know I'm here.</strong></p>
+      <div class="hero-meta">
+        <span class="meta-chip"><b>Prepared for</b> · Reed Breed Technologies</span>
+        <span class="meta-chip"><b>Category</b> · EdTech / Mentorship OS</span>
+        <span class="meta-chip"><b>Market</b> · Nigeria → Pan-African</span>
+        <span class="meta-chip"><b>Date</b> · July 2026</span>
+      </div>
+    </div>
+    <div class="dash-preview">
+      <div class="dash-chrome"><span class="cdot"></span><span class="cdot"></span><span class="cdot"></span><span class="clabel">DASHBOARD · LIVE</span></div>
+      <div class="dash-row">
+        <div class="dash-card" style="flex:1;display:flex;align-items:center;">
+          <div class="avatar-stack">
+            <div class="avatar a1"><span class="live"></span></div>
+            <div class="avatar a2"><span class="live"></span></div>
+            <div class="avatar a3"><span class="live"></span></div>
+            <div class="avatar a4"></div>
+          </div>
+          <span class="presence-text"><b>4 builders</b> online now</span>
+        </div>
+      </div>
+      <div class="dash-row">
+        <div class="dash-card split">
+          <span class="streak-label">CURRENT STREAK</span>
+          <div class="streak-flame">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2c1 3-2 4-2 7a4 4 0 108 0c0-1-1-2-1-2 2 1 3 3 3 5a6 6 0 11-12 0c0-4 3-6 4-10z" fill="#EF8B3C"/></svg>
+            <span class="streak-num">12</span><span class="streak-label">days</span>
+          </div>
+        </div>
+        <div class="dash-card split" style="align-items:center;">
+          <div class="ring-row">
+            <div class="ring"><div class="ring-inner">68%</div></div>
+            <span class="rl">Journey<br>complete</span>
+          </div>
+        </div>
+      </div>
+      <div class="dash-row">
+        <div class="dash-card" style="flex:1;">
+          <span class="streak-label">COHORT LEADERBOARD</span>
+          <div class="lb-row"><span>1 · Ada</span><span class="mono">1,240 XP</span></div>
+          <div class="lb-row me"><span>2 · You ▲2</span><span class="mono">1,190 XP</span></div>
+          <div class="lb-row"><span>3 · Tomi</span><span class="mono">1,050 XP</span></div>
+        </div>
+      </div>
+      <div class="dash-row">
+        <div class="dash-card" style="flex:1;">
+          <p class="mentor-quote">"Solid iteration on the onboarding flow — tighten the empty-state copy before Demo Day."</p>
+          <div class="mentor-who"><div class="avatar a1" style="width:20px;height:20px;"></div><span>Mentor Chidi · reviewed 2h ago</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="vision">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>01 · Foundation</span>
+      <h2>Vision &amp; core philosophy</h2>
+      <p class="section-lede">Most learning platforms optimize for content delivery. BuilderOS optimizes for human transformation — the product doesn't sell videos, certificates, or even the underlying UI/UX curriculum. It sells momentum, accountability, community, confidence, and eventually independence.</p>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:20px;">
+      <div class="card">
+        <span class="card-tag">Not this</span>
+        <h3>Self-paced content library</h3>
+        <p>Upload videos, let learners consume alone, hope completion happens. This is Udemy, Coursera, and every white-label LMS — content-first, human-optional.</p>
+      </div>
+      <div class="card" style="border-color:var(--signal);">
+        <span class="card-tag">This</span>
+        <h3>Mentor-guided, cohort-driven, project-based building</h3>
+        <p>Students don't consume — they build, collaborate, receive feedback, demonstrate progress in public, and become professionals inside a class that knows their name.</p>
+      </div>
+    </div>
+
+    <div class="card" style="background:var(--surface-2); border:none; box-shadow:none;">
+      <p style="font-family:'Space Grotesk'; font-size:1.15rem; color:var(--ink); line-height:1.5;">"How do we make someone feel like they're walking into a classroom where people know their name, expect their contribution, celebrate their progress, and help them become a builder?" — <span style="color:var(--ink-soft); font-family:'Inter'; font-size:.95rem; font-weight:400;">the single question every screen in BuilderOS must answer.</span></p>
+    </div>
+
+    <div class="grid-4" style="margin-top:20px;">
+      <div class="card"><h3>Portfolio</h3><p>Real, demonstrable project work — not a certificate of attendance.</p></div>
+      <div class="card"><h3>Confidence</h3><p>The primary outcome. Employment and freelancing are downstream of it.</p></div>
+      <div class="card"><h3>Community</h3><p>Classmates, mentors, and peers who are visibly, actively present.</p></div>
+      <div class="card"><h3>Momentum</h3><p>Streaks, sprints, and check-ins that make stopping feel harder than continuing.</p></div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="audience">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Foundation</span>
+      <h2>Target audience</h2>
+      <p class="section-lede">BuilderOS is built for the working professional squeezing transformation into evenings — not the unemployed full-time bootcamper most EdTech products are designed around.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Who they are</h3>
+        <ul style="list-style:none; font-size:.92rem; color:var(--ink-soft); line-height:2.1;">
+          <li>→ Age 22–40, employed or underemployed</li>
+          <li>→ Full-time job, studies evenings and weekends</li>
+          <li>→ Based in Lagos and other Nigerian / African urban centers</li>
+          <li>→ Has tried self-paced courses before and abandoned them</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>What they want</h3>
+        <ul style="list-style:none; font-size:.92rem; color:var(--ink-soft); line-height:2.1;">
+          <li>→ Accountability that a YouTube playlist can't give them</li>
+          <li>→ A real mentor who knows their work, not a forum thread</li>
+          <li>→ Structure — a syllabus with a start, a middle, and a demo day</li>
+          <li>→ Practical, portfolio-grade experience over theory</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:28px;">
+      <span class="eyebrow ember"><span class="dot"></span>What the UI must make them feel</span>
+      <div style="display:flex; flex-wrap:wrap; gap:8px;">
+        <span class="tag">"I'm expected."</span><span class="tag">"I have classmates."</span><span class="tag">"My mentor knows me."</span>
+        <span class="tag">"I'm making progress."</span><span class="tag">"I'm behind — I should continue."</span>
+        <span class="tag">"I'm proud."</span><span class="tag">"My work matters."</span><span class="tag">"I belong."</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="design-language">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Foundation</span>
+      <h2>Design language</h2>
+      <p class="section-lede">Imagine if Discord, Notion, Apple Fitness, Linear, Duolingo, GitHub, Figma, and a physical classroom had a baby. Not corporate. Not Moodle. Not Blackboard. Not Google Classroom.</p>
+    </div>
+    <div class="grid-4">
+      <div class="card"><h3>White-first</h3><p>Airy, elegant, minimal. Never clinical.</p></div>
+      <div class="card"><h3>Soft geometry</h3><p>Rounded corners, soft shadows, subtle gradients.</p></div>
+      <div class="card"><h3>Smooth motion</h3><p>Transitions that reinforce liveness, never decorate for its own sake.</p></div>
+      <div class="card"><h3>Premium restraint</h3><p>Beautiful typography, large spacing, no clutter.</p></div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="roles">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>02 · People</span>
+      <h2>Roles &amp; responsibilities</h2>
+      <p class="section-lede">Four roles run BuilderOS. Notice the naming: "Instructor" is deliberately absent — the role is Mentor.</p>
+    </div>
+    <div class="grid-4">
+      <div class="card">
+        <span class="card-tag" style="background:var(--signal-soft); color:var(--signal);">Student</span>
+        <h3>The builder</h3>
+        <p>Learns, watches lessons, reads resources, submits projects, joins calls, chats, collaborates, and tracks their own progress.</p>
+      </div>
+      <div class="card">
+        <span class="card-tag" style="background:var(--ember-soft); color:var(--ember);">Mentor</span>
+        <h3>Not "Instructor"</h3>
+        <p>Reviews work, grades, comments, schedules meetings, encourages students, pairs peers, approves milestones, monitors engagement.</p>
+      </div>
+      <div class="card">
+        <span class="card-tag" style="background:var(--growth-soft); color:var(--growth);">Program Admin</span>
+        <h3>Runs the cohort machine</h3>
+        <p>Creates programs, configures cohorts, uploads lessons, configures payments, manages mentors and students, generates reports.</p>
+      </div>
+      <div class="card">
+        <span class="card-tag" style="background:var(--surface-2); color:var(--ink-soft);">Super Admin</span>
+        <h3>Platform owner</h3>
+        <p>Billing, platform configuration, mentor management, content governance, analytics, CDN, AI features, and permissions.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="ia">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>03 · Product</span>
+      <h2>Information architecture</h2>
+      <p class="section-lede">Left navigation is the spine of the product. Every module below hangs off one of these 14 entries.</p>
+    </div>
+
+    <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:44px;">
+      <span class="tag" style="background:var(--signal-soft); color:var(--signal);">Dashboard</span>
+      <span class="tag">Learning Journey</span><span class="tag">Projects</span><span class="tag">Workspace</span>
+      <span class="tag">Classroom</span><span class="tag">Peers</span><span class="tag">Mentors</span>
+      <span class="tag">Messages</span><span class="tag">Leaderboard</span><span class="tag">Achievements</span>
+      <span class="tag">Calendar</span><span class="tag">Resources</span><span class="tag">Portfolio</span><span class="tag">Settings</span>
+    </div>
+
+    <span class="eyebrow ember"><span class="dot"></span>The Learning Journey — not "Course"</span>
+    <div class="flow" style="display:flex; flex-wrap:wrap; gap:0; margin-top:10px;">
+      <div class="flow-step"><span class="num">01</span><h4 style="font-size:.95rem;">Foundational Knowledge</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">02</span><h4 style="font-size:.95rem;">Practical Application</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">03</span><h4 style="font-size:.95rem;">Projects</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">04</span><h4 style="font-size:.95rem;">Feedback</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">05</span><h4 style="font-size:.95rem;">Iteration</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">06</span><h4 style="font-size:.95rem;">Demo Day</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color:var(--signal);"><span class="num">07</span><h4 style="font-size:.95rem;">Portfolio</h4></div>
+    </div>
+    <p style="color:var(--ink-soft); font-size:.88rem; margin-top:14px;">Each stage visually unlocks only once its predecessor is mentor-approved — progress is seen, not just tracked.</p>
+  </section>
+
+  <section class="section reveal" id="screens">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Product</span>
+      <h2>Screens directory</h2>
+      <p class="section-lede">Every screen across the four roles, grouped by the nav category it lives under. This is the full surface area of BuilderOS.</p>
+    </div>
+
+    <div class="screen-category">
+      <div class="screen-category-head"><span class="num-badge">1</span><h3>Dashboard</h3></div>
+      <div class="screen-list">
+        <div class="screen-item"><span class="name">Home Dashboard</span><span class="desc">The alive classroom snapshot — streak, leaderboard position, weekly objectives, next session, mentor feedback digest, quick-resume.</span></div>
+        <div class="screen-item"><span class="name">Weekly Objectives</span><span class="desc">This week's required modules and tasks as a completion checklist against the current sprint.</span></div>
+        <div class="screen-item"><span class="name">Learning Health Panel</span><span class="desc">Consistency score, confidence meter, and portfolio completion rolled into one glanceable view.</span></div>
+      </div>
+    </div>
+
+    <div class="screen-category">
+      <div class="screen-category-head"><span class="num-badge">2</span><h3>Learning Journey</h3></div>
+      <div class="screen-list">
+        <div class="screen-item"><span class="name">Journey Map</span><span class="desc">Stage-by-stage visual progression from Foundational Knowledge to Portfolio, with locked/unlocked states.</span></div>
+        <div class="screen-item"><span class="name">Module Overview</span><span class="desc">Objectives, estimated duration, required readings, and resources for a single module.</span></div>
+        <div class="screen-item"><span class="name">Lesson Player</span><span class="desc">Video / markdown / interactive content viewer with an AI summary panel and reflection questions.</span></div>
+        <div class="screen-item"><span class="name">Quiz Runner</span><span class="desc">AI-generated quiz UI with hints, explanations, and instant feedback.</span></div>
+        <div class="screen-item"><span class="name">Mini Challenge</span><span class="desc">Short scenario-based practice task bridging a lesson and its full project.</span></div>
+      </div>
+    </div>
+
+    <div class="screen-category">
+      <div class="screen-category-head"><span class="num-badge">3</span><h3>Projects</h3></div>
+      <div class="screen-list">
+        <div class="screen-item"><span class="name">Project Brief</span><span class="desc">Assignment details, acceptance criteria, rubric, deliverables, and timeline.</span></div>
+        <div class="screen-item"><span class="name">Submission Composer</span><span class="desc">Upload or link a submission — Figma, GitHub, PDF, video, prototype, ZIP, or website — with version history.</span></div>
+        <div class="screen-item"><span class="name">My Submissions</span><span class="desc">Every submission across the journey with live status: backlog, review, revision, approved.</span></div>
+      </div>
+    </div>
+
+    <div class="screen-category">
+      <div class="screen-category-head"><span class="num-badge">4</span><h3>Workspace</h3></div>
+      <div class="screen-list">
+        <div class="screen-item"><span class="name">Kanban Board</span><span class="desc">Backlog → In Progress → Review → Revision → Approved → Completed, dragged live like Trello meets GitHub.</span></div>
+        <div class="screen-item"><span class="name">Card Detail</span><span class="desc">Task detail with mentor annotations, comments, and attached files without leaving the board.</span></div>
+      </div>
+    </div>
+
+    <div class="screen-category">
+      <div class="screen-category-head"><span class="num-badge">5</span><h3>Classroom</h3></div>
+      <div class="screen-list">
+        <div class="screen-item"><span class="name">Presence Room</span><span class="desc">Who's online, studying, designing, reviewing, waiting, or presenting — right now, not last-seen.</span></div>
+        <div class="screen-item"><span class="name">Cowork / Voice Room</span><span class="desc">Ambient study-together rooms with live voice and typing indicators.</span></div>
+        <div class="screen-item"><span class="name">Office Hours</span><span class="desc">Open mentor sessions with live availability and one-click join.</span></div>
+      </div>
+    </div>
+
+    <div class="screen-category">
+      <div class="screen-category-head"><span class="num-badge">6</span><h3>Peers</h3></div>
+      <div class="screen-list">
+        <div class="screen-item"><span class="name">Peer Directory</span><span class="desc">Cohort roster with skills, timezone, and current focus area.</span></div>
+        <div class="screen-item"><span class="name">Pairing Detail</span><span class="desc">Current pairing, shared tasks, and a direct line into chat or call.</span></div>
+        <div class="screen-item"><span class="name">Peer Review Panel</span><span class="desc">Reviewing a teammate's submission with inline comments ahead of mentor review.</span></div>
+      </div>
+    </div>
+
+    <div class="screen-category">
+      <div class="screen-category-head"><span class="num-badge">7</span><h3>Mentors</h3></div>
+      <div class="screen-list">
+        <div class="screen-item"><span class="name">Mentor Profile</span><span class="desc">Bio, specialty, availability, and review style for every mentor in the cohort.</span></div>
+        <div class="screen-item"><span class="name">Book a Session</span><span class="desc">Schedule a 1:1 or reserve a slot in open office hours.</span></div>
+        <div class="screen-item"><span class="name">Feedback Archive</span><span class="desc">Full history of feedback received across every submission.</span></div>
+      </div>
+    </div>
+
+    <div class="screen-category">
+      <div class="screen-category-head"><span class="num-badge">8</span><h3>Messages</h3></div>
+      <div class="screen-list">
+        <div class="screen-item"><span class="name">Inbox</span><span class="desc">Direct messages and group threads in one unified list.</span></div>
+        <div class="screen-item"><span class="name">Thread View</span><span class="desc">Chat with typing indicators and inline file sharing.</span></div>
+      </div>
+    </div>
+
+    <div class="screen-category">
+      <div class="screen-category-head"><span class="num-badge">9</span><h3>Leaderboard &amp; Achievements</h3></div>
+      <div class="screen-list">
+        <div class="screen-item"><span class="name">Cohort Leaderboard</span><span class="desc">Ranked XP view with weekly / all-time toggle and rank-change indicators.</span></div>
+        <div class="screen-item"><span class="name">Class Champion Spotlight</span><span class="desc">Weekly highlight card celebrating a standout builder.</span></div>
+        <div class="screen-item"><span class="name">Badge Case</span><span class="desc">Earned and available badges — Fast Finisher, Best Teammate, Project Hero, and more.</span></div>
+        <div class="screen-item"><span class="name">Streak Tracker</span><span class="desc">Calendar heatmap of daily activity and consistency.</span></div>
+      </div>
+    </div>
+
+    <div class="screen-category">
+      <div class="screen-category-head"><span class="num-badge">10</span><h3>Calendar, Resources &amp; Portfolio</h3></div>
+      <div class="screen-list">
+        <div class="screen-item"><span class="name">Unified Calendar</span><span class="desc">Lessons, deadlines, live calls, peer meetings, and demo days with one-click join.</span></div>
+        <div class="screen-item"><span class="name">Session Detail</span><span class="desc">Agenda, reminders, and join link for a single scheduled event.</span></div>
+        <div class="screen-item"><span class="name">Resource Library</span><span class="desc">Downloadable templates and readings organized by journey stage.</span></div>
+        <div class="screen-item"><span class="name">Portfolio Builder</span><span class="desc">Assemble approved projects into a public case-study page.</span></div>
+        <div class="screen-item"><span class="name">Public Portfolio Page</span><span class="desc">Shareable, employer-facing link — builderos.xx/u/username.</span></div>
+        <div class="screen-item"><span class="name">Settings &amp; Billing</span><span class="desc">Profile, notification preferences, subscription plan, invoices, and payment method.</span></div>
+      </div>
+    </div>
+
+    <div class="screen-category">
+      <div class="screen-category-head"><span class="num-badge">11</span><h3>Mentor console (mentor-only)</h3></div>
+      <div class="screen-list">
+        <div class="screen-item"><span class="name">Mentor Dashboard</span><span class="desc">Air-traffic-control view: student health, risk alerts, pending reviews, weekly wins.</span></div>
+        <div class="screen-item"><span class="name">Review Console</span><span class="desc">Open a submission and approve, reject, request changes, annotate, or record video feedback.</span></div>
+        <div class="screen-item"><span class="name">Cohort Roster</span><span class="desc">Attendance, engagement, and at-risk flags across the whole cohort.</span></div>
+        <div class="screen-item"><span class="name">Pairing Manager</span><span class="desc">Assign or rebalance peer pairings — automatic, skill-based, or manual.</span></div>
+        <div class="screen-item"><span class="name">AI Assistant Panel</span><span class="desc">Risk suggestions plus one-click quiz, assignment, and rubric generation.</span></div>
+      </div>
+    </div>
+
+    <div class="screen-category">
+      <div class="screen-category-head"><span class="num-badge">12</span><h3>Admin &amp; Super Admin console</h3></div>
+      <div class="screen-list">
+        <div class="screen-item"><span class="name">Program Builder</span><span class="desc">Create journeys, modules, and content — the authoring surface for admins.</span></div>
+        <div class="screen-item"><span class="name">Cohort Configurator</span><span class="desc">Schedule, capacity, mentor assignment, and pricing for a new cohort.</span></div>
+        <div class="screen-item"><span class="name">Mentor Management</span><span class="desc">Onboarding, assignment, and performance tracking for mentors.</span></div>
+        <div class="screen-item"><span class="name">Payments Console</span><span class="desc">Subscriptions, coupons, scholarships, and dunning management.</span></div>
+        <div class="screen-item"><span class="name">Reports</span><span class="desc">Cohort- and program-level analytics, exportable for stakeholders.</span></div>
+        <div class="screen-item"><span class="name">Platform Settings</span><span class="desc">Billing, branding, permissions — Super Admin only.</span></div>
+        <div class="screen-item"><span class="name">AI Configuration</span><span class="desc">Model settings and AI usage / cost monitoring across the platform.</span></div>
+      </div>
+    </div>
+
+    <div class="screen-category">
+      <div class="screen-category-head"><span class="num-badge">13</span><h3>Cross-cutting: Auth &amp; onboarding</h3></div>
+      <div class="screen-list">
+        <div class="screen-item"><span class="name">Apply / Waitlist</span><span class="desc">Application form and cohort waitlist entry point.</span></div>
+        <div class="screen-item"><span class="name">Plan Selection &amp; Payment</span><span class="desc">Choose a plan and complete first payment before cohort assignment.</span></div>
+        <div class="screen-item"><span class="name">Orientation Walkthrough</span><span class="desc">First-login guided tour that introduces cohort, mentor, and journey.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="modules">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Product</span>
+      <h2>Core modules</h2>
+      <p class="section-lede">The systems that actually deliver the "mentor operating system" promise — expanded from concept to feature list.</p>
+    </div>
+
+    <div class="module-card">
+      <div class="module-card-head"><h3>Module structure</h3><span class="tag">Content engine</span></div>
+      <p class="desc">Every module a student opens follows the same reliable shape, so momentum never breaks on inconsistent formatting.</p>
+      <ul class="module-feature-list">
+        <li>Introduction &amp; objectives</li><li>Estimated duration</li>
+        <li>Required readings &amp; videos</li><li>Interactive examples</li>
+        <li>AI summary of the lesson</li><li>Reflection questions</li>
+        <li>Quiz + mini challenge</li><li>Project + peer activity</li>
+        <li>Submission + mentor feedback</li><li>Completion celebration</li>
+      </ul>
+    </div>
+
+    <div class="module-card">
+      <div class="module-card-head"><h3>Content types supported</h3><span class="tag">Authoring</span></div>
+      <p class="desc">Admins and mentors aren't limited to one format — the player renders whatever the lesson calls for.</p>
+      <ul class="module-feature-list">
+        <li>Markdown &amp; rich text</li><li>Embedded video (native, YouTube, Loom)</li>
+        <li>Interactive prototypes</li><li>PDF &amp; slides</li>
+        <li>Audio &amp; code snippets</li><li>Embedded Figma &amp; Miro</li>
+        <li>Live sessions</li><li>Downloadable resources</li>
+      </ul>
+    </div>
+
+    <div class="module-card">
+      <div class="module-card-head"><h3>AI features</h3><span class="tag" style="background:var(--signal-soft); color:var(--signal);">Differentiator</span></div>
+      <p class="desc">This is where BuilderOS stops looking like an LMS and starts looking like an operating system — AI removes the mentor-bandwidth ceiling that kills every solo-founder education business.</p>
+      <ul class="module-feature-list">
+        <li><b style="color:var(--ink);">Quiz Generator</b> — mentor uploads a lesson, AI returns MCQ, true/false, scenario, and reflection questions calibrated to Bloom's Taxonomy levels</li>
+        <li><b style="color:var(--ink);">Assignment Generator</b> — mentor sets lesson, difficulty, duration → AI drafts project ideas, acceptance criteria, deliverables, and bonus tasks</li>
+        <li><b style="color:var(--ink);">Rubric Generator</b> — auto-builds grading rubrics from the assignment brief</li>
+        <li><b style="color:var(--ink);">Mentor Assistant</b> — surfaces who's falling behind, improving, at dropout risk, and what to do about it</li>
+        <li><b style="color:var(--ink);">Progress Summary</b> — weekly AI digest of each student's strengths, weaknesses, confidence, and learning velocity</li>
+      </ul>
+    </div>
+
+    <div class="grid-2">
+      <div class="module-card" style="margin-bottom:0;">
+        <div class="module-card-head"><h3>Classroom experience</h3><span class="tag">Presence, not chat</span></div>
+        <p class="desc">Students should feel that people exist. This is the module that makes the product feel alive minute to minute.</p>
+        <ul class="module-feature-list" style="grid-template-columns:1fr;">
+          <li>Who's online / studying / designing / reviewing / presenting</li>
+          <li>Live mentor availability &amp; typing indicators</li>
+          <li>Study groups, cowork rooms, voice rooms, open discussions</li>
+        </ul>
+      </div>
+      <div class="module-card" style="margin-bottom:0;">
+        <div class="module-card-head"><h3>Peer collaboration</h3><span class="tag">Pairing engine</span></div>
+        <p class="desc">Automatic, manual, mentor, random, skill-based, or timezone-based pairing — students chat, call, review, and co-edit.</p>
+        <ul class="module-feature-list" style="grid-template-columns:1fr;">
+          <li>Shared submission with group grades</li>
+          <li>Structured peer evaluations</li>
+          <li>Comment &amp; co-edit on shared work</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module-card" style="margin-top:20px;">
+      <div class="module-card-head"><h3>Gamification</h3><span class="tag">Professional, not childish</span></div>
+      <p class="desc">Points, XP, levels, streaks, and badges tuned for adult professionals — momentum without gimmicks.</p>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:6px;">
+        <span class="tag">Consistency streak</span><span class="tag">Fast Finisher</span><span class="tag">Mentor's Choice</span>
+        <span class="tag">Top Reviewer</span><span class="tag">Best Teammate</span><span class="tag">Project Hero</span>
+        <span class="tag">Builder Level</span><span class="tag">Weekly Champion</span><span class="tag">Class Champion</span>
+        <span class="tag">Portfolio Complete</span><span class="tag">Perfect Attendance</span>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="module-card" style="margin-bottom:0;">
+        <div class="module-card-head"><h3>Submission &amp; review flow</h3></div>
+        <p class="desc">Student submits a link, file, or repo → version is stored automatically → mentor is notified instantly → mentor approves, rejects, or requests changes with annotation, voice note, or recorded video feedback, all without leaving the page.</p>
+      </div>
+      <div class="module-card" style="margin-bottom:0;">
+        <div class="module-card-head"><h3>Cohort system</h3></div>
+        <p class="desc">Every learner belongs to a cohort with shared photos, attendance, streaks, leaderboard, milestones, upcoming demos, and wins — the social unit the whole product is built around.</p>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="module-card" style="margin-bottom:0;">
+        <div class="module-card-head"><h3>Mentor dashboard</h3></div>
+        <p class="desc">An air-traffic-control center: student health, engagement, completion, attendance, risk alerts, pending reviews, weekly wins, students needing encouragement, and AI recommendations — one screen, full situational awareness.</p>
+      </div>
+      <div class="module-card" style="margin-bottom:0;">
+        <div class="module-card-head"><h3>Payments &amp; notifications</h3></div>
+        <p class="desc">Monthly subscriptions with automatic renewal, grace periods, reminders, restricted access on overdue, and automatic restoration on payment — paired with event-driven notifications for every moment that matters (review received, streak hit, demo starting).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="flows">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Product</span>
+      <h2>User flows</h2>
+      <p class="section-lede">The sequences that carry BuilderOS's core promise — order matters here, so these are the only places in this blueprint you'll see numbered steps.</p>
+    </div>
+
+    <h3 style="font-size:1rem; margin-bottom:4px;">Flow 1 — Student onboarding</h3>
+    <p style="color:var(--ink-soft); font-size:.86rem; margin-bottom:4px;">From discovery to first login inside an assigned cohort.</p>
+    <div class="flow">
+      <div class="flow-step"><span class="num">01</span><h4 style="font-size:.9rem;">Discover</h4><p>Lands via referral, community, or ad</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">02</span><h4 style="font-size:.9rem;">Apply / waitlist</h4><p>Short application, cohort start date shown</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">03</span><h4 style="font-size:.9rem;">Plan + payment</h4><p>Choose tier, pay via Paystack/Flutterwave</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">04</span><h4 style="font-size:.9rem;">Cohort assignment</h4><p>Placed into a cohort, mentor introduced</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">05</span><h4 style="font-size:.9rem;">Orientation</h4><p>Guided tour of dashboard &amp; journey</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color:var(--signal);"><span class="num">06</span><h4 style="font-size:.9rem;">First dashboard login</h4><p>Sees classmates, streak starts at day 1</p></div>
+    </div>
+
+    <h3 style="font-size:1rem; margin:40px 0 4px;">Flow 2 — Weekly learning loop</h3>
+    <p style="color:var(--ink-soft); font-size:.86rem; margin-bottom:4px;">The loop a student repeats every module, until the journey is complete.</p>
+    <div class="flow">
+      <div class="flow-step"><span class="num">01</span><h4 style="font-size:.9rem;">Watch / read module</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">02</span><h4 style="font-size:.9rem;">Attempt quiz</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">03</span><h4 style="font-size:.9rem;">Mini challenge</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">04</span><h4 style="font-size:.9rem;">Submit project</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">05</span><h4 style="font-size:.9rem;">Mentor review</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">06</span><h4 style="font-size:.9rem;">Iterate</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color:var(--growth); background:var(--growth-soft);"><span class="num" style="color:var(--growth);">07</span><h4 style="font-size:.9rem;">Approved → XP + badge</h4></div>
+    </div>
+    <p style="color:var(--ink-faint); font-size:.78rem; margin-top:10px;" class="mono">↻ repeats for every module until Demo Day</p>
+
+    <h3 style="font-size:1rem; margin:40px 0 4px;">Flow 3 — Submission → review</h3>
+    <p style="color:var(--ink-soft); font-size:.86rem; margin-bottom:4px;">What happens between a student clicking Submit and a mentor's decision landing back in their inbox.</p>
+    <div class="flow">
+      <div class="flow-step"><span class="num">01</span><h4 style="font-size:.9rem;">Student submits</h4><p>Link, file, repo, or prototype</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">02</span><h4 style="font-size:.9rem;">Version stored</h4><p>Auto-versioned, history preserved</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">03</span><h4 style="font-size:.9rem;">Mentor notified</h4><p>Instant, lands in Review Console</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">04</span><h4 style="font-size:.9rem;">Mentor reviews</h4><p>Annotate, score, voice / video note</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color:var(--signal);"><span class="num">05</span><h4 style="font-size:.9rem;">Decision</h4><p>Approve · Reject · Request changes</p></div>
+    </div>
+
+    <h3 style="font-size:1rem; margin:40px 0 4px;">Flow 4 — Subscription lifecycle</h3>
+    <p style="color:var(--ink-soft); font-size:.86rem; margin-bottom:4px;">Billing has to feel fair, not punitive, in a price-sensitive market — grace periods do real work here.</p>
+    <div class="flow">
+      <div class="flow-step"><span class="num">01</span><h4 style="font-size:.9rem;">Active subscription</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">02</span><h4 style="font-size:.9rem;">Renewal reminder</h4><p>3 days before due date</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">03</span><h4 style="font-size:.9rem;">Auto-charge attempt</h4></div>
+    </div>
+    <span class="flow-branch-label" style="color:var(--growth);">If payment succeeds</span>
+    <div class="flow">
+      <div class="flow-step" style="border-color:var(--growth); background:var(--growth-soft);"><h4 style="font-size:.9rem;">Access continues</h4><p>Receipt issued automatically</p></div>
+    </div>
+    <span class="flow-branch-label" style="color:var(--rose);">If payment fails</span>
+    <div class="flow">
+      <div class="flow-step"><span class="num">04a</span><h4 style="font-size:.9rem;">Grace period starts</h4></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span class="num">05a</span><h4 style="font-size:.9rem;">Access restricted</h4><p>Read-only, no new submissions</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color:var(--growth);"><span class="num">06a</span><h4 style="font-size:.9rem;">Payment clears</h4><p>Access restored automatically</p></div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="schema">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>04 · Engineering</span>
+      <h2>Data schema</h2>
+      <p class="section-lede">Core entities grouped by domain. PostgreSQL as system of record, Redis for presence/session state — field lists below are the working contract, not final DDL.</p>
+    </div>
+
+    <div style="margin-bottom:36px;">
+      <span class="eyebrow ember" style="margin-bottom:10px;"><span class="dot"></span>Core loop, end to end</span>
+      <div class="flow">
+        <div class="flow-step"><span class="num mono">cohorts</span></div><div class="flow-arrow">→</div>
+        <div class="flow-step"><span class="num mono">enrollments</span></div><div class="flow-arrow">→</div>
+        <div class="flow-step"><span class="num mono">submissions</span></div><div class="flow-arrow">→</div>
+        <div class="flow-step"><span class="num mono">reviews</span></div><div class="flow-arrow">→</div>
+        <div class="flow-step"><span class="num mono">xp_events</span></div><div class="flow-arrow">→</div>
+        <div class="flow-step" style="border-color:var(--signal);"><span class="num mono">leaderboard_snapshots</span></div>
+      </div>
+    </div>
+
+    <div class="schema-domain">
+      <span class="schema-domain-label">Identity &amp; access</span>
+      <div class="schema-grid">
+        <div class="schema-card"><h4>users</h4><span class="schema-desc">One row per human on the platform</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>name, email, avatar_url</li><li>role: student|mentor|admin|super_admin</li><li>timezone</li><li>created_at</li></ul>
+        </div>
+        <div class="schema-card"><h4>sessions</h4><span class="schema-desc">Auth session tokens</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>user_id fk</li><li>device, ip</li><li>expires_at</li></ul>
+        </div>
+        <div class="schema-card"><h4>presence</h4><span class="schema-desc">Redis-backed, not durable</span>
+          <ul class="schema-fields"><li><b>user_id</b> pk</li><li>status: online|studying|reviewing|away</li><li>updated_at</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="schema-domain">
+      <span class="schema-domain-label">Programs &amp; curriculum</span>
+      <div class="schema-grid">
+        <div class="schema-card"><h4>programs</h4><span class="schema-desc">e.g. "UI/UX Product Design"</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>name, description</li><li>duration_weeks</li><li>base_price</li></ul>
+        </div>
+        <div class="schema-card"><h4>journeys</h4><span class="schema-desc">The 7-stage arc per program</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>program_id fk</li><li>stage: foundational|practical|projects|feedback|iteration|demo|portfolio</li><li>order_index</li></ul>
+        </div>
+        <div class="schema-card"><h4>modules</h4><span class="schema-desc">A unit inside a journey stage</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>journey_id fk</li><li>title, objectives</li><li>duration_estimate_min</li></ul>
+        </div>
+        <div class="schema-card"><h4>content_items</h4><span class="schema-desc">Polymorphic lesson content</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>module_id fk</li><li>type: video|pdf|markdown|embed</li><li>url, order_index</li></ul>
+        </div>
+        <div class="schema-card"><h4>quizzes / quiz_questions</h4><span class="schema-desc">AI- or mentor-authored</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>module_id fk, generated_by_ai bool</li><li>difficulty, bloom_level</li><li>prompt, options, answer, explanation</li></ul>
+        </div>
+        <div class="schema-card"><h4>assignments / rubrics</h4><span class="schema-desc">Project briefs + grading criteria</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>module_id fk, title</li><li>deliverables, due_at</li><li>rubric_criteria jsonb</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="schema-domain">
+      <span class="schema-domain-label">Cohorts &amp; assessment</span>
+      <div class="schema-grid">
+        <div class="schema-card"><h4>cohorts</h4><span class="schema-desc">A running instance of a program</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>program_id fk, mentor_id fk</li><li>name, start_date, end_date</li><li>capacity, status</li></ul>
+        </div>
+        <div class="schema-card"><h4>enrollments</h4><span class="schema-desc">User ↔ cohort membership</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>user_id fk, cohort_id fk</li><li>status, joined_at</li></ul>
+        </div>
+        <div class="schema-card"><h4>submissions</h4><span class="schema-desc">Versioned project work</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>assignment_id fk, user_id fk</li><li>content_url, version</li><li>status, submitted_at</li></ul>
+        </div>
+        <div class="schema-card"><h4>reviews</h4><span class="schema-desc">Mentor decision on a submission</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>submission_id fk, mentor_id fk</li><li>score, comments</li><li>video_feedback_url, status</li></ul>
+        </div>
+        <div class="schema-card"><h4>attendance / live_sessions</h4><span class="schema-desc">Scheduled calls + who showed up</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>cohort_id fk, title</li><li>start_at, end_at, join_url</li><li>attendance: user_id, status</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="schema-domain">
+      <span class="schema-domain-label">Community &amp; gamification</span>
+      <div class="schema-grid">
+        <div class="schema-card"><h4>peer_pairings</h4><span class="schema-desc">Study / review / project pairs</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>cohort_id fk</li><li>user_a_id, user_b_id fk</li><li>type, created_at</li></ul>
+        </div>
+        <div class="schema-card"><h4>threads / messages</h4><span class="schema-desc">DM, group, and cohort chat</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>thread_id fk, sender_id fk</li><li>content, sent_at</li></ul>
+        </div>
+        <div class="schema-card"><h4>xp_events / streaks</h4><span class="schema-desc">Ledger + rolled-up state</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>user_id fk, source, amount</li><li>current_streak, longest_streak</li></ul>
+        </div>
+        <div class="schema-card"><h4>badges / user_badges</h4><span class="schema-desc">Definitions + awards</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>name, criteria, icon</li><li>user_id, awarded_at</li></ul>
+        </div>
+        <div class="schema-card"><h4>leaderboard_snapshots</h4><span class="schema-desc">Denormalized for fast reads</span>
+          <ul class="schema-fields"><li><b>cohort_id, user_id</b></li><li>period: weekly|all_time</li><li>rank, score</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="schema-domain">
+      <span class="schema-domain-label">Commerce &amp; platform</span>
+      <div class="schema-grid">
+        <div class="schema-card"><h4>subscriptions / payments</h4><span class="schema-desc">Billing state machine</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>user_id fk, plan_id fk</li><li>status, renews_at, grace_period_until</li><li>provider, provider_ref, paid_at</li></ul>
+        </div>
+        <div class="schema-card"><h4>coupons / scholarships</h4><span class="schema-desc">Discounting &amp; sponsorship</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>code, discount_type, value</li><li>sponsor_name, cohort_id, seats</li></ul>
+        </div>
+        <div class="schema-card"><h4>notifications</h4><span class="schema-desc">Event-driven, per user</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>user_id fk, type, payload jsonb</li><li>read_at, created_at</li></ul>
+        </div>
+        <div class="schema-card"><h4>ai_jobs</h4><span class="schema-desc">Async AI generation queue</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>type: quiz_gen|rubric_gen|assignment_gen|summary</li><li>input_ref, output_ref, status</li></ul>
+        </div>
+        <div class="schema-card"><h4>portfolios / portfolio_items</h4><span class="schema-desc">Public-facing published work</span>
+          <ul class="schema-fields"><li><b>id</b> uuid pk</li><li>user_id fk, public_slug</li><li>submission_id fk, order_index</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="architecture">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Engineering</span>
+      <h2>Technical architecture</h2>
+      <p class="section-lede">A pragmatic stack for a solo-founder-operated platform that still needs to feel real-time and handle heavy media.</p>
+    </div>
+
+    <div class="grid-4">
+      <div class="card">
+        <div class="stack-col-title"><span class="sw" style="background:var(--signal);"></span>Frontend</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;"><span class="tag">Next.js (web)</span><span class="tag">Flutter (mobile)</span><span class="tag">WebSockets</span><span class="tag">Offline lesson cache</span></div>
+      </div>
+      <div class="card">
+        <div class="stack-col-title"><span class="sw" style="background:var(--ember);"></span>Backend</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;"><span class="tag">Go microservices</span><span class="tag">REST + GraphQL</span><span class="tag">Background workers</span></div>
+      </div>
+      <div class="card">
+        <div class="stack-col-title"><span class="sw" style="background:var(--growth);"></span>Storage</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;"><span class="tag">PostgreSQL</span><span class="tag">Redis</span><span class="tag">Object storage + CDN</span></div>
+      </div>
+      <div class="card">
+        <div class="stack-col-title"><span class="sw" style="background:#B7B2E8;"></span>AI services</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;"><span class="tag">Quiz / rubric gen</span><span class="tag">Mentor assistant</span><span class="tag">Weekly summaries</span></div>
+      </div>
+    </div>
+
+    <div class="arch-diagram">
+      <div class="arch-layer">
+        <span class="layer-label">Client layer</span>
+        <div class="layer-items"><span>Next.js web app</span><span>Flutter mobile app</span><span>Offline-first lesson &amp; progress cache</span></div>
+      </div>
+      <div class="arch-layer accent">
+        <span class="layer-label">Realtime &amp; edge</span>
+        <div class="layer-items"><span>WebSocket gateway (presence, chat, live boards)</span><span>CDN for video &amp; assets</span></div>
+      </div>
+      <div class="arch-layer">
+        <span class="layer-label">API layer — Go microservices</span>
+        <div class="layer-items"><span>Identity &amp; Access</span><span>Learning &amp; Curriculum</span><span>Workspace &amp; Submissions</span><span>Community &amp; Messaging</span><span>Commerce &amp; Billing</span><span>AI Orchestrator</span></div>
+      </div>
+      <div class="arch-layer">
+        <span class="layer-label">Background workers</span>
+        <div class="layer-items"><span>Notification dispatch</span><span>Grading / AI job queue</span><span>Video transcoding</span><span>Dunning &amp; renewal jobs</span></div>
+      </div>
+      <div class="arch-layer">
+        <span class="layer-label">Data layer</span>
+        <div class="layer-items"><span>PostgreSQL — system of record</span><span>Redis — cache, sessions, presence</span><span>Object storage — submissions, video, assets</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="ai-layer">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Engineering</span>
+      <h2>AI layer</h2>
+      <p class="section-lede">AI exists to remove the single ceiling that kills every mentor-guided education business: one human can only review so much work. Every AI feature routes through a shared orchestrator, not five disconnected integrations.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>AI job</th><th>Trigger</th><th>Input</th><th>Output</th></tr></thead>
+        <tbody>
+          <tr><td>Quiz generation</td><td>Mentor uploads a lesson</td><td>Markdown / PDF / slides</td><td>MCQ, true/false, scenario &amp; reflection questions with hints and Bloom-level tagging</td></tr>
+          <tr><td>Assignment generation</td><td>Mentor sets lesson + difficulty + duration</td><td>Structured brief</td><td>Project ideas, acceptance criteria, deliverables, timeline, bonus tasks</td></tr>
+          <tr><td>Rubric generation</td><td>Assignment created</td><td>Assignment brief</td><td>Weighted grading rubric</td></tr>
+          <tr><td>Mentor assistant</td><td>Nightly + on-demand</td><td>Cohort activity data</td><td>Risk-of-dropout flags, who needs help, recommended interventions</td></tr>
+          <tr><td>Progress summary</td><td>Weekly, per student</td><td>Submissions, quiz scores, attendance</td><td>Strengths, weaknesses, confidence, learning velocity</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color:var(--ink-soft); font-size:.86rem; margin-top:16px; max-width:70ch;">All AI jobs run asynchronously through the <span class="mono">ai_jobs</span> queue so a slow generation never blocks a mentor's UI — they get a notification when output is ready to review and edit before it reaches a student.</p>
+  </section>
+
+  <section class="section reveal" id="monetization">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>05 · Business</span>
+      <h2>Monetization model</h2>
+      <p class="section-lede">Naira-first pricing built for a monthly-salary income pattern, with grace periods doing the work of a subscription-friendly culture. All figures illustrative planning estimates.</p>
+    </div>
+
+    <div class="grid-3" style="align-items:stretch;">
+      <div class="price-card">
+        <span class="plan-name">Builder</span>
+        <div class="price">₦15,000<span>/mo</span></div>
+        <span class="price-note">Self-guided + community, no assigned mentor</span>
+        <ul><li>Full journey content library</li><li>Classroom presence &amp; peer chat</li><li>Community-graded peer reviews</li><li>Leaderboard &amp; gamification</li></ul>
+      </div>
+      <div class="price-card featured">
+        <span class="fplan">Core offer</span>
+        <span class="plan-name">Cohort</span>
+        <div class="price">₦45,000<span>/mo</span></div>
+        <span class="price-note">12-week mentor-guided cohort program</span>
+        <ul><li>Everything in Builder</li><li>Assigned mentor &amp; weekly reviews</li><li>Live sessions + office hours</li><li>Demo Day + portfolio publishing</li></ul>
+      </div>
+      <div class="price-card">
+        <span class="plan-name">Cohort+</span>
+        <div class="price">₦75,000<span>/mo</span></div>
+        <span class="price-note">Fast-track with priority mentor time</span>
+        <ul><li>Everything in Cohort</li><li>Weekly 1:1 mentor sessions</li><li>Priority review turnaround</li><li>Placement-marketplace listing at graduation</li></ul>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:28px;">
+      <div class="card">
+        <h3>Revenue streams</h3>
+        <ul class="module-feature-list" style="grid-template-columns:1fr;">
+          <li>B2C subscriptions across the three tiers above</li>
+          <li>Enterprise / B2B licensing — per-seat pricing for bootcamps, corporate L&amp;D, and government upskilling programs</li>
+          <li>Corporate &amp; NGO sponsorship — sponsors fund scholarship seats in exchange for cohort branding</li>
+          <li>Placement marketplace fee — a referral fee when a graduate is hired or contracted through the portfolio network</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Billing mechanics</h3>
+        <ul class="module-feature-list" style="grid-template-columns:1fr;">
+          <li>Monthly auto-renewal via Paystack / Flutterwave</li>
+          <li>3-day pre-charge reminder, then a grace period on failure</li>
+          <li>Restricted (read-only) access during grace, full restore on payment</li>
+          <li>Coupons for community partners, scholarships for sponsored seats</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="roadmap">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Business</span>
+      <h2>Product roadmap</h2>
+      <p class="section-lede">Four phases from a single manually-run pilot cohort to a pan-African, AI-assisted mentorship platform.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <span class="phase-tag">PHASE 0 · FOUNDATION</span>
+        <h3>Prove the loop with one cohort</h3>
+        <span class="when">Q3 2026</span>
+        <p class="desc">Core LMS shell, auth &amp; roles, single pilot cohort run manually by the founder as mentor, Dashboard v1, submission → review flow, Paystack/Flutterwave payments.</p>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;"><span class="tag">Auth &amp; roles</span><span class="tag">Journey map v1</span><span class="tag">Submission flow</span><span class="tag">Manual mentor review</span><span class="tag">Payments</span></div>
+      </div>
+      <div class="timeline-item">
+        <span class="phase-tag">PHASE 1 · COHORT ENGINE</span>
+        <h3>Make the classroom feel alive</h3>
+        <span class="when">Q4 2026</span>
+        <p class="desc">Cohort system, Workspace kanban, peer pairing, gamification v1 (streaks, XP, badges), leaderboard, unified calendar, live sessions, event-driven notifications.</p>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;"><span class="tag">Cohorts &amp; peers</span><span class="tag">Workspace / Kanban</span><span class="tag">Gamification v1</span><span class="tag">Calendar</span><span class="tag">Notifications</span></div>
+      </div>
+      <div class="timeline-item">
+        <span class="phase-tag">PHASE 2 · AI LAYER + MOBILE</span>
+        <h3>Break the mentor-bandwidth ceiling</h3>
+        <span class="when">Q1 – Q2 2027</span>
+        <p class="desc">AI quiz / assignment / rubric generation, AI mentor assistant with risk alerts, AI progress summaries, Flutter mobile app launch for on-the-go review and submission.</p>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;"><span class="tag">AI quiz &amp; rubric gen</span><span class="tag">AI mentor assistant</span><span class="tag">Mobile app</span></div>
+      </div>
+      <div class="timeline-item">
+        <span class="phase-tag">PHASE 3 · SCALE &amp; MARKETPLACE</span>
+        <h3>From cohort to platform</h3>
+        <span class="when">Q3 2027 →</span>
+        <p class="desc">Multi-program support, public portfolio &amp; Demo Day pages, employer placement marketplace, enterprise/B2B licensing, full analytics suite, first cohorts outside Nigeria.</p>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;"><span class="tag">Multi-program</span><span class="tag">Placement marketplace</span><span class="tag">Enterprise licensing</span><span class="tag">Pan-African expansion</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="gtm">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Business</span>
+      <h2>Go-to-market strategy</h2>
+      <p class="section-lede">Lagos-first, community-led, and anchored on a channel most competitors don't have: a founder who is already inside Nigeria's largest active upskilling program.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="channel-card"><span class="ch-tag">Channel 01</span><h3 style="font-size:.98rem;">3MTT pipeline</h3><p style="font-size:.86rem; color:var(--ink-soft);">Pilot the first paid cohort from the founder's existing network as a UI/UX Design Training Lead in Nigeria's 3MTT Programme — warm, pre-qualified, trust already established.</p></div>
+      <div class="channel-card"><span class="ch-tag">Channel 02</span><h3 style="font-size:.98rem;">Builder-in-public content</h3><p style="font-size:.86rem; color:var(--ink-soft);">Weekly student build logs and Demo Day recaps on X, TikTok, and LinkedIn — the portfolio work itself is the marketing asset.</p></div>
+      <div class="channel-card"><span class="ch-tag">Channel 03</span><h3 style="font-size:.98rem;">Referral &amp; alumni ambassadors</h3><p style="font-size:.86rem; color:var(--ink-soft);">Graduates get a free month for every paid referral — cohort peer pressure becomes a growth loop, not just a retention one.</p></div>
+      <div class="channel-card"><span class="ch-tag">Channel 04</span><h3 style="font-size:.98rem;">Tech community partnerships</h3><p style="font-size:.86rem; color:var(--ink-soft);">Co-hosted events and discounted cohort seats with Lagos dev/design meetups and hubs.</p></div>
+      <div class="channel-card"><span class="ch-tag">Channel 05</span><h3 style="font-size:.98rem;">Employer &amp; SME partnerships</h3><p style="font-size:.86rem; color:var(--ink-soft);">Feed graduate portfolios directly to SME clients of Reed Breed Technologies as the first placement-marketplace demand side.</p></div>
+      <div class="channel-card"><span class="ch-tag">Channel 06</span><h3 style="font-size:.98rem;">Corporate / NGO sponsorship</h3><p style="font-size:.86rem; color:var(--ink-soft);">Sponsored scholarship seats sold as CSR packages to companies wanting visible impact in Nigerian tech upskilling.</p></div>
+    </div>
+
+    <div style="margin-top:32px;">
+      <h3 style="font-size:1rem; margin-bottom:6px;">Founding-cohort funnel</h3>
+      <div class="funnel">
+        <div class="funnel-row"><span>Waitlist signups</span><span>1,000</span></div>
+        <div class="funnel-row" style="width:82%;"><span>Application completed</span><span>350</span></div>
+        <div class="funnel-row" style="width:60%;"><span>Application accepted</span><span>180</span></div>
+        <div class="funnel-row" style="width:35%;"><span>Payment completed → enrolled</span><span>60</span></div>
+      </div>
+      <p style="font-size:.78rem; color:var(--ink-faint); margin-top:10px;" class="mono">Illustrative funnel for a single founding cohort launch</p>
+    </div>
+  </section>
+
+  <section class="section reveal" id="competitive">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Business</span>
+      <h2>Competitive landscape</h2>
+      <p class="section-lede">BuilderOS doesn't compete on content library size — it competes on accountability, and almost nothing at this price point offers that.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Capability</th><th>BuilderOS</th><th>Udemy / Coursera</th><th>Local bootcamps</th><th>Discord communities</th></tr></thead>
+        <tbody>
+          <tr><td>Assigned mentor with review SLA</td><td class="check">✓</td><td class="cross">✗</td><td class="check">✓</td><td class="cross">✗</td></tr>
+          <tr><td>Cohort accountability &amp; presence</td><td class="check">✓</td><td class="cross">✗</td><td class="partial">Partial</td><td class="partial">Partial</td></tr>
+          <tr><td>Structured, project-based curriculum</td><td class="check">✓</td><td class="partial">Partial</td><td class="check">✓</td><td class="cross">✗</td></tr>
+          <tr><td>Affordable for working professionals</td><td class="check">✓</td><td class="check">✓</td><td class="cross">✗</td><td class="check">✓</td></tr>
+          <tr><td>Public, employer-facing portfolio</td><td class="check">✓</td><td class="cross">✗</td><td class="partial">Partial</td><td class="cross">✗</td></tr>
+          <tr><td>AI-assisted mentor bandwidth</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section reveal" id="risks">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Business</span>
+      <h2>Risks &amp; mitigation</h2>
+      <p class="section-lede">The honest list — including the ones a solo-founder platform is most exposed to.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:22%;">Risk</th><th style="width:10%;">Severity</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td>Mentor bandwidth collapses as cohorts scale beyond one founder</td><td><span class="chip high">High</span></td><td>AI-assisted grading &amp; rubrics, cohort size caps, contracted mentor network from Phase 1 onward</td></tr>
+          <tr><td>Subscription churn in a price-sensitive market</td><td><span class="chip high">High</span></td><td>Flexible installment plans, employer/NGO sponsorship, grace period instead of hard cutoff</td></tr>
+          <tr><td>Student dropout / motivation decay — the classic LMS failure mode</td><td><span class="chip high">High</span></td><td>Gamification, cohort peer pressure, AI early-warning risk alerts to mentors</td></tr>
+          <tr><td>Low-bandwidth / intermittent connectivity for target users</td><td><span class="chip med">Medium</span></td><td>Offline-first mobile caching, adaptive-bitrate video, lightweight lesson formats</td></tr>
+          <tr><td>Inconsistent mentor quality across cohorts</td><td><span class="chip med">Medium</span></td><td>Rubric-driven AI-assisted grading, mandatory mentor onboarding certification</td></tr>
+          <tr><td>Competition from free global content (YouTube, Udemy)</td><td><span class="chip med">Medium</span></td><td>Differentiate on accountability and community, not catalog size — content is a commodity, mentorship isn't</td></tr>
+          <tr><td>Submission fraud or plagiarism</td><td><span class="chip low">Low</span></td><td>Version history, mandatory mentor review, automated similarity checks before approval</td></tr>
+          <tr><td>Rising infra cost as video content library grows</td><td><span class="chip low">Low</span></td><td>CDN + tiered object storage, adaptive bitrate encoding, lesson content reuse across cohorts</td></tr>
+          <tr><td>Data protection compliance (NDPR) as a platform holding learner data</td><td><span class="chip med">Medium</span></td><td>NDPR-aligned data handling review, clear consent flows, Nigeria-based data residency where practical</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section reveal" id="financials">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Business</span>
+      <h2>Financial projections</h2>
+      <p class="section-lede">Illustrative planning estimates in Naira (₦), to be replaced with real numbers after the first pilot cohort. Not a forecast guarantee.</p>
+    </div>
+
+    <div class="bar-chart">
+      <div class="bar-col"><span class="value">₦24.0M</span><div class="bar" style="height:22%;"></div><span class="label">Year 1</span></div>
+      <div class="bar-col"><span class="value">₦95.0M</span><div class="bar" style="height:62%;"></div><span class="label">Year 2</span></div>
+      <div class="bar-col"><span class="value">₦290.0M</span><div class="bar" style="height:100%;"></div><span class="label">Year 3</span></div>
+    </div>
+    <p style="font-size:.76rem; color:var(--ink-faint); margin-top:8px;" class="mono">Total revenue by year, bar height relative to Year 3</p>
+
+    <div class="table-wrap" style="margin-top:32px;">
+      <table>
+        <thead><tr><th>Metric</th><th>Year 1</th><th>Year 2</th><th>Year 3</th></tr></thead>
+        <tbody>
+          <tr><td>Cohorts run</td><td>4</td><td>10</td><td>24</td></tr>
+          <tr><td>Avg. cohort size</td><td>35</td><td>50</td><td>58</td></tr>
+          <tr><td>Total enrollments</td><td>140</td><td>500</td><td>1,400</td></tr>
+          <tr><td>Blended ARPU (program)</td><td>₦150,000</td><td>₦160,000</td><td>₦175,000</td></tr>
+          <tr><td>Subscription revenue</td><td>₦21.0M</td><td>₦80.0M</td><td>₦245.0M</td></tr>
+          <tr><td>Enterprise / sponsorship / marketplace revenue</td><td>₦3.0M</td><td>₦15.0M</td><td>₦45.0M</td></tr>
+          <tr><td><b>Total revenue</b></td><td><b>₦24.0M</b></td><td><b>₦95.0M</b></td><td><b>₦290.0M</b></td></tr>
+          <tr><td>Direct costs (mentor payouts, infra, AI)</td><td>₦10.5M</td><td>₦36.0M</td><td>₦101.5M</td></tr>
+          <tr><td>Gross margin</td><td>~56%</td><td>~62%</td><td>~65%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-4" style="margin-top:28px;">
+      <div class="unit-econ-card"><div class="ue-val">₦45k</div><div class="ue-label">Avg. monthly revenue per active seat</div></div>
+      <div class="unit-econ-card"><div class="ue-val">₦13.5k</div><div class="ue-label">Mentor + infra cost per seat / month</div></div>
+      <div class="unit-econ-card"><div class="ue-val">₦8k</div><div class="ue-label">Blended CAC per enrolled student</div></div>
+      <div class="unit-econ-card"><div class="ue-val">4–5×</div><div class="ue-label">Target LTV : CAC by Year 2</div></div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="kpis">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Business</span>
+      <h2>Success metrics</h2>
+      <p class="section-lede">The numbers that tell us the "mentorship operating system" promise is actually landing — not just vanity signups.</p>
+    </div>
+    <div class="grid-4">
+      <div class="kpi-card"><div class="kpi-value">≥80%</div><div class="kpi-label">Cohort completion rate</div><div class="kpi-target mono">vs. ~15% industry MOOC average</div></div>
+      <div class="kpi-card"><div class="kpi-value">&lt;24h</div><div class="kpi-label">Mentor review turnaround SLA</div><div class="kpi-target mono">Time from submission to first response</div></div>
+      <div class="kpi-card"><div class="kpi-value">≥70%</div><div class="kpi-label">Weekly active learners / enrolled</div><div class="kpi-target mono">Measured every Friday</div></div>
+      <div class="kpi-card"><div class="kpi-value">≥90%</div><div class="kpi-label">Portfolio completion at Demo Day</div><div class="kpi-target mono">Published, public case studies</div></div>
+      <div class="kpi-card"><div class="kpi-value">≥50 NPS</div><div class="kpi-label">Cohort net promoter score</div><div class="kpi-target mono">Surveyed post Demo Day</div></div>
+      <div class="kpi-card"><div class="kpi-value">≥40%</div><div class="kpi-label">Outcome rate — job / freelance / promotion</div><div class="kpi-target mono">Self-reported 90 days post-cohort</div></div>
+      <div class="kpi-card"><div class="kpi-value">≥90%</div><div class="kpi-label">Cohort fill rate at launch</div><div class="kpi-target mono">Filled seats vs. capacity</div></div>
+      <div class="kpi-card"><div class="kpi-value">≥7 days</div><div class="kpi-label">Median active streak length</div><div class="kpi-target mono">Consistency, not just enrollment</div></div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="glossary">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Reference</span>
+      <h2>Glossary</h2>
+      <p class="section-lede">The product's own vocabulary — naming choices that carry the philosophy, not just labels.</p>
+    </div>
+    <div class="glossary-grid">
+      <div class="glossary-item"><div class="term">Journey</div><div class="def">What every other LMS calls a "Course."</div><div class="not mono">not: course</div></div>
+      <div class="glossary-item"><div class="term">Mentor</div><div class="def">What every other LMS calls an "Instructor."</div><div class="not mono">not: instructor / teacher</div></div>
+      <div class="glossary-item"><div class="term">Builder</div><div class="def">What every other LMS calls a "Student" once they're actively producing work.</div><div class="not mono">not: learner (in marketing copy)</div></div>
+      <div class="glossary-item"><div class="term">Demo Day</div><div class="def">The public presentation that closes a Journey and opens the Portfolio stage.</div><div class="not mono">not: final exam</div></div>
+      <div class="glossary-item"><div class="term">Cohort</div><div class="def">The social unit — a shared class with photos, streaks, and a leaderboard.</div><div class="not mono">not: class / batch</div></div>
+      <div class="glossary-item"><div class="term">Presence</div><div class="def">Live who's-online-and-doing-what signal — the core differentiator over a forum.</div><div class="not mono">not: last seen</div></div>
+      <div class="glossary-item"><div class="term">Workspace</div><div class="def">The Trello-meets-GitHub kanban board every project lives on.</div><div class="not mono">not: assignments tab</div></div>
+      <div class="glossary-item"><div class="term">MOS</div><div class="def">Mentorship Operating System — the category BuilderOS is defining, not competing inside "LMS."</div><div class="not mono">not: LMS</div></div>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<footer>
+  <div class="fbrand">
+    <div class="brand-mark" style="width:26px;height:26px;"></div>
+    <div>
+      <div class="brand-name" style="font-size:13px;">BuilderOS</div>
+      <div class="brand-sub">A MENTORSHIP OPERATING SYSTEM</div>
+    </div>
+  </div>
+  <p>PRODUCT BLUEPRINT · V1.0 · REED BREED TECHNOLOGIES · JULY 2026</p>
+</footer>
+
+<script>
+// Mobile nav toggle
+const menuBtn = document.getElementById('menuBtn');
+const sidebar = document.getElementById('sidebar');
+if (menuBtn) {
+  menuBtn.addEventListener('click', () => sidebar.classList.toggle('open'));
+  document.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', () => sidebar.classList.remove('open')));
+}
+
+// Scrollspy
+const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+const sections = navLinks.map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+const spy = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const id = '#' + entry.target.id;
+    const link = navLinks.find(l => l.getAttribute('href') === id);
+    if (!link) return;
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+sections.forEach(s => spy.observe(s));
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+reveals.forEach(r => revealObserver.observe(r));
+</script>
+</body>
+</html>

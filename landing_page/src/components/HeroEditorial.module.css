@@ -1,0 +1,120 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: var(--space-xl);
+  overflow: hidden;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
+  gap: var(--space-lg);
+  max-width: var(--_layout---container--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.content {
+  z-index: 2;
+  position: relative;
+}
+
+.title {
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-md);
+  color: #ffffff;
+}
+
+.subtitle {
+  max-width: 480px;
+  margin-bottom: var(--space-lg);
+  font-size: 1.25rem;
+  color: #ffffff;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.imageContainer {
+  position: relative;
+  height: 80vh;
+  width: 100%;
+}
+
+.revealWrapper {
+  height: 100%;
+}
+
+.imageWrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 10s var(--ease-out-expo);
+}
+
+.hero:hover .image {
+  transform: scale(1.1);
+}
+
+.scrollIndicator {
+  position: absolute;
+  bottom: var(--space-lg);
+  left: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.scrollIndicator span {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  writing-mode: vertical-rl;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.line {
+  width: 1px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  animation: scrollLine 2s infinite var(--ease-out-expo);
+}
+
+@keyframes scrollLine {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@media (max-width: 1024px) {
+  .container {
+    grid-template-columns: 1fr;
+    padding-top: var(--space-xl);
+  }
+  .imageContainer {
+    height: 50vh;
+    order: -1;
+  }
+}

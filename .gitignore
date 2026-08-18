@@ -1,0 +1,84 @@
+# =====================================================================
+# ResultsPRO Suite Master .gitignore
+# =====================================================================
+
+# Operating System & IDE
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Node.js & Frontend Artifacts
+node_modules/
+.next/
+dist/
+build/
+out/
+.turbo/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun.lockb
+package-lock.json
+
+# Go Language Artifacts & Binaries
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+main
+server
+backend
+classroompro_server
+control-plane
+*.tmp
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Database Files
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+*.sqlite-journal
+
+# Logs & Debugging
+*.log
+logs/
+*.pid
+*.seed
+
+# Flutter / Dart (Mobile App)
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+ios/.generated/
+android/.gradle/
+
+# Temporary / Compression Archives
+*.zip
+*.tar.gz
+*.rar
+tmp/
+scratch/

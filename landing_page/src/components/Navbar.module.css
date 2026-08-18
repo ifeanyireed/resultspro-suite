@@ -1,0 +1,121 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 120px; /* Explicit height to ensure vertical centering */
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  transition: all 0.6s var(--ease-out-expo);
+}
+
+/* Floating rectangle effect on scroll (Now squared) */
+.scrolled {
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 3rem);
+  max-width: 1400px;
+  padding: 0;
+  min-height: 100px; /* Increased from 60px to 100px */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 0;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 3rem;
+  position: relative;
+  width: 100%;
+  min-height: inherit;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  position: absolute; /* Absolute to escape flex constraints */
+  left: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1001;
+}
+
+.logoImage {
+  object-fit: contain;
+  transition: all 0.6s var(--ease-out-expo);
+  transform-origin: center center;
+}
+
+.scrolled .logoImage {
+  transform: scale(1.1);
+}
+
+.scrolled .logo {
+  color: var(--color-sky-blue);
+}
+
+.links {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+  margin-left: 180px; /* Adjusted for the 132px logo */
+}
+
+.links a {
+  text-decoration: none;
+  color: var(--color-text-on-sky);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transition: all 0.3s ease;
+}
+
+.scrolled .links a {
+  color: var(--color-sky-blue);
+}
+
+.links a:hover {
+  opacity: 0.6;
+}
+
+.portalLink {
+  text-decoration: none;
+  color: var(--color-text-on-sky);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-right: 2.5rem;
+  transition: color 0.4s ease;
+}
+
+.scrolled .portalLink {
+  color: var(--color-sky-blue);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+/* Adjust button inside scrolled nav */
+.scrolled :global(.btn-primary) {
+  padding: 0.8rem 2.5rem;
+  font-size: 0.75rem;
+  background: var(--color-sky-blue);
+  color: white;
+}
+
+@media (max-width: 1024px) {
+  .links {
+    display: none;
+  }
+}

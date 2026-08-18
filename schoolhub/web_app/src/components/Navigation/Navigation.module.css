@@ -1,0 +1,112 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 2rem 0;
+  z-index: 1000;
+  transition: all 0.6s var(--ease-out-expo);
+}
+
+/* Floating rectangle effect on scroll (Now squared) */
+.scrolled {
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 3rem);
+  max-width: 1400px;
+  padding: 1.25rem 0;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border-radius: 0; /* Corner radius removed */
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 3rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logoImage {
+  object-fit: contain;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.logo:hover .logoImage {
+  transform: scale(1.05);
+}
+
+.scrolled .logoImage {
+  /* You could add a filter here if the logo needs to change on white, 
+     but let's keep it natural first */
+}
+
+.scrolled .logo {
+  color: var(--color-sky-blue);
+}
+
+.links {
+  display: flex;
+  gap: 3rem;
+}
+
+.links a {
+  text-decoration: none;
+  color: var(--color-text-on-sky);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transition: all 0.3s ease;
+}
+
+.scrolled .links a {
+  color: var(--color-sky-blue);
+}
+
+.links a:hover {
+  opacity: 0.6;
+}
+
+.portalLink {
+  text-decoration: none;
+  color: var(--color-text-on-sky);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-right: 2.5rem;
+  transition: color 0.4s ease;
+}
+
+.scrolled .portalLink {
+  color: var(--color-sky-blue);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+/* Adjust button inside scrolled nav */
+.scrolled :global(.btn-primary) {
+  padding: 0.8rem 2.5rem;
+  font-size: 0.75rem;
+  background: var(--color-sky-blue);
+  color: white;
+}
+
+@media (max-width: 1024px) {
+  .links {
+    display: none;
+  }
+}

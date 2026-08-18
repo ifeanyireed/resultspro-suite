@@ -1,0 +1,117 @@
+.section {
+  padding: var(--space-xl) 0;
+  overflow: hidden;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+.reverse {
+  direction: rtl;
+}
+
+.reverse > * {
+  direction: ltr;
+}
+
+.images {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.mainWrapper {
+  width: 80%;
+  z-index: 1;
+}
+
+.mainImage {
+  position: relative;
+  aspect-ratio: 4/5;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.secondaryWrapper {
+  position: absolute;
+  right: 0;
+  bottom: -10%;
+  width: 45%;
+  z-index: 2;
+}
+
+.secondaryImage {
+  position: relative;
+  aspect-ratio: 1/1;
+  background: rgba(255, 255, 255, 0.1);
+  border: 10px solid #fff;
+}
+
+.content {
+  padding: var(--space-md);
+}
+
+.title {
+  margin-bottom: var(--space-md);
+  color: #ffffff;
+}
+
+.divider {
+  width: 60px;
+  height: 2px;
+  background: #ffffff;
+  margin-bottom: var(--space-md);
+}
+
+.description {
+  margin-bottom: var(--space-lg);
+  font-size: 1.125rem;
+  color: #ffffff;
+}
+
+.link {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.875rem;
+  transition: opacity 0.3s ease;
+}
+
+.link:hover {
+  opacity: 0.6;
+}
+
+/* White Section Overrides */
+:global(.section-white) .title {
+  color: var(--color-sky-blue);
+}
+
+:global(.section-white) .divider {
+  background: var(--color-sky-blue);
+}
+
+:global(.section-white) .description {
+  color: var(--color-text-on-white);
+}
+
+:global(.section-white) .link {
+  color: var(--color-sky-blue);
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+  .mainWrapper {
+    width: 100%;
+  }
+  .secondaryWrapper {
+    display: none;
+  }
+}

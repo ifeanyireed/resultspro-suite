@@ -1,0 +1,44 @@
+package db
+
+import (
+	"log"
+	"os"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"service_coursespro/models"
+)
+
+var DB *gorm.DB
+
+func InitDB() {
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		dsn = "u721451974_resultspro:*Reedb4b4@tcp(srv2113.hstgr.io:3306)/u721451974_resultspro_db?charset=utf8mb4&parseTime=True&loc=Local"
+	}
+
+	var err error
+	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Warn),
+	})
+	if err != nil {
+		log.Printf("GORM open warning: %v", err)
+		return
+	}
+
+	// Auto-migrate CoursesPRO tables
+	_ = DB.AutoMigrate(
+		&models.Cohort{},
+		&models.Enrollment{},
+		&models.JourneyStage{},
+		&models.JourneyModule{},
+		&models.ModuleProgress{},
+		&models.ProjectSubmission{},
+		&models.PeerPairing{},
+		&models.PresenceSession{},
+		&models.PublicPortfolio{},
+	)
+
+	log.Println("CoursesPRO connected to MySQL with GORM successfully")
+}

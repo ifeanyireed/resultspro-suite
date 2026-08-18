@@ -1,0 +1,15 @@
+[Unit]
+Description=ResultsPRO Users Microservice (Identity, Academics & Subscriptions)
+After=network.target mysql.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/service_users
+ExecStart=/var/www/service_users/service_users
+Restart=always
+RestartSec=5
+EnvironmentFile=/var/www/service_users/.env
+
+[Install]
+WantedBy=multi-user.target

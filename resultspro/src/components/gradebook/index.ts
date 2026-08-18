@@ -1,0 +1,10 @@
+export { SchoolHeader } from './SchoolHeader';
+export { StudentInfo } from './StudentInfo';
+export { SubjectResults } from './SubjectResults';
+export { PerformanceSummary } from './PerformanceSummary';
+export { Attendance } from './Attendance';
+export { AffectiveDomain } from './AffectiveDomain';
+export { PsychomotorDomain } from './PsychomotorDomain';
+export { TeacherComments } from './TeacherComments';
+export { GradingSystem } from './GradingSystem';
+export { CompactGradebook } from './CompactGradebook';

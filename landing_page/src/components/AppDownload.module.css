@@ -1,0 +1,151 @@
+.section {
+  padding: var(--space-xxl) 0;
+  overflow: hidden;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.title {
+  color: #ffffff;
+  margin: var(--space-sm) 0 var(--space-md);
+}
+
+.description {
+  color: #ffffff;
+  max-width: 450px;
+  margin-bottom: var(--space-lg);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.storeButton {
+  background: #ffffff;
+  color: var(--color-sky-blue);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  transition: transform 0.3s var(--ease-out-expo), background 0.3s ease;
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.storeIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.storeButton:hover {
+  transform: translateY(-5px);
+  background: #f0f0f0;
+}
+
+.buttonInner {
+  display: flex;
+  flex-direction: column;
+}
+
+.smallText {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  opacity: 0.8;
+  line-height: 1;
+}
+
+.largeText {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.imageContainer {
+  position: relative;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.monsterWrapper {
+  position: absolute;
+  right: 50px;
+  bottom: 5px;
+  z-index: 10;
+}
+
+.monster {
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+}
+
+.phoneWrapper {
+  position: relative;
+  z-index: 5;
+  width: 280px;
+  height: 560px;
+  margin-right: 100px;
+}
+
+.phoneFrame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border: 12px solid #1a1a1a;
+  border-radius: 3rem;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.screenImage {
+  object-fit: cover;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .description {
+    margin: 0 auto var(--space-lg);
+  }
+  .actions {
+    justify-content: center;
+  }
+  .phoneWrapper {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  .imageContainer {
+    height: 450px;
+  }
+  .phoneWrapper {
+    width: 200px;
+    height: 400px;
+  }
+  .monster {
+    width: 180px;
+    height: auto;
+  }
+  .monsterWrapper {
+    bottom: 10px;
+  }
+}

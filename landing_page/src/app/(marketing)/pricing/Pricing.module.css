@@ -1,0 +1,175 @@
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 4rem;
+  background: #f1f5f9;
+  padding: 6px;
+  border-radius: 100px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tab {
+  padding: 10px 24px;
+  border-radius: 100px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tab.active {
+  background: white;
+  color: var(--color-sky-blue);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  flex: 1;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border-color: #cbd5e1;
+}
+
+.card.highlight {
+  border-color: var(--color-sky-blue);
+  box-shadow: 0 1px 3px 0 rgba(20, 110, 245, 0.1), 0 1px 2px -1px rgba(20, 110, 245, 0.1);
+}
+
+.card.highlight:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 50px -12px rgba(20, 110, 245, 0.25);
+  border-color: var(--color-sky-blue);
+}
+
+.badge {
+  position: absolute;
+  top: -12px;
+  right: 2rem;
+  background: var(--color-sky-blue);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 0 2px 4px rgba(20, 110, 245, 0.3);
+}
+
+.planHeader {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.planName {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.card.highlight .planName {
+  color: var(--color-sky-blue);
+}
+
+.planPrice {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.period {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex-grow: 1;
+}
+
+.featureItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.75rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.check {
+  color: var(--color-sky-blue);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    min-width: 300px;
+    flex: 1 1 calc(50% - 2rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    flex-direction: column;
+  }
+  
+  .card {
+    min-width: 100%;
+    transform: none !important;
+  }
+  
+  .tabs {
+    flex-direction: column;
+    border-radius: 1.5rem;
+    padding: 12px;
+  }
+  
+  .tab {
+    width: 100%;
+  }
+}
