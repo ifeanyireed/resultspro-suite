@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Badge } from '@/components/Badge';
-import { Building2, Search, Filter, ExternalLink } from 'lucide-react';
-import { fetchSchools, verifySchool } from '@/lib/api';
+import { Building2, Search, Filter, ExternalLink, Plus, X } from 'lucide-react';
+import { fetchSchools, verifySchool, createTenant } from '@/lib/api';
 import { School } from '@/lib/types';
 
 export default function TenantsListTab() {
@@ -10,16 +10,39 @@ export default function TenantsListTab() {
   const [filterTier, setFilterTier] = useState('ALL');
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [newTenantData, setNewTenantData] = useState({
+    name: '',
+    slug: '',
+    contact_email: '',
+    primary_color: '#2563eb'
+  });
+
+  async function load() {
+    setLoading(true);
+    const data = await fetchSchools();
+    setSchools(data);
+    setLoading(false);
+  }
 
   useEffect(() => {
-    async function load() {
-      setLoading(true);
-      const data = await fetchSchools();
-      setSchools(data);
-      setLoading(false);
-    }
     load();
   }, []);
+
+  const handleCreateTenant = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreating(true);
+    const ok = await createTenant(newTenantData);
+    setCreating(false);
+    if (ok) {
+      setIsModalOpen(false);
+      setNewTenantData({ name: '', slug: '', contact_email: '', primary_color: '#2563eb' });
+      load();
+    } else {
+      alert("Failed to create tenant");
+    }
+  };
 
   const handleVerify = async (schoolId: string, status: 'VERIFIED' | 'REJECTED') => {
     const ok = await verifySchool(schoolId, status);
@@ -84,6 +107,14 @@ export default function TenantsListTab() {
               <option value="REJECTED">Rejected</option>
             </select>
           </div>
+
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 px-5 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 shadow-sm transition-all text-xs ml-4"
+          >
+            <Plus className="w-4 h-4" />
+            New Tenant
+          </button>
         </div>
       </div>
 
@@ -107,7 +138,7 @@ export default function TenantsListTab() {
                   <tr key={school.id} className="hover:bg-blue-50/30 transition-colors group">
                     <td className="px-6 py-4 flex items-center space-x-3">
                       <div
-                        className="w-9 h-9 rounded-xl flex items-center justify-center font-medium text-white text-xs shadow-sm transition-transform group-hover:scale-105"
+                        className="w-9 h-9 rounded-full flex items-center justify-center font-medium text-white text-xs shadow-sm transition-transform group-hover:scale-105"
                         style={{ backgroundColor: school.primary_color || '#2563eb' }}
                       >
                         {school.logo_emoji || school.name.charAt(0)}
@@ -174,6 +205,93 @@ export default function TenantsListTab() {
           </table>
         </div>
       </div>
+
+      {/* Create Tenant Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-blue-600" />
+                Provision New Tenant
+              </h3>
+              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={handleCreateTenant} className="p-6 space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tenant / School Name</label>
+                <input 
+                  type="text" required
+                  value={newTenantData.name}
+                  onChange={e => setNewTenantData({...newTenantData, name: e.target.value})}
+                  placeholder="e.g. Greenwood High"
+                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Subdomain (Slug)</label>
+                <div className="relative">
+                  <input 
+                    type="text" required
+                    value={newTenantData.slug}
+                    onChange={e => setNewTenantData({...newTenantData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')})}
+                    placeholder="greenwood"
+                    className="w-full pl-4 pr-28 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                  />
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <span className="text-[10px] text-slate-400 font-medium">.resultspro.ng</span>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Admin Contact Email</label>
+                <input 
+                  type="email" required
+                  value={newTenantData.contact_email}
+                  onChange={e => setNewTenantData({...newTenantData, contact_email: e.target.value})}
+                  placeholder="admin@school.com"
+                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Primary Theme Color</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="color" 
+                    value={newTenantData.primary_color}
+                    onChange={e => setNewTenantData({...newTenantData, primary_color: e.target.value})}
+                    className="w-10 h-10 rounded-lg cursor-pointer bg-slate-50 border border-slate-200 p-1"
+                  />
+                  <input 
+                    type="text" 
+                    value={newTenantData.primary_color}
+                    onChange={e => setNewTenantData({...newTenantData, primary_color: e.target.value})}
+                    className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
+                  />
+                </div>
+              </div>
+              <div className="pt-4 flex gap-3">
+                <button 
+                  type="button" 
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit"
+                  disabled={creating}
+                  className="flex-1 px-4 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs hover:bg-blue-700 transition-colors shadow-sm disabled:opacity-50"
+                >
+                  {creating ? 'Creating...' : 'Provision Tenant'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

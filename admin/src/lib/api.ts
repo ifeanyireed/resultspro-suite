@@ -30,11 +30,26 @@ export async function fetchSuiteStats(): Promise<SuiteStats> {
 
 // 2. Schools Management
 export async function fetchSchools(): Promise<School[]> {
-  return [
-    { id: '1', name: 'Greenwood High', contact_email: 'admin@greenwood.edu', subscription_tier: 'PRO', verification_status: 'PENDING_VERIFICATION', created_at: new Date().toISOString(), school_code: 'GWH', address: 'Lagos', phone_number: '08012345678', logo_url: '' },
-    { id: '2', name: 'Kings College', contact_email: 'info@kingscollege.edu', subscription_tier: 'ENTERPRISE', verification_status: 'VERIFIED', created_at: new Date().toISOString(), school_code: 'KCL', address: 'Lagos', phone_number: '08012345678', logo_url: '' },
-    { id: '3', name: 'Queens College', contact_email: 'contact@queenscollege.edu', subscription_tier: 'PRO', verification_status: 'VERIFIED', created_at: new Date().toISOString(), school_code: 'QCL', address: 'Lagos', phone_number: '08012345678', logo_url: '' },
-  ];
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/tenants`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return Array.isArray(data.tenants) ? data.tenants : (Array.isArray(data) ? data : []);
+  } catch {
+    return [];
+  }
+}
+
+export async function createTenant(payload: any): Promise<boolean> {
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/tenants`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+      body: JSON.stringify(payload),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
 
 export async function verifySchool(schoolId: string, status: 'VERIFIED' | 'REJECTED', reason?: string): Promise<boolean> {

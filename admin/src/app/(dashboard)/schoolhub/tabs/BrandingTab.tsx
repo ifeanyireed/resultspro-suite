@@ -204,7 +204,7 @@ export default function BrandingTab() {
             <div className="w-56 bg-white border-r border-slate-100 flex flex-col">
               <div className="p-5 flex items-center gap-3 border-b border-slate-50">
                 <div 
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm"
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm"
                   style={{ backgroundColor: formData.primary_color }}
                 >
                   {formData.name.charAt(0)}
