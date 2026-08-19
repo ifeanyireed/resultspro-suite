@@ -1,12 +1,27 @@
-import React from 'react';
-import { DollarSign, TrendingUp, CreditCard, ArrowUpRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { DollarSign, TrendingUp, CreditCard, ArrowUpRight, RefreshCw } from 'lucide-react';
 import { Badge } from '@/components/Badge';
+import { fetchExamproFinancials } from '@/lib/api';
 
 export default function FinancialsTab() {
-  const transactions = [
-    { id: 'TXN-001', user: 'John Doe', amount: '+5,000 NGN', type: 'COIN_PURCHASE', date: 'Oct 14, 2026', status: 'COMPLETED' },
-    { id: 'TXN-002', user: 'Jane Smith', amount: '-1,500 NGN', type: 'BATTLE_PAYOUT', date: 'Oct 14, 2026', status: 'COMPLETED' },
-  ];
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchExamproFinancials();
+      setStats(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const transactions = stats?.transactions || [];
 
   return (
     <div className="space-y-6">
@@ -19,7 +34,7 @@ export default function FinancialsTab() {
             <span className="flex items-center text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full"><ArrowUpRight className="w-3 h-3 mr-1"/> 12.5%</span>
           </div>
           <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">Total Revenue (MTD)</p>
-          <p className="text-3xl font-bold text-slate-800">₦450,200</p>
+          <p className="text-3xl font-bold text-slate-800">₦{(stats?.revenueMTD || 0).toLocaleString()}</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
@@ -29,7 +44,7 @@ export default function FinancialsTab() {
             </div>
           </div>
           <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">Coin Purchases</p>
-          <p className="text-3xl font-bold text-slate-800">1,245</p>
+          <p className="text-3xl font-bold text-slate-800">{(stats?.coinPurchases || 0).toLocaleString()}</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
@@ -39,13 +54,16 @@ export default function FinancialsTab() {
             </div>
           </div>
           <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">Battle Payouts</p>
-          <p className="text-3xl font-bold text-slate-800">₦125,000</p>
+          <p className="text-3xl font-bold text-slate-800">₦{(stats?.battlePayouts || 0).toLocaleString()}</p>
         </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden">
-        <div className="p-6 border-b border-slate-100 bg-slate-50/50">
+        <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
           <h3 className="font-bold text-base text-slate-900">Recent Transactions</h3>
+          <button onClick={loadData} className="p-1.5 rounded-full hover:bg-slate-200 text-slate-500 transition-colors">
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-emerald-600' : ''}`} />
+          </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
@@ -60,13 +78,13 @@ export default function FinancialsTab() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
-              {transactions.map((t) => (
+              {transactions.map((t: any) => (
                 <tr key={t.id} className="hover:bg-slate-50/50 transition-colors">
                   <td className="px-6 py-4 font-mono text-[10px] font-bold text-slate-500">{t.id}</td>
-                  <td className="px-6 py-4 font-bold text-slate-800">{t.user}</td>
+                  <td className="px-6 py-4 font-bold text-slate-800">{t.user || 'Unknown'}</td>
                   <td className="px-6 py-4 text-slate-600 font-medium">{t.type}</td>
-                  <td className="px-6 py-4 font-bold text-slate-900">{t.amount}</td>
-                  <td className="px-6 py-4 text-slate-500">{t.date}</td>
+                  <td className="px-6 py-4 font-bold text-slate-900">{t.amount_ngn ? `₦${t.amount_ngn}` : `${t.amount_coins} Coins`}</td>
+                  <td className="px-6 py-4 text-slate-500">{new Date(t.createdAt).toLocaleDateString()}</td>
                   <td className="px-6 py-4">
                     <Badge status={t.status} />
                   </td>

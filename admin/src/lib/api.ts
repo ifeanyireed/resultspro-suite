@@ -140,3 +140,59 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
     return [];
   }
 }
+
+// --- EXAMSPRO API ---
+
+export async function fetchExamproOverview() {
+  try {
+    const res = await fetch(`${EXAMS_API}/api/admin/overview`, { headers: getAuthHeader() });
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchExamproExams() {
+  try {
+    const res = await fetch(`${EXAMS_API}/api/admin/exams`, { headers: getAuthHeader() });
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchExamproQuestions() {
+  try {
+    const res = await fetch(`${EXAMS_API}/api/admin/questions`, { headers: getAuthHeader() });
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchExamproBattles() {
+  try {
+    const res = await fetch(`${EXAMS_API}/api/admin/battles/monitor-stats`, { headers: getAuthHeader() });
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchExamproUsers() {
+  try {
+    const res = await fetch(`${EXAMS_API}/api/admin/users`, { headers: getAuthHeader() });
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchExamproFinancials() {
+  try {
+    const res = await fetch(`${EXAMS_API}/api/admin/finances/stats`, { headers: getAuthHeader() });
+    return await res.json();
+  } catch {
+    return null;
+  }
+}

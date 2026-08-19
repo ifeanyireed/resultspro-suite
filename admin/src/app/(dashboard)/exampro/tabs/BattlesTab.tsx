@@ -1,13 +1,34 @@
-import React, { useState } from 'react';
-import { Swords, Activity, Coins, ShieldAlert, Clock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Swords, Activity, Coins, ShieldAlert, Clock, RefreshCw } from 'lucide-react';
 import { Badge } from '@/components/Badge';
+import { fetchExamproBattles } from '@/lib/api';
 
 export default function BattlesTab() {
-  const [stats] = useState({ activeCount: 42, avgStake: 250, totalVolume: '15.2k', disputes: 1 });
-  const [battles] = useState([
-    { id: 'BTL-842', p1: 'JohnD', p2: 'JaneS', subject: 'Mathematics', stake: 500, progress: '6/10', time: '02:45', status: 'ACTIVE' },
-    { id: 'BTL-843', p1: 'MikeR', p2: 'SarahK', subject: 'Physics', stake: 100, progress: '10/10', time: '00:00', status: 'DISPUTE' },
-  ]);
+  const [stats, setStats] = useState({ activeCount: 0, avgStake: 0, totalVolume: '0', disputes: 0 });
+  const [battles, setBattles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchExamproBattles();
+      if (data) {
+        setStats({
+          activeCount: data.activeCount || 0,
+          avgStake: data.avgStake || 0,
+          totalVolume: data.totalVolume ? (data.totalVolume >= 1000 ? (data.totalVolume/1000).toFixed(1)+'k' : data.totalVolume.toString()) : '0',
+          disputes: data.pendingDisputes || 0
+        });
+        setBattles(data.battles || []);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -35,8 +56,8 @@ export default function BattlesTab() {
           <h3 className="font-bold text-base text-slate-900 flex items-center gap-2">
             <Swords className="w-5 h-5 text-blue-600" /> Live Battles Monitor
           </h3>
-          <button className="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-full text-xs font-bold hover:bg-slate-50 transition-colors flex items-center space-x-1.5 shadow-sm">
-            <Clock className="w-4 h-4" />
+          <button onClick={loadData} className="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-full text-xs font-bold hover:bg-slate-50 transition-colors flex items-center space-x-1.5 shadow-sm">
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-blue-600' : ''}`} />
             <span>Refresh</span>
           </button>
         </div>
