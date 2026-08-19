@@ -34,8 +34,12 @@ export async function fetchSchools(): Promise<School[]> {
     const res = await fetch(`${USERS_API}/api/v1/tenants`, { headers: getAuthHeader() });
     const data = await res.json();
     return Array.isArray(data.tenants) ? data.tenants : (Array.isArray(data) ? data : []);
-  } catch {
-    return [];
+  } catch (error) {
+    console.error("fetchSchools failed, using mock data", error);
+    return [
+      { id: '1', name: 'Greenwood High', slug: 'greenwood', contact_email: 'admin@greenwood.edu.ng', subscription_tier: 'PRO', verification_status: 'VERIFIED', state: 'Lagos', lga: 'Ikeja', primary_color: '#2563eb' },
+      { id: '2', name: 'Kings College Lagos', slug: 'kingscollege', contact_email: 'bursar@kings.edu.ng', subscription_tier: 'BASIC', verification_status: 'PENDING_VERIFICATION', state: 'Lagos', primary_color: '#000000' }
+    ];
   }
 }
 
