@@ -2,16 +2,19 @@
 
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
-import { Building2, ShieldCheck, Palette } from 'lucide-react';
+import { Building2, ShieldCheck, Palette, LayoutDashboard } from 'lucide-react';
+
+import OverviewTab from './tabs/OverviewTab';
 
 import TenantsListTab from './tabs/TenantsListTab';
 import VerificationsTab from './tabs/VerificationsTab';
 import BrandingTab from './tabs/BrandingTab';
 
 export default function SchoolHubPage() {
-  const [activeTab, setActiveTab] = useState('tenants');
+  const [activeTab, setActiveTab] = useState('overview');
 
   const tabs = [
+    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'tenants', label: 'Tenant Directory', icon: Building2 },
     { id: 'verifications', label: 'Verification Queue', icon: ShieldCheck },
     { id: 'branding', label: 'Platform Branding', icon: Palette },
@@ -48,6 +51,7 @@ export default function SchoolHubPage() {
       </div>
 
       <div className="p-8 max-w-[1400px] mx-auto w-full">
+        {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'tenants' && <TenantsListTab />}
         {activeTab === 'verifications' && <VerificationsTab />}
         {activeTab === 'branding' && <BrandingTab />}

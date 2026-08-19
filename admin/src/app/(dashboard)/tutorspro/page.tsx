@@ -2,16 +2,19 @@
 
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
-import { GraduationCap, CalendarClock, CreditCard } from 'lucide-react';
+import { GraduationCap, CalendarClock, CreditCard, LayoutDashboard } from 'lucide-react';
+
+import OverviewTab from './tabs/OverviewTab';
 
 import ProfilesTab from './tabs/ProfilesTab';
 import BookingsTab from './tabs/BookingsTab';
 import PayoutsTab from './tabs/PayoutsTab';
 
 export default function TutorsProAdminPage() {
-  const [activeTab, setActiveTab] = useState('profiles');
+  const [activeTab, setActiveTab] = useState('overview');
 
   const tabs = [
+    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'profiles', label: 'Tutor Profiles', icon: GraduationCap },
     { id: 'bookings', label: 'Global Bookings', icon: CalendarClock },
     { id: 'payouts', label: 'Tutor Payouts', icon: CreditCard },
@@ -48,6 +51,7 @@ export default function TutorsProAdminPage() {
       </div>
 
       <div className="p-8 max-w-[1400px] mx-auto w-full">
+        {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'profiles' && <ProfilesTab />}
         {activeTab === 'bookings' && <BookingsTab />}
         {activeTab === 'payouts' && <PayoutsTab />}

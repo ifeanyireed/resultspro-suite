@@ -2,16 +2,19 @@
 
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
-import { BookOpen, FileText, Layers, Award } from 'lucide-react';
+import { BookOpen, FileText, Layers, Award, LayoutDashboard } from 'lucide-react';
+
+import OverviewTab from './tabs/OverviewTab';
 
 import NotesTab from './tabs/NotesTab';
 import QuizzesTab from './tabs/QuizzesTab';
 import FlashcardsTab from './tabs/FlashcardsTab';
 
 export default function ClassroomProAdminPage() {
-  const [activeTab, setActiveTab] = useState('notes');
+  const [activeTab, setActiveTab] = useState('overview');
 
   const tabs = [
+    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'notes', label: 'Study Notes', icon: BookOpen },
     { id: 'quizzes', label: 'Quizzes', icon: FileText },
     { id: 'flashcards', label: 'SRS Flashcards', icon: Layers },
@@ -49,6 +52,7 @@ export default function ClassroomProAdminPage() {
       </div>
 
       <div className="p-8 max-w-[1400px] mx-auto w-full">
+        {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'notes' && <NotesTab />}
         {activeTab === 'quizzes' && <QuizzesTab />}
         {activeTab === 'flashcards' && <FlashcardsTab />}

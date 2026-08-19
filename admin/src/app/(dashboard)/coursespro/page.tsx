@@ -2,15 +2,18 @@
 
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
-import { Layers, Users, GraduationCap } from 'lucide-react';
+import { Layers, Users, GraduationCap, LayoutDashboard } from 'lucide-react';
+
+import OverviewTab from './tabs/OverviewTab';
 
 import CohortsTab from './tabs/CohortsTab';
 import EnrollmentsTab from './tabs/EnrollmentsTab';
 
 export default function CoursesProAdminPage() {
-  const [activeTab, setActiveTab] = useState('cohorts');
+  const [activeTab, setActiveTab] = useState('overview');
 
   const tabs = [
+    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'cohorts', label: 'Cohort Programs', icon: Layers },
     { id: 'enrollments', label: 'Student Enrollments', icon: Users },
   ];
@@ -46,6 +49,7 @@ export default function CoursesProAdminPage() {
       </div>
 
       <div className="p-8 max-w-[1400px] mx-auto w-full">
+        {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'cohorts' && <CohortsTab />}
         {activeTab === 'enrollments' && <EnrollmentsTab />}
       </div>
