@@ -18,7 +18,7 @@ func GetInstanceAnalytics(c *gin.Context) {
 	var lowestScore float64
 
 	err := db.DB.QueryRow(`SELECT COUNT(*), COALESCE(AVG(average_score), 0), COALESCE(MAX(total_score), 0), COALESCE(MIN(total_score), 0) 
-	                        FROM student_results WHERE instance_id = ?`, instanceID).
+	                        FROM res_student_results WHERE instance_id = ?`, instanceID).
 		Scan(&totalStudents, &classAverage, &highestScore, &lowestScore)
 
 	if err != nil {
@@ -34,7 +34,7 @@ func GetInstanceAnalytics(c *gin.Context) {
 		SUM(CASE WHEN average_score >= 45 AND average_score < 50 THEN 1 ELSE 0 END) as count_d,
 		SUM(CASE WHEN average_score >= 40 AND average_score < 45 THEN 1 ELSE 0 END) as count_e,
 		SUM(CASE WHEN average_score < 40 THEN 1 ELSE 0 END) as count_f
-		FROM student_results WHERE instance_id = ?`, instanceID)
+		FROM res_student_results WHERE instance_id = ?`, instanceID)
 
 	var countA, countB, countC, countD, countE, countF sql.NullInt64
 	if err == nil && rows.Next() {

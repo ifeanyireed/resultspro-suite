@@ -4,7 +4,7 @@
 -- =====================================================================
 
 -- 1. Results Instances (Academic Sessions / Terms for Results Processing)
-CREATE TABLE IF NOT EXISTS results_instances (
+CREATE TABLE IF NOT EXISTS res_instances (
     id VARCHAR(191) PRIMARY KEY,
     school_id VARCHAR(191) NOT NULL,
     session_id VARCHAR(191) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS results_instances (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 2. Student Results & Score Records
-CREATE TABLE IF NOT EXISTS student_results (
+CREATE TABLE IF NOT EXISTS res_student_results (
     id VARCHAR(191) PRIMARY KEY,
     instance_id VARCHAR(191) NOT NULL,
     student_id VARCHAR(191) NOT NULL,
@@ -46,11 +46,11 @@ CREATE TABLE IF NOT EXISTS student_results (
     UNIQUE KEY uniq_student_instance (instance_id, student_id),
     INDEX idx_sr_instance (instance_id),
     INDEX idx_sr_student (student_id),
-    CONSTRAINT fk_sr_instance FOREIGN KEY (instance_id) REFERENCES results_instances(id) ON DELETE CASCADE
+    CONSTRAINT fk_sr_instance FOREIGN KEY (instance_id) REFERENCES res_instances(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 3. Scratch Card Batches
-CREATE TABLE IF NOT EXISTS scratch_card_batches (
+CREATE TABLE IF NOT EXISTS res_scratch_card_batches (
     id VARCHAR(191) PRIMARY KEY,
     school_id VARCHAR(191),
     batch_number VARCHAR(191) UNIQUE NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS scratch_card_batches (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 4. Scratch Cards (Crypto Pin Hashes)
-CREATE TABLE IF NOT EXISTS scratch_cards (
+CREATE TABLE IF NOT EXISTS res_scratch_cards (
     id VARCHAR(191) PRIMARY KEY,
     batch_id VARCHAR(191) NOT NULL,
     school_id VARCHAR(191),
@@ -77,11 +77,11 @@ CREATE TABLE IF NOT EXISTS scratch_cards (
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     INDEX idx_card_serial (serial_number),
     INDEX idx_card_batch (batch_id),
-    CONSTRAINT fk_card_batch FOREIGN KEY (batch_id) REFERENCES scratch_card_batches(id) ON DELETE CASCADE
+    CONSTRAINT fk_card_batch FOREIGN KEY (batch_id) REFERENCES res_scratch_card_batches(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 5. Scratch Card Usages & Audit Log
-CREATE TABLE IF NOT EXISTS scratch_card_usages (
+CREATE TABLE IF NOT EXISTS res_scratch_card_usages (
     id VARCHAR(191) PRIMARY KEY,
     card_id VARCHAR(191) NOT NULL,
     student_id VARCHAR(191) NOT NULL,
@@ -90,6 +90,6 @@ CREATE TABLE IF NOT EXISTS scratch_card_usages (
     accessed_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     INDEX idx_usage_card (card_id),
     INDEX idx_usage_student (student_id),
-    CONSTRAINT fk_usage_card FOREIGN KEY (card_id) REFERENCES scratch_cards(id) ON DELETE CASCADE,
-    CONSTRAINT fk_usage_result FOREIGN KEY (result_id) REFERENCES student_results(id) ON DELETE CASCADE
+    CONSTRAINT fk_usage_card FOREIGN KEY (card_id) REFERENCES res_scratch_cards(id) ON DELETE CASCADE,
+    CONSTRAINT fk_usage_result FOREIGN KEY (result_id) REFERENCES res_student_results(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

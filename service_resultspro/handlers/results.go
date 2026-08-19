@@ -40,7 +40,7 @@ func CreateResultInstance(c *gin.Context) {
 	instanceID := uuid.New().String()
 	now := time.Now()
 
-	query := `INSERT INTO results_instances (id, school_id, session_id, session_name, term_id, term_name, status, exam_config, total_possible_score, created_at, updated_at) 
+	query := `INSERT INTO res_instances (id, school_id, session_id, session_name, term_id, term_name, status, exam_config, total_possible_score, created_at, updated_at) 
 	          VALUES (?, ?, ?, ?, ?, ?, 'DRAFT', ?, ?, ?, ?)`
 	
 	_, err := db.DB.Exec(query, instanceID, input.SchoolID, input.SessionID, input.SessionName, input.TermID, input.TermName, input.ExamConfig, input.TotalPossibleScore, now, now)
@@ -63,7 +63,7 @@ func GetResultInstances(c *gin.Context) {
 		return
 	}
 
-	rows, err := db.DB.Query("SELECT id, school_id, session_id, session_name, term_id, term_name, status, exam_config, total_possible_score, published_at, created_at, updated_at FROM results_instances WHERE school_id = ? ORDER BY created_at DESC", schoolID)
+	rows, err := db.DB.Query("SELECT id, school_id, session_id, session_name, term_id, term_name, status, exam_config, total_possible_score, published_at, created_at, updated_at FROM res_instances WHERE school_id = ? ORDER BY created_at DESC", schoolID)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"instances": []models.ResultsInstance{}})
 		return
@@ -140,7 +140,7 @@ func EnterStudentMarks(c *gin.Context) {
 	resultID := uuid.New().String()
 	now := time.Now()
 
-	query := `INSERT INTO student_results (id, instance_id, student_id, student_name, section_id, section_name, scores_json, total_score, average_score, principal_comment, teacher_comment, affective_domain, psychomotor_domain, attendance_days, total_days, status, created_at, updated_at)
+	query := `INSERT INTO res_student_results (id, instance_id, student_id, student_name, section_id, section_name, scores_json, total_score, average_score, principal_comment, teacher_comment, affective_domain, psychomotor_domain, attendance_days, total_days, status, created_at, updated_at)
 	          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING', ?, ?)
 	          ON DUPLICATE KEY UPDATE scores_json = VALUES(scores_json), total_score = VALUES(total_score), average_score = VALUES(average_score), principal_comment = VALUES(principal_comment), teacher_comment = VALUES(teacher_comment), affective_domain = VALUES(affective_domain), psychomotor_domain = VALUES(psychomotor_domain), attendance_days = VALUES(attendance_days), total_days = VALUES(total_days), updated_at = VALUES(updated_at)`
 
@@ -166,7 +166,7 @@ func GetStudentResult(c *gin.Context) {
 	var scoresJSON string
 
 	err := db.DB.QueryRow(`SELECT id, instance_id, student_id, student_name, section_id, section_name, scores_json, total_score, average_score, position, total_in_class, principal_comment, teacher_comment, affective_domain, psychomotor_domain, attendance_days, total_days, status, created_at, updated_at 
-	                        FROM student_results WHERE instance_id = ? AND student_id = ?`, instanceID, studentID).
+	                        FROM res_student_results WHERE instance_id = ? AND student_id = ?`, instanceID, studentID).
 		Scan(&res.ID, &res.InstanceID, &res.StudentID, &res.StudentName, &res.SectionID, &res.SectionName, &scoresJSON, &res.TotalScore, &res.AverageScore, &res.Position, &res.TotalInClass, &res.PrincipalComment, &res.TeacherComment, &res.AffectiveDomain, &res.PsychomotorDomain, &res.AttendanceDays, &res.TotalDays, &res.Status, &res.CreatedAt, &res.UpdatedAt)
 
 	if err != nil {
@@ -183,13 +183,13 @@ func PublishResults(c *gin.Context) {
 	instanceID := c.Param("instanceId")
 
 	now := time.Now()
-	_, err := db.DB.Exec("UPDATE results_instances SET status = 'PUBLISHED', published_at = ?, updated_at = ? WHERE id = ?", now, now, instanceID)
+	_, err := db.DB.Exec("UPDATE res_instances SET status = 'PUBLISHED', published_at = ?, updated_at = ? WHERE id = ?", now, now, instanceID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to publish result instance"})
 		return
 	}
 
-	_, _ = db.DB.Exec("UPDATE student_results SET status = 'PUBLISHED', updated_at = ? WHERE instance_id = ?", now, instanceID)
+	_, _ = db.DB.Exec("UPDATE res_student_results SET status = 'PUBLISHED', updated_at = ? WHERE instance_id = ?", now, instanceID)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Results published successfully and accessible to parents via scratch card or portal"})
 }

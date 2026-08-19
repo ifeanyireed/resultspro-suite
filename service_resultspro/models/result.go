@@ -67,3 +67,11 @@ type GradingSystem struct {
 	Rules    []GradingRule `json:"rules"`
 	IsDefault bool         `json:"is_default"`
 }
+
+func (ResultsInstance) TableName() string {
+	return "res_instances"
+}
+
+func (StudentResult) TableName() string {
+	return "res_student_results"
+}

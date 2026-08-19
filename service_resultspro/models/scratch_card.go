@@ -49,3 +49,15 @@ type VerifyCardResponse struct {
 	RemainingUsage int    `json:"remaining_usage"`
 	ResultID       string `json:"result_id,omitempty"`
 }
+
+func (ScratchCardBatch) TableName() string {
+	return "res_scratch_card_batches"
+}
+
+func (ScratchCard) TableName() string {
+	return "res_scratch_cards"
+}
+
+func (ScratchCardUsage) TableName() string {
+	return "res_scratch_card_usages"
+}

@@ -39,7 +39,7 @@ func GenerateScratchCards(c *gin.Context) {
 	}
 
 	// Insert Batch
-	_, err := db.DB.Exec(`INSERT INTO scratch_card_batches (id, school_id, batch_number, total_cards, used_cards, unit_cost, total_cost, status, created_at) 
+	_, err := db.DB.Exec(`INSERT INTO res_scratch_card_batches (id, school_id, batch_number, total_cards, used_cards, unit_cost, total_cost, status, created_at) 
 	                      VALUES (?, ?, ?, ?, 0, ?, ?, ?, ?)`,
 		batchID, input.SchoolID, batchNumber, input.Quantity, input.UnitCost, totalCost, status, now)
 	if err != nil {
@@ -62,7 +62,7 @@ func GenerateScratchCards(c *gin.Context) {
 		hash := sha256.Sum256([]byte(pin))
 		pinHash := hex.EncodeToString(hash[:])
 
-		_, _ = db.DB.Exec(`INSERT INTO scratch_cards (id, batch_id, school_id, serial_number, pin_hash, usage_count, max_usages, status, created_at) 
+		_, _ = db.DB.Exec(`INSERT INTO res_scratch_cards (id, batch_id, school_id, serial_number, pin_hash, usage_count, max_usages, status, created_at) 
 		                   VALUES (?, ?, ?, ?, ?, 0, 5, 'ACTIVE', ?)`,
 			cardID, batchID, input.SchoolID, serial, pinHash, now)
 
@@ -92,7 +92,7 @@ func VerifyScratchCard(c *gin.Context) {
 	var card models.ScratchCard
 	var schoolID sql.NullString
 	err := db.DB.QueryRow(`SELECT id, batch_id, school_id, serial_number, pin_hash, usage_count, max_usages, status 
-	                        FROM scratch_cards WHERE serial_number = ?`, req.SerialNumber).
+	                        FROM res_scratch_cards WHERE serial_number = ?`, req.SerialNumber).
 		Scan(&card.ID, &card.BatchID, &schoolID, &card.SerialNumber, &card.PinHash, &card.UsageCount, &card.MaxUsages, &card.Status)
 
 	if err != nil {
@@ -129,7 +129,7 @@ func VerifyScratchCard(c *gin.Context) {
 
 	// Check if this card was previously used for this student or another student
 	var existingStudentID sql.NullString
-	_ = db.DB.QueryRow(`SELECT student_id FROM scratch_card_usages WHERE card_id = ? LIMIT 1`, card.ID).Scan(&existingStudentID)
+	_ = db.DB.QueryRow(`SELECT student_id FROM res_scratch_card_usages WHERE card_id = ? LIMIT 1`, card.ID).Scan(&existingStudentID)
 
 	if existingStudentID.Valid && existingStudentID.String != req.StudentID {
 		c.JSON(http.StatusBadRequest, models.VerifyCardResponse{
@@ -141,7 +141,7 @@ func VerifyScratchCard(c *gin.Context) {
 
 	// Fetch Result
 	var resultID string
-	err = db.DB.QueryRow(`SELECT id FROM student_results WHERE instance_id = ? AND student_id = ?`, req.InstanceID, req.StudentID).Scan(&resultID)
+	err = db.DB.QueryRow(`SELECT id FROM res_student_results WHERE instance_id = ? AND student_id = ?`, req.InstanceID, req.StudentID).Scan(&resultID)
 	if err != nil {
 		c.JSON(http.StatusNotFound, models.VerifyCardResponse{
 			Valid:   false,
@@ -153,7 +153,7 @@ func VerifyScratchCard(c *gin.Context) {
 	// Record Usage
 	usageID := uuid.New().String()
 	now := time.Now()
-	_, _ = db.DB.Exec(`INSERT INTO scratch_card_usages (id, card_id, student_id, result_id, accessed_by, accessed_at) 
+	_, _ = db.DB.Exec(`INSERT INTO res_scratch_card_usages (id, card_id, student_id, result_id, accessed_by, accessed_at) 
 	                   VALUES (?, ?, ?, ?, ?, ?)`, usageID, card.ID, req.StudentID, resultID, c.ClientIP(), now)
 
 	newUsageCount := card.UsageCount + 1
@@ -161,7 +161,7 @@ func VerifyScratchCard(c *gin.Context) {
 	if newUsageCount >= card.MaxUsages {
 		status = "USED"
 	}
-	_, _ = db.DB.Exec(`UPDATE scratch_cards SET usage_count = ?, status = ? WHERE id = ?`, newUsageCount, status, card.ID)
+	_, _ = db.DB.Exec(`UPDATE res_scratch_cards SET usage_count = ?, status = ? WHERE id = ?`, newUsageCount, status, card.ID)
 
 	c.JSON(http.StatusOK, models.VerifyCardResponse{
 		Valid:          true,
