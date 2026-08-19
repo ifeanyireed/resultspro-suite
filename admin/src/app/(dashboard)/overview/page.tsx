@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { WelcomeBanner, dashboardStyles as styles } from '@resultspro/design-system';
+import { dashboardStyles as styles } from '@resultspro/design-system';
 import { Building2, Users, CreditCard, Briefcase, TrendingUp, FileCheck2, Sparkles } from 'lucide-react';
 import { fetchSuiteStats, fetchSchools, fetchPayoutRequests } from '@/lib/api';
 import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@resultspro/design-system';
@@ -39,12 +39,6 @@ export default function OverviewPage() {
         subtitle="Live cross-microservice telemetrics and control hub"
       />
       <div className="flex flex-col gap-6">
-        <WelcomeBanner
-          title="Suite Executive Overview"
-          description="Live cross-microservice telemetrics and control hub. You're doing a great job leading the suite!"
-          monsterSrc="/monster_winner.png" 
-        />
-
         {/* Top-Level KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <GradientMetricCard
