@@ -43,8 +43,11 @@ def sanitize_value(val):
         for bad_id, good_id in dummy_mapping.items():
             if val == bad_id:
                 val = good_id
-        # Escape single quotes and backslashes for MySQL
-        val = val.replace('\\\\', '\\\\\\\\').replace("'", "''")
+        # Escape single quotes, backslashes, and newlines for MySQL
+        val = val.replace('\\', '\\\\')
+        val = val.replace("'", "''")
+        val = val.replace('\n', '\\n')
+        val = val.replace('\r', '\\r')
         return f"'{val}'"
     # Fallback
     return f"'{str(val)}'"
