@@ -207,3 +207,23 @@ export async function fetchClassroomNotes() {
     return [];
   }
 }
+
+export async function fetchClassroomQuizzes() {
+  try {
+    const res = await fetch(`${CLASSROOM_API}/api/quizzes`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return Array.isArray(data.quizzes) ? data.quizzes : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchClassroomFlashcards() {
+  try {
+    const res = await fetch(`${CLASSROOM_API}/api/flashcards`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return Array.isArray(data.flashcards) ? data.flashcards : [];
+  } catch {
+    return [];
+  }
+}
