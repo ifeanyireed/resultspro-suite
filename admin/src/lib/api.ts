@@ -5,6 +5,7 @@ const RESULTS_API = process.env.NEXT_PUBLIC_RESULTS_API || 'http://localhost:500
 const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'http://localhost:8080';
 const CLASSROOM_API = process.env.NEXT_PUBLIC_CLASSROOM_API || 'http://localhost:8080';
 const TUTORS_API = process.env.NEXT_PUBLIC_TUTORS_API || 'http://localhost:8080';
+const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'http://localhost:8080';
 
 function getAuthHeader(): Record<string, string> {
   if (typeof window === 'undefined') return {};
@@ -254,6 +255,27 @@ export async function fetchTutorsproPayouts() {
     const res = await fetch(`${TUTORS_API}/api/admin/payouts`, { headers: getAuthHeader() });
     const data = await res.json();
     return Array.isArray(data.payouts) ? data.payouts : [];
+  } catch {
+    return [];
+  }
+}
+
+// --- COURSESPRO API ---
+export async function fetchCoursesproCohorts() {
+  try {
+    const res = await fetch(`${COURSES_API}/api/admin/cohorts`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return Array.isArray(data.cohorts) ? data.cohorts : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchCoursesproEnrollments() {
+  try {
+    const res = await fetch(`${COURSES_API}/api/admin/enrollments`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return Array.isArray(data.enrollments) ? data.enrollments : [];
   } catch {
     return [];
   }

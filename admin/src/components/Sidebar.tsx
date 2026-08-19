@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Building2, CheckCircle2, Users, CreditCard, Briefcase, FileCheck2, Sparkles, BookOpen, GraduationCap, FileText, Mail, Settings, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, Building2, CheckCircle2, Users, CreditCard, Briefcase, FileCheck2, Sparkles, BookOpen, GraduationCap, FileText, Mail, Settings, ShieldCheck, Map } from 'lucide-react';
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -34,6 +34,7 @@ export function Sidebar() {
         { label: 'ExamsPRO', href: '/exampro', icon: Sparkles },
         { label: 'ClassroomPRO', href: '/classroompro', icon: BookOpen },
         { label: 'TutorsPRO', href: '/tutorspro', icon: GraduationCap },
+        { label: 'CoursesPRO', href: '/coursespro', icon: Map },
       ],
     },
     {

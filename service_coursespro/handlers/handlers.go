@@ -275,3 +275,16 @@ func (h *Handler) GetPublicPortfolio(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"portfolio": portfolio})
 }
+
+// 8. Admin Endpoints
+func (h *Handler) AdminGetCohorts(c *gin.Context) {
+	var cohorts []models.Cohort
+	db.DB.Order("created_at DESC").Find(&cohorts)
+	c.JSON(http.StatusOK, gin.H{"cohorts": cohorts})
+}
+
+func (h *Handler) AdminGetEnrollments(c *gin.Context) {
+	var enrollments []models.Enrollment
+	db.DB.Order("created_at DESC").Find(&enrollments)
+	c.JSON(http.StatusOK, gin.H{"enrollments": enrollments})
+}

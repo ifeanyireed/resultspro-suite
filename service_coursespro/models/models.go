@@ -140,3 +140,13 @@ type PublicPortfolio struct {
 	CreatedAt          time.Time `json:"created_at"`
 	UpdatedAt          time.Time `json:"updated_at"`
 }
+
+func (Cohort) TableName() string { return "crs_cohorts" }
+func (Enrollment) TableName() string { return "crs_enrollments" }
+func (JourneyStage) TableName() string { return "crs_journey_stages" }
+func (JourneyModule) TableName() string { return "crs_journey_modules" }
+func (ModuleProgress) TableName() string { return "crs_module_progress" }
+func (ProjectSubmission) TableName() string { return "crs_project_submissions" }
+func (PeerPairing) TableName() string { return "crs_peer_pairings" }
+func (PresenceSession) TableName() string { return "crs_presence_sessions" }
+func (PublicPortfolio) TableName() string { return "crs_public_portfolios" }

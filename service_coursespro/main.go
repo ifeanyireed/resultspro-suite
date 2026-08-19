@@ -65,6 +65,10 @@ func main() {
 
 		// Peers
 		protected.GET("/peers/roster", h.GetPeers)
+
+		// Admin Endpoints
+		protected.GET("/admin/cohorts", h.AdminGetCohorts)
+		protected.GET("/admin/enrollments", h.AdminGetEnrollments)
 	}
 
 	port := os.Getenv("PORT")
