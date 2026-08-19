@@ -10,8 +10,6 @@ import SchoolsTab from './tabs/SchoolsTab';
 import AgentsTab from './tabs/AgentsTab';
 import FinancialsTab from './tabs/FinancialsTab';
 import CmsTab from './tabs/CmsTab';
-import CommunicationsTab from './tabs/CommunicationsTab';
-import SupportTab from './tabs/SupportTab';
 
 export default function ResultProCommandCenter() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -23,8 +21,6 @@ export default function ResultProCommandCenter() {
     { id: 'agents', label: 'Agents', icon: Users },
     { id: 'financials', label: 'Financials', icon: DollarSign },
     { id: 'cms', label: 'CMS', icon: FileText },
-    { id: 'communications', label: 'Communications', icon: Mail },
-    { id: 'support', label: 'Support', icon: Headset },
   ];
 
   return (
@@ -62,10 +58,8 @@ export default function ResultProCommandCenter() {
         {activeTab === 'scratch-cards' && <ScratchCardsTab />}
         {activeTab === 'schools' && <SchoolsTab />}
         {activeTab === 'agents' && <AgentsTab />}
-        {activeTab === 'financials' && <FinancialsTab />}
-        {activeTab === 'cms' && <CmsTab />}
-        {activeTab === 'communications' && <CommunicationsTab />}
-        {activeTab === 'support' && <SupportTab />}
+        { activeTab === 'financials' && <FinancialsTab /> }
+        { activeTab === 'cms' && <CmsTab /> }
       </div>
     </div>
   );
