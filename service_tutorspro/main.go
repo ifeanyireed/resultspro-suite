@@ -54,6 +54,11 @@ func main() {
 
 		// Payouts
 		protected.POST("/tutor/payouts", h.RequestPayout)
+
+		// Admin
+		protected.GET("/admin/tutors", h.AdminGetTutors)
+		protected.GET("/admin/bookings", h.AdminGetBookings)
+		protected.GET("/admin/payouts", h.AdminGetPayouts)
 	}
 
 	port := os.Getenv("PORT")

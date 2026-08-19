@@ -73,3 +73,9 @@ type TutorPayoutRequest struct {
 	ProcessedAt *time.Time `json:"processed_at,omitempty"`
 	CreatedAt   time.Time  `json:"created_at"`
 }
+
+func (TutorProfile) TableName() string { return "tut_profiles" }
+func (AvailabilitySlot) TableName() string { return "tut_availability_slots" }
+func (Booking) TableName() string { return "tut_bookings" }
+func (TutorReview) TableName() string { return "tut_reviews" }
+func (TutorPayoutRequest) TableName() string { return "tut_payout_requests" }

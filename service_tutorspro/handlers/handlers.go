@@ -210,3 +210,22 @@ func (h *Handler) RequestPayout(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{"payout": payout})
 }
+
+// Admin Endpoints
+func (h *Handler) AdminGetTutors(c *gin.Context) {
+	var tutors []models.TutorProfile
+	db.DB.Order("created_at DESC").Find(&tutors)
+	c.JSON(http.StatusOK, gin.H{"tutors": tutors})
+}
+
+func (h *Handler) AdminGetBookings(c *gin.Context) {
+	var bookings []models.Booking
+	db.DB.Order("created_at DESC").Find(&bookings)
+	c.JSON(http.StatusOK, gin.H{"bookings": bookings})
+}
+
+func (h *Handler) AdminGetPayouts(c *gin.Context) {
+	var payouts []models.TutorPayoutRequest
+	db.DB.Order("created_at DESC").Find(&payouts)
+	c.JSON(http.StatusOK, gin.H{"payouts": payouts})
+}

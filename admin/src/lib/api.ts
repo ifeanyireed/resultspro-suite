@@ -227,3 +227,34 @@ export async function fetchClassroomFlashcards() {
     return [];
   }
 }
+
+// --- TUTORSPRO API ---
+export async function fetchTutorsproTutors() {
+  try {
+    const res = await fetch(`${TUTORS_API}/api/admin/tutors`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return Array.isArray(data.tutors) ? data.tutors : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchTutorsproBookings() {
+  try {
+    const res = await fetch(`${TUTORS_API}/api/admin/bookings`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return Array.isArray(data.bookings) ? data.bookings : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchTutorsproPayouts() {
+  try {
+    const res = await fetch(`${TUTORS_API}/api/admin/payouts`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return Array.isArray(data.payouts) ? data.payouts : [];
+  } catch {
+    return [];
+  }
+}
