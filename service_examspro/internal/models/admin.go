@@ -18,7 +18,7 @@ type SystemSetting struct {
 }
 
 type Report struct {
-	ID           string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID           string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	ReporterID   string         `gorm:"index" json:"reporterId"`
 	Reporter     *User          `gorm:"foreignKey:ReporterID" json:"reporter,omitempty"`
 	Type         string         `json:"type"`     // 'question', 'user', 'comment', 'other'
@@ -34,7 +34,7 @@ type Report struct {
 }
 
 type CoinPack struct {
-	ID          string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID          string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	Name        string         `json:"name"`
 	Type        string         `gorm:"default:'COIN'" json:"type"` // 'COIN' or 'PREMIUM'
 	Coins       int            `gorm:"default:0" json:"coins"`
@@ -51,7 +51,7 @@ type CoinPack struct {
 }
 
 type Purchase struct {
-	ID               string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID               string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	UserID           string         `gorm:"index" json:"userId"`
 	User             *User          `json:"user,omitempty"`
 	PackName         string         `json:"packName"`
@@ -65,7 +65,7 @@ type Purchase struct {
 }
 
 type Withdrawal struct {
-	ID            string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID            string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	UserID        string         `gorm:"index" json:"userId"`
 	User          *User          `json:"user,omitempty"`
 	CoinAmount    int            `json:"coinAmount"`

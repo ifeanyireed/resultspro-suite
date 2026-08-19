@@ -7,7 +7,7 @@ import (
 )
 
 type Battle struct {
-	ID              string              `gorm:"primaryKey;type:uuid" json:"id"`
+	ID              string              `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	RoomCode        string              `gorm:"uniqueIndex;size:6" json:"roomCode"`
 	SubjectID       int                 `gorm:"index" json:"subjectId"`
 	Subject         *Subject            `json:"subject,omitempty"`
@@ -37,7 +37,7 @@ type BattleQuestion struct {
 }
 
 type BattleParticipant struct {
-	ID         string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID         string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	BattleID   string         `gorm:"index" json:"battleId"`
 	Battle     *Battle        `json:"battle,omitempty"`
 	UserID     string         `gorm:"index" json:"userId"`
@@ -52,7 +52,7 @@ type BattleParticipant struct {
 }
 
 type Tournament struct {
-	ID              string                   `gorm:"primaryKey;type:uuid" json:"id"`
+	ID              string                   `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	Title           string                   `json:"title"`
 	Description     string                   `json:"description"`
 	StartTime       time.Time                `json:"startTime"`
@@ -69,7 +69,7 @@ type Tournament struct {
 }
 
 type TournamentParticipant struct {
-	ID           string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID           string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	TournamentID string         `gorm:"index" json:"tournamentId"`
 	UserID       string         `gorm:"index" json:"userId"`
 	User         *User          `json:"user,omitempty"`

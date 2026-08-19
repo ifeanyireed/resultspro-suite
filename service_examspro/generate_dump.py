@@ -74,12 +74,17 @@ with open(out_path, 'w', encoding='utf-8') as f:
         rows = cursor.fetchall()
 
         if rows:
-            f.write(f"-- Data for {table}\n")
+            # Map table names to nat_exams_ prefix to match new models
+            out_table = table
+            if table in ['exams', 'subjects', 'topics', 'questions', 'question_options', 'user_answers']:
+                out_table = f"nat_exams_{table}"
+                
+            f.write(f"-- Data for {out_table}\n")
             # MySQL allows bulk inserts, let's group them by 100
             batch_size = 100
             for i in range(0, len(rows), batch_size):
                 batch = rows[i:i+batch_size]
-                f.write(f"INSERT INTO `{table}` ({col_str}) VALUES\n")
+                f.write(f"INSERT INTO `{out_table}` ({col_str}) VALUES\n")
                 
                 values_list = []
                 for row in batch:

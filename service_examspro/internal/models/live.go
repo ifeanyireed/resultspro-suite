@@ -7,7 +7,7 @@ import (
 )
 
 type LiveGameRoom struct {
-	ID                   string                `gorm:"primaryKey;type:uuid" json:"id"`
+	ID                   string                `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	AdminID              string                `gorm:"index" json:"adminId"`
 	Title                *string               `json:"title"`
 	SubjectID            int                   `gorm:"index" json:"subjectId"`
@@ -17,7 +17,7 @@ type LiveGameRoom struct {
 	Type                 string                `gorm:"default:'Public'" json:"type"` // 'Public', 'High Stakes', 'Private'
 	Status               string                `gorm:"default:'pending'" json:"status"` // 'pending', 'active', 'finished'
 	CurrentQuestionIndex int                   `gorm:"default:0" json:"currentQuestionIndex"`
-	CurrentQuestionID    *string               `gorm:"type:uuid" json:"currentQuestionId"`
+	CurrentQuestionID    *string               `gorm:"type:varchar(191)" json:"currentQuestionId"`
 	CurrentQuestion      *Question             `gorm:"foreignKey:CurrentQuestionID" json:"currentQuestion,omitempty"`
 	SpectatorCount       int                   `gorm:"default:0" json:"spectatorCount"`
 	StartTime            *time.Time            `json:"startTime"`
@@ -30,7 +30,7 @@ type LiveGameRoom struct {
 }
 
 type LiveGameParticipant struct {
-	ID        string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID        string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	RoomID    string         `gorm:"index" json:"roomId"`
 	Room      *LiveGameRoom  `json:"room,omitempty"`
 	UserID    string         `gorm:"index" json:"userId"`
@@ -41,7 +41,7 @@ type LiveGameParticipant struct {
 }
 
 type LiveRoomChatMessage struct {
-	ID        string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID        string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	RoomID    string         `gorm:"index" json:"roomId"`
 	Room      *LiveGameRoom  `json:"room,omitempty"`
 	UserID    string         `gorm:"index" json:"userId"`

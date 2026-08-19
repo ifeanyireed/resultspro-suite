@@ -55,7 +55,7 @@ type Topic struct {
 }
 
 type Question struct {
-	ID                  string           `gorm:"primaryKey;type:uuid" json:"id"`
+	ID                  string           `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	TopicID             int              `gorm:"index" json:"topicId"`
 	Topic               *Topic           `json:"topic,omitempty"`
 	Type                string           `json:"type"` // 'mcq','truefalse','fill','theory','practical','image','matching'
@@ -73,7 +73,7 @@ type Question struct {
 }
 
 type QuestionOption struct {
-	ID         string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID         string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	QuestionID string         `gorm:"index" json:"questionId"`
 	Question   *Question      `json:"question,omitempty"`
 	OptionText string         `json:"optionText"`
@@ -85,7 +85,7 @@ type QuestionOption struct {
 }
 
 type UserAnswer struct {
-	ID               string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID               string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	UserID           string         `gorm:"index" json:"userId"`
 	User             *User          `json:"user,omitempty"`
 	QuestionID       string         `gorm:"index" json:"questionId"`
@@ -98,4 +98,28 @@ type UserAnswer struct {
 	SessionID        string         `json:"sessionId"`
 	AnsweredAt       time.Time      `json:"answeredAt"`
 	DeletedAt        gorm.DeletedAt `gorm:"index" json:"-"`
+}
+
+func (Exam) TableName() string {
+	return "nat_exams_exams"
+}
+
+func (Subject) TableName() string {
+	return "nat_exams_subjects"
+}
+
+func (Topic) TableName() string {
+	return "nat_exams_topics"
+}
+
+func (Question) TableName() string {
+	return "nat_exams_questions"
+}
+
+func (QuestionOption) TableName() string {
+	return "nat_exams_question_options"
+}
+
+func (UserAnswer) TableName() string {
+	return "nat_exams_user_answers"
 }

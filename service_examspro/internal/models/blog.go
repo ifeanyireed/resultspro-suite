@@ -7,7 +7,7 @@ import (
 )
 
 type BlogPost struct {
-	ID              string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID              string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	Title           string         `gorm:"not null" json:"title"`
 	Slug            string         `gorm:"uniqueIndex;not null" json:"slug"`
 	Content         string         `gorm:"type:text;not null" json:"content"`
@@ -27,7 +27,7 @@ type BlogPost struct {
 }
 
 type BlogCategory struct {
-	ID          string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID          string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	Name        string         `gorm:"uniqueIndex;not null" json:"name"`
 	Slug        string         `gorm:"uniqueIndex;not null" json:"slug"`
 	Description string         `json:"description"`
@@ -38,7 +38,7 @@ type BlogCategory struct {
 }
 
 type BlogComment struct {
-	ID        string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID        string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	PostID    string         `gorm:"index;not null" json:"postId"`
 	Post      *BlogPost      `gorm:"foreignKey:PostID" json:"post,omitempty"`
 	UserID    *string        `gorm:"index" json:"userId"`

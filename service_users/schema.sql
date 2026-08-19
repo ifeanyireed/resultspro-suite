@@ -182,7 +182,7 @@ CREATE TABLE IF NOT EXISTS sections (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 13. Academics: Subjects
-CREATE TABLE IF NOT EXISTS subjects (
+CREATE TABLE IF NOT EXISTS usr_subjects (
     id VARCHAR(191) PRIMARY KEY,
     school_id VARCHAR(191) NOT NULL,
     name VARCHAR(191) NOT NULL, -- e.g. "Mathematics"
@@ -202,11 +202,11 @@ CREATE TABLE IF NOT EXISTS syllabus_weeks (
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     INDEX idx_syllabus_subject (subject_id, term, week_number),
-    CONSTRAINT fk_syllabus_week_subject FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+    CONSTRAINT fk_syllabus_week_subject FOREIGN KEY (subject_id) REFERENCES usr_subjects(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 15. Academics: Syllabus Topics
-CREATE TABLE IF NOT EXISTS topics (
+CREATE TABLE IF NOT EXISTS usr_topics (
     id VARCHAR(191) PRIMARY KEY,
     syllabus_week_id VARCHAR(191) NOT NULL,
     name VARCHAR(191) NOT NULL,
@@ -251,7 +251,7 @@ CREATE TABLE IF NOT EXISTS assignments (
     INDEX idx_assignment_teacher (teacher_id),
     INDEX idx_assignment_section (section_id),
     CONSTRAINT fk_assignment_section FOREIGN KEY (section_id) REFERENCES sections(id) ON DELETE CASCADE,
-    CONSTRAINT fk_assignment_subject FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE,
+    CONSTRAINT fk_assignment_subject FOREIGN KEY (subject_id) REFERENCES usr_subjects(id) ON DELETE CASCADE,
     CONSTRAINT fk_assignment_teacher FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT fk_assignment_term FOREIGN KEY (term_id) REFERENCES terms(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -299,7 +299,7 @@ CREATE TABLE IF NOT EXISTS resource_links (
     url TEXT,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     INDEX idx_resource_topic (topic_id),
-    CONSTRAINT fk_resource_topic FOREIGN KEY (topic_id) REFERENCES topics(id) ON DELETE CASCADE
+    CONSTRAINT fk_resource_topic FOREIGN KEY (topic_id) REFERENCES usr_topics(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 21. Learning Ecosystem: Student Progress
@@ -314,7 +314,7 @@ CREATE TABLE IF NOT EXISTS student_progress (
     UNIQUE KEY student_topic_unique (student_id, topic_id),
     INDEX idx_student_prog (student_id),
     CONSTRAINT fk_prog_student FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_prog_topic FOREIGN KEY (topic_id) REFERENCES topics(id) ON DELETE CASCADE
+    CONSTRAINT fk_prog_topic FOREIGN KEY (topic_id) REFERENCES usr_topics(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 22. Analytics: Engagement Metrics

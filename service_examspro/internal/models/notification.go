@@ -28,7 +28,7 @@ const (
 )
 
 type Notification struct {
-	ID        string           `gorm:"primaryKey;type:uuid" json:"id"`
+	ID        string           `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	UserID    string           `gorm:"index" json:"userId"`
 	Title     string           `json:"title"`
 	Message   string           `json:"message"`
@@ -41,7 +41,7 @@ type Notification struct {
 }
 
 type NotificationLog struct {
-	ID          string            `gorm:"primaryKey;type:uuid" json:"id"`
+	ID          string            `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	UserID      *string           `gorm:"index" json:"userId"` // Null if broadcast
 	Title       string            `json:"title"`
 	Message     string            `json:"message"`
@@ -54,7 +54,7 @@ type NotificationLog struct {
 }
 
 type NotificationCampaign struct {
-	ID           string            `gorm:"primaryKey;type:uuid" json:"id"`
+	ID           string            `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	Title        string            `json:"title"`
 	Message      string            `json:"message"`
 	Type         NotificationType  `json:"type"`
@@ -71,7 +71,7 @@ type NotificationCampaign struct {
 }
 
 type PopupNotification struct {
-	ID           string           `gorm:"primaryKey;type:uuid" json:"id"`
+	ID           string           `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	Title        string           `json:"title"`
 	Message      string           `json:"message"`
 	Type         NotificationType `json:"type"`

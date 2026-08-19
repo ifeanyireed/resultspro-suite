@@ -7,7 +7,7 @@ import (
 )
 
 type StudySession struct {
-	ID        string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID        string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	UserID    string         `gorm:"index" json:"userId"`
 	User      *User          `json:"user,omitempty"`
 	TopicID   *int           `gorm:"index" json:"topicId"`
@@ -20,7 +20,7 @@ type StudySession struct {
 }
 
 type ChatMessage struct {
-	ID        string         `gorm:"primaryKey;type:uuid" json:"id"`
+	ID        string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	SessionID string         `gorm:"index" json:"sessionId"`
 	Session   *StudySession  `json:"session,omitempty"`
 	Role      string         `json:"role"` // 'user' or 'assistant'
