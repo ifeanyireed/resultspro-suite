@@ -84,7 +84,7 @@ with open(out_path, 'w', encoding='utf-8') as f:
             batch_size = 100
             for i in range(0, len(rows), batch_size):
                 batch = rows[i:i+batch_size]
-                f.write(f"INSERT INTO `{out_table}` ({col_str}) VALUES\n")
+                f.write(f"REPLACE INTO `{out_table}` ({col_str}) VALUES\n")
                 
                 values_list = []
                 for row in batch:
