@@ -22,7 +22,6 @@ export function Sidebar() {
       links: [
         { label: 'Subscriptions & Plans', href: '/subscriptions', icon: CreditCard },
         { label: 'Agent Network', href: '/agents', icon: Briefcase },
-        { label: 'Payout Requests', href: '/agents/payouts', icon: ShieldCheck, badge: '3' },
       ],
     },
     {

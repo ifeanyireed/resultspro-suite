@@ -15,6 +15,7 @@ const (
 )
 
 type User struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID                 string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	Email              string         `gorm:"uniqueIndex;not null" json:"email"`
 	Phone              *string        `gorm:"uniqueIndex" json:"phone"`
@@ -48,6 +49,7 @@ type User struct {
 }
 
 type CoinTransaction struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID          string    `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	UserID      string    `gorm:"index" json:"userId"`
 	Amount      int       `json:"amount"`
@@ -58,6 +60,7 @@ type CoinTransaction struct {
 }
 
 type Referral struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID           string    `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	ReferrerID   string    `gorm:"index" json:"referrerId"`
 	RefereeID    string    `gorm:"index" json:"refereeId"`

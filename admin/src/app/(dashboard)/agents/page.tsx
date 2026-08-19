@@ -7,6 +7,8 @@ import { Users, Link2, Building2 } from 'lucide-react';
 import AgentsListTab from './tabs/AgentsListTab';
 import ReferralsTab from './tabs/ReferralsTab';
 import AssignmentsTab from './tabs/AssignmentsTab';
+import PayoutsTab from './tabs/PayoutsTab';
+import { DollarSign } from 'lucide-react';
 
 export default function AgentsPage() {
   const [activeTab, setActiveTab] = useState('agents');
@@ -15,6 +17,7 @@ export default function AgentsPage() {
     { id: 'agents', label: 'Agents Directory', icon: Users },
     { id: 'referrals', label: 'Referral Approvals', icon: Link2 },
     { id: 'assignments', label: 'School Assignments', icon: Building2 },
+    { id: 'payouts', label: 'Payout Requests', icon: DollarSign },
   ];
 
   return (
@@ -51,6 +54,7 @@ export default function AgentsPage() {
         {activeTab === 'agents' && <AgentsListTab />}
         {activeTab === 'referrals' && <ReferralsTab />}
         {activeTab === 'assignments' && <AssignmentsTab />}
+        {activeTab === 'payouts' && <PayoutsTab />}
       </div>
     </div>
   );

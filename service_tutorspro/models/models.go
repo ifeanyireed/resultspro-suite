@@ -5,6 +5,7 @@ import (
 )
 
 type TutorProfile struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID             string    `gorm:"primaryKey" json:"id"`
 	UserID         string    `gorm:"uniqueIndex" json:"user_id"`
 	Headline       string    `json:"headline"`
@@ -23,6 +24,7 @@ type TutorProfile struct {
 }
 
 type AvailabilitySlot struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID        string    `gorm:"primaryKey" json:"id"`
 	TutorID   string    `gorm:"index" json:"tutor_id"`
 	DayOfWeek int       `json:"day_of_week"` // 0=Sunday, 6=Saturday
@@ -33,6 +35,7 @@ type AvailabilitySlot struct {
 }
 
 type Booking struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID            string    `gorm:"primaryKey" json:"id"`
 	TutorID       string    `gorm:"index" json:"tutor_id"`
 	StudentID     string    `gorm:"index" json:"student_id"`
@@ -52,6 +55,7 @@ type Booking struct {
 }
 
 type TutorReview struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID        string    `gorm:"primaryKey" json:"id"`
 	TutorID   string    `gorm:"index" json:"tutor_id"`
 	StudentID string    `json:"student_id"`
@@ -62,6 +66,7 @@ type TutorReview struct {
 }
 
 type TutorPayoutRequest struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID          string     `gorm:"primaryKey" json:"id"`
 	TutorID     string     `gorm:"index" json:"tutor_id"`
 	Amount      float64    `json:"amount"`

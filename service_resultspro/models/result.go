@@ -3,6 +3,7 @@ package models
 import "time"
 
 type ResultsInstance struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID                 string    `json:"id"`
 	SchoolID           string    `json:"school_id"`
 	SessionID          string    `json:"session_id"`
@@ -18,6 +19,7 @@ type ResultsInstance struct {
 }
 
 type SubjectScore struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	SubjectID   string  `json:"subject_id"`
 	SubjectName string  `json:"subject_name"`
 	CAT1        float64 `json:"cat1"`
@@ -29,6 +31,7 @@ type SubjectScore struct {
 }
 
 type StudentResult struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID                string         `json:"id"`
 	InstanceID        string         `json:"instance_id"`
 	StudentID         string         `json:"student_id"`
@@ -53,6 +56,7 @@ type StudentResult struct {
 }
 
 type GradingRule struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	Grade      string  `json:"grade"`
 	MinScore   float64 `json:"min_score"`
 	MaxScore   float64 `json:"max_score"`
@@ -61,6 +65,7 @@ type GradingRule struct {
 }
 
 type GradingSystem struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID       string        `json:"id"`
 	SchoolID string        `json:"school_id"`
 	Name     string        `json:"name"`

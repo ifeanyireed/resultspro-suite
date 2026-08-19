@@ -22,7 +22,7 @@ func (h *Handler) GetPublicTutors(c *gin.Context) {
 	subject := c.Query("subject")
 	var tutors []models.TutorProfile
 
-	query := db.DB.Where("is_verified = ? AND is_available = ?", true, true)
+	query := db.WithTenant(c).Where("is_verified = ? AND is_available = ?", true, true)
 	if subject != "" {
 		query = query.Where("subjects LIKE ?", "%"+subject+"%")
 	}
@@ -65,7 +65,7 @@ func (h *Handler) TutorOnboarding(c *gin.Context) {
 		UpdatedAt:     time.Now(),
 	}
 
-	if err := db.DB.Create(&tutor).Error; err != nil {
+	if err := db.WithTenant(c).Create(&tutor).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create tutor profile"})
 		return
 	}
@@ -93,7 +93,7 @@ func (h *Handler) CreateBooking(c *gin.Context) {
 	}
 
 	var tutor models.TutorProfile
-	if err := db.DB.First(&tutor, "id = ?", input.TutorID).Error; err != nil {
+	if err := db.WithTenant(c).First(&tutor, "id = ?", input.TutorID).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Tutor not found"})
 		return
 	}
@@ -118,7 +118,7 @@ func (h *Handler) CreateBooking(c *gin.Context) {
 		UpdatedAt:     time.Now(),
 	}
 
-	if err := db.DB.Create(&booking).Error; err != nil {
+	if err := db.WithTenant(c).Create(&booking).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create booking"})
 		return
 	}
@@ -131,7 +131,7 @@ func (h *Handler) GetBookings(c *gin.Context) {
 	userID, _ := c.Get("user_id")
 	var bookings []models.Booking
 
-	db.DB.Where("tutor_id = ? OR student_id = ? OR parent_id = ?", userID.(string), userID.(string), userID.(string)).
+	db.WithTenant(c).Where("tutor_id = ? OR student_id = ? OR parent_id = ?", userID.(string), userID.(string), userID.(string)).
 		Order("scheduled_date DESC").Find(&bookings)
 
 	c.JSON(http.StatusOK, gin.H{"bookings": bookings})
@@ -160,15 +160,15 @@ func (h *Handler) CreateReview(c *gin.Context) {
 		CreatedAt: time.Now(),
 	}
 
-	db.DB.Create(&review)
+	db.WithTenant(c).Create(&review)
 
 	// Update tutor average rating
 	var avgRating float64
 	var count int64
-	db.DB.Model(&models.TutorReview{}).Where("tutor_id = ?", input.TutorID).Count(&count)
-	db.DB.Model(&models.TutorReview{}).Where("tutor_id = ?", input.TutorID).Select("AVG(rating)").Row().Scan(&avgRating)
+	db.WithTenant(c).Model(&models.TutorReview{}).Where("tutor_id = ?", input.TutorID).Count(&count)
+	db.WithTenant(c).Model(&models.TutorReview{}).Where("tutor_id = ?", input.TutorID).Select("AVG(rating)").Row().Scan(&avgRating)
 
-	db.DB.Model(&models.TutorProfile{}).Where("id = ?", input.TutorID).Updates(map[string]interface{}{
+	db.WithTenant(c).Model(&models.TutorProfile{}).Where("id = ?", input.TutorID).Updates(map[string]interface{}{
 		"rating":        avgRating,
 		"total_reviews": count,
 	})
@@ -203,7 +203,7 @@ func (h *Handler) RequestPayout(c *gin.Context) {
 		CreatedAt:   time.Now(),
 	}
 
-	if err := db.DB.Create(&payout).Error; err != nil {
+	if err := db.WithTenant(c).Create(&payout).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create payout request"})
 		return
 	}
@@ -214,18 +214,18 @@ func (h *Handler) RequestPayout(c *gin.Context) {
 // Admin Endpoints
 func (h *Handler) AdminGetTutors(c *gin.Context) {
 	var tutors []models.TutorProfile
-	db.DB.Order("created_at DESC").Find(&tutors)
+	db.WithTenant(c).Order("created_at DESC").Find(&tutors)
 	c.JSON(http.StatusOK, gin.H{"tutors": tutors})
 }
 
 func (h *Handler) AdminGetBookings(c *gin.Context) {
 	var bookings []models.Booking
-	db.DB.Order("created_at DESC").Find(&bookings)
+	db.WithTenant(c).Order("created_at DESC").Find(&bookings)
 	c.JSON(http.StatusOK, gin.H{"bookings": bookings})
 }
 
 func (h *Handler) AdminGetPayouts(c *gin.Context) {
 	var payouts []models.TutorPayoutRequest
-	db.DB.Order("created_at DESC").Find(&payouts)
+	db.WithTenant(c).Order("created_at DESC").Find(&payouts)
 	c.JSON(http.StatusOK, gin.H{"payouts": payouts})
 }

@@ -1,6 +1,8 @@
 package db
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"log"
 	"os"
 
@@ -40,4 +42,14 @@ func InitDB() {
 	)
 
 	log.Println("ClassroomPRO connected to MySQL with GORM successfully")
+}
+
+
+// WithTenant safely scopes the GORM DB instance to the current request's Tenant ID
+func WithTenant(c *gin.Context) *gorm.DB {
+	tenantID, exists := c.Get("tenant_id")
+	if exists && tenantID != "" {
+		return DB.Where("tenant_id = ?", tenantID)
+	}
+	return DB
 }

@@ -1,6 +1,8 @@
 package db
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"database/sql"
 	"log"
 	"time"
@@ -39,4 +41,14 @@ func InitDB() {
 	} else {
 		log.Println("Connected to ResultsPRO database with GORM successfully")
 	}
+}
+
+
+// WithTenant safely scopes the GORM GormDB instance to the current request's Tenant ID
+func WithTenant(c *gin.Context) *gorm.DB {
+	tenantID, exists := c.Get("tenant_id")
+	if exists && tenantID != "" {
+		return GormDB.Where("tenant_id = ?", tenantID)
+	}
+	return GormDB
 }

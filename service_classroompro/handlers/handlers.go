@@ -87,7 +87,7 @@ func (h *Handler) CreateNote(c *gin.Context) {
 		UpdatedAt: time.Now(),
 	}
 
-	if err := db.DB.Create(&note).Error; err != nil {
+	if err := db.WithTenant(c).Create(&note).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create note"})
 		return
 	}
@@ -111,7 +111,7 @@ func (h *Handler) GetNotes(c *gin.Context) {
 func (h *Handler) GetNoteByID(c *gin.Context) {
 	id := c.Param("id")
 	var note models.Note
-	if err := db.DB.First(&note, "id = ?", id).Error; err != nil {
+	if err := db.WithTenant(c).First(&note, "id = ?", id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Note not found"})
 		return
 	}
@@ -147,7 +147,7 @@ func (h *Handler) CreateQuiz(c *gin.Context) {
 		CreatedAt:   time.Now(),
 	}
 
-	if err := db.DB.Create(&quiz).Error; err != nil {
+	if err := db.WithTenant(c).Create(&quiz).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create quiz"})
 		return
 	}
@@ -171,7 +171,7 @@ func (h *Handler) GetQuizzes(c *gin.Context) {
 func (h *Handler) GetQuizByID(c *gin.Context) {
 	id := c.Param("id")
 	var quiz models.Quiz
-	if err := db.DB.First(&quiz, "id = ?", id).Error; err != nil {
+	if err := db.WithTenant(c).First(&quiz, "id = ?", id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Quiz not found"})
 		return
 	}
@@ -203,7 +203,7 @@ func (h *Handler) CreateFlashcard(c *gin.Context) {
 		CreatedAt: time.Now(),
 	}
 
-	if err := db.DB.Create(&card).Error; err != nil {
+	if err := db.WithTenant(c).Create(&card).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create flashcard"})
 		return
 	}
@@ -238,7 +238,7 @@ func (h *Handler) ReviewFlashcard(c *gin.Context) {
 	userID, _ := c.Get("user_id")
 	var progress models.FlashcardProgress
 
-	err := db.DB.Where("student_id = ? AND card_id = ?", userID.(string), input.CardID).First(&progress).Error
+	err := db.WithTenant(c).Where("student_id = ? AND card_id = ?", userID.(string), input.CardID).First(&progress).Error
 	if err != nil {
 		progress = models.FlashcardProgress{
 			ID:          uuid.New().String(),
@@ -278,7 +278,7 @@ func (h *Handler) ReviewFlashcard(c *gin.Context) {
 	progress.NextReview = time.Now().AddDate(0, 0, progress.Interval)
 	progress.UpdatedAt = time.Now()
 
-	db.DB.Save(&progress)
+	db.WithTenant(c).Save(&progress)
 	c.JSON(http.StatusOK, gin.H{"progress": progress})
 }
 
@@ -305,11 +305,11 @@ func (h *Handler) LogStudySession(c *gin.Context) {
 		CreatedAt: time.Now(),
 	}
 
-	db.DB.Create(&session)
+	db.WithTenant(c).Create(&session)
 
 	// Update points
 	var profile models.GamificationProfile
-	if err := db.DB.First(&profile, "user_id = ?", userID.(string)).Error; err != nil {
+	if err := db.WithTenant(c).First(&profile, "user_id = ?", userID.(string)).Error; err != nil {
 		profile = models.GamificationProfile{
 			UserID:       userID.(string),
 			Points:       0,
@@ -324,7 +324,7 @@ func (h *Handler) LogStudySession(c *gin.Context) {
 	profile.Points += pointsEarned
 	profile.Level = profile.Points/100 + 1
 	profile.LastActiveAt = time.Now()
-	db.DB.Save(&profile)
+	db.WithTenant(c).Save(&profile)
 
 	c.JSON(http.StatusOK, gin.H{
 		"session":       session,
@@ -337,7 +337,7 @@ func (h *Handler) LogStudySession(c *gin.Context) {
 func (h *Handler) GetGamificationProfile(c *gin.Context) {
 	userID, _ := c.Get("user_id")
 	var profile models.GamificationProfile
-	if err := db.DB.First(&profile, "user_id = ?", userID.(string)).Error; err != nil {
+	if err := db.WithTenant(c).First(&profile, "user_id = ?", userID.(string)).Error; err != nil {
 		profile = models.GamificationProfile{
 			UserID:       userID.(string),
 			Points:       0,
@@ -365,9 +365,9 @@ func (h *Handler) ToggleBookmark(c *gin.Context) {
 
 	userID, _ := c.Get("user_id")
 	var existing models.Bookmark
-	err := db.DB.Where("user_id = ? AND item_id = ?", userID.(string), input.ItemID).First(&existing).Error
+	err := db.WithTenant(c).Where("user_id = ? AND item_id = ?", userID.(string), input.ItemID).First(&existing).Error
 	if err == nil {
-		db.DB.Delete(&existing)
+		db.WithTenant(c).Delete(&existing)
 		c.JSON(http.StatusOK, gin.H{"bookmarked": false})
 		return
 	}
@@ -380,13 +380,13 @@ func (h *Handler) ToggleBookmark(c *gin.Context) {
 		Title:     input.Title,
 		CreatedAt: time.Now(),
 	}
-	db.DB.Create(&bm)
+	db.WithTenant(c).Create(&bm)
 	c.JSON(http.StatusOK, gin.H{"bookmarked": true, "bookmark": bm})
 }
 
 func (h *Handler) GetBookmarks(c *gin.Context) {
 	userID, _ := c.Get("user_id")
 	var bookmarks []models.Bookmark
-	db.DB.Where("user_id = ?", userID.(string)).Order("created_at DESC").Find(&bookmarks)
+	db.WithTenant(c).Where("user_id = ?", userID.(string)).Order("created_at DESC").Find(&bookmarks)
 	c.JSON(http.StatusOK, gin.H{"bookmarks": bookmarks})
 }

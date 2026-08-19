@@ -6,6 +6,7 @@ import (
 
 // Course / Cohort Program
 type Cohort struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID            string    `gorm:"primaryKey;size:64" json:"id"`
 	Slug          string    `gorm:"uniqueIndex;size:128" json:"slug"`
 	Title         string    `gorm:"size:255;not null" json:"title"`
@@ -26,6 +27,7 @@ type Cohort struct {
 
 // Student Cohort Enrollment
 type Enrollment struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID                 string    `gorm:"primaryKey;size:64" json:"id"`
 	CohortID           string    `gorm:"size:64;index;not null" json:"cohort_id"`
 	UserID             string    `gorm:"size:64;index;not null" json:"user_id"`
@@ -42,6 +44,7 @@ type Enrollment struct {
 
 // 7-Stage Learning Journey Stage
 type JourneyStage struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID          string    `gorm:"primaryKey;size:64" json:"id"`
 	CohortID    string    `gorm:"size:64;index" json:"cohort_id"`
 	StageNumber int       `gorm:"not null" json:"stage_number"` // 1 to 7
@@ -54,6 +57,7 @@ type JourneyStage struct {
 
 // Journey Lesson Module
 type JourneyModule struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID                  string    `gorm:"primaryKey;size:64" json:"id"`
 	StageID             string    `gorm:"size:64;index;not null" json:"stage_id"`
 	Title               string    `gorm:"size:255;not null" json:"title"`
@@ -72,6 +76,7 @@ type JourneyModule struct {
 
 // Module Progress Tracking per Student
 type ModuleProgress struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID               string    `gorm:"primaryKey;size:64" json:"id"`
 	UserID           string    `gorm:"size:64;index;not null" json:"user_id"`
 	ModuleID         string    `gorm:"size:64;index;not null" json:"module_id"`
@@ -85,6 +90,7 @@ type ModuleProgress struct {
 
 // Project Submission
 type ProjectSubmission struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID                  string     `gorm:"primaryKey;size:64" json:"id"`
 	CohortID            string     `gorm:"size:64;index;not null" json:"cohort_id"`
 	StageNumber         int        `gorm:"not null" json:"stage_number"`
@@ -106,6 +112,7 @@ type ProjectSubmission struct {
 
 // Peer Pairing for Joint Collaboration
 type PeerPairing struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID           string    `gorm:"primaryKey;size:64" json:"id"`
 	CohortID     string    `gorm:"size:64;index;not null" json:"cohort_id"`
 	StudentA_ID  string    `gorm:"size:64;index;not null" json:"student_a_id"`
@@ -118,6 +125,7 @@ type PeerPairing struct {
 
 // Real-Time Classroom Presence Session
 type PresenceSession struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID            string    `gorm:"primaryKey;size:64" json:"id"`
 	UserID        string    `gorm:"size:64;index;not null" json:"user_id"`
 	RoomName      string    `gorm:"size:128;default:'Sprint Room Alpha'" json:"room_name"`
@@ -128,6 +136,7 @@ type PresenceSession struct {
 
 // Public Employer Portfolio Case Study
 type PublicPortfolio struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID                 string    `gorm:"primaryKey;size:64" json:"id"`
 	UserID             string    `gorm:"size:64;uniqueIndex;not null" json:"user_id"`
 	Username           string    `gorm:"size:64;uniqueIndex;not null" json:"username"`

@@ -3,6 +3,7 @@ package models
 import "time"
 
 type ScratchCardBatch struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID          string    `json:"id"`
 	SchoolID    *string   `json:"school_id,omitempty"`
 	BatchNumber string    `json:"batch_number"`
@@ -15,6 +16,7 @@ type ScratchCardBatch struct {
 }
 
 type ScratchCard struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID           string     `json:"id"`
 	BatchID      string     `json:"batch_id"`
 	SchoolID     *string    `json:"school_id,omitempty"`
@@ -28,6 +30,7 @@ type ScratchCard struct {
 }
 
 type ScratchCardUsage struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID            string    `json:"id"`
 	CardID        string    `json:"card_id"`
 	StudentID     string    `json:"student_id"`
@@ -37,6 +40,7 @@ type ScratchCardUsage struct {
 }
 
 type VerifyCardRequest struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	SerialNumber string `json:"serial_number" binding:"required"`
 	Pin          string `json:"pin" binding:"required"`
 	StudentID    string `json:"student_id" binding:"required"`
@@ -44,6 +48,7 @@ type VerifyCardRequest struct {
 }
 
 type VerifyCardResponse struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	Valid          bool   `json:"valid"`
 	Message        string `json:"message"`
 	RemainingUsage int    `json:"remaining_usage"`

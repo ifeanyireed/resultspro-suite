@@ -19,14 +19,14 @@ func NewHandler() *Handler {
 // 1. Public Cohort Programs Catalog
 func (h *Handler) GetPublicCohorts(c *gin.Context) {
 	var cohorts []models.Cohort
-	db.DB.Where("status != ?", "DRAFT").Order("start_date ASC").Find(&cohorts)
+	db.WithTenant(c).Where("status != ?", "DRAFT").Order("start_date ASC").Find(&cohorts)
 	c.JSON(http.StatusOK, gin.H{"cohorts": cohorts})
 }
 
 func (h *Handler) GetCohortDetail(c *gin.Context) {
 	id := c.Param("id")
 	var cohort models.Cohort
-	if err := db.DB.First(&cohort, "id = ? OR slug = ?", id, id).Error; err != nil {
+	if err := db.WithTenant(c).First(&cohort, "id = ? OR slug = ?", id, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Cohort not found"})
 		return
 	}
@@ -37,10 +37,10 @@ func (h *Handler) GetCohortDetail(c *gin.Context) {
 func (h *Handler) GetCohortJourney(c *gin.Context) {
 	cohortID := c.Param("id")
 	var stages []models.JourneyStage
-	db.DB.Where("cohort_id = ?", cohortID).Order("stage_number ASC").Find(&stages)
+	db.WithTenant(c).Where("cohort_id = ?", cohortID).Order("stage_number ASC").Find(&stages)
 
 	var modules []models.JourneyModule
-	db.DB.Order("order_index ASC").Find(&modules)
+	db.WithTenant(c).Order("order_index ASC").Find(&modules)
 
 	c.JSON(http.StatusOK, gin.H{"stages": stages, "modules": modules})
 }
@@ -62,7 +62,7 @@ func (h *Handler) UpdateModuleProgress(c *gin.Context) {
 	}
 
 	var progress models.ModuleProgress
-	err := db.DB.Where("user_id = ? AND module_id = ?", userID.(string), moduleID).First(&progress).Error
+	err := db.WithTenant(c).Where("user_id = ? AND module_id = ?", userID.(string), moduleID).First(&progress).Error
 
 	now := time.Now()
 	if err != nil {
@@ -77,21 +77,21 @@ func (h *Handler) UpdateModuleProgress(c *gin.Context) {
 			CompletedAt:      &now,
 			UpdatedAt:        now,
 		}
-		db.DB.Create(&progress)
+		db.WithTenant(c).Create(&progress)
 	} else {
 		progress.Completed = input.Completed
 		progress.ReflectionAnswer = input.ReflectionAnswer
 		progress.QuizScore = input.QuizScore
 		progress.QuizPassed = input.QuizPassed
 		progress.UpdatedAt = now
-		db.DB.Save(&progress)
+		db.WithTenant(c).Save(&progress)
 	}
 
 	// Award XP to enrollment
 	if input.Completed {
-		db.DB.Model(&models.Enrollment{}).
+		db.WithTenant(c).Model(&models.Enrollment{}).
 			Where("user_id = ?", userID.(string)).
-			Update("current_xp", db.DB.Raw("current_xp + ?", 100))
+			Update("current_xp", db.WithTenant(c).Raw("current_xp + ?", 100))
 	}
 
 	c.JSON(http.StatusOK, gin.H{"progress": progress})
@@ -131,7 +131,7 @@ func (h *Handler) SubmitProject(c *gin.Context) {
 		UpdatedAt:    time.Now(),
 	}
 
-	if err := db.DB.Create(&sub).Error; err != nil {
+	if err := db.WithTenant(c).Create(&sub).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to submit project"})
 		return
 	}
@@ -142,14 +142,14 @@ func (h *Handler) SubmitProject(c *gin.Context) {
 func (h *Handler) GetMySubmissions(c *gin.Context) {
 	userID, _ := c.Get("user_id")
 	var submissions []models.ProjectSubmission
-	db.DB.Where("user_id = ?", userID.(string)).Order("submitted_at DESC").Find(&submissions)
+	db.WithTenant(c).Where("user_id = ?", userID.(string)).Order("submitted_at DESC").Find(&submissions)
 	c.JSON(http.StatusOK, gin.H{"submissions": submissions})
 }
 
 // 4. Mentor Console
 func (h *Handler) GetPendingSubmissions(c *gin.Context) {
 	var submissions []models.ProjectSubmission
-	db.DB.Where("status = ?", "MENTOR_REVIEW").Order("submitted_at ASC").Find(&submissions)
+	db.WithTenant(c).Where("status = ?", "MENTOR_REVIEW").Order("submitted_at ASC").Find(&submissions)
 	c.JSON(http.StatusOK, gin.H{"submissions": submissions})
 }
 
@@ -172,7 +172,7 @@ func (h *Handler) ReviewSubmission(c *gin.Context) {
 	now := time.Now()
 	mID := mentorID.(string)
 
-	err := db.DB.Model(&models.ProjectSubmission{}).Where("id = ?", subID).Updates(map[string]interface{}{
+	err := db.WithTenant(c).Model(&models.ProjectSubmission{}).Where("id = ?", subID).Updates(map[string]interface{}{
 		"status":           input.Status,
 		"mentor_id":        &mID,
 		"mentor_rating":    input.MentorRating,
@@ -190,13 +190,13 @@ func (h *Handler) ReviewSubmission(c *gin.Context) {
 	// If approved, advance student stage
 	if input.Status == "APPROVED" {
 		var sub models.ProjectSubmission
-		db.DB.First(&sub, "id = ?", subID)
+		db.WithTenant(c).First(&sub, "id = ?", subID)
 
-		db.DB.Model(&models.Enrollment{}).
+		db.WithTenant(c).Model(&models.Enrollment{}).
 			Where("user_id = ? AND cohort_id = ?", sub.UserID, sub.CohortID).
 			Updates(map[string]interface{}{
-				"current_stage_number": db.DB.Raw("current_stage_number + 1"),
-				"current_xp":           db.DB.Raw("current_xp + 500"),
+				"current_stage_number": db.WithTenant(c).Raw("current_stage_number + 1"),
+				"current_xp":           db.WithTenant(c).Raw("current_xp + 500"),
 			})
 	}
 
@@ -207,7 +207,7 @@ func (h *Handler) ReviewSubmission(c *gin.Context) {
 func (h *Handler) GetPresence(c *gin.Context) {
 	var sessions []models.PresenceSession
 	threshold := time.Now().Add(-5 * time.Minute)
-	db.DB.Where("is_active = ? AND last_heartbeat > ?", true, threshold).Find(&sessions)
+	db.WithTenant(c).Where("is_active = ? AND last_heartbeat > ?", true, threshold).Find(&sessions)
 	c.JSON(http.StatusOK, gin.H{"sessions": sessions, "active_count": len(sessions)})
 }
 
@@ -228,7 +228,7 @@ func (h *Handler) PresenceHeartbeat(c *gin.Context) {
 	}
 
 	var session models.PresenceSession
-	err := db.DB.Where("user_id = ?", userID.(string)).First(&session).Error
+	err := db.WithTenant(c).Where("user_id = ?", userID.(string)).First(&session).Error
 
 	now := time.Now()
 	if err != nil {
@@ -240,13 +240,13 @@ func (h *Handler) PresenceHeartbeat(c *gin.Context) {
 			IsActive:      true,
 			LastHeartbeat: now,
 		}
-		db.DB.Create(&session)
+		db.WithTenant(c).Create(&session)
 	} else {
 		session.RoomName = input.RoomName
 		session.Activity = input.Activity
 		session.IsActive = true
 		session.LastHeartbeat = now
-		db.DB.Save(&session)
+		db.WithTenant(c).Save(&session)
 	}
 
 	c.JSON(http.StatusOK, gin.H{"session": session})
@@ -256,7 +256,7 @@ func (h *Handler) PresenceHeartbeat(c *gin.Context) {
 func (h *Handler) GetPeers(c *gin.Context) {
 	cohortID := c.Query("cohort_id")
 	var enrollments []models.Enrollment
-	query := db.DB.Where("status = ?", "ACTIVE")
+	query := db.WithTenant(c).Where("status = ?", "ACTIVE")
 	if cohortID != "" {
 		query = query.Where("cohort_id = ?", cohortID)
 	}
@@ -269,7 +269,7 @@ func (h *Handler) GetPeers(c *gin.Context) {
 func (h *Handler) GetPublicPortfolio(c *gin.Context) {
 	username := c.Param("username")
 	var portfolio models.PublicPortfolio
-	if err := db.DB.First(&portfolio, "username = ? AND is_published = ?", username, true).Error; err != nil {
+	if err := db.WithTenant(c).First(&portfolio, "username = ? AND is_published = ?", username, true).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Portfolio not found"})
 		return
 	}
@@ -279,12 +279,12 @@ func (h *Handler) GetPublicPortfolio(c *gin.Context) {
 // 8. Admin Endpoints
 func (h *Handler) AdminGetCohorts(c *gin.Context) {
 	var cohorts []models.Cohort
-	db.DB.Order("created_at DESC").Find(&cohorts)
+	db.WithTenant(c).Order("created_at DESC").Find(&cohorts)
 	c.JSON(http.StatusOK, gin.H{"cohorts": cohorts})
 }
 
 func (h *Handler) AdminGetEnrollments(c *gin.Context) {
 	var enrollments []models.Enrollment
-	db.DB.Order("created_at DESC").Find(&enrollments)
+	db.WithTenant(c).Order("created_at DESC").Find(&enrollments)
 	c.JSON(http.StatusOK, gin.H{"enrollments": enrollments})
 }

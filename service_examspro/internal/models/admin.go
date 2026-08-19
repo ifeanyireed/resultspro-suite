@@ -7,6 +7,7 @@ import (
 )
 
 type SystemSetting struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID           string         `gorm:"primaryKey" json:"id"`
 	Value        string         `json:"value"`
 	Type         string         `json:"type"` // 'number', 'string', 'boolean'
@@ -18,6 +19,7 @@ type SystemSetting struct {
 }
 
 type Report struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID           string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	ReporterID   string         `gorm:"index" json:"reporterId"`
 	Reporter     *User          `gorm:"foreignKey:ReporterID" json:"reporter,omitempty"`
@@ -34,6 +36,7 @@ type Report struct {
 }
 
 type CoinPack struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID          string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	Name        string         `json:"name"`
 	Type        string         `gorm:"default:'COIN'" json:"type"` // 'COIN' or 'PREMIUM'
@@ -51,6 +54,7 @@ type CoinPack struct {
 }
 
 type Purchase struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID               string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	UserID           string         `gorm:"index" json:"userId"`
 	User             *User          `json:"user,omitempty"`
@@ -65,6 +69,7 @@ type Purchase struct {
 }
 
 type Withdrawal struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID            string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	UserID        string         `gorm:"index" json:"userId"`
 	User          *User          `json:"user,omitempty"`

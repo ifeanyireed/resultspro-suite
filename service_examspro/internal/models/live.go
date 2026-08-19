@@ -7,6 +7,7 @@ import (
 )
 
 type LiveGameRoom struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID                   string                `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	AdminID              string                `gorm:"index" json:"adminId"`
 	Title                *string               `json:"title"`
@@ -30,6 +31,7 @@ type LiveGameRoom struct {
 }
 
 type LiveGameParticipant struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID        string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	RoomID    string         `gorm:"index" json:"roomId"`
 	Room      *LiveGameRoom  `json:"room,omitempty"`
@@ -41,6 +43,7 @@ type LiveGameParticipant struct {
 }
 
 type LiveRoomChatMessage struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID        string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	RoomID    string         `gorm:"index" json:"roomId"`
 	Room      *LiveGameRoom  `json:"room,omitempty"`

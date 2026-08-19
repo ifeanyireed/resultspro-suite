@@ -7,6 +7,7 @@ import (
 )
 
 type Exam struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID        int            `gorm:"primaryKey;autoIncrement" json:"id"`
 	Name      string         `json:"name"`
 	Slug      string         `gorm:"uniqueIndex" json:"slug"`
@@ -24,6 +25,7 @@ type Exam struct {
 }
 
 type Subject struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID             int            `gorm:"primaryKey;autoIncrement" json:"id"`
 	ExamID         int            `gorm:"index" json:"examId"`
 	Exam           *Exam          `json:"exam,omitempty"`
@@ -41,6 +43,7 @@ type Subject struct {
 }
 
 type Topic struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID              int            `gorm:"primaryKey;autoIncrement" json:"id"`
 	SubjectID       int            `gorm:"index" json:"subjectId"`
 	Subject         *Subject       `json:"subject,omitempty"`
@@ -55,6 +58,7 @@ type Topic struct {
 }
 
 type Question struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID                  string           `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	TopicID             int              `gorm:"index" json:"topicId"`
 	Topic               *Topic           `json:"topic,omitempty"`
@@ -73,6 +77,7 @@ type Question struct {
 }
 
 type QuestionOption struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID         string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	QuestionID string         `gorm:"index" json:"questionId"`
 	Question   *Question      `json:"question,omitempty"`
@@ -85,6 +90,7 @@ type QuestionOption struct {
 }
 
 type UserAnswer struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID               string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	UserID           string         `gorm:"index" json:"userId"`
 	User             *User          `json:"user,omitempty"`

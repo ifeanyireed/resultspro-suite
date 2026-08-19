@@ -5,6 +5,7 @@ import (
 )
 
 type Note struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID        string    `gorm:"primaryKey" json:"id"`
 	SchoolID  *string   `json:"school_id,omitempty"`
 	SubjectID string    `json:"subject_id"`
@@ -18,6 +19,7 @@ type Note struct {
 }
 
 type Quiz struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID          string    `gorm:"primaryKey" json:"id"`
 	SchoolID    *string   `json:"school_id,omitempty"`
 	SubjectID   string    `json:"subject_id"`
@@ -31,6 +33,7 @@ type Quiz struct {
 }
 
 type QuizAttempt struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID        string    `gorm:"primaryKey" json:"id"`
 	QuizID    string    `json:"quiz_id"`
 	StudentID string    `json:"student_id"`
@@ -41,6 +44,7 @@ type QuizAttempt struct {
 }
 
 type Flashcard struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID        string    `gorm:"primaryKey" json:"id"`
 	SubjectID string    `json:"subject_id"`
 	TopicID   *string   `json:"topic_id,omitempty"`
@@ -51,6 +55,7 @@ type Flashcard struct {
 }
 
 type FlashcardProgress struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID          string    `gorm:"primaryKey" json:"id"`
 	StudentID   string    `gorm:"uniqueIndex:idx_student_card" json:"student_id"`
 	CardID      string    `gorm:"uniqueIndex:idx_student_card" json:"card_id"`
@@ -63,6 +68,7 @@ type FlashcardProgress struct {
 }
 
 type Bookmark struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID        string    `gorm:"primaryKey" json:"id"`
 	UserID    string    `gorm:"index" json:"user_id"`
 	ItemType  string    `json:"item_type"` // NOTE, QUIZ, FLASHCARD
@@ -72,6 +78,7 @@ type Bookmark struct {
 }
 
 type GamificationProfile struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	UserID       string    `gorm:"primaryKey" json:"user_id"`
 	Points       int       `json:"points"`
 	Level        int       `json:"level"`
@@ -81,6 +88,7 @@ type GamificationProfile struct {
 }
 
 type StudySession struct {
+	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID        string    `gorm:"primaryKey" json:"id"`
 	UserID    string    `gorm:"index" json:"user_id"`
 	SubjectID string    `json:"subject_id"`
