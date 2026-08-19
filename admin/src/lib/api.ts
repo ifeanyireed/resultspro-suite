@@ -196,3 +196,14 @@ export async function fetchExamproFinancials() {
     return null;
   }
 }
+
+// --- CLASSROOMPRO API ---
+export async function fetchClassroomNotes() {
+  try {
+    const res = await fetch(`${CLASSROOM_API}/api/notes`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return Array.isArray(data.notes) ? data.notes : [];
+  } catch {
+    return [];
+  }
+}

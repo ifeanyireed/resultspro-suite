@@ -1,17 +1,28 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { Badge } from '@/components/Badge';
-import { BookOpen, FileText, CheckCircle2, Award, Search, Plus } from 'lucide-react';
+import { BookOpen, FileText, CheckCircle2, Award, Search, Plus, RefreshCw } from 'lucide-react';
+import { fetchClassroomNotes } from '@/lib/api';
 
 export default function ClassroomProAdminPage() {
-  const notes = [
-    { id: '1', title: 'Quadratic Equations & Polynomials', subject: 'Mathematics', teacher: 'Mr. Adeniyi', reads: 1420, verified: true },
-    { id: '2', title: 'Newtonian Mechanics & Thermodynamics', subject: 'Physics', teacher: 'Dr. Okoro', reads: 890, verified: true },
-    { id: '3', title: 'Organic Chemistry & Hydrocarbons', subject: 'Chemistry', teacher: 'Mrs. Bello', reads: 1100, verified: true },
-    { id: '4', title: 'Ecology & Population Genetics', subject: 'Biology', teacher: 'Mr. Eze', reads: 750, verified: true },
-  ];
+  const [notes, setNotes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchClassroomNotes();
+      setNotes(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50/50 min-h-full">
@@ -30,10 +41,15 @@ export default function ClassroomProAdminPage() {
               className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-800 focus:outline-none"
             />
           </div>
-          <button className="bg-emerald-600 text-white px-3.5 py-2 rounded-full text-xs font-bold hover:bg-emerald-700 transition-colors flex items-center space-x-1.5">
-            <Plus className="w-4 h-4" />
-            <span>Upload Verified Study Note</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <button onClick={loadData} className="p-2 rounded-full hover:bg-slate-200 text-slate-500 transition-colors">
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-emerald-600' : ''}`} />
+            </button>
+            <button className="bg-emerald-600 text-white px-3.5 py-2 rounded-full text-xs font-bold hover:bg-emerald-700 transition-colors flex items-center space-x-1.5">
+              <Plus className="w-4 h-4" />
+              <span>Upload Verified Study Note</span>
+            </button>
+          </div>
         </div>
 
         {/* Study Notes Table */}
@@ -56,11 +72,11 @@ export default function ClassroomProAdminPage() {
                     <BookOpen className="w-4 h-4 text-emerald-600 flex-shrink-0" />
                     <span>{note.title}</span>
                   </td>
-                  <td className="px-4 py-3.5 text-slate-600 font-semibold">{note.subject}</td>
-                  <td className="px-4 py-3.5 text-slate-800">{note.teacher}</td>
-                  <td className="px-4 py-3.5 font-medium text-slate-800 text-xs">{note.reads.toLocaleString()}</td>
+                  <td className="px-4 py-3.5 text-slate-600 font-semibold">{note.subject_id}</td>
+                  <td className="px-4 py-3.5 text-slate-800">{note.teacher_id}</td>
+                  <td className="px-4 py-3.5 font-medium text-slate-800 text-xs">{note.reads?.toLocaleString() || 0}</td>
                   <td className="px-4 py-3.5">
-                    <Badge status="VERIFIED" />
+                    <Badge status={note.is_public ? 'VERIFIED' : 'DRAFT'} />
                   </td>
                   <td className="px-4 py-3.5 text-right">
                     <button className="text-blue-600 hover:underline font-semibold">Inspect Handout</button>

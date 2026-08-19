@@ -88,3 +88,12 @@ type StudySession struct {
 	Activity  string    `json:"activity"` // FLASHCARDS, NOTES, QUIZ
 	CreatedAt time.Time `json:"created_at"`
 }
+
+func (Note) TableName() string { return "cls_notes" }
+func (Quiz) TableName() string { return "cls_quizzes" }
+func (QuizAttempt) TableName() string { return "cls_quiz_attempts" }
+func (Flashcard) TableName() string { return "cls_flashcards" }
+func (FlashcardProgress) TableName() string { return "cls_flashcard_progress" }
+func (Bookmark) TableName() string { return "cls_bookmarks" }
+func (GamificationProfile) TableName() string { return "cls_gamification_profiles" }
+func (StudySession) TableName() string { return "cls_study_sessions" }
