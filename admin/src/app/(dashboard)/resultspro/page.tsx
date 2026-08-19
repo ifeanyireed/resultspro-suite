@@ -6,9 +6,6 @@ import { LayoutDashboard, KeyRound, Building2, Users, DollarSign, FileText, Mail
 
 import OverviewTab from './tabs/OverviewTab';
 import ScratchCardsTab from './tabs/ScratchCardsTab';
-import SchoolsTab from './tabs/SchoolsTab';
-import AgentsTab from './tabs/AgentsTab';
-import FinancialsTab from './tabs/FinancialsTab';
 
 export default function ResultProCommandCenter() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -16,9 +13,6 @@ export default function ResultProCommandCenter() {
   const tabs = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'scratch-cards', label: 'Scratch Cards', icon: KeyRound },
-    { id: 'schools', label: 'Schools', icon: Building2 },
-    { id: 'agents', label: 'Agents', icon: Users },
-    { id: 'financials', label: 'Financials', icon: DollarSign },
   ];
 
   return (
@@ -54,9 +48,6 @@ export default function ResultProCommandCenter() {
       <div className="p-8 max-w-[1400px] mx-auto w-full">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'scratch-cards' && <ScratchCardsTab />}
-        {activeTab === 'schools' && <SchoolsTab />}
-        {activeTab === 'agents' && <AgentsTab />}
-        { activeTab === 'financials' && <FinancialsTab /> }
       </div>
     </div>
   );

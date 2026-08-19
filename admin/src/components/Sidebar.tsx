@@ -40,7 +40,7 @@ export function Sidebar() {
       links: [
         { label: 'Suite Blog CMS', href: '/cms/blog', icon: FileText },
         { label: 'Email Broadcasts', href: '/cms/emails', icon: Mail },
-        { label: 'Support Desk', href: '/support', icon: Headset },
+        { label: 'Support Desk', href: '/support-desk', icon: Headset },
         { label: 'Global Settings', href: '/settings', icon: Settings },
       ],
     },
