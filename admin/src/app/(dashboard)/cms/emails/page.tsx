@@ -34,7 +34,7 @@ export default function EmailsPage() {
   }, []);
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50/50 min-h-full">
+    <div className="w-full">
       <Header
         title="Email Broadcasts & Communications"
         subtitle="Dispatch system-wide notifications, manage subscriber lists, and view campaign history"

@@ -46,7 +46,7 @@ export default function SubscriptionsPage() {
   ];
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50/50 min-h-full">
+    <div className="w-full">
       <Header
         title="Subscriptions & Central Billing"
         subtitle="Manage standardized subscription tiers, quotas, and invoice ledgers across the suite"

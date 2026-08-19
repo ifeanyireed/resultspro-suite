@@ -21,7 +21,7 @@ export default function SchoolHubPage() {
   ];
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50/50 min-h-full">
+    <div className="w-full">
       <Header
         title="SchoolHUB (Tenants)"
         subtitle="Manage multi-tenant institutions, verification pipelines, and white-label branding"

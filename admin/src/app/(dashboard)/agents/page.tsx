@@ -21,7 +21,7 @@ export default function AgentsPage() {
   ];
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50/50 min-h-full">
+    <div className="w-full">
       <Header
         title="Agent Referral Network"
         subtitle="Manage sales partners, track referrals, and handle school assignments"

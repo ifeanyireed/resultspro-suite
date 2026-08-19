@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { WelcomeBanner, dashboardStyles as styles } from '@resultspro/design-system';
 import { Building2, Users, CreditCard, Briefcase, TrendingUp, FileCheck2, Sparkles } from 'lucide-react';
 import { fetchSuiteStats, fetchSchools, fetchPayoutRequests } from '@/lib/api';
+import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@resultspro/design-system';
 import { SuiteStats, School, PayoutRequest } from '@/lib/types';
 import Link from 'next/link';
 
@@ -32,139 +33,111 @@ export default function OverviewPage() {
   }, []);
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50/50 min-h-full">
+    <div className="w-full">
       <Header
         title="Suite Executive Overview"
         subtitle="Live cross-microservice telemetrics and control hub"
       />
-      <div className={styles.container} style={{ padding: '2rem' }}>
-        <div className={styles.mainContent}>
-          <WelcomeBanner
+      <div className="flex flex-col gap-6">
+        <WelcomeBanner
           title="Suite Executive Overview"
           description="Live cross-microservice telemetrics and control hub. You're doing a great job leading the suite!"
           monsterSrc="/monster_winner.png" 
         />
 
         {/* Top-Level KPI Cards */}
-        <div className={styles.statsGrid}>
-          <div className={styles.statCard}>
-            <div className={styles.statTitle}>Total Schools</div>
-            <div className={styles.statContent}>
-              <div className={styles.statIcon} style={{ background: '#0ea5e915', color: '#0ea5e9' }}><Building2 size={24} /></div>
-              <div className={styles.statInfo}><h3>{stats?.totalSchools || 142}</h3></div>
-            </div>
-            <div className={styles.statInfo}><p>{stats?.verifiedSchools || 118} verified (+12% this month)</p></div>
-          </div>
-          <div className={styles.statCard}>
-            <div className={styles.statTitle}>Universal Users</div>
-            <div className={styles.statContent}>
-              <div className={styles.statIcon} style={{ background: '#10b98115', color: '#10b981' }}><Users size={24} /></div>
-              <div className={styles.statInfo}><h3>{stats?.totalUsers ? stats.totalUsers.toLocaleString() : '4,850'}</h3></div>
-            </div>
-            <div className={styles.statInfo}><p>Students, Teachers, Parents</p></div>
-          </div>
-          <div className={styles.statCard}>
-            <div className={styles.statTitle}>Suite Revenue</div>
-            <div className={styles.statContent}>
-              <div className={styles.statIcon} style={{ background: '#f59e0b15', color: '#f59e0b' }}><TrendingUp size={24} /></div>
-              <div className={styles.statInfo}><h3>₦{((stats?.totalRevenue || 24500000) / 1000000).toFixed(1)}M</h3></div>
-            </div>
-            <div className={styles.statInfo}><p>+18.4% YoY</p></div>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <GradientMetricCard
+            title="Suite Revenue"
+            value={`₦${((stats?.totalRevenue || 24500000) / 1000000).toFixed(1)}M`}
+            subtitle="Total revenue across all modules"
+            trend="+18.4%"
+            icon={TrendingUp}
+          />
+          <WhiteMetricCard
+            title="Total Schools"
+            value={stats?.totalSchools || 142}
+            subtitle="Verified tenants in network"
+            trend="+12%"
+            trendColor="green"
+            icon={Building2}
+          />
+          <WhiteMetricCard
+            title="Universal Users"
+            value={stats?.totalUsers ? stats.totalUsers.toLocaleString() : '4,850'}
+            subtitle="Students, Teachers, Parents"
+            trend="+5%"
+            trendColor="green"
+            icon={Users}
+          />
         </div>
 
-        {/* Microservices Pulse */}
-        <div className={styles.bottomGrid} style={{ marginTop: '1rem' }}>
-          <div className={styles.widget}>
-            <div className={styles.widgetHeader}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div className={styles.headerIcon} style={{ background: '#2563eb15' }}>
-                  <FileCheck2 size={18} color="#2563eb" />
+        {/* Lower Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+          <div className="lg:col-span-8 flex flex-col gap-3">
+            {/* Microservices Pulse */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <WidgetCard title="ResultPRO Pulse">
+                <div className="flex flex-col items-center justify-center py-4">
+                  <FileCheck2 size={40} className="text-blue-600 mb-4" />
+                  <div className="text-5xl font-bold text-gray-900">12,450</div>
+                  <p className="text-gray-500 mt-2">Term results published</p>
+                  <Link href="/resultspro" className="mt-6 bg-blue-50 text-blue-700 px-4 py-2 rounded-full font-bold text-sm hover:bg-blue-100 transition-colors">
+                    Open Control Center
+                  </Link>
                 </div>
-                <div>
-                  <h2 style={{ fontSize: '1.1rem', marginBottom: '0.1rem' }}>ResultPRO</h2>
-                  <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: '600' }}>Assessment Sheets</span>
+              </WidgetCard>
+              <WidgetCard title="ExamsPRO Pulse">
+                <div className="flex flex-col items-center justify-center py-4">
+                  <Sparkles size={40} className="text-purple-600 mb-4" />
+                  <div className="text-5xl font-bold text-gray-900">520</div>
+                  <p className="text-gray-500 mt-2">CBT Exams taken today</p>
+                  <Link href="/exampro" className="mt-6 bg-purple-50 text-purple-700 px-4 py-2 rounded-full font-bold text-sm hover:bg-purple-100 transition-colors">
+                    Open Control Center
+                  </Link>
                 </div>
-              </div>
-            </div>
-            <div style={{ padding: '1rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b' }}>12,450</div>
-              <p style={{ color: '#64748b', marginTop: '0.5rem' }}>Term results published</p>
-              <Link href="/resultspro" className="mt-4 inline-block text-blue-600 font-bold text-sm hover:underline">Control Center &rarr;</Link>
+              </WidgetCard>
             </div>
           </div>
+          <div className="lg:col-span-4 flex flex-col gap-3">
+            {/* Action Required */}
+            <WidgetCard title="Action Required">
+              <div className="space-y-4">
+                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Pending Payouts</h4>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-gray-900">Chinedu Okafor</p>
+                    <p className="text-xs text-gray-500">Zenith Bank • 1029384756</p>
+                  </div>
+                  <p className="font-bold text-orange-500">₦75,000</p>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-gray-900">Folake Adeleke</p>
+                    <p className="text-xs text-gray-500">Access Bank • 0039281745</p>
+                  </div>
+                  <p className="font-bold text-orange-500">₦120,000</p>
+                </div>
 
-          <div className={styles.widget}>
-            <div className={styles.widgetHeader}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div className={styles.headerIcon} style={{ background: '#9333ea15' }}>
-                  <Sparkles size={18} color="#9333ea" />
+                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-6">Recent Registrations</h4>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-gray-900">Greenwood High</p>
+                    <p className="text-xs text-gray-500">Pro Tier • Unverified</p>
+                  </div>
+                  <p className="font-bold text-blue-600">Today</p>
                 </div>
-                <div>
-                  <h2 style={{ fontSize: '1.1rem', marginBottom: '0.1rem' }}>ExamsPRO</h2>
-                  <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: '600' }}>CBT Tests</span>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-gray-900">Kings College</p>
+                    <p className="text-xs text-gray-500">Enterprise Tier • Verified</p>
+                  </div>
+                  <p className="font-bold text-gray-400">Yesterday</p>
                 </div>
               </div>
-            </div>
-            <div style={{ padding: '1rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b' }}>520</div>
-              <p style={{ color: '#64748b', marginTop: '0.5rem' }}>Exams taken today</p>
-              <Link href="/exampro" className="mt-4 inline-block text-purple-600 font-bold text-sm hover:underline">Control Center &rarr;</Link>
-            </div>
+            </WidgetCard>
           </div>
         </div>
-      </div>
-
-      {/* Right Sidebar */}
-      <div className={styles.sidebarArea}>
-        <div className={styles.sidebarHeader}>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b' }}>Action Required</h2>
-        </div>
-        
-        <div className={styles.sectionTitle}>Pending Agent Payouts</div>
-        <div className={styles.taskList}>
-          <div className={styles.taskItem}>
-            <div className={styles.taskInfo}>
-              <div className={styles.taskHeader}>
-                <h4>Agent Chinedu Okafor</h4>
-                <span className={styles.taskDate} style={{ color: '#f59e0b', fontWeight: '700' }}>₦75,000</span>
-              </div>
-              <div className={styles.taskMeta}>Zenith Bank • 1029384756</div>
-            </div>
-          </div>
-          <div className={styles.taskItem}>
-            <div className={styles.taskInfo}>
-              <div className={styles.taskHeader}>
-                <h4>Agent Folake Adeleke</h4>
-                <span className={styles.taskDate} style={{ color: '#f59e0b', fontWeight: '700' }}>₦120,000</span>
-              </div>
-              <div className={styles.taskMeta}>Access Bank • 0039281745</div>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.sectionTitle} style={{ marginTop: '2rem' }}>Recent Registrations</div>
-        <div className={styles.taskList}>
-          <div className={styles.taskItem}>
-            <div className={styles.taskInfo}>
-              <div className={styles.taskHeader}>
-                <h4>Greenwood High</h4>
-                <span className={styles.taskDate}>Today</span>
-              </div>
-              <div className={styles.taskMeta}>Pro Tier • Unverified</div>
-            </div>
-          </div>
-          <div className={styles.taskItem}>
-            <div className={styles.taskInfo}>
-              <div className={styles.taskHeader}>
-                <h4>Kings College</h4>
-                <span className={styles.taskDate}>Yesterday</span>
-              </div>
-              <div className={styles.taskMeta}>Enterprise Tier • Verified</div>
-            </div>
-          </div>
-        </div>
-      </div>
       </div>
     </div>
   );

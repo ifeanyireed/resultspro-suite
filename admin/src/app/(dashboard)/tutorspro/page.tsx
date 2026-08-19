@@ -21,7 +21,7 @@ export default function TutorsProAdminPage() {
   ];
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50/50 min-h-full">
+    <div className="w-full">
       <Header
         title="TutorsPRO Marketplace Oversight"
         subtitle="Manage private tutor credentials, hourly rate controls, and lesson booking disputes"

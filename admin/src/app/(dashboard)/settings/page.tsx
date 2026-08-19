@@ -14,7 +14,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50/50 min-h-full">
+    <div className="w-full">
       <Header
         title="Global Suite Configuration"
         subtitle="Ecosystem secrets, token expiration intervals, and central microservice gateways"
