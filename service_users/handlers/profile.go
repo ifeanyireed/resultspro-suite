@@ -59,11 +59,11 @@ func HandleGetProfile(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// 2. Query Roles & School Subscriptions
+	// 2. Query Roles & Tenant Subscriptions
 	roleRows, err := db.DB.Query(`
-		SELECT r.school_id, s.name, s.slug, s.subscription_tier, s.subscription_expires_at, r.role, r.status 
-		FROM user_school_roles r
-		JOIN schools s ON r.school_id = s.id
+		SELECT r.tenant_id, s.name, s.slug, s.subscription_tier, s.subscription_expires_at, r.role, r.status 
+		FROM user_tenant_roles r
+		JOIN tenants s ON r.tenant_id = s.id
 		WHERE r.user_id = ?`, userId)
 	if err != nil {
 		log.Printf("Error querying roles for user %s: %v", userId, err)
@@ -72,7 +72,7 @@ func HandleGetProfile(w http.ResponseWriter, r *http.Request) {
 		for roleRows.Next() {
 			var rd models.RoleDetail
 			var subTier, subExpires sql.NullString
-			if err := roleRows.Scan(&rd.SchoolID, &rd.SchoolName, &rd.SchoolSlug, &subTier, &subExpires, &rd.Role, &rd.Status); err == nil {
+			if err := roleRows.Scan(&rd.TenantID, &rd.TenantName, &rd.TenantSlug, &subTier, &subExpires, &rd.Role, &rd.Status); err == nil {
 				if subTier.Valid {
 					rd.SubscriptionTier = subTier.String
 				}
@@ -107,28 +107,28 @@ func HandleGetProfile(w http.ResponseWriter, r *http.Request) {
 
 	// 4. Query Dependents (If user is a Parent/Guardian)
 	depRows, err := db.DB.Query(`
-		SELECT fr.child_user_id, fr.relationship_type, u.full_name, c.name as class_name, s.id as school_id
+		SELECT fr.child_user_id, fr.relationship_type, u.full_name, c.name as class_name, s.id as tenant_id
 		FROM family_relationships fr
 		LEFT JOIN users u ON fr.child_user_id = u.id
 		LEFT JOIN enrollments e ON fr.child_user_id = e.student_id AND e.status = 'active'
 		LEFT JOIN sections sec ON e.section_id = sec.id
 		LEFT JOIN classes c ON sec.class_id = c.id
-		LEFT JOIN schools s ON c.school_id = s.id
+		LEFT JOIN tenants s ON c.tenant_id = s.id
 		WHERE fr.parent_user_id = ?`, userId)
 	if err == nil {
 		defer depRows.Close()
 		for depRows.Next() {
 			var dd models.DependentDetail
-			var childName, className, schoolID sql.NullString
-			if err := depRows.Scan(&dd.UserID, &dd.Relationship, &childName, &className, &schoolID); err == nil {
+			var childName, className, tenantID sql.NullString
+			if err := depRows.Scan(&dd.UserID, &dd.Relationship, &childName, &className, &tenantID); err == nil {
 				if childName.Valid {
 					dd.FullName = childName.String
 				}
 				if className.Valid {
 					dd.ClassName = className.String
 				}
-				if schoolID.Valid {
-					dd.SchoolID = schoolID.String
+				if tenantID.Valid {
+					dd.TenantID = tenantID.String
 				}
 				profile.Dependents = append(profile.Dependents, dd)
 			}
@@ -142,13 +142,13 @@ func HandleGetProfile(w http.ResponseWriter, r *http.Request) {
 		JOIN sections sec ON e.section_id = sec.id
 		JOIN classes c ON sec.class_id = c.id
 		JOIN academic_sessions sess ON e.session_id = sess.id
-		JOIN schools s ON c.school_id = s.id
+		JOIN tenants s ON c.tenant_id = s.id
 		WHERE e.student_id = ? AND e.status = 'active'`, userId)
 	if err == nil {
 		defer enRows.Close()
 		for enRows.Next() {
 			var ed models.EnrollmentDetail
-			if err := enRows.Scan(&ed.SchoolID, &ed.SchoolName, &ed.ClassID, &ed.ClassName, &ed.SectionID, &ed.SectionName, &ed.SessionID, &ed.SessionName); err == nil {
+			if err := enRows.Scan(&ed.TenantID, &ed.TenantName, &ed.ClassID, &ed.ClassName, &ed.SectionID, &ed.SectionName, &ed.SessionID, &ed.SessionName); err == nil {
 				profile.Enrollment = append(profile.Enrollment, ed)
 			}
 		}
@@ -162,13 +162,13 @@ func HandleGetProfile(w http.ResponseWriter, r *http.Request) {
 		JOIN classes c ON sec.class_id = c.id
 		JOIN subjects sub ON a.subject_id = sub.id
 		JOIN terms t ON a.term_id = t.id
-		JOIN schools s ON c.school_id = s.id
+		JOIN tenants s ON c.tenant_id = s.id
 		WHERE a.teacher_id = ?`, userId)
 	if err == nil {
 		defer teachRows.Close()
 		for teachRows.Next() {
 			var td models.TeachingDetail
-			if err := teachRows.Scan(&td.SchoolID, &td.SchoolName, &td.ClassID, &td.ClassName, &td.SectionID, &td.SectionName, &td.SubjectID, &td.SubjectName, &td.TermID, &td.TermName); err == nil {
+			if err := teachRows.Scan(&td.TenantID, &td.TenantName, &td.ClassID, &td.ClassName, &td.SectionID, &td.SectionName, &td.SubjectID, &td.SubjectName, &td.TermID, &td.TermName); err == nil {
 				profile.Teaching = append(profile.Teaching, td)
 			}
 		}
@@ -216,8 +216,8 @@ func HandleGetBulkProfiles(w http.ResponseWriter, r *http.Request) {
 	query := `
 		SELECT u.id, u.full_name, u.email, s.name, r.role
 		FROM users u
-		LEFT JOIN user_school_roles r ON u.id = r.user_id
-		LEFT JOIN schools s ON r.school_id = s.id
+		LEFT JOIN user_tenant_roles r ON u.id = r.user_id
+		LEFT JOIN tenants s ON r.tenant_id = s.id
 		WHERE u.id IN (` + inClause + `)`
 
 	rows, err := db.DB.Query(query, args...)
@@ -231,13 +231,13 @@ func HandleGetBulkProfiles(w http.ResponseWriter, r *http.Request) {
 	profiles := make(map[string]models.BulkProfileContext)
 	for rows.Next() {
 		var userID string
-		var fullName, email, schoolName, role sql.NullString
-		if err := rows.Scan(&userID, &fullName, &email, &schoolName, &role); err == nil {
+		var fullName, email, tenantName, role sql.NullString
+		if err := rows.Scan(&userID, &fullName, &email, &tenantName, &role); err == nil {
 			ctx := models.BulkProfileContext{
 				UserID:     userID,
 				FullName:   fullName.String,
 				Email:      email.String,
-				SchoolName: schoolName.String,
+				TenantName: tenantName.String,
 				Role:       role.String,
 			}
 			profiles[userID] = ctx

@@ -122,8 +122,8 @@ func main() {
 	mux.HandleFunc("/intelligence/profiles/bulk", handlers.HandleGetBulkProfiles)
 	mux.HandleFunc("/api/v1/users/profiles/bulk", handlers.HandleGetBulkProfiles)
 
-	// --- 3. Institutional Relationships & Schools ---
-	mux.HandleFunc("/intelligence/school/", func(w http.ResponseWriter, r *http.Request) {
+	// --- 3. Institutional Relationships & Tenants ---
+	mux.HandleFunc("/intelligence/tenant/", func(w http.ResponseWriter, r *http.Request) {
 		parts := strings.Split(r.URL.Path, "/")
 		if len(parts) < 4 {
 			utils.JSONError(w, http.StatusNotFound, "Resource not found")
@@ -131,61 +131,63 @@ func main() {
 		}
 
 		if parts[3] == "create" {
-			handlers.HandleCreateSchool(w, r)
+			handlers.HandleCreateTenant(w, r)
 			return
 		}
 
 		if len(parts) == 4 {
-			// e.g. /intelligence/school/{id}
-			handlers.HandleGetSchool(w, r)
+			// e.g. /intelligence/tenant/{id}
+			handlers.HandleGetTenant(w, r)
 			return
 		}
 
 		subAction := parts[4]
 		switch subAction {
 		case "verify":
-			handlers.HandleVerifySchool(w, r)
+			handlers.HandleVerifyTenant(w, r)
 		case "hierarchy":
-			handlers.HandleGetSchoolHierarchy(w, r)
+			handlers.HandleGetTenantHierarchy(w, r)
 		case "branding":
 			if r.Method == http.MethodGet {
-				handlers.HandleGetSchoolBranding(w, r)
+				handlers.HandleGetTenantBranding(w, r)
 			} else {
-				handlers.HandleUpdateSchoolBranding(w, r)
+				handlers.HandleUpdateTenantBranding(w, r)
 			}
 		default:
 			utils.JSONError(w, http.StatusNotFound, "Action not found")
 		}
 	})
 
-	// Direct REST School endpoints
-	mux.HandleFunc("/api/v1/schools", func(w http.ResponseWriter, r *http.Request) {
+	// Direct REST Tenant endpoints
+	mux.HandleFunc("/api/public/tenant/resolve", handlers.HandleResolveTenant)
+
+	mux.HandleFunc("/api/v1/tenants", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
-			handlers.HandleCreateSchool(w, r)
+			handlers.HandleCreateTenant(w, r)
 		} else {
-			handlers.HandleListSchools(w, r)
+			handlers.HandleListTenants(w, r)
 		}
 	})
-	mux.HandleFunc("/api/v1/schools/", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/v1/tenants/", func(w http.ResponseWriter, r *http.Request) {
 		parts := strings.Split(r.URL.Path, "/")
 		if len(parts) >= 5 {
 			action := parts[4]
 			switch action {
 			case "hierarchy":
-				handlers.HandleGetSchoolHierarchy(w, r)
+				handlers.HandleGetTenantHierarchy(w, r)
 			case "branding":
 				if r.Method == http.MethodGet {
-					handlers.HandleGetSchoolBranding(w, r)
+					handlers.HandleGetTenantBranding(w, r)
 				} else {
-					handlers.HandleUpdateSchoolBranding(w, r)
+					handlers.HandleUpdateTenantBranding(w, r)
 				}
 			case "verify":
-				handlers.HandleVerifySchool(w, r)
+				handlers.HandleVerifyTenant(w, r)
 			case "roles":
 				if r.Method == http.MethodPost {
-					handlers.HandleAssignSchoolRole(w, r)
+					handlers.HandleAssignTenantRole(w, r)
 				} else {
-					handlers.HandleGetSchoolRoles(w, r)
+					handlers.HandleGetTenantRoles(w, r)
 				}
 			case "sessions":
 				if r.Method == http.MethodPost {
@@ -206,11 +208,11 @@ func main() {
 					handlers.HandleGetSubjects(w, r)
 				}
 			default:
-				utils.JSONError(w, http.StatusNotFound, "School endpoint not found")
+				utils.JSONError(w, http.StatusNotFound, "Tenant endpoint not found")
 			}
 			return
 		}
-		handlers.HandleGetSchool(w, r)
+		handlers.HandleGetTenant(w, r)
 	})
 
 	// --- 4. Family Relationships & Relation Verification ---
@@ -289,12 +291,12 @@ func main() {
 			handlers.HandleGetCurriculums(w, r)
 		}
 	})
-	mux.HandleFunc("/intelligence/syllabus/school/", handlers.HandleGetSchoolSyllabus)
-	mux.HandleFunc("/api/v1/syllabus/school/", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/intelligence/syllabus/tenant/", handlers.HandleGetTenantSyllabus)
+	mux.HandleFunc("/api/v1/syllabus/tenant/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			handlers.HandleAddSyllabusWeek(w, r)
 		} else {
-			handlers.HandleGetSchoolSyllabus(w, r)
+			handlers.HandleGetTenantSyllabus(w, r)
 		}
 	})
 	mux.HandleFunc("/intelligence/syllabus/exam/", handlers.HandleGetExamSyllabus)
@@ -321,11 +323,11 @@ func main() {
 	// --- 6. Subscriptions & Billing Management ---
 	mux.HandleFunc("/intelligence/subscription", handlers.HandleUpdateSubscription)
 	mux.HandleFunc("/api/v1/subscriptions", handlers.HandleUpdateSubscription)
-	mux.HandleFunc("/api/v1/subscriptions/school/", handlers.HandleGetSchoolSubscription)
+	mux.HandleFunc("/api/v1/subscriptions/tenant/", handlers.HandleGetTenantSubscription)
 	mux.HandleFunc("/api/v1/subscriptions/user/", handlers.HandleGetUserSubscription)
 	mux.HandleFunc("/api/v1/subscriptions/limits", handlers.HandleCheckSubscriptionLimits)
 	mux.HandleFunc("/api/v1/billing/plans", handlers.HandleGetPlans)
-	mux.HandleFunc("/api/v1/billing/invoices/school/", handlers.HandleGetSchoolInvoices)
+	mux.HandleFunc("/api/v1/billing/invoices/tenant/", handlers.HandleGetTenantInvoices)
 	mux.HandleFunc("/api/v1/billing/webhook", handlers.HandleProcessWebhook)
 
 	// --- 7. Agents & Commissions ---

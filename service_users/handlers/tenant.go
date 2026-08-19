@@ -14,8 +14,8 @@ import (
 	"service_users.resultspro.ng/utils"
 )
 
-// HandleCreateSchool registers a new organization/school
-func HandleCreateSchool(w http.ResponseWriter, r *http.Request) {
+// HandleCreateTenant registers a new organization/tenant
+func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
@@ -25,7 +25,7 @@ func HandleCreateSchool(w http.ResponseWriter, r *http.Request) {
 		ID                string `json:"id"`
 		Name              string `json:"name"`
 		Slug              string `json:"slug"`
-		SchoolCode        string `json:"school_code"`
+		TenantCode        string `json:"tenant_code"`
 		ShortName         string `json:"short_name"`
 		Motto             string `json:"motto"`
 		ContactEmail      string `json:"contact_email"`
@@ -48,9 +48,9 @@ func HandleCreateSchool(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	schoolID := input.ID
-	if schoolID == "" {
-		schoolID = uuid.New().String()
+	tenantID := input.ID
+	if tenantID == "" {
+		tenantID = uuid.New().String()
 	}
 
 	tier := input.SubscriptionTier
@@ -61,14 +61,14 @@ func HandleCreateSchool(w http.ResponseWriter, r *http.Request) {
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
 
 	query := `
-		INSERT INTO schools (id, name, slug, school_code, short_name, motto, contact_email, contact_phone, contact_person_name, full_address, state, lga, status, verification_status, referred_by_agent_id, subscription_tier, created_at, updated_at) 
+		INSERT INTO tenants (id, name, slug, tenant_code, short_name, motto, contact_email, contact_phone, contact_person_name, full_address, state, lga, status, verification_status, referred_by_agent_id, subscription_tier, created_at, updated_at) 
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', 'PENDING_VERIFICATION', ?, ?, ?, ?)`
 
 	_, err := db.DB.Exec(query,
-		schoolID,
+		tenantID,
 		input.Name,
 		input.Slug,
-		sql.NullString{String: input.SchoolCode, Valid: input.SchoolCode != ""},
+		sql.NullString{String: input.TenantCode, Valid: input.TenantCode != ""},
 		sql.NullString{String: input.ShortName, Valid: input.ShortName != ""},
 		sql.NullString{String: input.Motto, Valid: input.Motto != ""},
 		sql.NullString{String: input.ContactEmail, Valid: input.ContactEmail != ""},
@@ -84,48 +84,48 @@ func HandleCreateSchool(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if err != nil {
-		log.Printf("Error creating school: %v", err)
-		utils.JSONError(w, http.StatusConflict, "School with this name or slug already exists")
+		log.Printf("Error creating tenant: %v", err)
+		utils.JSONError(w, http.StatusConflict, "Tenant with this name or slug already exists")
 		return
 	}
 
 	utils.JSONResponse(w, http.StatusCreated, map[string]interface{}{
-		"id":      schoolID,
+		"id":      tenantID,
 		"name":    input.Name,
 		"slug":    input.Slug,
-		"message": "School registered successfully",
+		"message": "Tenant registered successfully",
 	})
 }
 
-// HandleGetSchool retrieves a single school by ID or slug
-func HandleGetSchool(w http.ResponseWriter, r *http.Request) {
+// HandleGetTenant retrieves a single tenant by ID or slug
+func HandleGetTenant(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 	identifier := parts[len(parts)-1]
 
-	var s models.School
-	var schoolCode, shortName, motto, logoURL, logoEmoji, primaryColor, secondaryColor, accentColor sql.NullString
+	var s models.Tenant
+	var tenantCode, shortName, motto, logoURL, logoEmoji, primaryColor, secondaryColor, accentColor sql.NullString
 	var contactEmail, contactPhone, contactPerson, fullAddress, state, lga, agentID, subTier, subExpires, settings sql.NullString
 
 	query := `
-		SELECT id, name, slug, school_code, short_name, motto, logo_url, logo_emoji, primary_color, secondary_color, accent_color, contact_email, contact_phone, contact_person_name, full_address, state, lga, status, verification_status, referred_by_agent_id, subscription_tier, subscription_expires_at, settings, created_at, updated_at 
-		FROM schools WHERE id = ? OR slug = ?`
+		SELECT id, name, slug, tenant_code, short_name, motto, logo_url, logo_emoji, primary_color, secondary_color, accent_color, contact_email, contact_phone, contact_person_name, full_address, state, lga, status, verification_status, referred_by_agent_id, subscription_tier, subscription_expires_at, settings, created_at, updated_at 
+		FROM tenants WHERE id = ? OR slug = ?`
 
 	err := db.DB.QueryRow(query, identifier, identifier).Scan(
-		&s.ID, &s.Name, &s.Slug, &schoolCode, &shortName, &motto, &logoURL, &logoEmoji, &primaryColor, &secondaryColor, &accentColor,
+		&s.ID, &s.Name, &s.Slug, &tenantCode, &shortName, &motto, &logoURL, &logoEmoji, &primaryColor, &secondaryColor, &accentColor,
 		&contactEmail, &contactPhone, &contactPerson, &fullAddress, &state, &lga, &s.Status, &s.VerificationStatus, &agentID,
 		&subTier, &subExpires, &settings, &s.CreatedAt, &s.UpdatedAt,
 	)
 
 	if err == sql.ErrNoRows {
-		utils.JSONError(w, http.StatusNotFound, "School not found")
+		utils.JSONError(w, http.StatusNotFound, "Tenant not found")
 		return
 	} else if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
 		return
 	}
 
-	if schoolCode.Valid {
-		s.SchoolCode = schoolCode.String
+	if tenantCode.Valid {
+		s.TenantCode = tenantCode.String
 	}
 	if shortName.Valid {
 		s.ShortName = shortName.String
@@ -183,26 +183,26 @@ func HandleGetSchool(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusOK, s)
 }
 
-// HandleVerifySchool updates the verification status of a school
-func HandleVerifySchool(w http.ResponseWriter, r *http.Request) {
+// HandleVerifyTenant updates the verification status of a tenant
+func HandleVerifyTenant(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPatch && r.Method != http.MethodPost {
 		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
 	}
 
 	parts := strings.Split(r.URL.Path, "/")
-	schoolID := ""
+	tenantID := ""
 	for i, part := range parts {
-		if part == "school" || part == "schools" {
+		if part == "tenant" || part == "tenants" {
 			if i+1 < len(parts) {
-				schoolID = parts[i+1]
+				tenantID = parts[i+1]
 				break
 			}
 		}
 	}
 
-	if schoolID == "" {
-		utils.JSONError(w, http.StatusBadRequest, "School ID is required")
+	if tenantID == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Tenant ID is required")
 		return
 	}
 
@@ -215,32 +215,32 @@ func HandleVerifySchool(w http.ResponseWriter, r *http.Request) {
 	}
 
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
-	_, err := db.DB.Exec("UPDATE schools SET verification_status = ?, status = 'ACTIVE', updated_at = ? WHERE id = ?", input.Status, now, schoolID)
+	_, err := db.DB.Exec("UPDATE tenants SET verification_status = ?, status = 'ACTIVE', updated_at = ? WHERE id = ?", input.Status, now, tenantID)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
 		return
 	}
 
 	utils.JSONResponse(w, http.StatusOK, map[string]string{
-		"school_id":           schoolID,
+		"tenant_id":           tenantID,
 		"verification_status": input.Status,
-		"message":             "School verification updated successfully",
+		"message":             "Tenant verification updated successfully",
 	})
 }
 
-// HandleGetSchoolHierarchy retrieves the full academic structure (classes, sections, subjects)
-func HandleGetSchoolHierarchy(w http.ResponseWriter, r *http.Request) {
+// HandleGetTenantHierarchy retrieves the full academic structure (classes, sections, subjects)
+func HandleGetTenantHierarchy(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
-	schoolID := ""
+	tenantID := ""
 	for i, part := range parts {
-		if (part == "school" || part == "schools") && i+1 < len(parts) {
-			schoolID = parts[i+1]
+		if (part == "tenant" || part == "tenants") && i+1 < len(parts) {
+			tenantID = parts[i+1]
 			break
 		}
 	}
 
-	if schoolID == "" {
-		utils.JSONError(w, http.StatusBadRequest, "School ID is required")
+	if tenantID == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Tenant ID is required")
 		return
 	}
 
@@ -261,15 +261,15 @@ func HandleGetSchoolHierarchy(w http.ResponseWriter, r *http.Request) {
 		Code string `json:"code"`
 	}
 	type HierarchyResponse struct {
-		SchoolID string        `json:"school_id"`
+		TenantID string        `json:"tenant_id"`
 		Classes  []ClassData   `json:"classes"`
 		Subjects []SubjectData `json:"subjects"`
 	}
 
-	response := HierarchyResponse{SchoolID: schoolID, Classes: []ClassData{}, Subjects: []SubjectData{}}
+	response := HierarchyResponse{TenantID: tenantID, Classes: []ClassData{}, Subjects: []SubjectData{}}
 
 	// Fetch subjects
-	subRows, err := db.DB.Query("SELECT id, name, code FROM subjects WHERE school_id = ? ORDER BY name ASC", schoolID)
+	subRows, err := db.DB.Query("SELECT id, name, code FROM subjects WHERE tenant_id = ? ORDER BY name ASC", tenantID)
 	if err == nil {
 		defer subRows.Close()
 		for subRows.Next() {
@@ -285,7 +285,7 @@ func HandleGetSchoolHierarchy(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch classes
-	classRows, err := db.DB.Query("SELECT id, name, level FROM classes WHERE school_id = ? ORDER BY level ASC, name ASC", schoolID)
+	classRows, err := db.DB.Query("SELECT id, name, level FROM classes WHERE tenant_id = ? ORDER BY level ASC, name ASC", tenantID)
 	if err == nil {
 		defer classRows.Close()
 		for classRows.Next() {
@@ -319,28 +319,28 @@ func HandleGetSchoolHierarchy(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusOK, response)
 }
 
-// HandleGetSchoolBranding returns the branding and layout configuration for SchoolHub
-func HandleGetSchoolBranding(w http.ResponseWriter, r *http.Request) {
+// HandleGetTenantBranding returns the branding and layout configuration for TenantHub
+func HandleGetTenantBranding(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
-	schoolID := ""
+	tenantID := ""
 	for i, part := range parts {
-		if (part == "school" || part == "schools") && i+1 < len(parts) {
-			schoolID = parts[i+1]
+		if (part == "tenant" || part == "tenants") && i+1 < len(parts) {
+			tenantID = parts[i+1]
 			break
 		}
 	}
 
-	if schoolID == "" {
-		utils.JSONError(w, http.StatusBadRequest, "School ID is required")
+	if tenantID == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Tenant ID is required")
 		return
 	}
 
 	var name, slug, primaryColor, secondaryColor, accentColor, logoURL, logoEmoji, motto, contactEmail, contactPhone, contactPerson, fullAddress, settings sql.NullString
-	err := db.DB.QueryRow("SELECT name, slug, primary_color, secondary_color, accent_color, logo_url, logo_emoji, motto, contact_email, contact_phone, contact_person_name, full_address, settings FROM schools WHERE id = ? OR slug = ?", schoolID, schoolID).
+	err := db.DB.QueryRow("SELECT name, slug, primary_color, secondary_color, accent_color, logo_url, logo_emoji, motto, contact_email, contact_phone, contact_person_name, full_address, settings FROM tenants WHERE id = ? OR slug = ?", tenantID, tenantID).
 		Scan(&name, &slug, &primaryColor, &secondaryColor, &accentColor, &logoURL, &logoEmoji, &motto, &contactEmail, &contactPhone, &contactPerson, &fullAddress, &settings)
 
 	if err != nil {
-		utils.JSONError(w, http.StatusNotFound, "School not found")
+		utils.JSONError(w, http.StatusNotFound, "Tenant not found")
 		return
 	}
 
@@ -385,24 +385,24 @@ func HandleGetSchoolBranding(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusOK, response)
 }
 
-// HandleUpdateSchoolBranding updates colors, logos, and custom UI skinning settings
-func HandleUpdateSchoolBranding(w http.ResponseWriter, r *http.Request) {
+// HandleUpdateTenantBranding updates colors, logos, and custom UI skinning settings
+func HandleUpdateTenantBranding(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost && r.Method != http.MethodPatch && r.Method != http.MethodPut {
 		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
 	}
 
 	parts := strings.Split(r.URL.Path, "/")
-	schoolID := ""
+	tenantID := ""
 	for i, part := range parts {
-		if (part == "school" || part == "schools") && i+1 < len(parts) {
-			schoolID = parts[i+1]
+		if (part == "tenant" || part == "tenants") && i+1 < len(parts) {
+			tenantID = parts[i+1]
 			break
 		}
 	}
 
-	if schoolID == "" {
-		utils.JSONError(w, http.StatusBadRequest, "School ID is required")
+	if tenantID == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Tenant ID is required")
 		return
 	}
 
@@ -416,58 +416,58 @@ func HandleUpdateSchoolBranding(w http.ResponseWriter, r *http.Request) {
 
 	if branding, ok := input["branding"].(map[string]interface{}); ok {
 		if primary, ok := branding["primary_color"].(string); ok {
-			db.DB.Exec("UPDATE schools SET primary_color = ?, updated_at = ? WHERE id = ?", primary, now, schoolID)
+			db.DB.Exec("UPDATE tenants SET primary_color = ?, updated_at = ? WHERE id = ?", primary, now, tenantID)
 		}
 		if secondary, ok := branding["secondary_color"].(string); ok {
-			db.DB.Exec("UPDATE schools SET secondary_color = ?, updated_at = ? WHERE id = ?", secondary, now, schoolID)
+			db.DB.Exec("UPDATE tenants SET secondary_color = ?, updated_at = ? WHERE id = ?", secondary, now, tenantID)
 		}
 		if accent, ok := branding["accent_color"].(string); ok {
-			db.DB.Exec("UPDATE schools SET accent_color = ?, updated_at = ? WHERE id = ?", accent, now, schoolID)
+			db.DB.Exec("UPDATE tenants SET accent_color = ?, updated_at = ? WHERE id = ?", accent, now, tenantID)
 		}
 		if logo, ok := branding["logo_url"].(string); ok {
-			db.DB.Exec("UPDATE schools SET logo_url = ?, updated_at = ? WHERE id = ?", logo, now, schoolID)
+			db.DB.Exec("UPDATE tenants SET logo_url = ?, updated_at = ? WHERE id = ?", logo, now, tenantID)
 		}
 		if emoji, ok := branding["logo_emoji"].(string); ok {
-			db.DB.Exec("UPDATE schools SET logo_emoji = ?, updated_at = ? WHERE id = ?", emoji, now, schoolID)
+			db.DB.Exec("UPDATE tenants SET logo_emoji = ?, updated_at = ? WHERE id = ?", emoji, now, tenantID)
 		}
 		if motto, ok := branding["motto"].(string); ok {
-			db.DB.Exec("UPDATE schools SET motto = ?, updated_at = ? WHERE id = ?", motto, now, schoolID)
+			db.DB.Exec("UPDATE tenants SET motto = ?, updated_at = ? WHERE id = ?", motto, now, tenantID)
 		}
 	}
 
 	if content, ok := input["content"].(map[string]interface{}); ok {
 		if contact, ok := content["contact"].(map[string]interface{}); ok {
 			if email, ok := contact["email"].(string); ok {
-				db.DB.Exec("UPDATE schools SET contact_email = ?, updated_at = ? WHERE id = ?", email, now, schoolID)
+				db.DB.Exec("UPDATE tenants SET contact_email = ?, updated_at = ? WHERE id = ?", email, now, tenantID)
 			}
 			if phone, ok := contact["phone"].(string); ok {
-				db.DB.Exec("UPDATE schools SET contact_phone = ?, updated_at = ? WHERE id = ?", phone, now, schoolID)
+				db.DB.Exec("UPDATE tenants SET contact_phone = ?, updated_at = ? WHERE id = ?", phone, now, tenantID)
 			}
 			if person, ok := contact["contact_person"].(string); ok {
-				db.DB.Exec("UPDATE schools SET contact_person_name = ?, updated_at = ? WHERE id = ?", person, now, schoolID)
+				db.DB.Exec("UPDATE tenants SET contact_person_name = ?, updated_at = ? WHERE id = ?", person, now, tenantID)
 			}
 			if address, ok := contact["address"].(string); ok {
-				db.DB.Exec("UPDATE schools SET full_address = ?, updated_at = ? WHERE id = ?", address, now, schoolID)
+				db.DB.Exec("UPDATE tenants SET full_address = ?, updated_at = ? WHERE id = ?", address, now, tenantID)
 			}
 		}
 
 		contentJSON, _ := json.Marshal(content)
-		db.DB.Exec("UPDATE schools SET settings = ?, updated_at = ? WHERE id = ?", string(contentJSON), now, schoolID)
+		db.DB.Exec("UPDATE tenants SET settings = ?, updated_at = ? WHERE id = ?", string(contentJSON), now, tenantID)
 	}
 
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Branding and content updated successfully"})
 }
 
-// HandleListSchools returns a paginated/filtered list of schools
-func HandleListSchools(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.DB.Query("SELECT id, name, slug, status, verification_status, state, lga, subscription_tier, created_at FROM schools ORDER BY created_at DESC LIMIT 200")
+// HandleListTenants returns a paginated/filtered list of tenants
+func HandleListTenants(w http.ResponseWriter, r *http.Request) {
+	rows, err := db.DB.Query("SELECT id, name, slug, status, verification_status, state, lga, subscription_tier, created_at FROM tenants ORDER BY created_at DESC LIMIT 200")
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
 		return
 	}
 	defer rows.Close()
 
-	type SchoolSummary struct {
+	type TenantSummary struct {
 		ID                 string    `json:"id"`
 		Name               string    `json:"name"`
 		Slug               string    `json:"slug"`
@@ -479,9 +479,9 @@ func HandleListSchools(w http.ResponseWriter, r *http.Request) {
 		CreatedAt          time.Time `json:"created_at"`
 	}
 
-	schools := []SchoolSummary{}
+	tenants := []TenantSummary{}
 	for rows.Next() {
-		var s SchoolSummary
+		var s TenantSummary
 		var state, lga, tier sql.NullString
 		if err := rows.Scan(&s.ID, &s.Name, &s.Slug, &s.Status, &s.VerificationStatus, &state, &lga, &tier, &s.CreatedAt); err == nil {
 			if state.Valid {
@@ -493,15 +493,15 @@ func HandleListSchools(w http.ResponseWriter, r *http.Request) {
 			if tier.Valid {
 				s.SubscriptionTier = tier.String
 			}
-			schools = append(schools, s)
+			tenants = append(tenants, s)
 		}
 	}
 
-	utils.JSONResponse(w, http.StatusOK, schools)
+	utils.JSONResponse(w, http.StatusOK, tenants)
 }
 
-// HandleAssignSchoolRole assigns a user to a school with a specific role
-func HandleAssignSchoolRole(w http.ResponseWriter, r *http.Request) {
+// HandleAssignTenantRole assigns a user to a tenant with a specific role
+func HandleAssignTenantRole(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
@@ -509,13 +509,13 @@ func HandleAssignSchoolRole(w http.ResponseWriter, r *http.Request) {
 
 	var input struct {
 		UserID   string `json:"user_id"`
-		SchoolID string `json:"school_id"`
-		Role     string `json:"role"` // student, teacher, parent, school-admin, super-admin, agent
+		TenantID string `json:"tenant_id"`
+		Role     string `json:"role"` // student, teacher, parent, tenant-admin, super-admin, agent
 		Status   string `json:"status"`
 	}
 
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.UserID == "" || input.SchoolID == "" || input.Role == "" {
-		utils.JSONError(w, http.StatusBadRequest, "user_id, school_id, and role are required")
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.UserID == "" || input.TenantID == "" || input.Role == "" {
+		utils.JSONError(w, http.StatusBadRequest, "user_id, tenant_id, and role are required")
 		return
 	}
 
@@ -528,11 +528,11 @@ func HandleAssignSchoolRole(w http.ResponseWriter, r *http.Request) {
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
 
 	query := `
-		INSERT INTO user_school_roles (id, user_id, school_id, role, status, created_at, updated_at) 
+		INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status, created_at, updated_at) 
 		VALUES (?, ?, ?, ?, ?, ?, ?) 
 		ON DUPLICATE KEY UPDATE status = VALUES(status), updated_at = VALUES(updated_at)`
 
-	_, err := db.DB.Exec(query, id, input.UserID, input.SchoolID, strings.ToLower(input.Role), status, now, now)
+	_, err := db.DB.Exec(query, id, input.UserID, input.TenantID, strings.ToLower(input.Role), status, now, now)
 	if err != nil {
 		log.Printf("Assign role error: %v", err)
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to assign role")
@@ -542,13 +542,13 @@ func HandleAssignSchoolRole(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Role assigned successfully"})
 }
 
-// HandleGetSchoolRoles lists users and their roles for a school
-func HandleGetSchoolRoles(w http.ResponseWriter, r *http.Request) {
+// HandleGetTenantRoles lists users and their roles for a tenant
+func HandleGetTenantRoles(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
-	schoolID := ""
+	tenantID := ""
 	for i, part := range parts {
-		if (part == "schools" || part == "school") && i+1 < len(parts) {
-			schoolID = parts[i+1]
+		if (part == "tenants" || part == "tenant") && i+1 < len(parts) {
+			tenantID = parts[i+1]
 			break
 		}
 	}
@@ -557,11 +557,11 @@ func HandleGetSchoolRoles(w http.ResponseWriter, r *http.Request) {
 
 	query := `
 		SELECT r.id, r.user_id, u.email, u.full_name, r.role, r.status, r.created_at
-		FROM user_school_roles r
+		FROM user_tenant_roles r
 		JOIN users u ON r.user_id = u.id
-		WHERE r.school_id = ?`
+		WHERE r.tenant_id = ?`
 
-	args := []interface{}{schoolID}
+	args := []interface{}{tenantID}
 	if roleFilter != "" {
 		query += " AND r.role = ?"
 		args = append(args, roleFilter)
@@ -599,8 +599,8 @@ func HandleGetSchoolRoles(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusOK, results)
 }
 
-// HandleRemoveSchoolRole deletes a specific role link
-func HandleRemoveSchoolRole(w http.ResponseWriter, r *http.Request) {
+// HandleRemoveTenantRole deletes a specific role link
+func HandleRemoveTenantRole(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
@@ -609,11 +609,56 @@ func HandleRemoveSchoolRole(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 	roleID := parts[len(parts)-1]
 
-	_, err := db.DB.Exec("DELETE FROM user_school_roles WHERE id = ?", roleID)
+	_, err := db.DB.Exec("DELETE FROM user_tenant_roles WHERE id = ?", roleID)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to delete role")
 		return
 	}
 
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Role removed successfully"})
+}
+
+// HandleResolveTenant resolves a tenant by its default_subdomain or custom_domain
+func HandleResolveTenant(w http.ResponseWriter, r *http.Request) {
+	domain := r.URL.Query().Get("domain")
+	if domain == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Domain is required")
+		return
+	}
+
+	var t models.Tenant
+	var tenantCode, shortName, motto, logoURL, logoEmoji, primaryColor, secondaryColor, accentColor sql.NullString
+	var enabledModules, settings sql.NullString
+
+	query := `
+		SELECT id, name, slug, default_subdomain, custom_domain, tenant_code, short_name, motto, logo_url, logo_emoji, primary_color, secondary_color, accent_color, enabled_modules, settings 
+		FROM tenants WHERE default_subdomain = ? OR custom_domain = ?`
+
+	err := db.DB.QueryRow(query, domain, domain).Scan(
+		&t.ID, &t.Name, &t.Slug, &t.DefaultSubdomain, &t.CustomDomain, &tenantCode, &shortName, &motto, &logoURL, &logoEmoji, &primaryColor, &secondaryColor, &accentColor,
+		&enabledModules, &settings,
+	)
+
+	if err == sql.ErrNoRows {
+		utils.JSONError(w, http.StatusNotFound, "Tenant not found")
+		return
+	} else if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Database error")
+		return
+	}
+
+	if tenantCode.Valid { t.TenantCode = tenantCode.String }
+	if shortName.Valid { t.ShortName = shortName.String }
+	if motto.Valid { t.Motto = motto.String }
+	if logoURL.Valid { t.LogoURL = logoURL.String }
+	if logoEmoji.Valid { t.LogoEmoji = logoEmoji.String }
+	if primaryColor.Valid { t.PrimaryColor = primaryColor.String }
+	if secondaryColor.Valid { t.SecondaryColor = secondaryColor.String }
+	if accentColor.Valid { t.AccentColor = accentColor.String }
+	if enabledModules.Valid { t.EnabledModules = enabledModules.String }
+	if settings.Valid { t.Settings = settings.String }
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"tenant": t,
+	})
 }

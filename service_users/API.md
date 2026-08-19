@@ -106,9 +106,9 @@ Resolves full user ecosystem context.
   "account_status": "active",
   "roles": [
     {
-      "school_id": "school-1",
-      "school_name": "Greenwood High",
-      "school_slug": "greenwood-high",
+      "tenant_id": "tenant-1",
+      "tenant_name": "Greenwood High",
+      "tenant_slug": "greenwood-high",
       "subscription_tier": "PRO",
       "role": "student",
       "status": "active"
@@ -116,7 +116,7 @@ Resolves full user ecosystem context.
   ],
   "enrollment": [
     {
-      "school_id": "school-1",
+      "tenant_id": "tenant-1",
       "class_name": "Grade 10 (SS1)",
       "section_name": "10A (Science)",
       "session_name": "2025/2026"
@@ -138,7 +138,7 @@ Lightweight context for leaderboards in examsPRO and result sheets in ResultPRO.
   "uuid-1": {
     "user_id": "uuid-1",
     "full_name": "Jane Doe",
-    "school_name": "Greenwood High",
+    "tenant_name": "Greenwood High",
     "class_name": "Grade 10",
     "role": "student"
   }
@@ -147,15 +147,15 @@ Lightweight context for leaderboards in examsPRO and result sheets in ResultPRO.
 
 ---
 
-## 3. Organizations & Schools
+## 3. Organizations & Tenants
 
-- `POST /api/v1/schools` (or `/intelligence/school/create`): Register school.
-- `GET /api/v1/schools/{schoolId}`: Fetch school details.
-- `PATCH /api/v1/schools/{schoolId}/verify`: Update verification status (`VERIFIED`, `REJECTED`).
-- `GET /intelligence/school/{schoolId}/hierarchy`: Get classes, sections, and subjects.
-- `GET /intelligence/school/{schoolId}/branding`: Get SchoolHub branding and custom theme settings.
-- `POST /intelligence/school/{schoolId}/branding`: Update branding and contact information.
-- `POST /api/v1/schools/{schoolId}/roles`: Assign role to user (`student`, `teacher`, `parent`, `school-admin`).
+- `POST /api/v1/tenants` (or `/intelligence/tenant/create`): Register tenant.
+- `GET /api/v1/tenants/{tenantId}`: Fetch tenant details.
+- `PATCH /api/v1/tenants/{tenantId}/verify`: Update verification status (`VERIFIED`, `REJECTED`).
+- `GET /intelligence/tenant/{tenantId}/hierarchy`: Get classes, sections, and subjects.
+- `GET /intelligence/tenant/{tenantId}/branding`: Get TenantHub branding and custom theme settings.
+- `POST /intelligence/tenant/{tenantId}/branding`: Update branding and contact information.
+- `POST /api/v1/tenants/{tenantId}/roles`: Assign role to user (`student`, `teacher`, `parent`, `tenant-admin`).
 
 ---
 
@@ -170,15 +170,15 @@ Lightweight context for leaderboards in examsPRO and result sheets in ResultPRO.
 
 ## 5. Academics Graph Engine
 
-- `GET /api/v1/schools/{schoolId}/sessions` & `POST /api/v1/schools/{schoolId}/sessions`: Academic sessions.
+- `GET /api/v1/tenants/{tenantId}/sessions` & `POST /api/v1/tenants/{tenantId}/sessions`: Academic sessions.
 - `GET /api/v1/sessions/{sessionId}/terms` & `POST /api/v1/sessions/{sessionId}/terms`: Academic terms.
-- `GET /api/v1/schools/{schoolId}/classes` & `POST /api/v1/schools/{schoolId}/classes`: Classes.
+- `GET /api/v1/tenants/{tenantId}/classes` & `POST /api/v1/tenants/{tenantId}/classes`: Classes.
 - `GET /api/v1/classes/{classId}/sections` & `POST /api/v1/classes/{classId}/sections`: Sections.
-- `GET /api/v1/schools/{schoolId}/subjects` & `POST /api/v1/schools/{schoolId}/subjects`: Subjects.
+- `GET /api/v1/tenants/{tenantId}/subjects` & `POST /api/v1/tenants/{tenantId}/subjects`: Subjects.
 - `GET /intelligence/student/{studentId}/subjects`: Active subjects enrolled by a student.
 - `GET /intelligence/curriculum` & `POST /api/v1/curriculums`: National curriculums.
-- `GET /intelligence/syllabus/school/{subjectId}`: Weekly syllabus topics.
-- `POST /api/v1/syllabus/school/{subjectId}`: Add syllabus week & topics.
+- `GET /intelligence/syllabus/tenant/{subjectId}`: Weekly syllabus topics.
+- `POST /api/v1/syllabus/tenant/{subjectId}`: Add syllabus week & topics.
 - `POST /api/v1/enrollments`: Enroll student into a class section & session.
 - `POST /api/v1/assignments`: Assign teacher to section + subject + term.
 
@@ -186,14 +186,14 @@ Lightweight context for leaderboards in examsPRO and result sheets in ResultPRO.
 
 ## 6. Subscriptions Management
 
-- `PATCH /intelligence/subscription` (or `POST /api/v1/subscriptions`): Update School or User subscription.
-- `GET /api/v1/subscriptions/school/{schoolId}`: Returns active plan, limits, and real-time usage quotas.
-- `GET /api/v1/subscriptions/limits?school_id={id}&resource={students|teachers|results}`: Quick limit checker.
+- `PATCH /intelligence/subscription` (or `POST /api/v1/subscriptions`): Update Tenant or User subscription.
+- `GET /api/v1/subscriptions/tenant/{tenantId}`: Returns active plan, limits, and real-time usage quotas.
+- `GET /api/v1/subscriptions/limits?tenant_id={id}&resource={students|teachers|results}`: Quick limit checker.
 
 ---
 
 ## 7. Agent Network
 
-- `GET /intelligence/agent/{agentId}/portfolio`: List referred schools and verification status.
+- `GET /intelligence/agent/{agentId}/portfolio`: List referred tenants and verification status.
 - `GET /api/v1/agents/{agentId}/commissions`: Commission rate and earnings ledger.
 - `POST /api/v1/agents/{agentId}/payout`: Request payout withdrawal.

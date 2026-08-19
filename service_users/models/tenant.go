@@ -2,11 +2,14 @@ package models
 
 import "time"
 
-type School struct {
+type Tenant struct {
 	ID                    string     `json:"id"`
+	Type                  string     `json:"type"` // SCHOOL, FAMILY, CORPORATE
 	Name                  string     `json:"name"`
 	Slug                  string     `json:"slug"`
-	SchoolCode            string     `json:"school_code,omitempty"`
+	DefaultSubdomain      string     `json:"default_subdomain"` // e.g., oxford.resultspro.ng
+	CustomDomain          string     `json:"custom_domain,omitempty"`
+	TenantCode            string     `json:"tenant_code,omitempty"`
 	ShortName             string     `json:"short_name,omitempty"`
 	Motto                 string     `json:"motto,omitempty"`
 	LogoURL               string     `json:"logo_url,omitempty"`
@@ -25,16 +28,17 @@ type School struct {
 	ReferredByAgentID     string     `json:"referred_by_agent_id,omitempty"`
 	SubscriptionTier      string     `json:"subscription_tier,omitempty"` // FREE, BASIC, PRO, ENTERPRISE
 	SubscriptionExpiresAt *time.Time `json:"subscription_expires_at,omitempty"`
+	EnabledModules        string     `json:"enabled_modules,omitempty"` // JSON array e.g., ["resultspro", "examspro"]
 	Settings              string     `json:"settings,omitempty"` // JSON payload (theme, features, etc.)
 	CreatedAt             time.Time  `json:"created_at"`
 	UpdatedAt             time.Time  `json:"updated_at"`
 }
 
-type UserSchoolRole struct {
+type UserTenantRole struct {
 	ID        string    `json:"id"`
 	UserID    string    `json:"user_id"`
-	SchoolID  string    `json:"school_id"`
-	Role      string    `json:"role"` // student, teacher, parent, school-admin, super-admin, agent, platform-admin
+	TenantID  string    `json:"tenant_id"`
+	Role      string    `json:"role"` // student, teacher, parent, tenant-admin, super-admin, agent, platform-admin
 	Status    string    `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
@@ -63,7 +67,7 @@ type AgentCommission struct {
 type AgentEarning struct {
 	ID         string    `json:"id"`
 	AgentID    string    `json:"agent_id"`
-	SchoolID   string    `json:"school_id"`
+	TenantID   string    `json:"tenant_id"`
 	Amount     float64   `json:"amount"`
 	SourceType string    `json:"source_type"` // SCRATCH_CARD, TUITION, SUBSCRIPTION
 	SourceID   string    `json:"source_id,omitempty"`

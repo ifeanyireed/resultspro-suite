@@ -181,7 +181,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	// Fetch user roles for RBAC
 	var roles []string
-	rows, err := db.DB.Query("SELECT role FROM user_school_roles WHERE user_id = ? AND status = 'active'", user.ID)
+	rows, err := db.DB.Query("SELECT role FROM user_tenant_roles WHERE user_id = ? AND status = 'active'", user.ID)
 	if err == nil {
 		defer rows.Close()
 		for rows.Next() {
@@ -269,7 +269,7 @@ func HandleTokenRefresh(w http.ResponseWriter, r *http.Request) {
 
 	// Fetch user roles for RBAC
 	var roles []string
-	rows, err := db.DB.Query("SELECT role FROM user_school_roles WHERE user_id = ? AND status = 'active'", userID)
+	rows, err := db.DB.Query("SELECT role FROM user_tenant_roles WHERE user_id = ? AND status = 'active'", userID)
 	if err == nil {
 		defer rows.Close()
 		for rows.Next() {
@@ -357,7 +357,8 @@ func HandleIntrospect(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
-		Token string `json:"token"`
+		Token  string `json:"token"`
+		Domain string `json:"domain"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.Token == "" {
 		utils.JSONError(w, http.StatusBadRequest, "Token is required")
@@ -425,8 +426,40 @@ func HandleIntrospect(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var tenantID string
+	if input.Domain != "" {
+		// Resolve Tenant
+		err = db.DB.QueryRow("SELECT id FROM tenants WHERE default_subdomain = ? OR custom_domain = ?", input.Domain, input.Domain).Scan(&tenantID)
+		if err != nil {
+			utils.JSONResponse(w, http.StatusOK, models.IntrospectionResponse{
+				Active: false,
+				Reason: "tenant_not_found",
+				User:   &user,
+			})
+			return
+		}
+
+		// Check membership
+		var role string
+		err = db.DB.QueryRow("SELECT role FROM user_tenant_roles WHERE user_id = ? AND tenant_id = ? AND status = 'active'", userID, tenantID).Scan(&role)
+		
+		// If Super Admin, they have universal access
+		var isSuperAdmin bool
+		db.DB.QueryRow("SELECT 1 FROM user_tenant_roles WHERE user_id = ? AND role = 'super-admin' AND status = 'active' LIMIT 1", userID).Scan(&isSuperAdmin)
+
+		if err != nil && !isSuperAdmin {
+			utils.JSONResponse(w, http.StatusOK, models.IntrospectionResponse{
+				Active: false,
+				Reason: "user_not_in_tenant",
+				User:   &user,
+			})
+			return
+		}
+	}
+
 	utils.JSONResponse(w, http.StatusOK, models.IntrospectionResponse{
-		Active: true,
-		User:   &user,
+		Active:   true,
+		User:     &user,
+		TenantID: tenantID,
 	})
 }

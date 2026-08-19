@@ -13,8 +13,8 @@ type UserSubscription struct {
 	UpdatedAt time.Time  `json:"updated_at"`
 }
 
-type SchoolSubscriptionInfo struct {
-	SchoolID    string     `json:"school_id"`
+type TenantSubscriptionInfo struct {
+	TenantID    string     `json:"tenant_id"`
 	PlanName    string     `json:"plan_name"`
 	Status      string     `json:"status"` // ACTIVE, EXPIRED, TRIAL
 	ExpiresAt   *time.Time `json:"expires_at,omitempty"`
@@ -67,7 +67,7 @@ type Plan struct {
 
 type Invoice struct {
 	ID            string     `json:"id"`
-	SchoolID      string     `json:"school_id"`
+	TenantID      string     `json:"tenant_id"`
 	PlanID        string     `json:"plan_id"`
 	PlanName      string     `json:"plan_name"`
 	InvoiceNumber string     `json:"invoice_number"`
@@ -83,7 +83,7 @@ type Invoice struct {
 type PaymentTransaction struct {
 	ID            string     `json:"id"`
 	InvoiceID     string     `json:"invoice_id"`
-	SchoolID      string     `json:"school_id"`
+	TenantID      string     `json:"tenant_id"`
 	Amount        float64    `json:"amount"`
 	Currency      string     `json:"currency"`
 	PaymentMethod string     `json:"payment_method"` // PAYSTACK, STRIPE, FLUTTERWAVE, BANK_TRANSFER

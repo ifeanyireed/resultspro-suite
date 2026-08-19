@@ -170,7 +170,7 @@ func HandleMFAChallenge(w http.ResponseWriter, r *http.Request) {
 
 	// Fetch user roles for RBAC
 	var roles []string
-	rows, dbErr := db.DB.Query("SELECT role FROM user_school_roles WHERE user_id = ? AND status = 'active'", input.UserID)
+	rows, dbErr := db.DB.Query("SELECT role FROM user_tenant_roles WHERE user_id = ? AND status = 'active'", input.UserID)
 	if dbErr == nil {
 		defer rows.Close()
 		for rows.Next() {

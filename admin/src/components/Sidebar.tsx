@@ -14,8 +14,6 @@ export function Sidebar() {
       title: 'COMMAND CENTER',
       links: [
         { label: 'Suite Overview', href: '/overview', icon: LayoutDashboard },
-        { label: 'All Schools', href: '/schools', icon: Building2 },
-        { label: 'School Verifications', href: '/schools/verifications', icon: CheckCircle2, badge: '24' },
         { label: 'Universal Users', href: '/users', icon: Users },
       ],
     },
@@ -30,6 +28,7 @@ export function Sidebar() {
     {
       title: 'MODULAR SUITE CONTROLS',
       links: [
+        { label: 'SchoolHUB (Tenants)', href: '/schoolhub', icon: Building2 },
         { label: 'ResultPRO', href: '/resultspro', icon: FileCheck2 },
         { label: 'ExamsPRO', href: '/exampro', icon: Sparkles },
         { label: 'ClassroomPRO', href: '/classroompro', icon: BookOpen },

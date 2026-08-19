@@ -103,13 +103,13 @@ func HandleGetParentChildren(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query := `
-		SELECT fr.id, fr.child_user_id, u.full_name, u.email, u.avatar_url, fr.relationship_type, fr.is_emergency_contact, c.name as class_name, s.name as school_name
+		SELECT fr.id, fr.child_user_id, u.full_name, u.email, u.avatar_url, fr.relationship_type, fr.is_emergency_contact, c.name as class_name, s.name as tenant_name
 		FROM family_relationships fr
 		JOIN users u ON fr.child_user_id = u.id
 		LEFT JOIN enrollments e ON fr.child_user_id = e.student_id AND e.status = 'active'
 		LEFT JOIN sections sec ON e.section_id = sec.id
 		LEFT JOIN classes c ON sec.class_id = c.id
-		LEFT JOIN schools s ON c.school_id = s.id
+		LEFT JOIN tenants s ON c.tenant_id = s.id
 		WHERE fr.parent_user_id = ?`
 
 	rows, err := db.DB.Query(query, parentID)
@@ -128,14 +128,14 @@ func HandleGetParentChildren(w http.ResponseWriter, r *http.Request) {
 		RelationshipType   string `json:"relationship_type"`
 		IsEmergencyContact bool   `json:"is_emergency_contact"`
 		ClassName          string `json:"class_name,omitempty"`
-		SchoolName         string `json:"school_name,omitempty"`
+		TenantName         string `json:"tenant_name,omitempty"`
 	}
 
 	children := []ChildProfile{}
 	for rows.Next() {
 		var cp ChildProfile
-		var fullName, avatar, className, schoolName sql.NullString
-		if err := rows.Scan(&cp.RelationshipID, &cp.ChildUserID, &fullName, &cp.Email, &avatar, &cp.RelationshipType, &cp.IsEmergencyContact, &className, &schoolName); err == nil {
+		var fullName, avatar, className, tenantName sql.NullString
+		if err := rows.Scan(&cp.RelationshipID, &cp.ChildUserID, &fullName, &cp.Email, &avatar, &cp.RelationshipType, &cp.IsEmergencyContact, &className, &tenantName); err == nil {
 			if fullName.Valid {
 				cp.FullName = fullName.String
 			}
@@ -145,8 +145,8 @@ func HandleGetParentChildren(w http.ResponseWriter, r *http.Request) {
 			if className.Valid {
 				cp.ClassName = className.String
 			}
-			if schoolName.Valid {
-				cp.SchoolName = schoolName.String
+			if tenantName.Valid {
+				cp.TenantName = tenantName.String
 			}
 			children = append(children, cp)
 		}

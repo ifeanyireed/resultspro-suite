@@ -1,6 +1,6 @@
 # Sub-App Integration Guide for `service_users`
 
-This document details how downstream applications in the **ResultsPRO Suite** (`ResultPRO`, `ClassroomPRO`, `examsPRO`, `TutorsPRO`, `SchoolHub`, `SchoolHubApp`, `resultspro_ng`) interact with `service_users`.
+This document details how downstream applications in the **ResultsPRO Suite** (`ResultPRO`, `ClassroomPRO`, `examsPRO`, `TutorsPRO`, `TenantHub`, `TenantHubApp`, `resultspro_ng`) interact with `service_users`.
 
 ---
 
@@ -57,11 +57,11 @@ async function authMiddleware(req, res, next) {
 ### 📊 ResultPRO (Assessments & Gradebooks)
 - **Profile Context**: Fetches student class and subjects via `GET /intelligence/student/{studentId}/subjects`.
 - **Parent Access**: Protects student report card downloads with `GET /intelligence/verify-relation?parent={parentId}&child={studentId}`.
-- **Subscriptions**: Verifies results processing limits via `GET /api/v1/subscriptions/limits?school_id={id}&resource=results`.
+- **Subscriptions**: Verifies results processing limits via `GET /api/v1/subscriptions/limits?tenant_id={id}&resource=results`.
 
 ### 📚 ClassroomPRO (LMS & Study Materials)
-- **Classroom Roster**: Fetches class hierarchy and students via `/intelligence/school/{schoolId}/hierarchy`.
-- **Syllabus Sync**: Pulls official curriculum topics from `/intelligence/syllabus/school/{subjectId}` to anchor study notes and lesson plans.
+- **Classroom Roster**: Fetches class hierarchy and students via `/intelligence/tenant/{tenantId}/hierarchy`.
+- **Syllabus Sync**: Pulls official curriculum topics from `/intelligence/syllabus/tenant/{subjectId}` to anchor study notes and lesson plans.
 - **Resource Linking**: Registers quizzes and study flashcards to syllabus topics via `POST /api/v1/resources/link`.
 
 ### ⚡ examsPRO (CBT Engine & Gamification)
@@ -72,6 +72,6 @@ async function authMiddleware(req, res, next) {
 - **Expertise Validation**: Validates tutor expertise against standardized subjects in `service_users`.
 - **Guardian Verification**: Confirms parent relationship before booking tutoring appointments for a student.
 
-### 🏫 SchoolHub & SchoolHubApp (Parent Portal & White-Label App)
-- **Dynamic Skinning**: Skins UI on-the-fly using branding data from `GET /intelligence/school/{schoolId}/branding` (motto, logo, colors, and custom hero content).
+### 🏫 TenantHub & TenantHubApp (Parent Portal & White-Label App)
+- **Dynamic Skinning**: Skins UI on-the-fly using branding data from `GET /intelligence/tenant/{tenantId}/branding` (motto, logo, colors, and custom hero content).
 - **Parent Dashboards**: Fetches all linked children for a parent via `GET /api/v1/family/parents/{parentId}/children`.

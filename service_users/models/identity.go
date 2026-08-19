@@ -55,9 +55,10 @@ type MFASetupResponse struct {
 }
 
 type IntrospectionResponse struct {
-	Active bool       `json:"active"`
-	Reason string     `json:"reason,omitempty"`
-	User   *UserBrief `json:"user,omitempty"`
+	Active   bool       `json:"active"`
+	Reason   string     `json:"reason,omitempty"`
+	User     *UserBrief `json:"user,omitempty"`
+	TenantID string     `json:"tenant_id,omitempty"`
 }
 
 type UserBrief struct {

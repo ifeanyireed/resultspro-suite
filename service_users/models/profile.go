@@ -18,12 +18,12 @@ type AcademicProfile struct {
 }
 
 type RoleDetail struct {
-	SchoolID              string     `json:"school_id"`
-	SchoolName            string     `json:"school_name"`
-	SchoolSlug            string     `json:"school_slug"`
+	TenantID              string     `json:"tenant_id"`
+	TenantName            string     `json:"tenant_name"`
+	TenantSlug            string     `json:"tenant_slug"`
 	SubscriptionTier      string     `json:"subscription_tier,omitempty"`
 	SubscriptionExpiresAt *time.Time `json:"subscription_expires_at,omitempty"`
-	Role                  string     `json:"role"` // student, teacher, parent, school-admin, super-admin, agent
+	Role                  string     `json:"role"` // student, teacher, parent, tenant-admin, super-admin, agent
 	Status                string     `json:"status"`
 }
 
@@ -31,13 +31,13 @@ type DependentDetail struct {
 	UserID       string `json:"user_id"`
 	FullName     string `json:"full_name,omitempty"`
 	Relationship string `json:"relationship"`
-	SchoolID     string `json:"school_id,omitempty"`
+	TenantID     string `json:"tenant_id,omitempty"`
 	ClassName    string `json:"class_name,omitempty"`
 }
 
 type EnrollmentDetail struct {
-	SchoolID    string `json:"school_id"`
-	SchoolName  string `json:"school_name,omitempty"`
+	TenantID    string `json:"tenant_id"`
+	TenantName  string `json:"tenant_name,omitempty"`
 	ClassID     string `json:"class_id,omitempty"`
 	ClassName   string `json:"class_name"`
 	SectionID   string `json:"section_id,omitempty"`
@@ -47,8 +47,8 @@ type EnrollmentDetail struct {
 }
 
 type TeachingDetail struct {
-	SchoolID    string `json:"school_id"`
-	SchoolName  string `json:"school_name,omitempty"`
+	TenantID    string `json:"tenant_id"`
+	TenantName  string `json:"tenant_name,omitempty"`
 	ClassID     string `json:"class_id,omitempty"`
 	ClassName   string `json:"class_name"`
 	SectionID   string `json:"section_id,omitempty"`
@@ -64,7 +64,7 @@ type BulkProfileContext struct {
 	UserID     string `json:"user_id"`
 	FullName   string `json:"full_name,omitempty"`
 	Email      string `json:"email,omitempty"`
-	SchoolName string `json:"school_name"`
+	TenantName string `json:"tenant_name"`
 	ClassName  string `json:"class_name,omitempty"`
 	Role       string `json:"role"`
 }

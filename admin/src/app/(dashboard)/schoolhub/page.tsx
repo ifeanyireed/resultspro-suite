@@ -7,7 +7,7 @@ import { Building2, Search, Filter, CheckCircle2, XCircle, ExternalLink, MoreVer
 import { fetchSchools, verifySchool } from '@/lib/api';
 import { School } from '@/lib/types';
 
-export default function SchoolsPage() {
+export default function SchoolHubPage() {
   const [schools, setSchools] = useState<School[]>([]);
   const [search, setSearch] = useState('');
   const [filterTier, setFilterTier] = useState('ALL');
@@ -43,8 +43,8 @@ export default function SchoolsPage() {
   return (
     <div className="flex-1 flex flex-col bg-slate-50/50 min-h-full">
       <Header
-        title="Organizations & Schools"
-        subtitle="Manage multi-tenant school institutions, tiers, and white-label branding"
+        title="SchoolHUB (Tenants)"
+        subtitle="Manage multi-tenant institutions, tiers, and white-label branding"
       />
 
       <div className="p-8 space-y-8 max-w-[1400px] mx-auto w-full">
@@ -102,7 +102,7 @@ export default function SchoolsPage() {
             <table className="w-full text-left">
               <thead className="bg-slate-50/80 border-b border-slate-100">
                 <tr>
-                  <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">School Name</th>
+                  <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Tenant Name</th>
                   <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Contact Email</th>
                   <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Subscription Tier</th>
                   <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Verification</th>
@@ -173,8 +173,8 @@ export default function SchoolsPage() {
                         <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
                           <Building2 className="w-8 h-8 text-slate-300" />
                         </div>
-                        <h3 className="text-slate-900 font-bold text-lg mb-1">No Schools Found</h3>
-                        <p className="text-slate-500 text-sm max-w-sm">We couldn't find any schools matching your current filter criteria.</p>
+                        <h3 className="text-slate-900 font-bold text-lg mb-1">No Tenants Found</h3>
+                        <p className="text-slate-500 text-sm max-w-sm">We couldn't find any tenants matching your current filter criteria.</p>
                       </div>
                     </td>
                   </tr>

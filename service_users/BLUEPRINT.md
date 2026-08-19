@@ -21,8 +21,8 @@ graph TD
     B --> B3["TOTP Multi-Factor Authentication"]
     B --> B4["Sub-App Token Introspection"]
 
-    C --> C1["Schools &amp; Multi-Tenant Organizations"]
-    C --> C2["Dynamic SchoolHub Skinning &amp; Branding"]
+    C --> C1["Tenants &amp; Multi-Tenant Organizations"]
+    C --> C2["Dynamic TenantHub Skinning &amp; Branding"]
     C --> C3["Role Assignments (Student/Teacher/Admin)"]
     C --> C4["Family Graph (Parent-Child Linking)"]
 
@@ -36,7 +36,7 @@ graph TD
     E --> E2["Resource Quotas (Students, Teachers, Results)"]
     E --> E3["Family &amp; Agent Subscriptions"]
 
-    F --> F1["Agent School Portfolios"]
+    F --> F1["Agent Tenant Portfolios"]
     F --> F2["Commission Ledgers &amp; Payout Requests"]
 ```
 
@@ -48,13 +48,13 @@ The cornerstone of the ResultsPRO suite is the **Universal Profile Discovery Han
 
 When any user logs in through the single sign-on gateway:
 1. The gateway issues a signed JWT.
-2. Any downstream app (`ResultPRO`, `ClassroomPRO`, `examsPRO`, `TutorsPRO`, `SchoolHub`) takes the `user_id` and calls `service_users` to resolve context.
+2. Any downstream app (`ResultPRO`, `ClassroomPRO`, `examsPRO`, `TutorsPRO`, `TenantHub`) takes the `user_id` and calls `service_users` to resolve context.
 3. The handshake returns:
    - **Identity Profile**: Full name, email, avatar, phone, account status.
-   - **School Roles**: All schools where the user has active roles (`student`, `teacher`, `parent`, `school-admin`, `super-admin`, `agent`).
-   - **Subscriptions**: School-level plan tiers and personal family/agent subscription tiers.
+   - **Tenant Roles**: All tenants where the user has active roles (`student`, `teacher`, `parent`, `tenant-admin`, `super-admin`, `agent`).
+   - **Subscriptions**: Tenant-level plan tiers and personal family/agent subscription tiers.
    - **Dependents**: If parent, returns child user IDs, names, and enrolled classes.
-   - **Enrollments**: If student, returns class, section, session, and school.
+   - **Enrollments**: If student, returns class, section, session, and tenant.
    - **Teaching Assignments**: If teacher, returns subjects, classes, sections, and terms.
 
 ---
@@ -62,6 +62,6 @@ When any user logs in through the single sign-on gateway:
 ## 4. Database Topology & Charset
 
 - **Engine**: MySQL 8+ / MariaDB with `InnoDB`.
-- **Charset & Collation**: `utf8mb4` with `utf8mb4_unicode_ci` for full emoji and international character support (e.g. school logo emojis).
+- **Charset & Collation**: `utf8mb4` with `utf8mb4_unicode_ci` for full emoji and international character support (e.g. tenant logo emojis).
 - **UUID Strategy**: `VARCHAR(191)` primary keys for seamless distributed UUID generation across microservices.
 - **Connection Pool**: 50 max open connections, 25 max idle connections, 5-minute connection recycling.

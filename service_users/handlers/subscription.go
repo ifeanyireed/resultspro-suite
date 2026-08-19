@@ -14,7 +14,7 @@ import (
 	"service_users.resultspro.ng/utils"
 )
 
-// HandleUpdateSubscription updates subscription tier and expiry for a school or user
+// HandleUpdateSubscription updates subscription tier and expiry for a tenant or user
 func HandleUpdateSubscription(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPatch && r.Method != http.MethodPost {
 		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
@@ -22,8 +22,8 @@ func HandleUpdateSubscription(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
-		TargetType string `json:"target_type"` // SCHOOL, FAMILY, AGENT
-		TargetID   string `json:"target_id"`   // school_id or user_id
+		TargetType string `json:"target_type"` // TENANT, FAMILY, AGENT
+		TargetID   string `json:"target_id"`   // tenant_id or user_id
 		Tier       string `json:"tier"`        // FREE, BASIC, PRO, ENTERPRISE / PREMIUM
 		ExpiresAt  string `json:"expires_at"`  // YYYY-MM-DD HH:MM:SS or RFC3339
 	}
@@ -49,12 +49,12 @@ func HandleUpdateSubscription(w http.ResponseWriter, r *http.Request) {
 
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
 
-	if targetType == "SCHOOL" {
-		query := "UPDATE schools SET subscription_tier = ?, subscription_expires_at = ?, updated_at = ? WHERE id = ?"
+	if targetType == "TENANT" {
+		query := "UPDATE tenants SET subscription_tier = ?, subscription_expires_at = ?, updated_at = ? WHERE id = ?"
 		_, err := db.DB.Exec(query, tier, expiresVal, now, input.TargetID)
 		if err != nil {
-			log.Printf("Update school subscription error: %v", err)
-			utils.JSONError(w, http.StatusInternalServerError, "Failed to update school subscription")
+			log.Printf("Update tenant subscription error: %v", err)
+			utils.JSONError(w, http.StatusInternalServerError, "Failed to update tenant subscription")
 			return
 		}
 	} else if targetType == "FAMILY" || targetType == "AGENT" {
@@ -71,7 +71,7 @@ func HandleUpdateSubscription(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		utils.JSONError(w, http.StatusBadRequest, "Invalid target_type. Must be SCHOOL, FAMILY, or AGENT")
+		utils.JSONError(w, http.StatusBadRequest, "Invalid target_type. Must be TENANT, FAMILY, or AGENT")
 		return
 	}
 
@@ -83,15 +83,15 @@ func HandleUpdateSubscription(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// HandleGetSchoolSubscription retrieves active plan, limits, and real-time usage for a school
-func HandleGetSchoolSubscription(w http.ResponseWriter, r *http.Request) {
+// HandleGetTenantSubscription retrieves active plan, limits, and real-time usage for a tenant
+func HandleGetTenantSubscription(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
-	schoolID := parts[len(parts)-1]
+	tenantID := parts[len(parts)-1]
 
 	var tier, expires sql.NullString
-	err := db.DB.QueryRow("SELECT subscription_tier, subscription_expires_at FROM schools WHERE id = ?", schoolID).Scan(&tier, &expires)
+	err := db.DB.QueryRow("SELECT subscription_tier, subscription_expires_at FROM tenants WHERE id = ?", tenantID).Scan(&tier, &expires)
 	if err != nil {
-		utils.JSONError(w, http.StatusNotFound, "School not found")
+		utils.JSONError(w, http.StatusNotFound, "Tenant not found")
 		return
 	}
 
@@ -106,15 +106,15 @@ func HandleGetSchoolSubscription(w http.ResponseWriter, r *http.Request) {
 	var studentCount int
 	db.DB.QueryRow(`
 		SELECT COUNT(DISTINCT r.user_id) 
-		FROM user_school_roles r 
-		WHERE r.school_id = ? AND r.role = 'student' AND r.status = 'active'`, schoolID).Scan(&studentCount)
+		FROM user_tenant_roles r 
+		WHERE r.tenant_id = ? AND r.role = 'student' AND r.status = 'active'`, tenantID).Scan(&studentCount)
 
 	// Calculate teacher count
 	var teacherCount int
 	db.DB.QueryRow(`
 		SELECT COUNT(DISTINCT r.user_id) 
-		FROM user_school_roles r 
-		WHERE r.school_id = ? AND r.role = 'teacher' AND r.status = 'active'`, schoolID).Scan(&teacherCount)
+		FROM user_tenant_roles r 
+		WHERE r.tenant_id = ? AND r.role = 'teacher' AND r.status = 'active'`, tenantID).Scan(&teacherCount)
 
 	var expiresAt *time.Time
 	status := "ACTIVE"
@@ -146,7 +146,7 @@ func HandleGetSchoolSubscription(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
-		"school_id":   schoolID,
+		"tenant_id":   tenantID,
 		"plan_name":   planName,
 		"status":      status,
 		"expires_at":  expiresAt,
@@ -184,20 +184,20 @@ func HandleGetUserSubscription(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusOK, subs)
 }
 
-// HandleCheckSubscriptionLimits validates whether an action is allowed for a school
+// HandleCheckSubscriptionLimits validates whether an action is allowed for a tenant
 func HandleCheckSubscriptionLimits(w http.ResponseWriter, r *http.Request) {
-	schoolID := r.URL.Query().Get("school_id")
+	tenantID := r.URL.Query().Get("tenant_id")
 	resource := r.URL.Query().Get("resource") // students, teachers, results
 
-	if schoolID == "" {
-		utils.JSONError(w, http.StatusBadRequest, "school_id parameter is required")
+	if tenantID == "" {
+		utils.JSONError(w, http.StatusBadRequest, "tenant_id parameter is required")
 		return
 	}
 
 	var tier sql.NullString
-	err := db.DB.QueryRow("SELECT subscription_tier FROM schools WHERE id = ?", schoolID).Scan(&tier)
+	err := db.DB.QueryRow("SELECT subscription_tier FROM tenants WHERE id = ?", tenantID).Scan(&tier)
 	if err != nil {
-		utils.JSONError(w, http.StatusNotFound, "School not found")
+		utils.JSONError(w, http.StatusNotFound, "Tenant not found")
 		return
 	}
 
@@ -211,7 +211,7 @@ func HandleCheckSubscriptionLimits(w http.ResponseWriter, r *http.Request) {
 	switch strings.ToLower(resource) {
 	case "students":
 		var count int
-		db.DB.QueryRow("SELECT COUNT(DISTINCT user_id) FROM user_school_roles WHERE school_id = ? AND role = 'student' AND status = 'active'", schoolID).Scan(&count)
+		db.DB.QueryRow("SELECT COUNT(DISTINCT user_id) FROM user_tenant_roles WHERE tenant_id = ? AND role = 'student' AND status = 'active'", tenantID).Scan(&count)
 		allowed := count < limits.MaxStudents
 		utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
 			"allowed":      allowed,
@@ -221,7 +221,7 @@ func HandleCheckSubscriptionLimits(w http.ResponseWriter, r *http.Request) {
 		})
 	case "teachers":
 		var count int
-		db.DB.QueryRow("SELECT COUNT(DISTINCT user_id) FROM user_school_roles WHERE school_id = ? AND role = 'teacher' AND status = 'active'", schoolID).Scan(&count)
+		db.DB.QueryRow("SELECT COUNT(DISTINCT user_id) FROM user_tenant_roles WHERE tenant_id = ? AND role = 'teacher' AND status = 'active'", tenantID).Scan(&count)
 		allowed := count < limits.MaxTeachers
 		utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
 			"allowed":      allowed,
@@ -274,12 +274,12 @@ func HandleGetPlans(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusOK, plans)
 }
 
-// HandleGetSchoolInvoices retrieves billing invoice history for a school
-func HandleGetSchoolInvoices(w http.ResponseWriter, r *http.Request) {
+// HandleGetTenantInvoices retrieves billing invoice history for a tenant
+func HandleGetTenantInvoices(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
-	schoolID := parts[len(parts)-1]
+	tenantID := parts[len(parts)-1]
 
-	rows, err := db.DB.Query("SELECT id, school_id, plan_id, plan_name, invoice_number, amount, currency, status, billing_cycle, due_date, paid_at, created_at FROM invoices WHERE school_id = ? ORDER BY created_at DESC", schoolID)
+	rows, err := db.DB.Query("SELECT id, tenant_id, plan_id, plan_name, invoice_number, amount, currency, status, billing_cycle, due_date, paid_at, created_at FROM invoices WHERE tenant_id = ? ORDER BY created_at DESC", tenantID)
 	if err != nil {
 		utils.JSONResponse(w, http.StatusOK, []models.Invoice{})
 		return
@@ -290,7 +290,7 @@ func HandleGetSchoolInvoices(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		var inv models.Invoice
 		var paidAt sql.NullString
-		if err := rows.Scan(&inv.ID, &inv.SchoolID, &inv.PlanID, &inv.PlanName, &inv.InvoiceNumber, &inv.Amount, &inv.Currency, &inv.Status, &inv.BillingCycle, &inv.DueDate, &paidAt, &inv.CreatedAt); err == nil {
+		if err := rows.Scan(&inv.ID, &inv.TenantID, &inv.PlanID, &inv.PlanName, &inv.InvoiceNumber, &inv.Amount, &inv.Currency, &inv.Status, &inv.BillingCycle, &inv.DueDate, &paidAt, &inv.CreatedAt); err == nil {
 			if paidAt.Valid {
 				t, _ := time.Parse("2006-01-02 15:04:05", paidAt.String)
 				inv.PaidAt = &t

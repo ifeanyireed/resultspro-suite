@@ -11,7 +11,7 @@ type Curriculum struct {
 
 type AcademicSession struct {
 	ID        string    `json:"id"`
-	SchoolID  string    `json:"school_id"`
+	TenantID  string    `json:"tenant_id"`
 	Name      string    `json:"name"`
 	StartDate time.Time `json:"start_date"`
 	EndDate   time.Time `json:"end_date"`
@@ -31,7 +31,7 @@ type Term struct {
 
 type Class struct {
 	ID           string    `json:"id"`
-	SchoolID     string    `json:"school_id"`
+	TenantID     string    `json:"tenant_id"`
 	CurriculumID string    `json:"curriculum_id,omitempty"`
 	Name         string    `json:"name"`
 	Level        int       `json:"level"`
@@ -50,7 +50,7 @@ type Section struct {
 
 type Subject struct {
 	ID        string    `json:"id"`
-	SchoolID  string    `json:"school_id"`
+	TenantID  string    `json:"tenant_id"`
 	Name      string    `json:"name"`
 	Code      string    `json:"code"`
 	CreatedAt time.Time `json:"created_at"`
@@ -139,7 +139,7 @@ type StudentProgress struct {
 type EngagementMetric struct {
 	ID        string    `json:"id"`
 	StudentID string    `json:"student_id"`
-	SchoolID  string    `json:"school_id"`
+	TenantID  string    `json:"tenant_id"`
 	Type      string    `json:"type"`
 	Value     float64   `json:"value"`
 	Metadata  string    `json:"metadata"`

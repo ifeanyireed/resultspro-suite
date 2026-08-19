@@ -196,7 +196,7 @@ func processOAuthUser(w http.ResponseWriter, r *http.Request, googleID, microsof
 
 	// Generate tokens
 	var roles []string
-	rows, dbErr := db.DB.Query("SELECT role FROM user_school_roles WHERE user_id = ? AND status = 'active'", user.ID)
+	rows, dbErr := db.DB.Query("SELECT role FROM user_tenant_roles WHERE user_id = ? AND status = 'active'", user.ID)
 	if dbErr == nil {
 		defer rows.Close()
 		for rows.Next() {

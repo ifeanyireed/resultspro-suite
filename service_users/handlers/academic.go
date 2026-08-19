@@ -23,15 +23,15 @@ func HandleCreateSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
-		SchoolID  string `json:"school_id"`
+		TenantID  string `json:"tenant_id"`
 		Name      string `json:"name"`
 		StartDate string `json:"start_date"`
 		EndDate   string `json:"end_date"`
 		IsCurrent bool   `json:"is_current"`
 	}
 
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.SchoolID == "" || input.Name == "" {
-		utils.JSONError(w, http.StatusBadRequest, "school_id and name are required")
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.TenantID == "" || input.Name == "" {
+		utils.JSONError(w, http.StatusBadRequest, "tenant_id and name are required")
 		return
 	}
 
@@ -39,11 +39,11 @@ func HandleCreateSession(w http.ResponseWriter, r *http.Request) {
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
 
 	if input.IsCurrent {
-		db.DB.Exec("UPDATE academic_sessions SET is_current = 0 WHERE school_id = ?", input.SchoolID)
+		db.DB.Exec("UPDATE academic_sessions SET is_current = 0 WHERE tenant_id = ?", input.TenantID)
 	}
 
-	query := `INSERT INTO academic_sessions (id, school_id, name, start_date, end_date, is_current, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-	_, err := db.DB.Exec(query, sessionID, input.SchoolID, input.Name, input.StartDate, input.EndDate, input.IsCurrent, now, now)
+	query := `INSERT INTO academic_sessions (id, tenant_id, name, start_date, end_date, is_current, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+	_, err := db.DB.Exec(query, sessionID, input.TenantID, input.Name, input.StartDate, input.EndDate, input.IsCurrent, now, now)
 	if err != nil {
 		log.Printf("Create session error: %v", err)
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to create academic session")
@@ -58,22 +58,22 @@ func HandleCreateSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleGetSessions(w http.ResponseWriter, r *http.Request) {
-	schoolID := r.URL.Query().Get("school_id")
-	if schoolID == "" {
+	tenantID := r.URL.Query().Get("tenant_id")
+	if tenantID == "" {
 		parts := strings.Split(r.URL.Path, "/")
 		for i, part := range parts {
-			if (part == "schools" || part == "school") && i+1 < len(parts) {
-				schoolID = parts[i+1]
+			if (part == "tenants" || part == "tenant") && i+1 < len(parts) {
+				tenantID = parts[i+1]
 				break
 			}
 		}
 	}
 
-	query := "SELECT id, school_id, name, start_date, end_date, is_current, created_at FROM academic_sessions WHERE 1=1"
+	query := "SELECT id, tenant_id, name, start_date, end_date, is_current, created_at FROM academic_sessions WHERE 1=1"
 	args := []interface{}{}
-	if schoolID != "" {
-		query += " AND school_id = ?"
-		args = append(args, schoolID)
+	if tenantID != "" {
+		query += " AND tenant_id = ?"
+		args = append(args, tenantID)
 	}
 	query += " ORDER BY start_date DESC, created_at DESC"
 
@@ -88,7 +88,7 @@ func HandleGetSessions(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		var s models.AcademicSession
 		var start, end sql.NullString
-		if err := rows.Scan(&s.ID, &s.SchoolID, &s.Name, &start, &end, &s.IsCurrent, &s.CreatedAt); err == nil {
+		if err := rows.Scan(&s.ID, &s.TenantID, &s.Name, &start, &end, &s.IsCurrent, &s.CreatedAt); err == nil {
 			if start.Valid {
 				t, _ := time.Parse("2006-01-02 15:04:05", start.String)
 				s.StartDate = t
@@ -188,22 +188,22 @@ func HandleCreateClass(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
-		SchoolID     string `json:"school_id"`
+		TenantID     string `json:"tenant_id"`
 		CurriculumID string `json:"curriculum_id"`
 		Name         string `json:"name"`
 		Level        int    `json:"level"`
 	}
 
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.SchoolID == "" || input.Name == "" {
-		utils.JSONError(w, http.StatusBadRequest, "school_id and name are required")
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.TenantID == "" || input.Name == "" {
+		utils.JSONError(w, http.StatusBadRequest, "tenant_id and name are required")
 		return
 	}
 
 	classID := uuid.New().String()
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
 
-	query := `INSERT INTO classes (id, school_id, curriculum_id, name, level, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)`
-	_, err := db.DB.Exec(query, classID, input.SchoolID, sql.NullString{String: input.CurriculumID, Valid: input.CurriculumID != ""}, input.Name, input.Level, now, now)
+	query := `INSERT INTO classes (id, tenant_id, curriculum_id, name, level, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)`
+	_, err := db.DB.Exec(query, classID, input.TenantID, sql.NullString{String: input.CurriculumID, Valid: input.CurriculumID != ""}, input.Name, input.Level, now, now)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to create class")
 		return
@@ -217,22 +217,22 @@ func HandleCreateClass(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleGetClasses(w http.ResponseWriter, r *http.Request) {
-	schoolID := r.URL.Query().Get("school_id")
-	if schoolID == "" {
+	tenantID := r.URL.Query().Get("tenant_id")
+	if tenantID == "" {
 		parts := strings.Split(r.URL.Path, "/")
 		for i, part := range parts {
-			if (part == "schools" || part == "school") && i+1 < len(parts) {
-				schoolID = parts[i+1]
+			if (part == "tenants" || part == "tenant") && i+1 < len(parts) {
+				tenantID = parts[i+1]
 				break
 			}
 		}
 	}
 
-	query := "SELECT id, school_id, curriculum_id, name, level, created_at FROM classes WHERE 1=1"
+	query := "SELECT id, tenant_id, curriculum_id, name, level, created_at FROM classes WHERE 1=1"
 	args := []interface{}{}
-	if schoolID != "" {
-		query += " AND school_id = ?"
-		args = append(args, schoolID)
+	if tenantID != "" {
+		query += " AND tenant_id = ?"
+		args = append(args, tenantID)
 	}
 	query += " ORDER BY level ASC, name ASC"
 
@@ -247,7 +247,7 @@ func HandleGetClasses(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		var c models.Class
 		var curID sql.NullString
-		if err := rows.Scan(&c.ID, &c.SchoolID, &curID, &c.Name, &c.Level, &c.CreatedAt); err == nil {
+		if err := rows.Scan(&c.ID, &c.TenantID, &curID, &c.Name, &c.Level, &c.CreatedAt); err == nil {
 			if curID.Valid {
 				c.CurriculumID = curID.String
 			}
@@ -342,21 +342,21 @@ func HandleCreateSubject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
-		SchoolID string `json:"school_id"`
+		TenantID string `json:"tenant_id"`
 		Name     string `json:"name"`
 		Code     string `json:"code"`
 	}
 
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.SchoolID == "" || input.Name == "" {
-		utils.JSONError(w, http.StatusBadRequest, "school_id and name are required")
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.TenantID == "" || input.Name == "" {
+		utils.JSONError(w, http.StatusBadRequest, "tenant_id and name are required")
 		return
 	}
 
 	subjectID := uuid.New().String()
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
 
-	query := `INSERT INTO subjects (id, school_id, name, code, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)`
-	_, err := db.DB.Exec(query, subjectID, input.SchoolID, input.Name, sql.NullString{String: input.Code, Valid: input.Code != ""}, now, now)
+	query := `INSERT INTO subjects (id, tenant_id, name, code, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)`
+	_, err := db.DB.Exec(query, subjectID, input.TenantID, input.Name, sql.NullString{String: input.Code, Valid: input.Code != ""}, now, now)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to create subject")
 		return
@@ -371,22 +371,22 @@ func HandleCreateSubject(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleGetSubjects(w http.ResponseWriter, r *http.Request) {
-	schoolID := r.URL.Query().Get("school_id")
-	if schoolID == "" {
+	tenantID := r.URL.Query().Get("tenant_id")
+	if tenantID == "" {
 		parts := strings.Split(r.URL.Path, "/")
 		for i, part := range parts {
-			if (part == "schools" || part == "school") && i+1 < len(parts) {
-				schoolID = parts[i+1]
+			if (part == "tenants" || part == "tenant") && i+1 < len(parts) {
+				tenantID = parts[i+1]
 				break
 			}
 		}
 	}
 
-	query := "SELECT id, school_id, name, code, created_at FROM subjects WHERE 1=1"
+	query := "SELECT id, tenant_id, name, code, created_at FROM subjects WHERE 1=1"
 	args := []interface{}{}
-	if schoolID != "" {
-		query += " AND school_id = ?"
-		args = append(args, schoolID)
+	if tenantID != "" {
+		query += " AND tenant_id = ?"
+		args = append(args, tenantID)
 	}
 	query += " ORDER BY name ASC"
 
@@ -401,7 +401,7 @@ func HandleGetSubjects(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		var s models.Subject
 		var code sql.NullString
-		if err := rows.Scan(&s.ID, &s.SchoolID, &s.Name, &code, &s.CreatedAt); err == nil {
+		if err := rows.Scan(&s.ID, &s.TenantID, &s.Name, &code, &s.CreatedAt); err == nil {
 			if code.Valid {
 				s.Code = code.String
 			}
@@ -536,8 +536,8 @@ func HandleCreateCurriculum(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusCreated, map[string]string{"id": id, "name": input.Name})
 }
 
-// HandleGetSchoolSyllabus returns the weekly breakdown and topics for a subject
-func HandleGetSchoolSyllabus(w http.ResponseWriter, r *http.Request) {
+// HandleGetTenantSyllabus returns the weekly breakdown and topics for a subject
+func HandleGetTenantSyllabus(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 	subjectID := parts[len(parts)-1]
 
@@ -910,7 +910,7 @@ func HandleGetTeacherAssignments(w http.ResponseWriter, r *http.Request) {
 		JOIN classes c ON sec.class_id = c.id
 		JOIN subjects sub ON a.subject_id = sub.id
 		JOIN terms t ON a.term_id = t.id
-		JOIN schools s ON c.school_id = s.id
+		JOIN tenants s ON c.tenant_id = s.id
 		WHERE a.teacher_id = ?`
 
 	rows, err := db.DB.Query(query, teacherID)
@@ -929,13 +929,13 @@ func HandleGetTeacherAssignments(w http.ResponseWriter, r *http.Request) {
 		SubjectName string `json:"subject_name"`
 		TermID      string `json:"term_id"`
 		TermName    string `json:"term_name"`
-		SchoolName  string `json:"school_name"`
+		TenantName  string `json:"tenant_name"`
 	}
 
 	results := []AssignmentView{}
 	for rows.Next() {
 		var av AssignmentView
-		if err := rows.Scan(&av.ID, &av.SectionID, &av.SectionName, &av.ClassName, &av.SubjectID, &av.SubjectName, &av.TermID, &av.TermName, &av.SchoolName); err == nil {
+		if err := rows.Scan(&av.ID, &av.SectionID, &av.SectionName, &av.ClassName, &av.SubjectID, &av.SubjectName, &av.TermID, &av.TermName, &av.TenantName); err == nil {
 			results = append(results, av)
 		}
 	}

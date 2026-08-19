@@ -19,7 +19,8 @@ type IntrospectResponse struct {
 		FullName      string `json:"full_name"`
 		AccountStatus string `json:"account_status"`
 	} `json:"user"`
-	Reason string `json:"reason"`
+	TenantID string `json:"tenant_id"`
+	Reason   string `json:"reason"`
 }
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -35,7 +36,9 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		// Call service_users for introspection
 		introspectURL := config.AppConfig.UsersServiceURL + "/auth/introspect"
-		payload, _ := json.Marshal(map[string]string{"token": token})
+		domain := c.GetHeader("X-Tenant-Domain")
+
+		payload, _ := json.Marshal(map[string]string{"token": token, "domain": domain})
 
 		req, err := http.NewRequest("POST", introspectURL, bytes.NewBuffer(payload))
 		if err != nil {
@@ -73,6 +76,9 @@ func AuthMiddleware() gin.HandlerFunc {
 		c.Set("user_id", result.User.ID)
 		c.Set("user_email", result.User.Email)
 		c.Set("user_name", result.User.FullName)
+		if result.TenantID != "" {
+			c.Set("tenant_id", result.TenantID)
+		}
 		c.Next()
 	}
 }

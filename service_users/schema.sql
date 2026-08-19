@@ -68,12 +68,15 @@ CREATE TABLE IF NOT EXISTS curriculums (
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 6. Institutions: Schools / Organizations
-CREATE TABLE IF NOT EXISTS schools (
+-- 6. Institutions: Tenants / Organizations
+CREATE TABLE IF NOT EXISTS tenants (
     id VARCHAR(191) PRIMARY KEY,
+    type VARCHAR(191) DEFAULT 'SCHOOL', -- SCHOOL, FAMILY, CORPORATE
     name VARCHAR(191) UNIQUE NOT NULL,
     slug VARCHAR(191) UNIQUE NOT NULL,
-    school_code VARCHAR(191) UNIQUE,
+    default_subdomain VARCHAR(191) UNIQUE NOT NULL,
+    custom_domain VARCHAR(191) UNIQUE,
+    tenant_code VARCHAR(191) UNIQUE,
     short_name VARCHAR(191),
     motto TEXT,
     logo_url TEXT,
@@ -92,12 +95,15 @@ CREATE TABLE IF NOT EXISTS schools (
     referred_by_agent_id VARCHAR(191), -- user_id of referring agent
     subscription_tier VARCHAR(191) DEFAULT 'FREE', -- FREE, BASIC, PRO, ENTERPRISE
     subscription_expires_at DATETIME(3),
-    settings TEXT, -- JSON layout & theme config for SchoolHub white-labeling
+    enabled_modules TEXT, -- JSON array
+    settings TEXT, -- JSON layout & theme config for TenantHub white-labeling
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    INDEX idx_school_slug (slug),
-    INDEX idx_school_verification (verification_status),
-    INDEX idx_school_agent (referred_by_agent_id)
+    INDEX idx_tenant_slug (slug),
+    INDEX idx_tenant_domain (default_subdomain),
+    INDEX idx_tenant_custom_domain (custom_domain),
+    INDEX idx_tenant_verification (verification_status),
+    INDEX idx_tenant_agent (referred_by_agent_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 7. Subscriptions: Personal Subscriptions (Family & Agent)
@@ -114,33 +120,33 @@ CREATE TABLE IF NOT EXISTS user_subscriptions (
     CONSTRAINT fk_user_sub_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 8. Institutional Relationships: User School Roles
-CREATE TABLE IF NOT EXISTS user_school_roles (
+-- 8. Institutional Relationships: User Tenant Roles
+CREATE TABLE IF NOT EXISTS user_tenant_roles (
     id VARCHAR(191) PRIMARY KEY,
     user_id VARCHAR(191) NOT NULL,
-    school_id VARCHAR(191) NOT NULL,
-    role VARCHAR(191) NOT NULL, -- student, teacher, parent, school-admin, super-admin, agent, platform-admin
+    tenant_id VARCHAR(191) NOT NULL,
+    role VARCHAR(191) NOT NULL, -- student, teacher, parent, tenant-admin, super-admin, agent, platform-admin
     status VARCHAR(191) DEFAULT 'active', -- active, suspended, graduated, transferred
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    UNIQUE KEY user_school_role_unique (user_id, school_id, role),
-    INDEX idx_role_school (school_id, role),
+    UNIQUE KEY user_tenant_role_unique (user_id, tenant_id, role),
+    INDEX idx_role_tenant (tenant_id, role),
     CONSTRAINT fk_usr_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_usr_school FOREIGN KEY (school_id) REFERENCES schools(id) ON DELETE CASCADE
+    CONSTRAINT fk_usr_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 9. Academics: Academic Sessions
 CREATE TABLE IF NOT EXISTS academic_sessions (
     id VARCHAR(191) PRIMARY KEY,
-    school_id VARCHAR(191) NOT NULL,
+    tenant_id VARCHAR(191) NOT NULL,
     name VARCHAR(191) NOT NULL, -- e.g. "2025/2026"
     start_date DATETIME(3),
     end_date DATETIME(3),
     is_current BOOLEAN DEFAULT FALSE,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    INDEX idx_session_school (school_id, is_current),
-    CONSTRAINT fk_acad_session_school FOREIGN KEY (school_id) REFERENCES schools(id) ON DELETE CASCADE
+    INDEX idx_session_tenant (tenant_id, is_current),
+    CONSTRAINT fk_acad_session_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 10. Academics: Terms
@@ -158,14 +164,14 @@ CREATE TABLE IF NOT EXISTS terms (
 -- 11. Academics: Classes
 CREATE TABLE IF NOT EXISTS classes (
     id VARCHAR(191) PRIMARY KEY,
-    school_id VARCHAR(191) NOT NULL,
+    tenant_id VARCHAR(191) NOT NULL,
     curriculum_id VARCHAR(191),
     name VARCHAR(191) NOT NULL, -- e.g. "Grade 10", "SS1", "JSS1"
     level INT DEFAULT 1,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    INDEX idx_class_school (school_id, level),
-    CONSTRAINT fk_class_school FOREIGN KEY (school_id) REFERENCES schools(id) ON DELETE CASCADE,
+    INDEX idx_class_tenant (tenant_id, level),
+    CONSTRAINT fk_class_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
     CONSTRAINT fk_class_curriculum FOREIGN KEY (curriculum_id) REFERENCES curriculums(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -184,13 +190,13 @@ CREATE TABLE IF NOT EXISTS sections (
 -- 13. Academics: Subjects
 CREATE TABLE IF NOT EXISTS usr_subjects (
     id VARCHAR(191) PRIMARY KEY,
-    school_id VARCHAR(191) NOT NULL,
+    tenant_id VARCHAR(191) NOT NULL,
     name VARCHAR(191) NOT NULL, -- e.g. "Mathematics"
     code VARCHAR(191), -- e.g. "MTH101"
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    INDEX idx_subject_school (school_id),
-    CONSTRAINT fk_subject_school FOREIGN KEY (school_id) REFERENCES schools(id) ON DELETE CASCADE
+    INDEX idx_subject_tenant (tenant_id),
+    CONSTRAINT fk_subject_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 14. Academics: Syllabus Weeks
@@ -321,12 +327,12 @@ CREATE TABLE IF NOT EXISTS student_progress (
 CREATE TABLE IF NOT EXISTS engagement_metrics (
     id VARCHAR(191) PRIMARY KEY,
     student_id VARCHAR(191) NOT NULL,
-    school_id VARCHAR(191) NOT NULL,
+    tenant_id VARCHAR(191) NOT NULL,
     type VARCHAR(191) NOT NULL, -- login, study_time, quiz_attempt
     value FLOAT NOT NULL,
     metadata TEXT,
     date DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
-    INDEX idx_engagement_student (student_id, school_id)
+    INDEX idx_engagement_student (student_id, tenant_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 23. Agent Network: Commissions & Earnings
@@ -344,7 +350,7 @@ CREATE TABLE IF NOT EXISTS agent_commissions (
 CREATE TABLE IF NOT EXISTS agent_earnings (
     id VARCHAR(191) PRIMARY KEY,
     agent_id VARCHAR(191) NOT NULL,
-    school_id VARCHAR(191) NOT NULL,
+    tenant_id VARCHAR(191) NOT NULL,
     amount FLOAT NOT NULL,
     source_type VARCHAR(191) NOT NULL, -- SCRATCH_CARD, TUITION, SUBSCRIPTION
     source_id VARCHAR(191),
@@ -352,7 +358,7 @@ CREATE TABLE IF NOT EXISTS agent_earnings (
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     INDEX idx_agent_earning_agent (agent_id),
     CONSTRAINT fk_earning_agent FOREIGN KEY (agent_id) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_earning_school FOREIGN KEY (school_id) REFERENCES schools(id) ON DELETE CASCADE
+    CONSTRAINT fk_earning_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS payout_requests (
@@ -385,7 +391,7 @@ CREATE TABLE IF NOT EXISTS plans (
 -- 25. Billing Invoices
 CREATE TABLE IF NOT EXISTS invoices (
     id VARCHAR(191) PRIMARY KEY,
-    school_id VARCHAR(191) NOT NULL,
+    tenant_id VARCHAR(191) NOT NULL,
     plan_id VARCHAR(191) NOT NULL,
     plan_name VARCHAR(191) NOT NULL,
     invoice_number VARCHAR(191) UNIQUE NOT NULL,
@@ -396,15 +402,15 @@ CREATE TABLE IF NOT EXISTS invoices (
     due_date DATETIME(3) NOT NULL,
     paid_at DATETIME(3),
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
-    INDEX idx_invoice_school (school_id),
-    CONSTRAINT fk_invoice_school FOREIGN KEY (school_id) REFERENCES schools(id) ON DELETE CASCADE
+    INDEX idx_invoice_tenant (tenant_id),
+    CONSTRAINT fk_invoice_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 26. Payment Transactions
 CREATE TABLE IF NOT EXISTS payment_transactions (
     id VARCHAR(191) PRIMARY KEY,
     invoice_id VARCHAR(191) NOT NULL,
-    school_id VARCHAR(191) NOT NULL,
+    tenant_id VARCHAR(191) NOT NULL,
     amount FLOAT NOT NULL,
     currency VARCHAR(10) DEFAULT 'NGN',
     payment_method VARCHAR(191) NOT NULL, -- PAYSTACK, STRIPE, FLUTTERWAVE, BANK_TRANSFER

@@ -13,7 +13,7 @@ import (
 	"service_users.resultspro.ng/utils"
 )
 
-// HandleGetAgentPortfolio retrieves schools referred/onboarded by an agent
+// HandleGetAgentPortfolio retrieves tenants referred/onboarded by an agent
 func HandleGetAgentPortfolio(w http.ResponseWriter, r *http.Request) {
 	userId := strings.TrimPrefix(r.URL.Path, "/intelligence/agent/")
 	userId = strings.TrimSuffix(userId, "/portfolio")
@@ -35,7 +35,7 @@ func HandleGetAgentPortfolio(w http.ResponseWriter, r *http.Request) {
 
 	rows, err := db.DB.Query(`
 		SELECT id, name, slug, status, verification_status, subscription_tier, created_at 
-		FROM schools 
+		FROM tenants 
 		WHERE referred_by_agent_id = ? 
 		ORDER BY created_at DESC`, userId)
 	if err != nil {
@@ -44,7 +44,7 @@ func HandleGetAgentPortfolio(w http.ResponseWriter, r *http.Request) {
 	}
 	defer rows.Close()
 
-	type PortfolioSchool struct {
+	type PortfolioTenant struct {
 		ID                 string    `json:"id"`
 		Name               string    `json:"name"`
 		Slug               string    `json:"slug"`
@@ -54,19 +54,19 @@ func HandleGetAgentPortfolio(w http.ResponseWriter, r *http.Request) {
 		CreatedAt          time.Time `json:"created_at"`
 	}
 
-	schools := []PortfolioSchool{}
+	tenants := []PortfolioTenant{}
 	for rows.Next() {
-		var s PortfolioSchool
+		var s PortfolioTenant
 		var tier sql.NullString
 		if err := rows.Scan(&s.ID, &s.Name, &s.Slug, &s.Status, &s.VerificationStatus, &tier, &s.CreatedAt); err == nil {
 			if tier.Valid {
 				s.SubscriptionTier = tier.String
 			}
-			schools = append(schools, s)
+			tenants = append(tenants, s)
 		}
 	}
 
-	utils.JSONResponse(w, http.StatusOK, schools)
+	utils.JSONResponse(w, http.StatusOK, tenants)
 }
 
 // HandleGetAgentCommissions returns the agent's commission setup and earnings ledger
@@ -103,7 +103,7 @@ func HandleGetAgentCommissions(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch earnings ledger
-	rows, err := db.DB.Query("SELECT id, agent_id, school_id, amount, source_type, source_id, status, created_at FROM agent_earnings WHERE agent_id = ? ORDER BY created_at DESC", agentID)
+	rows, err := db.DB.Query("SELECT id, agent_id, tenant_id, amount, source_type, source_id, status, created_at FROM agent_earnings WHERE agent_id = ? ORDER BY created_at DESC", agentID)
 	earnings := []models.AgentEarning{}
 	var totalEarned, totalPaid float64
 
@@ -112,7 +112,7 @@ func HandleGetAgentCommissions(w http.ResponseWriter, r *http.Request) {
 		for rows.Next() {
 			var ae models.AgentEarning
 			var srcID sql.NullString
-			if err := rows.Scan(&ae.ID, &ae.AgentID, &ae.SchoolID, &ae.Amount, &ae.SourceType, &srcID, &ae.Status, &ae.CreatedAt); err == nil {
+			if err := rows.Scan(&ae.ID, &ae.AgentID, &ae.TenantID, &ae.Amount, &ae.SourceType, &srcID, &ae.Status, &ae.CreatedAt); err == nil {
 				if srcID.Valid {
 					ae.SourceID = srcID.String
 				}
