@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useTenant } from '../TenantProvider';
 import { 
   DashboardSpeed02Icon, 
   AnalyticsUpIcon, 
@@ -105,6 +106,7 @@ const devRoles = [
 
 export default function PortalSidebar() {
   const pathname = usePathname();
+  const { tenant, hasModule } = useTenant();
 
   const getActiveMenu = () => {
     if (pathname.startsWith('/teacher')) return teacherMenu;
@@ -116,14 +118,26 @@ export default function PortalSidebar() {
     return studentMenu;
   };
 
-  const menuItems = getActiveMenu();
+  const menuItems = getActiveMenu().filter(item => {
+    if (item.name.includes('Exam') || item.slug.includes('exams')) return hasModule('EXAM_PRO');
+    if (item.name.includes('Result') || item.slug.includes('results')) return hasModule('RESULT_PRO');
+    if (item.name.includes('Tutor') || item.slug.includes('tutor')) return hasModule('TUTORS_PRO');
+    if (item.name.includes('Future Skills') || item.slug.includes('future-skills')) return hasModule('COURSES_PRO');
+    return true;
+  });
 
   return (
     <aside className={styles.sidebar}>
       <div className={styles.logoArea}>
-        <Image src="/logo.png" alt="SchoolHub Logo" width={64} height={64} style={{ width: 'auto', height: '56px' }} />
+        {tenant?.logo_url ? (
+          <img src={tenant.logo_url} alt={tenant.name} style={{ width: 'auto', height: '48px', borderRadius: '8px' }} />
+        ) : (
+          <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold' }}>
+            {tenant?.logo_emoji || tenant?.name?.charAt(0) || 'S'}
+          </div>
+        )}
         <div className={styles.schoolBrand}>
-          <span className={styles.schoolName}>SchoolHub</span>
+          <span className={styles.schoolName}>{tenant?.short_name || tenant?.name || 'SchoolHub'}</span>
           <span className={styles.portalTag}>Digital Campus</span>
         </div>
       </div>

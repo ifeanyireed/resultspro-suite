@@ -30,7 +30,7 @@
 .schoolName {
   font-weight: 800;
   font-size: 1.25rem;
-  color: #146ef5;
+  color: var(--primary, #146ef5);
   letter-spacing: -0.02em;
 }
 
@@ -83,14 +83,14 @@
 
 .link:hover {
   background: #f8fafc;
-  color: #146ef5;
+  color: var(--primary, #146ef5);
 }
 
 .active {
-  background: #146ef5 !important;
+  background: var(--primary, #146ef5) !important;
   color: white !important;
   font-weight: 500;
-  box-shadow: 0 10px 15px -3px rgba(20, 110, 245, 0.25);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .icon {
