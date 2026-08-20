@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./nets.css";
 
 @theme {
   --color-navy: #0D1B2A;
