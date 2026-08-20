@@ -62,7 +62,7 @@ export const useAuthStore = create<AuthState>((set) => {
         localStorage.setItem('user', JSON.stringify(updatedUser));
         set({ user: updatedUser });
       } catch (err) {
-        console.error('Failed to fetch user profile:', err);
+        // silently fail to prevent console errors from browser extensions
       }
     }
   };
