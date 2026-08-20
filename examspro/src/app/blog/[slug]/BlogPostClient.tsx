@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { IconLoader2 as Loader2, IconCalendar as Calendar, IconChevronLeft as ChevronLeft, IconTag as Tag, IconShare2 as Share2, IconFacebook as Facebook, IconTwitter as Twitter, IconLink as LinkIcon } from '@tabler/icons-react';
+import { IconLoader2 as Loader2, IconCalendar as Calendar, IconChevronLeft as ChevronLeft, IconTag as Tag, IconShare2 as Share2, IconBrandFacebook as Facebook, IconBrandTwitter as Twitter, IconLink as LinkIcon } from '@tabler/icons-react';
 import Link from "next/link";
 import { toast } from "react-hot-toast";
 

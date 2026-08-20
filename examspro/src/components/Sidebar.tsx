@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { IconHome, IconBookOpen, IconZap, IconSword, IconBrain, IconTrophy, IconUserPlus, IconNews, IconShoppingBag, IconSettings, IconHelp } from '@tabler/icons-react';
+import { IconHome, IconBook, IconBolt, IconSword, IconBrain, IconTrophy, IconUserPlus, IconNews, IconShoppingBag, IconSettings, IconHelp } from '@tabler/icons-react';
 import { useAuthStore } from '@/store/useAuthStore';
 
 export function Sidebar() {
@@ -16,14 +16,14 @@ export function Sidebar() {
       title: 'LEARNING',
       links: [
         { label: 'Dashboard', href: '/dashboard', icon: IconHome },
-        { label: 'Practice', href: '/practice', icon: IconBookOpen },
+        { label: 'Practice', href: '/practice', icon: IconBook },
         { label: 'AI Tutor', href: '/study-assistant', icon: IconBrain },
       ],
     },
     {
       title: 'COMPETITION',
       links: [
-        { label: 'Live Games', href: '/live', icon: IconZap },
+        { label: 'Live Games', href: '/live', icon: IconBolt },
         { label: 'Battle Mode', href: '/battle-mode', icon: IconSword },
         { label: 'Leaderboard', href: '/leaderboard', icon: IconTrophy },
       ],

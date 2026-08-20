@@ -2,7 +2,7 @@
 
 import { useParams, useRouter, usePathname } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import { IconArrowLeft as ArrowLeft, IconSparkles as Sparkles, IconMessageSquare as MessageSquare, IconSend as Send, IconLoader2 as Loader2, IconCoins as Coins, IconChevronRight as ChevronRight, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit } from '@tabler/icons-react';
+import { IconArrowLeft as ArrowLeft, IconSparkles as Sparkles, IconMessage as MessageSquare, IconSend as Send, IconLoader2 as Loader2, IconCoins as Coins, IconChevronRight as ChevronRight, IconBook as BookOpen, IconBrain as BrainCircuit } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 import api from '@/lib/api';

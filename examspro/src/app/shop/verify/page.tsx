@@ -2,7 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { IconCheckCircle2 as CheckCircle2, IconXCircle as XCircle, IconLoader2 as Loader2, IconArrowRight as ArrowRight, IconShieldCheck as ShieldCheck, IconCoins as Coins } from '@tabler/icons-react';
+import { IconCircleCheck as CheckCircle2, IconCircleX as XCircle, IconLoader2 as Loader2, IconArrowRight as ArrowRight, IconShieldCheck as ShieldCheck, IconCoins as Coins } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';

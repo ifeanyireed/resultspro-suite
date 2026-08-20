@@ -1,6 +1,6 @@
 "use client";
 
-import { IconArrowLeft as ArrowLeft, IconMail as Mail, IconShield as Shield, IconBan as Ban, IconCoins as Coins, IconTrophy as Trophy, IconZap as Zap, IconTarget as Target, IconClock as Clock, IconEdit2 as Edit2, IconLoader2 as Loader2, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
+import { IconArrowLeft as ArrowLeft, IconMail as Mail, IconShield as Shield, IconBan as Ban, IconCoins as Coins, IconTrophy as Trophy, IconBolt as Zap, IconTarget as Target, IconClock as Clock, IconEdit as Edit2, IconLoader2 as Loader2, IconCircleCheck as CheckCircle2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import AdminHeader from '@/components/admin/AdminHeader';

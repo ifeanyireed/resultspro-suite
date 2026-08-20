@@ -1,6 +1,6 @@
 "use client";
 
-import { IconPlus as Plus, IconTrash2 as Trash2, IconCheckCircle2 as CheckCircle2, IconHelpCircle as HelpCircle, IconSparkles as Sparkles, IconLoader2 as Loader2, IconEye as Eye, IconUpload as Upload, IconX as X, IconImage as ImageIcon } from '@tabler/icons-react';
+import { IconPlus as Plus, IconTrash as Trash2, IconCircleCheck as CheckCircle2, IconHelpCircle as HelpCircle, IconSparkles as Sparkles, IconLoader2 as Loader2, IconEye as Eye, IconUpload as Upload, IconX as X, IconPhoto as ImageIcon } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';

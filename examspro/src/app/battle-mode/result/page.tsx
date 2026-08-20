@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { IconTrophy as Trophy, IconCoins as Coins, IconZap as Zap, IconRefreshCcw as RefreshCcw, IconHome as Home, IconXCircle as XCircle, IconShare2 as Share2, IconSword as Sword, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconTrophy as Trophy, IconCoins as Coins, IconBolt as Zap, IconRefresh as RefreshCcw, IconHome as Home, IconCircleX as XCircle, IconShare2 as Share2, IconSword as Sword, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import api from '@/lib/api';

@@ -1,6 +1,6 @@
 "use client";
 
-import { IconUsers as Users, IconTrendingUp as TrendingUp, IconSword as Sword, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconDollarSign as DollarSign, IconChevronRight as ChevronRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconUsers as Users, IconTrendingUp as TrendingUp, IconSword as Sword, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconCurrencyDollar as DollarSign, IconChevronRight as ChevronRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { useEffect, useState, useMemo } from 'react';

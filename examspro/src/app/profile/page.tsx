@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
 import { useAuthStore } from '@/store/useAuthStore';
-import { IconUser as User, IconSettings as Settings, IconLogOut as LogOut, IconChevronRight as ChevronRight, IconAward as Award, IconTarget as Target, IconZap as Zap, IconHistory as History, IconShield as Shield, IconBell as Bell, IconCoins as Coins, IconTrophy as Trophy, IconSword as Sword, IconCheckCircle2 as CheckCircle2, IconLock as Lock, IconSmartphone as Smartphone, IconGift as Gift, IconMail as Mail, IconUsers as Users, IconEye as Eye, IconImage as ImageIcon, IconLoader2 as Loader2, IconArrowRight as ArrowRight } from '@tabler/icons-react';
+import { IconUser as User, IconSettings as Settings, IconLogout as LogOut, IconChevronRight as ChevronRight, IconAward as Award, IconTarget as Target, IconBolt as Zap, IconHistory as History, IconShield as Shield, IconBell as Bell, IconCoins as Coins, IconTrophy as Trophy, IconSword as Sword, IconCircleCheck as CheckCircle2, IconLock as Lock, IconDeviceMobile as Smartphone, IconGift as Gift, IconMail as Mail, IconUsers as Users, IconEye as Eye, IconPhoto as ImageIcon, IconLoader2 as Loader2, IconArrowRight as ArrowRight } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';

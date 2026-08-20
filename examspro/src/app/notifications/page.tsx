@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
-import { IconSword as Sword, IconTrophy as Trophy, IconCoins as Coins, IconCheckCircle2 as CheckCircle2, IconInfo as Info, IconAlertTriangle as AlertTriangle, IconXCircle as XCircle, IconBell as Bell } from '@tabler/icons-react';
+import { IconSword as Sword, IconTrophy as Trophy, IconCoins as Coins, IconCircleCheck as CheckCircle2, IconInfoCircle as Info, IconAlertTriangle as AlertTriangle, IconCircleX as XCircle, IconBell as Bell } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { getNotifications, markAsRead, markAllAsRead, Notification } from '@/lib/notifications.api';
 import { formatDistanceToNow } from 'date-fns';

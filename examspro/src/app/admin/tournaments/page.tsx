@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { IconPlus as Plus, IconSearch as Search, IconTrophy as Trophy, IconCalendar as Calendar, IconUsers as Users, IconCoins as Coins, IconEdit as Edit, IconTrash2 as Trash2, IconLoader2 as Loader2, IconMoreVertical as MoreVertical, IconCheckCircle2 as CheckCircle2, IconClock as Clock, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
+import { IconPlus as Plus, IconSearch as Search, IconTrophy as Trophy, IconCalendar as Calendar, IconUsers as Users, IconCoins as Coins, IconEdit as Edit, IconTrash as Trash2, IconLoader2 as Loader2, IconDotsVertical as MoreVertical, IconCircleCheck as CheckCircle2, IconClock as Clock, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import AdminHeader from '@/components/admin/AdminHeader';
 import api from '@/lib/api';

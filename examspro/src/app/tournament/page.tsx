@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { IconTrophy as Trophy, IconUsers as Users, IconTimer as Timer, IconChevronRight as ChevronRight, IconSword as Sword, IconTarget as Target, IconZap as Zap, IconInfo as Info } from '@tabler/icons-react';
+import { IconTrophy as Trophy, IconUsers as Users, IconClock as Timer, IconChevronRight as ChevronRight, IconSword as Sword, IconTarget as Target, IconBolt as Zap, IconInfoCircle as Info } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
 export default function TournamentPage() {

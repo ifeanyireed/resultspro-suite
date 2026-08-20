@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { IconSearch as Search, IconFilter as Filter, IconDownload as Download, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconDollarSign as DollarSign, IconClock as Clock, IconCheckCircle2 as CheckCircle2, IconAlertCircle as AlertCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconSearch as Search, IconFilter as Filter, IconDownload as Download, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconCurrencyDollar as DollarSign, IconClock as Clock, IconCircleCheck as CheckCircle2, IconAlertCircle as AlertCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import AdminHeader from '@/components/admin/AdminHeader';
 import api from '@/lib/api';

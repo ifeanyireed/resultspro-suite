@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
-import { IconTrophy as Trophy, IconUsers as Users, IconCalendar as Calendar, IconTimer as Timer, IconCoins as Coins, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2, IconCheckCircle2 as CheckCircle2, IconArrowRight as ArrowRight, IconShieldCheck as ShieldCheck, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
+import { IconTrophy as Trophy, IconUsers as Users, IconCalendar as Calendar, IconClock as Timer, IconCoins as Coins, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2, IconCircleCheck as CheckCircle2, IconArrowRight as ArrowRight, IconShieldCheck as ShieldCheck, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import api from '@/lib/api';

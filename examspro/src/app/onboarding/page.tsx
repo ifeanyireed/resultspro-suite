@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconTarget as Target, IconBookOpen as BookOpen, IconTrophy as Trophy, IconZap as Zap, IconCheck as Check } from '@tabler/icons-react';
+import { IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconTarget as Target, IconBook as BookOpen, IconTrophy as Trophy, IconBolt as Zap, IconCheck as Check } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
 export default function OnboardingPage() {

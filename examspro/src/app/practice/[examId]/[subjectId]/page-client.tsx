@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import LoginPromptModal from '@/components/LoginPromptModal';
-import { IconArrowLeft as ArrowLeft, IconSearch as Search, IconPlay as Play, IconLock as Lock, IconCheckCircle2 as CheckCircle2, IconCoins as Coins, IconClock as Clock, IconZap as Zap, IconStar as Star, IconTrophy as Trophy, IconSparkles as Sparkles } from '@tabler/icons-react';
+import { IconArrowLeft as ArrowLeft, IconSearch as Search, IconPlayerPlay as Play, IconLock as Lock, IconCircleCheck as CheckCircle2, IconCoins as Coins, IconClock as Clock, IconBolt as Zap, IconStar as Star, IconTrophy as Trophy, IconSparkles as Sparkles } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState, useCallback } from 'react';
 import api from '@/lib/api';

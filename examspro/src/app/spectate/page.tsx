@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
-import { IconEye as Eye, IconUsers as Users, IconPlay as Play, IconSearch as Search, IconChevronRight as ChevronRight, IconMonitor as Monitor, IconShieldCheck as ShieldCheck, IconGlobe as Globe, IconClock as Clock, IconZap as Zap, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconEye as Eye, IconUsers as Users, IconPlayerPlay as Play, IconSearch as Search, IconChevronRight as ChevronRight, IconDeviceDesktop as Monitor, IconShieldCheck as ShieldCheck, IconGlobe as Globe, IconClock as Clock, IconBolt as Zap, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import api from '@/lib/api';

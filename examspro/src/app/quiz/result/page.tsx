@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { IconTrophy as Trophy, IconCoins as Coins, IconChevronRight as ChevronRight, IconRotateCcw as RotateCcw, IconShare2 as Share2, IconCheckCircle2 as CheckCircle2, IconXCircle as XCircle, IconZap as Zap, IconStar as Star } from '@tabler/icons-react';
+import { IconTrophy as Trophy, IconCoins as Coins, IconChevronRight as ChevronRight, IconRotate as RotateCcw, IconShare2 as Share2, IconCircleCheck as CheckCircle2, IconCircleX as XCircle, IconBolt as Zap, IconStar as Star } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 

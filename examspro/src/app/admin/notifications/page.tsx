@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import AdminHeader from '@/components/admin/AdminHeader';
-import { IconBell as Bell, IconSend as Send, IconHistory as History, IconTarget as Target, IconCheckCircle2 as CheckCircle2, IconAlertCircle as AlertCircle, IconMail as Mail, IconSmartphone as Smartphone, IconUsers as Users, IconCalendar as Calendar, IconSearch as Search, IconFilter as Filter, IconLayers as Layers, IconMonitor as Monitor, IconToggleLeft as ToggleLeft, IconToggleRight as ToggleRight, IconTrash2 as Trash2, IconExternalLink as ExternalLink } from '@tabler/icons-react';
+import { IconBell as Bell, IconSend as Send, IconHistory as History, IconTarget as Target, IconCircleCheck as CheckCircle2, IconAlertCircle as AlertCircle, IconMail as Mail, IconDeviceMobile as Smartphone, IconUsers as Users, IconCalendar as Calendar, IconSearch as Search, IconFilter as Filter, IconStack as Layers, IconDeviceDesktop as Monitor, IconToggleLeft as ToggleLeft, IconToggleRight as ToggleRight, IconTrash as Trash2, IconExternalLink as ExternalLink } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { 
   getNotificationLogs, 

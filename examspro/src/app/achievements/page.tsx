@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { IconTrophy as Trophy, IconAward as Award, IconStar as Star, IconZap as Zap, IconTarget as Target, IconLock as Lock, IconCheckCircle2 as CheckCircle2, IconTrendingUp as TrendingUp, IconCrown as Crown } from '@tabler/icons-react';
+import { IconTrophy as Trophy, IconAward as Award, IconStar as Star, IconBolt as Zap, IconTarget as Target, IconLock as Lock, IconCircleCheck as CheckCircle2, IconTrendingUp as TrendingUp, IconCrown as Crown } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
 export default function AchievementsPage() {

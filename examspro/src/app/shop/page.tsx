@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Navbar from '@/components/Navbar';
-import { IconCoins as Coins, IconZap as Zap, IconShieldCheck as ShieldCheck, IconHistory as History, IconSparkles as Sparkles, IconGift as Gift, IconLoader2 as Loader2, IconInfo as Info, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
+import { IconCoins as Coins, IconBolt as Zap, IconShieldCheck as ShieldCheck, IconHistory as History, IconSparkles as Sparkles, IconGift as Gift, IconLoader2 as Loader2, IconInfoCircle as Info, IconCircleCheck as CheckCircle2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';

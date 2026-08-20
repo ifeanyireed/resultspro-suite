@@ -5,7 +5,7 @@ import Link from 'next/link';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@resultspro/design-system';
-import { IconFlame, IconCoins, IconTrophy, IconChevronRight, IconPlay, IconSword, IconBookOpen, IconLoader2, IconZap } from '@tabler/icons-react';
+import { IconFlame, IconCoins, IconTrophy, IconChevronRight, IconPlayerPlay, IconSword, IconBook, IconLoader2, IconBolt } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
 interface DashboardData {
@@ -97,7 +97,7 @@ export default function Dashboard() {
         </div>
         <Link href="/battle-mode">
           <Button className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0 shadow-lg font-bold gap-2">
-            <IconPlay className="w-4 h-4 fill-current" /> QUICK BATTLE
+            <IconPlayerPlay className="w-4 h-4 fill-current" /> QUICK BATTLE
           </Button>
         </Link>
       </div>
@@ -122,7 +122,7 @@ export default function Dashboard() {
           title="Overall Readiness"
           value="78%"
           trend="+5% from last week"
-          icon={<IconBookOpen className="w-6 h-6 text-[#146ef5]" />}
+          icon={<IconBook className="w-6 h-6 text-[#146ef5]" />}
         />
         <WhiteMetricCard 
           title="Global Rank"
@@ -150,7 +150,7 @@ export default function Dashboard() {
                 <div key={sub.id} className="min-w-[240px] p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#146ef5]/30 transition-all cursor-pointer group shrink-0">
                   <div className="flex justify-between items-start mb-4">
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-sm text-${sub.color}-500`}>
-                      <IconBookOpen className="w-5 h-5" />
+                      <IconBook className="w-5 h-5" />
                     </div>
                     <div className="text-xs text-gray-500 font-medium">{sub.questions} Qs</div>
                   </div>
@@ -237,7 +237,7 @@ export default function Dashboard() {
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-black text-gray-900">{opponentScore}</span>
                             <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-600 overflow-hidden">
-                              {isBot ? <IconZap className="w-3 h-3 text-amber-500 fill-current" /> : (opponentName[0] || '?')}
+                              {isBot ? <IconBolt className="w-3 h-3 text-amber-500 fill-current" /> : (opponentName[0] || '?')}
                             </div>
                           </div>
                         </div>
@@ -297,7 +297,7 @@ export default function Dashboard() {
                     <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
                       item.type === 'study' ? 'bg-blue-50 text-blue-500' : 'bg-amber-50 text-amber-500'
                     }`}>
-                      {item.type === 'study' ? <IconBookOpen className="w-4 h-4" /> : <IconCoins className="w-4 h-4" />}
+                      {item.type === 'study' ? <IconBook className="w-4 h-4" /> : <IconCoins className="w-4 h-4" />}
                     </div>
                     <div>
                       <div className="text-xs font-bold text-gray-900 group-hover:text-[#146ef5] transition-colors line-clamp-1">{item.title}</div>

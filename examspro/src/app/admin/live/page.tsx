@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { IconPlus as Plus, IconUsers as Users, IconPlay as Play, IconLoader2 as Loader2, IconActivity as Activity, IconCalendar as Calendar, IconMessageSquare as MessageSquare, IconChevronRight as ChevronRight, IconMonitor as Monitor } from '@tabler/icons-react';
+import { IconPlus as Plus, IconUsers as Users, IconPlayerPlay as Play, IconLoader2 as Loader2, IconActivity as Activity, IconCalendar as Calendar, IconMessage as MessageSquare, IconChevronRight as ChevronRight, IconDeviceDesktop as Monitor } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from 'react';
-import { IconTimer as Timer, IconUsers as Users, IconTrophy as Trophy, IconCheckCircle2 as CheckCircle2, IconZap as Zap, IconStar as Star, IconChevronRight as ChevronRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconClock as Timer, IconUsers as Users, IconTrophy as Trophy, IconCircleCheck as CheckCircle2, IconBolt as Zap, IconStar as Star, IconChevronRight as ChevronRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useLiveGame } from '@/hooks/useLiveGame';
 import { useAuthStore } from '@/store/useAuthStore';

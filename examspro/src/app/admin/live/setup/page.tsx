@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { IconSettings as Settings, IconPlus as Plus, IconBookOpen as BookOpen, IconCoins as Coins, IconUsers as Users, IconCalendar as Calendar, IconClock as Clock, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconTarget as Target, IconGlobe as Globe, IconLock as Lock, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconSettings as Settings, IconPlus as Plus, IconBook as BookOpen, IconCoins as Coins, IconUsers as Users, IconCalendar as Calendar, IconClock as Clock, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconTarget as Target, IconGlobe as Globe, IconLock as Lock, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import AdminHeader from '@/components/admin/AdminHeader';

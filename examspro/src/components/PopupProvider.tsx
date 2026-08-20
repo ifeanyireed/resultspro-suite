@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { usePathname } from 'next/navigation';
 import { getActivePopups, PopupNotification } from '@/lib/notifications.api';
 import { useAuthStore } from '@/store/useAuthStore';
-import { IconX as X, IconBell as Bell, IconInfo as Info, IconAlertTriangle as AlertTriangle, IconCircleCheck as CheckCircle2, IconTrophy as Trophy, IconSword as Sword, IconCoins as Coins } from '@tabler/icons-react';
+import { IconX as X, IconBell as Bell, IconInfoCircle as Info, IconAlertTriangle as AlertTriangle, IconCircleCheck as CheckCircle2, IconTrophy as Trophy, IconSword as Sword, IconCoins as Coins } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
 interface PopupContextType {

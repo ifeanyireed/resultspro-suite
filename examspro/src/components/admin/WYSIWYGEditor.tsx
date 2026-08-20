@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect } from 'react';
-import { IconBold as Bold, IconItalic as Italic, IconList as List, IconListOrdered as ListOrdered, IconHeading1 as Heading1, IconHeading2 as Heading2, IconQuote as Quote, IconUndo as Undo, IconRedo as Redo, IconLink as LinkIcon } from '@tabler/icons-react';
+import { IconBold as Bold, IconItalic as Italic, IconList as List, IconListNumbers as ListOrdered, IconH1 as Heading1, IconH2 as Heading2, IconQuote as Quote, IconArrowBackUp as Undo, IconArrowForwardUp as Redo, IconLink as LinkIcon } from '@tabler/icons-react';
 
 interface WYSIWYGEditorProps {
   value: string;

@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { IconSword as Sword, IconUsers as Users, IconTrophy as Trophy, IconSearch as Search, IconPlay as Play, IconZap as Zap, IconPlus as Plus, IconChevronRight as ChevronRight, IconShield as Shield, IconCoins as Coins, IconLoader2 as Loader2, IconGlobe as Globe, IconLock as Lock, IconCopy as Copy, IconCheck as Check } from '@tabler/icons-react';
+import { IconSword as Sword, IconUsers as Users, IconTrophy as Trophy, IconSearch as Search, IconPlayerPlay as Play, IconBolt as Zap, IconPlus as Plus, IconChevronRight as ChevronRight, IconShield as Shield, IconCoins as Coins, IconLoader2 as Loader2, IconGlobe as Globe, IconLock as Lock, IconCopy as Copy, IconCheck as Check } from '@tabler/icons-react';
 import { 
   Dialog, 
   DialogContent, 

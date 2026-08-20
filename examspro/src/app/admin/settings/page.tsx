@@ -1,6 +1,6 @@
 "use client";
 
-import { IconSettings as Settings, IconCoins as Coins, IconShieldCheck as ShieldCheck, IconGlobe as Globe, IconSave as Save, IconToggleRight as ToggleRight, IconLoader2 as Loader2, IconPlus as Plus, IconTrash2 as Trash2, IconType as Type, IconPalette as Palette, IconCheckCircle as CheckCircle, IconAlertCircle as AlertCircle, IconX as X } from '@tabler/icons-react';
+import { IconSettings as Settings, IconCoins as Coins, IconShieldCheck as ShieldCheck, IconGlobe as Globe, IconDeviceFloppy as Save, IconToggleRight as ToggleRight, IconLoader2 as Loader2, IconPlus as Plus, IconTrash as Trash2, IconTypography as Type, IconPalette as Palette, IconCircleCheck as CheckCircle, IconAlertCircle as AlertCircle, IconX as X } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';

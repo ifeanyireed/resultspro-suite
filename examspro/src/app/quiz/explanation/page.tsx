@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from '@/components/ui/button';
-import { IconCoins as Coins, IconSparkles as Sparkles, IconArrowLeft as ArrowLeft, IconBookOpen as BookOpen, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
+import { IconCoins as Coins, IconSparkles as Sparkles, IconArrowLeft as ArrowLeft, IconBook as BookOpen, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function ExplanationPage() {

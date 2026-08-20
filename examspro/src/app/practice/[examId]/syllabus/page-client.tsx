@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import { IconArrowLeft as ArrowLeft, IconBookOpen as BookOpen, IconChevronRight as ChevronRight, IconSparkles as Sparkles, IconBook as Book, IconChevronDown as ChevronDown, IconChevronUp as ChevronUp, IconMaximize2 as Maximize2, IconMinimize2 as Minimize2, IconFileText as FileText } from '@tabler/icons-react';
+import { IconArrowLeft as ArrowLeft, IconBook as BookOpen, IconChevronRight as ChevronRight, IconSparkles as Sparkles, IconBook as Book, IconChevronDown as ChevronDown, IconChevronUp as ChevronUp, IconMaximize as Maximize2, IconMinimize as Minimize2, IconFileText as FileText } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';

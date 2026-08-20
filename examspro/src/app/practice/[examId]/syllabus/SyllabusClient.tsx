@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { IconChevronLeft as ChevronLeft, IconBookOpen as BookOpen, IconTarget as Target, IconSparkles as Sparkles, IconAlertCircle as AlertCircle, IconChevronDown as ChevronDown, IconChevronUp as ChevronUp } from '@tabler/icons-react';
+import { IconChevronLeft as ChevronLeft, IconBook as BookOpen, IconTarget as Target, IconSparkles as Sparkles, IconAlertCircle as AlertCircle, IconChevronDown as ChevronDown, IconChevronUp as ChevronUp } from '@tabler/icons-react';
 import Link from "next/link";
 
 export default function SyllabusClient({ syllabus, examId }: { syllabus: any, examId: string }) {

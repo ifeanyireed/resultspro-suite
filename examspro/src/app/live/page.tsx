@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { IconUsers as Users, IconCoins as Coins, IconTrophy as Trophy, IconTimer as Timer, IconChevronRight as ChevronRight, IconSword as Sword, IconSearch as Search, IconZap as Zap, IconEye as Eye, IconArrowRight as ArrowRight } from '@tabler/icons-react';
+import { IconUsers as Users, IconCoins as Coins, IconTrophy as Trophy, IconClock as Timer, IconChevronRight as ChevronRight, IconSword as Sword, IconSearch as Search, IconBolt as Zap, IconEye as Eye, IconArrowRight as ArrowRight } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import api from '@/lib/api';

@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import LoginPromptModal from '@/components/LoginPromptModal';
-import { IconArrowLeft as ArrowLeft, IconSearch as Search, IconBookOpen as BookOpen, IconChevronRight as ChevronRight, IconCoins as Coins, IconTrophy as Trophy, IconBarChart3 as BarChart3, IconLock as Lock, IconZap as Zap } from '@tabler/icons-react';
+import { IconArrowLeft as ArrowLeft, IconSearch as Search, IconBook as BookOpen, IconChevronRight as ChevronRight, IconCoins as Coins, IconTrophy as Trophy, IconChartBar as BarChart3, IconLock as Lock, IconBolt as Zap } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';

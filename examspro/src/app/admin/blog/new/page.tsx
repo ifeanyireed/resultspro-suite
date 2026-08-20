@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
-import { IconChevronLeft as ChevronLeft, IconSave as Save, IconLoader2 as Loader2, IconImage as ImageIcon, IconUpload as Upload } from '@tabler/icons-react';
+import { IconChevronLeft as ChevronLeft, IconDeviceFloppy as Save, IconLoader2 as Loader2, IconPhoto as ImageIcon, IconUpload as Upload } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
-import { IconSearch as Search, IconPlus as Plus, IconFilter as Filter, IconMoreVertical as MoreVertical, IconUpload as Upload, IconSparkles as Sparkles, IconLoader2 as Loader2, IconEye as Eye, IconEdit as Edit, IconTrash2 as Trash2, IconDownload as Download, IconX as X, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
+import { IconSearch as Search, IconPlus as Plus, IconFilter as Filter, IconDotsVertical as MoreVertical, IconUpload as Upload, IconSparkles as Sparkles, IconLoader2 as Loader2, IconEye as Eye, IconEdit as Edit, IconTrash as Trash2, IconDownload as Download, IconX as X, IconCircleCheck as CheckCircle2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import AdminHeader from '@/components/admin/AdminHeader';

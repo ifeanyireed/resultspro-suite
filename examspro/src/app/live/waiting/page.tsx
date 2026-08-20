@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
-import { IconUsers as UsersIcon, IconMessageSquare as MessageIcon, IconSend as SendIcon, IconSmile as SmileIcon, IconShieldCheck as ShieldIcon, IconCoins as CoinsIcon, IconArrowLeft as ArrowLeftIcon, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconUsers as UsersIcon, IconMessage as MessageIcon, IconSend as SendIcon, IconMoodSmile as SmileIcon, IconShieldCheck as ShieldIcon, IconCoins as CoinsIcon, IconArrowLeft as ArrowLeftIcon, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';

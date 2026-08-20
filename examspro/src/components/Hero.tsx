@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { IconSword as Sword, IconZap as Zap, IconBrain as Brain } from '@tabler/icons-react';
+import { IconSword as Sword, IconBolt as Zap, IconBrain as Brain } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '@/lib/api';
