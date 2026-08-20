@@ -148,7 +148,7 @@ export default function AgentLayout({
               </button>
               <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
                 <div className="w-10 h-10 bg-gradient-to-tr from-orange-200 to-orange-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
-                  <img src="/character7.jpg" alt="Agent Avatar" className="w-full h-full object-cover" />
+                  <img src="/avatars/character7.jpg" alt="Agent Avatar" className="w-full h-full object-cover" />
                 </div>
                 <div className="hidden md:block">
                   <p className="text-sm font-bold text-gray-900 leading-tight">Totok Michael</p>

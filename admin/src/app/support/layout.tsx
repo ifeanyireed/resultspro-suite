@@ -149,7 +149,7 @@ export default function SupportLayout({
               <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
                 <div className="w-10 h-10 bg-gradient-to-tr from-green-200 to-green-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
                   {/* Using standard character image */}
-                  <img src="/character7.jpg" alt="Support Staff" className="w-full h-full object-cover" />
+                  <img src="/avatars/character2.jpg" alt="Support Staff" className="w-full h-full object-cover" />
                 </div>
                 <div className="hidden md:block">
                   <p className="text-sm font-bold text-gray-900 leading-tight">Sarah Johnson</p>

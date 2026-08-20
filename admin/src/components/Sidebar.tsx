@@ -102,8 +102,8 @@ export function Sidebar() {
           <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
           
-          <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mb-4 relative z-10 backdrop-blur-sm">
-            <div className="font-bold text-sm">SA</div>
+          <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden">
+            <Image src="/avatars/character1.jpg" alt="Super Admin" width={40} height={40} className="w-full h-full object-cover" />
           </div>
           <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">Super<br/>Admin</h4>
           <p className="text-[10px] text-gray-300 mb-6 relative z-10">superadmin@resultspro</p>
