@@ -9,7 +9,7 @@ import { PopupProvider } from "@/components/PopupProvider";
 export function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
     <MsalProvider instance={msalInstance}>
-      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "missing-client-id"}>
         <Toaster position="top-right" />
         <PopupProvider>
           {children}

@@ -26,6 +26,7 @@ function SignupForm() {
   });
   const [agreed, setAgreed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const hasGoogleClientId = !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   
   const { instance } = useMsal();
 
@@ -199,14 +200,16 @@ function SignupForm() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <button 
-          onClick={() => loginWithGoogle()}
-          className="flex items-center justify-center gap-2 py-4 rounded-2xl bg-white/5 border border-white/[0.1] border-t-white/[0.15] text-white hover:bg-white/10 transition-colors font-bold text-sm"
-        >
-          <Chrome className="w-4 h-4" />
-          Google
-        </button>
+      <div className={`grid ${hasGoogleClientId ? 'grid-cols-2' : 'grid-cols-1'} gap-4`}>
+        {hasGoogleClientId && (
+          <button 
+            onClick={() => loginWithGoogle()}
+            className="flex items-center justify-center gap-2 py-4 rounded-2xl bg-white/5 border border-white/[0.1] border-t-white/[0.15] text-white hover:bg-white/10 transition-colors font-bold text-sm"
+          >
+            <Chrome className="w-4 h-4" />
+            Google
+          </button>
+        )}
         
         <button 
           onClick={handleMicrosoftSignup}

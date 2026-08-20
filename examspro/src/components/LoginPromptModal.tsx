@@ -24,6 +24,8 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
+  const hasGoogleClientId = !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
   // Sync with 'show' prop
   useEffect(() => {
@@ -156,31 +158,35 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
             </div>
 
             {/* Google Login CTA */}
-            <button
-              id="login-prompt-google-btn"
-              onClick={() => loginWithGoogle()}
-              disabled={isLoading}
-              className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-white text-gray-900 font-bold text-sm hover:bg-white/90 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed shadow-lg mb-3"
-            >
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <Chrome className="w-5 h-5 text-[#4285F4]" />
-              )}
-              {isLoading ? 'Signing in...' : 'Continue with Google'}
-            </button>
+            {hasGoogleClientId && (
+              <button
+                id="login-prompt-google-btn"
+                onClick={() => loginWithGoogle()}
+                disabled={isLoading}
+                className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-white text-gray-900 font-bold text-sm hover:bg-white/90 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed shadow-lg mb-3"
+              >
+                {isLoading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <Chrome className="w-5 h-5 text-[#4285F4]" />
+                )}
+                {isLoading ? 'Signing in...' : 'Continue with Google'}
+              </button>
+            )}
 
             {/* Divider */}
-            <div className="relative my-4">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/5" />
+            {hasGoogleClientId && (
+              <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-white/5" />
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="px-3 bg-[#0d1b2a] text-[10px] font-bold uppercase tracking-widest text-gray-600">
+                    or
+                  </span>
+                </div>
               </div>
-              <div className="relative flex justify-center">
-                <span className="px-3 bg-[#0d1b2a] text-[10px] font-bold uppercase tracking-widest text-gray-600">
-                  or
-                </span>
-              </div>
-            </div>
+            )}
 
             {/* Email login link */}
             <Link
