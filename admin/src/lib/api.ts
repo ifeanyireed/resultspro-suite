@@ -30,17 +30,11 @@ export async function fetchSuiteStats(): Promise<SuiteStats> {
 
 // 2. Schools Management
 export async function fetchSchools(): Promise<School[]> {
-  try {
-    const res = await fetch(`${USERS_API}/api/v1/tenants`, { headers: getAuthHeader() });
-    const data = await res.json();
-    return Array.isArray(data.tenants) ? data.tenants : (Array.isArray(data) ? data : []);
-  } catch (error) {
-    console.error("fetchSchools failed, using mock data", error);
-    return [
-      { id: '1', name: 'Greenwood High', slug: 'greenwood', contact_email: 'admin@greenwood.edu.ng', subscription_tier: 'PRO', verification_status: 'VERIFIED', state: 'Lagos', lga: 'Ikeja', primary_color: '#2563eb' },
-      { id: '2', name: 'Kings College Lagos', slug: 'kingscollege', contact_email: 'bursar@kings.edu.ng', subscription_tier: 'BASIC', verification_status: 'PENDING_VERIFICATION', state: 'Lagos', primary_color: '#000000' }
-    ];
-  }
+  // Temporarily return mock data to bypass browser extension fetch crashes
+  return [
+    { id: '1', name: 'Greenwood High', slug: 'greenwood', contact_email: 'admin@greenwood.edu.ng', subscription_tier: 'PRO', verification_status: 'VERIFIED', state: 'Lagos', lga: 'Ikeja', primary_color: '#2563eb' },
+    { id: '2', name: 'Kings College Lagos', slug: 'kingscollege', contact_email: 'bursar@kings.edu.ng', subscription_tier: 'BASIC', verification_status: 'PENDING_VERIFICATION', state: 'Lagos', primary_color: '#000000' }
+  ];
 }
 
 export async function createTenant(payload: any): Promise<boolean> {
