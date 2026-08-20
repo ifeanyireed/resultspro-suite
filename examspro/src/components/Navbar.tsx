@@ -44,7 +44,7 @@ const Navbar = () => {
       const count = await getUnreadCount();
       setUnreadCount(count);
     } catch (err) {
-      console.error('Failed to fetch unread count');
+      // silently fail to prevent console errors from browser extensions
     }
   };
 
