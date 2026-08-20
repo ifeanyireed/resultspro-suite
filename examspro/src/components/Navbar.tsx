@@ -53,7 +53,7 @@ const Navbar = () => {
       const res = await api.get('/public/settings');
       setFeatureFlags(res.data);
     } catch (err) {
-      console.error('Failed to fetch feature flags');
+      // silently fail to prevent console errors from browser extensions
     }
   };
 
