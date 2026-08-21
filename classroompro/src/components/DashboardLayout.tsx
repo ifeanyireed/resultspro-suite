@@ -108,7 +108,7 @@ export function Sidebar() {
         <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto no-scrollbar">
         <div className="px-3 mb-2">
           <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
-            {role.replace("_", " ")} Portal
+            {role?.replace("_", " ")} Portal
           </span>
         </div>
         {menuItems.map((item) => (
