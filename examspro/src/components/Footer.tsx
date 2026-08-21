@@ -51,7 +51,7 @@ export default function Footer() {
 
             {/* Contact quick */}
             {[
-              { label: 'Email',    value: 'support@resultspro.ng' },
+              { label: 'Email',    value: 'hello@resultspro.ng' },
               { label: 'Location', value: 'Lagos, Nigeria' },
             ].map(c => (
               <div key={c.label} style={{ display: 'flex', gap: '1rem', marginBottom: '0.625rem', alignItems: 'flex-start' }}>

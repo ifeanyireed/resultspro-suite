@@ -4,27 +4,28 @@ import Link from 'next/link';
 
 const footerSections = [
   {
-    title: 'Services',
+    title: 'Product',
     links: [
-      { label: 'Practice Mode',             href: '/practice' },
-      { label: 'Live Games',                href: '/live' },
-      { label: 'Battle Mode',               href: '/battle-mode' },
-      { label: 'AI Study Assistant',        href: '/study-assistant' },
+      { label: 'Features',                  href: '/features' },
+      { label: 'Pricing',                   href: '/pricing' },
+      { label: 'School Admin',              href: '/schools' },
+      { label: 'Request Demo',              href: '/contact-sales' },
     ],
   },
   {
     title: 'Company',
     links: [
-      { label: 'Leaderboard',               href: '/leaderboard' },
+      { label: 'About Us',                  href: '/about' },
+      { label: 'Careers',                   href: '/careers' },
+      { label: 'Partners',                  href: '/partners' },
       { label: 'Blog',                      href: '/blog' },
-      { label: 'Refer & Earn',              href: '/referral' },
-      { label: 'Coin Shop',                 href: '/shop' },
     ],
   },
   {
     title: 'Support',
     links: [
-      { label: 'Contact Support',           href: '/support' },
+      { label: 'Help Center',               href: '/support' },
+      { label: 'Contact Us',                href: '/contact' },
       { label: 'Terms of Service',          href: '/terms' },
       { label: 'Privacy Policy',            href: '/privacy' },
     ],
@@ -46,12 +47,12 @@ export default function Footer() {
               <img src="/logo.png" alt="ClassroomPRO Logo" style={{ height: '80px', width: 'auto', objectFit: 'contain' }} />
             </Link>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '2rem' }}>
-              Nigeria's ultimate CBT practice platform. Supercharge your prep with AI tutoring, live multiplayer games, and battle modes.
+              The comprehensive Learning Management System built for operational excellence in modern Nigerian schools.
             </p>
 
             {/* Contact quick */}
             {[
-              { label: 'Email',    value: 'support@resultspro.ng' },
+              { label: 'Email',    value: 'hello@resultspro.ng' },
               { label: 'Location', value: 'Lagos, Nigeria' },
             ].map(c => (
               <div key={c.label} style={{ display: 'flex', gap: '1rem', marginBottom: '0.625rem', alignItems: 'flex-start' }}>
