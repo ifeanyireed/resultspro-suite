@@ -5,10 +5,13 @@ import { Header } from '@/components/Header';
 import { LayoutDashboard, BookOpen, Swords, Users, Trophy, DollarSign, FileText } from 'lucide-react';
 
 import OverviewTab from './tabs/OverviewTab';
+import SubjectsTab from './tabs/SubjectsTab';
 import QuestionsTab from './tabs/QuestionsTab';
+import LiveGamesTab from './tabs/LiveGamesTab';
 import BattlesTab from './tabs/BattlesTab';
 import UsersTab from './tabs/UsersTab';
 import TournamentsTab from './tabs/TournamentsTab';
+import ModerationTab from './tabs/ModerationTab';
 import FinancialsTab from './tabs/FinancialsTab';
 
 export default function ExamsProCommandCenter() {
@@ -16,10 +19,13 @@ export default function ExamsProCommandCenter() {
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-    { id: 'questions', label: 'Question Bank', icon: BookOpen },
-    { id: 'battles', label: 'Live Battles', icon: Swords },
-    { id: 'users', label: 'Candidates', icon: Users },
+    { id: 'subjects', label: 'Subjects & Syllabus', icon: BookOpen },
+    { id: 'questions', label: 'Question Bank', icon: FileText },
+    { id: 'live', label: 'Live Games', icon: Swords },
+    { id: 'battles', label: 'Battles', icon: Swords },
     { id: 'tournaments', label: 'Tournaments', icon: Trophy },
+    { id: 'users', label: 'Candidates', icon: Users },
+    { id: 'moderation', label: 'Moderation', icon: FileText },
     { id: 'financials', label: 'Financials', icon: DollarSign },
   ];
 
@@ -55,10 +61,13 @@ export default function ExamsProCommandCenter() {
 
       <div className="p-8 max-w-[1400px] mx-auto w-full">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'subjects' && <SubjectsTab />}
         {activeTab === 'questions' && <QuestionsTab />}
+        {activeTab === 'live' && <LiveGamesTab />}
         {activeTab === 'battles' && <BattlesTab />}
         {activeTab === 'users' && <UsersTab />}
         {activeTab === 'tournaments' && <TournamentsTab />}
+        {activeTab === 'moderation' && <ModerationTab />}
         {activeTab === 'financials' && <FinancialsTab />}
       </div>
     </div>

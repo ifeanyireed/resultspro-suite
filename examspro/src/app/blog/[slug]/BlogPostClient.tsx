@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { IconLoader2 as Loader2, IconCalendar as Calendar, IconChevronLeft as ChevronLeft, IconTag as Tag, IconShare2 as Share2, IconBrandFacebook as Facebook, IconBrandTwitter as Twitter, IconLink as LinkIcon } from '@tabler/icons-react';
 import Link from "next/link";
 import { toast } from "react-hot-toast";
 
@@ -28,99 +27,91 @@ export default function BlogPostClient({ post, slug }: { post: BlogPost | null, 
 
   if (!post) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center text-center p-6">
-         <h1 className="text-4xl font-display font-black text-white mb-4">Post Not Found</h1>
-         <p className="text-gray-500 mb-8">The article you're looking for doesn't exist or has been moved.</p>
-         <Link href="/blog">
-           <button className="px-8 py-3 rounded-xl bg-green text-navy font-black uppercase tracking-widest hover:bg-green/90 transition-all">
-             Back to Blog
-           </button>
-         </Link>
-      </div>
+      <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--color-nets-navy)' }}>
+        <section style={{ paddingTop: '160px', paddingBottom: '80px', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="container-nets" style={{ textAlign: 'center' }}>
+            <h1 className="h1" style={{ color: 'white', marginBottom: '1.5rem' }}>Post Not Found</h1>
+            <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.7)', marginBottom: '2rem' }}>
+              The article you're looking for doesn't exist or has been moved.
+            </p>
+            <Link href="/blog" className="btn btn-red" style={{ display: 'inline-flex', textDecoration: 'none' }}>
+              Back to Blog
+            </Link>
+          </div>
+        </section>
+      </main>
     );
   }
 
   return (
-    <main className="flex-1 pb-20">
-      <article>
+    <main style={{ background: 'var(--color-nets-navy-dark)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <article style={{ flex: 1 }}>
         {/* Header Section */}
-        <header className="relative pt-20 pb-20 px-6 overflow-hidden">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue/20 via-navy to-navy pointer-events-none" />
-          
-          <div className="max-w-[900px] mx-auto relative z-10 text-center space-y-8">
-            <Link href="/blog" className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-500 hover:text-green transition-colors mb-4">
-              <ChevronLeft className="w-4 h-4" /> Back to Articles
-            </Link>
-            
-            <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green/10 text-green text-[10px] font-black uppercase tracking-widest">
-                <Tag className="w-3 h-3" /> {post.category?.name || "General"}
+        <header style={{ paddingTop: '160px', paddingBottom: '80px', background: 'var(--color-nets-navy)' }}>
+          <div className="container-nets">
+            <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+              <Link href="/blog" style={{ display: 'inline-block', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: '2rem', textDecoration: 'none' }}>
+                ← Back to Articles
+              </Link>
+              
+              <div style={{ marginBottom: '2rem' }}>
+                <span className="overline" style={{ color: 'var(--color-nets-red)', marginBottom: '1rem', display: 'block' }}>
+                  {post.category?.name || "General"}
+                </span>
+                <h1 className="h2" style={{ color: 'white', lineHeight: 1.2 }}>
+                  {post.title}
+                </h1>
               </div>
-              <h1 className="text-4xl md:text-6xl font-display font-black text-white leading-tight">
-                {post.title}
-              </h1>
-            </div>
 
-            <div className="flex items-center justify-center gap-8 text-sm text-gray-400">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-green/20 flex items-center justify-center text-green text-[10px] font-black">
-                  {post.author?.name?.charAt(0) || "A"}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem', color: 'rgba(255,255,255,0.6)', fontSize: '0.875rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ fontWeight: 600 }}>{post.author?.name || "Admin"}</span>
                 </div>
-                <span className="font-bold">{post.author?.name || "Admin"}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                 <Calendar className="w-4 h-4" /> {new Date(post.publishedAt).toLocaleDateString("en-NG", { dateStyle: 'long' })}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  {new Date(post.publishedAt).toLocaleDateString("en-NG", { dateStyle: 'long' })}
+                </div>
               </div>
             </div>
           </div>
         </header>
 
         {/* Featured Image */}
-        <div className="max-w-[1000px] mx-auto px-6 -mt-10 mb-20 relative z-20">
-           <div className="aspect-[21/9] rounded-[40px] overflow-hidden border border-white/[0.1] border-t-white/[0.15] bg-white/5 shadow-2xl">
-              <img 
-                src={post.featuredImage || "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&q=80"} 
-                alt={post.title}
-                className="w-full h-full object-cover"
-              />
-           </div>
+        <div className="container-nets" style={{ marginTop: '-40px', marginBottom: '80px', position: 'relative', zIndex: 10 }}>
+          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <img 
+              src={post.featuredImage || "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&q=80"} 
+              alt={post.title}
+              style={{ width: '100%', height: 'auto', aspectRatio: '21/9', objectFit: 'cover', borderRadius: '2px', display: 'block' }}
+            />
+          </div>
         </div>
 
         {/* Content */}
-        <div className="max-w-[800px] mx-auto px-6 relative z-10">
-           <div 
-             className="prose prose-invert prose-green max-w-none prose-lg
-               prose-headings:font-display prose-headings:font-black
-               prose-p:text-gray-300 prose-p:leading-relaxed
-               prose-li:text-gray-300
-               prose-strong:text-white
-               prose-blockquote:border-green prose-blockquote:bg-green/5 prose-blockquote:p-4 prose-blockquote:rounded-xl
-             "
-             dangerouslySetInnerHTML={{ __html: post.content }}
-           />
+        <div className="container-nets" style={{ paddingBottom: '80px' }}>
+           <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+             <div 
+               className="prose prose-invert prose-lg max-w-none"
+               style={{ color: 'rgba(255,255,255,0.8)' }}
+               dangerouslySetInnerHTML={{ __html: post.content }}
+             />
 
-           {/* Footer Info */}
-           <div className="mt-20 pt-10 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-8">
-              <div className="flex flex-wrap gap-2">
-                 {post.tags.split(',').map(tag => (
-                   <span key={tag} className="px-3 py-1 rounded-lg bg-white/5 text-gray-500 text-[10px] font-bold uppercase tracking-widest border border-white/[0.05] border-t-white/[0.1]">
-                      #{tag.trim()}
-                   </span>
-                 ))}
-              </div>
+             {/* Footer Info */}
+             <div style={{ marginTop: '5rem', paddingTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '2rem' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                   {(post.tags || "").split(',').filter(t => t.trim()).map(tag => (
+                     <span key={tag} style={{ padding: '0.25rem 0.75rem', background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', borderRadius: '2px' }}>
+                        #{tag.trim()}
+                     </span>
+                   ))}
+                </div>
 
-              <div className="flex items-center gap-4">
-                 <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Share:</span>
-                 <button onClick={copyLink} className="w-10 h-10 rounded-xl bg-white/5 border border-white/[0.1] border-t-white/[0.15] flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all">
-                    <LinkIcon className="w-4 h-4" />
-                 </button>
-                 <button className="w-10 h-10 rounded-xl bg-white/5 border border-white/[0.1] border-t-white/[0.15] flex items-center justify-center text-gray-400 hover:text-[#1DA1F2] hover:bg-[#1DA1F2]/10 transition-all">
-                    <Twitter className="w-4 h-4" />
-                 </button>
-                 <button className="w-10 h-10 rounded-xl bg-white/5 border border-white/[0.1] border-t-white/[0.15] flex items-center justify-center text-gray-400 hover:text-[#4267B2] hover:bg-[#4267B2]/10 transition-all">
-                    <Facebook className="w-4 h-4" />
-                 </button>
-              </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                   <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Share</span>
+                   <button onClick={copyLink} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'white', padding: '0.5rem 1rem', fontSize: '0.8125rem', cursor: 'pointer', borderRadius: '2px' }}>
+                      Copy Link
+                   </button>
+                </div>
+             </div>
            </div>
         </div>
       </article>

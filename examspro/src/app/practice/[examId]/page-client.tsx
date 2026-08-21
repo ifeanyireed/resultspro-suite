@@ -36,7 +36,7 @@ export default function SubjectSelectionPage() {
     const fetchSubjects = async () => {
       try {
         const response = await api.get(`/exams/${examId}/subjects`);
-        setSubjects(response.data.subjects);
+        setSubjects(Array.isArray(response.data.subjects) ? response.data.subjects : []);
         setExamName(response.data.examName);
         setPercentile(response.data.percentile || 0);
       } catch (err) {

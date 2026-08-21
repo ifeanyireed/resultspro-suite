@@ -16,31 +16,12 @@ export function Sidebar() {
       title: 'LEARNING',
       links: [
         { label: 'Dashboard', href: '/dashboard', icon: IconHome },
-        { label: 'Practice', href: '/practice', icon: IconBook },
-        { label: 'AI Tutor', href: '/study-assistant', icon: IconBrain },
-      ],
-    },
-    {
-      title: 'COMPETITION',
-      links: [
-        { label: 'Live Games', href: '/live', icon: IconBolt },
-        { label: 'Battle Mode', href: '/battle-mode', icon: IconSword },
-        { label: 'Leaderboard', href: '/leaderboard', icon: IconTrophy },
-      ],
-    },
-    {
-      title: 'COMMUNITY',
-      links: [
-        { label: 'Referral', href: '/referral', icon: IconUserPlus },
-        { label: 'Blog', href: '/blog', icon: IconNews },
-        { label: 'Shop', href: '/shop', icon: IconShoppingBag },
       ],
     },
     {
       title: 'SETTINGS',
       links: [
-        { label: 'Settings', href: '/settings', icon: IconSettings },
-        { label: 'Help', href: '/support', icon: IconHelp },
+        { label: 'Settings', href: '/dashboard/settings', icon: IconSettings },
       ],
     },
   ];

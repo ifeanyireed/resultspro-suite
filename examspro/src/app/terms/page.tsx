@@ -3,7 +3,6 @@
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { IconFileText as ScrollText, IconShieldCheck as ShieldCheck, IconClock as Clock, IconScale as Scale } from '@tabler/icons-react';
 
 export default function TermsPage() {
   const sections = [
@@ -34,53 +33,40 @@ export default function TermsPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-navy">
+    <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--color-nets-navy)' }}>
       <Navbar />
 
-      <section className="pt-32 pb-24 px-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="w-20 h-20 rounded-3xl bg-green/10 border border-green/20 flex items-center justify-center mx-auto mb-8">
-              <ScrollText className="w-10 h-10 text-green" />
-            </div>
-            <h1 className="text-4xl md:text-5xl font-display font-black text-white uppercase tracking-tight mb-4">Terms & Conditions</h1>
-            <p className="text-gray-500 font-bold text-xs uppercase tracking-widest">Last Updated: April 8, 2026</p>
-          </div>
-
-          <div className="bg-white/[0.02] border border-white/5 rounded-[40px] p-8 md:p-12 space-y-12">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pb-12 border-b border-white/5">
-              <div className="text-center">
-                <ShieldCheck className="w-6 h-6 text-green mx-auto mb-3" />
-                <p className="text-[10px] font-black text-white uppercase tracking-tighter">Legally Binding</p>
-              </div>
-              <div className="text-center">
-                <Clock className="w-6 h-6 text-blue-400 mx-auto mb-3" />
-                <p className="text-[10px] font-black text-white uppercase tracking-tighter">10 Min Read</p>
-              </div>
-              <div className="text-center">
-                <Scale className="w-6 h-6 text-amber mx-auto mb-3" />
-                <p className="text-[10px] font-black text-white uppercase tracking-tighter">Fair Usage</p>
-              </div>
-              <div className="text-center">
-                <ShieldCheck className="w-6 h-6 text-green mx-auto mb-3" />
-                <p className="text-[10px] font-black text-white uppercase tracking-tighter">Secure</p>
-              </div>
-            </div>
-
-            {sections.map((section, i) => (
-              <div key={i} className="space-y-4">
-                <h3 className="text-xl font-bold text-white uppercase tracking-tight">{section.title}</h3>
-                <p className="text-gray-400 font-medium leading-relaxed">
-                  {section.content}
-                </p>
-              </div>
-            ))}
-
-            <div className="pt-12 border-t border-white/5 text-center">
-              <p className="text-gray-500 text-sm italic">
-                Questions about our terms? Contact us at <span className="text-green">legal@resultspro.ng</span>
+      <section style={{ paddingTop: '160px', paddingBottom: '120px', background: 'var(--color-nets-navy-dark)', flex: 1 }}>
+        <div className="container-nets">
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+            
+            <div style={{ marginBottom: '4rem' }}>
+              <span className="overline" style={{ color: 'var(--color-nets-red)', marginBottom: '1rem', display: 'block' }}>Legal</span>
+              <h1 className="h2" style={{ color: 'white', marginBottom: '1.5rem' }}>Terms of Service</h1>
+              <p style={{ fontSize: '1.125rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
+                Last Updated: April 8, 2026<br/>
+                Please read these terms carefully before using our platform.
               </p>
             </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+              {sections.map((section, i) => (
+                <div key={i}>
+                  <h2 className="h4" style={{ color: 'white', marginBottom: '1rem' }}>{section.title}</h2>
+                  <p style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.7 }}>
+                    {section.content}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ marginTop: '5rem', paddingTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <h3 className="h5" style={{ color: 'white', marginBottom: '1rem' }}>Contact Us</h3>
+              <p style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.7 }}>
+                Questions about our terms? Contact our legal team at <a href="mailto:legal@resultspro.ng" style={{ color: 'var(--color-nets-red)', textDecoration: 'none' }}>legal@resultspro.ng</a>.
+              </p>
+            </div>
+
           </div>
         </div>
       </section>

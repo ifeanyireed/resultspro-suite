@@ -1,0 +1,15 @@
+{
+  "name": "resultspro-suite",
+  "private": true,
+  "workspaces": [
+    "admin",
+    "classroompro",
+    "coursespro",
+    "design-system",
+    "examspro",
+    "landing_page",
+    "resultspro",
+    "schoolhub",
+    "tutorspro"
+  ]
+}

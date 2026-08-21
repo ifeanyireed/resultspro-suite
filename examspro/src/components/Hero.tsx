@@ -34,13 +34,13 @@ const Hero = () => {
         flexDirection: 'column',
         overflow: 'hidden',
         background: 'var(--color-nets-navy-dark)',
-        marginTop: '-4rem' // to offset navbar
+        marginTop: '-72px' // to offset navbar height exactly
       }}
     >
       {/* ── Full-bleed background photo ── */}
       <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <img
-          src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1920&q=90"
+          src="/images/Students1.jpeg"
           alt=""
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
           loading="eager"

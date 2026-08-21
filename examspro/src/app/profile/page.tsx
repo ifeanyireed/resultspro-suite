@@ -166,7 +166,7 @@ export default function ProfilePage() {
           <div className="relative group">
             <div className="w-32 h-32 rounded-full border-4 border-green/20 p-1">
               <img 
-                src={`https://i.pravatar.cc/300?u=${user?.id}`} 
+                src={`/avatars/character1.jpg`} 
                 className="w-full h-full rounded-full object-cover border-4 border-navy" 
                 alt="Avatar" 
               />
@@ -453,7 +453,7 @@ export default function ProfilePage() {
         <div className="space-y-6">
           <div className="flex flex-col items-center gap-4 mb-4">
             <div className="relative group">
-              <img src={`https://i.pravatar.cc/300?u=${user?.id}`} className="w-24 h-24 rounded-[32px] border-2 border-white/10" alt="Avatar" />
+              <img src={`/avatars/character1.jpg`} className="w-24 h-24 rounded-[32px] border-2 border-white/10" alt="Avatar" />
               <div className="absolute inset-0 bg-navy/60 rounded-[32px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                 <ImageIcon className="w-6 h-6 text-white" />
               </div>

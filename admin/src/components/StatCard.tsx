@@ -5,7 +5,7 @@ interface StatCardProps {
   title: string;
   value: string | number;
   subtitle?: string;
-  icon: LucideIcon;
+  icon: any;
   trend?: string;
   trendPositive?: boolean;
   color?: 'blue' | 'emerald' | 'amber' | 'purple' | 'rose' | 'indigo';

@@ -116,10 +116,17 @@ export default function BattleLobbyPage() {
           return;
         }
 
-        const rawExams = examsRes.data || [];
-        const flatExams = Array.isArray(rawExams) && rawExams.length > 0 && rawExams[0].exams 
-          ? rawExams.flatMap((cat: any) => cat.exams || [])
-          : rawExams;
+        let rawExams = examsRes.data || [];
+        let flatExams: any[] = [];
+        
+        if (Array.isArray(rawExams)) {
+          flatExams = rawExams.length > 0 && rawExams[0].exams 
+            ? rawExams.flatMap((cat: any) => cat.exams || [])
+            : rawExams;
+        } else if (rawExams && typeof rawExams === 'object') {
+          if (Array.isArray(rawExams.exams)) flatExams = rawExams.exams;
+          else if (Array.isArray(rawExams.data)) flatExams = rawExams.data;
+        }
 
         setExams(flatExams);
         
@@ -149,7 +156,7 @@ export default function BattleLobbyPage() {
           api.get('/tournaments/current').catch(() => ({ data: null })),
         ]);
 
-        setActiveBattles(battlesRes.data);
+        setActiveBattles(Array.isArray(battlesRes.data) ? battlesRes.data : []);
         setOnlineStats(metricsRes.data);
         setTournamentInfo(tournamentRes.data);
       } catch (error) {
@@ -357,7 +364,7 @@ export default function BattleLobbyPage() {
                       <SelectValue placeholder="Select Exam" />
                     </SelectTrigger>
                     <SelectContent className="bg-navy border-white/10 text-white">
-                      {exams.map((e) => (
+                      {Array.isArray(exams) && exams.map((e) => (
                         <SelectItem key={e.id || e.ID} value={(e.id || e.ID)?.toString()}>{e.name}</SelectItem>
                       ))}
                     </SelectContent>
@@ -613,7 +620,7 @@ export default function BattleLobbyPage() {
                   <SelectValue placeholder="Choose an exam" />
                 </SelectTrigger>
                 <SelectContent className="bg-navy border-white/10 text-white">
-                  {exams.map((e) => (
+                  {Array.isArray(exams) && exams.map((e) => (
                     <SelectItem key={e.id || e.ID} value={(e.id || e.ID)?.toString()}>{e.name}</SelectItem>
                   ))}
                 </SelectContent>

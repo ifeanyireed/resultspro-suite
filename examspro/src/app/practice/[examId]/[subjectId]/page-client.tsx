@@ -47,7 +47,7 @@ export default function TopicListPage() {
   const fetchTopics = useCallback(async () => {
     try {
       const response = await api.get(`/exams/subjects/${subjectId}/topics`);
-      setTopics(response.data.topics);
+      setTopics(Array.isArray(response.data.topics) ? response.data.topics : []);
       setSubjectName(response.data.subjectName);
     } catch (err) {
       console.error('Error fetching topics:', err);

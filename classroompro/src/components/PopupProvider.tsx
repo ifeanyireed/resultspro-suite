@@ -32,14 +32,14 @@ export const PopupProvider = ({ children }: { children: ReactNode }) => {
   const fetchPopups = async () => {
     try {
       const data = await getActivePopups();
-      setPopups(data || []);
+      setPopups(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.error("Failed to fetch popups");
+      // silently fail to prevent console errors from browser extensions
     }
   };
 
   useEffect(() => {
-    if (!popups || popups.length === 0) {
+    if (!popups || !Array.isArray(popups) || popups.length === 0) {
       setCurrentPopup(null);
       return;
     }

@@ -188,7 +188,7 @@ function MatchmakingContent() {
                       'bg-white/5 border-white/[0.1] border-t-white/[0.15] group-hover:border-white/20 group-hover:bg-white/10 -rotate-3'
                     }`}>
                       <img 
-                        src={`https://i.pravatar.cc/150?u=${p.userId || i}`} 
+                        src={`/avatars/character${ (String(p.userId || i).charCodeAt(0) % 20) || 1 }.jpg`} 
                         className={`w-full h-full object-cover rounded-[32px] ${isMe ? '' : 'grayscale-[0.3] group-hover:grayscale-0 transition-all'}`}
                         alt="Avatar"
                       />

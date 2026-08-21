@@ -237,3 +237,100 @@
   letter-spacing: -0.04em;
   color: var(--color-nets-navy-10);
 }
+
+/* ─── Nav link ───────────────────────────────────────── */
+.nav-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  padding: 0.375rem 0;
+  position: relative;
+  transition: color 0.15s ease;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-nets-red);
+  transition: width 0.2s ease;
+}
+.nav-link:hover { color: #fff; }
+.nav-link:hover::after { width: 100%; }
+.nav-link.active { color: #fff; }
+.nav-link.active::after { width: 100%; }
+
+/* ─── Responsive Navigation ───────────────────────────── */
+@media (max-width: 1023px) {
+  .nav-desktop,
+  .nav-desktop-actions {
+    display: none !important;
+  }
+  .nav-mobile-toggle {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav-desktop,
+  .nav-desktop-actions {
+    display: flex !important;
+  }
+  .nav-mobile-toggle {
+    display: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Missing Landing Page Utility Classes for ExamsPRO
+   ═══════════════════════════════════════════════════════════════ */
+
+.bg-light {
+  background-color: var(--color-nets-light);
+  color: var(--color-nets-text);
+}
+
+.bg-white {
+  background-color: var(--color-nets-white);
+  color: var(--color-nets-text);
+}
+
+.bg-navy {
+  background-color: var(--color-nets-navy-dark);
+  color: var(--color-nets-white);
+}
+
+.text-navy {
+  color: var(--color-nets-navy) !important;
+}
+
+.text-red {
+  color: var(--color-nets-red) !important;
+}
+
+.text-muted {
+  color: var(--color-nets-text-2) !important;
+}
+
+.text-muted-light {
+  color: rgba(255,255,255,0.7) !important;
+}
+
+.text-white {
+  color: var(--color-nets-white) !important;
+}
+
+.bg-nets-light {
+  background-color: var(--color-nets-light);
+}
+
+.card {
+  background-color: var(--color-nets-white);
+  border: 1px solid var(--color-nets-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card);
+}

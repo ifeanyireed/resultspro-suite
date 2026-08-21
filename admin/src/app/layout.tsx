@@ -5,6 +5,11 @@ import { Sidebar } from '@/components/Sidebar';
 export const metadata: Metadata = {
   title: 'ResultsPRO Suite - Admin Control Hub',
   description: 'Centralized Master Control Centre for all ResultsPRO Suite Microservices and Applications',
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

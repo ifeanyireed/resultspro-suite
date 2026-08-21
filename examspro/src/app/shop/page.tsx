@@ -64,7 +64,13 @@ export default function CoinShopPage() {
   const fetchCoinPacks = async () => {
     try {
       const res = await api.get('/payment/packs');
-      setAllPacks(res.data);
+      let packsData = res.data;
+      if (!Array.isArray(packsData)) {
+        if (packsData && Array.isArray(packsData.packs)) packsData = packsData.packs;
+        else if (packsData && Array.isArray(packsData.data)) packsData = packsData.data;
+        else packsData = [];
+      }
+      setAllPacks(packsData);
     } catch (err) {
       console.error('Failed to fetch coin packs:', err);
     } finally {
@@ -72,8 +78,8 @@ export default function CoinShopPage() {
     }
   };
 
-  const coinPacks = useMemo(() => allPacks.filter(p => p.type === 'COIN'), [allPacks]);
-  const premiumPack = useMemo(() => allPacks.find(p => p.type === 'PREMIUM'), [allPacks]);
+  const coinPacks = useMemo(() => Array.isArray(allPacks) ? allPacks.filter(p => p.type === 'COIN') : [], [allPacks]);
+  const premiumPack = useMemo(() => Array.isArray(allPacks) ? allPacks.find(p => p.type === 'PREMIUM') : undefined, [allPacks]);
 
   const handlePurchase = async (packId: string) => {
     if (!user) {
@@ -100,7 +106,7 @@ export default function CoinShopPage() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         {/* Header / Balance */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
-          <div className={`text-center ${user ? 'md:text-left' : 'md:text-center w-full'}`}>
+          <div className={`text-center ${(isMounted && user) ? 'md:text-left' : 'md:text-center w-full'}`}>
             <h1 className="text-4xl md:text-6xl font-display font-black text-white mb-4">
               COIN <span className="text-amber">SHOP</span>
             </h1>
@@ -110,7 +116,7 @@ export default function CoinShopPage() {
             </p>
           </div>
           
-          {user && (
+          {isMounted && user && (
             <div className="p-8 rounded-[40px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] flex items-center gap-6 relative overflow-hidden group">
               <div className="absolute inset-0 bg-amber/5 opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="w-16 h-16 rounded-2xl bg-amber/10 flex items-center justify-center text-amber relative z-10">
@@ -170,7 +176,7 @@ export default function CoinShopPage() {
                   {loadingPack === premiumPack.id ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
-                    user?.isPremium ? 'Renew Membership' : 'Go Unlimited'
+                    (isMounted && user?.isPremium) ? 'Renew Membership' : 'Go Unlimited'
                   )}
                 </Button>
               </div>

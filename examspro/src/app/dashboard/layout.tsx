@@ -1,7 +1,7 @@
 'use client';
 
 import { Sidebar } from '@/components/Sidebar';
-import { ModernDashboardLayout } from '@resultspro/design-system';
+import { ModernDashboardLayout } from '@/components/layout/ModernDashboardLayout';
 import { IconSearch as Search, IconBell as Bell } from '@tabler/icons-react';
 import { useAuthStore } from '@/store/useAuthStore';
 
@@ -28,8 +28,8 @@ function GlobalTopNav() {
           <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
         </button>
         <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
-          <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
-            {user?.name?.charAt(0) || 'U'}
+          <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm bg-gray-100">
+            <img src={user?.avatarUrl || "/avatars/character1.jpg"} alt="User Avatar" className="w-full h-full object-cover" />
           </div>
         </div>
       </div>

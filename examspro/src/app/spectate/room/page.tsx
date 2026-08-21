@@ -74,7 +74,7 @@ function SpectatorViewContent() {
                     <div key={p.id} className="bg-white/5 border border-white/[0.1] border-t-white/[0.15] p-8 rounded-3xl relative overflow-hidden group">
                         <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4">Rank #{i+1}</div>
                         <div className="w-16 h-16 rounded-full border-2 border-white/[0.1] border-t-white/[0.15] overflow-hidden mx-auto mb-4 bg-white/5">
-                          <img src={`https://i.pravatar.cc/150?u=${p.userId}`} alt="" className="w-full h-full object-cover" />
+                          <img src={`/avatars/character${ (String(p.userId).charCodeAt(0) % 20) || 1 }.jpg`} alt="" className="w-full h-full object-cover" />
                         </div>
                         <div className="text-xl font-bold text-white mb-1">{p.user?.name || p.user?.email}</div>
                         <div className="text-blue font-black">{p.score} Points</div>
@@ -164,7 +164,7 @@ function SpectatorViewContent() {
                  <div key={p.id} className="flex-shrink-0 flex items-center gap-3 bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] p-3 rounded-2xl">
                     <div className="relative">
                       <div className="w-10 h-10 rounded-xl border border-white/[0.1] border-t-white/[0.15] overflow-hidden bg-white/5">
-                        <img src={`https://i.pravatar.cc/150?u=${p.userId}`} alt="" className="w-full h-full object-cover" />
+                        <img src={`/avatars/character${ (String(p.userId).charCodeAt(0) % 20) || 1 }.jpg`} alt="" className="w-full h-full object-cover" />
                       </div>
                       <div className="absolute -top-1 -right-1 w-4 h-4 bg-green rounded-full border-2 border-navy flex items-center justify-center text-[8px] font-black text-navy">✓</div>
                     </div>
@@ -197,7 +197,7 @@ function SpectatorViewContent() {
                   <div className="flex items-center gap-3">
                     <span className="text-[10px] font-black text-gray-500 w-4 text-center">{i+1}</span>
                     <div className="w-8 h-8 rounded-lg border border-white/[0.1] border-t-white/[0.15] overflow-hidden bg-white/5">
-                      <img src={`https://i.pravatar.cc/150?u=${p.userId}`} alt="" className="w-full h-full object-cover" />
+                      <img src={`/avatars/character${ (String(p.userId).charCodeAt(0) % 20) || 1 }.jpg`} alt="" className="w-full h-full object-cover" />
                     </div>
                     <span className="text-xs font-bold text-gray-300 group-hover:text-white transition-colors">{p.user?.name || p.user?.email || 'Player'}</span>
                   </div>

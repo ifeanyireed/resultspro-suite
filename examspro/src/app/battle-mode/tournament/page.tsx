@@ -228,7 +228,7 @@ export default function TournamentPage() {
                   <td className="px-8 py-6">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-full bg-white/5 border border-white/[0.1] border-t-white/[0.15] flex items-center justify-center overflow-hidden">
-                        <img src={`https://i.pravatar.cc/150?u=${row.userId}`} alt="" className="w-full h-full object-cover" />
+                        <img src={`/avatars/character${ (String(row.userId).charCodeAt(0) % 20) || 1 }.jpg`} alt="" className="w-full h-full object-cover" />
                       </div>
                       <div>
                         <div className="font-bold text-white group-hover:text-amber transition-colors">{row.user?.name}</div>

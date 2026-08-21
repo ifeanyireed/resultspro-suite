@@ -248,7 +248,7 @@ function LiveGamePlayContent() {
               <div className="flex items-center gap-3">
                 <span className="text-[10px] font-black text-gray-500 w-4">{i + 1}</span>
                 <div className="w-8 h-8 rounded-full border border-white/[0.1] border-t-white/[0.15] overflow-hidden bg-white/5">
-                  <img src={`https://i.pravatar.cc/150?u=${p.userId}`} alt="" className="w-full h-full object-cover" />
+                  <img src={`/avatars/character${ (String(p.userId).charCodeAt(0) % 20) || 1 }.jpg`} alt="" className="w-full h-full object-cover" />
                 </div>
                 <span className={`text-sm font-bold ${p.userId === user?.id ? 'text-green' : 'text-white'} truncate max-w-[100px]`}>
                   {p.user?.name || p.user?.email || 'Anonymous Player'}

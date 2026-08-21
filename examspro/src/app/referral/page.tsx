@@ -28,7 +28,13 @@ export default function ReferralPage() {
     try {
       setLoading(true);
       const res = await api.get('/user/referrals');
-      setReferrals(res.data);
+      let refData = res.data;
+      if (!Array.isArray(refData)) {
+        if (refData && Array.isArray(refData.referrals)) refData = refData.referrals;
+        else if (refData && Array.isArray(refData.data)) refData = refData.data;
+        else refData = [];
+      }
+      setReferrals(refData);
     } catch (err) {
       toast.error("Failed to load referrals");
     } finally {
@@ -80,9 +86,10 @@ export default function ReferralPage() {
     window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
   };
 
-  const convertedCount = referrals.filter(r => r.status === 'converted').length;
-  const totalEarned = referrals.reduce((acc, curr) => acc + (curr.coinsAwarded || 0), 0);
-  const conversionRate = referrals.length > 0 ? Math.round((convertedCount / referrals.length) * 100) : 0;
+  const isArray = Array.isArray(referrals);
+  const convertedCount = isArray ? referrals.filter(r => r.status === 'converted').length : 0;
+  const totalEarned = isArray ? referrals.reduce((acc, curr) => acc + (curr.coinsAwarded || 0), 0) : 0;
+  const conversionRate = isArray && referrals.length > 0 ? Math.round((convertedCount / referrals.length) * 100) : 0;
 
   return (
     <main className="min-h-screen bg-navy pb-24">
@@ -186,7 +193,7 @@ export default function ReferralPage() {
                 <h3 className="text-xl font-display font-bold text-white mb-8">Performance</h3>
                 <div className="space-y-8">
                     {[
-                    { label: "Total Invited", value: referrals.length, icon: Users, color: "blue" },
+                    { label: "Total Invited", value: isArray ? referrals.length : 0, icon: Users, color: "blue" },
                     { label: "Coins Earned", value: totalEarned, icon: Coins, color: "amber" },
                     { label: "Conversion", value: `${conversionRate}%`, icon: TrendingUp, color: "green" },
                     ].map((stat, i) => (
@@ -256,7 +263,7 @@ export default function ReferralPage() {
               <Loader2 className="w-10 h-10 text-green animate-spin mb-4" />
               <p className="text-gray-500 font-bold">Loading your referrals...</p>
             </div>
-          ) : referrals.length === 0 ? (
+          ) : !isArray || referrals.length === 0 ? (
             <div className="p-12 rounded-[40px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] text-center">
               <Users className="w-12 h-12 text-gray-600 mx-auto mb-4" />
               <h4 className="text-white font-bold">No referrals yet</h4>

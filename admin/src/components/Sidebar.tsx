@@ -9,7 +9,12 @@ import { LayoutDashboard, Building2, CheckCircle2, Users, CreditCard, Briefcase,
 export function Sidebar() {
   const pathname = usePathname();
 
-  const sections = [
+  type Section = {
+    title: string;
+    links: { label: string; href: string; icon: any; badge?: string }[];
+  };
+
+  const sections: Section[] = [
     {
       title: 'COMMAND CENTER',
       links: [

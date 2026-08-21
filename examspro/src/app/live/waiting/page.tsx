@@ -150,7 +150,7 @@ function LiveWaitingRoomContent() {
                 <div key={p.id} className="flex flex-col items-center gap-3 group animate-in fade-in zoom-in duration-500" style={{ animationDelay: `${i * 50}ms` }}>
                   <div className="relative">
                     <div className="w-16 h-16 rounded-2xl border-2 border-white/[0.1] border-t-white/[0.15] group-hover:border-green transition-all bg-white/5 overflow-hidden">
-                      <img src={`https://i.pravatar.cc/150?u=${p.userId}`} alt="" className="w-full h-full object-cover" />
+                      <img src={`/avatars/character${ (String(p.userId).charCodeAt(0) % 20) || 1 }.jpg`} alt="" className="w-full h-full object-cover" />
                     </div>
                     <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green rounded-full border-2 border-navy" />
                   </div>

@@ -34,15 +34,15 @@ export default function LiveGameLobby() {
           return;
         }
 
-        setRooms(roomsRes.data);
+        setRooms(Array.isArray(roomsRes.data) ? roomsRes.data : []);
         
         // Flatten categorized exams if necessary
-        const rawExams = examsRes.data || [];
-        const flatExams = Array.isArray(rawExams) && rawExams.length > 0 && rawExams[0].exams 
+        const rawExams = Array.isArray(examsRes.data) ? examsRes.data : [];
+        const flatExams = rawExams.length > 0 && rawExams[0].exams 
           ? rawExams.flatMap((cat: any) => cat.exams || [])
           : rawExams;
 
-        setExams(flatExams);
+        setExams(Array.isArray(flatExams) ? flatExams : []);
       } catch (error) {
         console.error('Error fetching live lobby data:', error);
       } finally {

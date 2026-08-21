@@ -10,8 +10,9 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
-    "@resultspro/design-system": "file:../design-system",
-    "@tabler/icons-react": "^3.0.0",
+    "@radix-ui/react-tooltip": "^1.1.8",
+    "@resultspro/design-system": "*",
+    "@tabler/icons-react": "^3.30.0",
     "clsx": "^2.1.1",
     "lucide-react": "^1.32.0",
     "next": "^16.3.1",

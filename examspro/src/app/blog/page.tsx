@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
-import { IconLoader2 as Loader2, IconCalendar as Calendar, IconUser as User, IconArrowRight as ArrowRight, IconSearch as Search, IconTag as Tag } from '@tabler/icons-react';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
@@ -45,130 +44,79 @@ export default function BlogListPage() {
     post.summary.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const featuredPost = filteredPosts[0];
-  const otherPosts = filteredPosts.slice(1);
-
   return (
-    <div className="min-h-screen bg-navy flex flex-col">
+    <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--color-nets-navy)' }}>
       <Navbar />
       
-      <main className="flex-1 pb-20">
-        {/* Hero Section */}
-        <section className="relative pt-20 pb-32 px-6 overflow-hidden">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue/20 via-navy to-navy pointer-events-none" />
-          
-          <div className="max-w-[1200px] mx-auto relative z-10 text-center space-y-6">
-            <h1 className="text-5xl md:text-7xl font-display font-black text-white leading-tight">
-              ResultsPRO <span className="text-green">Blog</span>
-            </h1>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+      <section style={{ paddingTop: '160px', paddingBottom: '80px', background: 'var(--color-nets-navy-dark)' }}>
+        <div className="container-nets">
+          <div style={{ maxWidth: '800px' }}>
+            <span className="overline" style={{ color: 'var(--color-nets-red)', marginBottom: '1rem', display: 'inline-block' }}>Blog & Updates</span>
+            <h1 className="h1" style={{ color: 'white', marginBottom: '1.5rem' }}>ResultsPRO News</h1>
+            <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, marginBottom: '2rem' }}>
               Stay updated with the latest JAMB/WAEC news, study tips, and platform updates.
             </p>
-            
-            <div className="max-w-xl mx-auto pt-8">
-              <div className="relative group">
-                <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-500 group-focus-within:text-green transition-colors" />
-                <input 
-                  type="text" 
-                  placeholder="Search articles..."
-                  className="w-full bg-white/5 border border-white/[0.1] border-t-white/[0.15] rounded-[32px] py-6 pl-16 pr-8 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-green/50 transition-all text-lg"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-            </div>
+            <input 
+              type="text" 
+              placeholder="Search articles..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: '100%', maxWidth: '400px', padding: '0.875rem 1.25rem',
+                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+                color: 'white', fontSize: '0.875rem', borderRadius: '2px', outline: 'none'
+              }}
+            />
           </div>
-        </section>
+        </div>
+      </section>
 
-        <div className="max-w-[1200px] mx-auto px-6">
+      <section style={{ padding: '80px 0', background: 'var(--color-nets-navy)', flex: 1 }}>
+        <div className="container-nets">
           {loading ? (
-            <div className="flex items-center justify-center h-64">
-              <Loader2 className="w-12 h-12 text-green animate-spin" />
+            <div style={{ padding: '4rem 0', color: 'rgba(255,255,255,0.5)', fontSize: '0.875rem' }}>
+              Loading articles...
             </div>
           ) : filteredPosts.length > 0 ? (
-            <>
-              {/* Featured Post */}
-              {!searchTerm && featuredPost && (
-                <div className="mb-20">
-                  <Link href={`/blog/${featuredPost.slug}`} className="group block">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                      <div className="relative aspect-[16/9] rounded-[40px] overflow-hidden border border-white/[0.1] border-t-white/[0.15] bg-white/5 shadow-2xl">
-                        <img 
-                          src={featuredPost.featuredImage || "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80"} 
-                          alt={featuredPost.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <div className="absolute top-6 left-6 px-4 py-2 rounded-full bg-green text-navy text-xs font-black uppercase tracking-widest shadow-lg">
-                          Featured
-                        </div>
-                      </div>
-                      <div className="space-y-6">
-                        <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-green">
-                          <Tag className="w-4 h-4" /> {featuredPost.category?.name || "General"}
-                        </div>
-                        <h2 className="text-4xl md:text-5xl font-display font-black text-white group-hover:text-green transition-colors leading-tight">
-                          {featuredPost.title}
-                        </h2>
-                        <p className="text-gray-400 text-lg leading-relaxed line-clamp-3">
-                          {featuredPost.summary}
-                        </p>
-                        <div className="flex items-center gap-6 pt-4 border-t border-white/10">
-                          <div className="flex items-center gap-2 text-sm text-gray-500">
-                             <User className="w-4 h-4" /> {featuredPost.author?.name || "Admin"}
-                          </div>
-                          <div className="flex items-center gap-2 text-sm text-gray-500">
-                             <Calendar className="w-4 h-4" /> {new Date(featuredPost.publishedAt).toLocaleDateString()}
-                          </div>
-                        </div>
-                      </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>
+              {filteredPosts.map((post) => (
+                <Link key={post.id} href={`/blog/${post.slug}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', background: 'var(--color-nets-navy-dark)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden' }}>
+                  <div style={{ aspectRatio: '16/10', width: '100%', background: 'rgba(255,255,255,0.02)' }}>
+                    <img 
+                      src={post.featuredImage || "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80"} 
+                      alt={post.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+                  <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                      <span className="overline" style={{ color: 'var(--color-nets-red)' }}>{post.category?.name || "General"}</span>
+                      <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>
+                        {new Date(post.publishedAt).toLocaleDateString()}
+                      </span>
                     </div>
-                  </Link>
-                </div>
-              )}
-
-              {/* Grid Section */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {(searchTerm ? filteredPosts : otherPosts).map((post) => (
-                  <Link key={post.id} href={`/blog/${post.slug}`} className="group flex flex-col">
-                    <div className="relative aspect-[16/10] rounded-[32px] overflow-hidden border border-white/[0.1] border-t-white/[0.15] bg-white/5 mb-6">
-                      <img 
-                        src={post.featuredImage || "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80"} 
-                        alt={post.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                    </div>
-                    <div className="flex-1 space-y-4">
-                      <div className="text-[10px] font-black uppercase tracking-[0.2em] text-green">
-                         {post.category?.name || "General"}
-                      </div>
-                      <h3 className="text-xl font-bold text-white group-hover:text-green transition-colors leading-snug">
-                        {post.title}
-                      </h3>
-                      <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">
-                        {post.summary}
-                      </p>
-                      <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                        <div className="flex items-center gap-2 text-[10px] text-gray-600 font-bold uppercase tracking-wider">
-                           <Calendar className="w-3 h-3" /> {new Date(post.publishedAt).toLocaleDateString()}
-                        </div>
-                        <div className="text-green opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all flex items-center gap-2 text-xs font-black uppercase tracking-widest">
-                           Read <ArrowRight className="w-3 h-3" />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </>
+                    <h3 className="h5" style={{ color: 'white', marginBottom: '1rem', lineHeight: 1.4 }}>
+                      {post.title}
+                    </h3>
+                    <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem', flex: 1 }}>
+                      {post.summary}
+                    </p>
+                    <span style={{ color: 'var(--color-nets-red)', fontSize: '0.8125rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      Read Article →
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
           ) : (
-            <div className="text-center py-20 bg-white/5 border border-white/[0.1] border-t-white/[0.15] rounded-[40px]">
-              <p className="text-gray-500 font-bold text-lg">No articles found matching your criteria.</p>
+            <div style={{ padding: '4rem 0', color: 'rgba(255,255,255,0.5)', fontSize: '0.875rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              No articles found matching your search.
             </div>
           )}
         </div>
-      </main>
+      </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }
