@@ -189,7 +189,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             </div>
             <div>
               <h2 className="text-xl font-bold text-white">User Profile</h2>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">{user?.role.replace('_', ' ')} Account</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">{user?.role?.replace('_', ' ')} Account</p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-xl transition-colors text-muted-foreground hover:text-white">
