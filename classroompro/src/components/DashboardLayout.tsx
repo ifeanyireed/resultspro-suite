@@ -161,7 +161,7 @@ export function DashboardHeader({ title }: { title: string }) {
           >
             <div className="text-right hidden sm:block">
               <p className="text-xs font-bold text-white leading-tight group-hover:text-green transition-colors">{user?.full_name || 'User'}</p>
-              <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">{user?.role.replace('_', ' ') || 'Guest'}</p>
+              <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">{user?.role?.replace('_', ' ') || 'Guest'}</p>
             </div>
             <div className="w-10 h-10 rounded-full bg-green-600 text-white font-bold flex items-center justify-center border-2 border-green/20 group-hover:border-green/50 transition-all overflow-hidden">
               {user?.avatar_url ? (
