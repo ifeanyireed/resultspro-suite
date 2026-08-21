@@ -2,7 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { IconMail as Mail, IconPhone as Phone, IconMapPin as MapPin, IconMessageSquare as MessageSquare, IconSend as Send, IconGlobe as Globe, IconBrandTwitter as Twitter, IconBrandInstagram as Instagram, IconBrandFacebook as Facebook } from '@tabler/icons-react';
+import { IconMail as Mail, IconPhone as Phone, IconMapPin as MapPin, IconMessage as MessageSquare, IconSend as Send, IconGlobe as Globe, IconBrandTwitter as Twitter, IconBrandInstagram as Instagram, IconBrandFacebook as Facebook } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

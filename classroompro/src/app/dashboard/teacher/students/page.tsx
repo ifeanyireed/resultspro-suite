@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconUsers as Users, IconSearch as Search, IconMessageSquare as MessageSquare, IconBarChart3 as BarChart3 } from '@tabler/icons-react';
+import { IconUsers as Users, IconSearch as Search, IconMessage as MessageSquare, IconBarChart3 as BarChart3 } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";

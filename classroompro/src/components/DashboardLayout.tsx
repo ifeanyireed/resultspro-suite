@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IconLayoutDashboard as LayoutDashboard, IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconCertificate as GraduationCap, IconTrendingUp as TrendingUp, IconDownload as Download, IconSettings as Settings, IconLogOut as LogOut, IconBell as Bell, IconUsers as Users, IconSchool as School, IconFilePlus as FilePlus, IconBarChart3 as BarChart3, IconCalendar as Calendar, IconTrophy as Trophy, IconBookmark as Bookmark, IconLibrary as Library, IconHeart as Heart, IconMessageSquare as MessageSquare, IconCreditCard as CreditCard } from '@tabler/icons-react';
+import { IconLayoutDashboard as LayoutDashboard, IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconCertificate as GraduationCap, IconTrendingUp as TrendingUp, IconDownload as Download, IconSettings as Settings, IconLogOut as LogOut, IconBell as Bell, IconUsers as Users, IconSchool as School, IconFilePlus as FilePlus, IconBarChart3 as BarChart3, IconCalendar as Calendar, IconTrophy as Trophy, IconBookmark as Bookmark, IconLibrary as Library, IconHeart as Heart, IconMessage as MessageSquare, IconCreditCard as CreditCard } from '@tabler/icons-react';
 import Logo from "@/components/Logo";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";

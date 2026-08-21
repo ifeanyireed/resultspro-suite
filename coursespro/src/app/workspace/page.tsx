@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Navbar } from '@/components/Navbar';
-import { IconKanban as Kanban, IconPlus as Plus, IconMessageSquare as MessageSquare, IconPaperclip as Paperclip, IconCircleCheck as CheckCircle2, IconStar as Star } from '@tabler/icons-react';
+import { IconKanban as Kanban, IconPlus as Plus, IconMessage as MessageSquare, IconPaperclip as Paperclip, IconCircleCheck as CheckCircle2, IconStar as Star } from '@tabler/icons-react';
 
 export default function WorkspacePage() {
   const [tasks, setTasks] = useState([

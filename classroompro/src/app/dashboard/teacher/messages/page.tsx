@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconSearch as Search, IconMessageSquare as MessageSquare, IconSend as Send, IconCircleCheck as CheckCircle2, IconPhone as Phone, IconVideo as Video, IconMoreVertical as MoreVertical } from '@tabler/icons-react';
+import { IconSearch as Search, IconMessage as MessageSquare, IconSend as Send, IconCircleCheck as CheckCircle2, IconPhone as Phone, IconVideo as Video, IconMoreVertical as MoreVertical } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";

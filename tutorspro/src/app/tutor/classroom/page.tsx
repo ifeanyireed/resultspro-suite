@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { IconMic as Mic, IconMicOff as MicOff, IconVideo as Video, IconVideoOff as VideoOff, IconMonitor as Monitor, IconSettings as Settings, IconMessageSquare as MessageSquare, IconUsers as Users, IconHand as Hand, IconLayout as Layout, IconMoreVertical as MoreVertical, IconLogOut as LogOut, IconPenTool as PenTool, IconBrain as Brain, IconShare2 as Share2, IconChevronRight as ChevronRight, IconShieldAlert as ShieldAlert, IconCircleDot as CircleDot } from '@tabler/icons-react';
+import { IconMic as Mic, IconMicOff as MicOff, IconVideo as Video, IconVideoOff as VideoOff, IconMonitor as Monitor, IconSettings as Settings, IconMessage as MessageSquare, IconUsers as Users, IconHand as Hand, IconLayout as Layout, IconMoreVertical as MoreVertical, IconLogOut as LogOut, IconPenTool as PenTool, IconBrain as Brain, IconShare2 as Share2, IconChevronRight as ChevronRight, IconShieldAlert as ShieldAlert, IconCircleDot as CircleDot } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function TutorClassroom() {

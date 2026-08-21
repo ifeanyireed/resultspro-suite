@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconUsers as Users, IconFilePlus as FilePlus, IconBook as BookOpen, IconBarChart3 as BarChart3, IconChevronRight as ChevronRight, IconPlus as Plus, IconCalendar as Calendar, IconMessageSquare as MessageSquare } from '@tabler/icons-react';
+import { IconUsers as Users, IconFilePlus as FilePlus, IconBook as BookOpen, IconBarChart3 as BarChart3, IconChevronRight as ChevronRight, IconPlus as Plus, IconCalendar as Calendar, IconMessage as MessageSquare } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";

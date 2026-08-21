@@ -2,7 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { IconBell as Bell, IconCalendar as Calendar, IconClock as Clock, IconCheck as Check, IconX as X, IconMessageSquare as MessageSquare, IconUser as User, IconMoreVertical as MoreVertical, IconChevronRight as ChevronRight, IconFilter as Filter, IconSearch as Search, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconBell as Bell, IconCalendar as Calendar, IconClock as Clock, IconCheck as Check, IconX as X, IconMessage as MessageSquare, IconUser as User, IconMoreVertical as MoreVertical, IconChevronRight as ChevronRight, IconFilter as Filter, IconSearch as Search, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
