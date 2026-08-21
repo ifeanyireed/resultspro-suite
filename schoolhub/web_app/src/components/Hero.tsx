@@ -129,15 +129,15 @@ const Hero = () => {
           <motion.div variants={staggerItem} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>1M+ Practice Questions</span>
+              <span>Certified Teachers</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>AI-Powered Explanations</span>
+              <span>Modern Facilities</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>Real-time Competitions</span>
+              <span>Holistic Curriculum</span>
             </div>
           </motion.div>
         </motion.div>
@@ -164,42 +164,27 @@ const Hero = () => {
               marginTop: '1.5rem'
             }}
           >
-            {/* Card header */}
             <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1.25rem' }}>
-              <div className="overline-dark" style={{ marginBottom: '0.5rem' }}>Quick Access</div>
+              <div className="overline-dark" style={{ marginBottom: '0.5rem' }}>Parent Portal</div>
               <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', letterSpacing: '-0.01em' }}>
-                Join a live session
+                Sign in to your account
               </h2>
             </div>
 
-            <form aria-label="Quick Access" style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+            <form aria-label="Portal Login" style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
               <div>
-                <label className="field-label-dark">Select Exam Type</label>
-                <select className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }}>
-                  <option value="waec">WAEC / SSCE</option>
-                  <option value="jamb">JAMB / UTME</option>
-                  <option value="neco">NECO</option>
-                  <option value="sat">SAT International</option>
-                </select>
+                <label className="field-label-dark">Email or Phone</label>
+                <input type="text" placeholder="Enter your credentials" className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }} />
+              </div>
+              
+              <div>
+                <label className="field-label-dark">Password</label>
+                <input type="password" placeholder="••••••••" className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }} />
               </div>
 
-              <div>
-                <label className="field-label-dark">Select Subject</label>
-                <select className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }}>
-                  <option value="math">Mathematics</option>
-                  <option value="eng">English Language</option>
-                  <option value="phy">Physics</option>
-                  <option value="chem">Chemistry</option>
-                  <option value="bio">Biology</option>
-                </select>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: '1rem' }}>
-                <Link href="/school/login" className="btn btn-outline-white" style={{ width: '100%', justifyContent: 'center' }}>
-                  <IconBook size={18} /> Solo
-                </Link>
-                <Link href="/admissions" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
-                  <IconPlay size={18} /> Battle
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.75rem', marginTop: '1rem' }}>
+                <Link href="/school/login" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
+                  Secure Login
                 </Link>
               </div>
             </form>

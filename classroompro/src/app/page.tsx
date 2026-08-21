@@ -45,11 +45,11 @@ export default function Home() {
               </p>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-                {[
-                  { title: 'Correct MCQ', reward: '+1', icon: IconBook },
-                  { title: 'Theory (AI)', reward: '+3', icon: IconBrain },
-                  { title: '7-Day Streak', reward: '+15', icon: IconTrophy },
-                  { title: 'Refer a Friend', reward: '+50', icon: IconUserPlus },
+                {[ 
+                  { title: 'Role Dashboards', reward: 'Custom views for all', icon: IconUserPlus },
+                  { title: 'Offline Access', reward: 'Learn without internet', icon: IconBrain },
+                  { title: 'Automated Grading', reward: 'Save teachers time', icon: IconTrophy },
+                  { title: 'Parental Reports', reward: 'Weekly SMS updates', icon: IconBook },
                 ].map((item, i) => (
                   <div key={i} className="flex gap-4">
                     <div className="w-12 h-12 rounded-sm bg-nets-light flex items-center justify-center text-red shrink-0">
@@ -57,12 +57,12 @@ export default function Home() {
                     </div>
                     <div>
                       <h4 className="fw-600">{item.title}</h4>
-                      <p className="text-sm text-muted">{item.reward} Coins</p>
+                      <p className="text-sm text-muted">{item.reward}</p>
                     </div>
                   </div>
                 ))}
               </div>
-              <Link href="/economy" className="btn btn-navy">Learn More</Link>
+              <Link href="/features" className="btn btn-navy">Learn More</Link>
             </div>
             
             <div className="relative">
@@ -75,9 +75,9 @@ export default function Home() {
       {/* CTA Banner (Mimicking CTABanner) */}
       <section className="section-py bg-navy text-white text-center">
         <div className="container-nets max-w-3xl">
-          <h2 className="text-d3 fw-300 mb-6 text-white">Join 50,000+ Students Already Winning</h2>
+          <h2 className="text-d3 fw-300 mb-6 text-white">Digitize Your School Infrastructure Today</h2>
           <p className="text-body-lg text-muted-light mb-10">
-            Start your journey today. Sign up for free and get 50 bonus coins.
+            Join hundreds of forward-thinking schools managing their curriculum, students, and staff on ClassroomPRO.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/signup" className="btn btn-red btn-lg">Create Free Account</Link>

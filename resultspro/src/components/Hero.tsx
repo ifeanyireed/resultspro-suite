@@ -97,11 +97,11 @@ const Hero = () => {
             letterSpacing: '-0.02em',
             whiteSpace: 'nowrap'
           }}>
-            Premium Exam
+            Digitize Your
             <br />
-            <em style={{ fontStyle: 'normal', fontWeight: 700, color: '#fff' }}>Preparation</em>
+            <em style={{ fontStyle: 'normal', fontWeight: 700, color: '#fff' }}>Results</em>
             <br />
-            <span style={{ color: 'rgba(255,255,255,0.6)' }}>for Every Student.</span>
+            <span style={{ color: 'rgba(255,255,255,0.6)' }}>Seamlessly.</span>
           </motion.h1>
 
           {/* Body */}
@@ -129,15 +129,15 @@ const Hero = () => {
           <motion.div variants={staggerItem} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>1M+ Practice Questions</span>
+              <span>Instant Processing</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>AI-Powered Explanations</span>
+              <span>Anti-Fraud Checks</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>Real-time Competitions</span>
+              <span>Secure Backups</span>
             </div>
           </motion.div>
         </motion.div>
@@ -164,42 +164,27 @@ const Hero = () => {
               marginTop: '1.5rem'
             }}
           >
-            {/* Card header */}
             <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1.25rem' }}>
-              <div className="overline-dark" style={{ marginBottom: '0.5rem' }}>Quick Access</div>
+              <div className="overline-dark" style={{ marginBottom: '0.5rem' }}>Result Portal</div>
               <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', letterSpacing: '-0.01em' }}>
-                Join a live session
+                Check Your Results
               </h2>
             </div>
 
-            <form aria-label="Quick Access" style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+            <form aria-label="Check Result" style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
               <div>
-                <label className="field-label-dark">Select Exam Type</label>
-                <select className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }}>
-                  <option value="waec">WAEC / SSCE</option>
-                  <option value="jamb">JAMB / UTME</option>
-                  <option value="neco">NECO</option>
-                  <option value="sat">SAT International</option>
-                </select>
+                <label className="field-label-dark">Scratch Card PIN</label>
+                <input type="text" placeholder="Enter 12-digit PIN" className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }} />
+              </div>
+              
+              <div>
+                <label className="field-label-dark">Student ID / Registration No.</label>
+                <input type="text" placeholder="e.g. REG-00123" className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }} />
               </div>
 
-              <div>
-                <label className="field-label-dark">Select Subject</label>
-                <select className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }}>
-                  <option value="math">Mathematics</option>
-                  <option value="eng">English Language</option>
-                  <option value="phy">Physics</option>
-                  <option value="chem">Chemistry</option>
-                  <option value="bio">Biology</option>
-                </select>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: '1rem' }}>
-                <Link href="/check" className="btn btn-outline-white" style={{ width: '100%', justifyContent: 'center' }}>
-                  <IconBook size={18} /> Solo
-                </Link>
-                <Link href="/schools" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
-                  <IconPlay size={18} /> Battle
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.75rem', marginTop: '1rem' }}>
+                <Link href="/check" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
+                  View Result
                 </Link>
               </div>
             </form>

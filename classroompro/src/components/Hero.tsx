@@ -97,11 +97,11 @@ const Hero = () => {
             letterSpacing: '-0.02em',
             whiteSpace: 'nowrap'
           }}>
-            Premium Exam
+            Premium Learning
             <br />
-            <em style={{ fontStyle: 'normal', fontWeight: 700, color: '#fff' }}>Preparation</em>
+            <em style={{ fontStyle: 'normal', fontWeight: 700, color: '#fff' }}>Management</em>
             <br />
-            <span style={{ color: 'rgba(255,255,255,0.6)' }}>for Every Student.</span>
+            <span style={{ color: 'rgba(255,255,255,0.6)' }}>for Every School.</span>
           </motion.h1>
 
           {/* Body */}
@@ -129,15 +129,15 @@ const Hero = () => {
           <motion.div variants={staggerItem} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>1M+ Practice Questions</span>
+              <span>100+ Partner Schools</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>AI-Powered Explanations</span>
+              <span>Offline Sync Ready</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>Real-time Competitions</span>
+              <span>Smart Analytics</span>
             </div>
           </motion.div>
         </motion.div>
@@ -166,40 +166,34 @@ const Hero = () => {
           >
             {/* Card header */}
             <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1.25rem' }}>
-              <div className="overline-dark" style={{ marginBottom: '0.5rem' }}>Quick Access</div>
+              <div className="overline-dark" style={{ marginBottom: '0.5rem' }}>School Portal</div>
               <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', letterSpacing: '-0.01em' }}>
-                Join a live session
+                Access your dashboard
               </h2>
             </div>
 
-            <form aria-label="Quick Access" style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+            <form aria-label="Portal Access" style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
               <div>
-                <label className="field-label-dark">Select Exam Type</label>
+                <label className="field-label-dark">Select Your Role</label>
                 <select className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }}>
-                  <option value="waec">WAEC / SSCE</option>
-                  <option value="jamb">JAMB / UTME</option>
-                  <option value="neco">NECO</option>
-                  <option value="sat">SAT International</option>
+                  <option value="student">Student</option>
+                  <option value="teacher">Teacher</option>
+                  <option value="parent">Parent</option>
+                  <option value="admin">School Administrator</option>
                 </select>
               </div>
 
               <div>
-                <label className="field-label-dark">Select Subject</label>
-                <select className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }}>
-                  <option value="math">Mathematics</option>
-                  <option value="eng">English Language</option>
-                  <option value="phy">Physics</option>
-                  <option value="chem">Chemistry</option>
-                  <option value="bio">Biology</option>
-                </select>
+                <label className="field-label-dark">School ID</label>
+                <input type="text" placeholder="e.g. SCH-001" className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }} />
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: '1rem' }}>
-                <Link href="/signup" className="btn btn-outline-white" style={{ width: '100%', justifyContent: 'center' }}>
-                  <IconBook size={18} /> Solo
+                <Link href="/login" className="btn btn-outline-white" style={{ width: '100%', justifyContent: 'center' }}>
+                  Log In
                 </Link>
-                <Link href="/about" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
-                  <IconPlay size={18} /> Battle
+                <Link href="/schools" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
+                  Register School
                 </Link>
               </div>
             </form>
