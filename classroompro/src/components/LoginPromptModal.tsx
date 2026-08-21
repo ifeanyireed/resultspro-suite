@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from 'react';
-import { IconX as X, IconBolt as Zap, IconTrophy as Trophy, IconBarChart3 as BarChart3, IconArrowRight as ArrowRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconX as X, IconBolt as Zap, IconTrophy as Trophy, IconChartBar as BarChart3, IconArrowRight as ArrowRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "@/lib/msal";
 import api from '@/lib/api';

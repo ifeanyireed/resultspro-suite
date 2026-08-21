@@ -2,7 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { IconUsers as Users, IconSearch as Search, IconFilter as Filter, IconChevronRight as ChevronRight, IconBrain as Brain, IconCircleCheck as CheckCircle2, IconClock as Clock, IconTrendingUp as TrendingUp, IconMessage as MessageSquare, IconBarChart3 as BarChart3, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconUsers as Users, IconSearch as Search, IconFilter as Filter, IconChevronRight as ChevronRight, IconBrain as Brain, IconCircleCheck as CheckCircle2, IconClock as Clock, IconTrendingUp as TrendingUp, IconMessage as MessageSquare, IconChartBar as BarChart3, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 

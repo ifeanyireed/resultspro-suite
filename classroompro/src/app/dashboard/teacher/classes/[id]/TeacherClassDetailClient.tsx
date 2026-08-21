@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconUsers as Users, IconArrowLeft as ArrowLeft, IconBook as BookOpen, IconBrain as BrainCircuit, IconCertificate as GraduationCap, IconBarChart3 as BarChart3, IconSearch as Search, IconMoreVertical as MoreVertical, IconMail as Mail, IconFilePlus as FilePlus } from '@tabler/icons-react';
+import { IconUsers as Users, IconArrowLeft as ArrowLeft, IconBook as BookOpen, IconBrain as BrainCircuit, IconCertificate as GraduationCap, IconChartBar as BarChart3, IconSearch as Search, IconMoreVertical as MoreVertical, IconMail as Mail, IconFilePlus as FilePlus } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
