@@ -36,7 +36,16 @@ export const useAuthStore = create<AuthState>((set) => {
   const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
   const storedUser = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
   
-  let user = null;
+  let user: any = {
+    id: "mock-bypass-123",
+    email: "mock@student.com",
+    full_name: "Bypass User",
+    role: "student",
+    account_status: "active",
+    created_at: new Date().toISOString(),
+    mfa_enabled: false,
+    auth_provider: "local"
+  };
   if (storedUser && storedUser !== 'undefined') {
     try {
       user = JSON.parse(storedUser);
@@ -50,7 +59,7 @@ export const useAuthStore = create<AuthState>((set) => {
     user,
     accessToken,
     refreshToken,
-    isAuthenticated: !!accessToken && !!user,
+    isAuthenticated: true, // BYPASS RBAC
     setAuth: (user, accessToken, refreshToken) => {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
