@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { IconCheck as Check, IconShieldCheck as ShieldCheck, IconBolt as Zap, IconSchool as School, IconBuilding2 as Building2, IconHeart as Heart } from '@tabler/icons-react';
+import { IconCheck as Check, IconShieldCheck as ShieldCheck, IconBolt as Zap, IconSchool as School, IconBuilding as Building2, IconHeart as Heart } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

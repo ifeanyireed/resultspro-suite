@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconSchool as School, IconMapPin as MapPin, IconGlobe as Globe, IconPhone as Phone, IconMail as Mail, IconShieldCheck as ShieldCheck, IconCamera as Camera, IconSave as Save, IconBuilding2 as Building2, IconCalendar as Calendar } from '@tabler/icons-react';
+import { IconSchool as School, IconMapPin as MapPin, IconGlobe as Globe, IconPhone as Phone, IconMail as Mail, IconShieldCheck as ShieldCheck, IconCamera as Camera, IconSave as Save, IconBuilding as Building2, IconCalendar as Calendar } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

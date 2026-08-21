@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
-import { IconCamera as Camera, IconImage as ImageIcon, IconGlobe as Globe, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCircleCheck as CheckCircle2, IconBuilding2 as Building2, IconPalette as Palette, IconBook as BookOpen, IconQuote as Quote, IconPlus as Plus, IconCalendar as Calendar, IconStack2 as Layers, IconUsers as Users, IconCertificate as GraduationCap, IconUpload as Upload, IconCheck as Check, IconCreditCard as CreditCard, IconLock as Lock, IconLink as Link } from '@tabler/icons-react';
+import { IconCamera as Camera, IconImage as ImageIcon, IconGlobe as Globe, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCircleCheck as CheckCircle2, IconBuilding as Building2, IconPalette as Palette, IconBook as BookOpen, IconQuote as Quote, IconPlus as Plus, IconCalendar as Calendar, IconStack2 as Layers, IconUsers as Users, IconCertificate as GraduationCap, IconUpload as Upload, IconCheck as Check, IconCreditCard as CreditCard, IconLock as Lock, IconLink as Link } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
 
