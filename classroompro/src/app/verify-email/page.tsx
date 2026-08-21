@@ -30,9 +30,9 @@ function VerifyEmailContent() {
 
       setTimeout(() => {
         if (role === "school_admin") {
-          router.push("/onboarding/school-setup");
+          router.push("/login");
         } else if (role === "student" || role === "teacher") {
-          router.push("/onboarding/school-selection");
+          router.push("/login");
         } else {
           router.push("/login");
         }
