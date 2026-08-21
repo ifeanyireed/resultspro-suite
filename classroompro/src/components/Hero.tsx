@@ -117,7 +117,7 @@ const Hero = () => {
 
           {/* CTAs */}
           <motion.div variants={staggerItem} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem', alignItems: 'center' }}>
-            <Link href="/signup" className="btn btn-red btn-lg">
+            <Link href="https://www.resultspro.ng" className="btn btn-red btn-lg">
               Start Free Trial
             </Link>
             <Link href="/about" className="btn btn-outline-white btn-lg">
@@ -194,7 +194,7 @@ const Hero = () => {
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.75rem', marginTop: '1rem' }}>
-                <Link href="/contact-sales" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
+                <Link href="https://www.resultspro.ng" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
                   Schedule Demo
                 </Link>
               </div>

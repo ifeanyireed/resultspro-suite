@@ -63,7 +63,7 @@ export default function Navbar() {
 
   const navItems = [
     { label: 'Features', href: '/#features', enabled: true },
-    { label: 'For Schools', href: '/schools', enabled: true },
+    { label: 'For Schools', href: 'https://www.resultspro.ng', enabled: true },
     { label: 'Pricing', href: '/pricing', enabled: true },
     { label: 'Contact', href: '/contact', enabled: true },
     { label: 'Dashboard', href: '/dashboard', enabled: isAuthenticated },
@@ -223,7 +223,7 @@ export default function Navbar() {
                 style={{ marginTop: '2.5rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}
               >
                 {!isAuthenticated ? (
-                  <Link href="/signup" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
+                  <Link href="https://www.resultspro.ng" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
                     Sign Up Free
                   </Link>
                 ) : (

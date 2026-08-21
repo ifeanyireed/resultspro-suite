@@ -8,7 +8,7 @@ const footerSections = [
     links: [
       { label: 'Features',                  href: '/features' },
       { label: 'Pricing',                   href: '/pricing' },
-      { label: 'School Admin',              href: '/schools' },
+      { label: 'School Admin',              href: 'https://www.resultspro.ng' },
       { label: 'Request Demo',              href: '/contact-sales' },
     ],
   },
