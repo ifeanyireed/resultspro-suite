@@ -62,15 +62,14 @@ export default function Navbar() {
   };
 
   const navItems = [
-    { label: 'Practice', href: '/practice', enabled: true },
-    { label: 'Live Games', href: '/live', enabled: featureFlags['live_games_enabled'] !== 'false' },
-    { label: 'Battle Mode', href: '/battle-mode', enabled: featureFlags['battle_mode_enabled'] !== 'false' },
-    { label: 'AI Tutor', href: '/study-assistant', enabled: isAuthenticated },
-    { label: 'Leaderboard', href: '/leaderboard', enabled: true },
-    { label: 'Admin', href: '/admin/dashboard', enabled: isAuthenticated && (user?.role === 'ADMIN' || user?.role === 'MODERATOR') },
+    { label: 'Features', href: '/#features', enabled: true },
+    { label: 'For Schools', href: '/schools', enabled: true },
+    { label: 'Pricing', href: '/pricing', enabled: true },
+    { label: 'Contact', href: '/contact', enabled: true },
+    { label: 'Dashboard', href: '/dashboard', enabled: isAuthenticated },
   ].filter(i => i.enabled);
 
-  const isActive = (href: string) => pathname.startsWith(href);
+  const isActive = (href: string) => pathname.startsWith(href) && href !== '/';
 
   return (
     <>
@@ -78,46 +77,51 @@ export default function Navbar() {
       <header
         role="banner"
         style={{
-          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+          position: 'fixed',
+          top: 0, left: 0, right: 0,
           height: '72px',
-          display: 'flex', alignItems: 'center',
+          zIndex: 100,
+          transition: 'all 0.3s ease',
           background: scrolled ? 'var(--color-nets-navy-dark)' : 'transparent',
-          boxShadow: scrolled ? '0 1px 0 rgba(255,255,255,0.06)' : 'none',
-          transition: 'background 0.3s ease, box-shadow 0.3s ease',
+          borderBottom: scrolled ? '1px solid rgba(255,255,255,0.08)' : '1px solid transparent',
+          backdropFilter: scrolled ? 'blur(12px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
         }}
       >
-        <div className="container-nets" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+        <div className="container-nets" style={{ display: 'flex', alignItems: 'center', height: '100%', justifyContent: 'space-between' }}>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}>
+            {/* Logo */}
+            <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+              <img src="/logo.png" alt="ClassroomPRO Logo" style={{ height: '44px', width: 'auto', objectFit: 'contain' }} />
+              <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: 'white', letterSpacing: '-0.05em' }}>ClassroomPRO</span>
+            </Link>
+          </div>
 
-          {/* Logo */}
-          <Link href="/" aria-label="ExamsPRO" style={{ display: 'flex', alignItems: 'center', flexShrink: 0, transition: 'opacity 0.2s ease' }} onMouseEnter={e => e.currentTarget.style.opacity = '0.8'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
-            <img src="/logo.png" alt="ClassroomPRO Logo" style={{ height: '56px', width: 'auto', objectFit: 'contain' }} />
-            <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: 'white', letterSpacing: '-0.05em' }}>ClassroomPRO</span>
-          </Link>
-
-          {/* Desktop nav */}
-          <nav aria-label="Primary Desktop" style={{ gap: '2.5rem', alignItems: 'center' }} className="nav-desktop">
-            {mounted ? (
-              navItems.map(l => (
-                <Link key={l.label} href={l.href} className="nav-link">{l.label}</Link>
-              ))
-            ) : (
-              <div style={{ display: 'flex', gap: '2.5rem' }}>
-                <div style={{ width: '60px', height: '20px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px' }} />
-                <div style={{ width: '80px', height: '20px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px' }} />
-                <div style={{ width: '70px', height: '20px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px' }} />
-              </div>
-            )}
-            
-            {/* Always show a red primary action button at the end of nav links */}
-            {mounted && !isAuthenticated ? (
-              <Link href="/signup" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
-                Sign Up Free
-              </Link>
-            ) : mounted && isAuthenticated ? (
-              <Link href="/shop" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
-                Shop
-              </Link>
-            ) : null}
+          {/* Desktop Nav Items */}
+          <nav className="nav-desktop-links" aria-label="Main Navigation">
+            {navItems.map((l) => {
+              const active = isActive(l.href);
+              return (
+                <Link
+                  key={l.label}
+                  href={l.href}
+                  className="nav-link"
+                  style={{
+                    fontSize: '0.875rem',
+                    fontWeight: 500,
+                    color: active ? '#fff' : 'rgba(255,255,255,0.65)',
+                    textDecoration: 'none',
+                    transition: 'color 0.2s ease',
+                    marginLeft: '20px'
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#fff'}
+                  onMouseLeave={e => { if (!active) e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; }}
+                >
+                  {l.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Desktop actions (Auth/Profile) */}
@@ -128,9 +132,6 @@ export default function Navbar() {
               </Link>
             ) : mounted && isAuthenticated ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                <Link href="/dashboard" className="btn btn-red btn-sm" style={{ textDecoration: 'none' }}>
-                  My Account
-                </Link>
                 <Link href="/notifications" style={{ position: 'relative', color: 'rgba(255,255,255,0.6)', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = 'white'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}>
                   <Bell style={{ width: '20px', height: '20px' }} />
                   {unreadCount > 0 && (
@@ -140,10 +141,6 @@ export default function Navbar() {
                   )}
                 </Link>
                 <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', lineHeight: 1.2 }}>
-                    <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'white' }}>{user?.coinBalance}</span>
-                    <span style={{ fontSize: '0.625rem', fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Coins</span>
-                  </div>
                   <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold', color: 'white' }}>
                     {user?.name?.charAt(0) || user?.email?.charAt(0) || 'U'}
                   </div>
@@ -237,8 +234,8 @@ export default function Navbar() {
 
                 {/* Contact Info */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <a href="mailto:support@resultspro.ng" style={{ fontSize: '0.875rem', color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>Email</span> support@resultspro.ng
+                  <a href="mailto:support@classroompro.ng" style={{ fontSize: '0.875rem', color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>Email</span> support@classroompro.ng
                   </a>
                   <div style={{ fontSize: '0.875rem', color: '#fff', display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
                     <span style={{ color: 'rgba(255,255,255,0.5)' }}>HQ</span> 

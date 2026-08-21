@@ -62,15 +62,14 @@ export default function Navbar() {
   };
 
   const navItems = [
-    { label: 'Practice', href: '/practice', enabled: true },
-    { label: 'Live Games', href: '/live', enabled: featureFlags['live_games_enabled'] !== 'false' },
-    { label: 'Battle Mode', href: '/battle-mode', enabled: featureFlags['battle_mode_enabled'] !== 'false' },
-    { label: 'AI Tutor', href: '/study-assistant', enabled: isAuthenticated },
-    { label: 'Leaderboard', href: '/leaderboard', enabled: true },
-    { label: 'Admin', href: '/admin/dashboard', enabled: isAuthenticated && (user?.role === 'ADMIN' || user?.role === 'MODERATOR') },
+    { label: 'Find a Tutor', href: '/tutors', enabled: true },
+    { label: 'How it Works', href: '/how-it-works', enabled: true },
+    { label: 'Pricing', href: '/pricing', enabled: true },
+    { label: 'Become a Tutor', href: '/apply', enabled: true },
+    { label: 'Dashboard', href: '/dashboard', enabled: isAuthenticated },
   ].filter(i => i.enabled);
 
-  const isActive = (href: string) => pathname.startsWith(href);
+  const isActive = (href: string) => pathname.startsWith(href) && href !== '/';
 
   return (
     <>
@@ -114,7 +113,7 @@ export default function Navbar() {
                 Sign Up Free
               </Link>
             ) : mounted && isAuthenticated ? (
-              <Link href="/shop" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
+              <Link href="/pricing" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
                 Shop
               </Link>
             ) : null}
@@ -237,8 +236,8 @@ export default function Navbar() {
 
                 {/* Contact Info */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <a href="mailto:support@resultspro.ng" style={{ fontSize: '0.875rem', color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>Email</span> support@resultspro.ng
+                  <a href="mailto:support@tutorspro.ng" style={{ fontSize: '0.875rem', color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>Email</span> support@tutorspro.ng
                   </a>
                   <div style={{ fontSize: '0.875rem', color: '#fff', display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
                     <span style={{ color: 'rgba(255,255,255,0.5)' }}>HQ</span> 
