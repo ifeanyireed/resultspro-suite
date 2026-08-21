@@ -1,6 +1,6 @@
 "use client";
 
-import { IconLayoutDashboard as LayoutDashboard, IconUser as User, IconCalendar as Calendar, IconBell as Bell, IconBook as BookOpen, IconVideo as Video, IconPenTool as PenTool, IconLibrary as Library, IconLineChart as LineChart, IconDollarSign as DollarSign, IconArrowUpCircle as ArrowUpCircle, IconStar as Star, IconSettings as Settings, IconLogOut as LogOut } from '@tabler/icons-react';
+import { IconLayoutDashboard as LayoutDashboard, IconUser as User, IconCalendar as Calendar, IconBell as Bell, IconBook as BookOpen, IconVideo as Video, IconPenTool as PenTool, IconLibrary as Library, IconLineChart as LineChart, IconDollarSign as DollarSign, IconArrowUpCircle as ArrowUpCircle, IconStar as Star, IconSettings as Settings, IconLogout as LogOut } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Logo from '../Logo';

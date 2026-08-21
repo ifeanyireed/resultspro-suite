@@ -1,6 +1,6 @@
 "use client";
 
-import { IconUsers as Users, IconTrendingUp as TrendingUp, IconLayoutDashboard as LayoutDashboard, IconBook as BookOpen, IconSettings as Settings, IconBell as Bell, IconFileText as FileText, IconCreditCard as CreditCard, IconPalette as Palette, IconCertificate as GraduationCap, IconLogOut as LogOut } from '@tabler/icons-react';
+import { IconUsers as Users, IconTrendingUp as TrendingUp, IconLayoutDashboard as LayoutDashboard, IconBook as BookOpen, IconSettings as Settings, IconBell as Bell, IconFileText as FileText, IconCreditCard as CreditCard, IconPalette as Palette, IconCertificate as GraduationCap, IconLogout as LogOut } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Logo from '../Logo';

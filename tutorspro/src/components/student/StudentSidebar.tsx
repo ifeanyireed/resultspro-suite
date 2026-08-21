@@ -1,6 +1,6 @@
 "use client";
 
-import { IconLayoutDashboard as LayoutDashboard, IconCalendar as Calendar, IconVideo as Video, IconFileText as FileText, IconBrain as Brain, IconStack2 as Layers, IconGamepad2 as Gamepad2, IconLineChart as LineChart, IconAward as Award, IconMessage as MessageSquare, IconWallet as Wallet, IconSettings as Settings, IconSearch as Search, IconLogOut as LogOut } from '@tabler/icons-react';
+import { IconLayoutDashboard as LayoutDashboard, IconCalendar as Calendar, IconVideo as Video, IconFileText as FileText, IconBrain as Brain, IconStack2 as Layers, IconGamepad2 as Gamepad2, IconLineChart as LineChart, IconAward as Award, IconMessage as MessageSquare, IconWallet as Wallet, IconSettings as Settings, IconSearch as Search, IconLogout as LogOut } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Logo from '../Logo';

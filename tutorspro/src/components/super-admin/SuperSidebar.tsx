@@ -1,6 +1,6 @@
 "use client";
 
-import { IconActivity as Activity, IconLayoutDashboard as LayoutDashboard, IconFlag as Flag, IconDatabase as Database, IconLink2 as Link2, IconScrollText as ScrollText, IconLock as Lock, IconChartBar as BarChart3, IconSettings as Settings, IconServer as Server, IconLogOut as LogOut } from '@tabler/icons-react';
+import { IconActivity as Activity, IconLayoutDashboard as LayoutDashboard, IconFlag as Flag, IconDatabase as Database, IconLink2 as Link2, IconScrollText as ScrollText, IconLock as Lock, IconChartBar as BarChart3, IconSettings as Settings, IconServer as Server, IconLogout as LogOut } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Logo from '../Logo';

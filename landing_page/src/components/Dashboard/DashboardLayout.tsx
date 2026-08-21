@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IconSearch as Search, IconBell as Bell, IconSettings as Settings, IconHelpCircle as HelpCircle, IconLogOut as LogOut } from '@tabler/icons-react';
+import { IconSearch as Search, IconBell as Bell, IconSettings as Settings, IconHelpCircle as HelpCircle, IconLogout as LogOut } from '@tabler/icons-react';
 import Image from 'next/image';
 
 export interface SidebarLink {
