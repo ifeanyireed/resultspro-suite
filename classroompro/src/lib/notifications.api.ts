@@ -45,7 +45,7 @@ export const getNotifications = async () => {
     const response = await api.get<Notification[]>('notifications');
     return response.data;
   } catch (error: any) {
-    console.error('Failed to fetch notifications:', error.response?.status, error.message);
+    console.warn('Failed to fetch notifications:', error.response?.status, error.message);
     throw error;
   }
 };
@@ -55,7 +55,7 @@ export const getUnreadCount = async () => {
     const response = await api.get<{ count: number }>('notifs/unread');
     return response.data.count;
   } catch (error: any) {
-    console.error('Failed to fetch unread count:', error.response?.status, error.message);
+    console.warn('Failed to fetch unread count:', error.response?.status, error.message);
     throw error;
   }
 };
@@ -65,7 +65,7 @@ export const getActivePopups = async () => {
     const response = await api.get<PopupNotification[]>('notifs/popups');
     return response.data;
   } catch (error: any) {
-    console.error('Failed to fetch popups:', error.response?.status, error.message);
+    console.warn('Failed to fetch popups:', error.response?.status, error.message);
     throw error;
   }
 };
