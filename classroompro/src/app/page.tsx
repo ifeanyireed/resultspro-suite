@@ -14,18 +14,23 @@ export default function Home() {
       <section className="section-py bg-light">
         <div className="container-nets">
           <div style={{ marginBottom: '4rem', maxWidth: '600px' }}>
-            <div className="overline" style={{ marginBottom: '1rem' }}>Features</div>
-            <h2 className="text-d4 fw-400">Everything you need to succeed.</h2>
+            <div className="overline" style={{ marginBottom: '1rem' }}>Enterprise Infrastructure</div>
+            <h2 className="text-d4 fw-400">Everything your school needs to succeed.</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[{ title: 'Class Notes', exams: 'Structured by Term & Topic' }, { title: 'Quizzes', exams: 'CBT-style Assessments' }, { title: 'Flashcards', exams: 'Active Recall & Spaced Repetition' }, { title: 'Analytics', exams: 'Class-wide performance tracking' }].map((cat, i) => (
+            {[
+              { title: 'Curriculum Management', exams: 'Align with NERDC and Cambridge standards effortlessly.' }, 
+              { title: 'Staff & Payroll', exams: 'Automate attendance, appraisals, and salary processing.' }, 
+              { title: 'Result Computation', exams: 'Generate termly broadsheets and report cards instantly.' }, 
+              { title: 'Fee Invoicing', exams: 'Track payments, send reminders, and manage cash flow.' }
+            ].map((cat, i) => (
               <div key={i} className="card p-8">
                 <IconBook className="w-8 h-8 text-red mb-6" />
                 <h3 className="text-xl fw-600 mb-2">{cat.title}</h3>
                 <p className="text-muted text-sm mb-6">{cat.exams}</p>
-                <Link href="/practice" className="nav-link text-navy" style={{ color: 'var(--color-nets-navy)' }}>
-                  Explore program &rarr;
+                <Link href="/features" className="nav-link text-navy" style={{ color: 'var(--color-nets-navy)' }}>
+                  View capabilities &rarr;
                 </Link>
               </div>
             ))}
@@ -38,18 +43,18 @@ export default function Home() {
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <div className="overline" style={{ marginBottom: '1rem' }}>Why Choose Us</div>
-              <h2 className="text-d3 fw-300 mb-6">Designed for Results.</h2>
+              <div className="overline" style={{ marginBottom: '1rem' }}>The ClassroomPRO Advantage</div>
+              <h2 className="text-d3 fw-300 mb-6">Designed for Operational Excellence.</h2>
               <p className="text-body-lg text-muted mb-8">
-                Our platform is built to optimize your learning experience with powerful tools and analytics.
+                Replace your fragmented tools with a single, unified platform built specifically for the administrative and academic needs of modern Nigerian schools.
               </p>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
                 {[ 
-                  { title: 'Role Dashboards', reward: 'Custom views for all', icon: IconUserPlus },
-                  { title: 'Offline Access', reward: 'Learn without internet', icon: IconBrain },
-                  { title: 'Automated Grading', reward: 'Save teachers time', icon: IconTrophy },
-                  { title: 'Parental Reports', reward: 'Weekly SMS updates', icon: IconBook },
+                  { title: 'Role-Based Access', reward: 'Custom portals for Teachers, Parents, and Admins', icon: IconUserPlus },
+                  { title: 'Offline-First Mobile App', reward: 'Sync attendance and grades without internet', icon: IconBrain },
+                  { title: 'Bank-Grade Security', reward: 'Encrypted databases with daily backups', icon: IconTrophy },
+                  { title: 'Dedicated Support', reward: '24/7 technical assistance for your staff', icon: IconBook },
                 ].map((item, i) => (
                   <div key={i} className="flex gap-4">
                     <div className="w-12 h-12 rounded-sm bg-nets-light flex items-center justify-center text-red shrink-0">
@@ -62,11 +67,11 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <Link href="/features" className="btn btn-navy">Learn More</Link>
+              <Link href="/contact-sales" className="btn btn-navy">Talk to our Sales Team</Link>
             </div>
             
             <div className="relative">
-              <img src="/images/Students2.jpeg" alt="Students learning" className="rounded-sm shadow-card-lg" />
+              <img src="/images/Students2.jpeg" alt="School administration" className="rounded-sm shadow-card-lg" />
             </div>
           </div>
         </div>
@@ -75,13 +80,13 @@ export default function Home() {
       {/* CTA Banner (Mimicking CTABanner) */}
       <section className="section-py bg-navy text-white text-center">
         <div className="container-nets max-w-3xl">
-          <h2 className="text-d3 fw-300 mb-6 text-white">Digitize Your School Infrastructure Today</h2>
+          <h2 className="text-d3 fw-300 mb-6 text-white">Ready to digitize your school?</h2>
           <p className="text-body-lg text-muted-light mb-10">
-            Join hundreds of forward-thinking schools managing their curriculum, students, and staff on ClassroomPRO.
+            Join hundreds of forward-thinking principals managing their curriculum, students, and staff on ClassroomPRO.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/signup" className="btn btn-red btn-lg">Create Free Account</Link>
-            <Link href="/login" className="btn btn-outline-white btn-lg">Sign In</Link>
+            <Link href="/contact-sales" className="btn btn-red btn-lg">Request a Demo</Link>
+            <Link href="/pricing" className="btn btn-outline-white btn-lg">Calculate ROI</Link>
           </div>
         </div>
       </section>

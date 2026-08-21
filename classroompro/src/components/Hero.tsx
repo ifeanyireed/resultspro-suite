@@ -166,34 +166,36 @@ const Hero = () => {
           >
             {/* Card header */}
             <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1.25rem' }}>
-              <div className="overline-dark" style={{ marginBottom: '0.5rem' }}>School Portal</div>
+              <div className="overline-dark" style={{ marginBottom: '0.5rem' }}>Book a Consultation</div>
               <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', letterSpacing: '-0.01em' }}>
-                Access your dashboard
+                Request a Demo
               </h2>
             </div>
 
-            <form aria-label="Portal Access" style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+            <form aria-label="Lead Capture" style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
               <div>
-                <label className="field-label-dark">Select Your Role</label>
+                <label className="field-label-dark">School Name</label>
+                <input type="text" placeholder="e.g. Riverbank Academy" className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }} />
+              </div>
+
+              <div>
+                <label className="field-label-dark">Work Email</label>
+                <input type="email" placeholder="admin@school.edu.ng" className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }} />
+              </div>
+
+              <div>
+                <label className="field-label-dark">Student Population</label>
                 <select className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }}>
-                  <option value="student">Student</option>
-                  <option value="teacher">Teacher</option>
-                  <option value="parent">Parent</option>
-                  <option value="admin">School Administrator</option>
+                  <option value="1-50">1 - 50 students</option>
+                  <option value="51-200">51 - 200 students</option>
+                  <option value="201-500">201 - 500 students</option>
+                  <option value="500+">500+ students</option>
                 </select>
               </div>
 
-              <div>
-                <label className="field-label-dark">School ID</label>
-                <input type="text" placeholder="e.g. SCH-001" className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }} />
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: '1rem' }}>
-                <Link href="/login" className="btn btn-outline-white" style={{ width: '100%', justifyContent: 'center' }}>
-                  Log In
-                </Link>
-                <Link href="/schools" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
-                  Register School
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.75rem', marginTop: '1rem' }}>
+                <Link href="/contact-sales" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
+                  Schedule Demo
                 </Link>
               </div>
             </form>
