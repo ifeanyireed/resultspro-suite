@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconUser as User, IconLock as Lock, IconBell as Bell, IconShield as Shield, IconLogout as LogOut, IconCamera as Camera, IconSave as Save, IconMail as Mail, IconPhone as Phone, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconUser as User, IconLock as Lock, IconBell as Bell, IconShield as Shield, IconLogout as LogOut, IconCamera as Camera, IconDeviceFloppy as Save, IconMail as Mail, IconPhone as Phone, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

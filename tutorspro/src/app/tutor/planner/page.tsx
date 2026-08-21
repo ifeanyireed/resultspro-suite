@@ -2,7 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { IconPlus as Plus, IconFileText as FileText, IconPaperclip as Paperclip, IconCalendar as Calendar, IconCircleCheck as CheckCircle2, IconMoreVertical as MoreVertical, IconChevronRight as ChevronRight, IconBook as BookOpen, IconTarget as Target, IconClock as Clock, IconSave as Save, IconTrash2 as Trash2, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconPlus as Plus, IconFileText as FileText, IconPaperclip as Paperclip, IconCalendar as Calendar, IconCircleCheck as CheckCircle2, IconMoreVertical as MoreVertical, IconChevronRight as ChevronRight, IconBook as BookOpen, IconTarget as Target, IconClock as Clock, IconDeviceFloppy as Save, IconTrash2 as Trash2, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
