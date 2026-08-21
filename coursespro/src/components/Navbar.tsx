@@ -140,8 +140,6 @@ export default function Navbar() {
                 </Link>
                 <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', lineHeight: 1.2 }}>
-                    <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'white' }}>{user?.coinBalance}</span>
-                    <span style={{ fontSize: '0.625rem', fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Coins</span>
                   </div>
                   <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold', color: 'white' }}>
                     {user?.name?.charAt(0) || user?.email?.charAt(0) || 'U'}
