@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 import { IconArrowLeft as ArrowLeft, IconClock as Clock, IconEye as Eye, IconBookmark as Bookmark, IconShare2 as Share2, IconDownload as Download, IconMessageCircle as MessageCircle, IconTrendingUp as TrendingUp, IconAward as Award, IconLock as Lock, IconBrain as BrainCircuit, IconStack2 as Layers } from '@tabler/icons-react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";

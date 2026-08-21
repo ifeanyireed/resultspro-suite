@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 import { IconFileText as FileText, IconLoader2 as Loader2, IconClock as Clock, IconUser as User } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";

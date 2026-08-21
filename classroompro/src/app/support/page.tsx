@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 import { IconSearch as Search, IconBook as BookOpen, IconHelpCircle as HelpCircle, IconShieldCheck as ShieldCheck, IconBolt as Zap, IconUsers as Users, IconChevronRight as ChevronRight, IconMessageSquare as MessageSquare, IconLifeBuoy as LifeBuoy } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

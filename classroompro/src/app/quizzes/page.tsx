@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 import { IconSearch as Search, IconFilter as Filter, IconBrain as BrainCircuit, IconTrophy as Trophy, IconPlay as Play, IconLoader2 as Loader2, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 import { IconSearch as Search, IconBook as BookOpen, IconLoader2 as Loader2, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconCircleCheck as CheckCircle2, IconCircle as Circle, IconCalendar as Calendar, IconStack2 as Layers, IconBrain as BrainCircuit, IconLock as Lock, IconArrowRight as ArrowRight, IconClock as Clock, IconSparkles as Sparkles, IconChevronDown as ChevronDown, IconChevronUp as ChevronUp } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
