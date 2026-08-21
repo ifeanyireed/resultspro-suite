@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { IconCheck as Check, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconUser as User, IconBookOpen as BookOpen, IconFileText as FileText, IconVideo as Video, IconClock as Clock, IconShieldCheck as ShieldCheck, IconUpload as Upload, IconPlus as Plus, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconCheck as Check, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconUser as User, IconBook as BookOpen, IconFileText as FileText, IconVideo as Video, IconClock as Clock, IconShieldCheck as ShieldCheck, IconUpload as Upload, IconPlus as Plus, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
@@ -245,7 +245,7 @@ export default function TutorOnboarding() {
               <button 
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="px-10 py-4 rounded-2xl bg-green text-navy font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-10 py-4 rounded-2xl bg-green-600 text-white font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : 'SUBMIT APPLICATION'}
                 {!submitting && <Check className="w-5 h-5" />}

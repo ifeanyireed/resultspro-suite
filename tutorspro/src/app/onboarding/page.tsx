@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconTarget as Target, IconBookOpen as BookOpen, IconTrophy as Trophy, IconZap as Zap, IconCheck as Check, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconTarget as Target, IconBook as BookOpen, IconTrophy as Trophy, IconBolt as Zap, IconCheck as Check, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 
@@ -186,7 +186,7 @@ export default function OnboardingPage() {
           )}
           <Button 
             onClick={nextStep}
-            className="flex-1 py-7 rounded-2xl bg-green text-navy hover:bg-green/90 font-bold text-lg flex items-center justify-center gap-2"
+            className="flex-1 py-7 rounded-2xl bg-green-600 text-white hover:bg-green/90 font-bold text-lg flex items-center justify-center gap-2"
           >
             {step === 3 ? "Start Winning" : "Continue"}
             <ChevronRight className="w-5 h-5" />

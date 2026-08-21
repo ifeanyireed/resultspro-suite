@@ -1,138 +1,140 @@
-import React from 'react';
+"use client";
 
-const Footer = () => {
+import Link from 'next/link';
+
+const footerSections = [
+  {
+    title: 'Services',
+    links: [
+      { label: 'Practice Mode',             href: '/practice' },
+      { label: 'Live Games',                href: '/live' },
+      { label: 'Battle Mode',               href: '/battle-mode' },
+      { label: 'AI Study Assistant',        href: '/study-assistant' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { label: 'Leaderboard',               href: '/leaderboard' },
+      { label: 'Blog',                      href: '/blog' },
+      { label: 'Refer & Earn',              href: '/referral' },
+      { label: 'Coin Shop',                 href: '/shop' },
+    ],
+  },
+  {
+    title: 'Support',
+    links: [
+      { label: 'Contact Support',           href: '/support' },
+      { label: 'Terms of Service',          href: '/terms' },
+      { label: 'Privacy Policy',            href: '/privacy' },
+    ],
+  },
+];
+
+export default function Footer() {
   return (
-    <footer className="justify-center items-stretch z-0 flex w-full flex-col bg-black max-md:max-w-full">
-      <div className="justify-between backdrop-blur-[30px] flex w-full gap-[40px_100px] flex-wrap p-24 rounded-[30px_30px_0_0] max-md:max-w-full max-md:px-5">
-        <div className="flex items-center gap-3 text-lg text-white font-bold whitespace-nowrap tracking-[-0.9px] p-1">
-          <img
-            src="/logo.png"
-            className="h-12 w-auto object-contain"
-            alt="Results Pro Logo"
-          />
-          <div className="text-white">
-            Results Pro
-          </div>
-        </div>
-        <div className="flex min-w-60 max-w-[720px] gap-[40px_88px] justify-between flex-wrap flex-1 shrink basis-[0%] max-md:max-w-full">
-          {/* Products Column */}
-          <div className="flex flex-col items-stretch text-[13px] text-white font-normal whitespace-nowrap leading-loose">
-            <div className="flex flex-col items-center text-sm text-white font-medium leading-none justify-center pl-2.5 pr-5 py-2.5 rounded-[10px]">
-              <div className="flex gap-2.5 overflow-hidden">
-                <div className="w-0 shrink-0 h-5 border-[rgba(255,255,255,0.1)] border-solid border-2" />
-                <div className="text-white">Products</div>
+    <footer id="contact" role="contentinfo" style={{ background: 'var(--color-nets-navy-dark)' }}>
+      {/* Top accent */}
+      <div style={{ height: '3px', background: 'var(--color-nets-navy)' }} />
+
+      <div className="container-nets" style={{ paddingTop: '5rem', paddingBottom: '4rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '2rem' }}>
+
+          {/* Brand */}
+          <div style={{ gridColumn: 'span 12' }} className="lg:col-span-4">
+            <Link href="/" style={{ display: 'inline-block', marginBottom: '1.5rem', transition: 'opacity 0.2s ease' }} onMouseEnter={e => e.currentTarget.style.opacity = '0.8'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+              <img src="/logo.png" alt="ResultsPRO Logo" style={{ height: '80px', width: 'auto', objectFit: 'contain' }} />
+            </Link>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '2rem' }}>
+              Nigeria's ultimate CBT practice platform. Supercharge your prep with AI tutoring, live multiplayer games, and battle modes.
+            </p>
+
+            {/* Contact quick */}
+            {[
+              { label: 'Email',    value: 'support@resultspro.ng' },
+              { label: 'Location', value: 'Lagos, Nigeria' },
+            ].map(c => (
+              <div key={c.label} style={{ display: 'flex', gap: '1rem', marginBottom: '0.625rem', alignItems: 'flex-start' }}>
+                <span style={{
+                  fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.1em',
+                  color: 'var(--color-nets-red)', textTransform: 'uppercase',
+                  width: '52px', flexShrink: 0, paddingTop: '1px',
+                }}>{c.label}</span>
+                <span style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.6)' }}>{c.value}</span>
               </div>
-            </div>
-            {['Courses', 'Tutorials', 'Pricing'].map((item) => (
-              <button
-                key={item}
-                className="flex flex-col items-center justify-center px-5 py-2.5 rounded-[10px] hover:bg-white/10 transition-colors"
-              >
-                <div>{item}</div>
-              </button>
             ))}
           </div>
 
-          {/* Company Column */}
-          <div className="flex flex-col text-[13px] text-white font-normal leading-loose">
-            <div className="flex flex-col items-center text-sm text-white font-medium whitespace-nowrap leading-none justify-center p-2.5 rounded-[10px]">
-              <div className="flex gap-2.5 overflow-hidden">
-                <div className="w-0 shrink-0 h-5 border-[rgba(255,255,255,0.1)] border-solid border-2" />
-                <div className="text-white">Company</div>
+          {/* Nav columns */}
+          <div
+            style={{ gridColumn: 'span 12', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem' }}
+            className="lg:col-span-7 lg:col-start-6"
+          >
+            {footerSections.map(sec => (
+              <div key={sec.title}>
+                <h3 style={{
+                  fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.15em',
+                  textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)',
+                  marginBottom: '1.5rem',
+                }}>
+                  {sec.title}
+                </h3>
+                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.875rem', padding: 0, margin: 0 }}>
+                  {sec.links.map(lk => {
+                    const style = { fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', transition: 'color 0.15s ease', textDecoration: 'none' }
+                    const onEnter = (e: React.MouseEvent<HTMLElement>) => (e.currentTarget.style.color = '#fff')
+                    const onLeave = (e: React.MouseEvent<HTMLElement>) => (e.currentTarget.style.color = 'rgba(255,255,255,0.5)')
+                    
+                    return (
+                      <li key={lk.label}>
+                        <Link href={lk.href} style={style} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+                          {lk.label}
+                        </Link>
+                      </li>
+                    )
+                  })}
+                </ul>
               </div>
-            </div>
-            {['About Us', 'Contact Us'].map((item) => (
-              <button
-                key={item}
-                className="flex flex-col items-center justify-center px-5 py-2.5 rounded-[10px] hover:bg-white/10 transition-colors"
-              >
-                <div>{item}</div>
-              </button>
             ))}
-          </div>
-
-          {/* Resources Column */}
-          <div className="flex flex-col items-stretch text-[13px] text-white font-normal whitespace-nowrap leading-loose">
-            <div className="flex flex-col items-center text-sm text-white font-medium leading-none justify-center p-2.5 rounded-[10px]">
-              <div className="flex gap-2.5 overflow-hidden">
-                <div className="w-0 shrink-0 h-5 border-[rgba(255,255,255,0.1)] border-solid border-2" />
-                <div className="text-white">Resources</div>
-              </div>
-            </div>
-            {['Downloads', 'Community'].map((item) => (
-              <button
-                key={item}
-                className="flex flex-col items-center justify-center px-5 py-2.5 rounded-[10px] hover:bg-white/10 transition-colors"
-              >
-                <div>{item}</div>
-              </button>
-            ))}
-          </div>
-
-          {/* Follow Us Column */}
-          <div className="flex flex-col items-stretch">
-            <div className="flex flex-col items-center text-sm text-white font-medium leading-none justify-center pr-5 py-2.5 rounded-[10px]">
-              <div className="flex gap-2.5 overflow-hidden">
-                <div className="w-0 shrink-0 h-5 border-[rgba(255,255,255,0.1)] border-solid border-2" />
-                <div className="text-white">FOLLOW US</div>
-              </div>
-            </div>
-            <div className="opacity-60 flex gap-2.5 mt-4">
-              {[
-                'https://api.builder.io/api/v1/image/assets/a296e6f6909345febc364568fca847ed/a2f4c8ef1ce6f5a272d4bc36c8c0b90213a51216?placeholderIfAbsent=true',
-                'https://api.builder.io/api/v1/image/assets/a296e6f6909345febc364568fca847ed/0a98801f0be729af2872477828935430b187ac4b?placeholderIfAbsent=true',
-                'https://api.builder.io/api/v1/image/assets/a296e6f6909345febc364568fca847ed/07d0ff9372a3540782b8644f14ec67fb73f1fcc4?placeholderIfAbsent=true'
-              ].map((src, index) => (
-                <button
-                  key={index}
-                  className="justify-center items-center border shadow-[0_1px_0_0_rgba(0,0,0,0.05),0_4px_4px_0_rgba(0,0,0,0.05),0_10px_10px_0_rgba(0,0,0,0.10)] backdrop-blur-[10px] flex min-h-9 gap-2.5 overflow-hidden w-9 h-9 bg-[rgba(0,0,0,0.60)] px-1.5 rounded-[32px] border-solid border-[rgba(255,255,255,0.10)] hover:bg-white/10 transition-colors"
-                >
-                  <img
-                    src={src}
-                    className="aspect-[1] object-contain w-4 self-stretch h-4 my-auto"
-                    alt={`Social ${index + 1}`}
-                  />
-                </button>
-              ))}
-            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Section */}
-      <div className="justify-between items-center flex w-full gap-[40px_100px] flex-wrap px-24 py-5 border-t-[rgba(255,255,255,0.10)] border-t border-solid max-md:max-w-full max-md:px-5">
-        <div className="text-white text-[13px] font-normal leading-loose self-stretch my-auto">
-          © 2024 Company
-        </div>
-        <div className="self-stretch flex min-w-60 items-center gap-10 my-auto">
-          <nav className="self-stretch flex min-w-60 items-center gap-4 text-[13px] text-white font-normal leading-loose justify-center my-auto">
-            {['Terms of Service', 'Privacy Policy', 'English'].map((item, index) => (
-              <React.Fragment key={item}>
-                <button className="self-stretch my-auto hover:text-blue-400 transition-colors">
-                  {item}
-                </button>
-                {index < 2 && (
-                  <div className="border self-stretch w-0 shrink-0 h-[17px] my-auto border-[rgba(255,255,255,0.1)] border-solid" />
-                )}
-              </React.Fragment>
+      {/* Bottom bar */}
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="container-nets" style={{
+          paddingTop: '1.5rem', paddingBottom: '1.5rem',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          flexWrap: 'wrap', gap: '1rem',
+        }}>
+          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem' }}>
+            © {new Date().getFullYear()} ResultsPRO.ng · All rights reserved
+          </div>
+          <div style={{ display: 'flex', gap: '0.25rem' }}>
+            {[
+              { label: 'Privacy Policy', href: '/privacy' },
+              { label: 'Terms of Service', href: '/terms' },
+            ].map((l, i) => (
+              <span key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                {i > 0 && <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '0.75rem' }}>·</span>}
+                <Link href={l.href} style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.25)', transition: 'color 0.15s', textDecoration: 'none' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.25)')}>
+                  {l.label}
+                </Link>
+              </span>
             ))}
-            <img
-              src="https://api.builder.io/api/v1/image/assets/a296e6f6909345febc364568fca847ed/818af71ce3c330555157f14969835affcee815e5?placeholderIfAbsent=true"
-              className="aspect-[1] object-contain w-5 self-stretch shrink-0 my-auto"
-              alt="Language"
-            />
-          </nav>
-          <button className="justify-center items-center border self-stretch flex min-h-11 gap-2.5 w-11 h-11 bg-[rgba(0,0,0,0.60)] my-auto px-1.5 rounded-[32px] border-solid border-[rgba(255,255,255,0.10)] hover:bg-white/10 transition-colors">
-            <img
-              src="https://api.builder.io/api/v1/image/assets/a296e6f6909345febc364568fca847ed/7156eb903f7db96c267f90a625fa7d56f374ce9d?placeholderIfAbsent=true"
-              className="aspect-[1] object-contain w-6 self-stretch my-auto"
-              alt="Go back"
-            />
-          </button>
+          </div>
+          <div style={{ display: 'flex', gap: '1.5rem' }}>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="ResultsPRO on Twitter"
+              style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.3)', transition: 'color 0.15s', textDecoration: 'none' }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}>
+              Twitter
+            </a>
+          </div>
         </div>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

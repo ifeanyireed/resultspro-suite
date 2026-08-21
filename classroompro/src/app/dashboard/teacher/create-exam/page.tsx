@@ -54,7 +54,7 @@ export default function CreateExamPage() {
              <Button variant="outline" className="border-white/10 hover:bg-white/5 text-white">
               <Eye className="w-4 h-4 mr-2" /> Preview
             </Button>
-            <Button className="bg-green hover:bg-green/90 text-navy font-bold">
+            <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
               <Save className="w-4 h-4 mr-2" /> Publish Exam
             </Button>
           </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { IconUsers as Users, IconTrendingUp as TrendingUp, IconLayoutDashboard as LayoutDashboard, IconBookOpen as BookOpen, IconDollarSign as DollarSign, IconSettings as Settings, IconShieldAlert as ShieldAlert, IconGift as Gift, IconTarget as Target, IconSword as Sword, IconRadio as Radio, IconTrophy as Trophy, IconBell as Bell, IconFileText as FileText, IconLogOut as LogOut } from '@tabler/icons-react';
+import { IconUsers as Users, IconTrendingUp as TrendingUp, IconLayoutDashboard as LayoutDashboard, IconBook as BookOpen, IconDollarSign as DollarSign, IconSettings as Settings, IconShieldAlert as ShieldAlert, IconGift as Gift, IconTarget as Target, IconSword as Sword, IconRadio as Radio, IconTrophy as Trophy, IconBell as Bell, IconFileText as FileText, IconLogOut as LogOut } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Logo from '../Logo';

@@ -2,7 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { IconPlus as Plus, IconFileText as FileText, IconPaperclip as Paperclip, IconCalendar as Calendar, IconCheckCircle2 as CheckCircle2, IconMoreVertical as MoreVertical, IconChevronRight as ChevronRight, IconBookOpen as BookOpen, IconTarget as Target, IconClock as Clock, IconSave as Save, IconTrash2 as Trash2, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconPlus as Plus, IconFileText as FileText, IconPaperclip as Paperclip, IconCalendar as Calendar, IconCircleCheck as CheckCircle2, IconMoreVertical as MoreVertical, IconChevronRight as ChevronRight, IconBook as BookOpen, IconTarget as Target, IconClock as Clock, IconSave as Save, IconTrash2 as Trash2, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -81,7 +81,7 @@ export default function TutorPlanner() {
             onClick={() => {
                setTitle('New Lesson Plan');
             }}
-            className="px-8 py-4 rounded-2xl bg-green text-navy font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20"
+            className="px-8 py-4 rounded-2xl bg-green-600 text-white font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20"
           >
              <Plus className="w-5 h-5" /> CREATE NEW PLAN
           </button>

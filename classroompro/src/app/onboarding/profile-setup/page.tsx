@@ -29,7 +29,7 @@ export default function ProfileSetupPage() {
             <div className="w-24 h-24 rounded-full bg-white/5 border-2 border-dashed border-white/20 flex items-center justify-center overflow-hidden transition-all group-hover:border-green/50">
               <User className="w-10 h-10 text-muted-foreground transition-colors group-hover:text-green" />
             </div>
-            <button type="button" className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-green text-navy flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+            <button type="button" className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
               <Camera className="w-4 h-4" />
             </button>
           </div>
@@ -76,7 +76,7 @@ export default function ProfileSetupPage() {
         <div className="pt-4">
           <Button 
             type="submit"
-            className="w-full bg-green hover:bg-green/90 text-navy font-bold h-11"
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-11"
             disabled={isLoading}
           >
             {isLoading ? "Saving..." : "Go to Dashboard"} <ArrowRight className="ml-2 w-4 h-4" />

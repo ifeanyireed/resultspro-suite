@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconChevronRight as ChevronRight, IconPlay as Play, IconCheckCircle2 as CheckCircle2, IconClock as Clock, IconArrowLeft as ArrowLeft, IconDownload as Download } from '@tabler/icons-react';
+import { IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconChevronRight as ChevronRight, IconPlay as Play, IconCircleCheck as CheckCircle2, IconClock as Clock, IconArrowLeft as ArrowLeft, IconDownload as Download } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -122,7 +122,7 @@ export default function TopicHubPage() {
                 <div className="h-full bg-green transition-all" style={{ width: `${topic.progress}%` }} />
               </div>
               <div className="flex gap-2">
-                <Button className="flex-1 bg-green hover:bg-green/90 text-navy font-bold h-10 text-xs">
+                <Button className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold h-10 text-xs">
                    Resume Learning
                 </Button>
                 <Button variant="outline" className="border-white/10 hover:bg-white/5 text-white h-10 w-10 p-0">

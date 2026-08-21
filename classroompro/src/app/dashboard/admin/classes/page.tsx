@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconLayers as Layers, IconPlus as Plus, IconSearch as Search, IconMoreVertical as MoreVertical, IconUsers as Users, IconGraduationCap as GraduationCap } from '@tabler/icons-react';
+import { IconStack2 as Layers, IconPlus as Plus, IconSearch as Search, IconMoreVertical as MoreVertical, IconUsers as Users, IconCertificate as GraduationCap } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -56,7 +56,7 @@ export default function ManageClassesPage() {
             <h2 className="text-2xl font-bold text-white font-display">Academic Classes</h2>
             <p className="text-sm text-muted-foreground">Define and manage the grade levels and classes in your school.</p>
           </div>
-          <Button className="bg-green hover:bg-green/90 text-navy font-bold">
+          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
             <Plus className="w-4 h-4 mr-2" /> Add New Class
           </Button>
         </div>

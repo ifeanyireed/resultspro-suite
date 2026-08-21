@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconUsers as Users, IconUserCheck as UserCheck, IconGraduationCap as GraduationCap, IconBookOpen as BookOpen, IconTrendingUp as TrendingUp, IconPlus as Plus, IconArrowUpRight as ArrowUpRight, IconMoreVertical as MoreVertical, IconSchool as School, IconCalendar as Calendar } from '@tabler/icons-react';
+import { IconUsers as Users, IconUserCheck as UserCheck, IconCertificate as GraduationCap, IconBook as BookOpen, IconTrendingUp as TrendingUp, IconPlus as Plus, IconArrowUpRight as ArrowUpRight, IconMoreVertical as MoreVertical, IconSchool as School, IconCalendar as Calendar } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
@@ -73,7 +73,7 @@ export default function SchoolAdminDashboard() {
             <Button variant="outline" className="border-white/10 hover:bg-white/5 text-white">
               <Calendar className="w-4 h-4 mr-2" /> Schedule Term
             </Button>
-            <Button className="bg-green hover:bg-green/90 text-navy font-bold">
+            <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
               <Plus className="w-4 h-4 mr-2" /> Add Teacher
             </Button>
           </div>

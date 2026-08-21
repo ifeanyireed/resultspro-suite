@@ -51,7 +51,7 @@ export default function SchoolManagementPage() {
             <h2 className="text-2xl font-bold text-white font-display">School Profile</h2>
             <p className="text-sm text-muted-foreground">Update your institution's public information and preferences.</p>
           </div>
-          <Button className="bg-green hover:bg-green/90 text-navy font-bold">
+          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
             <Save className="w-4 h-4 mr-2" /> Save Changes
           </Button>
         </div>
@@ -65,7 +65,7 @@ export default function SchoolManagementPage() {
                    <School className="w-12 h-12 text-muted-foreground group-hover:text-green transition-colors" />
                    <span className="text-[10px] text-muted-foreground font-bold">Click to Upload</span>
                 </div>
-                <button className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-green text-navy flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                <button className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-green-600 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                    <Camera className="w-5 h-5" />
                 </button>
              </div>

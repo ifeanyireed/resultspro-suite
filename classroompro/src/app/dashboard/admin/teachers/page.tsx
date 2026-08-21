@@ -52,7 +52,7 @@ export default function ManageTeachersPage() {
             <h2 className="text-2xl font-bold text-white font-display">Faculty Directory</h2>
             <p className="text-sm text-muted-foreground">Manage your school's teaching staff and their assignments.</p>
           </div>
-          <Button className="bg-green hover:bg-green/90 text-navy font-bold">
+          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
             <Plus className="w-4 h-4 mr-2" /> Add New Teacher
           </Button>
         </div>

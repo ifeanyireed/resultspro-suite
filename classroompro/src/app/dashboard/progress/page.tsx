@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconTrendingUp as TrendingUp, IconBarChart3 as BarChart3, IconTarget as Target, IconAward as Award, IconChevronRight as ChevronRight, IconClock as Clock, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconArrowLeft as ArrowLeft, IconCalendar as Calendar, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconTrendingUp as TrendingUp, IconBarChart3 as BarChart3, IconTarget as Target, IconAward as Award, IconChevronRight as ChevronRight, IconClock as Clock, IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconArrowLeft as ArrowLeft, IconCalendar as Calendar, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";

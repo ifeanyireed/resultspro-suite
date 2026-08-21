@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconBookmark as Bookmark, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconChevronRight as ChevronRight, IconTrash2 as Trash2, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconBookmark as Bookmark, IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconChevronRight as ChevronRight, IconTrash2 as Trash2, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import React, { useEffect, useState } from "react";
 import api from "@/lib/api";
 import { formatDistanceToNow } from "date-fns";
@@ -73,7 +73,7 @@ export default function SavedContentPage() {
              onClick={() => setFilter("")}
              className={cn(
                "px-6 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap border",
-               filter === "" ? "bg-green text-navy border-green" : "bg-white/5 text-muted-foreground border-white/10 hover:text-white"
+               filter === "" ? "bg-green-600 text-white border-green" : "bg-white/5 text-muted-foreground border-white/10 hover:text-white"
              )}
            >
               All Items ({items.length})
@@ -82,7 +82,7 @@ export default function SavedContentPage() {
              onClick={() => setFilter("NOTE")}
              className={cn(
                "px-6 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap border",
-               filter === "NOTE" ? "bg-green text-navy border-green" : "bg-white/5 text-muted-foreground border-white/10 hover:text-white"
+               filter === "NOTE" ? "bg-green-600 text-white border-green" : "bg-white/5 text-muted-foreground border-white/10 hover:text-white"
              )}
            >
               Notes
@@ -91,7 +91,7 @@ export default function SavedContentPage() {
              onClick={() => setFilter("QUIZ")}
              className={cn(
                "px-6 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap border",
-               filter === "QUIZ" ? "bg-green text-navy border-green" : "bg-white/5 text-muted-foreground border-white/10 hover:text-white"
+               filter === "QUIZ" ? "bg-green-600 text-white border-green" : "bg-white/5 text-muted-foreground border-white/10 hover:text-white"
              )}
            >
               Quizzes
@@ -100,7 +100,7 @@ export default function SavedContentPage() {
              onClick={() => setFilter("FLASHCARD_SET")}
              className={cn(
                "px-6 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap border",
-               filter === "FLASHCARD_SET" ? "bg-green text-navy border-green" : "bg-white/5 text-muted-foreground border-white/10 hover:text-white"
+               filter === "FLASHCARD_SET" ? "bg-green-600 text-white border-green" : "bg-white/5 text-muted-foreground border-white/10 hover:text-white"
              )}
            >
               Flashcards

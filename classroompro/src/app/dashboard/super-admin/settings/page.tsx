@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconSettings as Settings, IconGlobe as Globe, IconShield as Shield, IconCreditCard as CreditCard, IconBell as Bell, IconDatabase as Database, IconLayout as Layout, IconSave as Save, IconCheckCircle2 as CheckCircle2, IconAlertTriangle as AlertTriangle } from '@tabler/icons-react';
+import { IconSettings as Settings, IconGlobe as Globe, IconShield as Shield, IconCreditCard as CreditCard, IconBell as Bell, IconDatabase as Database, IconLayout as Layout, IconSave as Save, IconCircleCheck as CheckCircle2, IconAlertTriangle as AlertTriangle } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -60,7 +60,7 @@ export default function PlatformSettings() {
             <h2 className="text-2xl font-bold text-white mb-2">Global Configurations</h2>
             <p className="text-sm text-muted-foreground">Manage platform-wide settings, subscription tiers, and system security.</p>
           </div>
-          <Button className="bg-green text-navy font-bold h-11 px-8 shadow-lg shadow-green/10">
+          <Button className="bg-green-600 text-white font-bold h-11 px-8 shadow-lg shadow-green/10">
              <Save className="w-4 h-4 mr-2" /> Save All Changes
           </Button>
         </div>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconSchool as School, IconUsers as Users, IconBookOpen as BookOpen, IconTrendingUp as TrendingUp, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconShieldCheck as ShieldCheck, IconAlertCircle as AlertCircle, IconChevronRight as ChevronRight, IconDollarSign as DollarSign } from '@tabler/icons-react';
+import { IconSchool as School, IconUsers as Users, IconBook as BookOpen, IconTrendingUp as TrendingUp, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconShieldCheck as ShieldCheck, IconAlertCircle as AlertCircle, IconChevronRight as ChevronRight, IconDollarSign as DollarSign } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";

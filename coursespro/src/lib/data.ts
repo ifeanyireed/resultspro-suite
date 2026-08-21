@@ -167,7 +167,7 @@ export const mockProjects: Project[] = [
     submittedUrl: 'https://github.com/ifeanyireed/resultspro_suite',
     mentorFeedback: {
       mentorName: 'Dr. Adeyemi Alabi',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop',
+      avatar: '/avatars/character9.jpg',
       rating: 4.9,
       comment: 'Exceptional architectural separation between the identity service and the result engine. The GORM integration is clean and well-typed.',
       timestamp: 'Yesterday at 4:30 PM',
@@ -200,7 +200,7 @@ export const mockPeers: Peer[] = [
   {
     id: 'peer-1',
     name: 'Tunde Bakare',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+    avatar: '/avatars/character5.jpg',
     role: 'Fullstack Builder',
     skills: ['Go', 'React', 'GORM', 'MySQL'],
     currentStage: 'Stage 03: Projects',
@@ -211,7 +211,7 @@ export const mockPeers: Peer[] = [
   {
     id: 'peer-2',
     name: 'Amara Nwosu',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+    avatar: '/avatars/character5.jpg',
     role: 'Product Designer',
     skills: ['Figma', 'Design Systems', 'Tailwind'],
     currentStage: 'Stage 03: Projects',
@@ -222,7 +222,7 @@ export const mockPeers: Peer[] = [
   {
     id: 'peer-3',
     name: 'Kofi Mensah',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
+    avatar: '/avatars/character2.jpg',
     role: 'Backend Engineer',
     skills: ['Go', 'Docker', 'AWS SES', 'PostgreSQL'],
     currentStage: 'Stage 02: Applications',
@@ -233,7 +233,7 @@ export const mockPeers: Peer[] = [
   {
     id: 'peer-4',
     name: 'Fatima Ibrahim',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop',
+    avatar: '/avatars/character5.jpg',
     role: 'AI & Fullstack Dev',
     skills: ['Python', 'Next.js', 'LLMs', 'Prompt Engineering'],
     currentStage: 'Stage 03: Projects',
@@ -244,18 +244,18 @@ export const mockPeers: Peer[] = [
 ];
 
 export const mockPresence: PresenceUser[] = [
-  { id: '1', name: 'Tunde Bakare', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop', activity: 'Coding', room: 'Sprint Room Alpha', timeActive: '42m' },
-  { id: '2', name: 'Amara Nwosu', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop', activity: 'Designing', room: 'Figma Lab', timeActive: '1h 15m' },
-  { id: '3', name: 'Kofi Mensah', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop', activity: 'Studying', room: 'Quiet Study Hall', timeActive: '25m' },
-  { id: '4', name: 'Dr. Adeyemi', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop', activity: 'In Mentor 1:1', room: 'Office Hours #1', timeActive: '10m' },
+  { id: '1', name: 'Tunde Bakare', avatar: '/avatars/character18.jpg', activity: 'Coding', room: 'Sprint Room Alpha', timeActive: '42m' },
+  { id: '2', name: 'Amara Nwosu', avatar: '/avatars/character19.jpg', activity: 'Designing', room: 'Figma Lab', timeActive: '1h 15m' },
+  { id: '3', name: 'Kofi Mensah', avatar: '/avatars/character5.jpg', activity: 'Studying', room: 'Quiet Study Hall', timeActive: '25m' },
+  { id: '4', name: 'Dr. Adeyemi', avatar: '/avatars/character14.jpg', activity: 'In Mentor 1:1', room: 'Office Hours #1', timeActive: '10m' },
 ];
 
 export const mockLeaderboard: LeaderboardUser[] = [
-  { rank: 1, name: 'Tunde Bakare', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop', xp: 4850, streak: 18, projectsApproved: 4, badge: 'PROJECT HERO' },
-  { rank: 2, name: 'You (Alex Reed)', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop', xp: 4620, streak: 14, projectsApproved: 3, badge: 'FAST FINISHER', isCurrentUser: true },
-  { rank: 3, name: 'Fatima Ibrahim', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop', xp: 4100, streak: 12, projectsApproved: 3, badge: 'TOP REVIEWER' },
-  { rank: 4, name: 'Amara Nwosu', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop', xp: 3950, streak: 9, projectsApproved: 2, badge: 'BEST TEAMMATE' },
-  { rank: 5, name: 'Kofi Mensah', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop', xp: 3400, streak: 7, projectsApproved: 2, badge: 'BUILDER' },
+  { rank: 1, name: 'Tunde Bakare', avatar: '/avatars/character5.jpg', xp: 4850, streak: 18, projectsApproved: 4, badge: 'PROJECT HERO' },
+  { rank: 2, name: 'You (Alex Reed)', avatar: '/avatars/character15.jpg', xp: 4620, streak: 14, projectsApproved: 3, badge: 'FAST FINISHER', isCurrentUser: true },
+  { rank: 3, name: 'Fatima Ibrahim', avatar: '/avatars/character2.jpg', xp: 4100, streak: 12, projectsApproved: 3, badge: 'TOP REVIEWER' },
+  { rank: 4, name: 'Amara Nwosu', avatar: '/avatars/character13.jpg', xp: 3950, streak: 9, projectsApproved: 2, badge: 'BEST TEAMMATE' },
+  { rank: 5, name: 'Kofi Mensah', avatar: '/avatars/character10.jpg', xp: 3400, streak: 7, projectsApproved: 2, badge: 'BUILDER' },
 ];
 
 export const mockPortfolio: PortfolioItem[] = [
@@ -263,7 +263,7 @@ export const mockPortfolio: PortfolioItem[] = [
     id: 'port-1',
     title: 'ResultsPRO Assessment & Gradebook Engine',
     category: 'Fullstack Systems Engineering',
-    thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=350&fit=crop',
+    thumbnail: '"/avatars/character2.jpg"',
     demoUrl: 'https://resultspro.ng/demo',
     githubUrl: 'https://github.com/ifeanyireed/resultspro_suite',
     description: 'A distributed Go microservice handling Continuous Assessment records, automated GPA calculations, class rankings, and instant high-fidelity PDF gradebook generation.',
@@ -274,7 +274,7 @@ export const mockPortfolio: PortfolioItem[] = [
     id: 'port-2',
     title: 'examsPRO Multiplayer CBT Battle Arena',
     category: 'Real-Time WebSockets & Gamification',
-    thumbnail: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=600&h=350&fit=crop',
+    thumbnail: '"/avatars/character2.jpg"',
     demoUrl: 'https://examspro.ng/live',
     githubUrl: 'https://github.com/ifeanyireed/resultspro_suite',
     description: 'Low-latency multiplayer battle room connecting students in live timed exam challenges with real-time wager settlements and dynamic ELO leaderboard tracking.',

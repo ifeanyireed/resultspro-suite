@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconTrophy as Trophy, IconCheckCircle2 as CheckCircle2, IconXCircle as XCircle, IconClock as Clock, IconArrowRight as ArrowRight, IconRotateCcw as RotateCcw, IconShare2 as Share2, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconTrophy as Trophy, IconCircleCheck as CheckCircle2, IconXCircle as XCircle, IconClock as Clock, IconArrowRight as ArrowRight, IconRotateCcw as RotateCcw, IconShare2 as Share2, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -102,7 +102,7 @@ export default function QuizResultsClient() {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4">
            <Link href="/dashboard/subjects" className="flex-1">
-              <Button className="w-full bg-green hover:bg-green/90 text-navy font-bold h-14 rounded-2xl text-lg">
+              <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-14 rounded-2xl text-lg">
                  Continue Learning <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
            </Link>

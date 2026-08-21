@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconBarChart3 as BarChart3, IconTrendingUp as TrendingUp, IconUsers as Users, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconCalendar as Calendar, IconFilter as Filter } from '@tabler/icons-react';
+import { IconBarChart3 as BarChart3, IconTrendingUp as TrendingUp, IconUsers as Users, IconBook as BookOpen, IconBrain as BrainCircuit, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconCalendar as Calendar, IconFilter as Filter } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";

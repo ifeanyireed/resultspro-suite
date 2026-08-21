@@ -56,7 +56,7 @@ export default function TutorClassroom() {
               { icon: Brain, label: 'Polls' },
               { icon: Share2, label: 'Assets' },
             ].map((tool, i) => (
-              <button key={i} className={`p-4 rounded-2xl transition-all group relative ${tool.active ? 'bg-green text-navy' : 'text-gray-500 hover:bg-white/5 hover:text-white'}`}>
+              <button key={i} className={`p-4 rounded-2xl transition-all group relative ${tool.active ? 'bg-green-600 text-white' : 'text-gray-500 hover:bg-white/5 hover:text-white'}`}>
                  <tool.icon className="w-6 h-6" />
                  <span className="absolute left-full ml-4 px-2 py-1 rounded bg-white text-navy text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none">
                     {tool.label}
@@ -181,7 +181,7 @@ export default function TutorClassroom() {
          </div>
 
          <div className="flex items-center gap-4 bg-white/5 p-2 rounded-[28px] border border-white/10">
-            <button className="px-8 py-3 rounded-[20px] bg-green text-navy font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-green/20">
+            <button className="px-8 py-3 rounded-[20px] bg-green-600 text-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-green/20">
                SHARE SCREEN
             </button>
             <button className="p-3 rounded-full hover:bg-white/5 text-gray-500 hover:text-white transition-all">

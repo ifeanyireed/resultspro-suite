@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconSearch as Search, IconMessageSquare as MessageSquare, IconSend as Send, IconCheckCircle2 as CheckCircle2, IconPhone as Phone, IconVideo as Video, IconMoreVertical as MoreVertical } from '@tabler/icons-react';
+import { IconSearch as Search, IconMessageSquare as MessageSquare, IconSend as Send, IconCircleCheck as CheckCircle2, IconPhone as Phone, IconVideo as Video, IconMoreVertical as MoreVertical } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
@@ -80,7 +80,7 @@ export default function TeacherMessagesPage() {
                 <Input placeholder="Search messages..." className="pl-9 bg-white/5 border-white/10 h-10 text-sm" />
              </div>
              <div className="flex gap-2">
-                <button className="px-4 py-1.5 rounded-full bg-green text-navy font-bold text-[10px] uppercase tracking-widest">All</button>
+                <button className="px-4 py-1.5 rounded-full bg-green-600 text-white font-bold text-[10px] uppercase tracking-widest">All</button>
                 <button className="px-4 py-1.5 rounded-full bg-white/5 text-muted-foreground font-bold text-[10px] uppercase tracking-widest hover:text-white transition-colors">Parents</button>
                 <button className="px-4 py-1.5 rounded-full bg-white/5 text-muted-foreground font-bold text-[10px] uppercase tracking-widest hover:text-white transition-colors">Students</button>
              </div>
@@ -118,7 +118,7 @@ export default function TeacherMessagesPage() {
                       </p>
                    </div>
                    {contact.unread > 0 && (
-                      <div className="w-5 h-5 rounded-full bg-green text-navy text-[10px] font-black flex items-center justify-center shadow-lg shadow-green/20">
+                      <div className="w-5 h-5 rounded-full bg-green-600 text-white text-[10px] font-black flex items-center justify-center shadow-lg shadow-green/20">
                          {contact.unread}
                       </div>
                    )}
@@ -178,11 +178,11 @@ export default function TeacherMessagesPage() {
 
               {/* Message Sent */}
               <div className="flex items-start gap-4 max-w-2xl ml-auto flex-row-reverse text-sm">
-                 <div className="w-8 h-8 rounded-lg bg-green text-navy flex items-center justify-center text-[10px] font-black shrink-0">
+                 <div className="w-8 h-8 rounded-lg bg-green-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">
                     JD
                  </div>
                  <div className="space-y-2 text-right">
-                    <div className="p-4 rounded-2xl rounded-tr-none bg-green text-navy font-medium leading-relaxed shadow-xl shadow-green/10">
+                    <div className="p-4 rounded-2xl rounded-tr-none bg-green-600 text-white font-medium leading-relaxed shadow-xl shadow-green/10">
                        Hello Mr. Kunle, yes I noticed that too. I've uploaded a revision note 
                        specifically focusing on the theory questions. She should check it out.
                     </div>
@@ -216,7 +216,7 @@ export default function TeacherMessagesPage() {
                     placeholder="Write a message..." 
                     className="flex-1 bg-transparent border-none focus:outline-none text-white text-sm py-3"
                  />
-                 <Button className="bg-green hover:bg-green/90 text-navy font-black rounded-xl h-10 px-6 shadow-lg shadow-green/20">
+                 <Button className="bg-green-600 hover:bg-green-700 text-white font-black rounded-xl h-10 px-6 shadow-lg shadow-green/20">
                     Send <Send className="w-3.5 h-3.5 ml-2" />
                  </Button>
               </div>

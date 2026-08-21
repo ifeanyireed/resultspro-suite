@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconTrendingUp as TrendingUp, IconUsers as Users, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconDownload as Download, IconCalendar as Calendar } from '@tabler/icons-react';
+import { IconTrendingUp as TrendingUp, IconUsers as Users, IconBook as BookOpen, IconBrain as BrainCircuit, IconDownload as Download, IconCalendar as Calendar } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
@@ -63,7 +63,7 @@ export default function AdminReportsPage() {
              <Button variant="outline" className="border-white/10 hover:bg-white/5 text-white">
                 <Calendar className="w-4 h-4 mr-2" /> Annual Report
              </Button>
-             <Button className="bg-green hover:bg-green/90 text-navy font-bold">
+             <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
                 <Download className="w-4 h-4 mr-2" /> Export PDF
              </Button>
           </div>

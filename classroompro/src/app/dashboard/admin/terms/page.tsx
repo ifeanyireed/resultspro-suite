@@ -60,7 +60,7 @@ export default function ManageTermsPage() {
              <Button variant="outline" className="border-white/10 hover:bg-white/5 text-white">
                 <Settings className="w-4 h-4 mr-2" /> Session Settings
              </Button>
-             <Button className="bg-green hover:bg-green/90 text-navy font-bold">
+             <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
                 <Plus className="w-4 h-4 mr-2" /> Create New Term
              </Button>
           </div>
@@ -83,7 +83,7 @@ export default function ManageTermsPage() {
                        <div className="flex items-center gap-3 mb-1">
                           <h3 className="text-lg font-bold text-white">{term.name}</h3>
                           <span className={cn("text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-[0.2em]",
-                             term.status === "Active" ? "bg-green text-navy" : "bg-white/10 text-muted-foreground"
+                             term.status === "Active" ? "bg-green-600 text-white" : "bg-white/10 text-muted-foreground"
                           )}>
                              {term.status}
                           </span>

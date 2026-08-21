@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { IconSearch as Search, IconFilter as Filter, IconLayers as Layers, IconBrain as Brain, IconEye as Eye, IconTrendingUp as TrendingUp, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconSearch as Search, IconFilter as Filter, IconStack2 as Layers, IconBrain as Brain, IconEye as Eye, IconTrendingUp as TrendingUp, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -302,7 +302,7 @@ export default function PublicFlashcardsIndex() {
                              variant={currentPage === pageNum ? "default" : "outline"}
                              className={cn(
                                "w-10 h-10 rounded-xl font-bold",
-                               currentPage === pageNum ? "bg-green text-navy hover:bg-green/90" : "border-white/10 text-white hover:bg-white/5"
+                               currentPage === pageNum ? "bg-green-600 text-white hover:bg-green/90" : "border-white/10 text-white hover:bg-white/5"
                              )}
                              onClick={() => setCurrentPage(pageNum)}
                            >

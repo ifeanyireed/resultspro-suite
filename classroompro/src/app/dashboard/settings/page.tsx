@@ -115,7 +115,7 @@ export default function SettingsPage() {
                         <div className="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden font-bold text-2xl text-green">
                            {user?.full_name?.[0] || <User className="w-10 h-10 text-muted-foreground" />}
                         </div>
-                        <button className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-green text-navy flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                        <button className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-green-600 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                            <Camera className="w-3.5 h-3.5" />
                         </button>
                      </div>
@@ -220,7 +220,7 @@ export default function SettingsPage() {
                             }
                           }}
                           disabled={loading}
-                          className="bg-green hover:bg-green/90 text-navy font-bold"
+                          className="bg-green-600 hover:bg-green-700 text-white font-bold"
                      >                        {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />} Save Changes
                      </Button>
                   </div>
@@ -287,7 +287,7 @@ export default function SettingsPage() {
                      <Button 
                        onClick={handleChangePassword}
                        disabled={loading}
-                       className="bg-green hover:bg-green/90 text-navy font-bold"
+                       className="bg-green-600 hover:bg-green-700 text-white font-bold"
                      >
                         {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null} Update Password
                      </Button>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconUsers as Users, IconArrowLeft as ArrowLeft, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconGraduationCap as GraduationCap, IconBarChart3 as BarChart3, IconSearch as Search, IconMoreVertical as MoreVertical, IconMail as Mail, IconFilePlus as FilePlus } from '@tabler/icons-react';
+import { IconUsers as Users, IconArrowLeft as ArrowLeft, IconBook as BookOpen, IconBrain as BrainCircuit, IconCertificate as GraduationCap, IconBarChart3 as BarChart3, IconSearch as Search, IconMoreVertical as MoreVertical, IconMail as Mail, IconFilePlus as FilePlus } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -77,7 +77,7 @@ export function TeacherClassDetailClient() {
               <Button variant="outline" className="border-white/10 text-white">
                  <Mail className="w-4 h-4 mr-2" /> Message All
               </Button>
-              <Button className="bg-green text-navy font-bold">
+              <Button className="bg-green-600 text-white font-bold">
                  <FilePlus className="w-4 h-4 mr-2" /> Add Material
               </Button>
            </div>

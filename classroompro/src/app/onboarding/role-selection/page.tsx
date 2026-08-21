@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { AuthLayout } from "@/components/AuthLayout";
 import { Button } from "@/components/ui/button";
-import { IconGraduationCap as GraduationCap, IconSchool as School, IconUserCircle as UserCircle, IconShieldCheck as ShieldCheck, IconUsers as Users, IconArrowRight as ArrowRight, IconHeart as Heart } from '@tabler/icons-react';
+import { IconCertificate as GraduationCap, IconSchool as School, IconUserCircle as UserCircle, IconShieldCheck as ShieldCheck, IconUsers as Users, IconArrowRight as ArrowRight, IconHeart as Heart } from '@tabler/icons-react';
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -90,7 +90,7 @@ export default function RoleSelectionPage() {
 
       <Link href={currentRole?.nextStep || "#"}>
         <Button 
-          className="w-full bg-green hover:bg-green/90 text-navy font-bold h-12 text-lg"
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-12 text-lg"
           disabled={!selectedRole}
         >
           Continue <ArrowRight className="ml-2 w-5 h-5" />

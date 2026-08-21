@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconGraduationCap as GraduationCap, IconSearch as Search, IconMoreVertical as MoreVertical, IconFilter as Filter, IconDownload as Download, IconUserPlus as UserPlus } from '@tabler/icons-react';
+import { IconCertificate as GraduationCap, IconSearch as Search, IconMoreVertical as MoreVertical, IconFilter as Filter, IconDownload as Download, IconUserPlus as UserPlus } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -60,7 +60,7 @@ export default function ManageStudentsPage() {
             <Button variant="outline" className="border-white/10 hover:bg-white/5 text-white">
               <Download className="w-4 h-4 mr-2" /> Export CSV
             </Button>
-            <Button className="bg-green hover:bg-green/90 text-navy font-bold">
+            <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
               <UserPlus className="w-4 h-4 mr-2" /> Enroll Student
             </Button>
           </div>

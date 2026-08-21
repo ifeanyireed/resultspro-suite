@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconGraduationCap as GraduationCap, IconSearch as Search, IconFilter as Filter, IconChevronRight as ChevronRight, IconClock as Clock, IconCalendar as Calendar, IconAlertCircle as AlertCircle, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconCheckCircle as CheckCircle, IconTrophy as Trophy, IconActivity as Activity, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
+import { IconCertificate as GraduationCap, IconSearch as Search, IconFilter as Filter, IconChevronRight as ChevronRight, IconClock as Clock, IconCalendar as Calendar, IconAlertCircle as AlertCircle, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconCheckCircle as CheckCircle, IconTrophy as Trophy, IconActivity as Activity, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -215,7 +215,7 @@ export default function ExamsPage() {
                   <div className="flex flex-col md:flex-row gap-3 pt-6 border-t border-white/5">
                     {exam.status === "UPCOMING" ? (
                       <Link href={`/dashboard/exams/${exam.id}`} className="flex-1">
-                        <Button className="w-full bg-green hover:bg-green/90 text-navy font-bold h-11 rounded-xl shadow-lg shadow-green/10">
+                        <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-11 rounded-xl shadow-lg shadow-green/10">
                           Start Exam
                         </Button>
                       </Link>

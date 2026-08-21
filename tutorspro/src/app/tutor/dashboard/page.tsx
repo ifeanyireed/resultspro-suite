@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { IconCalendar as Calendar, IconUsers as Users, IconWallet as Wallet, IconChevronRight as ChevronRight, IconPlay as Play, IconClock as Clock, IconStar as Star, IconCheckCircle2 as CheckCircle2, IconLayoutDashboard as LayoutDashboard, IconArrowUpRight as ArrowUpRight, IconPlus as Plus, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconCalendar as Calendar, IconUsers as Users, IconWallet as Wallet, IconChevronRight as ChevronRight, IconPlay as Play, IconClock as Clock, IconStar as Star, IconCircleCheck as CheckCircle2, IconLayoutDashboard as LayoutDashboard, IconArrowUpRight as ArrowUpRight, IconPlus as Plus, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -57,7 +57,7 @@ export default function TutorDashboard() {
               </p>
             </div>
             <div className="flex gap-4">
-              <button className="px-6 py-3 rounded-2xl bg-green text-navy font-bold flex items-center gap-2 hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
+              <button className="px-6 py-3 rounded-2xl bg-green-600 text-white font-bold flex items-center gap-2 hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
                 <Plus className="w-5 h-5" /> Set Availability
               </button>
             </div>
@@ -116,7 +116,7 @@ export default function TutorDashboard() {
                             <div className="text-xs text-gray-500 uppercase font-bold tracking-widest">{session.duration}</div>
                           </div>
                           <div className="flex items-center">
-                            <button className="w-full md:w-auto px-6 py-3 rounded-xl bg-green text-navy font-bold flex items-center justify-center gap-2">
+                            <button className="w-full md:w-auto px-6 py-3 rounded-xl bg-green-600 text-white font-bold flex items-center justify-center gap-2">
                               <Play className="w-4 h-4 fill-current" />
                               Start Class
                             </button>

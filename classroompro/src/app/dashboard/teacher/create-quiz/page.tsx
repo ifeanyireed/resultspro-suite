@@ -80,7 +80,7 @@ export default function CreateQuizPage() {
              <Button variant="outline" className="border-white/10 hover:bg-white/5 text-white">
               <Eye className="w-4 h-4 mr-2" /> Preview
             </Button>
-            <Button className="bg-green hover:bg-green/90 text-navy font-bold">
+            <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
               <Save className="w-4 h-4 mr-2" /> Save Quiz
             </Button>
           </div>
@@ -122,7 +122,7 @@ export default function CreateQuizPage() {
                           <button 
                             className={cn(
                               "w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors",
-                              q.correctAnswer === optIndex ? "border-green bg-green text-navy" : "border-white/10"
+                              q.correctAnswer === optIndex ? "border-green bg-green-600 text-white" : "border-white/10"
                             )}
                           >
                             {String.fromCharCode(65 + optIndex)}

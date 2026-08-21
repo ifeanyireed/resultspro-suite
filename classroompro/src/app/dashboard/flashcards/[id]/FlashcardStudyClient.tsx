@@ -1,6 +1,6 @@
 "use client";
 
-import { IconArrowLeft as ArrowLeft, IconRotateCcw as RotateCcw, IconCheckCircle as CheckCircle, IconXCircle as XCircle, IconHelpCircle as HelpCircle, IconLayers as Layers, IconLoader2 as Loader2, IconTrophy as Trophy, IconZap as Zap } from '@tabler/icons-react';
+import { IconArrowLeft as ArrowLeft, IconRotateCcw as RotateCcw, IconCheckCircle as CheckCircle, IconXCircle as XCircle, IconHelpCircle as HelpCircle, IconStack2 as Layers, IconLoader2 as Loader2, IconTrophy as Trophy, IconBolt as Zap } from '@tabler/icons-react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -97,7 +97,7 @@ export default function FlashcardStudyClient() {
                </Button>
             </Link>
             <Link href="/dashboard/flashcards">
-               <Button className="bg-green text-navy font-bold px-8 h-12 rounded-xl">Back to Dashboard</Button>
+               <Button className="bg-green-600 text-white font-bold px-8 h-12 rounded-xl">Back to Dashboard</Button>
             </Link>
          </div>
       </div>

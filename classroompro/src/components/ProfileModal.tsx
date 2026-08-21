@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { IconUser as UserIcon, IconLock as Lock, IconShield as Shield, IconCamera as Camera, IconSave as Save, IconLoader2 as Loader2, IconX as X, IconPhone as Phone, IconMail as Mail, IconCalendar as Calendar, IconMapPin as MapPin, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
+import { IconUser as UserIcon, IconLock as Lock, IconShield as Shield, IconCamera as Camera, IconSave as Save, IconLoader2 as Loader2, IconX as X, IconPhone as Phone, IconMail as Mail, IconCalendar as Calendar, IconMapPin as MapPin, IconCircleCheck as CheckCircle2 } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -231,7 +231,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                   </div>
                   <button 
                     onClick={() => fileInputRef.current?.click()}
-                    className="absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-green text-navy flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+                    className="absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-green-600 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
                   >
                     <Camera className="w-4 h-4" />
                   </button>
@@ -364,7 +364,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                   <Button 
                     onClick={handleChangePassword}
                     disabled={loading}
-                    className="bg-green hover:bg-green/90 text-navy font-bold h-12 rounded-xl mt-2"
+                    className="bg-green-600 hover:bg-green-700 text-white font-bold h-12 rounded-xl mt-2"
                   >
                     {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Update Password"}
                   </Button>
@@ -447,7 +447,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                       <Button 
                         onClick={handleMfaVerify}
                         disabled={loading || mfaCode.length !== 6}
-                        className="bg-green hover:bg-green/90 text-navy font-bold h-12 rounded-xl text-lg w-full"
+                        className="bg-green-600 hover:bg-green-700 text-white font-bold h-12 rounded-xl text-lg w-full"
                       >
                         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Verify & Enable 2FA"}
                       </Button>
@@ -498,7 +498,7 @@ export function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             <Button 
               onClick={handleUpdateProfile}
               disabled={loading}
-              className="bg-green hover:bg-green/90 text-navy font-bold rounded-xl px-8 h-12 min-w-[140px]"
+              className="bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl px-8 h-12 min-w-[140px]"
             >
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
                 <><Save className="w-4 h-4 mr-2" /> Save Changes</>

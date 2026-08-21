@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IconLayoutDashboard as LayoutDashboard, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconGraduationCap as GraduationCap, IconTrendingUp as TrendingUp, IconDownload as Download, IconSettings as Settings, IconLogOut as LogOut, IconBell as Bell, IconUsers as Users, IconSchool as School, IconFilePlus as FilePlus, IconBarChart3 as BarChart3, IconCalendar as Calendar, IconTrophy as Trophy, IconBookmark as Bookmark, IconLibrary as Library, IconHeart as Heart, IconMessageSquare as MessageSquare, IconCreditCard as CreditCard } from '@tabler/icons-react';
+import { IconLayoutDashboard as LayoutDashboard, IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconCertificate as GraduationCap, IconTrendingUp as TrendingUp, IconDownload as Download, IconSettings as Settings, IconLogOut as LogOut, IconBell as Bell, IconUsers as Users, IconSchool as School, IconFilePlus as FilePlus, IconBarChart3 as BarChart3, IconCalendar as Calendar, IconTrophy as Trophy, IconBookmark as Bookmark, IconLibrary as Library, IconHeart as Heart, IconMessageSquare as MessageSquare, IconCreditCard as CreditCard } from '@tabler/icons-react';
 import Logo from "@/components/Logo";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -163,7 +163,7 @@ export function DashboardHeader({ title }: { title: string }) {
               <p className="text-xs font-bold text-white leading-tight group-hover:text-green transition-colors">{user?.full_name || 'User'}</p>
               <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">{user?.role.replace('_', ' ') || 'Guest'}</p>
             </div>
-            <div className="w-10 h-10 rounded-full bg-green text-navy font-bold flex items-center justify-center border-2 border-green/20 group-hover:border-green/50 transition-all overflow-hidden">
+            <div className="w-10 h-10 rounded-full bg-green-600 text-white font-bold flex items-center justify-center border-2 border-green/20 group-hover:border-green/50 transition-all overflow-hidden">
               {user?.avatar_url ? (
                 <img src={user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
               ) : (

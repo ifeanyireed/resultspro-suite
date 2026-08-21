@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { IconUsers as Users, IconTrendingUp as TrendingUp, IconCalendar as Calendar, IconWallet as Wallet, IconChevronRight as ChevronRight, IconMessageSquare as MessageSquare, IconClock as Clock, IconCheckCircle2 as CheckCircle2, IconAlertCircle as AlertCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconUsers as Users, IconTrendingUp as TrendingUp, IconCalendar as Calendar, IconWallet as Wallet, IconChevronRight as ChevronRight, IconMessageSquare as MessageSquare, IconClock as Clock, IconCircleCheck as CheckCircle2, IconAlertCircle as AlertCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { IconUser as User, IconMail as Mail, IconLock as Lock, IconSchool as School, IconLoader2 as Loader2, IconChrome as Chrome } from '@tabler/icons-react';
+import { IconUser as User, IconMail as Mail, IconLock as Lock, IconSchool as School, IconLoader2 as Loader2, IconBrandGoogle as Chrome } from '@tabler/icons-react';
 import { useState, useEffect } from "react";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "@/lib/msal";
@@ -240,7 +240,7 @@ export default function SignupPage() {
           </div>
         </div>
 
-        <Button type="submit" disabled={isLoading} className="w-full h-12 bg-green hover:bg-green/90 text-navy font-bold text-lg mt-4">
+        <Button type="submit" disabled={isLoading} className="w-full h-12 bg-green-600 hover:bg-green-700 text-white font-bold text-lg mt-4">
           {isLoading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : "Create Account"}
         </Button>
 

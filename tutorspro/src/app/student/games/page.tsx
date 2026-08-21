@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { IconGamepad2 as Gamepad2, IconTrophy as Trophy, IconUsers as Users, IconZap as Zap, IconPlay as Play, IconStar as Star, IconSparkles as Sparkles, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconGamepad2 as Gamepad2, IconTrophy as Trophy, IconUsers as Users, IconBolt as Zap, IconPlay as Play, IconStar as Star, IconSparkles as Sparkles, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { RoleGate } from '@/components/RoleGate';
@@ -62,7 +62,7 @@ export default function GamesHub() {
             <section className="mb-12 p-8 md:p-12 rounded-[48px] bg-gradient-to-br from-green/20 via-blue/10 to-transparent border border-white/10 relative overflow-hidden group cursor-pointer">
                <Sparkles className="absolute top-12 right-12 w-32 h-32 text-green/10 animate-pulse" />
                <div className="max-w-xl relative z-10">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green text-navy text-[10px] font-black uppercase tracking-widest mb-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-600 text-white text-[10px] font-black uppercase tracking-widest mb-6">
                      Weekend Tournament
                   </div>
                   <h2 className="text-3xl md:text-5xl font-display font-black text-white mb-4">{tournament.title}</h2>

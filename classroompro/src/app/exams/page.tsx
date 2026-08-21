@@ -102,7 +102,7 @@ export default function PublicExamsIndex() {
                         </div>
                         
                         <Link href={`/dashboard/exams/${exam.id}`}>
-                          <Button className="bg-green hover:bg-green/90 text-navy font-bold h-10 px-8 rounded-full">
+                          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold h-10 px-8 rounded-full">
                             Practice Now
                           </Button>
                         </Link>
@@ -137,7 +137,7 @@ export default function PublicExamsIndex() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/signup">
-                <Button className="bg-green hover:bg-green/90 text-navy font-bold h-14 px-10 text-lg rounded-2xl">
+                <Button className="bg-green-600 hover:bg-green-700 text-white font-bold h-14 px-10 text-lg rounded-2xl">
                   Get Started Free
                 </Button>
               </Link>

@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { IconCalendar as Calendar, IconUsers as Users, IconBrain as Brain, IconWallet as Wallet, IconChevronRight as ChevronRight, IconPlay as Play, IconClock as Clock, IconStar as Star, IconCheckCircle2 as CheckCircle2, IconTrophy as Trophy, IconBookOpen as BookOpen, IconZap as Zap, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconCalendar as Calendar, IconUsers as Users, IconBrain as Brain, IconWallet as Wallet, IconChevronRight as ChevronRight, IconPlay as Play, IconClock as Clock, IconStar as Star, IconCircleCheck as CheckCircle2, IconTrophy as Trophy, IconBook as BookOpen, IconBolt as Zap, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -106,7 +106,7 @@ export default function StudentDashboard() {
                             <div className="text-xs text-gray-500 uppercase font-bold tracking-widest">{cls.duration}</div>
                           </div>
                           <div className="flex items-center">
-                            <button className="w-full md:w-auto px-6 py-3 rounded-xl bg-green text-navy font-bold flex items-center justify-center gap-2 group-hover:scale-105 transition-transform">
+                            <button className="w-full md:w-auto px-6 py-3 rounded-xl bg-green-600 text-white font-bold flex items-center justify-center gap-2 group-hover:scale-105 transition-transform">
                               <Play className="w-4 h-4 fill-current" />
                               Join Room
                             </button>

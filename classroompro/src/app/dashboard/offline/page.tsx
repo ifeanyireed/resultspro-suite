@@ -1,6 +1,6 @@
 "use client";
 
-import { IconWifiOff as WifiOff, IconRefreshCcw as RefreshCcw, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconHome as Home } from '@tabler/icons-react';
+import { IconWifiOff as WifiOff, IconRefreshCcw as RefreshCcw, IconBook as BookOpen, IconBrain as BrainCircuit, IconHome as Home } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Logo from "@/components/Logo";

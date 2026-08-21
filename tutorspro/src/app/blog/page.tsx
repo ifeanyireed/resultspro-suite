@@ -103,11 +103,11 @@ export default function BlogListPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                       <div className="relative aspect-[16/9] rounded-[40px] overflow-hidden border border-white/[0.1] border-t-white/[0.15] bg-white/5 shadow-2xl">
                         <img 
-                          src={featuredPost.featuredImage || "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80"} 
+                          src={featuredPost.featuredImage || "/avatars/character3.jpg"} 
                           alt={featuredPost.title}
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
-                        <div className="absolute top-6 left-6 px-4 py-2 rounded-full bg-green text-navy text-xs font-black uppercase tracking-widest shadow-lg">
+                        <div className="absolute top-6 left-6 px-4 py-2 rounded-full bg-green-600 text-white text-xs font-black uppercase tracking-widest shadow-lg">
                           Featured
                         </div>
                       </div>
@@ -141,7 +141,7 @@ export default function BlogListPage() {
                   <Link key={post.id} href={`/blog/${post.slug}`} className="group flex flex-col">
                     <div className="relative aspect-[16/10] rounded-[32px] overflow-hidden border border-white/[0.1] border-t-white/[0.15] bg-white/5 mb-6">
                       <img 
-                        src={post.featuredImage || "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80"} 
+                        src={post.featuredImage || "/avatars/character7.jpg"} 
                         alt={post.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />

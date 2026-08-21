@@ -77,7 +77,7 @@ const AdminHeader = ({ title, subtitle, action, searchValue, onSearchChange }: A
               {mounted ? (user?.role || 'Super Admin') : 'Super Admin'}
             </div>
           </div>
-          <img src={`https://i.pravatar.cc/100?u=${mounted && user?.email ? user.email : 'admin'}`} className="w-10 h-10 rounded-xl border border-white/10 shadow-lg shadow-black/20" alt="Admin" />
+          <img src={`/avatars/character15.jpg && user?.email ? user.email : 'admin'}`} className="w-10 h-10 rounded-xl border border-white/10 shadow-lg shadow-black/20" alt="Admin" />
         </div>
       </div>
     </header>

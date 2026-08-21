@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconChevronRight as ChevronRight, IconClock as Clock, IconTrophy as Trophy, IconFlame as Flame, IconZap as Zap, IconTarget as Target, IconAward as Award, IconEye as Eye, IconEyeOff as EyeOff } from '@tabler/icons-react';
+import { IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconChevronRight as ChevronRight, IconClock as Clock, IconTrophy as Trophy, IconFlame as Flame, IconBolt as Zap, IconTarget as Target, IconAward as Award, IconEye as Eye, IconEyeOff as EyeOff } from '@tabler/icons-react';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -427,7 +427,7 @@ export default function StudentDashboard() {
                </div>
                <button 
                 onClick={() => setStudyMode(false)}
-                className="px-6 py-2 bg-green text-navy font-bold rounded-xl hover:bg-green/90 transition-all"
+                className="px-6 py-2 bg-green-600 text-white font-bold rounded-xl hover:bg-green/90 transition-all"
                >
                  Exit Study Mode
                </button>

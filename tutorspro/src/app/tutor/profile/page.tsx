@@ -2,7 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { IconCamera as Camera, IconUser as User, IconBookOpen as BookOpen, IconZap as Zap, IconGlobe as Globe, IconDollarSign as DollarSign, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconPlus as Plus, IconTrash2 as Trash2, IconSave as Save, IconCheck as Check, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconCamera as Camera, IconUser as User, IconBook as BookOpen, IconBolt as Zap, IconGlobe as Globe, IconDollarSign as DollarSign, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconPlus as Plus, IconTrash2 as Trash2, IconSave as Save, IconCheck as Check, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { toast } from 'react-hot-toast';
@@ -82,7 +82,7 @@ export default function TutorProfileEditor() {
              <button 
                onClick={handleSave}
                disabled={loading}
-               className="px-8 py-3 rounded-2xl bg-green text-navy font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20 disabled:opacity-50"
+               className="px-8 py-3 rounded-2xl bg-green-600 text-white font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20 disabled:opacity-50"
              >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />} 
                 SAVE CHANGES

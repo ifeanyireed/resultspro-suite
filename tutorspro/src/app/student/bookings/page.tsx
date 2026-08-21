@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { IconCalendar as Calendar, IconClock as Clock, IconUser as User, IconChevronRight as ChevronRight, IconCheckCircle2 as CheckCircle2, IconWallet as Wallet, IconPlus as Plus, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconCalendar as Calendar, IconClock as Clock, IconUser as User, IconChevronRight as ChevronRight, IconCircleCheck as CheckCircle2, IconWallet as Wallet, IconPlus as Plus, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';
@@ -50,7 +50,7 @@ export default function Bookings() {
                 </h1>
                 <p className="text-gray-400">Manage your scheduled sessions and pending requests.</p>
              </div>
-             <button onClick={() => setStep(2)} className="px-6 py-3 rounded-2xl bg-green text-navy font-bold flex items-center gap-2 hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
+             <button onClick={() => setStep(2)} className="px-6 py-3 rounded-2xl bg-green-600 text-white font-bold flex items-center gap-2 hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
                 <Plus className="w-5 h-5" /> Book New Session
              </button>
           </div>
@@ -109,7 +109,7 @@ export default function Bookings() {
                    </div>
                    <h3 className="text-xl font-display font-bold text-white mb-2">Student Wallet</h3>
                    <div className="text-3xl font-black text-white mb-6">₦{walletBalance.toLocaleString()}</div>
-                   <button className="w-full py-4 rounded-2xl bg-green text-navy font-bold hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
+                   <button className="w-full py-4 rounded-2xl bg-green-600 text-white font-bold hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
                       Top Up Now
                    </button>
                 </section>

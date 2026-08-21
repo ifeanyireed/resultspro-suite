@@ -42,7 +42,7 @@ export default function TutorEarnings() {
             </h1>
             <p className="text-gray-400">Track your revenue, commissions, and upcoming payouts.</p>
           </div>
-          <button className="px-8 py-4 rounded-2xl bg-green text-navy font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20">
+          <button className="px-8 py-4 rounded-2xl bg-green-600 text-white font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20">
              <Wallet className="w-5 h-5" /> REQUEST PAYOUT
           </button>
         </div>

@@ -64,7 +64,7 @@ export default function GlobalUserManagement() {
              <Button variant="outline" className="border-white/10 text-white hover:bg-white/5">
                 <UserX className="w-4 h-4 mr-2" /> Banned Users
              </Button>
-             <Button className="bg-green text-navy font-bold">
+             <Button className="bg-green-600 text-white font-bold">
                 <UserCheck className="w-4 h-4 mr-2" /> Verify Users
              </Button>
           </div>
@@ -160,7 +160,7 @@ export default function GlobalUserManagement() {
                  <Button variant="outline" size="sm" className="h-9 w-9 p-0 border-white/10 text-white hover:bg-white/5" disabled>
                     <ChevronLeft className="w-4 h-4" />
                  </Button>
-                 <Button variant="outline" size="sm" className="h-9 w-9 p-0 bg-green text-navy border-green font-bold">1</Button>
+                 <Button variant="outline" size="sm" className="h-9 w-9 p-0 bg-green-600 text-white border-green font-bold">1</Button>
                  <Button variant="outline" size="sm" className="h-9 w-9 p-0 border-white/10 text-white hover:bg-white/5">2</Button>
                  <Button variant="outline" size="sm" className="h-9 w-9 p-0 border-white/10 text-white hover:bg-white/5">3</Button>
                  <span className="text-muted-foreground">...</span>

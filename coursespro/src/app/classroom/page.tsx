@@ -13,9 +13,9 @@ export default function ClassroomPage() {
       type: 'Silent Coworking & Live Code Sync',
       activeCount: 6,
       avatarList: [
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
-        'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop',
+        '/avatars/character9.jpg',
+        '/avatars/character2.jpg',
+        '/avatars/character10.jpg',
       ],
     },
     {
@@ -25,8 +25,8 @@ export default function ClassroomPage() {
       activeCount: 4,
       isMentorHost: true,
       avatarList: [
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop',
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
+        '/avatars/character12.jpg',
+        '/avatars/character5.jpg',
       ],
     },
     {
@@ -35,7 +35,7 @@ export default function ClassroomPage() {
       type: 'Screen Share & Critique',
       activeCount: 3,
       avatarList: [
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+        '/avatars/character11.jpg',
       ],
     },
   ];

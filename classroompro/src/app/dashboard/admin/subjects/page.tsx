@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconBookOpen as BookOpen, IconPlus as Plus, IconSearch as Search, IconMoreVertical as MoreVertical, IconFilter as Filter } from '@tabler/icons-react';
+import { IconBook as BookOpen, IconPlus as Plus, IconSearch as Search, IconMoreVertical as MoreVertical, IconFilter as Filter } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -62,7 +62,7 @@ export default function ManageSubjectsPage() {
             <h2 className="text-2xl font-bold text-white font-display">Academic Subjects</h2>
             <p className="text-sm text-muted-foreground">Configure the subjects offered across all grade levels.</p>
           </div>
-          <Button className="bg-green hover:bg-green/90 text-navy font-bold">
+          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
             <Plus className="w-4 h-4 mr-2" /> Add New Subject
           </Button>
         </div>

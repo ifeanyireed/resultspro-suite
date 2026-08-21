@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import { IconLayers as Layers, IconCalendar as Calendar, IconUsers2 as Users2, IconArrowRight as ArrowRight, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
+import { IconStack2 as Layers, IconCalendar as Calendar, IconUsers2 as Users2, IconArrowRight as ArrowRight, IconCircleCheck as CheckCircle2 } from '@tabler/icons-react';
 
 export default function CoursesCatalogPage() {
   const cohorts = [

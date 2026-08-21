@@ -38,7 +38,7 @@ export default function TutorResources() {
              <button className="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition-all flex items-center gap-2">
                 <FolderPlus className="w-5 h-5" /> NEW FOLDER
              </button>
-             <button className="px-8 py-3 rounded-2xl bg-green text-navy font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20">
+             <button className="px-8 py-3 rounded-2xl bg-green-600 text-white font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20">
                 <Plus className="w-5 h-5" /> UPLOAD FILE
              </button>
           </div>

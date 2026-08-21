@@ -54,7 +54,7 @@ export default function MyClassesPage() {
             <h2 className="text-2xl font-bold text-white mb-2">Manage Your Classes</h2>
             <p className="text-sm text-muted-foreground">View performance and manage students for each of your assigned classes.</p>
           </div>
-          <Button className="bg-green text-navy font-bold">
+          <Button className="bg-green-600 text-white font-bold">
             <Plus className="w-4 h-4 mr-2" /> Request New Class
           </Button>
         </div>

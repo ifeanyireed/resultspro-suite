@@ -32,7 +32,7 @@ export default function NotFound() {
 
          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
             <Link href="/">
-               <Button className="w-full sm:w-auto bg-green hover:bg-green/90 text-navy font-black h-12 px-8 rounded-xl shadow-xl shadow-green/20">
+               <Button className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-black h-12 px-8 rounded-xl shadow-xl shadow-green/20">
                   <Home className="w-4 h-4 mr-2" /> Back to Home
                </Button>
             </Link>

@@ -1,6 +1,6 @@
 "use client";
 
-import { IconSearch as Search, IconMessageSquare as MessageSquare, IconSend as Send, IconCheckCircle2 as CheckCircle2, IconPhone as Phone, IconVideo as Video, IconArrowLeft as ArrowLeft, IconMoreVertical as MoreVertical } from '@tabler/icons-react';
+import { IconSearch as Search, IconMessageSquare as MessageSquare, IconSend as Send, IconCircleCheck as CheckCircle2, IconPhone as Phone, IconVideo as Video, IconArrowLeft as ArrowLeft, IconMoreVertical as MoreVertical } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
@@ -74,7 +74,7 @@ export default function ParentMessagesPage() {
           <div className="h-6 w-px bg-white/10 mx-2" />
           <h1 className="text-lg font-bold text-white">Teacher Messages</h1>
         </div>
-        <div className="w-10 h-10 rounded-full bg-green text-navy font-bold flex items-center justify-center border-2 border-green/20">
+        <div className="w-10 h-10 rounded-full bg-green-600 text-white font-bold flex items-center justify-center border-2 border-green/20">
           JD
         </div>
       </div>
@@ -121,7 +121,7 @@ export default function ParentMessagesPage() {
                       </p>
                    </div>
                    {contact.unread > 0 && (
-                      <div className="w-5 h-5 rounded-full bg-green text-navy text-[10px] font-black flex items-center justify-center shadow-lg shadow-green/20">
+                      <div className="w-5 h-5 rounded-full bg-green-600 text-white text-[10px] font-black flex items-center justify-center shadow-lg shadow-green/20">
                          {contact.unread}
                       </div>
                    )}
@@ -167,11 +167,11 @@ export default function ParentMessagesPage() {
 
               {/* Message Sent */}
               <div className="flex items-start gap-4 max-w-2xl ml-auto flex-row-reverse text-sm">
-                 <div className="w-8 h-8 rounded-lg bg-green text-navy flex items-center justify-center text-[10px] font-black shrink-0">
+                 <div className="w-8 h-8 rounded-lg bg-green-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">
                     JD
                  </div>
                  <div className="space-y-2 text-right">
-                    <div className="p-4 rounded-2xl rounded-tr-none bg-green text-navy font-medium leading-relaxed shadow-xl shadow-green/10">
+                    <div className="p-4 rounded-2xl rounded-tr-none bg-green-600 text-white font-medium leading-relaxed shadow-xl shadow-green/10">
                        Hello sir, I was reviewing Jessica's latest quiz result. 
                        She mentioned some difficulty with the theory section on Photosynthesis.
                     </div>
@@ -206,7 +206,7 @@ export default function ParentMessagesPage() {
                     placeholder="Write a message to teacher..." 
                     className="flex-1 bg-transparent border-none focus:outline-none text-white text-sm py-3"
                  />
-                 <Button className="bg-green hover:bg-green/90 text-navy font-black rounded-xl h-10 px-6 shadow-lg shadow-green/20">
+                 <Button className="bg-green-600 hover:bg-green-700 text-white font-black rounded-xl h-10 px-6 shadow-lg shadow-green/20">
                     Send <Send className="w-3.5 h-3.5 ml-2" />
                  </Button>
               </div>

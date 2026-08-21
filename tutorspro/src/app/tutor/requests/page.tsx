@@ -124,7 +124,7 @@ export default function TutorRequests() {
                             <button 
                               onClick={() => handleUpdateStatus(req.id, 'Confirmed')}
                               disabled={updatingId === req.id}
-                              className="flex-1 md:flex-none px-10 py-4 rounded-2xl bg-green text-navy font-bold text-sm hover:scale-105 transition-all shadow-lg shadow-green/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                              className="flex-1 md:flex-none px-10 py-4 rounded-2xl bg-green-600 text-white font-bold text-sm hover:scale-105 transition-all shadow-lg shadow-green/20 flex items-center justify-center gap-2 disabled:opacity-50"
                             >
                                {updatingId === req.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />} ACCEPT
                             </button>

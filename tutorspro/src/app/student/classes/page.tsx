@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { IconCalendar as Calendar, IconClock as Clock, IconBookOpen as BookOpen, IconPlay as Play, IconChevronRight as ChevronRight, IconMapPin as MapPin, IconVideo as Video, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconCalendar as Calendar, IconClock as Clock, IconBook as BookOpen, IconPlay as Play, IconChevronRight as ChevronRight, IconMapPin as MapPin, IconVideo as Video, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { RoleGate } from '@/components/RoleGate';
@@ -93,7 +93,7 @@ export default function StudentClasses() {
                         </div>
                         <div className="flex items-center">
                            <button className={`w-full md:w-auto px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
-                             cls.status === 'Live' ? 'bg-green text-navy hover:shadow-[0_0_20px_rgba(0,200,83,0.4)]' : 'bg-white/5 text-gray-500 border border-white/10'
+                             cls.status === 'Live' ? 'bg-green-600 text-white hover:shadow-[0_0_20px_rgba(0,200,83,0.4)]' : 'bg-white/5 text-gray-500 border border-white/10'
                            }`}>
                               <Play className="w-4 h-4 fill-current" />
                               {cls.status === 'Live' ? 'Join Now' : 'Enter Room'}

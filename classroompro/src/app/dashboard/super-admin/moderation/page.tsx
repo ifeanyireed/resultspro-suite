@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconShieldAlert as ShieldAlert, IconCheckCircle as CheckCircle, IconXCircle as XCircle, IconEye as Eye, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconFlag as Flag, IconSearch as Search, IconFilter as Filter, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
+import { IconShieldAlert as ShieldAlert, IconCheckCircle as CheckCircle, IconXCircle as XCircle, IconEye as Eye, IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconFlag as Flag, IconSearch as Search, IconFilter as Filter, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect, useMemo } from "react";
@@ -94,7 +94,7 @@ export default function ContentModeration() {
             <p className="text-sm text-muted-foreground">Review and approve content submitted to the public library or flagged items.</p>
           </div>
           <div className="flex gap-2 p-1 bg-white/5 border border-white/10 rounded-xl">
-             <button className="px-6 py-2 rounded-lg bg-green text-navy font-bold text-sm">Pending (42)</button>
+             <button className="px-6 py-2 rounded-lg bg-green-600 text-white font-bold text-sm">Pending (42)</button>
              <button className="px-6 py-2 rounded-lg text-muted-foreground hover:text-white font-bold text-sm transition-colors">Approved</button>
              <button className="px-6 py-2 rounded-lg text-muted-foreground hover:text-white font-bold text-sm transition-colors">Rejected</button>
           </div>
@@ -208,7 +208,7 @@ export default function ContentModeration() {
                               variant={currentPage === p ? "default" : "outline"}
                               className={cn(
                                  "h-9 w-9 rounded-xl font-bold text-xs",
-                                 currentPage === p ? "bg-green text-navy hover:bg-green/90" : "border-white/10 text-white"
+                                 currentPage === p ? "bg-green-600 text-white hover:bg-green/90" : "border-white/10 text-white"
                               )}
                               onClick={() => setCurrentPage(p)}
                             >

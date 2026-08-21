@@ -142,7 +142,7 @@ export default function ContactPage() {
                   ></textarea>
                </div>
 
-               <button className="w-full py-5 rounded-2xl bg-green text-navy font-black flex items-center justify-center gap-3 hover:bg-green/90 transition-all shadow-[0_0_20px_rgba(34,197,94,0.3)]">
+               <button className="w-full py-5 rounded-2xl bg-green-600 text-white font-black flex items-center justify-center gap-3 hover:bg-green/90 transition-all shadow-[0_0_20px_rgba(34,197,94,0.3)]">
                  SEND MESSAGE <Send className="w-5 h-5" />
                </button>
              </form>

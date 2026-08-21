@@ -1,6 +1,6 @@
 "use client";
 
-import { IconArrowLeft as ArrowLeft, IconClock as Clock, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconFlag as Flag, IconSend as Send, IconLoader2 as Loader2, IconCheckCircle2 as CheckCircle2, IconGraduationCap as GraduationCap } from '@tabler/icons-react';
+import { IconArrowLeft as ArrowLeft, IconClock as Clock, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconFlag as Flag, IconSend as Send, IconLoader2 as Loader2, IconCircleCheck as CheckCircle2, IconCertificate as GraduationCap } from '@tabler/icons-react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";

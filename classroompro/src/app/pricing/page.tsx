@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { IconCheck as Check, IconShieldCheck as ShieldCheck, IconZap as Zap, IconSchool as School, IconBuilding2 as Building2, IconHeart as Heart } from '@tabler/icons-react';
+import { IconCheck as Check, IconShieldCheck as ShieldCheck, IconBolt as Zap, IconSchool as School, IconBuilding2 as Building2, IconHeart as Heart } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -133,7 +133,7 @@ export default function PricingPage() {
                 )}
               >
                 {tier.highlight && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green text-navy text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest">
                     Most Popular
                   </div>
                 )}
@@ -167,7 +167,7 @@ export default function PricingPage() {
                   className={cn(
                     "w-full h-12 rounded-xl font-bold text-sm transition-all",
                     tier.highlight 
-                      ? "bg-green hover:bg-green/90 text-navy shadow-[0_0_20px_rgba(0,200,83,0.2)]" 
+                      ? "bg-green-600 hover:bg-green-700 text-white shadow-[0_0_20px_rgba(0,200,83,0.2)]" 
                       : "bg-white/5 hover:bg-white/10 text-white border border-white/10"
                   )}
                 >

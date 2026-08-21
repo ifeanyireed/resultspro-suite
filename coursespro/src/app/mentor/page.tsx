@@ -2,14 +2,14 @@
 
 import React, { useState } from 'react';
 import { Navbar } from '@/components/Navbar';
-import { IconGraduationCap as GraduationCap, IconCheckCircle2 as CheckCircle2, IconXCircle as XCircle, IconVideo as Video, IconSparkles as Sparkles, IconAlertTriangle as AlertTriangle, IconSend as Send, IconExternalLink as ExternalLink } from '@tabler/icons-react';
+import { IconCertificate as GraduationCap, IconCircleCheck as CheckCircle2, IconXCircle as XCircle, IconVideo as Video, IconSparkles as Sparkles, IconAlertTriangle as AlertTriangle, IconSend as Send, IconExternalLink as ExternalLink } from '@tabler/icons-react';
 
 export default function MentorPage() {
   const [reviews, setReviews] = useState([
     {
       id: 'sub-1',
       student: 'Tunde Bakare',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+      avatar: '/avatars/character19.jpg',
       project: 'ResultsPRO Assessment Engine',
       stage: 'Stage 03',
       repoUrl: 'https://github.com/ifeanyireed/resultspro_suite',
@@ -19,7 +19,7 @@ export default function MentorPage() {
     {
       id: 'sub-2',
       student: 'Fatima Ibrahim',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop',
+      avatar: '/avatars/character16.jpg',
       project: 'Multiplayer CBT Battle Arena',
       stage: 'Stage 03',
       repoUrl: 'https://github.com/ifeanyireed/resultspro_suite',

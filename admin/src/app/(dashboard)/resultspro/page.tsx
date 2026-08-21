@@ -13,6 +13,12 @@ export default function ResultProCommandCenter() {
   const tabs = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'scratch-cards', label: 'Scratch Cards', icon: KeyRound },
+    { id: 'schools', label: 'Schools', icon: Building2 },
+    { id: 'agents', label: 'Agents', icon: Users },
+    { id: 'subscriptions', label: 'Subscriptions', icon: DollarSign },
+    { id: 'blog', label: 'Blog CMS', icon: FileText },
+    { id: 'emails', label: 'Email Control', icon: Mail },
+    { id: 'support', label: 'Support', icon: Headset },
   ];
 
   return (

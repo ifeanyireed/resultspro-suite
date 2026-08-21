@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconLayers as Layers, IconSearch as Search, IconUnlock as Unlock, IconPlus as Plus, IconTrendingUp as TrendingUp, IconBrain as Brain, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconClock as Clock, IconZap as Zap } from '@tabler/icons-react';
+import { IconStack2 as Layers, IconSearch as Search, IconUnlock as Unlock, IconPlus as Plus, IconTrendingUp as TrendingUp, IconBrain as Brain, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconClock as Clock, IconBolt as Zap } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -160,7 +160,7 @@ export default function FlashcardsPage() {
                   <TrendingUp className="w-4 h-4 mr-2 text-blue" /> Analytics
                 </Button>
              </Link>
-             <Button className="bg-green hover:bg-green/90 text-navy font-bold h-11 px-6 rounded-xl">
+             <Button className="bg-green-600 hover:bg-green-700 text-white font-bold h-11 px-6 rounded-xl">
                <Plus className="w-4 h-4 mr-2" /> Create New Set
              </Button>
           </div>
@@ -406,7 +406,7 @@ export default function FlashcardsPage() {
                              variant={currentPage === pageNum ? "default" : "outline"}
                              className={cn(
                                "w-10 h-10 rounded-xl font-bold",
-                               currentPage === pageNum ? "bg-green text-navy hover:bg-green/90" : "border-white/10 text-white hover:bg-white/5"
+                               currentPage === pageNum ? "bg-green-600 text-white hover:bg-green/90" : "border-white/10 text-white hover:bg-white/5"
                              )}
                              onClick={() => {
                                setCurrentPage(pageNum);

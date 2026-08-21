@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconBookOpen as BookOpen, IconSearch as Search, IconFilter as Filter, IconChevronRight as ChevronRight, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconClock as Clock, IconCheckCircle as CheckCircle, IconActivity as Activity, IconLayers as Layers } from '@tabler/icons-react';
+import { IconBook as BookOpen, IconSearch as Search, IconFilter as Filter, IconChevronRight as ChevronRight, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconClock as Clock, IconCheckCircle as CheckCircle, IconActivity as Activity, IconStack2 as Layers } from '@tabler/icons-react';
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -199,7 +199,7 @@ export default function NotesListPage() {
                       onClick={() => setSelectedSubjectId(null)}
                       className={cn(
                         "w-full flex items-center justify-between p-3 rounded-2xl text-xs font-bold transition-all",
-                        !selectedSubjectId ? "bg-green text-navy shadow-lg shadow-green/10" : "text-muted-foreground hover:bg-white/5 hover:text-white"
+                        !selectedSubjectId ? "bg-green-600 text-white shadow-lg shadow-green/10" : "text-muted-foreground hover:bg-white/5 hover:text-white"
                       )}
                     >
                        <span>All Subjects</span>
@@ -211,7 +211,7 @@ export default function NotesListPage() {
                         onClick={() => setSelectedSubjectId(stat.id)}
                         className={cn(
                           "w-full flex items-center justify-between p-3 rounded-2xl text-xs font-bold transition-all",
-                          selectedSubjectId === stat.id ? "bg-green text-navy shadow-lg shadow-green/10" : "text-muted-foreground hover:bg-white/5 hover:text-white"
+                          selectedSubjectId === stat.id ? "bg-green-600 text-white shadow-lg shadow-green/10" : "text-muted-foreground hover:bg-white/5 hover:text-white"
                         )}
                       >
                          <div className="flex items-center gap-3">

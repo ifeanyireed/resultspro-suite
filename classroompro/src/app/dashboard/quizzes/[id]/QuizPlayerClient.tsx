@@ -1,6 +1,6 @@
 "use client";
 
-import { IconArrowLeft as ArrowLeft, IconClock as Clock, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconFlag as Flag, IconSend as Send, IconLoader2 as Loader2, IconCheckCircle2 as CheckCircle2, IconBrainCircuit as BrainCircuit, IconBookmark as Bookmark, IconBookmarkCheck as BookmarkCheck } from '@tabler/icons-react';
+import { IconArrowLeft as ArrowLeft, IconClock as Clock, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconFlag as Flag, IconSend as Send, IconLoader2 as Loader2, IconCircleCheck as CheckCircle2, IconBrain as BrainCircuit, IconBookmark as Bookmark, IconBookmarkCheck as BookmarkCheck } from '@tabler/icons-react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
@@ -202,7 +202,7 @@ export default function QuizPlayerClient() {
             <Clock className="w-5 h-5 text-green" />
             <span className="text-lg font-mono font-bold text-white">{formatTime(timeLeft)}</span>
           </div>
-          <Button className="bg-green text-navy font-bold px-6 h-10 rounded-xl" onClick={handleSubmit}>
+          <Button className="bg-green-600 text-white font-bold px-6 h-10 rounded-xl" onClick={handleSubmit}>
             <Send className="w-4 h-4 mr-2" /> Submit
           </Button>
         </div>

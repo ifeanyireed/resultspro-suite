@@ -2,7 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { IconShieldCheck as ShieldCheck, IconUsers as Users, IconTarget as Target, IconCheckCircle2 as CheckCircle2, IconAward as Award, IconZap as Zap } from '@tabler/icons-react';
+import { IconShieldCheck as ShieldCheck, IconUsers as Users, IconTarget as Target, IconCircleCheck as CheckCircle2, IconAward as Award, IconBolt as Zap } from '@tabler/icons-react';
 
 export default function AboutPage() {
   const values = [

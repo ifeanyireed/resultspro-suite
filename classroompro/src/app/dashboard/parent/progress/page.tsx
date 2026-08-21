@@ -68,7 +68,7 @@ export default function ChildProgressReport() {
           <Button variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/5 h-9">
             <Calendar className="w-4 h-4 mr-2" /> 1st Term 2025
           </Button>
-          <Button className="bg-green text-navy font-bold h-9 text-xs">Download PDF</Button>
+          <Button className="bg-green-600 text-white font-bold h-9 text-xs">Download PDF</Button>
         </div>
       </div>
       

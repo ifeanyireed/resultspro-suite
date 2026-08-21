@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { IconBarChart3 as BarChart3, IconTrendingUp as TrendingUp, IconCalendar as Calendar, IconCheckCircle2 as CheckCircle2, IconTrophy as Trophy, IconClock as Clock, IconBrain as Brain, IconChevronRight as ChevronRight, IconDownload as Download, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconBarChart3 as BarChart3, IconTrendingUp as TrendingUp, IconCalendar as Calendar, IconCircleCheck as CheckCircle2, IconTrophy as Trophy, IconClock as Clock, IconBrain as Brain, IconChevronRight as ChevronRight, IconDownload as Download, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';

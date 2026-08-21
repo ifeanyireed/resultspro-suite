@@ -139,7 +139,7 @@ export default function TutorsPage() {
                        </div>
                        <Link 
                          href={`/signup`}
-                         className="py-3 rounded-xl bg-green text-navy font-black text-xs text-center hover:bg-green/90 transition-all"
+                         className="py-3 rounded-xl bg-green-600 text-white font-black text-xs text-center hover:bg-green/90 transition-all"
                        >
                           BOOK NOW
                        </Link>

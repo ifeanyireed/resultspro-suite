@@ -58,7 +58,7 @@ export default function ChildLinkPage() {
 
           <Button 
             type="submit"
-            className="w-full bg-green hover:bg-green/90 text-navy font-bold h-12 text-lg"
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-12 text-lg"
             disabled={isLoading || !studentId}
           >
             {isLoading ? "Searching..." : "Find Account"} <ArrowRight className="ml-2 w-5 h-5" />
@@ -94,7 +94,7 @@ export default function ChildLinkPage() {
            <div className="space-y-3">
               <Button 
                 onClick={handleConfirm}
-                className="w-full bg-green hover:bg-green/90 text-navy font-bold h-12 text-lg"
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-12 text-lg"
                 disabled={isLoading}
               >
                 {isLoading ? "Linking..." : "Confirm & Link Account"}

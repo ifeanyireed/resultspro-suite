@@ -67,7 +67,7 @@ export default function TeacherStudentsPage() {
             <h2 className="text-2xl font-bold text-white font-display">Classroom Overview</h2>
             <p className="text-sm text-muted-foreground">Monitor performance across your assigned classes.</p>
           </div>
-          <Button className="bg-green hover:bg-green/90 text-navy font-bold">
+          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
             <MessageSquare className="w-4 h-4 mr-2" /> Message All Classes
           </Button>
         </div>

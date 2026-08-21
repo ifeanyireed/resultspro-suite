@@ -1,6 +1,6 @@
 "use client";
 
-import { IconPlus as Plus, IconTrash2 as Trash2, IconCheckCircle2 as CheckCircle2, IconHelpCircle as HelpCircle, IconSparkles as Sparkles, IconLoader2 as Loader2, IconEye as Eye, IconUpload as Upload, IconX as X, IconImage as ImageIcon } from '@tabler/icons-react';
+import { IconPlus as Plus, IconTrash2 as Trash2, IconCircleCheck as CheckCircle2, IconHelpCircle as HelpCircle, IconSparkles as Sparkles, IconLoader2 as Loader2, IconEye as Eye, IconUpload as Upload, IconX as X, IconImage as ImageIcon } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
@@ -351,7 +351,7 @@ export default function QuestionForm({ initialData, onSuccess, onCancel }: Quest
               <div className="space-y-4">
                 {options.map((opt: any, i: number) => (
                   <div key={opt.id} className="flex gap-4">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-black shrink-0 ${opt.isCorrect ? 'bg-green text-navy' : 'bg-white/5 text-gray-500'}`}>
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-black shrink-0 ${opt.isCorrect ? 'bg-green-600 text-white' : 'bg-white/5 text-gray-500'}`}>
                       {String.fromCharCode(65 + i)}
                     </div>
                     <div className="flex-1 relative">
@@ -517,7 +517,7 @@ export default function QuestionForm({ initialData, onSuccess, onCancel }: Quest
               <Button 
                 onClick={handleSave}
                 disabled={isSaving}
-                className="rounded-xl bg-green text-navy hover:bg-green/90 font-bold text-xs gap-2 h-12"
+                className="rounded-xl bg-green-600 text-white hover:bg-green/90 font-bold text-xs gap-2 h-12"
               >
                 {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                 {initialData?.id ? 'Update' : 'Publish'}
@@ -553,7 +553,7 @@ export default function QuestionForm({ initialData, onSuccess, onCancel }: Quest
                 key={idx} 
                 className={`p-4 rounded-2xl border flex items-center gap-4 ${opt.isCorrect ? 'bg-green/10 border-green/30 text-green' : 'bg-white/5 border-white/[0.1] border-t-white/[0.15] text-gray-400'}`}
               >
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-black ${opt.isCorrect ? 'bg-green text-navy' : 'bg-white/10 text-gray-500'}`}>
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-black ${opt.isCorrect ? 'bg-green-600 text-white' : 'bg-white/10 text-gray-500'}`}>
                   {String.fromCharCode(65 + idx)}
                 </div>
                 <div className="text-sm font-medium">
@@ -590,7 +590,7 @@ export default function QuestionForm({ initialData, onSuccess, onCancel }: Quest
               placeholder="e.g. Physics"
             />
           </div>
-          <Button onClick={handleAddSubject} className="w-full bg-green text-navy font-bold rounded-xl">Add Subject</Button>
+          <Button onClick={handleAddSubject} className="w-full bg-green-600 text-white font-bold rounded-xl">Add Subject</Button>
         </div>
       </Modal>
 
@@ -607,7 +607,7 @@ export default function QuestionForm({ initialData, onSuccess, onCancel }: Quest
               placeholder="e.g. Newton's Laws"
             />
           </div>
-          <Button onClick={handleAddTopic} className="w-full bg-green text-navy font-bold rounded-xl">Add Topic</Button>
+          <Button onClick={handleAddTopic} className="w-full bg-green-600 text-white font-bold rounded-xl">Add Topic</Button>
         </div>
       </Modal>
     </div>

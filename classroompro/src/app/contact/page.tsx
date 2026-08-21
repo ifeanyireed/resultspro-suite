@@ -70,7 +70,7 @@ export default function ContactPage() {
                       />
                    </div>
 
-                   <Button className="w-full bg-green hover:bg-green/90 text-navy font-black h-14 rounded-2xl shadow-xl shadow-green/20 group">
+                   <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-black h-14 rounded-2xl shadow-xl shadow-green/20 group">
                       Send Message <Send className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                    </Button>
                 </form>

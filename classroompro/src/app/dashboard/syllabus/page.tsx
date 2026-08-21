@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconBookOpen as BookOpen, IconChevronRight as ChevronRight, IconCheckCircle2 as CheckCircle2, IconCircle as Circle, IconPlay as Play, IconArrowLeft as ArrowLeft, IconFilter as Filter, IconBrainCircuit as BrainCircuit, IconLayers as Layers } from '@tabler/icons-react';
+import { IconBook as BookOpen, IconChevronRight as ChevronRight, IconCircleCheck as CheckCircle2, IconCircle as Circle, IconPlay as Play, IconArrowLeft as ArrowLeft, IconFilter as Filter, IconBrain as BrainCircuit, IconStack2 as Layers } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";

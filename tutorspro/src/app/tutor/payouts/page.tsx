@@ -2,7 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { IconBuilding2 as Building2, IconCreditCard as CreditCard, IconChevronRight as ChevronRight, IconPlus as Plus, IconCheckCircle2 as CheckCircle2, IconClock as Clock, IconAlertCircle as AlertCircle, IconArrowUpRight as ArrowUpRight, IconShieldCheck as ShieldCheck, IconSmartphone as Smartphone, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconBuilding2 as Building2, IconCreditCard as CreditCard, IconChevronRight as ChevronRight, IconPlus as Plus, IconCircleCheck as CheckCircle2, IconClock as Clock, IconAlertCircle as AlertCircle, IconArrowUpRight as ArrowUpRight, IconShieldCheck as ShieldCheck, IconSmartphone as Smartphone, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -111,7 +111,7 @@ export default function TutorPayouts() {
                                <button 
                                  onClick={() => setPayoutMethod('Bank Transfer (Access Bank)')}
                                  className={`p-4 rounded-2xl border font-bold text-sm flex items-center gap-3 transition-all ${
-                                   payoutMethod.includes('Bank') ? 'bg-green text-navy border-green' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                                   payoutMethod.includes('Bank') ? 'bg-green-600 text-white border-green' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
                                  }`}
                                >
                                   <Building2 size={18} /> Access Bank
@@ -119,7 +119,7 @@ export default function TutorPayouts() {
                                <button 
                                  onClick={() => setPayoutMethod('Mobile Money (MTN)')}
                                  className={`p-4 rounded-2xl border font-bold text-sm flex items-center gap-3 transition-all ${
-                                   payoutMethod.includes('Mobile') ? 'bg-green text-navy border-green' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                                   payoutMethod.includes('Mobile') ? 'bg-green-600 text-white border-green' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
                                  }`}
                                >
                                   <Smartphone size={18} /> Mobile Money
@@ -130,7 +130,7 @@ export default function TutorPayouts() {
                          <button 
                            onClick={handleRequestPayout}
                            disabled={requesting}
-                           className="w-full py-5 rounded-[24px] bg-green text-navy font-black text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-green/20 mt-4 flex items-center justify-center gap-2 disabled:opacity-50"
+                           className="w-full py-5 rounded-[24px] bg-green-600 text-white font-black text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-green/20 mt-4 flex items-center justify-center gap-2 disabled:opacity-50"
                          >
                             {requesting ? <Loader2 className="w-6 h-6 animate-spin" /> : 'REQUEST DISBURSEMENT'}
                          </button>

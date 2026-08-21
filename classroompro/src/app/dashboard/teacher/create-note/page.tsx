@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconPlus as Plus, IconTrash2 as Trash2, IconSave as Save, IconChevronLeft as ChevronLeft, IconBookOpen as BookOpen, IconSparkles as Sparkles, IconFileText as FileText } from '@tabler/icons-react';
+import { IconPlus as Plus, IconTrash2 as Trash2, IconSave as Save, IconChevronLeft as ChevronLeft, IconBook as BookOpen, IconSparkles as Sparkles, IconFileText as FileText } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -44,7 +44,7 @@ export default function CreateNotePage() {
           <Link href="/dashboard/teacher" className="inline-flex items-center text-sm text-muted-foreground hover:text-white transition-colors">
             <ChevronLeft className="w-4 h-4 mr-1" /> Back
           </Link>
-          <Button className="bg-green hover:bg-green/90 text-navy font-bold">
+          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
             <Save className="w-4 h-4 mr-2" /> Publish Note
           </Button>
         </div>

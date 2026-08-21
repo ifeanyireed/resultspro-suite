@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconUsers as Users, IconFilePlus as FilePlus, IconBookOpen as BookOpen, IconBarChart3 as BarChart3, IconChevronRight as ChevronRight, IconPlus as Plus, IconCalendar as Calendar, IconMessageSquare as MessageSquare } from '@tabler/icons-react';
+import { IconUsers as Users, IconFilePlus as FilePlus, IconBook as BookOpen, IconBarChart3 as BarChart3, IconChevronRight as ChevronRight, IconPlus as Plus, IconCalendar as Calendar, IconMessageSquare as MessageSquare } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -81,7 +81,7 @@ export default function TeacherDashboard() {
             <p className="text-muted-foreground">Manage your classes and learning materials.</p>
           </div>
           <div className="flex gap-3">
-             <Button className="bg-green text-navy font-bold">
+             <Button className="bg-green-600 text-white font-bold">
                <Plus className="w-4 h-4 mr-2" /> Create Note
              </Button>
              <Button variant="outline" className="border-white/10 text-white">

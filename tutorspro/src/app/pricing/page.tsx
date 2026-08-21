@@ -2,7 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { IconCheck as Check, IconZap as Zap, IconShield as Shield, IconHelpCircle as HelpCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconCheck as Check, IconBolt as Zap, IconShield as Shield, IconHelpCircle as HelpCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
@@ -115,7 +115,7 @@ export default function PricingPage() {
              {plans.map((plan, i) => (
                <div key={i} className={`relative p-8 md:p-12 rounded-[48px] bg-white/[0.02] border transition-all hover:bg-white/[0.04] flex flex-col ${plan.featured ? 'border-green/30 scale-105 shadow-[0_0_50px_rgba(0,200,83,0.1)]' : 'border-white/10'}`}>
                  {plan.featured && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-green text-navy text-[10px] font-black uppercase tracking-widest">
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-green-600 text-white text-[10px] font-black uppercase tracking-widest">
                       Most Popular
                     </div>
                  )}
@@ -144,7 +144,7 @@ export default function PricingPage() {
                    href="/signup" 
                    className={`w-full py-5 rounded-2xl font-black text-center transition-all ${
                      plan.featured 
-                       ? 'bg-green text-navy shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:bg-green/90' 
+                       ? 'bg-green-600 text-white shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:bg-green/90' 
                        : 'bg-white/5 border border-white/10 text-white hover:bg-white/10'
                    }`}
                  >

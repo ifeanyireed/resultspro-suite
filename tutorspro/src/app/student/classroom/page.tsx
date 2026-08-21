@@ -117,7 +117,7 @@ export default function Classroom() {
                        <Hand className="w-5 h-5" />
                     </button>
                     <div className="w-px h-8 bg-white/10 mx-2" />
-                    <button className="px-6 h-12 rounded-2xl bg-green text-navy font-black text-xs hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
+                    <button className="px-6 h-12 rounded-2xl bg-green-600 text-white font-black text-xs hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
                        SCREEN SHARE
                     </button>
                  </div>

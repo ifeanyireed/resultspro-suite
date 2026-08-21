@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconBell as Bell, IconBookOpen as BookOpen, IconBrainCircuit as BrainCircuit, IconTrophy as Trophy, IconMessageSquare as MessageSquare, IconCheck as Check, IconMoreVertical as MoreVertical, IconClock as Clock } from '@tabler/icons-react';
+import { IconBell as Bell, IconBook as BookOpen, IconBrain as BrainCircuit, IconTrophy as Trophy, IconMessageSquare as MessageSquare, IconCheck as Check, IconMoreVertical as MoreVertical, IconClock as Clock } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

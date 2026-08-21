@@ -28,7 +28,8 @@ export default function SharedLoginPage({
   logoSrc = "/logo.png",
   redirectPath = "/dashboard",
   loginEndpoint = "/auth/login",
-}: SharedLoginPageProps) {
+  children,
+}: SharedLoginPageProps & { children?: React.ReactNode }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
@@ -118,8 +119,8 @@ export default function SharedLoginPage({
       <div className="w-full lg:w-[45%] bg-white flex items-center justify-center p-8 sm:p-16 relative">
         {/* Mobile Logo overlay */}
         <div className="absolute top-8 left-8 lg:hidden flex items-center space-x-2">
-           <Image src={logoSrc} alt="ResultsPRO" width={48} height={48} className="bg-slate-900 rounded-lg p-1" />
-           <span className="font-bold text-slate-900">ResultsPRO</span>
+           <Image src={logoSrc} alt={brandTitle} width={48} height={48} className="bg-slate-900 rounded-lg p-1" />
+           <span className="font-bold text-slate-900">{brandTitle}</span>
         </div>
 
         <div className="w-full max-w-md">
@@ -128,6 +129,7 @@ export default function SharedLoginPage({
             <p className="text-slate-500 font-medium">Enter your credentials to access the admin hub.</p>
           </div>
 
+          {children || (
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-1.5">
               <label className="block text-sm font-semibold text-slate-700">Email Address</label>
@@ -183,6 +185,7 @@ export default function SharedLoginPage({
               )}
             </button>
           </form>
+          )}
 
           <div className="mt-8 text-center">
             <p className="text-xs text-slate-400 font-medium">

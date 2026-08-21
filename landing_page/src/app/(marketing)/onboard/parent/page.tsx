@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IconLayoutGrid as LayoutGrid, IconUser as User, IconSearch as Search, IconUsers as Users, IconCreditCard as CreditCard, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCheckCircle2 as CheckCircle2, IconShieldCheck as ShieldCheck, IconLock as Lock, IconPlus as Plus, IconTrash2 as Trash2, IconAlertCircle as AlertCircle, IconSmartphone as Smartphone, IconMail as Mail, IconCheck as Check, IconTicket as Ticket, IconClock as Clock, IconSparkles as Sparkles, IconInfo as Info, IconCreditCard as CardIcon, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
+import { IconLayoutGrid as LayoutGrid, IconUser as User, IconSearch as Search, IconUsers as Users, IconCreditCard as CreditCard, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCircleCheck as CheckCircle2, IconShieldCheck as ShieldCheck, IconLock as Lock, IconPlus as Plus, IconTrash2 as Trash2, IconAlertCircle as AlertCircle, IconSmartphone as Smartphone, IconMail as Mail, IconCheck as Check, IconTicket as Ticket, IconClock as Clock, IconSparkles as Sparkles, IconInfoCircle as Info, IconCreditCard as CardIcon, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
 import { ResultsProPageHeader } from '@/components/onboarding/ResultsProPageHeader';

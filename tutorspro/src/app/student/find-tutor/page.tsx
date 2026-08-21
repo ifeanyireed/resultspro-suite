@@ -73,7 +73,7 @@ export default function FindTutor() {
                  key={cat}
                  onClick={() => setActiveCategory(cat)}
                  className={`px-6 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all border ${
-                   activeCategory === cat ? 'bg-green text-navy border-green' : 'bg-white/5 text-gray-400 border-white/10 hover:border-white/20'
+                   activeCategory === cat ? 'bg-green-600 text-white border-green' : 'bg-white/5 text-gray-400 border-white/10 hover:border-white/20'
                  }`}
                >
                  {cat}
@@ -125,7 +125,7 @@ export default function FindTutor() {
                      <Clock className="w-3 h-3 text-amber" /> {tutor.location}
                   </div>
 
-                  <button className="w-full py-4 rounded-2xl bg-green text-navy font-bold hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
+                  <button className="w-full py-4 rounded-2xl bg-green-600 text-white font-bold hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
                      View Full Profile
                   </button>
                 </div>

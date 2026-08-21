@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconBrainCircuit as BrainCircuit, IconClock as Clock, IconTrophy as Trophy, IconSearch as Search, IconPlay as Play, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconActivity as Activity, IconCheckCircle as CheckCircle, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
+import { IconBrain as BrainCircuit, IconClock as Clock, IconTrophy as Trophy, IconSearch as Search, IconPlay as Play, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconActivity as Activity, IconCheckCircle as CheckCircle, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -235,7 +235,7 @@ export default function QuizzesPage() {
                 }}
                 className={cn(
                   "flex items-center justify-center px-4 h-12 rounded-xl border border-white/10 transition-all text-xs font-bold",
-                  !selectedSubjectId && selectedTerm === "all" && selectedCurriculum === "all" && selectedStatus === "all" && !search ? "bg-white/5 text-muted-foreground" : "bg-green text-navy hover:bg-green/90"
+                  !selectedSubjectId && selectedTerm === "all" && selectedCurriculum === "all" && selectedStatus === "all" && !search ? "bg-white/5 text-muted-foreground" : "bg-green-600 text-white hover:bg-green/90"
                 )}
               >
                 Clear
@@ -286,7 +286,7 @@ export default function QuizzesPage() {
                     </div>
                   </div>
                   <Link href={`/dashboard/quizzes/${quiz.id}`}>
-                    <Button size="sm" className="bg-green hover:bg-green/90 text-navy font-bold rounded-full w-8 h-8 p-0">
+                    <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white font-bold rounded-full w-8 h-8 p-0">
                       <Play className="w-3 h-3 ml-0.5" />
                     </Button>
                   </Link>

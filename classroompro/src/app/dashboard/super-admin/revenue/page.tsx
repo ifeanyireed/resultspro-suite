@@ -288,7 +288,7 @@ export default function RevenueAnalytics() {
                                     variant={currentPage === p ? "default" : "outline"}
                                     className={cn(
                                        "h-9 w-9 rounded-xl font-bold text-xs",
-                                       currentPage === p ? "bg-green text-navy hover:bg-green/90" : "border-white/10 text-white"
+                                       currentPage === p ? "bg-green-600 text-white hover:bg-green/90" : "border-white/10 text-white"
                                     )}
                                     onClick={() => setCurrentPage(p)}
                                   >

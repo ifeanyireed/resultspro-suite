@@ -5,7 +5,7 @@ import { AuthLayout } from "@/components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { IconSearch as Search, IconSchool as School, IconGraduationCap as GraduationCap, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
+import { IconSearch as Search, IconSchool as School, IconCertificate as GraduationCap, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCircleCheck as CheckCircle2 } from '@tabler/icons-react';
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -88,7 +88,7 @@ export default function SchoolSelectionPage() {
 
           <div className="pt-4 border-t border-white/5">
             <Button 
-              className="w-full bg-green hover:bg-green/90 text-navy font-bold h-11"
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-11"
               disabled={!selectedSchool}
               onClick={() => setStep(2)}
             >
@@ -131,7 +131,7 @@ export default function SchoolSelectionPage() {
               <ArrowLeft className="mr-2 w-4 h-4" /> Back
             </Button>
             <Button 
-              className="flex-[2] bg-green hover:bg-green/90 text-navy font-bold h-11"
+              className="flex-[2] bg-green-600 hover:bg-green-700 text-white font-bold h-11"
               disabled={!selectedClass || isLoading}
               onClick={handleFinish}
             >

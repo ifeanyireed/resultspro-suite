@@ -32,7 +32,7 @@ export default function BlogPostClient({ post, slug }: { post: BlogPost | null, 
          <h1 className="text-4xl font-display font-black text-white mb-4">Post Not Found</h1>
          <p className="text-gray-500 mb-8">The article you're looking for doesn't exist or has been moved.</p>
          <Link href="/blog">
-           <button className="px-8 py-3 rounded-xl bg-green text-navy font-black uppercase tracking-widest hover:bg-green/90 transition-all">
+           <button className="px-8 py-3 rounded-xl bg-green-600 text-white font-black uppercase tracking-widest hover:bg-green/90 transition-all">
              Back to Blog
            </button>
          </Link>
@@ -79,7 +79,7 @@ export default function BlogPostClient({ post, slug }: { post: BlogPost | null, 
         <div className="max-w-[1000px] mx-auto px-6 -mt-10 mb-20 relative z-20">
            <div className="aspect-[21/9] rounded-[40px] overflow-hidden border border-white/[0.1] border-t-white/[0.15] bg-white/5 shadow-2xl">
               <img 
-                src={post.featuredImage || "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&q=80"} 
+                src={post.featuredImage || ""/avatars/character2.jpg""} 
                 alt={post.title}
                 className="w-full h-full object-cover"
               />

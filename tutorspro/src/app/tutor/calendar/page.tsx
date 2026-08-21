@@ -2,7 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
-import { IconCalendar as CalendarIcon, IconClock as Clock, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconPlus as Plus, IconLock as Lock, IconCheckCircle2 as CheckCircle2, IconRefreshCcw as RefreshCcw, IconSettings as Settings, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconCalendar as CalendarIcon, IconClock as Clock, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconPlus as Plus, IconLock as Lock, IconCircleCheck as CheckCircle2, IconRefreshCcw as RefreshCcw, IconSettings as Settings, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -57,7 +57,7 @@ export default function TutorCalendar() {
              <button className="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 text-white font-bold flex items-center gap-2 hover:bg-white/10 transition-all">
                 <Settings className="w-4 h-4" /> Recurrence Settings
              </button>
-             <button className="px-8 py-3 rounded-2xl bg-green text-navy font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20">
+             <button className="px-8 py-3 rounded-2xl bg-green-600 text-white font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20">
                 <Plus className="w-5 h-5" /> ADD TIME SLOT
              </button>
           </div>

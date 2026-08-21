@@ -35,7 +35,7 @@ export default function LeaderboardPage() {
           </div>
           <div className="w-16 h-16 rounded-full border-4 border-white/20 overflow-hidden shadow-inner hidden sm:block">
             <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop"
+              src="/avatars/character10.jpg"
               alt="Champion"
               className="w-full h-full object-cover"
             />

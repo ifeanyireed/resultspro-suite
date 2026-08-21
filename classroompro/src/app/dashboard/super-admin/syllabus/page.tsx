@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconPlus as Plus, IconSearch as Search, IconTrash2 as Trash2, IconEdit as Edit, IconBookOpen as BookOpen, IconCheckCircle2 as CheckCircle2, IconFilter as Filter, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
+import { IconPlus as Plus, IconSearch as Search, IconTrash2 as Trash2, IconEdit as Edit, IconBook as BookOpen, IconCircleCheck as CheckCircle2, IconFilter as Filter, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -172,7 +172,7 @@ export default function SuperAdminSyllabusPage() {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <Button onClick={() => setShowAddModal(true)} className="bg-green hover:bg-green/90 text-navy font-bold rounded-xl px-6 h-12 shadow-lg shadow-green/10">
+          <Button onClick={() => setShowAddModal(true)} className="bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl px-6 h-12 shadow-lg shadow-green/10">
             <Plus className="w-4 h-4 mr-2" /> Add New Topic
           </Button>
         </div>
@@ -262,7 +262,7 @@ export default function SuperAdminSyllabusPage() {
                                 variant={currentPage === p ? "default" : "outline"}
                                 className={cn(
                                    "h-9 w-9 rounded-xl font-bold text-xs",
-                                   currentPage === p ? "bg-green text-navy hover:bg-green/90" : "border-white/10 text-white"
+                                   currentPage === p ? "bg-green-600 text-white hover:bg-green/90" : "border-white/10 text-white"
                                 )}
                                 onClick={() => setCurrentPage(p)}
                               >
@@ -352,7 +352,7 @@ export default function SuperAdminSyllabusPage() {
                     <Button type="button" onClick={() => setShowAddModal(false)} variant="outline" className="flex-1 border-white/10 text-white h-12 rounded-xl hover:bg-white/5">
                        Cancel
                     </Button>
-                    <Button type="submit" className="flex-1 bg-green hover:bg-green/90 text-navy font-bold h-12 rounded-xl">
+                    <Button type="submit" className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold h-12 rounded-xl">
                        Save Topic
                     </Button>
                  </div>

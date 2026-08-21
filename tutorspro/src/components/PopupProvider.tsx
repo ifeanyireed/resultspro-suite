@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { usePathname } from 'next/navigation';
 import { getActivePopups, PopupNotification } from '@/lib/notifications.api';
 import { useAuthStore } from '@/store/useAuthStore';
-import { IconX as X, IconBell as Bell, IconInfo as Info, IconAlertTriangle as AlertTriangle, IconCheckCircle2 as CheckCircle2, IconTrophy as Trophy, IconSword as Sword, IconCoins as Coins } from '@tabler/icons-react';
+import { IconX as X, IconBell as Bell, IconInfoCircle as Info, IconAlertTriangle as AlertTriangle, IconCircleCheck as CheckCircle2, IconTrophy as Trophy, IconSword as Sword, IconCoins as Coins } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
 interface PopupContextType {
@@ -112,7 +112,7 @@ export const PopupProvider = ({ children }: { children: ReactNode }) => {
 
             <Button 
               onClick={() => closePopup(currentPopup.id)}
-              className="w-full bg-green text-navy hover:bg-green/90 font-black uppercase tracking-widest h-14 rounded-2xl shadow-[0_8px_20px_rgba(0,200,83,0.3)]"
+              className="w-full bg-green-600 text-white hover:bg-green/90 font-black uppercase tracking-widest h-14 rounded-2xl shadow-[0_8px_20px_rgba(0,200,83,0.3)]"
             >
               Got it!
             </Button>

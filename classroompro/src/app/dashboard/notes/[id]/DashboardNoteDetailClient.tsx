@@ -1,6 +1,6 @@
 "use client";
 
-import { IconArrowLeft as ArrowLeft, IconBookOpen as BookOpen, IconShare2 as Share2, IconDownload as Download, IconBrainCircuit as BrainCircuit, IconLayers as Layers, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconCheckCircle2 as CheckCircle2, IconClock as Clock, IconEye as Eye, IconLoader2 as Loader2, IconBookmark as Bookmark, IconBookmarkCheck as BookmarkCheck } from '@tabler/icons-react';
+import { IconArrowLeft as ArrowLeft, IconBook as BookOpen, IconShare2 as Share2, IconDownload as Download, IconBrain as BrainCircuit, IconStack2 as Layers, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconCircleCheck as CheckCircle2, IconClock as Clock, IconEye as Eye, IconLoader2 as Loader2, IconBookmark as Bookmark, IconBookmarkCheck as BookmarkCheck } from '@tabler/icons-react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
@@ -93,7 +93,7 @@ export default function DashboardNoteDetailClient() {
           <Button variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/5">
             <Download className="w-4 h-4 mr-2" /> Save Offline
           </Button>
-          <Button className="bg-green text-navy font-bold" size="sm">
+          <Button className="bg-green-600 text-white font-bold" size="sm">
             <CheckCircle2 className="w-4 h-4 mr-2" /> Mark Completed
           </Button>
         </div>

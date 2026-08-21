@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Logo from '@/components/Logo';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { IconMail as Mail, IconLock as Lock, IconArrowRight as ArrowRight, IconUser as UserIcon, IconTicket as Ticket, IconChrome as Chrome, IconZap as Zap, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconMail as Mail, IconLock as Lock, IconArrowRight as ArrowRight, IconUser as UserIcon, IconTicket as Ticket, IconBrandGoogle as Chrome, IconBolt as Zap, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "@/lib/msal";
@@ -179,7 +179,7 @@ function SignupForm() {
         <Button 
           type="submit"
           disabled={isLoading}
-          className="w-full py-7 rounded-2xl bg-green text-navy hover:bg-green/90 font-bold text-lg flex items-center justify-center gap-2 group"
+          className="w-full py-7 rounded-2xl bg-green-600 text-white hover:bg-green/90 font-bold text-lg flex items-center justify-center gap-2 group"
         >
           {isLoading ? (
             <Loader2 className="w-6 h-6 animate-spin" />

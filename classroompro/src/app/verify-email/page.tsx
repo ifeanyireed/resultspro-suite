@@ -5,7 +5,7 @@ import { AuthLayout } from "@/components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { IconShieldCheck as ShieldCheck, IconRefreshCw as RefreshCw, IconCheckCircle2 as CheckCircle2 } from '@tabler/icons-react';
+import { IconShieldCheck as ShieldCheck, IconRefreshCw as RefreshCw, IconCircleCheck as CheckCircle2 } from '@tabler/icons-react';
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 import api from "@/lib/api";
@@ -80,7 +80,7 @@ function VerifyEmailContent() {
           </div>
           <Button
             onClick={() => router.push("/login")}
-            className="w-full bg-green text-navy font-bold"
+            className="w-full bg-green-600 text-white font-bold"
           >
             Go to Login
           </Button>
@@ -119,7 +119,7 @@ function VerifyEmailContent() {
 
         <Button
           type="submit"
-          className="w-full bg-green hover:bg-green/90 text-navy font-bold h-12 text-lg"
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-12 text-lg"
           disabled={isLoading || otp.length !== 6}
         >
           {isLoading ? "Verifying..." : "Verify email"}

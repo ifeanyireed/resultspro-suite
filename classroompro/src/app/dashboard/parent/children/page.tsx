@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconHeart as Heart, IconUserPlus as UserPlus, IconShieldCheck as ShieldCheck, IconSettings as Settings, IconMail as Mail, IconGraduationCap as GraduationCap } from '@tabler/icons-react';
+import { IconHeart as Heart, IconUserPlus as UserPlus, IconShieldCheck as ShieldCheck, IconSettings as Settings, IconMail as Mail, IconCertificate as GraduationCap } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
@@ -51,7 +51,7 @@ export default function MyChildren() {
             <h2 className="text-2xl font-bold text-white mb-2">Child Management</h2>
             <p className="text-sm text-muted-foreground">Link and manage your children's accounts to monitor their academic progress.</p>
           </div>
-          <Button className="bg-green text-navy font-bold h-12 px-6">
+          <Button className="bg-green-600 text-white font-bold h-12 px-6">
             <UserPlus className="w-5 h-5 mr-2" /> Link New Child
           </Button>
         </div>

@@ -4,7 +4,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { IconSearch as Search, IconBookOpen as BookOpen, IconLoader2 as Loader2, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconCheckCircle2 as CheckCircle2, IconCircle as Circle, IconCalendar as Calendar, IconLayers as Layers, IconBrainCircuit as BrainCircuit, IconLock as Lock, IconArrowRight as ArrowRight, IconClock as Clock, IconSparkles as Sparkles, IconChevronDown as ChevronDown, IconChevronUp as ChevronUp } from '@tabler/icons-react';
+import { IconSearch as Search, IconBook as BookOpen, IconLoader2 as Loader2, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconCircleCheck as CheckCircle2, IconCircle as Circle, IconCalendar as Calendar, IconStack2 as Layers, IconBrain as BrainCircuit, IconLock as Lock, IconArrowRight as ArrowRight, IconClock as Clock, IconSparkles as Sparkles, IconChevronDown as ChevronDown, IconChevronUp as ChevronUp } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -261,7 +261,7 @@ export default function PublicSyllabusPage() {
                                 <div className="absolute left-0 md:left-1/2 top-0 -translate-x-1/2 flex flex-col items-center z-10">
                                    <div className={cn(
                                      "w-10 h-10 rounded-full flex items-center justify-center border-4 border-navy shadow-lg transition-all duration-500",
-                                     weekTopics.length > 0 ? "bg-green text-navy" : "bg-white/5 text-white/20"
+                                     weekTopics.length > 0 ? "bg-green-600 text-white" : "bg-white/5 text-white/20"
                                    )}>
                                       <span className="text-xs font-black">{week}</span>
                                    </div>
@@ -407,7 +407,7 @@ export default function PublicSyllabusPage() {
                                  variant={currentPage === pageNum ? "default" : "outline"}
                                  className={cn(
                                    "w-10 h-10 rounded-xl font-bold",
-                                   currentPage === pageNum ? "bg-green text-navy hover:bg-green/90" : "border-white/10 text-white hover:bg-white/5"
+                                   currentPage === pageNum ? "bg-green-600 text-white hover:bg-green/90" : "border-white/10 text-white hover:bg-white/5"
                                  )}
                                  onClick={() => {
                                    setCurrentPage(pageNum);

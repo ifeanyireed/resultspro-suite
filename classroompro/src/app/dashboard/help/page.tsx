@@ -107,7 +107,7 @@ export default function HelpPage() {
                  Can't find the answer you're looking for? Please chat with our friendly team.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                 <Button className="bg-green text-navy font-bold h-12 px-8 rounded-xl shadow-xl shadow-green/10">
+                 <Button className="bg-green-600 text-white font-bold h-12 px-8 rounded-xl shadow-xl shadow-green/10">
                     <MessageSquare className="w-4 h-4 mr-2" /> Start a Chat
                  </Button>
                  <Button variant="outline" className="border-white/10 text-white h-12 px-8 rounded-xl hover:bg-white/5">

@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
-import { IconFileText as FileText, IconClock as Clock, IconCheckCircle2 as CheckCircle2, IconAlertCircle as AlertCircle, IconChevronRight as ChevronRight, IconUpload as Upload, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconFileText as FileText, IconClock as Clock, IconCircleCheck as CheckCircle2, IconAlertCircle as AlertCircle, IconChevronRight as ChevronRight, IconUpload as Upload, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';
 import { RoleGate } from '@/components/RoleGate';
@@ -92,7 +92,7 @@ export default function Assignments() {
                                 View Submission
                              </button>
                            ) : (
-                             <button className="px-6 py-3 rounded-xl bg-green text-navy font-bold text-xs flex items-center gap-2 hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
+                             <button className="px-6 py-3 rounded-xl bg-green-600 text-white font-bold text-xs flex items-center gap-2 hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
                                 <Upload className="w-4 h-4" /> Submit Now
                              </button>
                            )}

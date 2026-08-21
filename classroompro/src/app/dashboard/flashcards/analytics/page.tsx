@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconTrendingUp as TrendingUp, IconTarget as Target, IconAward as Award, IconLayers as Layers, IconClock as Clock, IconZap as Zap, IconFlame as Flame, IconShieldAlert as ShieldAlert, IconArrowLeft as ArrowLeft } from '@tabler/icons-react';
+import { IconTrendingUp as TrendingUp, IconTarget as Target, IconAward as Award, IconStack2 as Layers, IconClock as Clock, IconBolt as Zap, IconFlame as Flame, IconShieldAlert as ShieldAlert, IconArrowLeft as ArrowLeft } from '@tabler/icons-react';
 import { useEffect, useState, useMemo } from "react";
 import api from "@/lib/api";
 import { 

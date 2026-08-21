@@ -67,7 +67,7 @@ export default function SchoolsOverview() {
             <h2 className="text-2xl font-bold text-white mb-2 font-display">School Management</h2>
             <p className="text-sm text-muted-foreground">Monitor and manage all schools registered on the platform.</p>
           </div>
-          <Button className="bg-green hover:bg-green/90 text-navy font-bold h-12 px-6 shadow-lg shadow-green/10">
+          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold h-12 px-6 shadow-lg shadow-green/10">
             <Plus className="w-5 h-5 mr-2" /> Onboard New School
           </Button>
         </div>
@@ -237,7 +237,7 @@ export default function SchoolsOverview() {
                                 variant={currentPage === p ? "default" : "outline"}
                                 className={cn(
                                    "h-9 w-9 rounded-xl font-bold text-xs",
-                                   currentPage === p ? "bg-green text-navy hover:bg-green/90" : "border-white/10 text-white"
+                                   currentPage === p ? "bg-green-600 text-white hover:bg-green/90" : "border-white/10 text-white"
                                 )}
                                 onClick={() => setCurrentPage(p)}
                               >

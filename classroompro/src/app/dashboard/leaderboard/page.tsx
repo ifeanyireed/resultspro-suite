@@ -90,7 +90,7 @@ export default function LeaderboardPage() {
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all",
                   scope === s.id 
-                    ? "bg-green text-navy shadow-lg shadow-green/10" 
+                    ? "bg-green-600 text-white shadow-lg shadow-green/10" 
                     : "text-muted-foreground hover:text-white"
                 )}
               >

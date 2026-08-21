@@ -1,110 +1,210 @@
 "use client";
 
 import Link from 'next/link';
-import { IconSword as Sword, IconZap as Zap, IconBrain as Brain } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import api from '@/lib/api';
+import { IconCheck, IconPlayerPlay as IconPlay, IconBook, IconBrain } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+  }
+};
+
+const staggerItem = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } }
+};
+
+const slideInRight = {
+  hidden: { opacity: 0, x: 40 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const, delay: 0.4 } }
+};
 
 const Hero = () => {
-  const [messages, setMessages] = useState<string[]>(["Personalized Learning for Every Student"]);
-  const [stats, setStats] = useState<any[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [intervalSec] = useState(5);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchHeroData = async () => {
-      try {
-        const res = await api.get('/public/home');
-        if (res.data?.hero) {
-          setMessages(res.data.hero.messages || []);
-          setStats(res.data.hero.stats || []);
-        }
-      } catch (err) {
-        console.error("Failed to fetch hero data");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchHeroData();
-  }, []);
-
-  useEffect(() => {
-    if (messages.length <= 1) return;
-    
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % messages.length);
-    }, intervalSec * 1000);
-
-    return () => clearInterval(timer);
-  }, [messages, intervalSec]);
-
   return (
-    <section className="relative w-full min-h-[90vh] flex flex-col items-center justify-center px-4 md:px-12 lg:px-20 overflow-hidden bg-navy -mt-16">
-      {/* Background Glows */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-green/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue/10 rounded-full blur-[120px]" />
+    <section
+      id="hero"
+      aria-label="Hero — TutorsPRO"
+      style={{
+        position: 'relative',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+        background: 'var(--color-nets-navy-dark)',
+        marginTop: '-72px' // to offset navbar height exactly
+      }}
+    >
+      {/* ── Full-bleed background photo ── */}
+      <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+        <img
+          src="/images/Students3.jpeg"
+          alt=""
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+          loading="eager"
+        />
+        {/* Cinematic overlay */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(105deg, rgba(13,16,96,0.95) 0%, rgba(13,16,96,0.7) 45%, rgba(13,16,96,0) 100%)',
+        }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(13,16,96,0.6) 0%, transparent 40%)' }} />
+        {/* Red accent — thin left rule */}
+        <div aria-hidden style={{
+          position: 'absolute', left: 0, top: 0, bottom: 0, width: '4px',
+          background: 'var(--color-nets-red)',
+          zIndex: 10,
+        }} />
       </div>
 
-      {/* Content Container */}
-      <div className="relative z-10 max-w-4xl pt-32 text-center">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/[0.1] border-t-white/[0.15] text-xs font-medium text-green mb-8 backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
-          <Zap className="w-3 h-3 fill-current" />
-          GLOBAL TUTORING NETWORK
-        </div>
+      {/* ── Content ── */}
+      <div
+        className="container-nets"
+        style={{
+          position: 'relative', zIndex: 1,
+          display: 'grid',
+          gridTemplateColumns: 'repeat(12, 1fr)',
+          gap: '2rem',
+          alignItems: 'center',
+          paddingTop: '10rem',
+          paddingBottom: '4rem',
+          flex: 1
+        }}
+      >
+        {/* ── Left — Editorial headline ── */}
+        <motion.div
+          style={{ gridColumn: 'span 12' }}
+          className="lg:col-span-7"
+          variants={staggerContainer}
+          initial="hidden"
+          animate="visible"
+        >
+          {/* Overline */}
+          <motion.div variants={staggerItem} style={{ marginBottom: '1.5rem' }}>
+            <span className="overline-dark">
+              Nigeria's Elite Tutoring Network
+            </span>
+          </motion.div>
 
-        {/* Main Heading with Animation */}
-        <div className="h-[120px] md:h-[180px] flex items-center justify-center mb-6">
-          <AnimatePresence mode="wait">
-            <motion.h1 
-              key={currentIndex}
-              initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="text-5xl md:text-7xl font-display font-black tracking-tight leading-tight text-white max-w-3xl"
-            >
-              {messages[currentIndex]}
-            </motion.h1>
-          </AnimatePresence>
-        </div>
+          {/* Headline — editorial split */}
+          <motion.h1 variants={staggerItem} className="fw-300" style={{ 
+            color: '#fff', 
+            marginBottom: '1rem', 
+            fontSize: 'clamp(2.75rem, 4vw, 3.75rem)', 
+            lineHeight: '1.1',
+            letterSpacing: '-0.02em',
+            whiteSpace: 'nowrap'
+          }}>
+            Premium Exam
+            <br />
+            <em style={{ fontStyle: 'normal', fontWeight: 700, color: '#fff' }}>Preparation</em>
+            <br />
+            <span style={{ color: 'rgba(255,255,255,0.6)' }}>for Every Student.</span>
+          </motion.h1>
 
-        {/* Subheading */}
-        <p className="text-lg md:text-xl text-gray-400 mb-10 leading-relaxed max-w-2xl mx-auto">
-          Connect with expert tutors, join live classes, and track your progress 
-          with our modular learning ecosystem designed for families and schools.
-        </p>
+          {/* Body */}
+          <motion.p variants={staggerItem} style={{ 
+            maxWidth: '460px', 
+            marginBottom: '2rem', 
+            fontSize: '1.125rem', 
+            color: 'rgba(255,255,255,0.7)',
+            lineHeight: '1.5'
+          }}>
+            Connect with verified, top-tier tutors for personalized learning and exam prep.
+          </motion.p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-          <Link 
-            href="/student/find-tutor" 
-            className="group items-center border shadow-[0_1px_3px_0_rgba(0,200,83,0.4)_inset,0_0_20px_0_rgba(0,200,83,0.3)_inset,0_1px_22px_0_rgba(255,255,255,0.15),0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-2xl backdrop-saturate-150 bg-[rgba(255,255,255,0.03)] flex gap-3 overflow-hidden px-8 py-4 rounded-xl border border-solid border-green/30 border-t-green/50 hover:bg-green/10 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-white text-lg font-bold"
+          {/* CTAs */}
+          <motion.div variants={staggerItem} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem', alignItems: 'center' }}>
+            <Link href="/tutors" className="btn btn-red btn-lg">
+              Find a Tutor
+            </Link>
+            <Link href="/about" className="btn btn-outline-white btn-lg">
+              Learn More
+            </Link>
+          </motion.div>
+
+          {/* Trust badges & checkmark features */}
+          <motion.div variants={staggerItem} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
+              <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
+              <span>1M+ Practice Questions</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
+              <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
+              <span>AI-Powered Explanations</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
+              <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
+              <span>Real-time Competitions</span>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* ── Right — Quick Practice card ── */}
+        <motion.div
+          style={{ gridColumn: 'span 12', display: 'flex' }}
+          className="lg:col-span-5 lg:col-start-8 lg:justify-end justify-center"
+          variants={slideInRight}
+          initial="hidden"
+          animate="visible"
+        >
+          <div
+            id="quote"
+            style={{
+              width: '100%',
+              maxWidth: '420px',
+              background: 'rgba(13,16,96,0.85)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              borderRadius: '4px',
+              padding: '1.5rem',
+              backdropFilter: 'blur(16px)',
+              boxShadow: '0 24px 64px rgba(0,0,0,0.4)',
+              marginTop: '1.5rem'
+            }}
           >
-            FIND A TUTOR
-          </Link>
-          <Link 
-            href="/schools" 
-            className="items-center border shadow-[0_1px_3px_0_rgba(255,255,255,0.15)_inset,0_0_20px_0_rgba(255,255,255,0.08)_inset,0_1px_22px_0_rgba(255,255,255,0.15),0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-2xl backdrop-saturate-150 bg-[rgba(255,255,255,0.03)] flex gap-3 overflow-hidden px-8 py-4 rounded-xl border border-solid border-white/10 border-t-white/20 hover:bg-white/5 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-white text-lg font-bold"
-          >
-            SCHOOL SOLUTIONS
-          </Link>
-        </div>
+            {/* Card header */}
+            <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1.25rem' }}>
+              <div className="overline-dark" style={{ marginBottom: '0.5rem' }}>Quick Access</div>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', letterSpacing: '-0.01em' }}>
+                Join a live session
+              </h2>
+            </div>
 
-        {/* Quick Stats */}
-        {!loading && stats.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 border-t border-white/10 pt-10">
-            {stats.map((stat: any, i: number) => (
-              <div key={i} className="text-center">
-                <div className="text-2xl md:text-3xl font-display font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-xs text-gray-500 uppercase tracking-widest">{stat.label}</div>
+            <form aria-label="Quick Access" style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+              <div>
+                <label className="field-label-dark">Select Exam Type</label>
+                <select className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }}>
+                  <option value="waec">WAEC / SSCE</option>
+                  <option value="jamb">JAMB / UTME</option>
+                  <option value="neco">NECO</option>
+                  <option value="sat">SAT International</option>
+                </select>
               </div>
-            ))}
+
+              <div>
+                <label className="field-label-dark">Select Subject</label>
+                <select className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }}>
+                  <option value="math">Mathematics</option>
+                  <option value="eng">English Language</option>
+                  <option value="phy">Physics</option>
+                  <option value="chem">Chemistry</option>
+                  <option value="bio">Biology</option>
+                </select>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: '1rem' }}>
+                <Link href="/tutors" className="btn btn-outline-white" style={{ width: '100%', justifyContent: 'center' }}>
+                  <IconBook size={18} /> Solo
+                </Link>
+                <Link href="/about" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
+                  <IconPlay size={18} /> Battle
+                </Link>
+              </div>
+            </form>
           </div>
-        )}
+        </motion.div>
       </div>
     </section>
   );

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
-import { IconLayoutGrid as LayoutGrid, IconClipboardList as ClipboardList, IconPhone as Phone, IconShieldCheck as ShieldCheck, IconCamera as Camera, IconCreditCard as CreditCard, IconArrowRight as ArrowRight, IconUser as User, IconSchool as School, IconHandshake as Handshake, IconGraduationCap as GraduationCap, IconCalendar as Calendar, IconLayers as Layers, IconUsers as Users, IconWallet as Wallet, IconShare2 as Share2, IconKey as Key, IconSearch as Search, IconBookOpen as BookOpen } from '@tabler/icons-react';
+import { IconLayoutGrid as LayoutGrid, IconClipboardList as ClipboardList, IconPhone as Phone, IconShieldCheck as ShieldCheck, IconCamera as Camera, IconCreditCard as CreditCard, IconArrowRight as ArrowRight, IconUser as User, IconSchool as School, IconHandshake as Handshake, IconCertificate as GraduationCap, IconCalendar as Calendar, IconStack2 as Layers, IconUsers as Users, IconWallet as Wallet, IconShare2 as Share2, IconKey as Key, IconSearch as Search, IconBook as BookOpen } from '@tabler/icons-react';
 
 const defaultSteps = [
   { id: 'ROLE', icon: LayoutGrid, label: 'ROLE' },

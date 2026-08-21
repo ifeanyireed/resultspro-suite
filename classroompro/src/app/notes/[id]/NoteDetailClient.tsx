@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { IconArrowLeft as ArrowLeft, IconClock as Clock, IconEye as Eye, IconBookmark as Bookmark, IconShare2 as Share2, IconDownload as Download, IconMessageCircle as MessageCircle, IconTrendingUp as TrendingUp, IconAward as Award, IconLock as Lock, IconBrainCircuit as BrainCircuit, IconLayers as Layers } from '@tabler/icons-react';
+import { IconArrowLeft as ArrowLeft, IconClock as Clock, IconEye as Eye, IconBookmark as Bookmark, IconShare2 as Share2, IconDownload as Download, IconMessageCircle as MessageCircle, IconTrendingUp as TrendingUp, IconAward as Award, IconLock as Lock, IconBrain as BrainCircuit, IconStack2 as Layers } from '@tabler/icons-react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
@@ -145,7 +145,7 @@ export default function PublicNoteDetailClient() {
                           </p>
                           <div className="flex flex-col sm:flex-row gap-4 justify-center">
                              <Link href="/signup">
-                                <Button className="w-full sm:w-auto bg-green text-navy hover:bg-green/90 font-bold h-12 px-8">
+                                <Button className="w-full sm:w-auto bg-green-600 text-white hover:bg-green/90 font-bold h-12 px-8">
                                    Create Free Account
                                 </Button>
                              </Link>
