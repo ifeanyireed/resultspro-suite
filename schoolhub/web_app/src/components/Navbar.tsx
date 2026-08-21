@@ -108,7 +108,7 @@ export default function Navbar() {
             
             {/* Always show a red primary action button at the end of nav links */}
             {mounted && !isAuthenticated ? (
-              <Link href="/signup" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
+              <Link href="https://www.resultspro.ng" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
                 Sign Up Free
               </Link>
             ) : mounted && isAuthenticated ? (
@@ -222,7 +222,7 @@ export default function Navbar() {
                 style={{ marginTop: '2.5rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}
               >
                 {!isAuthenticated ? (
-                  <Link href="/signup" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
+                  <Link href="https://www.resultspro.ng" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
                     Sign Up Free
                   </Link>
                 ) : (
