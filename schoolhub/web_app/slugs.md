@@ -1,6 +1,6 @@
 # SchoolHub Page Slugs
 
-Based on the Screen Inventory and Information Architecture defined in the blueprint, the following routes (slugs) are required.
+Based on the latest routing architecture and restructuring, the following routes (slugs) are actively used in the SchoolHub portal.
 
 ## Public Marketing Pages (White-Label Site)
 These pages are accessible to visitors and focused on conversion.
@@ -8,31 +8,12 @@ These pages are accessible to visitors and focused on conversion.
 | Page | Slug | Description |
 | :--- | :--- | :--- |
 | **Home** | `/` | Main landing page with hero, mission, and CTAs. |
-| **About** | `/about` | School history, leadership, and values. |
-| **Academics** | `/academics` | Curriculum, subjects, and teaching approach. |
-| **Future Skills** | `/future-skills` | ScholarsNG pathways, coding, and AI robotics. |
-| **Student Life** | `/student-life` | Clubs, sports, and campus culture. |
-| **Admissions Home** | `/admissions` | Overview of the enrollment process. |
-| **Inquiry** | `/admissions/inquiry` | Lead capture form for prospective parents. |
-| **Tour Booking** | `/admissions/tour` | Schedule a campus visit. |
-| **Application** | `/admissions/apply` | Full admission application portal. |
-| **News & Events** | `/news` | Announcements and school gallery. |
-| **Contact** | `/contact` | Locations, maps, and branch-specific info. |
+| **Login** | `/login` | Unified authentication portal for all ecosystem users. |
 
-## Authenticated Portal Pages
-These pages require a login and are role-aware (Parent, Student, Teacher, Admin).
-
-| Page | Slug | Description |
-| :--- | :--- | :--- |
-| **Universal Dashboard** | `/dashboard` | Fallback/default entry point. |
-| **Student Dashboard** | `/student/dashboard` | Student-specific command center. |
-| **Teacher Dashboard** | `/teacher/dashboard` | Teacher-specific command center. |
-| **Parent Dashboard** | `/parent/dashboard` | Parent-specific children overview. |
-| **Principal Pulse** | `/admin/pulse` | Institutional health and leadership analytics. |
-| **Admissions CRM** | `/admin/admissions` | Lead management for staff (AdmissionsPRO). |
+*(Note: Additional marketing pages like `/about`, `/academics`, `/contact` will be built out as needed based on specific school requirements)*
 
 ## Role-Specific Sidebar Navigation
-These pages are mapped to the distinct dashboards and ecosystem integrations for each user role.
+These pages are mapped to the distinct dashboards and ecosystem integrations for each user role. They are protected behind the `(portal)` route group.
 
 ### 🎓 Student Sidebar
 | Page | Slug | Description |
@@ -50,6 +31,8 @@ These pages are mapped to the distinct dashboards and ecosystem integrations for
 | **Online Lessons** | `/student/tutors/lessons` | Active lesson links and session history. |
 | **Future Skills** | `/student/future-skills` | Coding and AI robotics pathway. |
 | **Skills Progress** | `/student/future-skills/progress` | Mastery breakdown and skill badges. |
+| **Student Progress** | `/student/progress` | General tracking of academic/extra-curricular goals. |
+| **Support Helpdesk**| `/student/support` | Ticket submission and platform help. |
 
 ### 🍎 Teacher Sidebar
 | Page | Slug | Description |
@@ -62,6 +45,7 @@ These pages are mapped to the distinct dashboards and ecosystem integrations for
 | **Tutor Schedule** | `/teacher/tutors` | Online session and tutoring management. |
 | **Assessments** | `/teacher/assessments` | Quiz creation and grading hub. |
 | **Tasks** | `/teacher/tasks` | Personal task manager (Lesson plans, meetings). |
+| **Support Helpdesk**| `/teacher/support` | Ticket submission and platform help. |
 
 ### 👨‍👩‍👧 Parent Sidebar
 | Page | Slug | Description |
@@ -73,18 +57,19 @@ These pages are mapped to the distinct dashboards and ecosystem integrations for
 | **Academic Reports** | `/parent/reports` | Detailed progress and goals for each child. |
 | **Tutor Booking** | `/parent/tutors` | Manage tutoring support for children. |
 | **Future Skills** | `/parent/future-skills` | Track child's digital skills progression. |
-| **Payments** | `/payments` | Fee management and history. |
-| **Messages** | `/communications` | School newsletters and teacher updates. |
+| **Payments** | `/parent/payments` | Fee management, invoicing, and history. |
+| **Messages** | `/parent/communications` | School newsletters and teacher updates. |
 | **Events Calendar** | `/parent/events` | PTA meetings, sports days, and deadlines. |
+| **Support Helpdesk**| `/parent/support` | Ticket submission and platform help. |
 
-### 🏛️ Principal / Admin Sidebar
+### 🏛️ Principal / Operations Sidebar (Admin)
 | Page | Slug | Description |
 | :--- | :--- | :--- |
 | **Pulse** | `/admin/pulse` | Institutional health and enrollment trends. |
 | **Results Center** | `/admin/results` | School-wide academic overview and audits. |
 | **Insights Hub** | `/admin/insights` | Consolidated ecosystem oversight screen. |
 | **Class Timetable**| `/admin/timetable` | Master schedule management for all grades. |
-| **Fees** | `/admin/fees` | Invoice generation, receipts, and fee tracking. |
+| **Fees & Finance** | `/admin/fees` | Invoice generation, receipts, and fee tracking. |
 | **Enrollment** | `/admin/enrollment` | Student capacity and trend analysis. |
 | **Transport** | `/admin/transport` | Vehicle management, routes, and schedules. |
 | **Procurement** | `/admin/procurement` | Inventory, supply orders, and vendor management. |
@@ -92,8 +77,9 @@ These pages are mapped to the distinct dashboards and ecosystem integrations for
 | **Hostel** | `/admin/hostel` | Room allocations, boarding, and facility management. |
 | **Performance** | `/admin/performance` | Departmental excellence metrics. |
 | **Operations** | `/admin/operations` | Critical incident logs and operational milestones. |
+| **Support Helpdesk**| `/admin/support` | Platform support and SLA tracking. |
 
-### 🤝 Admissions Sidebar
+### 🤝 Admissions CRM Sidebar (Admin)
 | Page | Slug | Description |
 | :--- | :--- | :--- |
 | **CRM Home** | `/admin/admissions` | Pipeline summary and lead conversion. |
