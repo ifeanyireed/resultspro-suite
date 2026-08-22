@@ -2,6 +2,7 @@
 import { IconLayoutDashboard as LayoutDashboard, IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconCertificate as GraduationCap, IconTrendingUp as TrendingUp, IconDownload as Download, IconSettings as Settings, IconLogout as LogOut, IconBell as Bell, IconUsers as Users, IconSchool as School, IconFilePlus as FilePlus, IconChartBar as BarChart3, IconCalendar as Calendar, IconTrophy as Trophy, IconBookmark as Bookmark, IconLibrary as Library, IconHeart as Heart, IconMessage as MessageSquare, IconCreditCard as CreditCard } from '@tabler/icons-react';
 import { useAuthStore } from "@/store/useAuthStore";
 import { Role } from "@/lib/roles";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import React from 'react';
