@@ -11,14 +11,11 @@ import {
 import api from '@/lib/api';
 import WelcomeBanner from './WelcomeBanner';
 import HomeworkSidebar from './HomeworkSidebar';
-import styles from './Dashboard.module.css';
 
 export default function StudentDashboard() {
   const [dashboardData, setDashboardData] = useState<any>(null);
 
   useEffect(() => {
-    // In a real flow, the token would be in localStorage after login.
-    // For this restructuring phase, we assume the backend handles it or returns mock if missing.
     api.get('/student/dashboard')
       .then(res => setDashboardData(res.data))
       .catch(err => console.error('Failed to load student dashboard:', err));
@@ -26,138 +23,142 @@ export default function StudentDashboard() {
 
   if (!dashboardData) {
     return (
-      <div className={styles.container}>
-        <div style={{ color: 'white', padding: '2rem' }}>Loading Student Portal...</div>
+      <div className="flex items-center justify-center p-8 text-gray-500 min-h-[50vh]">
+        Loading Student Portal...
       </div>
     );
   }
 
-  const { stats, future_skills } = dashboardData;
+  const { student, schedule, attendance, upcoming_tests, subjects } = dashboardData;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.mainContent}>
-        <WelcomeBanner 
-          title="Welcome back!" 
-          description={`You've made great progress in ${future_skills.active_pathway}. Keep it up and improve your progress.`} 
-          monsterSrc="/monster_studying.png" 
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-[1600px] mx-auto w-full">
+      {/* Main Content Area */}
+      <div className="lg:col-span-8 xl:col-span-9 flex flex-col gap-6">
+        
+        <WelcomeBanner
+          title={`Hello, ${student.first_name}!`}
+          description="Ready to learn? You have 4 classes today and 2 pending assignments. Keep up the great work!"
+          monsterSrc="/monster-study.png"
+          backgroundColor="#146ef5"
         />
 
-        {/* Stats Grid - Now Dynamic */}
-        <div className={styles.statsGrid}>
-          <div className={styles.statCard}>
-            <div className={styles.statTitle}>Attendance</div>
-            <div className={styles.statContent}>
-              <div className={styles.statIcon} style={{ background: '#146ef515', color: '#146ef5' }}>
-                <TimeQuarterIcon />
-              </div>
-              <div className={styles.statInfo}><h3>{stats.attendance}</h3></div>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <TimeQuarterIcon size={24} />
             </div>
-            <div className={styles.statInfo}><p>Well done! You&apos;re attending all lessons.</p></div>
+            <div>
+              <div className="text-xl font-bold text-gray-900">4h 30m</div>
+              <div className="text-xs font-medium text-gray-500 uppercase">Learning Time</div>
+            </div>
           </div>
-          <div className={styles.statCard}>
-            <div className={styles.statTitle}>Homework</div>
-            <div className={styles.statContent}>
-              <div className={styles.statIcon} style={{ background: '#10b98115', color: '#10b981' }}>
-                <Home01Icon />
-              </div>
-              <div className={styles.statInfo}><h3>{stats.pending_tasks} Pending</h3></div>
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+              <Home01Icon size={24} />
             </div>
-            <div className={styles.statInfo}><p>Don&apos;t forget about your next homework.</p></div>
+            <div>
+              <div className="text-xl font-bold text-gray-900">85%</div>
+              <div className="text-xs font-medium text-gray-500 uppercase">Homework</div>
+            </div>
           </div>
-          <div className={styles.statCard}>
-            <div className={styles.statTitle}>Academic Rating</div>
-            <div className={styles.statContent}>
-              <div className={styles.statIcon} style={{ background: '#f59e0b15', color: '#f59e0b' }}>
-                <StarIcon />
-              </div>
-              <div className={styles.statInfo}><h3>{stats.overall_average}/100</h3></div>
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-yellow-50 text-yellow-600 flex items-center justify-center shrink-0">
+              <StarIcon size={24} />
             </div>
-            <div className={styles.statInfo}><p>Your current academic rating.</p></div>
-            <a href="/student/results" className={styles.statLink}>Go to report</a>
+            <div>
+              <div className="text-xl font-bold text-gray-900">92%</div>
+              <div className="text-xs font-medium text-gray-500 uppercase">Avg Score</div>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <Calendar03Icon size={24} />
+            </div>
+            <div>
+              <div className="text-xl font-bold text-gray-900">{attendance.percentage}%</div>
+              <div className="text-xs font-medium text-gray-500 uppercase">Attendance</div>
+            </div>
           </div>
         </div>
 
-        {/* Bottom Widgets */}
-        <div className={styles.bottomGrid}>
-          <div className={styles.widget}>
-            <div className={styles.widgetHeader}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div className={styles.headerIcon} style={{ background: '#146ef515' }}>
-                  <Calendar03Icon size={18} color="#146ef5" />
-                </div>
-                <h2>Timetable</h2>
-              </div>
-              <span className={styles.widgetDate}>June 12, 2026</span>
+        {/* Schedule & Tests Area */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Today's Classes */}
+          <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-bold text-gray-900 tracking-tight">Today's Schedule</h3>
+              <button className="text-sm font-semibold text-[#146ef5] hover:underline">View Calendar</button>
             </div>
-            <div className={styles.timetable}>
-              <div className={styles.daysRow}>
-                {[
-                  { name: 'Mon', date: '08' },
-                  { name: 'Tue', date: '09' },
-                  { name: 'Wed', date: '10' },
-                  { name: 'Thu', date: '11' },
-                  { name: 'Fri', date: '12', active: true },
-                  { name: 'Sat', date: '13' },
-                  { name: 'Sun', date: '14' },
-                ].map((d, i) => (
-                  <div key={i} className={`${styles.day} ${d.active ? styles.activeDay : ''}`}>
-                    <span className={styles.dayName}>{d.name}</span>
-                    <span className={styles.dayDate}>{d.date}</span>
+            <div className="flex flex-col gap-4">
+              {schedule.today.map((cls: any, i: number) => (
+                <div key={i} className="flex gap-4 items-center">
+                  <div className="w-16 text-right">
+                    <div className="text-sm font-bold text-gray-900">{cls.time}</div>
+                    <div className="text-[10px] text-gray-400 font-semibold uppercase">{cls.duration}</div>
                   </div>
-                ))}
-              </div>
-              <div className={styles.calendarView}>
-                {['08:00', '09:00', '10:00', '11:00'].map((hour) => (
-                  <div key={hour} className={styles.hourRow}>
-                    <span className={styles.hourLabel}>{hour}</span>
-                    <div className={styles.hourContent} />
-                  </div>
-                ))}
-
-                <div className={styles.eventsOverlay}>
-                  {dashboardData.timetable?.map((event: any) => (
-                    <div key={event.id} className={styles.calendarEvent} style={{ top: event.top, height: event.height }}>
-                      <div className={styles.eventHeader}>
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                          <span className={styles.className}>{event.name}</span>
-                          <span className={styles.classTime}>{event.time}</span>
-                        </div>
-                      </div>
-                      <div className={styles.eventFooter}>
-                        <span className={styles.subjectTag} style={{ background: event.color }}>{event.subject}</span>
-                      </div>
+                  <div className={`flex-1 rounded-xl p-4 border-l-4 ${i % 2 === 0 ? 'bg-blue-50/50 border-blue-500' : 'bg-purple-50/50 border-purple-500'}`}>
+                    <h4 className="text-sm font-bold text-gray-900">{cls.subject}</h4>
+                    <div className="flex justify-between items-center mt-2">
+                      <span className="text-xs text-gray-500 font-medium">Room {cls.room}</span>
+                      <span className="text-xs font-semibold text-gray-700">{cls.teacher}</span>
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
 
-          <div className={styles.widget}>
-            <div className={styles.widgetHeader}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div className={styles.headerIcon} style={{ background: '#f59e0b15' }}>
-                  <StarIcon size={18} color="#f59e0b" />
-                </div>
-                <h2>Future Skills Progress</h2>
-              </div>
-              <a href="/student/future-skills" style={{ fontSize: '0.75rem', color: '#146ef5', fontWeight: '700', textDecoration: 'none' }}>View Pathway</a>
+          {/* Academic Performance / Tests */}
+          <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-bold text-gray-900 tracking-tight">Academic Progress</h3>
+              <button className="text-sm font-semibold text-[#146ef5] hover:underline">Full Report</button>
             </div>
-            <div style={{ padding: '1.5rem', background: 'white', borderRadius: '1rem', marginTop: '1rem' }}>
-              <h3>{future_skills.active_pathway}</h3>
-              <div style={{ height: '8px', width: '100%', background: '#f1f5f9', borderRadius: '4px', marginTop: '1rem', overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: `${future_skills.progress}%`, background: 'var(--color-sky-blue)' }}></div>
+            <div className="flex flex-col gap-5">
+              {subjects.map((sub: any, i: number) => (
+                <div key={i}>
+                  <div className="flex justify-between text-sm mb-1.5">
+                    <span className="font-semibold text-gray-800">{sub.name}</span>
+                    <span className="font-bold text-gray-900">{sub.grade}%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full rounded-full ${sub.grade >= 90 ? 'bg-emerald-500' : sub.grade >= 75 ? 'bg-blue-500' : 'bg-yellow-500'}`}
+                      style={{ width: `${sub.grade}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="mt-8 pt-6 border-t border-gray-100">
+              <h4 className="text-sm font-bold text-gray-900 mb-4">Upcoming Assessments</h4>
+              <div className="flex flex-col gap-3">
+                {upcoming_tests.map((test: any, i: number) => (
+                  <div key={i} className="flex justify-between items-center p-3 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/30 transition-colors">
+                    <div>
+                      <div className="text-sm font-semibold text-gray-900">{test.subject}</div>
+                      <div className="text-xs text-gray-500">{test.type}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-bold text-[#146ef5]">{test.date}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <p style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#64748b' }}>
-                You have earned {future_skills.certificates} certificates so far.
-              </p>
             </div>
           </div>
         </div>
+
       </div>
 
-      <HomeworkSidebar />
+      {/* Right Sidebar (Homework) */}
+      <div className="lg:col-span-4 xl:col-span-3">
+        <HomeworkSidebar />
+      </div>
+
     </div>
   );
 }

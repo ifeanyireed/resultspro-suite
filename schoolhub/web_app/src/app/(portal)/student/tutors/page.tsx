@@ -7,7 +7,7 @@ import {
   Plus01Icon, 
   Clock01Icon, 
   Book02Icon,
-  VideoCameraIcon,
+  VideoCamera01Icon,
   Message01Icon
 } from 'hugeicons-react';
 import api from '@/lib/api';
@@ -82,7 +82,7 @@ export default function StudentTutorHub() {
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                    <button style={{ background: '#1e293b', color: 'white', border: 'none', padding: '0.6rem 1rem', borderRadius: '0.75rem', fontWeight: '700', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <VideoCameraIcon size={14} /> Join
+                      <VideoCamera01Icon size={14} /> Join
                    </button>
                    <button style={{ background: '#f8fafc', color: '#1e293b', border: '1px solid #e2e8f0', padding: '0.6rem 1rem', borderRadius: '0.75rem', fontWeight: '700', fontSize: '0.8rem', cursor: 'pointer' }}>Reschedule</button>
                 </div>

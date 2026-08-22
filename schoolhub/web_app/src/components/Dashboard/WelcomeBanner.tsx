@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Image from 'next/image';
-import styles from './Dashboard.module.css';
 
 interface WelcomeBannerProps {
   title: string;
@@ -18,13 +17,16 @@ export default function WelcomeBanner({
   backgroundColor = '#146ef5' 
 }: WelcomeBannerProps) {
   return (
-    <div className={styles.welcomeBanner} style={{ backgroundColor }}>
-      <div className={styles.welcomeText}>
-        <h1>{title}</h1>
-        <p>{description}</p>
+    <div 
+      className="relative overflow-hidden rounded-[1.5rem] p-8 text-white flex justify-between items-center shadow-sm" 
+      style={{ backgroundColor }}
+    >
+      <div className="relative z-10 max-w-lg">
+        <h1 className="text-3xl font-bold tracking-tight mb-2">{title}</h1>
+        <p className="text-white/90 text-sm leading-relaxed">{description}</p>
       </div>
-      <div className={styles.monsterContainer}>
-         <Image src={monsterSrc} alt="Monster" width={160} height={160} style={{ objectFit: 'contain' }} />
+      <div className="absolute right-8 bottom-0 translate-y-2">
+         <Image src={monsterSrc} alt="Monster" width={160} height={160} className="object-contain" />
       </div>
     </div>
   );

@@ -2,18 +2,18 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
 import { 
   AnalyticsUpIcon, 
   CreditCardIcon, 
   UserGroupIcon,
   Activity04Icon,
   Pulse01Icon,
-  ArrowUp01Icon
+  ArrowUp01Icon,
+  Message01Icon,
+  Calendar03Icon
 } from 'hugeicons-react';
 import api from '@/lib/api';
 import WelcomeBanner from './WelcomeBanner';
-import styles from './Dashboard.module.css';
 
 export default function PrincipalDashboard() {
   const [pulseData, setPulseData] = useState<any>(null);
@@ -26,8 +26,8 @@ export default function PrincipalDashboard() {
 
   if (!pulseData) {
     return (
-      <div className={styles.container}>
-        <div style={{ color: 'white', padding: '2rem' }}>Loading Institutional Intelligence...</div>
+      <div className="flex items-center justify-center p-8 text-gray-500 min-h-[50vh]">
+        Loading Institutional Intelligence...
       </div>
     );
   }
@@ -35,119 +35,162 @@ export default function PrincipalDashboard() {
   const { admissions, academic_health, engagement, revenue, school_name } = pulseData;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.mainContent}>
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-[1600px] mx-auto w-full">
+      {/* Main Content Area */}
+      <div className="lg:col-span-8 xl:col-span-9 flex flex-col gap-6">
         <WelcomeBanner 
           title={`${school_name} Pulse`} 
-          description="Institutional health metrics are synthesized from all specialist services. You're doing a great job leading!" 
-          monsterSrc="/monster_winner.png" 
+          description="Real-time institutional intelligence and operations overview." 
+          monsterSrc="/monster-reading.png" 
+          backgroundColor="#111827"
         />
 
-        {/* Stats Grid - Now Dynamic */}
-        <div className={styles.statsGrid}>
-          <div className={styles.statCard}>
-            <div className={styles.statTitle}>Admissions</div>
-            <div className={styles.statContent}>
-              <div className={styles.statIcon} style={{ background: '#0ea5e915', color: '#0ea5e9' }}><UserGroupIcon /></div>
-              <div className={styles.statInfo}><h3>{admissions.pipeline_value}</h3></div>
+        {/* Executive Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col justify-between group hover:border-gray-300 transition-colors cursor-pointer">
+            <div className="text-sm font-bold text-gray-500 mb-4">Admissions Funnel</div>
+            <div className="flex items-center gap-4 mb-2">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-blue-600 bg-blue-50 group-hover:scale-110 transition-transform">
+                <UserGroupIcon size={24} />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900">{admissions.total_applications}</h3>
             </div>
-            <div className={styles.statInfo}><p>Active Applications ({admissions.conversion} Conv.)</p></div>
+            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 w-max px-2 py-0.5 rounded">
+              <ArrowUp01Icon size={14} /> {admissions.growth} vs last year
+            </div>
           </div>
-          <div className={styles.statCard}>
-            <div className={styles.statTitle}>Revenue</div>
-            <div className={styles.statContent}>
-              <div className={styles.statIcon} style={{ background: '#10b98115', color: '#10b981' }}><CreditCardIcon /></div>
-              <div className={styles.statInfo}><h3>{revenue.fees_collected}</h3></div>
+
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col justify-between group hover:border-gray-300 transition-colors cursor-pointer">
+            <div className="text-sm font-bold text-gray-500 mb-4">Academic Health</div>
+            <div className="flex items-center gap-4 mb-2">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-emerald-600 bg-emerald-50 group-hover:scale-110 transition-transform">
+                <AnalyticsUpIcon size={24} />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900">{academic_health.average_gpa}</h3>
             </div>
-            <div className={styles.statInfo}><p>Fees Collected this term</p></div>
-            <a href="/admin/fees" className={styles.statLink}>Financials</a>
+            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 w-max px-2 py-0.5 rounded">
+              <ArrowUp01Icon size={14} /> +{academic_health.gpa_growth} pts
+            </div>
           </div>
-          <div className={styles.statCard}>
-            <div className={styles.statTitle}>Engagement</div>
-            <div className={styles.statContent}>
-              <div className={styles.statIcon} style={{ background: '#6366f115', color: '#6366f1' }}><Activity04Icon /></div>
-              <div className={styles.statInfo}><h3>{engagement.active_parents}</h3></div>
+
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col justify-between group hover:border-gray-300 transition-colors cursor-pointer">
+            <div className="text-sm font-bold text-gray-500 mb-4">Parent Engagement</div>
+            <div className="flex items-center gap-4 mb-2">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-purple-600 bg-purple-50 group-hover:scale-110 transition-transform">
+                <Activity04Icon size={24} />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900">{engagement.active_parents}</h3>
             </div>
-            <div className={styles.statInfo}><p>Parent Active Rate</p></div>
+            <p className="text-xs font-semibold text-gray-400">Weekly Active</p>
+          </div>
+
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col justify-between group hover:border-gray-300 transition-colors cursor-pointer">
+            <div className="text-sm font-bold text-gray-500 mb-4">Revenue & Fees</div>
+            <div className="flex items-center gap-4 mb-2">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-amber-600 bg-amber-50 group-hover:scale-110 transition-transform">
+                <CreditCardIcon size={24} />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900">{revenue.collected_percentage}</h3>
+            </div>
+            <p className="text-xs font-semibold text-gray-400">Term 3 Collection</p>
           </div>
         </div>
 
-        {/* Bottom Widgets */}
-        <div className={styles.bottomGrid}>
-          <div className={styles.widget}>
-            <div className={styles.widgetHeader}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div className={styles.headerIcon} style={{ background: '#6366f115' }}>
-                  <Pulse01Icon size={18} color="#6366f1" />
-                </div>
-                <div>
-                  <h2 style={{ fontSize: '1.1rem', marginBottom: '0.1rem' }}>Academic Health</h2>
-                  <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: '600' }}>Aggregated from ResultsPRO</span>
-                </div>
+        {/* Middle Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-2">
+                <Pulse01Icon size={20} color="#146ef5" />
+                <h2 className="text-lg font-bold text-gray-900 tracking-tight">System Pulse</h2>
               </div>
             </div>
-            
-            <div style={{ padding: '2rem', textAlign: 'center' }}>
-               <div style={{ fontSize: '3rem', fontWeight: '800', color: '#1e293b' }}>{academic_health.average_performance}%</div>
-               <p style={{ color: '#64748b', marginTop: '0.5rem' }}>School-wide Average Performance</p>
-               <div style={{ marginTop: '1.5rem', background: '#f8fafc', padding: '1rem', borderRadius: '1rem', border: '1px solid #f1f5f9' }}>
-                 <p style={{ fontSize: '0.875rem', color: '#1e293b', fontWeight: '700' }}>Top Performing Class: {academic_health.top_performing_class}</p>
-                 <p style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '700', marginTop: '0.5rem' }}>{academic_health.intervention_needed} students require academic intervention</p>
-               </div>
+            <div className="flex flex-col gap-6">
+              <div>
+                <div className="flex justify-between text-sm mb-1.5">
+                  <span className="font-semibold text-gray-800">Teacher Attendance Today</span>
+                  <span className="font-bold text-gray-900">98%</span>
+                </div>
+                <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-full rounded-full bg-emerald-500" style={{ width: '98%' }} />
+                </div>
+              </div>
+              <div>
+                <div className="flex justify-between text-sm mb-1.5">
+                  <span className="font-semibold text-gray-800">Student Attendance Today</span>
+                  <span className="font-bold text-gray-900">94%</span>
+                </div>
+                <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-full rounded-full bg-emerald-500" style={{ width: '94%' }} />
+                </div>
+              </div>
+              <div>
+                <div className="flex justify-between text-sm mb-1.5">
+                  <span className="font-semibold text-gray-800">Timetable Execution</span>
+                  <span className="font-bold text-gray-900">100%</span>
+                </div>
+                <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-full rounded-full bg-blue-500" style={{ width: '100%' }} />
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className={styles.widget}>
-            <div className={styles.widgetHeader}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div className={styles.headerIcon} style={{ background: '#10b98115' }}>
-                  <AnalyticsUpIcon size={18} color="#10b981" />
-                </div>
-                <div>
-                  <h2 style={{ fontSize: '1.1rem', marginBottom: '0.1rem' }}>Admissions Pipeline</h2>
-                  <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: '600' }}>Leads & Funnel Status</span>
-                </div>
+          <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-2">
+                <Message01Icon size={20} color="#f59e0b" />
+                <h2 className="text-lg font-bold text-gray-900 tracking-tight">Action Items</h2>
               </div>
             </div>
-            
-            <div style={{ padding: '1.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <span>New Inquiries</span>
-                <span style={{ fontWeight: '700' }}>{admissions.new_inquiries}</span>
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
+                <div className="w-2 h-2 rounded-full bg-red-500 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-sm font-bold text-gray-900 truncate">Approve Q3 Budget</h4>
+                  <span className="text-xs font-medium text-gray-500">Finance Dept</span>
+                </div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <span>Tours Booked</span>
-                <span style={{ fontWeight: '700' }}>{admissions.active_tours}</span>
+              <div className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
+                <div className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-sm font-bold text-gray-900 truncate">Review Disciplinary Report</h4>
+                  <span className="text-xs font-medium text-gray-500">VP Admin</span>
+                </div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <span>Conversion Rate</span>
-                <span style={{ fontWeight: '700', color: '#10b981' }}>{admissions.conversion}</span>
+              <div className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
+                <div className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-sm font-bold text-gray-900 truncate">Sign Parent Newsletter</h4>
+                  <span className="text-xs font-medium text-gray-500">Communications</span>
+                </div>
               </div>
-              <a href="/admin/admissions" className="btn btn-secondary" style={{ width: '100%', marginTop: '1rem', textAlign: 'center' }}>Open CRM</a>
             </div>
           </div>
         </div>
       </div>
 
       {/* Right Sidebar */}
-      <div className={styles.sidebarArea}>
-        <div className={styles.sidebarHeader} style={{ marginBottom: '1.5rem' }}>
-          <div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b' }}>Strategic Insights</h2>
+      <div className="lg:col-span-4 xl:col-span-3 flex flex-col gap-6">
+        <div className="bg-gray-900 rounded-[1.5rem] p-6 text-white shadow-sm relative overflow-hidden h-[300px] flex flex-col justify-between">
+          <div className="absolute inset-0 opacity-20 bg-cover bg-center" style={{ backgroundImage: "url('/abstract-blue-4.jpg')" }} />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent" />
+          
+          <div className="relative z-10">
+            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Total Enrollment</h3>
+            <div className="text-4xl font-bold text-white tracking-tight">1,248</div>
+            <div className="text-emerald-400 text-sm font-bold mt-2">+42 this term</div>
           </div>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          <div style={{ padding: '1.5rem', background: 'white', borderRadius: '1.5rem', border: '1px solid #f1f5f9' }}>
-            <h4 style={{ color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Revenue Snapshot</h4>
-            <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', marginTop: '0.5rem' }}>₦{revenue.overdue_total.toLocaleString()}</div>
-            <p style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: '700', marginTop: '0.25rem' }}>Overdue Fees Outstanding</p>
-          </div>
-
-          <div style={{ padding: '1.5rem', background: 'white', borderRadius: '1.5rem', border: '1px solid #f1f5f9' }}>
-            <h4 style={{ color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Future Skills Participation</h4>
-            <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#6366f1', marginTop: '0.5rem' }}>{engagement.future_skills}</div>
-            <p style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: '600', marginTop: '0.25rem' }}>Enrolled in ScholarsNG</p>
+          
+          <div className="relative z-10 flex gap-4">
+            <div className="flex-1">
+              <div className="text-xs font-semibold text-gray-400">Primary</div>
+              <div className="text-lg font-bold">580</div>
+            </div>
+            <div className="flex-1">
+              <div className="text-xs font-semibold text-gray-400">Secondary</div>
+              <div className="text-lg font-bold">668</div>
+            </div>
           </div>
         </div>
       </div>

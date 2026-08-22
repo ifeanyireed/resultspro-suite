@@ -1,15 +1,25 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { Space_Grotesk, DM_Sans } from "next/font/google";
 import "./globals.css";
+import "./nets.css";
 import { TenantProvider } from "../components/TenantProvider";
 
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
+  subsets: ["latin"],
+});
+
 async function getTenant(host: string) {
-  // If it's localhost without a tenant subdomain, use a default for testing
   const searchDomain = host.includes('localhost') ? 'loral.resultspro.ng' : host;
   try {
-    // Calling the internal identity service directly
     const res = await fetch(`http://localhost:7000/api/public/tenant/resolve?domain=${searchDomain}`, { 
-      next: { revalidate: 60 } // cache for 1 minute
+      next: { revalidate: 60 }
     });
     if (!res.ok) return null;
     const data = await res.json();
@@ -21,7 +31,7 @@ async function getTenant(host: string) {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const headersList = headers();
+  const headersList = await headers();
   const host = headersList.get('host') || '';
   const tenant = await getTenant(host);
 
@@ -47,7 +57,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headersList = headers();
+  const headersList = await headers();
   const host = headersList.get('host') || '';
   const tenant = await getTenant(host);
 
@@ -59,7 +69,10 @@ export default async function RootLayout({
 
   return (
     <html lang="en" style={themeVars}>
-      <body>
+      <head>
+        <link rel="icon" href={tenant?.logo_url || "/logo.png"} />
+      </head>
+      <body className={`${spaceGrotesk.variable} ${dmSans.variable} antialiased`}>
         <TenantProvider tenant={tenant}>
           {children}
         </TenantProvider>
