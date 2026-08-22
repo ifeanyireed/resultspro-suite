@@ -1,6 +1,6 @@
 "use client";
 
-import { IconArrowLeft as ArrowLeft, IconRotateCcw as RotateCcw, IconCheckCircle as CheckCircle, IconCircleX as XCircle, IconHelpCircle as HelpCircle, IconStack2 as Layers, IconLoader2 as Loader2, IconTrophy as Trophy, IconBolt as Zap } from '@tabler/icons-react';
+import { IconArrowLeft as ArrowLeft, IconRotate as RotateCcw, IconCheckCircle as CheckCircle, IconCircleX as XCircle, IconHelpCircle as HelpCircle, IconStack2 as Layers, IconLoader2 as Loader2, IconTrophy as Trophy, IconBolt as Zap } from '@tabler/icons-react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";

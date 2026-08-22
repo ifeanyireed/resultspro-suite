@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconTrophy as Trophy, IconCircleCheck as CheckCircle2, IconCircleX as XCircle, IconClock as Clock, IconArrowRight as ArrowRight, IconRotateCcw as RotateCcw, IconShare2 as Share2, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconTrophy as Trophy, IconCircleCheck as CheckCircle2, IconCircleX as XCircle, IconClock as Clock, IconArrowRight as ArrowRight, IconRotate as RotateCcw, IconShare2 as Share2, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
