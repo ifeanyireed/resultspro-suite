@@ -1,6 +1,7 @@
 "use client";
 
-import { Sidebar } from "@/components/DashboardLayout";
+import { Sidebar, DashboardHeader } from "@/components/DashboardLayout";
+import { ModernDashboardLayout } from "@/components/layout/ModernDashboardLayout";
 import { useAuthStore } from "@/store/useAuthStore";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -47,11 +48,11 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-navy">
-      <Sidebar />
-      <div className="pl-64">
-        {children}
-      </div>
-    </div>
+    <ModernDashboardLayout
+      sidebarContent={<Sidebar />}
+      headerContent={<DashboardHeader title="Student Portal" />}
+    >
+      {children}
+    </ModernDashboardLayout>
   );
 }
