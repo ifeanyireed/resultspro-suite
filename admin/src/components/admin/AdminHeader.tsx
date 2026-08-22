@@ -71,7 +71,7 @@ const AdminHeader = ({ title, subtitle, action, searchValue, onSearchChange }: A
         <div className="flex items-center gap-3">
           <div className="text-right hidden sm:block">
             <div className="text-sm font-bold text-white">
-              {mounted ? (user?.name || 'Admin User') : 'Admin User'}
+              {mounted ? (user?.full_name || 'Admin User') : 'Admin User'}
             </div>
             <div className="text-[10px] font-bold text-green uppercase tracking-widest leading-none">
               {mounted ? (user?.role || 'Super Admin') : 'Super Admin'}
