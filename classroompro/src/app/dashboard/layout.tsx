@@ -32,6 +32,13 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const { user, isAuthenticated } = useAuthStore();
+  const logoutStore = useAuthStore((state) => state.logout);
+  const router = useRouter();
+  
+  const handleLogout = () => {
+    logoutStore();
+    router.push("/login");
+  };
   const [role, setRole] = useState(Role.STUDENT);
 
   useEffect(() => {
@@ -124,10 +131,10 @@ export default function DashboardLayout({
                 <QuestionMarkCircleIcon className="w-6 h-6" />
                 Help
               </Link>
-              <Link href="#" className="flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
+              <button onClick={handleLogout} className="flex w-full items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
                 <ArrowRightOnRectangleIcon className="w-6 h-6" />
                 Logout
-              </Link>
+              </button>
             </div>
           </div>
 
