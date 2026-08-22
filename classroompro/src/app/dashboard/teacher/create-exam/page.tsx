@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconPlus as Plus, IconTrash2 as Trash2, IconSettings as Settings, IconEye as Eye, IconDeviceFloppy as Save, IconChevronLeft as ChevronLeft, IconCalendar as Calendar, IconUsers as Users } from '@tabler/icons-react';
+import { IconPlus as Plus, IconTrash as Trash2, IconSettings as Settings, IconEye as Eye, IconDeviceFloppy as Save, IconChevronLeft as ChevronLeft, IconCalendar as Calendar, IconUsers as Users } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

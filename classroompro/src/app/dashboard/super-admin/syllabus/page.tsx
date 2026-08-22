@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconPlus as Plus, IconSearch as Search, IconTrash2 as Trash2, IconEdit as Edit, IconBook as BookOpen, IconCircleCheck as CheckCircle2, IconFilter as Filter, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
+import { IconPlus as Plus, IconSearch as Search, IconTrash as Trash2, IconEdit as Edit, IconBook as BookOpen, IconCircleCheck as CheckCircle2, IconFilter as Filter, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 

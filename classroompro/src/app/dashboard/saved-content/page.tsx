@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconBookmark as Bookmark, IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconChevronRight as ChevronRight, IconTrash2 as Trash2, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconBookmark as Bookmark, IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconChevronRight as ChevronRight, IconTrash as Trash2, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import React, { useEffect, useState } from "react";
 import api from "@/lib/api";
 import { formatDistanceToNow } from "date-fns";
