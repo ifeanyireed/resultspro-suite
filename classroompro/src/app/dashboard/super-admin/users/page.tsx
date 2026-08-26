@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconSearch as Search, IconMoreVertical as MoreVertical, IconUserCheck as UserCheck, IconUserX as UserX, IconMail as Mail, IconActivity as Activity, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
+import { IconSearch as Search, IconDotsVertical as MoreVertical, IconUserCheck as UserCheck, IconUserX as UserX, IconMail as Mail, IconActivity as Activity, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";

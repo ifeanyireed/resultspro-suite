@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconHelpCircle as HelpCircle, IconSearch as Search, IconBook as Book, IconMessage as MessageSquare, IconMail as Mail, IconChevronDown as ChevronDown, IconExternalLink as ExternalLink, IconPlayCircle as PlayCircle, IconFileText as FileText } from '@tabler/icons-react';
+import { IconHelpCircle as HelpCircle, IconSearch as Search, IconBook as Book, IconMessage as MessageSquare, IconMail as Mail, IconChevronDown as ChevronDown, IconExternalLink as ExternalLink, IconPlayerPlay as PlayCircle, IconFileText as FileText } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";

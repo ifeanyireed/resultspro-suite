@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconBrain as BrainCircuit, IconClock as Clock, IconTrophy as Trophy, IconSearch as Search, IconPlay as Play, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconActivity as Activity, IconCheckCircle as CheckCircle, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
+import { IconBrain as BrainCircuit, IconClock as Clock, IconTrophy as Trophy, IconSearch as Search, IconPlayerPlay as Play, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconActivity as Activity, IconCircleCheck as CheckCircle, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";

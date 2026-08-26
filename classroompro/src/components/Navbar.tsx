@@ -142,7 +142,7 @@ export default function Navbar() {
                 </Link>
                 <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
                   <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold', color: 'white' }}>
-                    {user?.name?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                    {user?.full_name?.charAt(0) || user?.email?.charAt(0) || 'U'}
                   </div>
                 </Link>
               </div>

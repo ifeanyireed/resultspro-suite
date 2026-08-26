@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconChevronRight as ChevronRight, IconPlay as Play, IconCircleCheck as CheckCircle2, IconClock as Clock, IconArrowLeft as ArrowLeft, IconDownload as Download } from '@tabler/icons-react';
+import { IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconChevronRight as ChevronRight, IconPlayerPlay as Play, IconCircleCheck as CheckCircle2, IconClock as Clock, IconArrowLeft as ArrowLeft, IconDownload as Download } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";

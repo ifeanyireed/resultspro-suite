@@ -1,6 +1,6 @@
 "use client";
 
-import { IconArrowLeft as ArrowLeft, IconBook as BookOpen, IconShare2 as Share2, IconDownload as Download, IconBrain as BrainCircuit, IconStack2 as Layers, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconCircleCheck as CheckCircle2, IconClock as Clock, IconEye as Eye, IconLoader2 as Loader2, IconBookmark as Bookmark, IconBookmarkCheck as BookmarkCheck } from '@tabler/icons-react';
+import { IconArrowLeft as ArrowLeft, IconBook as BookOpen, IconShare2 as Share2, IconDownload as Download, IconBrain as BrainCircuit, IconStack2 as Layers, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconCircleCheck as CheckCircle2, IconClock as Clock, IconEye as Eye, IconLoader2 as Loader2, IconBookmark as Bookmark, IconBookmark as BookmarkCheck } from '@tabler/icons-react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";

@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconTrendingUp as TrendingUp, IconDollarSign as DollarSign, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconCalendar as Calendar, IconDownload as Download, IconCreditCard as CreditCard, IconSchool as School, IconWallet as Wallet, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
+import { IconTrendingUp as TrendingUp, IconCurrencyDollar as DollarSign, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconCalendar as Calendar, IconDownload as Download, IconCreditCard as CreditCard, IconSchool as School, IconWallet as Wallet, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect, useMemo } from "react";

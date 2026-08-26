@@ -43,7 +43,7 @@ export default function SharedLoginPage({
     try {
       const res = await api.post(loginEndpoint, { email, password });
       if (res.data.token) {
-        setAuth(res.data.user, res.data.token);
+        setAuth(res.data.user, res.data.token, res.data.refreshToken || "");
         toast.success("Login successful!");
         router.push(redirectPath);
       }

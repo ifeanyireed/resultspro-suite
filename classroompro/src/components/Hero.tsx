@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { IconCheck, IconPlayerPlay as IconPlay, IconBook, IconBrain } from '@tabler/icons-react';
+import { IconCheck, IconPlayerPlay as IconPlayerPlay, IconBook, IconBrain } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 
 const staggerContainer = {

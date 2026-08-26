@@ -5,7 +5,7 @@ import { AuthLayout } from "@/components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { IconShieldCheck as ShieldCheck, IconRefreshCw as RefreshCw, IconCircleCheck as CheckCircle2 } from '@tabler/icons-react';
+import { IconShieldCheck as ShieldCheck, IconRefresh as RefreshCw, IconCircleCheck as CheckCircle2 } from '@tabler/icons-react';
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 import api from "@/lib/api";

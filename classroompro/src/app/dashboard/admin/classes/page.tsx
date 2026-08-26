@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardHeader } from "@/components/DashboardLayout";
-import { IconStack2 as Layers, IconPlus as Plus, IconSearch as Search, IconMoreVertical as MoreVertical, IconUsers as Users, IconCertificate as GraduationCap } from '@tabler/icons-react';
+import { IconStack2 as Layers, IconPlus as Plus, IconSearch as Search, IconDotsVertical as MoreVertical, IconUsers as Users, IconCertificate as GraduationCap } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
