@@ -1,18 +1,14 @@
 'use client';
 
 import React from 'react';
-import { Navbar } from '@/components/Navbar';
-import { IconStack2 as Layers, IconCircleCheck as CheckCircle2, IconLock as Lock, IconPlayCircle as PlayCircle, IconClock as Clock, IconBook as BookOpen, IconSparkles as Sparkles, IconArrowRight as ArrowRight } from '@tabler/icons-react';
+import { IconStack2 as Layers, IconCircleCheck as CheckCircle2, IconLock as Lock, IconPlayerPlay as PlayCircle, IconClock as Clock, IconBook as BookOpen, IconSparkles as Sparkles, IconArrowRight as ArrowRight } from '@tabler/icons-react';
 import Link from 'next/link';
 import { mockJourneyStages } from '@/lib/data';
 
 export default function JourneyPage() {
   return (
     <div className="flex-1 flex flex-col">
-      <Navbar
-        title="7-Stage Learning Journey"
-        subtitle="Progress from Foundational Knowledge to Public Employer Portfolio"
-      />
+      
 
       <div className="p-8 max-w-5xl mx-auto w-full space-y-8">
         {/* Journey Progress Bar */}

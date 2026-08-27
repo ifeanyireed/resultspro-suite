@@ -1,17 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Navbar } from '@/components/Navbar';
-import { IconBriefcase as Briefcase, IconExternalLink as ExternalLink, IconGithub as Github, IconCircleCheck as CheckCircle2, IconStar as Star, IconAward as Award } from '@tabler/icons-react';
+import { IconBriefcase as Briefcase, IconExternalLink as ExternalLink, IconBrandGithub as Github, IconCircleCheck as CheckCircle2, IconStar as Star, IconAward as Award } from '@tabler/icons-react';
 import { mockPortfolio } from '@/lib/data';
 
 export default function PortfolioPage() {
   return (
     <div className="flex-1 flex flex-col">
-      <Navbar
-        title="Public Employer Portfolio"
-        subtitle="Stage 07 • Verified project case studies and mentor endorsements"
-      />
+      
 
       <div className="p-8 max-w-5xl mx-auto w-full space-y-8">
         {/* Profile Card */}

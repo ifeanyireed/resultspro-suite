@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAuthStore } from '@/store/useAuthStore';
-import api from '@/lib/api';
-import { getUnreadCount } from '@/lib/notifications.api';
+// import { useAuthStore } from '@/store/useAuthStore';
+// import api from '@/lib/api';
+// import { getUnreadCount } from '@/lib/notifications.api';
 import { IconBell as Bell } from '@tabler/icons-react';
 
 export default function Navbar() {
@@ -14,10 +14,12 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   
-  const { user, isAuthenticated } = useAuthStore();
+  // Mocked for coursespro until auth store is ported over
+  const isAuthenticated = false;
+  const user = { name: "Test", email: "test" };
   const [mounted, setMounted] = useState(false);
   const [featureFlags, setFeatureFlags] = useState<Record<string, string>>({});
-  const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadCount, setUnreadCount] = useState(0); const getUnreadCount = async () => 0; const api = { get: async (url: string) => ({ data: url.includes("feature") ? ({} as Record<string, string>) : { unread: 0 } as any }) };
 
   useEffect(() => {
     setMounted(true);

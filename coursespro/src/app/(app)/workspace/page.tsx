@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Navbar } from '@/components/Navbar';
-import { IconKanban as Kanban, IconPlus as Plus, IconMessage as MessageSquare, IconPaperclip as Paperclip, IconCircleCheck as CheckCircle2, IconStar as Star } from '@tabler/icons-react';
+import { IconLayoutKanban as Kanban, IconPlus as Plus, IconMessage as MessageSquare, IconPaperclip as Paperclip, IconCircleCheck as CheckCircle2, IconStar as Star } from '@tabler/icons-react';
 
 export default function WorkspacePage() {
   const [tasks, setTasks] = useState([
@@ -23,10 +22,7 @@ export default function WorkspacePage() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <Navbar
-        title="Sprint Workspace"
-        subtitle="Kanban Task Board • Drag & drop progress synchronization"
-      />
+      
 
       <div className="p-8 space-y-6 flex-1 flex flex-col">
         <div className="flex justify-between items-center">

@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Navbar } from '@/components/Navbar';
-import { IconStack2 as Layers, IconCalendar as Calendar, IconUsers2 as Users2, IconArrowRight as ArrowRight, IconCircleCheck as CheckCircle2 } from '@tabler/icons-react';
+import { IconStack2 as Layers, IconCalendar as Calendar, IconUsersGroup as Users2, IconArrowRight as ArrowRight, IconCircleCheck as CheckCircle2 } from '@tabler/icons-react';
 
 export default function CoursesCatalogPage() {
   const cohorts = [
@@ -32,10 +31,7 @@ export default function CoursesCatalogPage() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <Navbar
-        title="Browse Cohort Programs"
-        subtitle="Cohort-based, mentor-led programs designed for production engineers and builders"
-      />
+      
 
       <div className="p-8 max-w-5xl mx-auto w-full space-y-6">
         {cohorts.map((c) => (

@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Navbar } from '@/components/Navbar';
-import { IconUsers2 as Users2, IconHeartHandshake as HeartHandshake, IconMessage as MessageSquare, IconExternalLink as ExternalLink, IconSparkles as Sparkles } from '@tabler/icons-react';
+import { IconUsersGroup as Users2, IconHeartHandshake as HeartHandshake, IconMessage as MessageSquare, IconExternalLink as ExternalLink, IconSparkles as Sparkles } from '@tabler/icons-react';
 import { mockPeers } from '@/lib/data';
 
 export default function PeersPage() {
@@ -10,10 +9,7 @@ export default function PeersPage() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <Navbar
-        title="Peer Directory & Collaboration"
-        subtitle="Sprint peer pairing, joint submissions, and pre-mentor code critiques"
-      />
+      
 
       <div className="p-8 max-w-6xl mx-auto w-full space-y-8">
         {/* Active Peer Pairing Banner */}

@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Navbar } from '@/components/Navbar';
-import { IconTrophy as Trophy, IconFlame as Flame, IconAward as Award, IconZap as Zap, IconStar as Star } from '@tabler/icons-react';
+import { IconTrophy as Trophy, IconFlame as Flame, IconAward as Award, IconBolt as Zap, IconStar as Star } from '@tabler/icons-react';
 import { mockLeaderboard } from '@/lib/data';
 
 export default function LeaderboardPage() {
@@ -15,10 +14,7 @@ export default function LeaderboardPage() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <Navbar
-        title="Cohort Leaderboard & Badges"
-        subtitle="Rankings, professional XP milestones, and earned peer endorsements"
-      />
+      
 
       <div className="p-8 max-w-5xl mx-auto w-full space-y-8">
         {/* Class Champion Spotlight */}

@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Navbar } from '@/components/Navbar';
-import { IconCertificate as GraduationCap, IconCircleCheck as CheckCircle2, IconXCircle as XCircle, IconVideo as Video, IconSparkles as Sparkles, IconAlertTriangle as AlertTriangle, IconSend as Send, IconExternalLink as ExternalLink } from '@tabler/icons-react';
+import { IconCertificate as GraduationCap, IconCircleCheck as CheckCircle2, IconCircleX as XCircle, IconVideo as Video, IconSparkles as Sparkles, IconAlertTriangle as AlertTriangle, IconSend as Send, IconExternalLink as ExternalLink } from '@tabler/icons-react';
 
 export default function MentorPage() {
   const [reviews, setReviews] = useState([
@@ -37,10 +36,7 @@ export default function MentorPage() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <Navbar
-        title="Mentor Air-Traffic Control"
-        subtitle="Review console, student health alerts, and AI rubric generator"
-      />
+      
 
       <div className="p-8 max-w-6xl mx-auto w-full space-y-8">
         {/* Mentor Health Alerts */}

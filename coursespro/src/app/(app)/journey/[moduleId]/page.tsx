@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Navbar } from '@/components/Navbar';
-import { IconPlayCircle as PlayCircle, IconSparkles as Sparkles, IconBook as BookOpen, IconHelpCircle as HelpCircle, IconCircleCheck as CheckCircle2, IconArrowLeft as ArrowLeft, IconArrowRight as ArrowRight, IconSend as Send, IconAward as Award } from '@tabler/icons-react';
+import { IconPlayerPlay as PlayCircle, IconSparkles as Sparkles, IconBook as BookOpen, IconHelpCircle as HelpCircle, IconCircleCheck as CheckCircle2, IconArrowLeft as ArrowLeft, IconArrowRight as ArrowRight, IconSend as Send, IconAward as Award } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function LessonPlayerPage() {
@@ -26,10 +25,7 @@ export default function LessonPlayerPage() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <Navbar
-        title="Stage 02 • Practical Application"
-        subtitle="High-Performance API Design with Go & GORM"
-      />
+      
 
       <div className="p-8 max-w-6xl mx-auto w-full space-y-6">
         {/* Back Link */}

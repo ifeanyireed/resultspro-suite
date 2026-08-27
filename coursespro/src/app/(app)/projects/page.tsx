@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Navbar } from '@/components/Navbar';
-import { IconBook as BookOpen, IconCircleCheck as CheckCircle2, IconClock as Clock, IconUpload as Upload, IconLink2 as Link2, IconMessage as MessageSquare, IconStar as Star, IconSparkles as Sparkles, IconArrowRight as ArrowRight, IconExternalLink as ExternalLink } from '@tabler/icons-react';
+import { IconBook as BookOpen, IconCircleCheck as CheckCircle2, IconClock as Clock, IconUpload as Upload, IconLink as Link2, IconMessage as MessageSquare, IconStar as Star, IconSparkles as Sparkles, IconArrowRight as ArrowRight, IconExternalLink as ExternalLink } from '@tabler/icons-react';
 import { mockProjects } from '@/lib/data';
 
 export default function ProjectsPage() {
@@ -11,10 +10,7 @@ export default function ProjectsPage() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <Navbar
-        title="Stage 03 • Projects & Submissions"
-        subtitle="Deliver production-ready implementations against structured rubrics"
-      />
+      
 
       <div className="p-8 max-w-6xl mx-auto w-full space-y-8">
         {mockProjects.map((project) => (

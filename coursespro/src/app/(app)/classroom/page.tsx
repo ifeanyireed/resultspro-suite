@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Navbar } from '@/components/Navbar';
-import { IconRadio as Radio, IconUsers2 as Users2, IconMic as Mic, IconHeadphones as Headphones, IconVideo as Video, IconMessage as MessageSquare, IconSparkles as Sparkles, IconArrowRight as ArrowRight, IconPlus as Plus } from '@tabler/icons-react';
+import { IconRadio as Radio, IconUsersGroup as Users2, IconMicrophone as Mic, IconHeadphones as Headphones, IconVideo as Video, IconMessage as MessageSquare, IconSparkles as Sparkles, IconArrowRight as ArrowRight, IconPlus as Plus } from '@tabler/icons-react';
 import { mockPresence } from '@/lib/data';
 
 export default function ClassroomPage() {
@@ -42,10 +41,7 @@ export default function ClassroomPage() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <Navbar
-        title="Alive Classroom & Voice Rooms"
-        subtitle="Real-time ambient presence, open office hours, and collaborative study halls"
-      />
+      
 
       <div className="p-8 max-w-6xl mx-auto w-full space-y-8">
         {/* Virtual Study Rooms Grid */}
