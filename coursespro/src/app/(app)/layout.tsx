@@ -14,6 +14,11 @@ import {
   FolderOpenIcon,
   VideoCameraIcon,
   UserGroupIcon,
+  ChatBubbleLeftEllipsisIcon,
+  CalendarIcon,
+  DocumentDuplicateIcon,
+  GlobeAltIcon,
+  StarIcon,
   AcademicCapIcon,
   TrophyIcon,
   Cog6ToothIcon,
@@ -83,6 +88,15 @@ export default function AppLayout({
                 <BriefcaseIcon className="w-6 h-6" />
                 Workspace
               </Link>
+
+              <Link href="/portfolio" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/portfolio') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
+                <GlobeAltIcon className="w-6 h-6" />
+                Portfolio
+              </Link>
+              <Link href="/resources" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/resources') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
+                <DocumentDuplicateIcon className="w-6 h-6" />
+                Resources
+              </Link>
             </div>
 
             <div className="px-6 mt-8 space-y-1">
@@ -103,6 +117,15 @@ export default function AppLayout({
                 <UserGroupIcon className="w-6 h-6" />
                 Peers
               </Link>
+
+              <Link href="/messages" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/messages') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
+                <ChatBubbleLeftEllipsisIcon className="w-6 h-6" />
+                Messages
+              </Link>
+              <Link href="/calendar" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/calendar') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
+                <CalendarIcon className="w-6 h-6" />
+                Calendar
+              </Link>
               
               <Link href="/mentor" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/mentor') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
                 <AcademicCapIcon className="w-6 h-6" />
@@ -112,6 +135,11 @@ export default function AppLayout({
               <Link href="/leaderboard" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/leaderboard') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
                 <TrophyIcon className="w-6 h-6" />
                 Leaderboard
+              </Link>
+
+              <Link href="/achievements" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/achievements') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
+                <StarIcon className="w-6 h-6" />
+                Achievements
               </Link>
 
               <div className="pt-4 mt-4 border-t border-gray-100">
