@@ -16,7 +16,7 @@ export default function CohortsPage() {
   return (
     <main>
       <Navbar />
-      <section className="section-py bg-navy text-white text-center">
+      <section className="section-py bg-navy text-white text-center" style={{ marginTop: "-72px", paddingTop: "calc(5rem + 72px)" }}>
         <div className="container-nets max-w-3xl pt-16">
           <h1 className="text-d2 fw-300 mb-6">Browse Open Cohorts</h1>
           <p className="text-body-lg text-muted-light mb-10">

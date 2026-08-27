@@ -6,7 +6,7 @@ export default function ApplyPage() {
   return (
     <main>
       <Navbar />
-      <section className="section-py bg-navy text-white">
+      <section className="section-py bg-navy text-white" style={{ marginTop: "-72px", paddingTop: "calc(5rem + 72px)" }}>
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center pt-16">
             <div>
