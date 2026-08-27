@@ -4,27 +4,27 @@ import Link from 'next/link';
 
 const footerSections = [
   {
-    title: 'Services',
+    title: 'Platform',
     links: [
-      { label: 'Practice Mode',             href: '/practice' },
-      { label: 'Live Games',                href: '/live' },
-      { label: 'Battle Mode',               href: '/battle-mode' },
-      { label: 'AI Study Assistant',        href: '/study-assistant' },
+      { label: 'Browse Cohorts',            href: '/cohorts' },
+      { label: 'Enterprise Training',       href: '/enterprise' },
+      { label: 'Pricing & Plans',           href: '/pricing' },
+      { label: 'Student Workspace',         href: '/dashboard' },
     ],
   },
   {
     title: 'Company',
     links: [
-      { label: 'Leaderboard',               href: '/leaderboard' },
-      { label: 'Blog',                      href: '/blog' },
-      { label: 'Refer & Earn',              href: '/referral' },
-      { label: 'Coin Shop',                 href: '/shop' },
+      { label: 'About CoursesPRO',          href: '/about' },
+      { label: 'Become an Instructor',      href: '/apply' },
+      { label: 'Our Blog',                  href: '/blog' },
+      { label: 'Careers',                   href: '/careers' },
     ],
   },
   {
     title: 'Support',
     links: [
-      { label: 'Contact Support',           href: '/support' },
+      { label: 'Help Center',               href: '/support' },
       { label: 'Terms of Service',          href: '/terms' },
       { label: 'Privacy Policy',            href: '/privacy' },
     ],
@@ -46,93 +46,40 @@ export default function Footer() {
               <img src="/logo.png" alt="CoursesPRO Logo" style={{ height: '80px', width: 'auto', objectFit: 'contain' }} />
             </Link>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '2rem' }}>
-              Nigeria's ultimate CBT practice platform. Supercharge your prep with AI tutoring, live multiplayer games, and battle modes.
+              The ultimate cohort-based learning operating system. Upskill with live classes, peer-to-peer collaboration, and industry-leading mentors.
             </p>
-
-            {/* Contact quick */}
-            {[
-              { label: 'Email',    value: 'hello@resultspro.ng' },
-              { label: 'Location', value: 'Lagos, Nigeria' },
-            ].map(c => (
-              <div key={c.label} style={{ display: 'flex', gap: '1rem', marginBottom: '0.625rem', alignItems: 'flex-start' }}>
-                <span style={{
-                  fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.1em',
-                  color: 'var(--color-nets-red)', textTransform: 'uppercase',
-                  width: '52px', flexShrink: 0, paddingTop: '1px',
-                }}>{c.label}</span>
-                <span style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.6)' }}>{c.value}</span>
-              </div>
-            ))}
+            <div style={{ display: 'flex', gap: '1rem', opacity: 0.7 }}>
+              <span className="text-white">© {new Date().getFullYear()} CoursesPRO. All rights reserved.</span>
+            </div>
           </div>
 
           {/* Nav columns */}
-          <div
-            style={{ gridColumn: 'span 12', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem' }}
-            className="lg:col-span-7 lg:col-start-6"
-          >
-            {footerSections.map(sec => (
-              <div key={sec.title}>
-                <h3 style={{
-                  fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.15em',
-                  textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)',
-                  marginBottom: '1.5rem',
-                }}>
-                  {sec.title}
-                </h3>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.875rem', padding: 0, margin: 0 }}>
-                  {sec.links.map(lk => {
-                    const style = { fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', transition: 'color 0.15s ease', textDecoration: 'none' }
-                    const onEnter = (e: React.MouseEvent<HTMLElement>) => (e.currentTarget.style.color = '#fff')
-                    const onLeave = (e: React.MouseEvent<HTMLElement>) => (e.currentTarget.style.color = 'rgba(255,255,255,0.5)')
-                    
-                    return (
-                      <li key={lk.label}>
-                        <Link href={lk.href} style={style} onMouseEnter={onEnter} onMouseLeave={onLeave}>
-                          {lk.label}
+          <div style={{ gridColumn: 'span 12' }} className="lg:col-span-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+              {footerSections.map(section => (
+                <div key={section.title}>
+                  <h4 style={{ color: 'white', fontWeight: 600, marginBottom: '1.5rem', fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    {section.title}
+                  </h4>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {section.links.map(link => (
+                      <li key={link.label}>
+                        <Link 
+                          href={link.href}
+                          style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.875rem', textDecoration: 'none', transition: 'color 0.2s ease' }}
+                          onMouseEnter={e => e.currentTarget.style.color = 'var(--color-nets-red)'}
+                          onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
+                        >
+                          {link.label}
                         </Link>
                       </li>
-                    )
-                  })}
-                </ul>
-              </div>
-            ))}
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Bottom bar */}
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="container-nets" style={{
-          paddingTop: '1.5rem', paddingBottom: '1.5rem',
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          flexWrap: 'wrap', gap: '1rem',
-        }}>
-          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem' }}>
-            © {new Date().getFullYear()} CoursesPRO.ng · All rights reserved
-          </div>
-          <div style={{ display: 'flex', gap: '0.25rem' }}>
-            {[
-              { label: 'Privacy Policy', href: '/privacy' },
-              { label: 'Terms of Service', href: '/terms' },
-            ].map((l, i) => (
-              <span key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                {i > 0 && <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '0.75rem' }}>·</span>}
-                <Link href={l.href} style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.25)', transition: 'color 0.15s', textDecoration: 'none' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.25)')}>
-                  {l.label}
-                </Link>
-              </span>
-            ))}
-          </div>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
-            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="ResultsPRO on Twitter"
-              style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.3)', transition: 'color 0.15s', textDecoration: 'none' }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}>
-              Twitter
-            </a>
-          </div>
         </div>
       </div>
     </footer>
