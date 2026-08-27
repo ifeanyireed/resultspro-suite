@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import { IconClock, IconTrendingUp } from '@tabler/icons-react';
 
 export default function CohortsPage() {
   const cohorts = [
@@ -38,8 +39,8 @@ export default function CohortsPage() {
                 <div className="p-6">
                   <h3 className="text-xl fw-600 mb-3">{cohort.title}</h3>
                   <div className="flex gap-4 text-sm text-muted mb-6">
-                    <span className="flex items-center gap-1">⏱ {cohort.duration}</span>
-                    <span className="flex items-center gap-1">📈 {cohort.level}</span>
+                    <span className="flex items-center gap-1"><IconClock size={16} /> {cohort.duration}</span>
+                    <span className="flex items-center gap-1"><IconTrendingUp size={16} /> {cohort.level}</span>
                   </div>
                   <Link href="/signup" className="btn btn-navy w-full text-center block">
                     Join Cohort
