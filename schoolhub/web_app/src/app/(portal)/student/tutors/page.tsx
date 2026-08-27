@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { 
-  Plus01Icon, 
   Clock01Icon, 
   Book02Icon,
   VideoCamera01Icon,
@@ -42,7 +41,7 @@ export default function StudentTutorHub() {
           </p>
         </div>
         <button style={{ background: '#10b981', color: 'white', border: 'none', padding: '1rem 1.5rem', borderRadius: '1.25rem', fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(16, 185, 129, 0.25)' }}>
-          <Plus01Icon size={20} />
+          <PlusIcon style={{ width: 20, height: 20 }} />
           Book New Session
         </button>
       </header>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { DashboardHeader } from "@/components/DashboardLayout";
 import { IconTrendingUp as TrendingUp, IconChevronRight as ChevronRight, IconClock as Clock, IconAlertCircle as AlertCircle, IconAward as Award, IconChevronLeft as ChevronLeft } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -77,7 +76,7 @@ export default function ParentDashboard() {
   if (loading) {
     return (
       <div className="flex-1 pb-12 animate-in fade-in duration-500">
-        <DashboardHeader title="Parent Overview" />
+        
         <main className="p-8 space-y-10">
           <div className="flex flex-col md:flex-row gap-8 items-center justify-between">
             <div className="space-y-3">
@@ -111,23 +110,23 @@ export default function ParentDashboard() {
 
   return (
     <div className="flex-1 pb-12">
-      <DashboardHeader title="Parent Overview" />
+      
       
       <main className="p-8 space-y-10">
         {/* Welcome & Quick Stats */}
         <div className="flex flex-col md:flex-row gap-8 items-center justify-between">
            <div>
-              <h2 className="text-3xl font-bold text-white mb-2 font-display">Hello, {parentName}</h2>
-              <p className="text-muted-foreground">Here&apos;s how your children are performing this week.</p>
+              <h2 className="text-3xl font-bold text-gray-900 mb-2 font-display">Hello, {parentName}</h2>
+              <p className="text-gray-500">Here&apos;s how your children are performing this week.</p>
            </div>
            <div className="flex gap-4">
-              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center min-w-[120px]">
-                 <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Avg. Score</p>
-                 <p className="text-xl font-bold text-green">{avgScore > 0 ? `${avgScore}%` : 'N/A'}</p>
+              <div className="p-4 rounded-2xl bg-white shadow-sm border border-gray-100 text-center min-w-[120px]">
+                 <p className="text-[10px] font-bold text-gray-500 uppercase mb-1">Avg. Score</p>
+                 <p className="text-xl font-bold text-emerald-600">{avgScore > 0 ? `${avgScore}%` : 'N/A'}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center min-w-[120px]">
-                 <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Total Time</p>
-                 <p className="text-xl font-bold text-blue">12h</p>
+              <div className="p-4 rounded-2xl bg-white shadow-sm border border-gray-100 text-center min-w-[120px]">
+                 <p className="text-[10px] font-bold text-gray-500 uppercase mb-1">Total Time</p>
+                 <p className="text-xl font-bold text-[#146ef5]">12h</p>
               </div>
            </div>
         </div>
@@ -135,57 +134,57 @@ export default function ParentDashboard() {
         {/* Children Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
            {children.length > 0 ? children.map((child) => (
-              <div key={child.id} className="p-8 rounded-[40px] bg-white/5 border border-white/10 hover:border-white/20 transition-all group relative overflow-hidden">
+              <div key={child.id} className="p-8 rounded-[40px] bg-white shadow-sm border border-gray-100 hover:border-gray-200 transition-all group relative overflow-hidden">
                  <div className="absolute top-0 right-0 p-8">
                     <Link href={`/dashboard/parent/progress?childId=${child.id}`}>
-                      <button className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-muted-foreground hover:text-white transition-colors">
+                      <button className="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors">
                          <ChevronRight className="w-5 h-5" />
                       </button>
                     </Link>
                  </div>
                  
                  <div className="flex items-center gap-6 mb-8">
-                    <div className="w-20 h-20 rounded-3xl bg-navy border-2 border-white/10 flex items-center justify-center text-2xl font-bold text-white shadow-2xl">
+                    <div className="w-20 h-20 rounded-3xl bg-[#146ef5] border-2 border-gray-100 flex items-center justify-center text-2xl font-bold text-white shadow-2xl">
                        {child.name.split(' ').map(n => n[0]).join('')}
                     </div>
                     <div>
-                       <h3 className="text-2xl font-bold text-white group-hover:text-green transition-colors">{child.name}</h3>
-                       <p className="text-muted-foreground text-sm font-medium">{child.class} Student</p>
+                       <h3 className="text-2xl font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">{child.name}</h3>
+                       <p className="text-gray-500 text-sm font-medium">{child.class} Student</p>
                     </div>
                  </div>
 
                  <div className="space-y-6">
                     <div className="space-y-2">
                        <div className="flex justify-between text-xs font-bold">
-                          <span className="text-muted-foreground uppercase tracking-widest">Weekly Goal Progress</span>
-                          <span className="text-white">{child.progress}%</span>
+                          <span className="text-gray-500 uppercase tracking-widest">Weekly Goal Progress</span>
+                          <span className="text-gray-900">{child.progress}%</span>
                        </div>
-                       <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                          <div className="h-full bg-green transition-all duration-1000" style={{ width: `${child.progress}%` }} />
+                       <div className="h-2 w-full bg-white shadow-sm border border-gray-100 rounded-full overflow-hidden">
+                          <div className="h-full bg-emerald-600 transition-all duration-1000" style={{ width: `${child.progress}%` }} />
                        </div>
                     </div>
                     
-                    <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                    <div className="flex items-center gap-2 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
                        <Clock className="w-3 h-3" /> Last: {child.lastActivity}
                     </div>
                  </div>
 
                  <div className="grid grid-cols-2 gap-3 mt-8">
                     <Link href={`/dashboard/parent/progress?childId=${child.id}`} className="w-full">
-                       <Button variant="outline" className="w-full border-white/10 text-white h-11 font-bold text-xs">
+                       <Button variant="outline" className="w-full border-gray-100 text-gray-900 h-11 font-bold text-xs">
                           Full Report
                        </Button>
                     </Link>
                     <Link href={`/dashboard/parent/messages?childId=${child.id}`} className="w-full">
-                       <Button variant="outline" className="w-full border-white/10 text-white h-11 font-bold text-xs">
+                       <Button variant="outline" className="w-full border-gray-100 text-gray-900 h-11 font-bold text-xs">
                           Ask Teacher
                        </Button>
                     </Link>
                  </div>
               </div>
            )) : (
-             <div className="col-span-full p-12 text-center bg-white/5 border border-dashed border-white/10 rounded-[40px]">
-                <p className="text-muted-foreground">No children linked to your account yet.</p>
+             <div className="col-span-full p-12 text-center bg-white shadow-sm border border-gray-100 border border-dashed border-gray-100 rounded-[40px]">
+                <p className="text-gray-500">No children linked to your account yet.</p>
              </div>
            )}
         </div>
@@ -194,25 +193,25 @@ export default function ParentDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
            <div className="lg:col-span-2 space-y-6 flex flex-col">
               <div className="flex items-center justify-between px-2">
-                 <h3 className="text-xl font-bold text-white font-display">Recent Activity</h3>
+                 <h3 className="text-xl font-bold text-gray-900 font-display">Recent Activity</h3>
                  {totalItems > limit && (
                     <div className="flex items-center gap-2">
                        <Button 
                          variant="outline" 
                          size="icon" 
-                         className="h-8 w-8 border-white/10 text-white disabled:opacity-30"
+                         className="h-8 w-8 border-gray-100 text-gray-900 disabled:opacity-30"
                          onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                          disabled={currentPage === 1}
                        >
                           <ChevronLeft className="w-3 h-3" />
                        </Button>
-                       <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-2">
+                       <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest px-2">
                           {currentPage} / {totalPages}
                        </span>
                        <Button 
                          variant="outline" 
                          size="icon" 
-                         className="h-8 w-8 border-white/10 text-white disabled:opacity-30"
+                         className="h-8 w-8 border-gray-100 text-gray-900 disabled:opacity-30"
                          onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                          disabled={currentPage === totalPages}
                        >
@@ -222,29 +221,29 @@ export default function ParentDashboard() {
                  )}
               </div>
 
-              <div className="bg-white/5 border border-white/10 rounded-[32px] overflow-hidden flex-1">
+              <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden flex-1">
                  {currentActivities.length > 0 ? currentActivities.map((item, i) => (
                     <div key={i} className="p-5 flex items-center gap-5 border-b border-white/5 last:border-0 hover:bg-white/[0.02] transition-colors">
                        <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", 
-                          item.type === 'score' ? 'bg-green/10 text-green' : 
-                          item.type === 'achievement' ? 'bg-amber/10 text-amber' : 'bg-red-500/10 text-red-500'
+                          item.type === 'score' ? 'bg-emerald-50 text-emerald-600' : 
+                          item.type === 'achievement' ? 'bg-amber-50 text-amber-600' : 'bg-red-500/10 text-red-500'
                        )}>
                           {item.type === 'score' && <TrendingUp className="w-5 h-5" />}
                           {item.type === 'achievement' && <Award className="w-5 h-5" />}
                           {item.type === 'alert' && <AlertCircle className="w-5 h-5" />}
                        </div>
                        <div className="flex-1">
-                          <p className="text-sm text-white/90">
-                             <span className="font-bold text-white">{item.child}</span> {item.action}
+                          <p className="text-sm text-gray-900/90">
+                             <span className="font-bold text-gray-900">{item.child}</span> {item.action}
                           </p>
-                          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">{item.time}</p>
+                          <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">{item.time}</p>
                        </div>
-                       <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-white">
+                       <Button variant="ghost" size="sm" className="text-gray-500 hover:text-gray-900">
                           <ChevronRight className="w-4 h-4" />
                        </Button>
                     </div>
                  )) : (
-                   <div className="p-8 text-center text-muted-foreground text-sm">
+                   <div className="p-8 text-center text-gray-500 text-sm">
                       No recent activity found.
                    </div>
                  )}
@@ -254,12 +253,12 @@ export default function ParentDashboard() {
               {totalItems > 5 && (
                 <div className="flex justify-end mt-4 px-2">
                    <div className="flex items-center gap-3">
-                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Show</span>
+                      <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Show</span>
                       <Select value={itemsPerPage} onValueChange={(val) => { setItemsPerPage(val); setCurrentPage(1); }}>
-                         <SelectTrigger className="w-16 bg-navy border-white/10 text-white h-8 rounded-lg text-[10px]">
+                         <SelectTrigger className="w-16 bg-[#146ef5] border-gray-100 text-white h-8 rounded-lg text-[10px]">
                             <SelectValue placeholder="5" />
                          </SelectTrigger>
-                         <SelectContent className="bg-navy border-white/10 text-white">
+                         <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
                             <SelectItem value="5">5</SelectItem>
                             <SelectItem value="10">10</SelectItem>
                             <SelectItem value="20">20</SelectItem>
@@ -271,21 +270,21 @@ export default function ParentDashboard() {
            </div>
 
            <div className="space-y-6">
-              <h3 className="text-xl font-bold text-white font-display px-2">Key Highlights</h3>
-              <div className="p-8 rounded-[32px] bg-gradient-to-br from-blue/20 to-green/10 border border-white/10 space-y-6">
+              <h3 className="text-xl font-bold text-gray-900 font-display px-2">Key Highlights</h3>
+              <div className="p-8 rounded-[32px] bg-gradient-to-br from-blue/20 to-green/10 border border-gray-100 space-y-6">
                  <div className="space-y-2">
-                    <h4 className="text-xs font-black text-green uppercase tracking-[0.2em]">Strength</h4>
-                    <p className="text-sm text-white font-bold leading-relaxed">
+                    <h4 className="text-xs font-black text-emerald-600 uppercase tracking-[0.2em]">Strength</h4>
+                    <p className="text-sm text-gray-900 font-bold leading-relaxed">
                        Your children are making steady progress in their assigned subjects. Keep it up!
                     </p>
                  </div>
                  <div className="space-y-2 pt-6 border-t border-white/5">
-                    <h4 className="text-xs font-black text-amber uppercase tracking-[0.2em]">Next Step</h4>
-                    <p className="text-sm text-white font-bold leading-relaxed">
+                    <h4 className="text-xs font-black text-amber-600 uppercase tracking-[0.2em]">Next Step</h4>
+                    <p className="text-sm text-gray-900 font-bold leading-relaxed">
                        Review the full report to see detailed performance by topic and subject.
                     </p>
                  </div>
-                 <Button className="w-full bg-white text-navy font-black h-11 hover:bg-white/90 text-xs uppercase tracking-widest mt-4">
+                 <Button className="w-full bg-white text-white font-black h-11 hover:bg-white/90 text-xs uppercase tracking-widest mt-4">
                     View Study Plan
                  </Button>
               </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { IconSearch as Search, IconSend as Send, IconUser as User, IconMessageCircle as MessageCircle, IconChevronRight as ChevronRight, IconClock as Clock, IconArrowLeft as ArrowLeft, IconLoader2 as Loader2, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
+import { IconSearch as Search, IconSend as Send, IconUser as User, IconMessageCircle as MessageCircle, IconChevronRight as ChevronRight, IconClock as Clock, IconArrowLeft as ArrowLeft, IconLoader2 as Loader2, IconExclamationCircle as AlertCircle } from '@tabler/icons-react';
 import { axiosInstance as axios } from '@/lib/axiosConfig';
 import { useToast } from '@/hooks/use-toast';
 import { formatDistanceToNow } from 'date-fns';

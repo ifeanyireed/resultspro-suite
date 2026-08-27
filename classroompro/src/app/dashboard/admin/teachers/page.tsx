@@ -1,6 +1,5 @@
 "use client";
 
-import { DashboardHeader } from "@/components/DashboardLayout";
 import { IconPlus as Plus, IconSearch as Search, IconDotsVertical as MoreVertical, IconFilter as Filter } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +25,7 @@ export default function ManageTeachersPage() {
   if (loading) {
     return (
       <div className="flex-1 pb-12 animate-in fade-in duration-500">
-        <DashboardHeader title="Manage Teachers" />
+        
         <main className="p-8 space-y-6">
           <div className="flex justify-between items-center">
             <div className="space-y-3">
@@ -44,80 +43,80 @@ export default function ManageTeachersPage() {
 
   return (
     <div className="flex-1">
-      <DashboardHeader title="Manage Teachers" />
+      
       
       <main className="p-8 space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-bold text-white font-display">Faculty Directory</h2>
-            <p className="text-sm text-muted-foreground">Manage your school's teaching staff and their assignments.</p>
+            <h2 className="text-2xl font-bold text-gray-900 font-display">Faculty Directory</h2>
+            <p className="text-sm text-gray-500">Manage your school's teaching staff and their assignments.</p>
           </div>
-          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
+          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold">
             <Plus className="w-4 h-4 mr-2" /> Add New Teacher
           </Button>
         </div>
 
         {/* Filters */}
-        <div className="flex gap-4 bg-white/5 p-4 rounded-2xl border border-white/10">
+        <div className="flex gap-4 bg-white shadow-sm border border-gray-100 p-4 rounded-2xl border border-gray-100">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
             <Input 
               placeholder="Search by name, email, or subject..." 
-              className="pl-10 bg-navy border-white/10 text-white"
+              className="pl-10 bg-[#146ef5] border-gray-100 text-white"
             />
           </div>
-          <Button variant="outline" className="border-white/10 hover:bg-white/5 text-white">
+          <Button variant="outline" className="border-gray-100 hover:bg-gray-50 text-gray-900">
             <Filter className="w-4 h-4 mr-2" /> Filter
           </Button>
         </div>
 
         {/* Teachers Table */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/10 bg-white/[0.02]">
-                <th className="p-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">Teacher</th>
-                <th className="p-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">Subjects</th>
-                <th className="p-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">Classes</th>
-                <th className="p-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">Status</th>
-                <th className="p-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">Actions</th>
+              <tr className="border-b border-gray-100 bg-white/[0.02]">
+                <th className="p-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Teacher</th>
+                <th className="p-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Subjects</th>
+                <th className="p-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Classes</th>
+                <th className="p-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Status</th>
+                <th className="p-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/10">
+            <tbody className="divide-y divide-gray-100">
               {teachersData.map((teacher) => (
                 <tr key={teacher.id} className="hover:bg-white/[0.02] transition-colors group">
                   <td className="p-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-blue/20 text-blue flex items-center justify-center font-bold">
+                      <div className="w-10 h-10 rounded-full bg-blue/20 text-[#146ef5] flex items-center justify-center font-bold">
                         {teacher.name.charAt(0)}
                       </div>
                       <div>
-                        <div className="text-sm font-bold text-white">{teacher.name}</div>
-                        <div className="text-[10px] text-muted-foreground">{teacher.email}</div>
+                        <div className="text-sm font-bold text-gray-900">{teacher.name}</div>
+                        <div className="text-[10px] text-gray-500">{teacher.email}</div>
                       </div>
                     </div>
                   </td>
                   <td className="p-4">
                     <div className="flex flex-wrap gap-1">
                       {teacher.subjects.map((sub, i) => (
-                        <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-white border border-white/10">
+                        <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-white shadow-sm border border-gray-100 text-gray-900 border border-gray-100">
                           {sub}
                         </span>
                       ))}
                     </div>
                   </td>
                   <td className="p-4">
-                    <div className="text-xs text-muted-foreground">{teacher.classes.join(", ")}</div>
+                    <div className="text-xs text-gray-500">{teacher.classes.join(", ")}</div>
                   </td>
                   <td className="p-4">
                     <span className={cn("text-[10px] font-bold px-2 py-1 rounded-lg uppercase tracking-wider",
-                      teacher.status === "Active" ? "text-green bg-green/10" : "text-amber bg-amber/10"
+                      teacher.status === "Active" ? "text-emerald-600 bg-emerald-50" : "text-amber-600 bg-amber-50"
                     )}>
                       {teacher.status}
                     </span>
                   </td>
                   <td className="p-4">
-                    <button className="text-muted-foreground hover:text-white transition-colors">
+                    <button className="text-gray-500 hover:text-gray-900 transition-colors">
                       <MoreVertical className="w-5 h-5" />
                     </button>
                   </td>

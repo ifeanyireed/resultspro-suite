@@ -1,111 +1,209 @@
+
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
 import { 
-  AnalyticsUpIcon, 
-  Activity04Icon, 
-  Download01Icon
-} from 'hugeicons-react';
-import api from '@/lib/api';
+  DocumentTextIcon,
+  ChartBarIcon,
+  ArrowUpRightIcon,
+  UserGroupIcon,
+  BoltIcon,
+  CheckCircleIcon,
+  EllipsisHorizontalIcon,
+  UserPlusIcon,
+  ShoppingCartIcon,
+  PauseIcon,
+  StopIcon
+} from '@heroicons/react/24/outline';
+import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 
-export default function AdminSchoolInsights() {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get('/admin/insights');
-        setData(response.data);
-      } catch (error) {
-        console.error('Failed to fetch admin insights data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (loading) return <div style={{ padding: '2rem' }}>Loading Insights Hub...</div>;
-  if (!data) return <div style={{ padding: '2rem' }}>Failed to load insights data.</div>;
-
+export default function InsightsDashboard() {
   return (
-    <div style={{ maxWidth: '1200px', paddingBottom: '4rem' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
+    <>
+      <div className="flex items-end justify-between mb-8 mt-2">
         <div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
-            School Insights Hub
-          </h1>
-          <p style={{ color: '#64748b', fontSize: '1.1rem', fontWeight: '500' }}>
-            Consolidated oversight across ClassroomPRO, ExamPRO, TutorsPRO, and Scholars.ng ecosystem.
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Insights Hub</h1>
+          <p className="text-sm text-gray-500 mt-1">School-wide analytics and intelligence.</p>
         </div>
-        <button style={{ background: '#1e293b', color: 'white', border: 'none', padding: '1rem 1.5rem', borderRadius: '1.25rem', fontWeight: '700', fontSize: '1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-           <Download01Icon size={18} />
-           Export Ecosystem Report
-        </button>
-      </header>
-
-      {/* Product Summary Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '3rem' }}>
-        {data.products?.map((item: any, i: number) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.1 }}
-            style={{ background: 'white', padding: '1.5rem', borderRadius: '2rem', border: '1px solid #f1f5f9' }}
-          >
-             <div style={{ fontSize: '0.75rem', fontWeight: '800', color: item.color, background: item.bg, padding: '0.25rem 0.6rem', borderRadius: '2rem', display: 'inline-block', marginBottom: '1.25rem' }}>{item.product}</div>
-             <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b' }}>{item.metric}</div>
-             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.5rem' }}>
-                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />
-                <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: '600' }}>{item.status}</span>
-             </div>
-             <button style={{ width: '100%', marginTop: '1.5rem', padding: '0.6rem', borderRadius: '0.75rem', background: '#f8fafc', border: '1px solid #f1f5f9', color: '#1e293b', fontWeight: '700', fontSize: '0.75rem', cursor: 'pointer' }}>Drill Down</button>
-          </motion.div>
-        ))}
+        <div className="flex items-center gap-3">
+          <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
+            <DocumentTextIcon className="w-4 h-4" />
+            Generate Report
+          </button>
+          <button className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-[#f6f9f8] text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
+            <ChartBarIcon className="w-4 h-4" />
+            View Analytics
+          </button>
+        </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2.5rem' }}>
-         {/* Adoption Trends */}
-         <div style={{ background: 'white', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '2rem' }}>Cross-Platform Adoption</h2>
-            <div style={{ height: '250px', width: '100%', display: 'flex', alignItems: 'flex-end', gap: '2rem', padding: '0 2rem' }}>
-               {data.products?.map((item: any, i: number) => (
-                 <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-                    <motion.div 
-                      initial={{ height: 0 }}
-                      animate={{ height: `${item.val}%` }}
-                      style={{ width: '100%', background: item.color, borderRadius: '0.5rem 0.5rem 0 0', opacity: 0.8 }} 
-                    />
-                    <span style={{ fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8' }}>{item.label}</span>
-                 </div>
-               ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        
+        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+          <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
+          <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
+          
+          <div className="flex justify-between items-start z-10">
+            <h3 className="text-xl font-normal text-white">Global Engagement</h3>
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm group-hover:bg-white group-hover:text-[#146ef5] transition-colors">
+              <ArrowUpRightIcon className="w-4 h-4" />
             </div>
-         </div>
+          </div>
+          <div className="z-10">
+            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">1,248</h2>
+            <div className="flex items-center gap-1.5 text-xs text-white/80">
+              <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> +12%</div>
+              <span>vs Last Month</span>
+            </div>
+          </div>
+        </div>
 
-         {/* Flagged Areas */}
-         <div style={{ background: '#f8fafc', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.5rem' }}>Management Focus</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-               {data.focus_areas?.map((area: any, i: number) => (
-                 <div key={i} style={{ background: 'white', padding: '1.25rem', borderRadius: '1.25rem', border: '1px solid #f1f5f9' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: area.color, marginBottom: '0.5rem' }}>
-                       {area.icon === 'activity' && <Activity04Icon size={16} />}
-                       {area.icon === 'analytics' && <AnalyticsUpIcon size={16} />}
-                       <span style={{ fontSize: '0.8rem', fontWeight: '800' }}>{area.title}</span>
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">System Health</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <UserGroupIcon className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">94%</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> +2.4%</div>
+              <span>vs Last Month</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Active Users</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <BoltIcon className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">342</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <span className="text-gray-400">Total this week</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Data Processed</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <CheckCircleIcon className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">89%</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <span className="text-gray-400">Overall average</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+        
+        <div className="lg:col-span-9 flex flex-col gap-3">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-9 gap-3">
+            
+            <div className="lg:col-span-5 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-normal text-gray-900">Recent Activity</h3>
+                <button className="text-gray-400 hover:text-gray-900 transition-colors">
+                  <EllipsisHorizontalIcon className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="flex-1 flex flex-col justify-between gap-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                        <img src="/photo01.jpeg" alt="Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <div>
+                      <h4 className="text-base font-normal text-gray-900">System Update</h4>
+                      <p className="text-sm text-gray-500">Processed <span className="font-medium text-gray-700">Records</span></p>
                     </div>
-                    <p style={{ fontSize: '0.8rem', color: '#64748b', lineHeight: 1.5, margin: 0 }}>{area.desc}</p>
-                 </div>
-               ))}
+                  </div>
+                  <span className="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-md">Completed</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                        <img src="/photo02.jpeg" alt="Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <div>
+                      <h4 className="text-base font-normal text-gray-900">Data Sync</h4>
+                      <p className="text-sm text-gray-500">Connecting <span className="font-medium text-gray-700">API</span></p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-1 bg-yellow-50 text-yellow-600 text-[10px] font-bold rounded-md">Pending</span>
+                </div>
+              </div>
             </div>
-            <button style={{ width: '100%', marginTop: '2rem', padding: '1rem', borderRadius: '1.25rem', background: '#1e293b', color: 'white', border: 'none', fontWeight: '700', fontSize: '0.9rem', cursor: 'pointer' }}>
-               Monitor Flagged Students
-            </button>
-         </div>
+
+            <div className="lg:col-span-4 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col items-center">
+              <h3 className="text-xl font-normal text-gray-900 mb-6 self-start">Target Progress</h3>
+              
+              <div className="relative w-full aspect-[2/1] max-w-[260px] flex items-end justify-center mt-2 mb-4">
+                <svg viewBox="0 0 100 50" className="w-full h-full overflow-visible">
+                  <defs>
+                    <pattern id="stripes-arc" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                      <line x1="0" y1="0" x2="0" y2="4" stroke="#d1d5db" strokeWidth="2" />
+                    </pattern>
+                  </defs>
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="url(#stripes-arc)" strokeWidth="15" strokeLinecap="round" strokeDasharray="125.66 125.66" strokeDashoffset="0" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#111827" strokeWidth="15" strokeLinecap="round" strokeDasharray="82.93 125.66" strokeDashoffset="0" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#146ef5" strokeWidth="15" strokeLinecap="round" strokeDasharray="51.52 125.66" strokeDashoffset="0" />
+                </svg>
+                <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end translate-y-[15%]">
+                  <span className="text-5xl font-normal tracking-tight text-gray-900">41%</span>
+                  <span className="text-xs font-medium text-gray-500 mt-1">Target Reached</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 mt-auto w-full justify-center pt-6">
+                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#146ef5]"></div><span className="text-xs text-gray-500 font-medium">Completed</span></div>
+                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#111827]"></div><span className="text-xs text-gray-500 font-medium">In Progress</span></div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-white border border-gray-200" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 1px, #d1d5db 1px, #d1d5db 3px)' }}></div>
+                  <span className="text-xs text-gray-500 font-medium">Pending</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="lg:col-span-3 flex flex-col gap-3">
+          
+          <div className="w-full bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
+            <h3 className="text-xl font-normal text-gray-900 mb-6">Alerts</h3>
+            <div className="flex-1 flex flex-col gap-8 pb-2">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                  <CheckCircleIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-base font-normal text-gray-900">Sync Complete</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Just now</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center shrink-0">
+                  <UserPlusIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-base font-normal text-gray-900">New Target</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Assigned to team</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
+    </>
   );
 }

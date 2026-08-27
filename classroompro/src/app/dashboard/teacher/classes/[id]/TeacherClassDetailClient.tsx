@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { DashboardHeader } from "@/components/DashboardLayout";
 import { IconUsers as Users, IconArrowLeft as ArrowLeft, IconBook as BookOpen, IconBrain as BrainCircuit, IconCertificate as GraduationCap, IconChartBar as BarChart3, IconSearch as Search, IconDotsVertical as MoreVertical, IconMail as Mail, IconFilePlus as FilePlus } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +27,7 @@ export function TeacherClassDetailClient() {
   if (loading) {
     return (
       <div className="flex-1 pb-12 animate-in fade-in duration-500">
-        <DashboardHeader title="Class Details" />
+        
         <div className="p-8 max-w-7xl mx-auto space-y-8">
            <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -57,27 +56,27 @@ export function TeacherClassDetailClient() {
 
   return (
     <div className="flex-1 pb-12">
-      <DashboardHeader title="Class Details" />
+      
       
       <div className="p-8 max-w-7xl mx-auto space-y-8">
         {/* Header Section */}
         <div className="flex items-center justify-between">
            <div className="flex items-center gap-4">
-              <Link href="/dashboard/teacher/classes" className="w-10 h-10 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors">
-                 <ArrowLeft className="w-5 h-5 text-white" />
+              <Link href="/dashboard/teacher/classes" className="w-10 h-10 rounded-full hover:bg-gray-50 flex items-center justify-center transition-colors">
+                 <ArrowLeft className="w-5 h-5 text-gray-900" />
               </Link>
               <div>
-                 <h2 className="text-2xl font-bold text-white mb-1">SSS 1 - Mathematics</h2>
-                 <p className="text-sm text-muted-foreground flex items-center gap-2">
+                 <h2 className="text-2xl font-bold text-gray-900 mb-1">SSS 1 - Mathematics</h2>
+                 <p className="text-sm text-gray-500 flex items-center gap-2">
                     <Users className="w-4 h-4" /> 32 Students Enrolled
                  </p>
               </div>
            </div>
            <div className="flex gap-3">
-              <Button variant="outline" className="border-white/10 text-white">
+              <Button variant="outline" className="border-gray-100 text-gray-900">
                  <Mail className="w-4 h-4 mr-2" /> Message All
               </Button>
-              <Button className="bg-green-600 text-white font-bold">
+              <Button className="bg-emerald-600 text-white font-bold">
                  <FilePlus className="w-4 h-4 mr-2" /> Add Material
               </Button>
            </div>
@@ -85,33 +84,33 @@ export function TeacherClassDetailClient() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-           <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-              <div className="w-10 h-10 rounded-xl bg-blue/10 flex items-center justify-center text-blue mb-4">
+           <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#146ef5] mb-4">
                  <BarChart3 className="w-5 h-5" />
               </div>
-              <p className="text-xs text-muted-foreground uppercase font-bold tracking-widest mb-1">Avg. Performance</p>
-              <h4 className="text-2xl font-bold text-white">78%</h4>
+              <p className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Avg. Performance</p>
+              <h4 className="text-2xl font-bold text-gray-900">78%</h4>
            </div>
-           <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-              <div className="w-10 h-10 rounded-xl bg-green/10 flex items-center justify-center text-green mb-4">
+           <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 mb-4">
                  <BookOpen className="w-5 h-5" />
               </div>
-              <p className="text-xs text-muted-foreground uppercase font-bold tracking-widest mb-1">Notes Assigned</p>
-              <h4 className="text-2xl font-bold text-white">12</h4>
+              <p className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Notes Assigned</p>
+              <h4 className="text-2xl font-bold text-gray-900">12</h4>
            </div>
-           <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-              <div className="w-10 h-10 rounded-xl bg-amber/10 flex items-center justify-center text-amber mb-4">
+           <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 mb-4">
                  <BrainCircuit className="w-5 h-5" />
               </div>
-              <p className="text-xs text-muted-foreground uppercase font-bold tracking-widest mb-1">Active Quizzes</p>
-              <h4 className="text-2xl font-bold text-white">4</h4>
+              <p className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Active Quizzes</p>
+              <h4 className="text-2xl font-bold text-gray-900">4</h4>
            </div>
-           <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
+           <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
               <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500 mb-4">
                  <GraduationCap className="w-5 h-5" />
               </div>
-              <p className="text-xs text-muted-foreground uppercase font-bold tracking-widest mb-1">Next Assessment</p>
-              <h4 className="text-2xl font-bold text-white">May 15</h4>
+              <p className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Next Assessment</p>
+              <h4 className="text-2xl font-bold text-gray-900">May 15</h4>
            </div>
         </div>
 
@@ -119,17 +118,17 @@ export function TeacherClassDetailClient() {
            {/* Student List */}
            <div className="lg:col-span-2 space-y-6">
               <div className="flex items-center justify-between">
-                 <h3 className="text-xl font-bold text-white">Student Roster</h3>
+                 <h3 className="text-xl font-bold text-gray-900">Student Roster</h3>
                  <div className="relative w-64">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input placeholder="Search students..." className="pl-9 bg-white/5 border-white/10 text-white" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <Input placeholder="Search students..." className="pl-9 bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900" />
                  </div>
               </div>
 
-              <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden">
+              <div className="bg-white shadow-sm border border-gray-100 rounded-3xl overflow-hidden">
                  <table className="w-full text-left">
                     <thead>
-                       <tr className="border-b border-white/5 bg-white/5 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                       <tr className="border-b border-white/5 bg-white shadow-sm border border-gray-100 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
                           <th className="px-6 py-4">Student</th>
                           <th className="px-6 py-4">Avg. Score</th>
                           <th className="px-6 py-4">Status</th>
@@ -141,33 +140,33 @@ export function TeacherClassDetailClient() {
                           <tr key={student.id} className="hover:bg-white/[0.02] transition-colors">
                              <td className="px-6 py-4">
                                 <div className="flex items-center gap-3">
-                                   <div className="w-8 h-8 rounded-full bg-navy border border-white/10 flex items-center justify-center text-xs font-bold text-green uppercase">
+                                   <div className="w-8 h-8 rounded-full bg-[#146ef5] border border-gray-100 flex items-center justify-center text-xs font-bold text-emerald-600 uppercase">
                                       {student.name.charAt(0)}
                                    </div>
                                    <div>
-                                      <div className="text-sm font-bold text-white">{student.name}</div>
-                                      <div className="text-[10px] text-muted-foreground">{student.email}</div>
+                                      <div className="text-sm font-bold text-gray-900">{student.name}</div>
+                                      <div className="text-[10px] text-gray-500">{student.email}</div>
                                    </div>
                                 </div>
                              </td>
                              <td className="px-6 py-4">
                                 <div className="flex items-center gap-2">
-                                   <div className="w-16 h-1.5 bg-navy rounded-full overflow-hidden">
-                                      <div className="h-full bg-green" style={{ width: student.score }} />
+                                   <div className="w-16 h-1.5 bg-[#146ef5] rounded-full overflow-hidden">
+                                      <div className="h-full bg-emerald-600" style={{ width: student.score }} />
                                    </div>
-                                   <span className="text-xs font-bold text-white">{student.score}</span>
+                                   <span className="text-xs font-bold text-gray-900">{student.score}</span>
                                 </div>
                              </td>
                              <td className="px-6 py-4">
                                 <span className={cn(
                                    "px-2 py-0.5 rounded text-[10px] font-bold",
-                                   student.status === "Active" ? "bg-green/10 text-green" : "bg-white/5 text-muted-foreground"
+                                   student.status === "Active" ? "bg-emerald-50 text-emerald-600" : "bg-white shadow-sm border border-gray-100 text-gray-500"
                                 )}>
                                    {student.status}
                                 </span>
                              </td>
                              <td className="px-6 py-4 text-right">
-                                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-white">
+                                <Button variant="ghost" size="icon" className="text-gray-500 hover:text-gray-900">
                                    <MoreVertical className="w-4 h-4" />
                                 </Button>
                              </td>
@@ -180,25 +179,25 @@ export function TeacherClassDetailClient() {
 
            {/* Quick Actions / Activity */}
            <div className="space-y-6">
-              <h3 className="text-xl font-bold text-white">Class Activity</h3>
-              <div className="p-6 rounded-3xl bg-white/5 border border-white/10 space-y-6">
+              <h3 className="text-xl font-bold text-gray-900">Class Activity</h3>
+              <div className="p-6 rounded-3xl bg-white shadow-sm border border-gray-100 space-y-6">
                  {[
                     { student: "Jessica Alabi", action: "completed 'Calculus III' note", time: "2m ago" },
                     { student: "Daniel Smith", action: "scored 92% in 'Limits' quiz", time: "15m ago" },
                     { student: "Fatima Yusuf", action: "started studying flashcards", time: "1h ago" },
                  ].map((activity, i) => (
                     <div key={i} className="flex gap-4 group">
-                       <div className="w-1.5 h-1.5 rounded-full bg-green mt-1.5 shrink-0" />
+                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-1.5 shrink-0" />
                        <div>
-                          <p className="text-xs text-white/90">
-                             <span className="font-bold text-white">{activity.student}</span> {activity.action}
+                          <p className="text-xs text-gray-900/90">
+                             <span className="font-bold text-gray-900">{activity.student}</span> {activity.action}
                           </p>
-                          <p className="text-[10px] text-muted-foreground mt-1 uppercase tracking-widest">{activity.time}</p>
+                          <p className="text-[10px] text-gray-500 mt-1 uppercase tracking-widest">{activity.time}</p>
                        </div>
                     </div>
                  ))}
                  <div className="pt-4 mt-2 border-t border-white/5">
-                    <Button variant="ghost" className="w-full text-xs text-blue font-bold">Create new assessment</Button>
+                    <Button variant="ghost" className="w-full text-xs text-[#146ef5] font-bold">Create new assessment</Button>
                  </div>
               </div>
            </div>

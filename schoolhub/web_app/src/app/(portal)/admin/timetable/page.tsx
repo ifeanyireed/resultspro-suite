@@ -1,131 +1,209 @@
+
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Plus01Icon, FilterIcon, UserGroupIcon, Location01Icon, Clock01Icon } from 'hugeicons-react';
-import api from '@/lib/api';
+import React from 'react';
+import { 
+  DocumentTextIcon,
+  ChartBarIcon,
+  ArrowUpRightIcon,
+  UserGroupIcon,
+  BoltIcon,
+  CheckCircleIcon,
+  EllipsisHorizontalIcon,
+  UserPlusIcon,
+  ShoppingCartIcon,
+  PauseIcon,
+  StopIcon
+} from '@heroicons/react/24/outline';
+import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 
-export default function AdminTimetablePage() {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get('/admin/timetable');
-        setData(response.data);
-      } catch (error) {
-        console.error('Failed to fetch admin timetable data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (loading) return <div style={{ padding: '2rem' }}>Loading Timetable...</div>;
-  if (!data) return <div style={{ padding: '2rem' }}>Failed to load timetable data.</div>;
-
+export default function TimetableDashboard() {
   return (
-    <div style={{ maxWidth: '1200px', paddingBottom: '4rem' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
+    <>
+      <div className="flex items-end justify-between mb-8 mt-2">
         <div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
-            Master Timetable
-          </h1>
-          <p style={{ color: '#64748b', fontSize: '1.1rem', fontWeight: '500' }}>
-            Manage the institutional schedule, assign teachers to rooms, and resolve scheduling conflicts.
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Class Timetable</h1>
+          <p className="text-sm text-gray-500 mt-1">Master schedule and room allocation.</p>
         </div>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-           <button style={{ background: 'white', border: '1px solid #e2e8f0', padding: '0.75rem 1.25rem', borderRadius: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '700', color: '#1e293b', cursor: 'pointer' }}>
-             <FilterIcon size={18} />
-             Conflict Check
-           </button>
-           <button style={{ background: '#146ef5', color: 'white', border: 'none', padding: '1rem 1.5rem', borderRadius: '1.25rem', fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(20, 110, 245, 0.25)' }}>
-             <Plus01Icon size={20} />
-             Add Class Session
-           </button>
+        <div className="flex items-center gap-3">
+          <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
+            <DocumentTextIcon className="w-4 h-4" />
+            Generate Report
+          </button>
+          <button className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-[#f6f9f8] text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
+            <ChartBarIcon className="w-4 h-4" />
+            View Analytics
+          </button>
         </div>
-      </header>
+      </div>
 
-      <div style={{ background: 'white', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem' }}>
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
-           {data.classes?.map((cls: string, i: number) => (
-             <button 
-               key={i} 
-               style={{ 
-                 padding: '0.6rem 1.25rem', 
-                 borderRadius: '2rem', 
-                 border: i === 4 ? '2px solid #146ef5' : '1px solid #e2e8f0', 
-                 background: i === 4 ? '#eff6ff' : 'white',
-                 color: i === 4 ? '#146ef5' : '#64748b',
-                 fontWeight: '700',
-                 fontSize: '0.85rem',
-                 whiteSpace: 'nowrap',
-                 cursor: 'pointer'
-               }}
-             >
-               {cls}
-             </button>
-           ))}
-        </div>
-
-        <div style={{ minWidth: '800px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
-            <div />
-            {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].map(day => (
-              <div key={day} style={{ textAlign: 'center', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
-                {day}
-              </div>
-            ))}
-          </div>
-
-          {[ '08:00', '09:00', '10:00', '11:00', '12:00', '13:00' ].map((hour, hIdx) => (
-            <div key={hour} style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: '1rem', height: '100px', borderTop: '1px solid #f1f5f9' }}>
-               <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '600', paddingTop: '0.5rem' }}>{hour}</div>
-               {[0, 1, 2, 3, 4].map(dIdx => (
-                 <div key={dIdx} style={{ padding: '0.5rem' }}>
-                    {(hIdx + dIdx) % 3 === 0 && (
-                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '1rem', padding: '0.75rem', height: '100%', fontSize: '0.75rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                         <div style={{ fontWeight: '800', color: '#1e293b' }}>Mathematics</div>
-                         <div style={{ color: '#64748b', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '0.2rem', marginTop: '0.2rem' }}>
-                            <Location01Icon size={10} /> Room 402
-                         </div>
-                      </div>
-                    )}
-                 </div>
-               ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        
+        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+          <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
+          <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
+          
+          <div className="flex justify-between items-start z-10">
+            <h3 className="text-xl font-normal text-white">Active Sessions</h3>
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm group-hover:bg-white group-hover:text-[#146ef5] transition-colors">
+              <ArrowUpRightIcon className="w-4 h-4" />
             </div>
-          ))}
+          </div>
+          <div className="z-10">
+            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">1,248</h2>
+            <div className="flex items-center gap-1.5 text-xs text-white/80">
+              <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> +12%</div>
+              <span>vs Last Month</span>
+            </div>
+          </div>
         </div>
+
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Room Utilization</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <UserGroupIcon className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">94%</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> +2.4%</div>
+              <span>vs Last Month</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Teacher Load</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <BoltIcon className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">342</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <span className="text-gray-400">Total this week</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Conflicts</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <CheckCircleIcon className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">89%</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <span className="text-gray-400">Overall average</span>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <div style={{ marginTop: '2.5rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
-         <div style={{ background: '#f8fafc', borderRadius: '1.5rem', padding: '1.5rem', border: '1px solid #f1f5f9' }}>
-            <h3 style={{ fontSize: '0.9rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-               <UserGroupIcon size={18} color="#146ef5" />
-               Teacher Utilization
-            </h3>
-            <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b' }}>{data.stats?.utilization}</div>
-            <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>Average teacher workload across all departments.</p>
-         </div>
-         <div style={{ background: '#f8fafc', borderRadius: '1.5rem', padding: '1.5rem', border: '1px solid #f1f5f9' }}>
-            <h3 style={{ fontSize: '0.9rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-               <Location01Icon size={18} color="#10b981" />
-               Room Availability
-            </h3>
-            <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b' }}>{data.stats?.rooms}</div>
-            <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>Available for extra-curricular or special sessions.</p>
-         </div>
-         <div style={{ background: '#fef2f2', borderRadius: '1.5rem', padding: '1.5rem', border: '1px solid #fee2e2' }}>
-            <h3 style={{ fontSize: '0.9rem', fontWeight: '800', color: '#ef4444', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-               <Clock01Icon size={18} />
-               Conflicts Detected
-            </h3>
-            <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#ef4444' }}>{data.stats?.conflicts}</div>
-            <p style={{ fontSize: '0.75rem', color: '#991b1b', marginTop: '0.25rem' }}>No scheduling overlaps found in current term.</p>
-         </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+        
+        <div className="lg:col-span-9 flex flex-col gap-3">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-9 gap-3">
+            
+            <div className="lg:col-span-5 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-normal text-gray-900">Recent Activity</h3>
+                <button className="text-gray-400 hover:text-gray-900 transition-colors">
+                  <EllipsisHorizontalIcon className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="flex-1 flex flex-col justify-between gap-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                        <img src="/photo01.jpeg" alt="Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <div>
+                      <h4 className="text-base font-normal text-gray-900">System Update</h4>
+                      <p className="text-sm text-gray-500">Processed <span className="font-medium text-gray-700">Records</span></p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-md">Completed</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                        <img src="/photo02.jpeg" alt="Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <div>
+                      <h4 className="text-base font-normal text-gray-900">Data Sync</h4>
+                      <p className="text-sm text-gray-500">Connecting <span className="font-medium text-gray-700">API</span></p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-1 bg-yellow-50 text-yellow-600 text-[10px] font-bold rounded-md">Pending</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-4 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col items-center">
+              <h3 className="text-xl font-normal text-gray-900 mb-6 self-start">Target Progress</h3>
+              
+              <div className="relative w-full aspect-[2/1] max-w-[260px] flex items-end justify-center mt-2 mb-4">
+                <svg viewBox="0 0 100 50" className="w-full h-full overflow-visible">
+                  <defs>
+                    <pattern id="stripes-arc" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                      <line x1="0" y1="0" x2="0" y2="4" stroke="#d1d5db" strokeWidth="2" />
+                    </pattern>
+                  </defs>
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="url(#stripes-arc)" strokeWidth="15" strokeLinecap="round" strokeDasharray="125.66 125.66" strokeDashoffset="0" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#111827" strokeWidth="15" strokeLinecap="round" strokeDasharray="82.93 125.66" strokeDashoffset="0" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#146ef5" strokeWidth="15" strokeLinecap="round" strokeDasharray="51.52 125.66" strokeDashoffset="0" />
+                </svg>
+                <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end translate-y-[15%]">
+                  <span className="text-5xl font-normal tracking-tight text-gray-900">41%</span>
+                  <span className="text-xs font-medium text-gray-500 mt-1">Target Reached</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 mt-auto w-full justify-center pt-6">
+                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#146ef5]"></div><span className="text-xs text-gray-500 font-medium">Completed</span></div>
+                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#111827]"></div><span className="text-xs text-gray-500 font-medium">In Progress</span></div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-white border border-gray-200" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 1px, #d1d5db 1px, #d1d5db 3px)' }}></div>
+                  <span className="text-xs text-gray-500 font-medium">Pending</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="lg:col-span-3 flex flex-col gap-3">
+          
+          <div className="w-full bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
+            <h3 className="text-xl font-normal text-gray-900 mb-6">Alerts</h3>
+            <div className="flex-1 flex flex-col gap-8 pb-2">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                  <CheckCircleIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-base font-normal text-gray-900">Sync Complete</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Just now</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center shrink-0">
+                  <UserPlusIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-base font-normal text-gray-900">New Target</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Assigned to team</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
+    </>
   );
 }

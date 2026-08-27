@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAuthStore } from '@/store/useAuthStore';
+// import { useAuthStore } from '@/store/useAuthStore';
 import api from '@/lib/api';
-import { getUnreadCount } from '@/lib/notifications.api';
+// import { getUnreadCount } from '@/lib/notifications.api';
 import { IconBell as Bell } from '@tabler/icons-react';
 
 export default function Navbar() {
@@ -14,7 +14,9 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   
-  const { user, isAuthenticated } = useAuthStore();
+  // Mocked for resultspro until auth store is ported over
+  const isAuthenticated = false;
+  const user = null;
   const [mounted, setMounted] = useState(false);
   const [featureFlags, setFeatureFlags] = useState<Record<string, string>>({});
   const [unreadCount, setUnreadCount] = useState(0);

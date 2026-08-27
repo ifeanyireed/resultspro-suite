@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { DashboardHeader } from "@/components/DashboardLayout";
 import { IconPlus as Plus, IconSearch as Search, IconTrash as Trash2, IconEdit as Edit, IconBook as BookOpen, IconCircleCheck as CheckCircle2, IconFilter as Filter, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -105,7 +104,7 @@ export default function SuperAdminSyllabusPage() {
   if (loading) {
     return (
       <div className="flex-1 pb-12 animate-in fade-in duration-500">
-        <DashboardHeader title="Curriculum Management" />
+        
         <main className="p-8 space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[1, 2, 3].map(i => <Skeleton key={i} className="h-32 rounded-3xl" />)}
@@ -122,41 +121,41 @@ export default function SuperAdminSyllabusPage() {
 
   return (
     <div className="flex-1 animate-in fade-in duration-500">
-      <DashboardHeader title="Curriculum Management" />
+      
       
       <main className="p-8 space-y-8">
         {/* Stats / Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-           <div className="bg-white/5 border border-white/10 p-6 rounded-3xl">
+           <div className="bg-white shadow-sm border border-gray-100 p-6 rounded-3xl">
               <div className="flex items-center gap-4 mb-4">
-                 <div className="w-10 h-10 rounded-xl bg-green/10 flex items-center justify-center text-green">
+                 <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
                     <BookOpen className="w-5 h-5" />
                  </div>
-                 <span className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Total Topics</span>
+                 <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Total Topics</span>
               </div>
-              <div className="text-3xl font-bold text-white font-display">
+              <div className="text-3xl font-bold text-gray-900 font-display">
                 {topics.length}
               </div>
            </div>
-           <div className="bg-white/5 border border-white/10 p-6 rounded-3xl">
+           <div className="bg-white shadow-sm border border-gray-100 p-6 rounded-3xl">
               <div className="flex items-center gap-4 mb-4">
-                 <div className="w-10 h-10 rounded-xl bg-blue/10 flex items-center justify-center text-blue">
+                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#146ef5]">
                     <CheckCircle2 className="w-5 h-5" />
                  </div>
-                 <span className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Active Subjects</span>
+                 <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Active Subjects</span>
               </div>
-              <div className="text-3xl font-bold text-white font-display">
+              <div className="text-3xl font-bold text-gray-900 font-display">
                 {subjects.length}
               </div>
            </div>
-           <div className="bg-white/5 border border-white/10 p-6 rounded-3xl">
+           <div className="bg-white shadow-sm border border-gray-100 p-6 rounded-3xl">
               <div className="flex items-center gap-4 mb-4">
-                 <div className="w-10 h-10 rounded-xl bg-amber/10 flex items-center justify-center text-amber">
+                 <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
                     <Filter className="w-5 h-5" />
                  </div>
-                 <span className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Global Classes</span>
+                 <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">Global Classes</span>
               </div>
-              <div className="text-3xl font-bold text-white font-display">
+              <div className="text-3xl font-bold text-gray-900 font-display">
                 {classes.length}
               </div>
            </div>
@@ -164,41 +163,41 @@ export default function SuperAdminSyllabusPage() {
 
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="relative w-full md:w-96">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
             <Input 
               placeholder="Search syllabus topics..." 
-              className="pl-10 bg-white/5 border-white/10 text-white rounded-xl"
+              className="pl-10 bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900 rounded-xl"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <Button onClick={() => setShowAddModal(true)} className="bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl px-6 h-12 shadow-lg shadow-green/10">
+          <Button onClick={() => setShowAddModal(true)} className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl px-6 h-12 shadow-lg shadow-green/10">
             <Plus className="w-4 h-4 mr-2" /> Add New Topic
           </Button>
         </div>
 
         {/* Topics Table */}
-        <div className="bg-white/5 border border-white/10 rounded-[32px] overflow-hidden">
+        <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
            <div className="overflow-x-auto">
              <table className="w-full text-left border-collapse">
                 <thead>
-                   <tr className="bg-white/5 border-b border-white/10">
-                      <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Topic Title</th>
-                      <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Subject</th>
-                      <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Class</th>
-                      <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Term</th>
-                      <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-right">Actions</th>
+                   <tr className="bg-white shadow-sm border border-gray-100 border-b border-gray-100">
+                      <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Topic Title</th>
+                      <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Subject</th>
+                      <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Class</th>
+                      <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Term</th>
+                      <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest text-right">Actions</th>
                    </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
                    {currentTopics.map((topic) => (
                       <tr key={topic.id} className="hover:bg-white/[0.02] transition-colors group">
                          <td className="px-6 py-4">
-                            <div className="font-bold text-white">{topic.title}</div>
-                            <div className="text-[10px] text-muted-foreground">{topic.notes?.length || 0} Attached Notes</div>
+                            <div className="font-bold text-gray-900">{topic.title}</div>
+                            <div className="text-[10px] text-gray-500">{topic.notes?.length || 0} Attached Notes</div>
                          </td>
                          <td className="px-6 py-4">
-                            <span className="px-2 py-1 rounded bg-blue/10 text-blue text-[10px] font-bold uppercase tracking-widest">
+                            <span className="px-2 py-1 rounded bg-blue-50 text-[#146ef5] text-[10px] font-bold uppercase tracking-widest">
                                {topic.subject?.name || "General"}
                             </span>
                          </td>
@@ -206,14 +205,14 @@ export default function SuperAdminSyllabusPage() {
                             {topic.class?.name}
                          </td>
                          <td className="px-6 py-4">
-                            <span className="text-white font-medium">Term {topic.term}</span>
+                            <span className="text-gray-900 font-medium">Term {topic.term}</span>
                          </td>
                          <td className="px-6 py-4 text-right">
                             <div className="flex justify-end gap-2">
-                               <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-white">
+                               <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-gray-900">
                                   <Edit className="w-4 h-4" />
                                 </Button>
-                               <Button onClick={() => handleDeleteTopic(topic.id)} variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-500">
+                               <Button onClick={() => handleDeleteTopic(topic.id)} variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-red-500">
                                   <Trash2 className="w-4 h-4" />
                                </Button>
                             </div>
@@ -228,12 +227,12 @@ export default function SuperAdminSyllabusPage() {
            {totalItems > limit && (
              <div className="p-6 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 bg-white/[0.02]">
                 <div className="flex items-center gap-4">
-                   <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Show</span>
+                   <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Show</span>
                    <Select value={itemsPerPage} onValueChange={setItemsPerPage}>
-                      <SelectTrigger className="w-20 bg-navy border-white/10 text-white h-9 rounded-xl">
+                      <SelectTrigger className="w-20 bg-[#146ef5] border-gray-100 text-white h-9 rounded-xl">
                          <SelectValue placeholder="10" />
                       </SelectTrigger>
-                      <SelectContent className="bg-navy border-white/10 text-white">
+                      <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
                          <SelectItem value="10">10</SelectItem>
                          <SelectItem value="25">25</SelectItem>
                          <SelectItem value="50">50</SelectItem>
@@ -245,7 +244,7 @@ export default function SuperAdminSyllabusPage() {
                    <Button 
                      variant="outline" 
                      size="icon" 
-                     className="h-9 w-9 border-white/10 text-white disabled:opacity-30"
+                     className="h-9 w-9 border-gray-100 text-gray-900 disabled:opacity-30"
                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                      disabled={currentPage === 1}
                    >
@@ -257,12 +256,12 @@ export default function SuperAdminSyllabusPage() {
                         .filter(p => p === 1 || p === totalPages || (p >= currentPage - 1 && p <= currentPage + 1))
                         .map((p, i, arr) => (
                            <span key={p} className="flex items-center gap-1">
-                              {i > 0 && arr[i-1] !== p - 1 && <span className="text-muted-foreground px-1">...</span>}
+                              {i > 0 && arr[i-1] !== p - 1 && <span className="text-gray-500 px-1">...</span>}
                               <Button
                                 variant={currentPage === p ? "default" : "outline"}
                                 className={cn(
                                    "h-9 w-9 rounded-xl font-bold text-xs",
-                                   currentPage === p ? "bg-green-600 text-white hover:bg-green/90" : "border-white/10 text-white"
+                                   currentPage === p ? "bg-emerald-600 text-white hover:bg-emerald-600/90" : "border-gray-100 text-white"
                                 )}
                                 onClick={() => setCurrentPage(p)}
                               >
@@ -276,7 +275,7 @@ export default function SuperAdminSyllabusPage() {
                    <Button 
                      variant="outline" 
                      size="icon" 
-                     className="h-9 w-9 border-white/10 text-white disabled:opacity-30"
+                     className="h-9 w-9 border-gray-100 text-gray-900 disabled:opacity-30"
                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                      disabled={currentPage === totalPages}
                    >
@@ -284,7 +283,7 @@ export default function SuperAdminSyllabusPage() {
                    </Button>
                 </div>
 
-                <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">
+                <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">
                    Page {currentPage} of {totalPages}
                 </p>
              </div>
@@ -294,40 +293,40 @@ export default function SuperAdminSyllabusPage() {
 
       {/* Add Topic Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-navy/80 backdrop-blur-sm">
-           <div className="bg-navy border border-white/10 rounded-[32px] w-full max-w-md p-8 shadow-2xl">
-              <h2 className="text-2xl font-bold text-white mb-6">Add New Topic</h2>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#146ef5]/80 backdrop-blur-sm">
+           <div className="bg-[#146ef5] border border-gray-100 rounded-[32px] w-full max-w-md p-8 shadow-2xl">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Add New Topic</h2>
               <form onSubmit={handleAddTopic} className="space-y-4">
                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Topic Title</label>
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Topic Title</label>
                     <Input 
                       required
                       value={newTopic.title}
                       onChange={(e) => setNewTopic({...newTopic, title: e.target.value})}
                       placeholder="e.g. Quantum Physics" 
-                      className="bg-white/5 border-white/10 text-white h-12 rounded-xl" 
+                      className="bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900 h-12 rounded-xl" 
                     />
                  </div>
                  
                  <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                       <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Subject</label>
+                       <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Subject</label>
                        <Select value={newTopic.subjectId} onValueChange={(val) => setNewTopic({...newTopic, subjectId: val})}>
-                          <SelectTrigger className="bg-white/5 border-white/10 text-white h-12 rounded-xl">
+                          <SelectTrigger className="bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900 h-12 rounded-xl">
                              <SelectValue placeholder="Select" />
                           </SelectTrigger>
-                          <SelectContent className="bg-navy border-white/10 text-white">
+                          <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
                              {subjects.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                           </SelectContent>
                        </Select>
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Class</label>
+                       <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Class</label>
                        <Select value={newTopic.classId} onValueChange={(val) => setNewTopic({...newTopic, classId: val})}>
-                          <SelectTrigger className="bg-white/5 border-white/10 text-white h-12 rounded-xl">
+                          <SelectTrigger className="bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900 h-12 rounded-xl">
                              <SelectValue placeholder="Select" />
                           </SelectTrigger>
-                          <SelectContent className="bg-navy border-white/10 text-white">
+                          <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
                              {classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                           </SelectContent>
                        </Select>
@@ -335,12 +334,12 @@ export default function SuperAdminSyllabusPage() {
                  </div>
 
                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Term</label>
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Term</label>
                     <Select value={newTopic.term} onValueChange={(val) => setNewTopic({...newTopic, term: val})}>
-                       <SelectTrigger className="bg-white/5 border-white/10 text-white h-12 rounded-xl">
+                       <SelectTrigger className="bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900 h-12 rounded-xl">
                           <SelectValue placeholder="Select Term" />
                        </SelectTrigger>
-                       <SelectContent className="bg-navy border-white/10 text-white">
+                       <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
                           <SelectItem value="1">1st Term</SelectItem>
                           <SelectItem value="2">2nd Term</SelectItem>
                           <SelectItem value="3">3rd Term</SelectItem>
@@ -349,10 +348,10 @@ export default function SuperAdminSyllabusPage() {
                  </div>
 
                  <div className="flex gap-4 pt-4">
-                    <Button type="button" onClick={() => setShowAddModal(false)} variant="outline" className="flex-1 border-white/10 text-white h-12 rounded-xl hover:bg-white/5">
+                    <Button type="button" onClick={() => setShowAddModal(false)} variant="outline" className="flex-1 border-gray-100 text-gray-900 h-12 rounded-xl hover:bg-gray-50">
                        Cancel
                     </Button>
-                    <Button type="submit" className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold h-12 rounded-xl">
+                    <Button type="submit" className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-12 rounded-xl">
                        Save Topic
                     </Button>
                  </div>

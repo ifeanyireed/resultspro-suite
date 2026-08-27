@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus01Icon, Calendar03Icon, Flag01Icon, Tick02Icon, MoreHorizontalIcon } from 'hugeicons-react';
+import { Calendar03Icon, Flag01Icon, Tick02Icon, MoreHorizontalIcon } from 'hugeicons-react';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import api from '@/lib/api';
 
 export default function TeacherTasksPage() {
@@ -38,7 +39,7 @@ export default function TeacherTasksPage() {
           </p>
         </div>
         <button style={{ background: '#146ef5', color: 'white', border: 'none', padding: '1rem 1.5rem', borderRadius: '1.25rem', fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(20, 110, 245, 0.25)' }}>
-          <Plus01Icon size={20} />
+          <PlusIcon style={{ width: 20, height: 20 }} />
           Add Task
         </button>
       </header>

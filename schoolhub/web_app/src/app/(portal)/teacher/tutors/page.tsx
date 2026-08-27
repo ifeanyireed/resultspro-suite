@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import { 
   VideoCamera01Icon, 
   Clock01Icon, 
-  Plus01Icon, 
   NoteIcon,
   Share01Icon
 } from 'hugeicons-react';
@@ -48,7 +47,7 @@ export default function TeacherTutorSchedule() {
           </p>
         </div>
         <button style={{ background: '#10b981', color: 'white', border: 'none', padding: '1rem 1.5rem', borderRadius: '1.25rem', fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(16, 185, 129, 0.25)' }}>
-          <Plus01Icon size={20} />
+          <PlusIcon style={{ width: 20, height: 20 }} />
           Set Availability
         </button>
       </header>

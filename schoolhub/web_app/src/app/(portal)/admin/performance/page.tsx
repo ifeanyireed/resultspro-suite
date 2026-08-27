@@ -1,122 +1,209 @@
+
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { AnalyticsUpIcon, StarIcon, Award01Icon, Activity04Icon, ArrowUp01Icon } from 'hugeicons-react';
-import api from '@/lib/api';
+import React from 'react';
+import { 
+  DocumentTextIcon,
+  ChartBarIcon,
+  ArrowUpRightIcon,
+  UserGroupIcon,
+  BoltIcon,
+  CheckCircleIcon,
+  EllipsisHorizontalIcon,
+  UserPlusIcon,
+  ShoppingCartIcon,
+  PauseIcon,
+  StopIcon
+} from '@heroicons/react/24/outline';
+import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 
-export default function AdminPerformancePage() {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get('/admin/performance');
-        setData(response.data);
-      } catch (error) {
-        console.error('Failed to fetch admin performance data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (loading) return <div style={{ padding: '2rem' }}>Loading Performance Metrics...</div>;
-  if (!data) return <div style={{ padding: '2rem' }}>Failed to load performance data.</div>;
-
+export default function PerformanceDashboard() {
   return (
-    <div style={{ maxWidth: '1200px', paddingBottom: '4rem' }}>
-      <header style={{ marginBottom: '2.5rem' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
-          Institutional Performance
-        </h1>
-        <p style={{ color: '#64748b', fontSize: '1.1rem', fontWeight: '500' }}>
-          High-level academic excellence metrics, departmental rankings, and institutional KPIs.
-        </p>
-      </header>
-
-      {/* KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '3rem' }}>
-        {data.kpis?.map((stat: any, i: number) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            style={{ background: 'white', padding: '1.5rem', borderRadius: '1.75rem', border: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '1rem' }}
-          >
-            <div style={{ width: '48px', height: '48px', borderRadius: '1rem', background: stat.bg, color: stat.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {stat.icon === 'star' && <StarIcon />}
-              {stat.icon === 'award' && <Award01Icon />}
-              {stat.icon === 'analytics' && <AnalyticsUpIcon />}
-              {stat.icon === 'activity' && <Activity04Icon />}
-            </div>
-            <div>
-              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.label}</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b' }}>{stat.value}</div>
-            </div>
-          </motion.div>
-        ))}
+    <>
+      <div className="flex items-end justify-between mb-8 mt-2">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Performance</h1>
+          <p className="text-sm text-gray-500 mt-1">Track staff and academic performance metrics.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
+            <DocumentTextIcon className="w-4 h-4" />
+            Generate Report
+          </button>
+          <button className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-[#f6f9f8] text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
+            <ChartBarIcon className="w-4 h-4" />
+            View Analytics
+          </button>
+        </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2.5rem' }}>
-         {/* Department Performance */}
-         <div style={{ background: 'white', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '2rem' }}>Departmental Breakdown</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-               {data.departments?.map((dept: any, i: number) => (
-                 <div key={i}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'center' }}>
-                       <span style={{ fontWeight: '700', color: '#1e293b' }}>{dept.name}</span>
-                       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                          <span style={{ fontSize: '0.75rem', fontWeight: '800', color: dept.trend.startsWith('+') ? '#10b981' : '#ef4444', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
-                             <ArrowUp01Icon size={12} style={{ transform: dept.trend.startsWith('+') ? 'none' : 'rotate(180deg)' }} />
-                             {dept.trend}
-                          </span>
-                          <span style={{ fontWeight: '800', color: '#1e293b' }}>{dept.score}%</span>
-                       </div>
-                    </div>
-                    <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
-                       <motion.div 
-                         initial={{ width: 0 }}
-                         animate={{ width: `${dept.score}%` }}
-                         transition={{ duration: 1, delay: i * 0.1 }}
-                         style={{ height: '100%', background: dept.color, borderRadius: '4px' }} 
-                       />
-                    </div>
-                 </div>
-               ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        
+        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+          <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
+          <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
+          
+          <div className="flex justify-between items-start z-10">
+            <h3 className="text-xl font-normal text-white">Average Score</h3>
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm group-hover:bg-white group-hover:text-[#146ef5] transition-colors">
+              <ArrowUpRightIcon className="w-4 h-4" />
             </div>
-         </div>
+          </div>
+          <div className="z-10">
+            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">1,248</h2>
+            <div className="flex items-center gap-1.5 text-xs text-white/80">
+              <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> +12%</div>
+              <span>vs Last Month</span>
+            </div>
+          </div>
+        </div>
 
-         {/* Teacher Performance */}
-         <div style={{ background: '#f8fafc', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.5rem' }}>Faculty Highlights</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-               {data.faculty?.map((teacher: any, i: number) => (
-                 <div key={i} style={{ padding: '1rem', background: 'white', borderRadius: '1.25rem', border: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', overflow: 'hidden', position: 'relative' }}>
-                       <Image src={teacher.photo} alt={teacher.name} fill style={{ objectFit: 'cover' }} />
-                    </div>
-                    <div style={{ flex: 1 }}>
-                       <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#1e293b' }}>{teacher.name}</div>
-                       <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: '600' }}>{teacher.dept} Department</div>
-                    </div>
-                    <div style={{ textAlign: 'right' }}>
-                       <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#10b981' }}>{teacher.score}</div>
-                       <div style={{ fontSize: '0.6rem', color: '#94a3b8', fontWeight: '700' }}>Rating</div>
-                    </div>
-                 </div>
-               ))}
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Top Performers</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <UserGroupIcon className="w-4 h-4" />
             </div>
-            <button style={{ width: '100%', marginTop: '2rem', padding: '1rem', borderRadius: '1.25rem', background: '#1e293b', color: 'white', border: 'none', fontWeight: '700', fontSize: '0.9rem', cursor: 'pointer' }}>
-               Full Faculty Audit
-            </button>
-         </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">94%</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> +2.4%</div>
+              <span>vs Last Month</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Appraisals Done</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <BoltIcon className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">342</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <span className="text-gray-400">Total this week</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Goals Met</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <CheckCircleIcon className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">89%</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <span className="text-gray-400">Overall average</span>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+        
+        <div className="lg:col-span-9 flex flex-col gap-3">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-9 gap-3">
+            
+            <div className="lg:col-span-5 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-normal text-gray-900">Recent Activity</h3>
+                <button className="text-gray-400 hover:text-gray-900 transition-colors">
+                  <EllipsisHorizontalIcon className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="flex-1 flex flex-col justify-between gap-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                        <img src="/photo01.jpeg" alt="Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <div>
+                      <h4 className="text-base font-normal text-gray-900">System Update</h4>
+                      <p className="text-sm text-gray-500">Processed <span className="font-medium text-gray-700">Records</span></p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-md">Completed</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                        <img src="/photo02.jpeg" alt="Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <div>
+                      <h4 className="text-base font-normal text-gray-900">Data Sync</h4>
+                      <p className="text-sm text-gray-500">Connecting <span className="font-medium text-gray-700">API</span></p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-1 bg-yellow-50 text-yellow-600 text-[10px] font-bold rounded-md">Pending</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-4 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col items-center">
+              <h3 className="text-xl font-normal text-gray-900 mb-6 self-start">Target Progress</h3>
+              
+              <div className="relative w-full aspect-[2/1] max-w-[260px] flex items-end justify-center mt-2 mb-4">
+                <svg viewBox="0 0 100 50" className="w-full h-full overflow-visible">
+                  <defs>
+                    <pattern id="stripes-arc" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                      <line x1="0" y1="0" x2="0" y2="4" stroke="#d1d5db" strokeWidth="2" />
+                    </pattern>
+                  </defs>
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="url(#stripes-arc)" strokeWidth="15" strokeLinecap="round" strokeDasharray="125.66 125.66" strokeDashoffset="0" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#111827" strokeWidth="15" strokeLinecap="round" strokeDasharray="82.93 125.66" strokeDashoffset="0" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#146ef5" strokeWidth="15" strokeLinecap="round" strokeDasharray="51.52 125.66" strokeDashoffset="0" />
+                </svg>
+                <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end translate-y-[15%]">
+                  <span className="text-5xl font-normal tracking-tight text-gray-900">41%</span>
+                  <span className="text-xs font-medium text-gray-500 mt-1">Target Reached</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 mt-auto w-full justify-center pt-6">
+                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#146ef5]"></div><span className="text-xs text-gray-500 font-medium">Completed</span></div>
+                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#111827]"></div><span className="text-xs text-gray-500 font-medium">In Progress</span></div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-white border border-gray-200" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 1px, #d1d5db 1px, #d1d5db 3px)' }}></div>
+                  <span className="text-xs text-gray-500 font-medium">Pending</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="lg:col-span-3 flex flex-col gap-3">
+          
+          <div className="w-full bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
+            <h3 className="text-xl font-normal text-gray-900 mb-6">Alerts</h3>
+            <div className="flex-1 flex flex-col gap-8 pb-2">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                  <CheckCircleIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-base font-normal text-gray-900">Sync Complete</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Just now</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center shrink-0">
+                  <UserPlusIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-base font-normal text-gray-900">New Target</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Assigned to team</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </>
   );
 }

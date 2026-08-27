@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '@/lib/axiosConfig';
 import { Button } from '@/components/ui/button';
-import { IconAlertCircle as AlertCircle, IconCheck as Check, IconRefreshCw as RefreshCw } from '@tabler/icons-react';
+import { IconExclamationCircle as AlertCircle, IconCheck as Check, IconRefresh as RefreshCw } from '@tabler/icons-react';
 import { useOnboardingStore, Step6Data } from '@/stores/onboardingStore';
 
 interface Plan {

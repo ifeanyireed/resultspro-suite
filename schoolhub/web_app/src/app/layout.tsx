@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { Space_Grotesk, DM_Sans } from "next/font/google";
 import "./globals.css";
-import "./nets.css";
+
 import { TenantProvider } from "../components/TenantProvider";
 
 const spaceGrotesk = Space_Grotesk({
@@ -68,11 +68,11 @@ export default async function RootLayout({
   } as React.CSSProperties : {};
 
   return (
-    <html lang="en" style={themeVars}>
+    <html lang="en" style={themeVars} suppressHydrationWarning>
       <head>
         <link rel="icon" href={tenant?.logo_url || "/logo.png"} />
       </head>
-      <body className={`${spaceGrotesk.variable} ${dmSans.variable} antialiased`}>
+      <body suppressHydrationWarning className={`${spaceGrotesk.variable} ${dmSans.variable} antialiased`}>
         <TenantProvider tenant={tenant}>
           {children}
         </TenantProvider>

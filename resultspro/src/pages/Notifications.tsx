@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { IconClock as Clock, IconTrash2 as Trash2, IconMail as Mail, IconCheckCircle as CheckCircle, IconAlertCircle as AlertCircle, IconMessage as MessageSquare } from '@tabler/icons-react';
+import { IconClock as Clock, IconTrash as Trash2, IconMail as Mail, IconCircleCheck as CheckCircle, IconExclamationCircle as AlertCircle, IconMessage as MessageSquare } from '@tabler/icons-react';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { useNotifications } from '@/hooks/useNotifications';
 import { toast } from 'sonner';

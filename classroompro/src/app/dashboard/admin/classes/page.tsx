@@ -1,6 +1,5 @@
 "use client";
 
-import { DashboardHeader } from "@/components/DashboardLayout";
 import { IconStack2 as Layers, IconPlus as Plus, IconSearch as Search, IconDotsVertical as MoreVertical, IconUsers as Users, IconCertificate as GraduationCap } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +27,7 @@ export default function ManageClassesPage() {
   if (loading) {
     return (
       <div className="flex-1 pb-12 animate-in fade-in duration-500">
-        <DashboardHeader title="Manage Classes" />
+        
         <main className="p-8 space-y-8">
           <div className="flex justify-between items-center">
             <div className="space-y-3">
@@ -48,59 +47,59 @@ export default function ManageClassesPage() {
 
   return (
     <div className="flex-1">
-      <DashboardHeader title="Manage Classes" />
+      
       
       <main className="p-8 space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-bold text-white font-display">Academic Classes</h2>
-            <p className="text-sm text-muted-foreground">Define and manage the grade levels and classes in your school.</p>
+            <h2 className="text-2xl font-bold text-gray-900 font-display">Academic Classes</h2>
+            <p className="text-sm text-gray-500">Define and manage the grade levels and classes in your school.</p>
           </div>
-          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
+          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold">
             <Plus className="w-4 h-4 mr-2" /> Add New Class
           </Button>
         </div>
 
         <div className="relative max-w-md">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
           <Input 
             placeholder="Search classes..." 
-            className="pl-10 bg-white/5 border-white/10 text-white"
+            className="pl-10 bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {classesData.map((cls) => (
-            <div key={cls.id} className="bg-white/5 border border-white/10 rounded-[32px] p-6 hover:border-green/50 transition-all group">
+            <div key={cls.id} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-6 hover:border-green/50 transition-all group">
               <div className="flex justify-between items-start mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-[#146ef5]">
                   <Layers className="w-6 h-6" />
                 </div>
-                <button className="text-muted-foreground hover:text-white transition-colors">
+                <button className="text-gray-500 hover:text-gray-900 transition-colors">
                   <MoreVertical className="w-5 h-5" />
                 </button>
               </div>
 
-              <h3 className="text-xl font-bold text-white mb-1">{cls.name}</h3>
-              <p className="text-xs text-muted-foreground mb-6 uppercase tracking-widest font-bold">{cls.level}</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-1">{cls.name}</h3>
+              <p className="text-xs text-gray-500 mb-6 uppercase tracking-widest font-bold">{cls.level}</p>
 
               <div className="grid grid-cols-2 gap-4 pt-6 border-t border-white/5">
                 <div className="flex items-center gap-2">
-                   <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
-                      <Users className="w-4 h-4 text-muted-foreground" />
+                   <div className="w-8 h-8 rounded-lg bg-white shadow-sm border border-gray-100 flex items-center justify-center">
+                      <Users className="w-4 h-4 text-gray-500" />
                    </div>
                    <div>
-                      <div className="text-sm font-bold text-white">{cls.students}</div>
-                      <div className="text-[8px] text-muted-foreground uppercase font-bold">Students</div>
+                      <div className="text-sm font-bold text-gray-900">{cls.students}</div>
+                      <div className="text-[8px] text-gray-500 uppercase font-bold">Students</div>
                    </div>
                 </div>
                 <div className="flex items-center gap-2">
-                   <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
-                      <GraduationCap className="w-4 h-4 text-muted-foreground" />
+                   <div className="w-8 h-8 rounded-lg bg-white shadow-sm border border-gray-100 flex items-center justify-center">
+                      <GraduationCap className="w-4 h-4 text-gray-500" />
                    </div>
                    <div>
-                      <div className="text-sm font-bold text-white">{cls.teachers}</div>
-                      <div className="text-[8px] text-muted-foreground uppercase font-bold">Teachers</div>
+                      <div className="text-sm font-bold text-gray-900">{cls.teachers}</div>
+                      <div className="text-[8px] text-gray-500 uppercase font-bold">Teachers</div>
                    </div>
                 </div>
               </div>

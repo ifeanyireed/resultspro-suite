@@ -1,143 +1,209 @@
+
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { UserGroupIcon, Plus01Icon, Activity04Icon, StarIcon } from 'hugeicons-react';
-import api from '@/lib/api';
+import React from 'react';
+import { 
+  DocumentTextIcon,
+  ChartBarIcon,
+  ArrowUpRightIcon,
+  UserGroupIcon,
+  BoltIcon,
+  CheckCircleIcon,
+  EllipsisHorizontalIcon,
+  UserPlusIcon,
+  ShoppingCartIcon,
+  PauseIcon,
+  StopIcon
+} from '@heroicons/react/24/outline';
+import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 
-export default function AdminEnrollmentPage() {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get('/admin/enrollment');
-        setData(response.data);
-      } catch (error) {
-        console.error('Failed to fetch admin enrollment data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (loading) return <div style={{ padding: '2rem' }}>Loading Enrollment Analytics...</div>;
-  if (!data) return <div style={{ padding: '2rem' }}>Failed to load enrollment data.</div>;
-
+export default function EnrollmentDashboard() {
   return (
-    <div style={{ maxWidth: '1200px', paddingBottom: '4rem' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
+    <>
+      <div className="flex items-end justify-between mb-8 mt-2">
         <div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
-            Enrollment Analytics
-          </h1>
-          <p style={{ color: '#64748b', fontSize: '1.1rem', fontWeight: '500' }}>
-            Track student population trends, manage grade capacity, and monitor admissions pipeline health.
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Enrollment CRM</h1>
+          <p className="text-sm text-gray-500 mt-1">Monitor admissions and student growth.</p>
         </div>
-        <button style={{ background: '#146ef5', color: 'white', border: 'none', padding: '1rem 1.5rem', borderRadius: '1.25rem', fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(20, 110, 245, 0.25)' }}>
-          <Plus01Icon size={20} />
-          New Enrollment
-        </button>
-      </header>
-
-      {/* Stats Hub */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '3rem' }}>
-        {data.stats?.map((stat: any, i: number) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            style={{ background: 'white', padding: '1.75rem', borderRadius: '2rem', border: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '1.5rem' }}
-          >
-            <div style={{ width: '64px', height: '64px', borderRadius: '1.25rem', background: stat.bg, color: stat.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {stat.icon === 'users' && <UserGroupIcon size={32} />}
-              {stat.icon === 'activity' && <Activity04Icon size={32} />}
-              {stat.icon === 'star' && <StarIcon size={32} />}
-            </div>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.label}</span>
-                <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#10b981', background: '#f0fdf4', padding: '0.1rem 0.4rem', borderRadius: '0.4rem' }}>{stat.trend}</span>
-              </div>
-              <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#1e293b', marginTop: '0.25rem' }}>{stat.value}</div>
-            </div>
-          </motion.div>
-        ))}
+        <div className="flex items-center gap-3">
+          <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
+            <DocumentTextIcon className="w-4 h-4" />
+            Generate Report
+          </button>
+          <button className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-[#f6f9f8] text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
+            <ChartBarIcon className="w-4 h-4" />
+            View Analytics
+          </button>
+        </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.8fr', gap: '2.5rem' }}>
-         {/* Grade Breakdown */}
-         <div style={{ background: 'white', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '2rem' }}>Grade Breakdown</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-               {data.grades?.map((item: any, i: number) => (
-                 <div key={i}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', alignItems: 'center' }}>
-                       <span style={{ fontWeight: '700', color: '#1e293b' }}>{item.grade}</span>
-                       <span style={{ fontWeight: '800', color: '#1e293b' }}>{item.count}</span>
-                    </div>
-                    <div style={{ height: '12px', background: '#f1f5f9', borderRadius: '6px', overflow: 'hidden' }}>
-                       <motion.div 
-                         initial={{ width: 0 }}
-                         animate={{ width: `${(item.count / 450) * 100}%` }}
-                         transition={{ duration: 1, delay: i * 0.1 }}
-                         style={{ height: '100%', background: item.color, borderRadius: '6px' }} 
-                       />
-                    </div>
-                 </div>
-               ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        
+        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+          <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
+          <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
+          
+          <div className="flex justify-between items-start z-10">
+            <h3 className="text-xl font-normal text-white">Total Students</h3>
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm group-hover:bg-white group-hover:text-[#146ef5] transition-colors">
+              <ArrowUpRightIcon className="w-4 h-4" />
             </div>
-            <div style={{ marginTop: '3rem', padding: '1.5rem', background: '#f8fafc', borderRadius: '1.5rem', border: '1px solid #f1f5f9' }}>
-               <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem' }}>Total Capacity</div>
-               <div style={{ fontSize: '1.25rem', fontWeight: '800', color: '#10b981' }}>1,240 / 1,400</div>
-               <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.5rem' }}>Current enrollment is at 88% of physical infrastructure limit.</p>
+          </div>
+          <div className="z-10">
+            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">1,248</h2>
+            <div className="flex items-center gap-1.5 text-xs text-white/80">
+              <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> +12%</div>
+              <span>vs Last Month</span>
             </div>
-         </div>
+          </div>
+        </div>
 
-         {/* Growth Chart (Placeholder Visual) */}
-         <div style={{ background: 'white', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-               <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b' }}>Growth Trends</h2>
-               <select style={{ padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid #e2e8f0', fontSize: '0.8rem', fontWeight: '600', color: '#64748b' }}>
-                  <option>Last 6 Months</option>
-                  <option>Last Year</option>
-               </select>
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">New Admissions</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <UserGroupIcon className="w-4 h-4" />
             </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">94%</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> +2.4%</div>
+              <span>vs Last Month</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Retention Rate</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <BoltIcon className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">342</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <span className="text-gray-400">Total this week</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Capacity</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <CheckCircleIcon className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">89%</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <span className="text-gray-400">Overall average</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+        
+        <div className="lg:col-span-9 flex flex-col gap-3">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-9 gap-3">
             
-            <div style={{ height: '300px', width: '100%', display: 'flex', alignItems: 'flex-end', gap: '1rem', padding: '0 1rem' }}>
-               {data.growth?.data?.map((val: number, i: number) => (
-                 <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
-                    <motion.div 
-                      initial={{ height: 0 }}
-                      animate={{ height: `${val}%` }}
-                      transition={{ duration: 1, delay: i * 0.05 }}
-                      style={{ width: '100%', background: 'linear-gradient(to top, #0ea5e9, #38bdf8)', borderRadius: '0.5rem 0.5rem 0 0' }} 
-                    />
-                    <span style={{ fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8' }}>{['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'][i]}</span>
-                 </div>
-               ))}
+            <div className="lg:col-span-5 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-normal text-gray-900">Recent Activity</h3>
+                <button className="text-gray-400 hover:text-gray-900 transition-colors">
+                  <EllipsisHorizontalIcon className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="flex-1 flex flex-col justify-between gap-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                        <img src="/photo01.jpeg" alt="Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <div>
+                      <h4 className="text-base font-normal text-gray-900">System Update</h4>
+                      <p className="text-sm text-gray-500">Processed <span className="font-medium text-gray-700">Records</span></p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-md">Completed</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                        <img src="/photo02.jpeg" alt="Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <div>
+                      <h4 className="text-base font-normal text-gray-900">Data Sync</h4>
+                      <p className="text-sm text-gray-500">Connecting <span className="font-medium text-gray-700">API</span></p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-1 bg-yellow-50 text-yellow-600 text-[10px] font-bold rounded-md">Pending</span>
+                </div>
+              </div>
             </div>
 
-            <div style={{ marginTop: '2rem', display: 'flex', gap: '2rem', borderTop: '1px solid #f1f5f9', paddingTop: '1.5rem' }}>
-               <div>
-                  <div style={{ fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase' }}>New Leads</div>
-                  <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b' }}>{data.growth?.leads}</div>
-               </div>
-               <div>
-                  <div style={{ fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase' }}>Conversion</div>
-                  <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b' }}>{data.growth?.conversion}</div>
-               </div>
-               <div>
-                  <div style={{ fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase' }}>Attrition</div>
-                  <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#ef4444' }}>{data.growth?.attrition}</div>
-               </div>
+            <div className="lg:col-span-4 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col items-center">
+              <h3 className="text-xl font-normal text-gray-900 mb-6 self-start">Target Progress</h3>
+              
+              <div className="relative w-full aspect-[2/1] max-w-[260px] flex items-end justify-center mt-2 mb-4">
+                <svg viewBox="0 0 100 50" className="w-full h-full overflow-visible">
+                  <defs>
+                    <pattern id="stripes-arc" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                      <line x1="0" y1="0" x2="0" y2="4" stroke="#d1d5db" strokeWidth="2" />
+                    </pattern>
+                  </defs>
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="url(#stripes-arc)" strokeWidth="15" strokeLinecap="round" strokeDasharray="125.66 125.66" strokeDashoffset="0" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#111827" strokeWidth="15" strokeLinecap="round" strokeDasharray="82.93 125.66" strokeDashoffset="0" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#146ef5" strokeWidth="15" strokeLinecap="round" strokeDasharray="51.52 125.66" strokeDashoffset="0" />
+                </svg>
+                <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end translate-y-[15%]">
+                  <span className="text-5xl font-normal tracking-tight text-gray-900">41%</span>
+                  <span className="text-xs font-medium text-gray-500 mt-1">Target Reached</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 mt-auto w-full justify-center pt-6">
+                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#146ef5]"></div><span className="text-xs text-gray-500 font-medium">Completed</span></div>
+                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#111827]"></div><span className="text-xs text-gray-500 font-medium">In Progress</span></div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-white border border-gray-200" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 1px, #d1d5db 1px, #d1d5db 3px)' }}></div>
+                  <span className="text-xs text-gray-500 font-medium">Pending</span>
+                </div>
+              </div>
             </div>
-         </div>
+          </div>
+        </div>
+
+        <div className="lg:col-span-3 flex flex-col gap-3">
+          
+          <div className="w-full bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
+            <h3 className="text-xl font-normal text-gray-900 mb-6">Alerts</h3>
+            <div className="flex-1 flex flex-col gap-8 pb-2">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                  <CheckCircleIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-base font-normal text-gray-900">Sync Complete</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Just now</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center shrink-0">
+                  <UserPlusIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-base font-normal text-gray-900">New Target</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Assigned to team</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
+    </>
   );
 }

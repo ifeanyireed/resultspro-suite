@@ -1,6 +1,5 @@
 "use client";
 
-import { DashboardHeader } from "@/components/DashboardLayout";
 import { IconCalendar as Calendar, IconPlus as Plus, IconClock as Clock, IconSettings as Settings, IconDotsVertical as MoreVertical } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -25,7 +24,7 @@ export default function ManageTermsPage() {
   if (loading) {
     return (
       <div className="flex-1 pb-12 animate-in fade-in duration-500">
-        <DashboardHeader title="Academic Terms" />
+        
         <main className="p-8 space-y-8">
           <div className="flex justify-between items-center">
             <div className="space-y-3">
@@ -48,19 +47,19 @@ export default function ManageTermsPage() {
 
   return (
     <div className="flex-1">
-      <DashboardHeader title="Academic Terms" />
+      
       
       <main className="p-8 space-y-8">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-bold text-white font-display">Academic Calendar</h2>
-            <p className="text-sm text-muted-foreground">Manage terms, academic sessions, and key dates.</p>
+            <h2 className="text-2xl font-bold text-gray-900 font-display">Academic Calendar</h2>
+            <p className="text-sm text-gray-500">Manage terms, academic sessions, and key dates.</p>
           </div>
           <div className="flex gap-3">
-             <Button variant="outline" className="border-white/10 hover:bg-white/5 text-white">
+             <Button variant="outline" className="border-gray-100 hover:bg-gray-50 text-gray-900">
                 <Settings className="w-4 h-4 mr-2" /> Session Settings
              </Button>
-             <Button className="bg-green-600 hover:bg-green-700 text-white font-bold">
+             <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold">
                 <Plus className="w-4 h-4 mr-2" /> Create New Term
              </Button>
           </div>
@@ -70,26 +69,26 @@ export default function ManageTermsPage() {
            {termsData.map((term) => (
               <div key={term.id} className={cn(
                  "p-6 rounded-[24px] border flex items-center justify-between transition-all",
-                 term.status === "Active" ? "bg-white/5 border-green/30" : "bg-white/[0.02] border-white/10 opacity-70"
+                 term.status === "Active" ? "bg-white shadow-sm border border-gray-100 border-green/30" : "bg-white/[0.02] border-gray-100 opacity-70"
               )}>
                  <div className="flex items-center gap-6">
                     <div className={cn(
                        "w-12 h-12 rounded-2xl flex items-center justify-center shrink-0",
-                       term.status === "Active" ? "bg-green/10 text-green" : "bg-white/5 text-muted-foreground"
+                       term.status === "Active" ? "bg-emerald-50 text-emerald-600" : "bg-white shadow-sm border border-gray-100 text-gray-500"
                     )}>
                        <Calendar className="w-6 h-6" />
                     </div>
                     <div>
                        <div className="flex items-center gap-3 mb-1">
-                          <h3 className="text-lg font-bold text-white">{term.name}</h3>
+                          <h3 className="text-lg font-bold text-gray-900">{term.name}</h3>
                           <span className={cn("text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-[0.2em]",
-                             term.status === "Active" ? "bg-green-600 text-white" : "bg-white/10 text-muted-foreground"
+                             term.status === "Active" ? "bg-emerald-600 text-white" : "bg-gray-100 text-gray-500"
                           )}>
                              {term.status}
                           </span>
                        </div>
-                       <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                          <span className="font-bold text-white/60">{term.session}</span>
+                       <div className="flex items-center gap-4 text-xs text-gray-500">
+                          <span className="font-bold text-gray-900/60">{term.session}</span>
                           <div className="flex items-center gap-1">
                              <Clock className="w-3 h-3" /> {term.dates}
                           </div>
@@ -100,14 +99,14 @@ export default function ManageTermsPage() {
                  <div className="flex items-center gap-8">
                     <div className="hidden md:block w-48">
                        <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest mb-1.5">
-                          <span className="text-muted-foreground">Term Progress</span>
-                          <span className="text-white">{term.progress}%</span>
+                          <span className="text-gray-500">Term Progress</span>
+                          <span className="text-gray-900">{term.progress}%</span>
                        </div>
-                       <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                          <div className={cn("h-full transition-all", term.status === "Active" ? "bg-green" : "bg-muted-foreground")} style={{ width: `${term.progress}%` }} />
+                       <div className="w-full h-1.5 bg-white shadow-sm border border-gray-100 rounded-full overflow-hidden">
+                          <div className={cn("h-full transition-all", term.status === "Active" ? "bg-emerald-600" : "bg-muted-foreground")} style={{ width: `${term.progress}%` }} />
                        </div>
                     </div>
-                    <button className="p-2 rounded-lg hover:bg-white/5 text-muted-foreground hover:text-white">
+                    <button className="p-2 rounded-lg hover:bg-gray-50 text-gray-500 hover:text-gray-900">
                        <MoreVertical className="w-5 h-5" />
                     </button>
                  </div>
@@ -115,12 +114,12 @@ export default function ManageTermsPage() {
            ))}
         </div>
 
-        <div className="bg-blue/10 border border-blue/20 p-8 rounded-[32px] flex items-center justify-between">
+        <div className="bg-blue-50 border border-blue/20 p-8 rounded-[32px] flex items-center justify-between">
            <div>
-              <h4 className="text-lg font-bold text-white mb-1">Automatic Promotion</h4>
-              <p className="text-sm text-blue/80">Schedule student promotion to next class levels for the upcoming academic session.</p>
+              <h4 className="text-lg font-bold text-gray-900 mb-1">Automatic Promotion</h4>
+              <p className="text-sm text-[#146ef5]/80">Schedule student promotion to next class levels for the upcoming academic session.</p>
            </div>
-           <Button className="bg-blue hover:bg-blue/80 text-white font-bold h-11 px-8 rounded-xl">
+           <Button className="bg-blue hover:bg-blue/80 text-gray-900 font-bold h-11 px-8 rounded-xl">
               Configure Promotion
            </Button>
         </div>

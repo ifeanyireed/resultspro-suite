@@ -17,7 +17,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { IconAlertCircle as AlertCircle, IconCheckCircle as CheckCircle, IconClock as Clock, IconLoader2 as Loader2, IconMessage as MessageSquare, IconSend as Send, IconX as X, IconUpload as Upload, IconFileText as FileText, IconUserCheck as UserCheck } from '@tabler/icons-react';
+import { IconExclamationCircle as AlertCircle, IconCircleCheck as CheckCircle, IconClock as Clock, IconLoader2 as Loader2, IconMessage as MessageSquare, IconSend as Send, IconX as X, IconUpload as Upload, IconFileText as FileText, IconUserCheck as UserCheck } from '@tabler/icons-react';
 import { User, LogOut, BarChart01 } from '@/lib/hugeicons-compat';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';

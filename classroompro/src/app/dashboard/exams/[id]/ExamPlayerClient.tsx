@@ -109,20 +109,20 @@ export default function ExamPlayerClient() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-navy flex items-center justify-center">
-         <Loader2 className="w-12 h-12 text-blue animate-spin" />
+      <div className="min-h-screen bg-[#146ef5] flex items-center justify-center">
+         <Loader2 className="w-12 h-12 text-[#146ef5] animate-spin" />
       </div>
     );
   }
 
   if (!exam) {
     return (
-      <div className="min-h-screen bg-navy flex flex-col items-center justify-center text-white p-8 text-center">
-        <GraduationCap className="w-16 h-16 text-muted-foreground mb-6 opacity-20" />
+      <div className="min-h-screen bg-[#146ef5] flex flex-col items-center justify-center text-white p-8 text-center">
+        <GraduationCap className="w-16 h-16 text-gray-500 mb-6 opacity-20" />
         <h1 className="text-2xl font-bold mb-2">Exam Not Found</h1>
-        <p className="text-muted-foreground mb-8">This assessment may have been moved or deleted.</p>
+        <p className="text-gray-500 mb-8">This assessment may have been moved or deleted.</p>
         <Link href="/dashboard/exams">
-          <Button className="bg-blue text-white px-8 h-12 rounded-xl">Back to Exams</Button>
+          <Button className="bg-blue text-gray-900 px-8 h-12 rounded-xl">Back to Exams</Button>
         </Link>
       </div>
     );
@@ -132,9 +132,9 @@ export default function ExamPlayerClient() {
   const isAnswered = (idx: number) => !!selectedAnswers[exam.questions[idx].id];
 
   return (
-    <div className="min-h-screen bg-navy flex flex-col">
+    <div className="min-h-screen bg-[#146ef5] flex flex-col">
       {/* Exam Header */}
-      <header className="h-20 border-b border-white/10 bg-navy/80 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-50">
+      <header className="h-20 border-b border-gray-100 bg-[#146ef5]/80 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-4">
           <button 
             onClick={() => {
@@ -142,26 +142,26 @@ export default function ExamPlayerClient() {
                 router.push('/dashboard/exams');
               }
             }}
-            className="w-10 h-10 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors"
+            className="w-10 h-10 rounded-full hover:bg-gray-50 flex items-center justify-center transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-white" />
+            <ArrowLeft className="w-5 h-5 text-gray-900" />
           </button>
           <div>
-            <h1 className="text-lg font-bold text-white truncate max-w-[200px] md:max-w-md">{exam.title}</h1>
-            <p className="text-xs text-muted-foreground">Question {currentQuestionIdx + 1} of {exam.questions.length}</p>
+            <h1 className="text-lg font-bold text-gray-900 truncate max-w-[200px] md:max-w-md">{exam.title}</h1>
+            <p className="text-xs text-gray-500">Question {currentQuestionIdx + 1} of {exam.questions.length}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-6">
           <div className={cn(
-            "flex items-center gap-3 px-4 py-2 rounded-xl bg-white/5 border border-white/10 transition-colors",
+            "flex items-center gap-3 px-4 py-2 rounded-xl bg-white shadow-sm border border-gray-100 transition-colors",
             timeLeft < 300 ? "border-red-500/50 bg-red-500/10 text-red-500" : "text-white"
           )}>
-            <Clock className={cn("w-5 h-5", timeLeft < 300 ? "text-red-500 animate-pulse" : "text-blue")} />
+            <Clock className={cn("w-5 h-5", timeLeft < 300 ? "text-red-500 animate-pulse" : "text-[#146ef5]")} />
             <span className="text-lg font-mono font-bold">{formatTime(timeLeft)}</span>
           </div>
           <Button 
-            className="bg-blue hover:bg-blue/80 text-white font-bold px-6 h-10 rounded-xl shadow-lg shadow-blue/20" 
+            className="bg-blue hover:bg-blue/80 text-gray-900 font-bold px-6 h-10 rounded-xl shadow-lg shadow-blue/20" 
             onClick={() => {
               if (confirm("Are you sure you want to submit your exam now?")) {
                 handleSubmit();
@@ -178,14 +178,14 @@ export default function ExamPlayerClient() {
       <main className="flex-1 max-w-5xl mx-auto w-full p-8 grid lg:grid-cols-4 gap-8">
         {/* Question Area */}
         <div className="lg:col-span-3 space-y-8">
-          <div className="p-8 rounded-3xl bg-white/5 border border-white/10 shadow-xl relative overflow-hidden">
+          <div className="p-8 rounded-3xl bg-white shadow-sm border border-gray-100 shadow-xl relative overflow-hidden">
              <div className="absolute top-0 right-0 w-64 h-64 bg-blue/5 blur-[80px] rounded-full -mr-32 -mt-32" />
              
              <div className="flex justify-between items-start mb-8 relative z-10">
-                <h2 className="text-2xl font-bold text-white pr-4">
+                <h2 className="text-2xl font-bold text-gray-900 pr-4">
                   {currentQuestion?.text}
                 </h2>
-                <span className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-black text-blue uppercase tracking-widest shrink-0">
+                <span className="px-2 py-1 rounded bg-white shadow-sm border border-gray-100 text-[10px] font-black text-[#146ef5] uppercase tracking-widest shrink-0">
                   Multiple Choice
                 </span>
              </div>
@@ -200,24 +200,24 @@ export default function ExamPlayerClient() {
                       className={cn(
                         "w-full p-6 rounded-2xl border transition-all flex items-center gap-4 group text-left",
                         isSelected 
-                          ? "bg-blue/10 border-blue shadow-[0_0_20px_rgba(59,130,246,0.1)]" 
-                          : "bg-navy/50 border-white/10 hover:border-white/30"
+                          ? "bg-blue-50 border-blue shadow-[0_0_20px_rgba(59,130,246,0.1)]" 
+                          : "bg-gray-50 border-gray-100 hover:border-white/30"
                       )}
                     >
                       <div className={cn(
                         "w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-all",
                         isSelected 
-                          ? "bg-blue border-blue text-white" 
-                          : "border-white/20 text-muted-foreground group-hover:border-white group-hover:text-white"
+                          ? "bg-blue border-blue text-gray-900" 
+                          : "border-gray-200 text-gray-500 group-hover:border-white group-hover:text-gray-900"
                       )}>
                         {String.fromCharCode(65 + idx)}
                       </div>
                       <span className={cn(
                         "font-medium transition-colors",
-                        isSelected ? "text-white" : "text-white/70 group-hover:text-white"
+                        isSelected ? "text-gray-900" : "text-gray-900/70 group-hover:text-gray-900"
                       )}>{option}</span>
                       {isSelected && (
-                        <CheckCircle2 className="w-5 h-5 text-blue ml-auto" />
+                        <CheckCircle2 className="w-5 h-5 text-[#146ef5] ml-auto" />
                       )}
                     </button>
                   );
@@ -228,7 +228,7 @@ export default function ExamPlayerClient() {
           <div className="flex items-center justify-between">
             <Button 
               variant="outline" 
-              className="border-white/10 text-white h-12 px-6 rounded-xl hover:bg-white/5" 
+              className="border-gray-100 text-gray-900 h-12 px-6 rounded-xl hover:bg-gray-50" 
               disabled={currentQuestionIdx === 0} 
               onClick={() => {
                 setCurrentQuestionIdx(prev => prev - 1);
@@ -241,8 +241,8 @@ export default function ExamPlayerClient() {
             <Button 
               variant="outline" 
               className={cn(
-                "border-white/10 h-12 px-6 rounded-xl transition-all",
-                flaggedQuestions[currentQuestionIdx] ? "bg-amber/10 border-amber text-amber" : "text-amber hover:bg-amber/10"
+                "border-gray-100 h-12 px-6 rounded-xl transition-all",
+                flaggedQuestions[currentQuestionIdx] ? "bg-amber-50 border-amber text-amber-600" : "text-amber-600 hover:bg-amber-50"
               )}
               onClick={toggleFlag}
             >
@@ -251,7 +251,7 @@ export default function ExamPlayerClient() {
             </Button>
 
             <Button 
-              className="bg-blue hover:bg-blue/90 text-white h-12 px-8 rounded-xl font-bold shadow-lg shadow-blue/20" 
+              className="bg-blue hover:bg-blue/90 text-gray-900 h-12 px-8 rounded-xl font-bold shadow-lg shadow-blue/20" 
               onClick={() => {
                 if (currentQuestionIdx < exam.questions.length - 1) {
                   setCurrentQuestionIdx(prev => prev + 1);
@@ -271,8 +271,8 @@ export default function ExamPlayerClient() {
 
         {/* Question Navigation Sidebar */}
         <div className="space-y-6">
-           <div className="p-6 rounded-2xl bg-white/5 border border-white/10 sticky top-28 backdrop-blur-md">
-              <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Question Map</h3>
+           <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 sticky top-28 backdrop-blur-md">
+              <h3 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wider">Question Map</h3>
               <div className="grid grid-cols-4 gap-2">
                  {exam.questions.map((_: any, idx: number) => {
                    const answered = isAnswered(idx);
@@ -289,10 +289,10 @@ export default function ExamPlayerClient() {
                       className={cn(
                         "aspect-square rounded-lg flex items-center justify-center text-xs font-bold border transition-all relative",
                         active 
-                          ? "bg-white/10 border-blue text-blue scale-110 z-10 shadow-[0_0_15px_rgba(59,130,246,0.3)]" 
+                          ? "bg-gray-100 border-blue text-[#146ef5] scale-110 z-10 shadow-[0_0_15px_rgba(59,130,246,0.3)]" 
                           : answered 
-                            ? "bg-blue/20 border-blue/50 text-blue" 
-                            : "bg-white/5 text-muted-foreground border-white/10 hover:border-white/30"
+                            ? "bg-blue/20 border-blue/50 text-[#146ef5]" 
+                            : "bg-white shadow-sm border border-gray-100 text-gray-500 border-gray-100 hover:border-white/30"
                       )}
                      >
                        {idx + 1}
@@ -304,14 +304,14 @@ export default function ExamPlayerClient() {
                  })}
               </div>
               <div className="mt-6 space-y-3 pt-6 border-t border-white/5">
-                 <div className="flex items-center gap-3 text-[10px] text-muted-foreground uppercase font-bold">
+                 <div className="flex items-center gap-3 text-[10px] text-gray-500 uppercase font-bold">
                     <div className="w-3 h-3 rounded bg-blue/20 border border-blue/50" /> Answered
                  </div>
-                 <div className="flex items-center gap-3 text-[10px] text-muted-foreground uppercase font-bold">
-                    <div className="w-3 h-3 rounded bg-white/5 border border-white/10" /> Unanswered
+                 <div className="flex items-center gap-3 text-[10px] text-gray-500 uppercase font-bold">
+                    <div className="w-3 h-3 rounded bg-white shadow-sm border border-gray-100" /> Unanswered
                  </div>
-                 <div className="flex items-center gap-3 text-[10px] text-muted-foreground uppercase font-bold">
-                    <div className="w-3 h-3 rounded bg-white/5 border border-white/10 relative">
+                 <div className="flex items-center gap-3 text-[10px] text-gray-500 uppercase font-bold">
+                    <div className="w-3 h-3 rounded bg-white shadow-sm border border-gray-100 relative">
                        <div className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-amber rounded-full" />
                     </div> Flagged
                  </div>

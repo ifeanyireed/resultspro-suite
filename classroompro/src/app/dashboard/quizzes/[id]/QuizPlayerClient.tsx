@@ -148,15 +148,15 @@ export default function QuizPlayerClient() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-navy flex items-center justify-center">
-         <Loader2 className="w-12 h-12 text-green animate-spin" />
+      <div className="min-h-screen bg-[#146ef5] flex items-center justify-center">
+         <Loader2 className="w-12 h-12 text-emerald-600 animate-spin" />
       </div>
     );
   }
 
   if (!quiz) {
     return (
-      <div className="min-h-screen bg-navy flex flex-col items-center justify-center text-white">
+      <div className="min-h-screen bg-[#146ef5] flex flex-col items-center justify-center text-white">
         <h1 className="text-2xl font-bold mb-4">Quiz Not Found</h1>
         <Link href="/dashboard/quizzes">
           <Button>Back to Quizzes</Button>
@@ -169,16 +169,16 @@ export default function QuizPlayerClient() {
   const isAnswered = (idx: number) => !!selectedAnswers[quiz.questions[idx].id];
 
   return (
-    <div className="min-h-screen bg-navy flex flex-col">
+    <div className="min-h-screen bg-[#146ef5] flex flex-col">
       {/* Quiz Header */}
-      <header className="h-20 border-b border-white/10 bg-navy/80 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-50">
+      <header className="h-20 border-b border-gray-100 bg-[#146ef5]/80 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-4">
-          <Link href="/dashboard/quizzes" className="w-10 h-10 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors">
-            <ArrowLeft className="w-5 h-5 text-white" />
+          <Link href="/dashboard/quizzes" className="w-10 h-10 rounded-full hover:bg-gray-50 flex items-center justify-center transition-colors">
+            <ArrowLeft className="w-5 h-5 text-gray-900" />
           </Link>
           <div>
-            <h1 className="text-lg font-bold text-white truncate max-w-[200px] md:max-w-md">{quiz.title}</h1>
-            <p className="text-xs text-muted-foreground">Question {currentQuestionIdx + 1} of {quiz.questions.length}</p>
+            <h1 className="text-lg font-bold text-gray-900 truncate max-w-[200px] md:max-w-md">{quiz.title}</h1>
+            <p className="text-xs text-gray-500">Question {currentQuestionIdx + 1} of {quiz.questions.length}</p>
           </div>
         </div>
 
@@ -188,8 +188,8 @@ export default function QuizPlayerClient() {
             size="sm" 
             onClick={toggleBookmark}
             className={cn(
-              "border-white/10 text-white hover:bg-white/5 transition-all hidden md:flex",
-              isBookmarked && "bg-green/10 text-green border-green/20"
+              "border-gray-100 text-gray-900 hover:bg-gray-50 transition-all hidden md:flex",
+              isBookmarked && "bg-emerald-50 text-emerald-600 border-green/20"
             )}
           >
             {isBookmarked ? (
@@ -198,11 +198,11 @@ export default function QuizPlayerClient() {
               <><Bookmark className="w-4 h-4 mr-2" /> Save</>
             )}
           </Button>
-          <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
-            <Clock className="w-5 h-5 text-green" />
-            <span className="text-lg font-mono font-bold text-white">{formatTime(timeLeft)}</span>
+          <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-white shadow-sm border border-gray-100">
+            <Clock className="w-5 h-5 text-emerald-600" />
+            <span className="text-lg font-mono font-bold text-gray-900">{formatTime(timeLeft)}</span>
           </div>
-          <Button className="bg-green-600 text-white font-bold px-6 h-10 rounded-xl" onClick={handleSubmit}>
+          <Button className="bg-emerald-600 text-white font-bold px-6 h-10 rounded-xl" onClick={handleSubmit}>
             <Send className="w-4 h-4 mr-2" /> Submit
           </Button>
         </div>
@@ -211,14 +211,14 @@ export default function QuizPlayerClient() {
       <main className="flex-1 max-w-5xl mx-auto w-full p-8 grid lg:grid-cols-4 gap-8">
         {/* Question Area */}
         <div className="lg:col-span-3 space-y-8">
-          <div className="p-8 rounded-3xl bg-white/5 border border-white/10 shadow-xl relative overflow-hidden">
-             <div className="absolute top-0 right-0 w-64 h-64 bg-green/5 blur-[80px] rounded-full -mr-32 -mt-32" />
+          <div className="p-8 rounded-3xl bg-white shadow-sm border border-gray-100 shadow-xl relative overflow-hidden">
+             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/5 blur-[80px] rounded-full -mr-32 -mt-32" />
              
              <div className="flex justify-between items-start mb-8 relative z-10">
-                <h2 className="text-2xl font-bold text-white pr-4">
+                <h2 className="text-2xl font-bold text-gray-900 pr-4">
                   {currentQuestion?.text}
                 </h2>
-                <span className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-black text-blue uppercase tracking-widest shrink-0">
+                <span className="px-2 py-1 rounded bg-white shadow-sm border border-gray-100 text-[10px] font-black text-[#146ef5] uppercase tracking-widest shrink-0">
                   {currentQuestion?.type === 'THEORY' ? 'Theory' : 'Multiple Choice'}
                 </span>
              </div>
@@ -230,12 +230,12 @@ export default function QuizPlayerClient() {
                       value={selectedAnswers[currentQuestion.id] || ""}
                       onChange={(e) => handleOptionSelect(e.target.value)}
                       placeholder="Type your answer here in detail..."
-                      className="w-full min-h-[200px] p-6 rounded-2xl border border-white/10 bg-navy/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-green/50 transition-colors"
+                      className="w-full min-h-[200px] p-6 rounded-2xl border border-gray-100 bg-[#146ef5]/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-green/50 transition-colors"
                     />
                     <div className="flex justify-end">
                       <Button 
                         size="sm" 
-                        className="bg-blue hover:bg-blue/90 text-white font-bold h-10 rounded-xl"
+                        className="bg-blue hover:bg-blue/90 text-gray-900 font-bold h-10 rounded-xl"
                         onClick={evaluateTheory}
                         disabled={evaluating || !selectedAnswers[currentQuestion.id]}
                       >
@@ -244,14 +244,14 @@ export default function QuizPlayerClient() {
                       </Button>
                     </div>
                     {theoryEvaluation[currentQuestion.id] && (
-                      <div className="p-6 rounded-2xl bg-green/5 border border-green/20 space-y-2 animate-in fade-in slide-in-from-top-4 duration-500">
+                      <div className="p-6 rounded-2xl bg-emerald-600/5 border border-green/20 space-y-2 animate-in fade-in slide-in-from-top-4 duration-500">
                         <div className="flex justify-between items-center mb-2">
-                          <span className="text-[10px] font-black text-green uppercase tracking-[0.2em]">AI Feedback</span>
-                          <span className="px-3 py-1 rounded-full bg-green/20 text-green font-bold text-sm">
+                          <span className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em]">AI Feedback</span>
+                          <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-600 font-bold text-sm">
                             Score: {theoryEvaluation[currentQuestion.id].score}/10
                           </span>
                         </div>
-                        <p className="text-sm text-white/80 leading-relaxed italic">"{theoryEvaluation[currentQuestion.id].feedback}"</p>
+                        <p className="text-sm text-gray-900/80 leading-relaxed italic">"{theoryEvaluation[currentQuestion.id].feedback}"</p>
                       </div>
                     )}
                   </div>
@@ -265,24 +265,24 @@ export default function QuizPlayerClient() {
                         className={cn(
                           "w-full p-6 rounded-2xl border transition-all flex items-center gap-4 group text-left",
                           isSelected 
-                            ? "bg-green/10 border-green shadow-[0_0_20px_rgba(16,185,129,0.1)]" 
-                            : "bg-navy/50 border-white/10 hover:border-white/30"
+                            ? "bg-emerald-50 border-green shadow-[0_0_20px_rgba(16,185,129,0.1)]" 
+                            : "bg-gray-50 border-gray-100 hover:border-white/30"
                         )}
                       >
                         <div className={cn(
                           "w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-all",
                           isSelected 
-                            ? "bg-green border-green text-navy" 
-                            : "border-white/20 text-muted-foreground group-hover:border-white group-hover:text-white"
+                            ? "bg-emerald-600 border-green text-white" 
+                            : "border-gray-200 text-gray-500 group-hover:border-white group-hover:text-gray-900"
                         )}>
                           {String.fromCharCode(65 + idx)}
                         </div>
                         <span className={cn(
                           "font-medium transition-colors",
-                          isSelected ? "text-white" : "text-white/70 group-hover:text-white"
+                          isSelected ? "text-gray-900" : "text-gray-900/70 group-hover:text-gray-900"
                         )}>{option}</span>
                         {isSelected && (
-                          <CheckCircle2 className="w-5 h-5 text-green ml-auto" />
+                          <CheckCircle2 className="w-5 h-5 text-emerald-600 ml-auto" />
                         )}
                       </button>
                     );
@@ -294,7 +294,7 @@ export default function QuizPlayerClient() {
           <div className="flex items-center justify-between">
             <Button 
               variant="outline" 
-              className="border-white/10 text-white h-12 px-6 rounded-xl" 
+              className="border-gray-100 text-gray-900 h-12 px-6 rounded-xl" 
               disabled={currentQuestionIdx === 0} 
               onClick={() => {
                 setCurrentQuestionIdx(prev => prev - 1);
@@ -307,8 +307,8 @@ export default function QuizPlayerClient() {
             <Button 
               variant="outline" 
               className={cn(
-                "border-white/10 h-12 px-6 rounded-xl transition-all",
-                flaggedQuestions[currentQuestionIdx] ? "bg-amber/10 border-amber text-amber" : "text-amber hover:bg-amber/10"
+                "border-gray-100 h-12 px-6 rounded-xl transition-all",
+                flaggedQuestions[currentQuestionIdx] ? "bg-amber-50 border-amber text-amber-600" : "text-amber-600 hover:bg-amber-50"
               )}
               onClick={toggleFlag}
             >
@@ -317,7 +317,7 @@ export default function QuizPlayerClient() {
             </Button>
 
             <Button 
-              className="bg-blue hover:bg-blue/90 text-white h-12 px-8 rounded-xl font-bold" 
+              className="bg-blue hover:bg-blue/90 text-gray-900 h-12 px-8 rounded-xl font-bold" 
               onClick={() => {
                 if (currentQuestionIdx < quiz.questions.length - 1) {
                   setCurrentQuestionIdx(prev => prev + 1);
@@ -335,8 +335,8 @@ export default function QuizPlayerClient() {
 
         {/* Question Navigation Sidebar */}
         <div className="space-y-6">
-           <div className="p-6 rounded-2xl bg-white/5 border border-white/10 sticky top-28 backdrop-blur-md">
-              <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Question Map</h3>
+           <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 sticky top-28 backdrop-blur-md">
+              <h3 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wider">Question Map</h3>
               <div className="grid grid-cols-5 gap-2">
                  {quiz.questions.map((_: any, idx: number) => {
                    const answered = isAnswered(idx);
@@ -353,10 +353,10 @@ export default function QuizPlayerClient() {
                       className={cn(
                         "aspect-square rounded-lg flex items-center justify-center text-xs font-bold border transition-all relative",
                         active 
-                          ? "bg-white/10 border-blue text-blue scale-110 z-10 shadow-[0_0_15px_rgba(59,130,246,0.3)]" 
+                          ? "bg-gray-100 border-blue text-[#146ef5] scale-110 z-10 shadow-[0_0_15px_rgba(59,130,246,0.3)]" 
                           : answered 
-                            ? "bg-green/20 border-green/50 text-green" 
-                            : "bg-white/5 text-muted-foreground border-white/10 hover:border-white/30"
+                            ? "bg-emerald-100 border-green/50 text-emerald-600" 
+                            : "bg-white shadow-sm border border-gray-100 text-gray-500 border-gray-100 hover:border-white/30"
                       )}
                      >
                        {idx + 1}
@@ -368,14 +368,14 @@ export default function QuizPlayerClient() {
                  })}
               </div>
               <div className="mt-6 space-y-3 pt-6 border-t border-white/5">
-                 <div className="flex items-center gap-3 text-[10px] text-muted-foreground uppercase font-bold">
-                    <div className="w-3 h-3 rounded bg-green/20 border border-green/50" /> Answered
+                 <div className="flex items-center gap-3 text-[10px] text-gray-500 uppercase font-bold">
+                    <div className="w-3 h-3 rounded bg-emerald-100 border border-green/50" /> Answered
                  </div>
-                 <div className="flex items-center gap-3 text-[10px] text-muted-foreground uppercase font-bold">
-                    <div className="w-3 h-3 rounded bg-white/5 border border-white/10" /> Unanswered
+                 <div className="flex items-center gap-3 text-[10px] text-gray-500 uppercase font-bold">
+                    <div className="w-3 h-3 rounded bg-white shadow-sm border border-gray-100" /> Unanswered
                  </div>
-                 <div className="flex items-center gap-3 text-[10px] text-muted-foreground uppercase font-bold">
-                    <div className="w-3 h-3 rounded bg-white/5 border border-white/10 relative">
+                 <div className="flex items-center gap-3 text-[10px] text-gray-500 uppercase font-bold">
+                    <div className="w-3 h-3 rounded bg-white shadow-sm border border-gray-100 relative">
                        <div className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-amber rounded-full" />
                     </div> Flagged
                  </div>

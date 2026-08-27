@@ -1,6 +1,5 @@
 "use client";
 
-import { DashboardHeader } from "@/components/DashboardLayout";
 import { IconUsers as Users, IconSearch as Search, IconPlus as Plus, IconChartBar as BarChart3 } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +25,7 @@ export default function MyClassesPage() {
   if (loading) {
     return (
       <div className="flex-1 pb-12 animate-in fade-in duration-500">
-        <DashboardHeader title="My Classes" />
+        
         <div className="p-8 max-w-7xl mx-auto space-y-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-3">
@@ -46,62 +45,62 @@ export default function MyClassesPage() {
 
   return (
     <div className="flex-1 pb-12">
-      <DashboardHeader title="My Classes" />
+      
       
       <div className="p-8 max-w-7xl mx-auto space-y-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Manage Your Classes</h2>
-            <p className="text-sm text-muted-foreground">View performance and manage students for each of your assigned classes.</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Manage Your Classes</h2>
+            <p className="text-sm text-gray-500">View performance and manage students for each of your assigned classes.</p>
           </div>
-          <Button className="bg-green-600 text-white font-bold">
+          <Button className="bg-emerald-600 text-white font-bold">
             <Plus className="w-4 h-4 mr-2" /> Request New Class
           </Button>
         </div>
 
         <div className="flex flex-col md:flex-row gap-4">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-            <Input placeholder="Search classes..." className="pl-10 h-12 bg-white/5 border-white/10" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+            <Input placeholder="Search classes..." className="pl-10 h-12 bg-white shadow-sm border border-gray-100 border-gray-100" />
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {classesData.map((cls) => (
-            <div key={cls.id} className="p-6 rounded-3xl bg-white/5 border border-white/10 hover:border-white/20 transition-all group">
+            <div key={cls.id} className="p-6 rounded-3xl bg-white shadow-sm border border-gray-100 hover:border-gray-200 transition-all group">
               <div className="flex justify-between items-start mb-6">
-                 <div className="w-12 h-12 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
+                 <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-[#146ef5]">
                     <Users className="w-6 h-6" />
                  </div>
-                 <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{cls.term}</span>
+                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{cls.term}</span>
               </div>
               
-              <h3 className="text-xl font-bold text-white mb-1 group-hover:text-blue transition-colors">{cls.name}</h3>
-              <p className="text-sm text-muted-foreground mb-6">{cls.students} Enrolled Students</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-[#146ef5] transition-colors">{cls.name}</h3>
+              <p className="text-sm text-gray-500 mb-6">{cls.students} Enrolled Students</p>
 
               <div className="grid grid-cols-3 gap-4 mb-6">
-                 <div className="text-center p-2 rounded-xl bg-white/5">
-                    <div className="text-lg font-bold text-white">{cls.performance}</div>
-                    <div className="text-[8px] text-muted-foreground uppercase font-black">Perf.</div>
+                 <div className="text-center p-2 rounded-xl bg-white shadow-sm border border-gray-100">
+                    <div className="text-lg font-bold text-gray-900">{cls.performance}</div>
+                    <div className="text-[8px] text-gray-500 uppercase font-black">Perf.</div>
                  </div>
-                 <div className="text-center p-2 rounded-xl bg-white/5">
-                    <div className="text-lg font-bold text-white">12</div>
-                    <div className="text-[8px] text-muted-foreground uppercase font-black">Notes</div>
+                 <div className="text-center p-2 rounded-xl bg-white shadow-sm border border-gray-100">
+                    <div className="text-lg font-bold text-gray-900">12</div>
+                    <div className="text-[8px] text-gray-500 uppercase font-black">Notes</div>
                  </div>
-                 <div className="text-center p-2 rounded-xl bg-white/5">
-                    <div className="text-lg font-bold text-white">4</div>
-                    <div className="text-[8px] text-muted-foreground uppercase font-black">Quizzes</div>
+                 <div className="text-center p-2 rounded-xl bg-white shadow-sm border border-gray-100">
+                    <div className="text-lg font-bold text-gray-900">4</div>
+                    <div className="text-[8px] text-gray-500 uppercase font-black">Quizzes</div>
                  </div>
               </div>
 
               <div className="flex gap-2">
                  <Link href={`/dashboard/teacher/classes/${cls.id}`} className="flex-1">
-                    <Button variant="outline" className="w-full border-white/10 text-white text-xs h-10">
+                    <Button variant="outline" className="w-full border-gray-100 text-gray-900 text-xs h-10">
                        Manage
                     </Button>
                  </Link>
                  <Link href={`/dashboard/teacher/analytics?classId=${cls.id}`}>
-                    <Button variant="outline" className="border-white/10 text-white h-10 px-3">
+                    <Button variant="outline" className="border-gray-100 text-gray-900 h-10 px-3">
                        <BarChart3 className="w-4 h-4" />
                     </Button>
                  </Link>

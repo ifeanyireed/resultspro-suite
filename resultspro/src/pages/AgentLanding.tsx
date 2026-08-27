@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
-import { IconTrendingUp as TrendingUp, IconDollarSign as DollarSign, IconUsers as Users, IconAward as Award, IconZap as Zap, IconShield as Shield, IconArrowRight as ArrowRight } from '@tabler/icons-react';
+import { IconTrendingUp as TrendingUp, IconCurrencyDollar as DollarSign, IconUsers as Users, IconAward as Award, IconBolt as Zap, IconShield as Shield, IconArrowRight as ArrowRight } from '@tabler/icons-react';
 
 const AgentLanding = () => {
   const [expandedFaq, setExpandedFaq] = useState<string | null>(null);

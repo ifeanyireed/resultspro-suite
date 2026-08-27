@@ -1,107 +1,96 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useTenant } from '../TenantProvider';
 import { 
-  DashboardSpeed02Icon, 
-  AnalyticsUpIcon, 
-  Calendar03Icon, 
-  Home01Icon,
-  HelpCircleIcon,
-  Book02Icon,
-  Task01Icon,
-  Quiz01Icon,
-  NoteIcon,
-  CreditCardIcon,
-  Message01Icon,
-  Pulse01Icon,
-  Invoice01Icon,
+  Squares2X2Icon,
+  HomeModernIcon,
+  ShoppingCartIcon,
+  TruckIcon,
+  AcademicCapIcon,
+  CalendarIcon,
+  BookOpenIcon,
+  ClipboardDocumentListIcon,
   UserGroupIcon,
-  SchoolBusIcon,
-  PackageIcon,
-  BedIcon,
-  Activity04Icon,
-  Settings01Icon,
-  FolderCheckIcon,
-  School01Icon,
-  Award01Icon,
-  AiBrain01Icon,
-  PlayCircle02Icon,
-  ArrowUp01Icon
-} from 'hugeicons-react';
-import styles from './PortalSidebar.module.css';
+  PlayCircleIcon,
+  ChartBarIcon,
+  CreditCardIcon,
+  EnvelopeIcon,
+  BanknotesIcon,
+  BuildingStorefrontIcon,
+  FolderOpenIcon,
+  ChartPieIcon,
+  Cog6ToothIcon,
+  QuestionMarkCircleIcon,
+  ArrowRightOnRectangleIcon,
+  ComputerDesktopIcon
+} from '@heroicons/react/24/outline';
+import { 
+  Squares2X2Icon as Squares2X2Solid
+} from '@heroicons/react/24/solid';
 
 const studentMenu = [
-  { name: 'Home', icon: DashboardSpeed02Icon, slug: '/student/dashboard' },
-  { name: 'Classroom', icon: School01Icon, slug: '/student/classroom' },
-  { name: 'Timetable', icon: Calendar03Icon, slug: '/student/timetable' },
-  { name: 'Homework', icon: Task01Icon, slug: '/student/homework' },
-  { name: 'Learning Library', icon: Book02Icon, slug: '/student/learning' },
-  { name: 'My Exams', icon: Quiz01Icon, slug: '/student/exams' },
-  { name: 'Practice Progress', icon: AnalyticsUpIcon, slug: '/student/exams/progress' },
-  { name: 'Academic Results', icon: Award01Icon, slug: '/student/results' },
-  { name: 'Results Analytics', icon: Activity04Icon, slug: '/student/results/analytics' },
-  { name: 'Tutor Hub', icon: UserGroupIcon, slug: '/student/tutors' },
-  { name: 'Online Lessons', icon: PlayCircle02Icon, slug: '/student/tutors/lessons' },
-  { name: 'Future Skills', icon: AiBrain01Icon, slug: '/student/future-skills' },
-  { name: 'Skills Progress', icon: ArrowUp01Icon, slug: '/student/future-skills/progress' },
+  { name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/student/dashboard' },
+  { name: 'Classroom', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/student/classroom' },
+  { name: 'Timetable', icon: CalendarIcon, activeIcon: CalendarIcon, slug: '/student/timetable' },
+  { name: 'Homework', icon: ClipboardDocumentListIcon, activeIcon: ClipboardDocumentListIcon, slug: '/student/homework' },
+  { name: 'Library', icon: BookOpenIcon, activeIcon: BookOpenIcon, slug: '/student/learning' },
+  { name: 'Exams', icon: ChartBarIcon, activeIcon: ChartBarIcon, slug: '/student/exams' },
+  { name: 'Results', icon: ChartPieIcon, activeIcon: ChartPieIcon, slug: '/student/results' },
+  { name: 'Tutors', icon: UserGroupIcon, activeIcon: UserGroupIcon, slug: '/student/tutors' },
+  { name: 'Future Skills', icon: ComputerDesktopIcon, activeIcon: ComputerDesktopIcon, slug: '/student/future-skills' },
 ];
 
 const teacherMenu = [
-  { name: 'Home', icon: DashboardSpeed02Icon, slug: '/teacher/dashboard' },
-  { name: 'Classroom', icon: School01Icon, slug: '/teacher/classroom' },
-  { name: 'My Classes', icon: Book02Icon, slug: '/teacher/classes' },
-  { name: 'Homework', icon: Task01Icon, slug: '/teacher/homework' },
-  { name: 'Practice Insights', icon: AnalyticsUpIcon, slug: '/teacher/exams' },
-  { name: 'Tutor Schedule', icon: Calendar03Icon, slug: '/teacher/tutors' },
-  { name: 'Assessments', icon: Quiz01Icon, slug: '/teacher/assessments' },
-  { name: 'Tasks', icon: NoteIcon, slug: '/teacher/tasks' },
+  { name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/teacher/dashboard' },
+  { name: 'Classroom', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/teacher/classroom' },
+  { name: 'My Classes', icon: BookOpenIcon, activeIcon: BookOpenIcon, slug: '/teacher/classes' },
+  { name: 'Homework', icon: ClipboardDocumentListIcon, activeIcon: ClipboardDocumentListIcon, slug: '/teacher/homework' },
+  { name: 'Assessments', icon: ChartBarIcon, activeIcon: ChartBarIcon, slug: '/teacher/assessments' },
 ];
 
 const parentMenu = [
-  { name: 'Home', icon: DashboardSpeed02Icon, slug: '/parent/dashboard' },
-  { name: 'Classroom', icon: School01Icon, slug: '/parent/classroom' },
-  { name: 'Exam Insights', icon: Quiz01Icon, slug: '/parent/exams' },
-  { name: 'Results Analytics', icon: Activity04Icon, slug: '/parent/results' },
-  { name: 'Academic Reports', icon: AnalyticsUpIcon, slug: '/parent/reports' },
-  { name: 'Tutor Booking', icon: UserGroupIcon, slug: '/parent/tutors' },
-  { name: 'Future Skills', icon: AiBrain01Icon, slug: '/parent/future-skills' },
-  { name: 'Payments', icon: CreditCardIcon, slug: '/payments' },
-  { name: 'Messages', icon: Message01Icon, slug: '/communications' },
-  { name: 'Events Calendar', icon: Calendar03Icon, slug: '/parent/events' },
+  { name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/parent/dashboard' },
+  { name: 'Classroom', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/parent/classroom' },
+  { name: 'Payments', icon: CreditCardIcon, activeIcon: CreditCardIcon, slug: '/parent/payments' },
+  { name: 'Messages', icon: EnvelopeIcon, activeIcon: EnvelopeIcon, slug: '/parent/communications' },
+  { name: 'Events', icon: CalendarIcon, activeIcon: CalendarIcon, slug: '/parent/events' },
 ];
 
 const adminMenu = [
-  { name: 'Pulse', icon: Pulse01Icon, slug: '/admin/pulse' },
-  { name: 'Results Center', icon: Award01Icon, slug: '/admin/results' },
-  { name: 'Insights Hub', icon: AnalyticsUpIcon, slug: '/admin/insights' },
-  { name: 'Class Timetable', icon: Calendar03Icon, slug: '/admin/timetable' },
-  { name: 'Fees', icon: Invoice01Icon, slug: '/admin/fees' },
-  { name: 'Enrollment', icon: UserGroupIcon, slug: '/admin/enrollment' },
-  { name: 'Transport', icon: SchoolBusIcon, slug: '/admin/transport' },
-  { name: 'Procurement', icon: PackageIcon, slug: '/admin/procurement' },
-  { name: 'Library', icon: Book02Icon, slug: '/admin/library' },
-  { name: 'Hostel', icon: BedIcon, slug: '/admin/hostel' },
-  { name: 'Performance', icon: Activity04Icon, slug: '/admin/performance' },
-  { name: 'Operations', icon: Settings01Icon, slug: '/admin/operations' },
+  { section: 'Dashboard', name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/admin/pulse' },
+  { section: 'Modular Suite', name: 'ClassroomPRO', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/admin/classrooms' },
+  { name: 'TutorsPRO', icon: UserGroupIcon, activeIcon: UserGroupIcon, slug: '/admin/tutors' },
+  { name: 'CoursesPRO', icon: BookOpenIcon, activeIcon: BookOpenIcon, slug: '/admin/cohorts' },
+  { name: 'ResultsPRO', icon: ChartPieIcon, activeIcon: ChartPieIcon, slug: '/admin/results' },
+  { section: 'Operations', name: 'Insights Hub', icon: ChartBarIcon, activeIcon: ChartBarIcon, slug: '/admin/insights' },
+  { name: 'Class Timetable', icon: CalendarIcon, activeIcon: CalendarIcon, slug: '/admin/timetable' },
+  { name: 'Fees', icon: BanknotesIcon, activeIcon: BanknotesIcon, slug: '/admin/fees' },
+  { name: 'Enrollment', icon: UserGroupIcon, activeIcon: UserGroupIcon, slug: '/admin/enrollment' },
+  { name: 'Transport', icon: TruckIcon, activeIcon: TruckIcon, slug: '/admin/transport' },
+  { name: 'Procurement', icon: ShoppingCartIcon, activeIcon: ShoppingCartIcon, slug: '/admin/procurement' },
+  { name: 'Library', icon: BookOpenIcon, activeIcon: BookOpenIcon, slug: '/admin/library' },
+  { name: 'Hostel', icon: HomeModernIcon, activeIcon: HomeModernIcon, slug: '/admin/hostel' },
+  { name: 'Performance', icon: ChartBarIcon, activeIcon: ChartBarIcon, slug: '/admin/performance' },
+  { name: 'Operations Controls', icon: Cog6ToothIcon, activeIcon: Cog6ToothIcon, slug: '/admin/operations' },
 ];
 
 const admissionsMenu = [
-  { name: 'CRM Home', icon: DashboardSpeed02Icon, slug: '/admin/admissions' },
-  { name: 'Inquiries', icon: UserGroupIcon, slug: '/admin/admissions/inquiries' },
-  { name: 'Applications', icon: FolderCheckIcon, slug: '/admin/admissions/applications' },
-  { name: 'Pipeline', icon: AnalyticsUpIcon, slug: '/admin/admissions/pipeline' },
-  { name: 'Tours & Events', icon: Calendar03Icon, slug: '/admin/admissions/tours' },
+  { name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/admin/admissions' },
+  { name: 'Inquiries', icon: EnvelopeIcon, activeIcon: EnvelopeIcon, slug: '/admin/admissions/inquiries' },
+  { name: 'Applications', icon: FolderOpenIcon, activeIcon: FolderOpenIcon, slug: '/admin/admissions/applications' },
+  { name: 'Pipeline', icon: ChartBarIcon, activeIcon: ChartBarIcon, slug: '/admin/admissions/pipeline' },
 ];
 
 const devRoles = [
-  { name: 'Student Dashboard', slug: '/student/dashboard' },
-  { name: 'Teacher Dashboard', slug: '/teacher/dashboard' },
-  { name: 'Parent Dashboard', slug: '/parent/dashboard' },
-  { name: 'Principal Pulse', slug: '/admin/pulse' },
-  { name: 'Admissions Officer', slug: '/admin/admissions' },
+  { name: 'Student Portal', slug: '/student/dashboard' },
+  { name: 'Teacher Portal', slug: '/teacher/dashboard' },
+  { name: 'Parent Portal', slug: '/parent/dashboard' },
+  { name: 'Principal Portal', slug: '/admin/pulse' },
+  { name: 'Admissions CRM', slug: '/admin/admissions' },
 ];
 
 export default function PortalSidebar() {
@@ -110,7 +99,7 @@ export default function PortalSidebar() {
 
   const getActiveMenu = () => {
     if (pathname.startsWith('/teacher')) return teacherMenu;
-    if (pathname.startsWith('/parent') || pathname === '/payments' || pathname === '/communications') return parentMenu;
+    if (pathname.startsWith('/parent')) return parentMenu;
     if (pathname.startsWith('/admin')) {
       if (pathname.includes('/admissions')) return admissionsMenu;
       return adminMenu;
@@ -118,69 +107,103 @@ export default function PortalSidebar() {
     return studentMenu;
   };
 
-  const menuItems = getActiveMenu().filter(item => {
-    if (item.name.includes('Exam') || item.slug.includes('exams')) return hasModule('EXAM_PRO');
-    if (item.name.includes('Result') || item.slug.includes('results')) return hasModule('RESULT_PRO');
-    if (item.name.includes('Tutor') || item.slug.includes('tutor')) return hasModule('TUTORS_PRO');
-    if (item.name.includes('Future Skills') || item.slug.includes('future-skills')) return hasModule('COURSES_PRO');
-    return true;
-  });
+  const menuItems = getActiveMenu();
 
   return (
-    <aside className={styles.sidebar}>
-      <div className={styles.logoArea}>
-        {tenant?.logo_url ? (
-          <img src={tenant.logo_url} alt={tenant.name} style={{ width: 'auto', height: '48px', borderRadius: '8px' }} />
-        ) : (
-          <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold' }}>
-            {tenant?.logo_emoji || tenant?.name?.charAt(0) || 'S'}
-          </div>
-        )}
-        <div className={styles.schoolBrand}>
-          <span className={styles.schoolName}>{tenant?.short_name || tenant?.name || 'SchoolHub'}</span>
-          <span className={styles.portalTag}>Digital Campus</span>
+    <>
+      <div>
+        {/* Logo */}
+        <div className="px-8 mb-6">
+          <Image 
+            src="/logo.png" 
+            alt="ResultsPRO" 
+            width={300} 
+            height={80} 
+            className="w-auto h-20 object-contain" 
+          />
         </div>
-      </div>
 
-      <nav className={styles.nav}>
-        {menuItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.slug;
-          return (
-            <Link 
-              key={item.slug} 
-              href={item.slug} 
-              className={`${styles.link} ${isActive ? styles.active : ''}`}
-            >
-              <Icon 
-                size={22} 
-                className={styles.icon} 
-              />
-              <span className={styles.name}>{item.name}</span>
-            </Link>
-          );
-        })}
-
-        <div style={{ marginTop: '2rem', padding: '0 1rem', fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          Roles (Dev)
+        {/* Menu Sections */}
+        <div className="px-6 space-y-1">
+          {!menuItems[0]?.section && <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">MENU</p>}
+          
+          {menuItems.map((item, index) => {
+            const isActive = pathname === item.slug;
+            const Icon = isActive ? item.activeIcon : item.icon;
+            return (
+              <React.Fragment key={item.slug}>
+                {item.section && (
+                  <div className={`px-2 ${index > 0 ? 'mt-8' : ''} mb-3`}>
+                    <p className="text-xs font-semibold text-gray-400 tracking-wider uppercase">{item.section}</p>
+                  </div>
+                )}
+                <Link 
+                  href={item.slug} 
+                  className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}
+                >
+                  <Icon className="w-6 h-6" />
+                  {item.name}
+                </Link>
+              </React.Fragment>
+            );
+          })}
         </div>
-        {devRoles.map((role) => (
-          <Link 
-            key={role.slug} 
-            href={role.slug} 
-            className={`${styles.link} ${pathname.startsWith(role.slug) ? styles.active : ''}`}
-          >
-            <span className={styles.name} style={{ marginLeft: '2rem' }}>{role.name}</span>
+
+        <div className="px-6 mt-10 space-y-1">
+          <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">SWITCH ROLES</p>
+          
+          {devRoles.map((role) => {
+            const isActive = pathname.startsWith(role.slug.split('/')[1] === 'admin' ? '/admin' : role.slug);
+            return (
+              <Link 
+                key={role.slug}
+                href={role.slug} 
+                className={`flex items-center gap-3 text-sm px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}
+              >
+                <UserGroupIcon className="w-5 h-5" />
+                {role.name}
+              </Link>
+            );
+          })}
+        </div>
+        
+        <div className="px-6 mt-10 space-y-1">
+          <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">GENERAL</p>
+          
+          <Link href="/support" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${pathname === '/support' ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
+            <QuestionMarkCircleIcon className="w-6 h-6" />
+            Help
           </Link>
-        ))}
-      </nav>
-
-      <div className={styles.footer}>
-        <Link href="/support" className={styles.link}>
-          <HelpCircleIcon size={20} />
-          <span>Support</span>
-        </Link>
+          <Link href="/login" className="flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
+            <ArrowRightOnRectangleIcon className="w-6 h-6" />
+            Logout
+          </Link>
+        </div>
       </div>
-    </aside>
+
+      {/* Bottom App Promo */}
+      <div className="px-6 mt-8">
+        <div 
+          className="rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
+          style={{ backgroundImage: "url('/skies.jpeg')" }}
+        >
+          {/* Lighter overlay for text readability */}
+          <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
+          
+          <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mb-4 relative z-10 backdrop-blur-sm">
+            <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center">
+              <div className="w-1.5 h-1.5 bg-[#146ef5] rounded-full"></div>
+            </div>
+          </div>
+          <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">Download our<br/>Mobile App</h4>
+          <p className="text-[10px] text-gray-300 mb-6 relative z-10">Get easy in another way</p>
+          
+          <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] transition-colors text-white text-xs font-semibold py-3 rounded-full relative z-10 shadow-md">
+            Download
+          </button>
+        </div>
+      </div>
+    </>
   );
 }

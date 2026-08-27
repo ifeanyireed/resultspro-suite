@@ -48,14 +48,14 @@ export default function DashboardNoteDetailClient() {
   if (loading) {
     return (
       <div className="flex-1 pb-12 flex items-center justify-center">
-        <Loader2 className="w-12 h-12 text-green animate-spin" />
+        <Loader2 className="w-12 h-12 text-emerald-600 animate-spin" />
       </div>
     );
   }
 
   if (!note) {
     return (
-      <div className="flex-1 pb-12 flex flex-col items-center justify-center text-white">
+      <div className="flex-1 pb-12 flex flex-col items-center justify-center text-gray-900">
         <h1 className="text-2xl font-bold mb-4">Note Not Found</h1>
         <Link href="/dashboard/notes">
           <Button>Back to Notes</Button>
@@ -66,20 +66,20 @@ export default function DashboardNoteDetailClient() {
 
   return (
     <div className="flex-1 pb-12">
-      <div className="h-16 border-b border-white/10 flex items-center justify-between px-8 bg-navy/50 backdrop-blur-md sticky top-0 z-40">
+      <div className="h-16 border-b border-gray-100 flex items-center justify-between px-8 bg-gray-50 backdrop-blur-md sticky top-0 z-40">
         <div className="flex items-center gap-4">
-          <Link href="/dashboard/notes" className="w-10 h-10 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors">
-            <ArrowLeft className="w-5 h-5 text-white" />
+          <Link href="/dashboard/notes" className="w-10 h-10 rounded-full hover:bg-gray-50 flex items-center justify-center transition-colors">
+            <ArrowLeft className="w-5 h-5 text-gray-900" />
           </Link>
-          <div className="h-6 w-px bg-white/10 mx-2" />
-          <h1 className="text-lg font-bold text-white truncate max-w-md">{note.title}</h1>
+          <div className="h-6 w-px bg-gray-100 mx-2" />
+          <h1 className="text-lg font-bold text-gray-900 truncate max-w-md">{note.title}</h1>
         </div>
         <div className="flex items-center gap-3">
           <Button 
             variant="outline" 
             size="sm" 
             onClick={toggleBookmark}
-            className={`border-white/10 text-white hover:bg-white/5 transition-all ${isBookmarked ? 'bg-green/10 text-green border-green/20' : ''}`}
+            className={`border-gray-100 text-gray-900 hover:bg-gray-50 transition-all ${isBookmarked ? 'bg-emerald-50 text-emerald-600 border-green/20' : ''}`}
           >
             {isBookmarked ? (
               <><BookmarkCheck className="w-4 h-4 mr-2" /> Saved</>
@@ -87,13 +87,13 @@ export default function DashboardNoteDetailClient() {
               <><Bookmark className="w-4 h-4 mr-2" /> Save</>
             )}
           </Button>
-          <Button variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/5 hidden md:flex">
+          <Button variant="outline" size="sm" className="border-gray-100 text-gray-900 hover:bg-gray-50 hidden md:flex">
             <Share2 className="w-4 h-4 mr-2" /> Share
           </Button>
-          <Button variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/5">
+          <Button variant="outline" size="sm" className="border-gray-100 text-gray-900 hover:bg-gray-50">
             <Download className="w-4 h-4 mr-2" /> Save Offline
           </Button>
-          <Button className="bg-green-600 text-white font-bold" size="sm">
+          <Button className="bg-emerald-600 text-white font-bold" size="sm">
             <CheckCircle2 className="w-4 h-4 mr-2" /> Mark Completed
           </Button>
         </div>
@@ -102,39 +102,39 @@ export default function DashboardNoteDetailClient() {
       <div className="max-w-7xl mx-auto p-8 grid lg:grid-cols-4 gap-8">
         {/* Main Content: The Note */}
         <div className="lg:col-span-3">
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 min-h-[600px] shadow-2xl relative overflow-hidden">
-             <div className="absolute top-0 right-0 w-96 h-96 bg-green/5 blur-[100px] rounded-full -mr-48 -mt-48 opacity-50" />
+          <div className="bg-white shadow-sm border border-gray-100 rounded-3xl p-8 md:p-12 min-h-[600px] shadow-2xl relative overflow-hidden">
+             <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-600/5 blur-[100px] rounded-full -mr-48 -mt-48 opacity-50" />
              
              {/* Note Meta */}
              <div className="relative z-10 flex items-center gap-3 mb-8">
-                <span className="bg-green/10 text-green text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">{note.topic?.subject?.name || "Biology"}</span>
-                <span className="text-muted-foreground text-xs font-medium uppercase tracking-widest">{note.topic?.class?.name || "SSS 1"} • {note.topic?.term === 1 ? '1st Term' : note.topic?.term === 2 ? '2nd Term' : '3rd Term'} • Week {note.topic?.week}</span>
+                <span className="bg-emerald-50 text-emerald-600 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">{note.topic?.subject?.name || "Biology"}</span>
+                <span className="text-gray-500 text-xs font-medium uppercase tracking-widest">{note.topic?.class?.name || "SSS 1"} • {note.topic?.term === 1 ? '1st Term' : note.topic?.term === 2 ? '2nd Term' : '3rd Term'} • Week {note.topic?.week}</span>
              </div>
 
              {/* Note Content */}
              <article className="relative z-10 prose prose-invert max-w-none">
-                <h1 className="text-4xl md:text-5xl font-bold text-white mb-8 font-display leading-tight">{note.title}</h1>
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 font-display leading-tight">{note.title}</h1>
                 
-                <div className="flex items-center gap-6 py-6 border-y border-white/5 mb-10 text-muted-foreground">
+                <div className="flex items-center gap-6 py-6 border-y border-white/5 mb-10 text-gray-500">
                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-green" />
+                      <Clock className="w-4 h-4 text-emerald-600" />
                       <span className="text-xs font-bold uppercase tracking-widest">8 Mins Read</span>
                    </div>
                    <div className="flex items-center gap-2">
-                      <Eye className="w-4 h-4 text-green" />
+                      <Eye className="w-4 h-4 text-emerald-600" />
                       <span className="text-xs font-bold uppercase tracking-widest">1,245 Students</span>
                    </div>
                 </div>
 
-                <div className="text-white/80 leading-relaxed text-lg" dangerouslySetInnerHTML={{ __html: note.content }} />
+                <div className="text-gray-900/80 leading-relaxed text-lg" dangerouslySetInnerHTML={{ __html: note.content }} />
              </article>
 
              {/* Pagination */}
-             <div className="relative z-10 mt-16 pt-8 border-t border-white/10 flex items-center justify-between">
-                <button className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-white transition-colors">
+             <div className="relative z-10 mt-16 pt-8 border-t border-gray-100 flex items-center justify-between">
+                <button className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors">
                   <ChevronLeft className="w-5 h-5" /> Previous Topic
                 </button>
-                <button className="flex items-center gap-2 text-sm font-bold text-green hover:underline transition-colors">
+                <button className="flex items-center gap-2 text-sm font-bold text-emerald-600 hover:underline transition-colors">
                   Next Topic <ChevronRight className="w-5 h-5" />
                 </button>
              </div>
@@ -143,50 +143,50 @@ export default function DashboardNoteDetailClient() {
 
         {/* Sidebar: Related Activities */}
         <div className="space-y-6">
-          <div className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-blue/5 blur-2xl rounded-full -mr-12 -mt-12 group-hover:bg-blue/10 transition-colors" />
-            <h4 className="font-bold text-white mb-4 flex items-center gap-2 relative z-10">
-              <BrainCircuit className="w-5 h-5 text-blue" /> Practice
+          <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 backdrop-blur-sm relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-blue/5 blur-2xl rounded-full -mr-12 -mt-12 group-hover:bg-blue-50 transition-colors" />
+            <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2 relative z-10">
+              <BrainCircuit className="w-5 h-5 text-[#146ef5]" /> Practice
             </h4>
-            <p className="text-xs text-muted-foreground mb-4 relative z-10">Test your understanding of this topic with a quick quiz.</p>
+            <p className="text-xs text-gray-500 mb-4 relative z-10">Test your understanding of this topic with a quick quiz.</p>
             {note.quizzes?.[0] ? (
               <Link href={`/dashboard/quizzes/${note.quizzes[0].id}`}>
-                 <Button className="w-full bg-blue hover:bg-blue/90 text-white font-bold h-11 relative z-10 shadow-lg shadow-blue/20">
+                 <Button className="w-full bg-blue hover:bg-blue/90 text-gray-900 font-bold h-11 relative z-10 shadow-lg shadow-blue/20">
                     Start Topic Quiz
                  </Button>
               </Link>
             ) : (
-              <Button disabled className="w-full border border-white/10 bg-white/5 text-muted-foreground font-bold h-11 relative z-10">
+              <Button disabled className="w-full border border-gray-100 bg-white shadow-sm border border-gray-100 text-gray-500 font-bold h-11 relative z-10">
                 No Quiz Available
               </Button>
             )}
           </div>
 
-          <div className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-amber/5 blur-2xl rounded-full -mr-12 -mt-12 group-hover:bg-amber/10 transition-colors" />
-            <h4 className="font-bold text-white mb-4 flex items-center gap-2 relative z-10">
-              <Layers className="w-5 h-5 text-amber" /> Revision
+          <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 backdrop-blur-sm relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-amber/5 blur-2xl rounded-full -mr-12 -mt-12 group-hover:bg-amber-50 transition-colors" />
+            <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2 relative z-10">
+              <Layers className="w-5 h-5 text-amber-600" /> Revision
             </h4>
-            <p className="text-xs text-muted-foreground mb-4 relative z-10">Use flashcards to memorize key terms and definitions.</p>
+            <p className="text-xs text-gray-500 mb-4 relative z-10">Use flashcards to memorize key terms and definitions.</p>
             {note.flashcards?.[0] ? (
               <Link href={`/dashboard/flashcards/${note.flashcards[0].id}`}>
-                 <Button className="w-full bg-amber hover:bg-amber/90 text-white font-bold h-11 relative z-10 shadow-lg shadow-amber/20">
+                 <Button className="w-full bg-amber hover:bg-amber/90 text-gray-900 font-bold h-11 relative z-10 shadow-lg shadow-amber/20">
                     Study Flashcards
                  </Button>
               </Link>
             ) : (
-              <Button disabled className="w-full border border-white/10 bg-white/5 text-muted-foreground font-bold h-11 relative z-10">
+              <Button disabled className="w-full border border-gray-100 bg-white shadow-sm border border-gray-100 text-gray-500 font-bold h-11 relative z-10">
                 No Cards Available
               </Button>
             )}
           </div>
 
-          <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-            <h4 className="font-bold text-white mb-4 uppercase tracking-widest text-[10px]">Topic Progress</h4>
-            <div className="w-full h-2 bg-navy rounded-full overflow-hidden mb-2">
-               <div className="w-1/3 h-full bg-green" />
+          <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+            <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-widest text-[10px]">Topic Progress</h4>
+            <div className="w-full h-2 bg-[#146ef5] rounded-full overflow-hidden mb-2">
+               <div className="w-1/3 h-full bg-emerald-600" />
             </div>
-            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">33% Mastered</p>
+            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">33% Mastered</p>
           </div>
         </div>
       </div>

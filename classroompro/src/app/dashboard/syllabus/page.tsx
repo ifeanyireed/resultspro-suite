@@ -1,6 +1,5 @@
 "use client";
 
-import { DashboardHeader } from "@/components/DashboardLayout";
 import { IconBook as BookOpen, IconChevronRight as ChevronRight, IconCircleCheck as CheckCircle2, IconCircle as Circle, IconPlayerPlay as Play, IconArrowLeft as ArrowLeft, IconFilter as Filter, IconBrain as BrainCircuit, IconStack2 as Layers } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -39,7 +38,7 @@ export default function SyllabusPage() {
   if (loading) {
     return (
       <div className="flex-1 pb-12 animate-in fade-in duration-500">
-        <DashboardHeader title="Course Syllabus" />
+        
         <div className="p-8 max-w-4xl space-y-10">
           <div className="flex justify-between items-center">
             <div className="space-y-3">
@@ -68,19 +67,19 @@ export default function SyllabusPage() {
 
   return (
     <div className="flex-1 pb-12">
-      <DashboardHeader title="Course Syllabus" />
+      
       
       <main className="p-8 max-w-4xl space-y-10">
         <div className="flex justify-between items-center">
            <div>
-              <Link href="/dashboard/subjects" className="inline-flex items-center text-xs font-bold text-muted-foreground hover:text-white transition-colors mb-4 uppercase tracking-widest">
+              <Link href="/dashboard/subjects" className="inline-flex items-center text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors mb-4 uppercase tracking-widest">
                  <ArrowLeft className="w-3 h-3 mr-1" /> All Subjects
               </Link>
-              <h2 className="text-4xl font-bold text-white mb-2 font-display">{data?.subject?.name || subjectParam}</h2>
-              <p className="text-muted-foreground text-sm font-medium">Full academic curriculum and learning path.</p>
+              <h2 className="text-4xl font-bold text-gray-900 mb-2 font-display">{data?.subject?.name || subjectParam}</h2>
+              <p className="text-gray-500 text-sm font-medium">Full academic curriculum and learning path.</p>
            </div>
            
-           <Button variant="outline" className="border-white/10 text-white h-11 px-6 rounded-xl font-bold">
+           <Button variant="outline" className="border-gray-100 text-gray-900 h-11 px-6 rounded-xl font-bold">
               <Filter className="w-4 h-4 mr-2" /> All Terms
            </Button>
         </div>
@@ -89,43 +88,43 @@ export default function SyllabusPage() {
           {(data?.terms || []).map((term: any) => (
             <div key={term.number} className="space-y-8 relative">
               {/* Vertical timeline line */}
-              <div className="absolute left-6 top-14 bottom-0 w-px bg-white/5" />
+              <div className="absolute left-6 top-14 bottom-0 w-px bg-white shadow-sm border border-gray-100" />
               
               <div className="flex items-center gap-6">
-                 <div className="w-12 h-12 rounded-2xl bg-blue/10 border border-blue/20 flex items-center justify-center text-blue font-black text-sm relative z-10">
+                 <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue/20 flex items-center justify-center text-[#146ef5] font-black text-sm relative z-10">
                     {term.number}
                  </div>
-                 <h3 className="text-2xl font-bold text-white font-display">{ordinalSuffix(term.number)} Term</h3>
+                 <h3 className="text-2xl font-bold text-gray-900 font-display">{ordinalSuffix(term.number)} Term</h3>
               </div>
 
               <div className="space-y-4 pl-12">
                 {(term.topics || []).map((topic: any) => (
                   <div key={topic.id} className="group relative">
                     <Link href={`/dashboard/topic-hub?topicId=${topic.id}`}>
-                      <div className="p-6 rounded-[32px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] hover:bg-white/[0.05] hover:border-white/20 transition-all flex items-center justify-between">
+                      <div className="p-6 rounded-[32px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] hover:bg-white/[0.05] hover:border-gray-200 transition-all flex items-center justify-between">
                          <div className="flex items-center gap-6">
-                            <div className="w-12 h-12 rounded-2xl bg-navy border border-white/10 flex items-center justify-center text-muted-foreground group-hover:text-green group-hover:border-green/30 transition-all">
-                               {topic.isCompleted ? <CheckCircle2 className="w-6 h-6 text-green" /> : <Circle className="w-5 h-5 opacity-20" />}
+                            <div className="w-12 h-12 rounded-2xl bg-[#146ef5] border border-gray-100 flex items-center justify-center text-gray-500 group-hover:text-emerald-600 group-hover:border-green/30 transition-all">
+                               {topic.isCompleted ? <CheckCircle2 className="w-6 h-6 text-emerald-600" /> : <Circle className="w-5 h-5 opacity-20" />}
                             </div>
                             <div>
-                               <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-1">Week {topic.week}</div>
-                               <h4 className="text-lg font-bold text-white group-hover:text-green transition-colors">{topic.title}</h4>
+                               <div className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-1">Week {topic.week}</div>
+                               <h4 className="text-lg font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">{topic.title}</h4>
                             </div>
                          </div>
 
                          <div className="flex items-center gap-4">
                             <div className="hidden md:flex gap-2">
-                               <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-muted-foreground" title="Notes">
+                               <div className="w-8 h-8 rounded-lg bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-500" title="Notes">
                                   <BookOpen className="w-4 h-4" />
                                </div>
-                               <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-muted-foreground" title="Quizzes">
+                               <div className="w-8 h-8 rounded-lg bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-500" title="Quizzes">
                                   <BrainCircuit className="w-4 h-4" />
                                </div>
-                               <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-muted-foreground" title="Flashcards">
+                               <div className="w-8 h-8 rounded-lg bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-500" title="Flashcards">
                                   <Layers className="w-4 h-4" />
                                </div>
                             </div>
-                            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white group-hover:bg-green group-hover:text-navy transition-all">
+                            <div className="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-900 group-hover:bg-emerald-600 group-hover:text-white transition-all">
                                <Play className="w-4 h-4 ml-0.5" />
                             </div>
                          </div>
@@ -137,7 +136,7 @@ export default function SyllabusPage() {
             </div>
           ))}
           {(!data?.terms || data.terms.length === 0) && (
-            <p className="text-muted-foreground italic text-center py-20">No syllabus items found for this subject.</p>
+            <p className="text-gray-500 italic text-center py-20">No syllabus items found for this subject.</p>
           )}
         </div>
       </main>
