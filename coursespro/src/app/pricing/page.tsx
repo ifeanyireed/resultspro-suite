@@ -36,10 +36,10 @@ export default function PricingPage() {
             {/* Pro */}
             <div className="card p-8 bg-navy text-white border-2 border-red relative shadow-xl transform md:-translate-y-4">
               <div className="absolute top-0 right-0 bg-red text-white text-xs fw-700 px-3 py-1 rounded-bl-lg">POPULAR</div>
-              <h3 className="text-xl fw-600 mb-2 text-white">Pro Learner</h3>
-              <p className="text-muted-light text-sm mb-6">Full access to a single cohort.</p>
-              <div className="mb-6"><span className="text-4xl fw-700">₦150k</span><span className="text-muted-light">/cohort</span></div>
-              <ul className="space-y-3 text-sm text-muted-light mb-8">
+              <h3 className="text-xl fw-600 mb-2 text-black">Pro Learner</h3>
+              <p className="text-black text-sm mb-6">Full access to a single cohort.</p>
+              <div className="mb-6"><span className="text-4xl fw-700 text-black">₦150k</span><span className="text-black">/cohort</span></div>
+              <ul className="space-y-3 text-sm text-black mb-8">
                 <li className="flex items-center gap-2"><IconCheck size={16} className="text-green-400" /> Live class attendance</li>
                 <li className="flex items-center gap-2"><IconCheck size={16} className="text-green-400" /> Mentor reviews & feedback</li>
                 <li className="flex items-center gap-2"><IconCheck size={16} className="text-green-400" /> Graded projects & certification</li>

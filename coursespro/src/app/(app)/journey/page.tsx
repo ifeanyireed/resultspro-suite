@@ -1,157 +1,67 @@
-'use client';
-
+"use client";
 import React from 'react';
-import { IconStack2 as Layers, IconCircleCheck as CheckCircle2, IconLock as Lock, IconPlayerPlay as PlayCircle, IconClock as Clock, IconBook as BookOpen, IconSparkles as Sparkles, IconArrowRight as ArrowRight } from '@tabler/icons-react';
-import Link from 'next/link';
-import { mockJourneyStages } from '@/lib/data';
+import { PlayIcon, CheckCircleIcon, LockClosedIcon, DocumentTextIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 
 export default function JourneyPage() {
+  const stages = [
+    { title: 'Foundational Knowledge', status: 'completed', desc: 'Core concepts and theory.', duration: '2 Weeks' },
+    { title: 'Practical Application', status: 'completed', desc: 'Hands-on exercises and mini-projects.', duration: '3 Weeks' },
+    { title: 'Projects', status: 'current', desc: 'Build your first full-stack application.', duration: '4 Weeks' },
+    { title: 'Feedback & Iteration', status: 'locked', desc: 'Mentor reviews and refinement.', duration: '2 Weeks' },
+    { title: 'Demo Day', status: 'locked', desc: 'Present to the cohort and industry partners.', duration: '1 Week' },
+    { title: 'Portfolio', status: 'locked', desc: 'Publish your case studies.', duration: '1 Week' },
+  ];
+
   return (
-    <div className="flex-1 flex flex-col">
-      
-
-      <div className="p-8 max-w-5xl mx-auto w-full space-y-8">
-        {/* Journey Progress Bar */}
-        <div className="bg-surface rounded-2xl border border-line p-6 shadow-sm space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="mono text-xs font-bold uppercase text-signal">Cohort Pathway</span>
-              <h3 className="font-grotesk font-bold text-xl text-ink mt-0.5">
-                Fullstack Systems & Distributed Microservices
-              </h3>
-            </div>
-            <div className="text-right">
-              <span className="text-2xl font-extrabold font-grotesk text-ink">42%</span>
-              <p className="text-[11px] text-ink-faint">Stage 02 of 07 In Progress</p>
-            </div>
-          </div>
-
-          <div className="w-full bg-line rounded-full h-2 overflow-hidden">
-            <div className="bg-signal h-2 rounded-full" style={{ width: '42%' }}></div>
-          </div>
+    <>
+      <div className="flex items-end justify-between mb-8 mt-2">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">The Learning Journey</h1>
+          <p className="text-sm text-gray-500 mt-1">Master the curriculum step-by-step through guided mentorship.</p>
         </div>
+        <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
+          <PlayIcon className="w-4 h-4" />
+          Resume Module
+        </button>
+      </div>
 
-        {/* 7 Stages Chronological Stack */}
-        <div className="space-y-6">
-          {mockJourneyStages.map((stage) => {
-            const isCompleted = stage.status === 'COMPLETED';
-            const isInProgress = stage.status === 'IN_PROGRESS';
-            const isLocked = stage.status === 'LOCKED';
-
-            return (
-              <div
-                key={stage.id}
-                className={`bg-surface rounded-2xl border transition-all shadow-sm overflow-hidden ${
-                  isInProgress
-                    ? 'border-signal ring-2 ring-signal/10'
-                    : isCompleted
-                    ? 'border-growth/40'
-                    : 'border-line opacity-75'
-                }`}
-              >
-                {/* Stage Header */}
-                <div className="p-6 flex items-start justify-between border-b border-line bg-surface2/30">
-                  <div className="flex items-start space-x-4">
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center font-grotesk font-bold text-sm ${
-                        isCompleted
-                          ? 'bg-growth text-white'
-                          : isInProgress
-                          ? 'bg-signal text-white'
-                          : 'bg-line text-ink-faint'
-                      }`}
-                    >
-                      {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : stage.number}
-                    </div>
-
-                    <div>
-                      <div className="flex items-center space-x-2">
-                        <h4 className="font-grotesk font-bold text-lg text-ink">{stage.title}</h4>
-                        {isInProgress && (
-                          <span className="px-2 py-0.5 rounded-full bg-signal-soft text-signal text-[10px] font-bold">
-                            CURRENT STAGE
-                          </span>
-                        )}
-                        {isCompleted && (
-                          <span className="px-2 py-0.5 rounded-full bg-growth-soft text-growth text-[10px] font-bold">
-                            COMPLETED
-                          </span>
-                        )}
-                        {isLocked && (
-                          <span className="px-2 py-0.5 rounded-full bg-surface2 text-ink-faint text-[10px] font-bold flex items-center space-x-1 border border-line">
-                            <Lock className="w-3 h-3" />
-                            <span>LOCKED</span>
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-xs text-ink-soft mt-1">{stage.subtitle}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Modules List */}
-                {stage.modules.length > 0 ? (
-                  <div className="divide-y divide-line p-2">
-                    {stage.modules.map((mod) => (
-                      <div
-                        key={mod.id}
-                        className="p-4 flex items-center justify-between hover:bg-surface2/50 rounded-xl transition-colors"
-                      >
-                        <div className="flex items-center space-x-3.5">
-                          <div
-                            className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                              mod.completed ? 'bg-growth-soft text-growth' : 'bg-signal-soft text-signal'
-                            }`}
-                          >
-                            {mod.completed ? (
-                              <CheckCircle2 className="w-4 h-4" />
-                            ) : (
-                              <PlayCircle className="w-4 h-4" />
-                            )}
-                          </div>
-                          <div>
-                            <h5 className="font-bold text-xs text-ink">{mod.title}</h5>
-                            <div className="flex items-center space-x-3 text-[11px] text-ink-faint mt-0.5">
-                              <span className="flex items-center space-x-1">
-                                <Clock className="w-3 h-3" />
-                                <span>{mod.duration}</span>
-                              </span>
-                              <span className="flex items-center space-x-1">
-                                <BookOpen className="w-3 h-3" />
-                                <span>{mod.readingsCount} Readings</span>
-                              </span>
-                              {mod.hasQuiz && (
-                                <span className="text-signal font-semibold">Quiz Included</span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-
-                        <Link
-                          href={`/journey/${mod.id}`}
-                          className={`px-3.5 py-1.5 rounded-md text-xs font-bold flex items-center space-x-1 transition-all ${
-                            mod.completed
-                              ? 'bg-surface2 text-ink hover:bg-line'
-                              : 'bg-signal text-white hover:bg-signal-light shadow-sm'
-                          }`}
-                        >
-                          <span>{mod.completed ? 'Review' : 'Start Lesson'}</span>
-                          <ArrowRight className="w-3 h-3" />
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="p-6 text-center text-xs text-ink-faint">
-                    <Lock className="w-5 h-5 mx-auto mb-1 text-ink-faint" />
-                    <span>Unlocks upon successful mentor evaluation of preceding stage projects.</span>
-                  </div>
-                )}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-4">
+          {stages.map((stage, i) => (
+            <div key={i} className={`bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex items-center gap-6 ${stage.status === 'locked' ? 'opacity-60' : ''}`}>
+              <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${
+                stage.status === 'completed' ? 'bg-emerald-50 text-emerald-600' :
+                stage.status === 'current' ? 'bg-blue-50 text-[#146ef5]' : 'bg-gray-50 text-gray-400'
+              }`}>
+                {stage.status === 'completed' && <CheckCircleIcon className="w-6 h-6" />}
+                {stage.status === 'current' && <DocumentTextIcon className="w-6 h-6" />}
+                {stage.status === 'locked' && <LockClosedIcon className="w-6 h-6" />}
               </div>
-            );
-          })}
+              <div className="flex-1">
+                <div className="flex justify-between items-start mb-1">
+                  <h3 className="text-lg font-medium text-gray-900">{stage.title}</h3>
+                  <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">{stage.duration}</span>
+                </div>
+                <p className="text-sm text-gray-500">{stage.desc}</p>
+              </div>
+              {stage.status === 'current' && (
+                <button className="w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center text-gray-900 transition-colors">
+                  <ArrowRightIcon className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+        
+        <div className="space-y-6">
+          <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 relative overflow-hidden group">
+             <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full filter blur-[2rem] opacity-30"></div>
+             <h3 className="text-xl font-normal text-white mb-6">Journey Progress</h3>
+             <h2 className="text-5xl font-medium tracking-tight text-white mb-2">38%</h2>
+             <p className="text-sm text-white/80">You are on track to graduate by Oct 15th.</p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

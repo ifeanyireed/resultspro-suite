@@ -1,109 +1,70 @@
-'use client';
-
+"use client";
 import React from 'react';
-import { IconTrophy as Trophy, IconFlame as Flame, IconAward as Award, IconBolt as Zap, IconStar as Star } from '@tabler/icons-react';
-import { mockLeaderboard } from '@/lib/data';
+import { TrophyIcon, FireIcon } from '@heroicons/react/24/outline';
 
 export default function LeaderboardPage() {
-  const badges = [
-    { name: 'Fast Finisher', desc: 'Submitted sprint deliverables 48 hours ahead of schedule', earned: true },
-    { name: 'Project Hero', desc: 'Maintained 100% test coverage across all microservice projects', earned: true },
-    { name: 'Top Reviewer', desc: 'Provided detailed peer reviews on 15+ community pull requests', earned: true },
-    { name: 'Class Champion', desc: 'Held the #1 rank on the cohort leaderboard for 2 consecutive weeks', earned: false },
+  const leaders = [
+    { rank: 1, name: 'David K.', xp: 4520, streak: 14, avatar: 'david' },
+    { rank: 2, name: 'Sarah M.', xp: 4100, streak: 12, avatar: 'sarah' },
+    { rank: 3, name: 'Tunde B.', xp: 3950, streak: 8, avatar: 'tunde' },
+    { rank: 4, name: 'Amaka O.', xp: 3800, streak: 5, avatar: 'amaka' },
+    { rank: 5, name: 'John D.', xp: 3420, streak: 2, avatar: 'john' },
   ];
 
   return (
-    <div className="flex-1 flex flex-col">
-      
-
-      <div className="p-8 max-w-5xl mx-auto w-full space-y-8">
-        {/* Class Champion Spotlight */}
-        <div className="bg-gradient-to-r from-signal to-signal-light rounded-2xl p-6 text-white shadow-md flex items-center justify-between">
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2 text-xs font-bold text-signal-soft">
-              <Trophy className="w-4 h-4 text-amber fill-amber" />
-              <span>WEEKLY CLASS CHAMPION</span>
-            </div>
-            <h3 className="font-grotesk font-bold text-2xl">Tunde Bakare</h3>
-            <p className="text-xs text-signal-soft">
-              Earned 4,850 XP • 18-Day Streak • 4 Approved Microservice Architectures
-            </p>
-          </div>
-          <div className="w-16 h-16 rounded-full border-4 border-white/20 overflow-hidden shadow-inner hidden sm:block">
-            <img
-              src="/avatars/character10.jpg"
-              alt="Champion"
-              className="w-full h-full object-cover"
-            />
-          </div>
+    <>
+      <div className="flex items-end justify-between mb-8 mt-2">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Cohort Leaderboard</h1>
+          <p className="text-sm text-gray-500 mt-1">Earn XP by completing modules, helping peers, and shipping projects.</p>
         </div>
-
-        {/* Leaderboard Table */}
-        <div className="bg-surface rounded-2xl border border-line shadow-sm overflow-hidden space-y-2 p-6">
-          <h4 className="font-grotesk font-bold text-base text-ink mb-4">Cohort Ranking (Sprint 03)</h4>
-
-          <div className="divide-y divide-line text-xs">
-            {mockLeaderboard.map((user) => (
-              <div
-                key={user.rank}
-                className={`py-3.5 flex items-center justify-between px-3 rounded-xl transition-colors ${
-                  user.isCurrentUser ? 'bg-signal-soft/40 font-bold border border-signal/20' : 'hover:bg-surface2/50'
-                }`}
-              >
-                <div className="flex items-center space-x-4">
-                  <span className="mono font-bold text-sm text-ink-faint w-6 text-center">
-                    #{user.rank}
-                  </span>
-                  <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
-                  <div>
-                    <p className="text-ink">{user.name}</p>
-                    <p className="mono text-[10px] text-ink-faint">{user.badge}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-6">
-                  <div className="flex items-center space-x-1 text-ember">
-                    <Flame className="w-3.5 h-3.5 fill-ember" />
-                    <span>{user.streak}d</span>
-                  </div>
-                  <div className="flex items-center space-x-1 text-signal font-bold">
-                    <Zap className="w-3.5 h-3.5 fill-signal" />
-                    <span>{user.xp.toLocaleString()} XP</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Badge Showcase */}
-        <div className="space-y-4">
-          <h4 className="font-grotesk font-bold text-base text-ink">Earned Badges & Achievements</h4>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {badges.map((b, idx) => (
-              <div
-                key={idx}
-                className={`p-5 rounded-2xl border flex items-start space-x-3.5 shadow-sm ${
-                  b.earned ? 'bg-surface border-line' : 'bg-surface2/50 border-line/40 opacity-60'
-                }`}
-              >
-                <div
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                    b.earned ? 'bg-signal-soft text-signal' : 'bg-line text-ink-faint'
-                  }`}
-                >
-                  <Award className="w-5 h-5" />
-                </div>
-                <div>
-                  <h5 className="font-bold text-xs text-ink">{b.name}</h5>
-                  <p className="text-xs text-ink-soft mt-0.5">{b.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="bg-orange-50 text-orange-600 px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm border border-orange-100">
+           <FireIcon className="w-5 h-5" />
+           <span className="font-bold text-sm">12 Day Streak!</span>
         </div>
       </div>
-    </div>
+
+      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-gray-50/50 border-b border-gray-100">
+              <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider w-16 text-center">Rank</th>
+              <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">Builder</th>
+              <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">XP Earned</th>
+              <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Active Streak</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-50">
+            {leaders.map((leader) => (
+              <tr key={leader.rank} className="hover:bg-gray-50/50 transition-colors">
+                <td className="py-4 px-6 text-center">
+                  {leader.rank === 1 ? <TrophyIcon className="w-6 h-6 mx-auto text-amber-500" /> : 
+                   leader.rank === 2 ? <TrophyIcon className="w-6 h-6 mx-auto text-gray-400" /> :
+                   leader.rank === 3 ? <TrophyIcon className="w-6 h-6 mx-auto text-orange-400" /> :
+                   <span className="text-gray-500 font-bold">{leader.rank}</span>}
+                </td>
+                <td className="py-4 px-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden shrink-0"><img src={`https://i.pravatar.cc/150?u=${leader.avatar}`} alt={leader.name} /></div>
+                    <span className="font-medium text-gray-900">{leader.name}</span>
+                  </div>
+                </td>
+                <td className="py-4 px-6">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-[#146ef5]">{leader.xp.toLocaleString()} XP</span>
+                    <div className="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                       <div className="h-full bg-[#146ef5]" style={{ width: `${(leader.xp/5000)*100}%`}}></div>
+                    </div>
+                  </div>
+                </td>
+                <td className="py-4 px-6 text-right">
+                  <span className="inline-flex items-center gap-1 text-sm font-medium text-orange-500 bg-orange-50 px-2 py-0.5 rounded-lg"><FireIcon className="w-4 h-4"/> {leader.streak} Days</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }

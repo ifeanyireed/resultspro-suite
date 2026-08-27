@@ -1,99 +1,65 @@
-'use client';
-
-import React, { useState } from 'react';
-import { IconLayoutKanban as Kanban, IconPlus as Plus, IconMessage as MessageSquare, IconPaperclip as Paperclip, IconCircleCheck as CheckCircle2, IconStar as Star } from '@tabler/icons-react';
+"use client";
+import React from 'react';
+import { PlusIcon, ChatBubbleLeftIcon, PaperClipIcon } from '@heroicons/react/24/outline';
 
 export default function WorkspacePage() {
-  const [tasks, setTasks] = useState([
-    { id: '1', title: 'Implement GORM MySQL Pool', stage: 'DOING', tags: ['Backend', 'Go'], comments: 4, attachments: 2 },
-    { id: '2', title: 'Design Token Introspection Middleware', stage: 'REVIEW', tags: ['Security', 'Zero-PII'], comments: 7, attachments: 1 },
-    { id: '3', title: 'Scratch Card Cryptographic Generator', stage: 'APPROVED', tags: ['ResultPRO', 'Go'], comments: 12, attachments: 3 },
-    { id: '4', title: 'Multiplayer CBT WebSockets Arena', stage: 'BACKLOG', tags: ['Realtime', 'Melody'], comments: 2, attachments: 0 },
-    { id: '5', title: 'Spaced Repetition Flashcard Engine', stage: 'PORTFOLIO', tags: ['LMS', 'Next.js'], comments: 8, attachments: 4 },
-  ]);
-
   const columns = [
-    { id: 'BACKLOG', label: 'Sprint Backlog', color: 'bg-slate-400' },
-    { id: 'DOING', label: 'In Progress', color: 'bg-signal' },
-    { id: 'REVIEW', label: 'Peer & Mentor Review', color: 'bg-amber' },
-    { id: 'APPROVED', label: 'Mentor Approved', color: 'bg-growth' },
-    { id: 'PORTFOLIO', label: 'Portfolio Ready', color: 'bg-purple-600' },
+    { name: 'To Do', count: 3, color: 'bg-gray-100 text-gray-600', dot: 'bg-gray-400' },
+    { name: 'In Progress', count: 2, color: 'bg-blue-50 text-[#146ef5]', dot: 'bg-[#146ef5]' },
+    { name: 'In Review', count: 1, color: 'bg-amber-50 text-amber-600', dot: 'bg-amber-500' },
+    { name: 'Done', count: 5, color: 'bg-emerald-50 text-emerald-600', dot: 'bg-emerald-500' },
+  ];
+
+  const tasks = [
+    { title: 'Draft API Schema', col: 'In Progress', tags: ['Backend'], comments: 4, attachments: 2 },
+    { title: 'Setup UI Library', col: 'To Do', tags: ['Frontend'], comments: 0, attachments: 1 },
+    { title: 'Peer Review Auth', col: 'In Review', tags: ['Security'], comments: 12, attachments: 0 },
   ];
 
   return (
-    <div className="flex-1 flex flex-col">
-      
-
-      <div className="p-8 space-y-6 flex-1 flex flex-col">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <Kanban className="w-5 h-5 text-signal" />
-            <h3 className="font-grotesk font-bold text-base text-ink">Active Sprint Tasks</h3>
-          </div>
-          <button className="bg-signal text-white px-3.5 py-1.5 rounded-lg text-xs font-bold hover:bg-signal-light transition-colors flex items-center space-x-1 shadow-sm">
-            <Plus className="w-3.5 h-3.5" />
-            <span>Create Task</span>
-          </button>
+    <>
+      <div className="flex items-end justify-between mb-8 mt-2">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Workspace</h1>
+          <p className="text-sm text-gray-500 mt-1">Manage your sprint tasks and project deliverables.</p>
         </div>
+        <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
+          <PlusIcon className="w-4 h-4" />
+          New Task
+        </button>
+      </div>
 
-        {/* Columns Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 flex-1 items-start">
-          {columns.map((col) => {
-            const colTasks = tasks.filter((t) => t.stage === col.id);
-            return (
-              <div key={col.id} className="bg-surface2/60 rounded-2xl p-4 border border-line flex flex-col space-y-3 min-h-[500px]">
-                <div className="flex items-center justify-between pb-2 border-b border-line">
-                  <div className="flex items-center space-x-2">
-                    <span className={`w-2 h-2 rounded-full ${col.color}`}></span>
-                    <h4 className="font-bold text-xs text-ink">{col.label}</h4>
-                  </div>
-                  <span className="mono text-[10px] font-bold text-ink-faint px-1.5 py-0.5 rounded bg-surface border border-line">
-                    {colTasks.length}
-                  </span>
-                </div>
-
-                <div className="space-y-3 flex-1">
-                  {colTasks.map((task) => (
-                    <div
-                      key={task.id}
-                      className="bg-surface rounded-xl p-4 border border-line shadow-sm hover:border-signal/30 transition-all space-y-3 cursor-grab"
-                    >
-                      <h5 className="font-bold text-xs text-ink">{task.title}</h5>
-
-                      <div className="flex flex-wrap gap-1">
-                        {task.tags.map((tag, i) => (
-                          <span
-                            key={i}
-                            className="mono text-[9px] font-bold px-2 py-0.5 rounded-full bg-surface2 text-ink-soft border border-line"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-
-                      <div className="flex items-center justify-between pt-2 border-t border-line/60 text-[10px] text-ink-faint">
-                        <div className="flex items-center space-x-2">
-                          <span className="flex items-center space-x-0.5">
-                            <MessageSquare className="w-3 h-3" />
-                            <span>{task.comments}</span>
-                          </span>
-                          <span className="flex items-center space-x-0.5">
-                            <Paperclip className="w-3 h-3" />
-                            <span>{task.attachments}</span>
-                          </span>
-                        </div>
-                        <div className="w-5 h-5 rounded-full bg-signal text-white flex items-center justify-center font-bold text-[9px]">
-                          AR
-                        </div>
-                      </div>
-                    </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {columns.map(col => (
+          <div key={col.name} className="flex flex-col gap-4">
+            <div className="flex items-center justify-between pb-2 border-b border-gray-200">
+              <div className="flex items-center gap-2">
+                <div className={`w-2.5 h-2.5 rounded-full ${col.dot}`}></div>
+                <h3 className="font-medium text-gray-900">{col.name}</h3>
+              </div>
+              <span className={`text-xs font-bold px-2 py-0.5 rounded ${col.color}`}>{col.count}</span>
+            </div>
+            
+            {tasks.filter(t => t.col === col.name).map((task, i) => (
+              <div key={i} className="bg-white rounded-[1.25rem] p-5 shadow-sm border border-gray-100 hover:-translate-y-1 transition-transform cursor-pointer group">
+                <h4 className="text-sm font-medium text-gray-900 mb-3">{task.title}</h4>
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {task.tags.map(tag => (
+                    <span key={tag} className="text-[10px] font-bold uppercase tracking-wider text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">{tag}</span>
                   ))}
                 </div>
+                <div className="flex items-center justify-between pt-3 border-t border-gray-50 text-gray-400">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1"><ChatBubbleLeftIcon className="w-3.5 h-3.5"/> <span className="text-xs">{task.comments}</span></div>
+                    <div className="flex items-center gap-1"><PaperClipIcon className="w-3.5 h-3.5"/> <span className="text-xs">{task.attachments}</span></div>
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-gray-100"></div>
+                </div>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        ))}
       </div>
-    </div>
+    </>
   );
 }
