@@ -35,12 +35,12 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/logo.png" />
       </head>
-      <body
-        className={`${spaceGrotesk.variable} ${dmSans.variable} antialiased`}
-      >
+      <body>
+        
         <ClientProviders>
           {children}
         </ClientProviders>
+      
       </body>
     </html>
   );

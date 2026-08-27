@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
 import { IconBell as Bell, IconCalendar as Calendar, IconCreditCard as CreditCard, IconMessage as MessageSquare, IconTrophy as Trophy, IconSettings as Settings, IconChevronRight as ChevronRight, IconMoreVertical as MoreVertical, IconCheck as Check, IconLoader2 as Loader2, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -53,8 +52,7 @@ export default function ParentNotifications() {
 
   return (
     <main className="min-h-screen bg-navy pb-24">
-      <Navbar />
-      
+            
       <div className="max-w-4xl mx-auto px-4 md:px-8 pt-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>

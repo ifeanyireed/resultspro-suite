@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import { IconSend as Send, IconPaperclip as Paperclip, IconSearch as Search, IconMoreVertical as MoreVertical, IconPhone as Phone, IconVideo as Video, IconInfoCircle as Info, IconChevronLeft as ChevronLeft, IconCheckCheck as CheckCheck, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -62,8 +61,7 @@ export default function StudentMessages() {
   return (
     <RoleGate allowedRoles={['STUDENT', 'TUTOR', 'PARENT', 'SUPERADMIN']}>
       <main className="h-screen bg-navy flex flex-col overflow-hidden">
-        <Navbar />
-        
+                
         <div className="flex-1 flex max-w-[1600px] mx-auto w-full overflow-hidden border-x border-white/5 bg-white/[0.02]">
           {/* Sidebar - Contacts */}
           <div className="w-full md:w-80 lg:w-96 border-r border-white/5 flex flex-col bg-navy/30">

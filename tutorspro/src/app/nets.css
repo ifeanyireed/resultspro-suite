@@ -3,7 +3,7 @@
    Editorial Swiss Enterprise
    ═══════════════════════════════════════════════════════════════ */
 
-@theme {
+:root {
   --color-nets-navy:        #1A1FA8;
   --color-nets-navy-dark:   #0D1060;
   --color-nets-red:         #C0272D;
@@ -22,7 +22,7 @@
   --color-nets-dark-70:     rgba(13, 16, 96, 0.70);
   --color-nets-dark-50:     rgba(13, 16, 96, 0.50);
 
-  --font-sans:  'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: system-ui, -apple-system, sans-serif;
 
   --radius-xs:  1px;
   --radius-sm:  2px;

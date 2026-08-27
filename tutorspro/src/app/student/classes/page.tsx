@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import { IconCalendar as Calendar, IconClock as Clock, IconBook as BookOpen, IconPlay as Play, IconChevronRight as ChevronRight, IconMapPin as MapPin, IconVideo as Video, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
@@ -40,8 +39,7 @@ export default function StudentClasses() {
   return (
     <RoleGate allowedRoles={['STUDENT', 'TUTOR', 'SCHOOL_ADMIN', 'SUPERADMIN']}>
       <main className="min-h-screen bg-navy pb-24">
-        <Navbar />
-        
+                
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
           <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-12">
              My <span className="text-blue">Schedule</span>

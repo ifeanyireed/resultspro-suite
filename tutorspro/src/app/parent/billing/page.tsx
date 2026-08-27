@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
 import { IconCreditCard as CreditCard, IconWallet as Wallet, IconHistory as History, IconArrowDownLeft as ArrowDownLeft, IconArrowUpRight as ArrowUpRight, IconDownload as Download, IconShieldCheck as ShieldCheck, IconPlus as Plus, IconChevronRight as ChevronRight, IconTrendingUp as TrendingUp, IconAlertCircle as AlertCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -32,8 +31,7 @@ export default function ParentBilling() {
 
   return (
     <main className="min-h-screen bg-navy pb-24">
-      <Navbar />
-      
+            
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>

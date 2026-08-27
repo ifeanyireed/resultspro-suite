@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import { IconChartBar as BarChart3, IconTrendingUp as TrendingUp, IconCalendar as Calendar, IconCircleCheck as CheckCircle2, IconTrophy as Trophy, IconClock as Clock, IconBrain as Brain, IconChevronRight as ChevronRight, IconDownload as Download, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -52,8 +51,7 @@ export default function StudentProgress() {
   return (
     <RoleGate allowedRoles={['STUDENT', 'PARENT', 'SUPERADMIN']}>
       <main className="min-h-screen bg-navy pb-24">
-        <Navbar />
-        
+                
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
             <div>

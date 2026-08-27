@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
 import { IconPlus as Plus, IconFileText as FileText, IconPaperclip as Paperclip, IconCalendar as Calendar, IconCircleCheck as CheckCircle2, IconMoreVertical as MoreVertical, IconChevronRight as ChevronRight, IconBook as BookOpen, IconTarget as Target, IconClock as Clock, IconDeviceFloppy as Save, IconTrash2 as Trash2, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -67,8 +66,7 @@ export default function TutorPlanner() {
 
   return (
     <main className="min-h-screen bg-navy pb-24">
-      <Navbar />
-      
+            
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>

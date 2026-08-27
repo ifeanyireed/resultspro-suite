@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import { IconUser as User, IconBell as Bell, IconShield as Shield, IconCreditCard as CreditCard, IconLogout as LogOut, IconSmartphone as Smartphone, IconGlobe as Globe, IconCheck as Check, IconChevronRight as ChevronRight, IconCamera as Camera, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -63,8 +62,7 @@ export default function StudentSettings() {
   return (
     <RoleGate allowedRoles={['STUDENT', 'TUTOR', 'PARENT', 'SCHOOL_ADMIN', 'PLATFORM_ADMIN', 'SUPERADMIN']}>
       <main className="min-h-screen bg-navy pb-24">
-        <Navbar />
-        
+                
         <div className="max-w-6xl mx-auto px-4 md:px-8 pt-12">
           <div className="mb-12">
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">

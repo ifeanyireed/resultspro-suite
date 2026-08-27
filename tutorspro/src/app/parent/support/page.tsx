@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
 import { IconHelpCircle as HelpCircle, IconSearch as Search, IconMessageCircle as MessageCircle, IconFileText as FileText, IconChevronRight as ChevronRight, IconMail as Mail, IconMessage as MessageSquare, IconShieldQuestion as ShieldQuestion, IconLifeBuoy as LifeBuoy, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -36,8 +35,7 @@ export default function ParentSupport() {
 
   return (
     <main className="min-h-screen bg-navy pb-24">
-      <Navbar />
-      
+            
       <div className="max-w-5xl mx-auto px-4 md:px-8 pt-12">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue/10 border border-blue/20 text-[10px] font-bold text-blue uppercase tracking-widest mb-6">

@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
 import { IconBuilding as Building2, IconCreditCard as CreditCard, IconChevronRight as ChevronRight, IconPlus as Plus, IconCircleCheck as CheckCircle2, IconClock as Clock, IconAlertCircle as AlertCircle, IconArrowUpRight as ArrowUpRight, IconShieldCheck as ShieldCheck, IconSmartphone as Smartphone, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -65,8 +64,7 @@ export default function TutorPayouts() {
 
   return (
     <main className="min-h-screen bg-navy pb-24">
-      <Navbar />
-      
+            
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>

@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import { IconBolt as Zap, IconRotateCcw as RotateCcw, IconCheck as Check, IconX as X, IconChevronRight as ChevronRight, IconStack2 as Layers, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { RoleGate } from '@/components/RoleGate';
@@ -41,8 +40,7 @@ export default function Flashcards() {
   return (
     <RoleGate allowedRoles={['STUDENT', 'TUTOR', 'SCHOOL_ADMIN', 'SUPERADMIN']}>
       <main className="min-h-screen bg-navy pb-24">
-        <Navbar />
-        
+                
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
              <div>

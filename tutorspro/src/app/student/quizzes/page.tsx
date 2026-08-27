@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import { IconBrain as Brain, IconTrophy as Trophy, IconChevronRight as ChevronRight, IconPlay as Play, IconClock as Clock, IconSparkles as Sparkles, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';
@@ -35,8 +34,7 @@ export default function Quizzes() {
   return (
     <RoleGate allowedRoles={['STUDENT', 'TUTOR', 'SCHOOL_ADMIN', 'SUPERADMIN']}>
       <main className="min-h-screen bg-navy pb-24">
-        <Navbar />
-        
+                
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
           {/* ... rest of header ... */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">

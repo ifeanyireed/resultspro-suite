@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import { IconWallet as Wallet, IconPlus as Plus, IconArrowUpRight as ArrowUpRight, IconArrowDownLeft as ArrowDownLeft, IconCreditCard as CreditCard, IconHistory as History, IconTrendingUp as TrendingUp, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -41,8 +40,7 @@ export default function StudentWallet() {
   return (
     <RoleGate allowedRoles={['STUDENT', 'PARENT', 'SUPERADMIN']}>
       <main className="min-h-screen bg-navy pb-24">
-        <Navbar />
-        
+                
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
           <div className="mb-12">
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">

@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import { IconPenTool as PenTool, IconSquare as Square, IconCircle as Circle, IconType as Type, IconImage as ImageIcon, IconUndo2 as Undo2, IconRedo2 as Redo2, IconTrash2 as Trash2, IconDownload as Download, IconShare2 as Share2, IconSettings as Settings, IconChevronRight as ChevronRight, IconMaximize2 as Maximize2, IconMousePointer2 as MousePointer2, IconEraser as Eraser } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
@@ -16,8 +15,7 @@ export default function TutorWhiteboard() {
 
   return (
     <main className="h-screen bg-navy flex flex-col overflow-hidden">
-      <Navbar />
-      
+            
       {/* Tools Toolbar */}
       <div className="h-16 border-b border-white/5 bg-navy/80 backdrop-blur-md flex items-center justify-between px-6 shrink-0">
          <div className="flex items-center gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/10">

@@ -1,204 +1,323 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
-import { IconCalendar as Calendar, IconUsers as Users, IconWallet as Wallet, IconChevronRight as ChevronRight, IconPlay as Play, IconClock as Clock, IconStar as Star, IconCircleCheck as CheckCircle2, IconLayoutDashboard as LayoutDashboard, IconArrowUpRight as ArrowUpRight, IconPlus as Plus, IconLoader2 as Loader2 } from '@tabler/icons-react';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useAuthStore } from '@/store/useAuthStore';
-import { RoleGate } from '@/components/RoleGate';
-import api from '@/lib/api';
+import React from 'react';
+import { 
+  PlusIcon,
+  ArrowUpRightIcon,
+  PlayIcon,
+  PauseIcon,
+  StopIcon,
+  EllipsisHorizontalIcon,
+  CheckCircleIcon,
+  UserPlusIcon,
+  ShoppingCartIcon
+} from '@heroicons/react/24/outline';
+import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 
 export default function TutorDashboard() {
-  const { user } = useAuthStore();
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchDashboard = async () => {
-      try {
-        const res = await api.get('/tutor/dashboard');
-        setData(res.data);
-      } catch (err) {
-        console.error('Failed to fetch tutor dashboard:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDashboard();
-  }, []);
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-navy flex items-center justify-center">
-        <Loader2 className="w-12 h-12 text-amber animate-spin" />
-      </main>
-    );
-  }
-
-  const upcomingSessions = data?.upcoming_sessions || [];
-  const pendingRequests = data?.pending_requests || [];
-  const stats = data?.stats || { total_earnings: 0, hours_taught: 0, avg_rating: 0, teaching_score: 0 };
-
   return (
-    <RoleGate allowedRoles={['TUTOR', 'SCHOOL_ADMIN', 'SUPERADMIN']}>
-      <main className="min-h-screen bg-navy pb-24">
-        <Navbar />
+    <>
+      {/* Dashboard Title & Actions */}
+      <div className="flex items-end justify-between mb-8 mt-2">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Agent Dashboard</h1>
+          <p className="text-sm text-gray-500 mt-1">Plan, prioritize, and accomplish your tasks with ease.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
+            <PlusIcon className="w-4 h-4" />
+            Register School
+          </button>
+          <button className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-[#f6f9f8] text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
+            Buy Cards
+          </button>
+        </div>
+      </div>
+
+      {/* Top Metric Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         
-        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-          {/* Header */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
-            <div>
-              <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
-                Tutor <span className="text-amber">Workspace</span>
-              </h1>
-              <p className="text-gray-400">
-                Welcome back, {user?.full_name?.split(' ')[0] || 'Tutor'}. 
-                {upcomingSessions.length > 0 ? ` You have ${upcomingSessions.length} sessions today.` : " No sessions scheduled for today."}
-              </p>
-            </div>
-            <div className="flex gap-4">
-              <button className="px-6 py-3 rounded-2xl bg-green-600 text-white font-bold flex items-center gap-2 hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
-                <Plus className="w-5 h-5" /> Set Availability
-              </button>
+        {/* Card 1: Primary Dark */}
+        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+          {/* Subtle Depth Effects */}
+          <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
+          <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
+          
+          <div className="flex justify-between items-start z-10">
+            <h3 className="text-xl font-normal text-white">Bounties Earned</h3>
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm group-hover:bg-white group-hover:text-[#146ef5] transition-colors">
+              <ArrowUpRightIcon className="w-4 h-4" />
             </div>
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main (Left) */}
-            <div className="lg:col-span-2 space-y-8">
-              {/* Stats Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                {[
-                  { label: 'Total Earnings', value: `₦${stats.total_earnings.toLocaleString()}`, icon: Wallet, color: 'text-green', bg: 'bg-green/10' },
-                  { label: 'Hours Taught', value: `${stats.hours_taught}h`, icon: Clock, color: 'text-blue', bg: 'bg-blue/10' },
-                  { label: 'Avg Rating', value: stats.avg_rating.toString(), icon: Star, color: 'text-amber', bg: 'bg-amber/10' },
-                ].map((stat, i) => (
-                  <div key={i} className="p-6 rounded-3xl bg-white/5 border border-white/10">
-                     <div className={`w-10 h-10 rounded-xl ${stat.bg} ${stat.color} flex items-center justify-center mb-4`}>
-                        <stat.icon className="w-5 h-5" />
-                     </div>
-                     <div className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">{stat.label}</div>
-                     <div className="text-2xl font-display font-bold text-white">{stat.value}</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Upcoming Sessions */}
-              <section>
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-display font-bold text-white flex items-center gap-2">
-                    <Calendar className="w-6 h-6 text-blue" />
-                    Today&apos;s Sessions
-                  </h2>
-                  <Link href="/tutor/calendar" className="text-sm text-amber font-medium hover:underline">Full Calendar</Link>
-                </div>
-                
-                {upcomingSessions.length > 0 ? (
-                  <div className="space-y-4">
-                    {upcomingSessions.map((session: any) => (
-                      <div key={session.id} className="p-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-all group">
-                        <div className="flex flex-col md:flex-row justify-between gap-6">
-                          <div className="flex gap-4">
-                            <div className="w-14 h-14 rounded-2xl bg-amber/20 flex items-center justify-center text-amber">
-                              <Users className="w-7 h-7" />
-                            </div>
-                            <div>
-                              <h3 className="text-xl font-bold text-white mb-1">{session.subject}</h3>
-                              <div className="text-sm text-gray-400 flex items-center gap-2">
-                                Student: {session.student}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex flex-col md:items-end gap-2 text-right">
-                            <div className="text-sm text-white font-medium flex items-center gap-2">
-                              <Clock className="w-4 h-4 text-amber" /> {session.time}
-                            </div>
-                            <div className="text-xs text-gray-500 uppercase font-bold tracking-widest">{session.duration}</div>
-                          </div>
-                          <div className="flex items-center">
-                            <button className="w-full md:w-auto px-6 py-3 rounded-xl bg-green-600 text-white font-bold flex items-center justify-center gap-2">
-                              <Play className="w-4 h-4 fill-current" />
-                              Start Class
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="p-12 rounded-3xl bg-white/5 border border-dashed border-white/10 text-center">
-                    <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">No sessions scheduled for today</p>
-                  </div>
-                )}
-              </section>
-            </div>
-
-            {/* Sidebar (Right) */}
-            <div className="space-y-8">
-              {/* Pending Requests */}
-              <section>
-                <h2 className="text-2xl font-display font-bold text-white mb-6 flex items-center gap-2">
-                  <Bell className="w-6 h-6 text-green" />
-                  New Requests
-                </h2>
-                
-                {pendingRequests.length > 0 ? (
-                  <div className="space-y-4">
-                    {pendingRequests.map((req: any) => (
-                      <div key={req.id} className="p-5 rounded-3xl bg-white/5 border border-white/10">
-                        <div className="font-bold text-white mb-1">{req.student}</div>
-                        <div className="text-sm text-gray-400 mb-4">{req.subject} • {req.time}</div>
-                        <div className="flex gap-2">
-                           <button className="flex-1 py-2 rounded-xl bg-green/20 text-green font-bold text-xs hover:bg-green/30 transition-all">Accept</button>
-                           <button className="flex-1 py-2 rounded-xl bg-white/5 text-gray-500 font-bold text-xs hover:bg-white/10 transition-all">Decline</button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="p-8 rounded-3xl bg-white/5 border border-dashed border-white/10 text-center">
-                    <p className="text-gray-500 font-bold uppercase tracking-widest text-[10px]">No pending requests</p>
-                  </div>
-                )}
-              </section>
-
-              {/* Teaching Progress */}
-              <section className="p-8 rounded-[40px] bg-gradient-to-br from-blue/20 to-transparent border border-white/10 relative overflow-hidden">
-                 <ArrowUpRight className="absolute -top-4 -right-4 w-32 h-32 text-blue/10" />
-                 <h3 className="text-xl font-display font-bold text-white mb-2">Teaching Score</h3>
-                 <div className="text-4xl font-black text-blue mb-4">{stats.teaching_score}%</div>
-                 <p className="text-sm text-gray-500 leading-relaxed">
-                   Your score is based on student reviews, punctuality, and material quality. Keep it up!
-                 </p>
-              </section>
-
-              {/* Quick Actions */}
-              <section className="space-y-3">
-                 <button className="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-bold flex items-center justify-center gap-2 hover:bg-white/10 transition-all">
-                   <LayoutDashboard className="w-5 h-5 text-amber" /> Lesson Planner
-                 </button>
-                 <button className="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-bold flex items-center justify-center gap-2 hover:bg-white/10 transition-all">
-                   <CheckCircle2 className="w-5 h-5 text-green" /> Mark Assignments
-                 </button>
-              </section>
+          <div className="z-10">
+            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">₦450k</h2>
+            <div className="flex items-center gap-1.5 text-xs text-white/80">
+              <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 5%</div>
+              <span>Increased from last month</span>
             </div>
           </div>
         </div>
-      </main>
-    </RoleGate>
-  );
-}
 
-function Bell({ className }: { className?: string }) {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      width="24" height="24" viewBox="0 0 24 24" fill="none" 
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" 
-      className={className}
-    >
-      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
-      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
-    </svg>
+        {/* Card 2: White */}
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Unpaid Earnings</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <ArrowUpRightIcon className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">₦150k</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 6%</div>
+              <span>Increased from last month</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 3: White */}
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Active Schools</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <ArrowUpRightIcon className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">12</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 2%</div>
+              <span>Increased from last month</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 4: White */}
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Total Cards Sold</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+              <ArrowUpRightIcon className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">1,250</h2>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <span className="text-gray-400">On Discuss</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Main Content Area */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+        
+        {/* Left Side (Analytics, Reminders, Leads, etc) */}
+        <div className="lg:col-span-9 flex flex-col gap-3">
+          
+          {/* Top Row of Left Side */}
+          <div className="grid grid-cols-1 lg:grid-cols-9 gap-3">
+            {/* Analytics Bar Chart (Mock) */}
+            <div className="lg:col-span-6 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
+              <h3 className="text-xl font-normal text-gray-900 mb-6">Sales Analytics</h3>
+          <div className="flex-1 flex items-end justify-between gap-2 px-4 pb-2">
+            {[
+              { h: '60%', type: 'stripe' },
+              { h: '80%', type: 'solid-dark' },
+              { h: '65%', type: 'solid-light', tooltip: '74%' },
+              { h: '90%', type: 'solid-dark' },
+              { h: '70%', type: 'stripe' },
+              { h: '45%', type: 'stripe' },
+              { h: '55%', type: 'stripe' },
+            ].map((bar, i) => (
+              <div key={i} className="w-[12%] flex flex-col items-center gap-3">
+                <div className="w-full relative flex items-end h-[140px]">
+                  {bar.tooltip && (
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-sm text-xs font-bold px-2 py-1 rounded">
+                      {bar.tooltip}
+                    </div>
+                  )}
+                  <div 
+                    className={`w-full rounded-full transition-all hover:opacity-80 ${
+                      bar.type === 'solid-dark' ? 'bg-[#146ef5]' : 
+                      bar.type === 'solid-light' ? 'bg-[#6ba0f5]' : 
+                      'bg-gray-100'
+                    }`}
+                    style={{ 
+                      height: bar.h,
+                      backgroundImage: bar.type === 'stripe' ? 'repeating-linear-gradient(45deg, transparent, transparent 5px, #d1d5db 5px, #d1d5db 7px)' : 'none'
+                    }}
+                  ></div>
+                </div>
+                <span className="text-xs font-medium text-gray-400">
+                  {['S','M','T','W','T','F','S'][i]}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Reminders / Next Actions */}
+        <div className="lg:col-span-3 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
+          <div>
+            <h3 className="text-xl font-normal text-gray-900 mb-6">Reminders</h3>
+            <h4 className="text-xl font-normal text-gray-900 leading-tight mb-2">Meeting with<br/>Excel Academy</h4>
+            <p className="text-sm text-gray-500 mb-8 flex items-center gap-2">
+              Time : 02.00 pm - 04.00 pm
+            </p>
+          </div>
+          <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] text-white font-semibold py-3.5 rounded-full transition-colors flex items-center justify-center gap-2 shadow-sm">
+            <PlayIcon className="w-5 h-5 fill-current" />
+            Start Meeting
+          </button>
+        </div>
+
+          </div>
+
+          {/* Bottom Row of Left Side */}
+          <div className="grid grid-cols-1 lg:grid-cols-9 gap-3">
+            
+            {/* Registrations List */}
+            <div className="lg:col-span-5 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-xl font-normal text-gray-900">Active Leads</h3>
+            <button className="text-[#146ef5] text-xs font-semibold px-3 py-1.5 border border-[#146ef5] rounded-full flex items-center gap-1 hover:bg-[#eef5ff] transition-colors">
+              <PlusIcon className="w-3 h-3" /> Add Lead
+            </button>
+          </div>
+          <div className="space-y-5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                    <img src="/character9.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                <div>
+                  <h4 className="text-base font-normal text-gray-900">Greenwood High</h4>
+                  <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Onboarding Form</span></p>
+                </div>
+              </div>
+              <span className="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-md">Completed</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                    <img src="/character10.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                <div>
+                  <h4 className="text-base font-normal text-gray-900">Lighthouse Academy</h4>
+                  <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Pricing Approval</span></p>
+                </div>
+              </div>
+              <span className="px-2 py-1 bg-yellow-50 text-yellow-600 text-[10px] font-bold rounded-md">In Progress</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                    <img src="/character11.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                <div>
+                  <h4 className="text-base font-normal text-gray-900">Harvard Int'l</h4>
+                  <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Initial Pitch</span></p>
+                </div>
+              </div>
+              <span className="px-2 py-1 bg-red-50 text-red-500 text-[10px] font-bold rounded-md">Pending</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Project Progress Donut */}
+        <div className="lg:col-span-4 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col items-center">
+          <h3 className="text-xl font-normal text-gray-900 mb-6 self-start">Target Progress</h3>
+          
+          <div className="relative w-full aspect-[2/1] max-w-[260px] flex items-end justify-center mt-2 mb-4">
+            <svg viewBox="0 0 100 50" className="w-full h-full overflow-visible">
+              <defs>
+                <pattern id="stripes-arc" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                  <line x1="0" y1="0" x2="0" y2="4" stroke="#d1d5db" strokeWidth="2" />
+                </pattern>
+              </defs>
+              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="url(#stripes-arc)" strokeWidth="15" strokeLinecap="round" strokeDasharray="125.66 125.66" strokeDashoffset="0" />
+              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#111827" strokeWidth="15" strokeLinecap="round" strokeDasharray="82.93 125.66" strokeDashoffset="0" />
+              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#146ef5" strokeWidth="15" strokeLinecap="round" strokeDasharray="51.52 125.66" strokeDashoffset="0" />
+            </svg>
+            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end translate-y-[15%]">
+              <span className="text-5xl font-normal tracking-tight text-gray-900">41%</span>
+              <span className="text-xs font-medium text-gray-500 mt-1">Target Reached</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 mt-auto w-full justify-center pt-6">
+            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#146ef5]"></div><span className="text-xs text-gray-500 font-medium">Completed</span></div>
+            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#111827]"></div><span className="text-xs text-gray-500 font-medium">In Progress</span></div>
+            <div className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full bg-white border border-gray-200" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 1px, #d1d5db 1px, #d1d5db 3px)' }}></div>
+              <span className="text-xs text-gray-500 font-medium">Pending</span>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar Stack */}
+        <div className="lg:col-span-3 flex flex-col gap-3">
+          
+          {/* Recent Activity */}
+          <div className="w-full bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
+            <h3 className="text-xl font-normal text-gray-900 mb-6">Recent Activity</h3>
+            <div className="flex-1 flex flex-col gap-8 pb-2">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                  <CheckCircleIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-base font-normal text-gray-900">Bounty Credited</p>
+                  <p className="text-sm text-gray-500 mt-0.5">₦50k from Excel Academy</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center shrink-0">
+                  <UserPlusIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-base font-normal text-gray-900">New Lead Added</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Springfield High School</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center shrink-0">
+                  <ShoppingCartIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-base font-normal text-gray-900">PINs Purchased</p>
+                  <p className="text-sm text-gray-500 mt-0.5">50 PINs standard pack</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div className="rounded-[1.5rem] p-6 text-white relative overflow-hidden aspect-square flex flex-col justify-between shadow-lg group">
+            {/* Background Image */}
+            <div 
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+              style={{ backgroundImage: "url('/abstract-blue-4.jpg')" }}
+            ></div>
+            {/* Gradient Dark Overlay */}
+            <div className="absolute inset-0 bg-black/10"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+            
+            <h3 className="text-xl font-normal text-white relative z-10 text-left w-full">Time Tracker</h3>
+            <div className="relative z-10 flex flex-col items-center justify-center flex-1">
+              <div className="text-5xl font-medium tracking-tight mb-8 font-sans">01:24:08</div>
+              <div className="flex gap-4">
+                <button className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:scale-105 transition-transform shadow-md">
+                  <PauseIcon className="w-5 h-5 text-gray-900" strokeWidth={2.5} />
+                </button>
+                <button className="w-12 h-12 rounded-full bg-red-500 flex items-center justify-center hover:scale-105 transition-transform shadow-md">
+                  <StopIcon className="w-5 h-5 text-white" strokeWidth={2.5} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '@/components/Navbar';
 import { IconGamepad2 as Gamepad2, IconTrophy as Trophy, IconUsers as Users, IconBolt as Zap, IconPlay as Play, IconStar as Star, IconSparkles as Sparkles, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
@@ -39,8 +38,7 @@ export default function GamesHub() {
   return (
     <RoleGate allowedRoles={['STUDENT', 'PARENT', 'SUPERADMIN']}>
       <main className="min-h-screen bg-navy pb-24">
-        <Navbar />
-        
+                
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
              <div>
