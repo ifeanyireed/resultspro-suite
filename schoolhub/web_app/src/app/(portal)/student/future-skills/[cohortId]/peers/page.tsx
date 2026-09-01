@@ -28,7 +28,7 @@ export default function PeersDirectory({ params }: { params: Promise<{ cohortId:
     if (domain.includes('localhost')) {
       domain = 'reedbreed.resultspro.ng';
     }
-    const wsUrl = `ws://localhost:8080/api/classroom/ws?room=PeerDirectory&token=${token}&domain=${domain}`;
+    const wsUrl = `wss://resultspro-service-coursespro.onrender.com/api/classroom/ws?room=PeerDirectory&token=${token}&domain=${domain}`;
     
     const ws = new WebSocket(wsUrl);
 

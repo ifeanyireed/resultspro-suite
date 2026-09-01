@@ -8,7 +8,7 @@ import axios from 'axios';
  * - Headers: Automatically attaches JWT and X-School-Slug.
  */
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://resultspro-service-coursespro.onrender.com/api',
   headers: {
     'Content-Type': 'application/json',
   },
