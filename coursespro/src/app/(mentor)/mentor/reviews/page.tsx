@@ -37,7 +37,7 @@ export default function MentorReviews() {
     setLoading(true);
     try {
       // Mock user_id header since auth isn't fully wired yet
-      const res = await fetch('http://localhost:8080/mentor/submissions', {
+      const res = await fetch('https://resultspro-service-coursespro.onrender.com/mentor/submissions', {
         headers: {
           'x-user-id': 'mentor-user-1',
           'x-tenant-id': 'tenant-1'
@@ -63,7 +63,7 @@ export default function MentorReviews() {
     setSubmitting(selectedSub.id);
     
     try {
-      const res = await fetch(`http://localhost:8080/mentor/submissions/${selectedSub.id}/review`, {
+      const res = await fetch(`https://resultspro-service-coursespro.onrender.com/mentor/submissions/${selectedSub.id}/review`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

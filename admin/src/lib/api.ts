@@ -5,7 +5,7 @@ const RESULTS_API = process.env.NEXT_PUBLIC_RESULTS_API || 'http://localhost:500
 const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'http://localhost:8080';
 const CLASSROOM_API = process.env.NEXT_PUBLIC_CLASSROOM_API || 'http://localhost:8080';
 const TUTORS_API = process.env.NEXT_PUBLIC_TUTORS_API || 'http://localhost:8080';
-const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'http://localhost:8080';
+const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
 
 function getAuthHeader(): Record<string, string> {
   if (typeof window === 'undefined') return {};
