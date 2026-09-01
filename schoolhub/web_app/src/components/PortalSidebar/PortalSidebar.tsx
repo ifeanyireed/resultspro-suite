@@ -53,11 +53,14 @@ const teacherMenu = [
 ];
 
 const parentMenu = [
-  { name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/parent/dashboard' },
-  { name: 'Classroom', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/parent/classroom' },
-  { name: 'Payments', icon: CreditCardIcon, activeIcon: CreditCardIcon, slug: '/parent/payments' },
-  { name: 'Messages', icon: EnvelopeIcon, activeIcon: EnvelopeIcon, slug: '/parent/communications' },
+  { name: 'Dashboard', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/parent/dashboard' },
+  { name: 'Future Skills', icon: ComputerDesktopIcon, activeIcon: ComputerDesktopIcon, slug: '/parent/future-skills' },
+  { name: 'Results', icon: ChartPieIcon, activeIcon: ChartPieIcon, slug: '/parent/results' },
+  { name: 'Classes', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/parent/classroom' },
+  { name: 'Communications', icon: EnvelopeIcon, activeIcon: EnvelopeIcon, slug: '/parent/communications' },
   { name: 'Events', icon: CalendarIcon, activeIcon: CalendarIcon, slug: '/parent/events' },
+  { name: 'Payments', icon: CreditCardIcon, activeIcon: CreditCardIcon, slug: '/parent/payments' },
+  { name: 'Tutors', icon: UserGroupIcon, activeIcon: UserGroupIcon, slug: '/parent/tutors' },
 ];
 
 const adminMenu = [

@@ -26,13 +26,19 @@ type IntrospectResponse struct {
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
-		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header missing or invalid"})
+		token := ""
+		if authHeader != "" && strings.HasPrefix(authHeader, "Bearer ") {
+			token = strings.TrimPrefix(authHeader, "Bearer ")
+		} else {
+			// Fallback for WebSockets
+			token = c.Query("token")
+		}
+
+		if token == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization token missing"})
 			c.Abort()
 			return
 		}
-
-		token := strings.TrimPrefix(authHeader, "Bearer ")
 
 		usersURL := os.Getenv("USERS_SERVICE_URL")
 		if usersURL == "" {
@@ -40,6 +46,9 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		domain := c.GetHeader("X-Tenant-Domain")
+		if domain == "" {
+			domain = c.Query("domain")
+		}
 
 		payload, _ := json.Marshal(map[string]string{"token": token, "domain": domain})
 		req, err := http.NewRequest("POST", usersURL+"/auth/introspect", bytes.NewBuffer(payload))

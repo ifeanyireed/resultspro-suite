@@ -15,26 +15,33 @@ function getAuthHeader(): Record<string, string> {
 }
 
 export async function fetchSuiteStats(): Promise<SuiteStats> {
-  return {
-    totalUsers: 4850,
-    totalSchools: 142,
-    verifiedSchools: 118,
-    pendingVerifications: 24,
-    activeSubscriptions: 86,
-    totalRevenue: 24500000,
-    activeAgents: 38,
-    cbtExamsCount: 520,
-    activeTutors: 84,
-  };
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/admin/stats`, { headers: getAuthHeader() });
+    return await res.json();
+  } catch {
+    return {
+      totalUsers: 0,
+      totalSchools: 0,
+      verifiedSchools: 0,
+      pendingVerifications: 0,
+      activeSubscriptions: 0,
+      totalRevenue: 0,
+      activeAgents: 0,
+      cbtExamsCount: 0,
+      activeTutors: 0,
+    };
+  }
 }
 
 // 2. Schools Management
 export async function fetchSchools(): Promise<School[]> {
-  // Temporarily return mock data to bypass browser extension fetch crashes
-  return [
-    { id: '1', name: 'Greenwood High', slug: 'greenwood', contact_email: 'admin@greenwood.edu.ng', subscription_tier: 'PRO', verification_status: 'VERIFIED', state: 'Lagos', lga: 'Ikeja', primary_color: '#2563eb', status: 'ACTIVE', created_at: new Date().toISOString() },
-    { id: '2', name: 'Kings College Lagos', slug: 'kingscollege', contact_email: 'bursar@kings.edu.ng', subscription_tier: 'BASIC', verification_status: 'PENDING_VERIFICATION', state: 'Lagos', primary_color: '#000000', status: 'ACTIVE', created_at: new Date().toISOString() }
-  ];
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/tenants`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data.tenants || []);
+  } catch {
+    return [];
+  }
 }
 
 export async function createTenant(payload: any): Promise<boolean> {
@@ -111,10 +118,13 @@ export async function fetchInvoices(schoolId?: string): Promise<Invoice[]> {
 
 // 5. Agents & Payouts
 export async function fetchPayoutRequests(): Promise<PayoutRequest[]> {
-  return [
-    { id: 'p1', agent_id: 'a1', amount: 75000, status: 'PENDING', created_at: new Date().toISOString(), bank_name: 'Zenith Bank', account_number: '1029384756', account_name: 'Chinedu Okafor' },
-    { id: 'p2', agent_id: 'a2', amount: 120000, status: 'PENDING', created_at: new Date().toISOString(), bank_name: 'Access Bank', account_number: '0039281745', account_name: 'Folake Adeleke' },
-  ];
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/admin/payouts`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
 }
 
 export async function processPayout(payoutId: string, action: 'APPROVE' | 'REJECT' | 'MARK_PAID'): Promise<boolean> {

@@ -6,6 +6,7 @@
 -- 1. Cohorts
 CREATE TABLE IF NOT EXISTS crs_cohorts (
     id VARCHAR(64) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
     slug VARCHAR(128) NOT NULL UNIQUE,
     title VARCHAR(255) NOT NULL,
     subtitle VARCHAR(255),
@@ -21,6 +22,7 @@ CREATE TABLE IF NOT EXISTS crs_cohorts (
     status VARCHAR(32) DEFAULT 'ENROLLING',
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    INDEX idx_cohorts_tenant (tenant_id),
     INDEX idx_cohorts_mentor (lead_mentor_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -142,6 +144,7 @@ CREATE TABLE IF NOT EXISTS crs_presence_sessions (
 -- 9. Public Portfolios
 CREATE TABLE IF NOT EXISTS crs_public_portfolios (
     id VARCHAR(64) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
     user_id VARCHAR(64) NOT NULL UNIQUE,
     username VARCHAR(64) NOT NULL UNIQUE,
     headline VARCHAR(255),
@@ -151,5 +154,6 @@ CREATE TABLE IF NOT EXISTS crs_public_portfolios (
     is_available_for_hire BOOLEAN DEFAULT TRUE,
     is_published BOOLEAN DEFAULT TRUE,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
-    updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+    updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    INDEX idx_portfolios_tenant (tenant_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

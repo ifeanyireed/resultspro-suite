@@ -16,8 +16,18 @@ export default function TenantsListTab() {
     name: '',
     slug: '',
     contact_email: '',
-    primary_color: '#2563eb'
+    primary_color: '#2563eb',
+    enabled_modules: ['resultspro'] // Default module
   });
+
+  const toggleModule = (moduleKey: string) => {
+    setNewTenantData(prev => {
+      if (prev.enabled_modules.includes(moduleKey)) {
+        return { ...prev, enabled_modules: prev.enabled_modules.filter(m => m !== moduleKey) };
+      }
+      return { ...prev, enabled_modules: [...prev.enabled_modules, moduleKey] };
+    });
+  };
 
   async function load() {
     setLoading(true);
@@ -33,11 +43,14 @@ export default function TenantsListTab() {
   const handleCreateTenant = async (e: React.FormEvent) => {
     e.preventDefault();
     setCreating(true);
-    const ok = await createTenant(newTenantData);
+    const ok = await createTenant({
+      ...newTenantData,
+      enabled_modules: JSON.stringify(newTenantData.enabled_modules)
+    });
     setCreating(false);
     if (ok) {
       setIsModalOpen(false);
-      setNewTenantData({ name: '', slug: '', contact_email: '', primary_color: '#2563eb' });
+      setNewTenantData({ name: '', slug: '', contact_email: '', primary_color: '#2563eb', enabled_modules: ['resultspro'] });
       load();
     } else {
       alert("Failed to create tenant");
@@ -270,6 +283,38 @@ export default function TenantsListTab() {
                     onChange={e => setNewTenantData({...newTenantData, primary_color: e.target.value})}
                     className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
                   />
+                </div>
+              </div>
+              <div className="space-y-1.5 pt-2 border-t border-slate-100">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Enable Modules</label>
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <label className="flex items-center space-x-2 cursor-pointer bg-slate-50 p-2 rounded-lg border border-slate-200 hover:border-blue-300">
+                    <input 
+                      type="checkbox" 
+                      checked={newTenantData.enabled_modules.includes('coursepro')}
+                      onChange={() => toggleModule('coursepro')}
+                      className="rounded text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-xs font-medium text-slate-700">CoursePRO</span>
+                  </label>
+                  <label className="flex items-center space-x-2 cursor-pointer bg-slate-50 p-2 rounded-lg border border-slate-200 hover:border-blue-300">
+                    <input 
+                      type="checkbox" 
+                      checked={newTenantData.enabled_modules.includes('resultspro')}
+                      onChange={() => toggleModule('resultspro')}
+                      className="rounded text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-xs font-medium text-slate-700">ResultsPRO</span>
+                  </label>
+                  <label className="flex items-center space-x-2 cursor-pointer bg-slate-50 p-2 rounded-lg border border-slate-200 hover:border-blue-300">
+                    <input 
+                      type="checkbox" 
+                      checked={newTenantData.enabled_modules.includes('classroompro')}
+                      onChange={() => toggleModule('classroompro')}
+                      className="rounded text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-xs font-medium text-slate-700">ClassroomPRO</span>
+                  </label>
                 </div>
               </div>
               <div className="pt-4 flex gap-3">

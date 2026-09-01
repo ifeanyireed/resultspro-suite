@@ -161,6 +161,10 @@ func main() {
 	// Direct REST Tenant endpoints
 	mux.HandleFunc("/api/public/tenant/resolve", handlers.HandleResolveTenant)
 
+	// Admin Global Telemetry
+	mux.HandleFunc("/api/v1/admin/stats", handlers.HandleGetSuiteStats)
+	mux.HandleFunc("/api/v1/admin/payouts", handlers.HandleGetAdminPayouts)
+
 	mux.HandleFunc("/api/v1/tenants", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			handlers.HandleCreateTenant(w, r)

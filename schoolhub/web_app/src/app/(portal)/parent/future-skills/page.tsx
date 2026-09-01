@@ -1,154 +1,123 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import React from 'react';
 import { 
-  CodeIcon, 
-  Award01Icon, 
-  StarIcon, 
-  AnalyticsUpIcon, 
-  Share01Icon
-} from 'hugeicons-react';
-import api from '@/lib/api';
+  LockClosedIcon,
+  CheckCircleIcon,
+  PlayIcon,
+  TrophyIcon,
+  CodeBracketIcon
+} from '@heroicons/react/24/outline';
+import { SparklesIcon } from '@heroicons/react/24/solid';
 
-export default function ParentFutureSkillsView() {
-  const [activeChild, setActiveChild] = useState(0);
-  const [childrenSkills, setChildrenSkills] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchSkills = async () => {
-      try {
-        const response = await api.get('/parent/future-skills');
-        setChildrenSkills(response.data);
-      } catch (error) {
-        console.error('Failed to fetch parent future skills:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSkills();
-  }, []);
-
-  if (loading) return <div style={{ padding: '2rem' }}>Loading Skills...</div>;
-  if (!childrenSkills.length) return <div style={{ padding: '2rem' }}>No skills data found.</div>;
-
+export default function ParentFutureSkillsPage() {
   return (
-    <div style={{ maxWidth: '1200px', paddingBottom: '4rem' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
+    <>
+      <div className="flex items-end justify-between mb-8 mt-2">
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#f59e0b', background: '#fffbeb', padding: '0.25rem 0.75rem', borderRadius: '2rem' }}>Scholars.ng</span>
-          </div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
-            Future Skills Progress
-          </h1>
-          <p style={{ color: '#64748b', fontSize: '1.1rem', fontWeight: '500' }}>
-            Monitor your children&apos;s digital skills journey across coding, AI, and emerging technologies.
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Future Skills Journey</h1>
+          <p className="text-sm text-gray-500 mt-1">Track Alex's progress in coding, AI, and Courses projects.</p>
         </div>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-           {childrenSkills.map((child, i) => (
-             <button
-               key={i}
-               onClick={() => setActiveChild(i)}
-               style={{
-                 padding: '0.6rem 1.25rem',
-                 borderRadius: '2rem',
-                 border: activeChild === i ? '2px solid #f59e0b' : '1px solid #e2e8f0',
-                 background: activeChild === i ? '#fffbeb' : 'white',
-                 display: 'flex',
-                 alignItems: 'center',
-                 gap: '0.75rem',
-                 cursor: 'pointer',
-                 transition: 'all 0.2s ease'
-               }}
-             >
-                <div style={{ width: '24px', height: '24px', borderRadius: '50%', overflow: 'hidden' }}>
-                   <Image src={child.photo} alt={child.name} width={24} height={24} style={{ objectFit: 'cover' }} />
-                </div>
-                <span style={{ fontSize: '0.85rem', fontWeight: '700', color: activeChild === i ? '#b45309' : '#64748b' }}>{child.name.split(' ')[0]}</span>
-             </button>
-           ))}
+        <div className="flex items-center gap-3">
+          <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
+            <TrophyIcon className="w-4 h-4" />
+            View Certificate
+          </button>
         </div>
-      </header>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2.5rem' }}>
-         {/* Mastery Overview */}
-         <div>
-            <div style={{ background: 'white', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem', marginBottom: '2rem' }}>
-               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
-                  <div>
-                     <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', margin: 0 }}>{childrenSkills[activeChild].stage}</h2>
-                     <p style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: '600', marginTop: '0.25rem' }}>Current Milestone: {childrenSkills[activeChild].milestone}</p>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                     <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#146ef5' }}>{childrenSkills[activeChild].completion}%</div>
-                     <span style={{ fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase' }}>Completion</span>
-                  </div>
-               </div>
-               
-               <div style={{ height: '12px', background: '#f1f5f9', borderRadius: '6px', overflow: 'hidden', marginBottom: '2.5rem' }}>
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: `${childrenSkills[activeChild].completion}%` }}
-                    transition={{ duration: 1 }}
-                    style={{ height: '100%', background: 'linear-gradient(to right, #146ef5, #0ea5e9)', borderRadius: '6px' }} 
-                  />
-               </div>
-
-               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
-                  <div style={{ padding: '1.25rem', background: '#f8fafc', borderRadius: '1.5rem' }}>
-                     <CodeIcon size={20} color="#146ef5" style={{ marginBottom: '0.5rem' }} />
-                     <div style={{ fontSize: '1rem', fontWeight: '800', color: '#1e293b' }}>8 Modules</div>
-                     <span style={{ fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8' }}>Completed</span>
-                  </div>
-                  <div style={{ padding: '1.25rem', background: '#f8fafc', borderRadius: '1.5rem' }}>
-                     <Award01Icon size={20} color="#f59e0b" style={{ marginBottom: '0.5rem' }} />
-                     <div style={{ fontSize: '1rem', fontWeight: '800', color: '#1e293b' }}>{childrenSkills[activeChild].badges} Badges</div>
-                     <span style={{ fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8' }}>Earned</span>
-                  </div>
-                  <div style={{ padding: '1.25rem', background: '#f8fafc', borderRadius: '1.5rem' }}>
-                     <AnalyticsUpIcon size={20} color="#10b981" style={{ marginBottom: '0.5rem' }} />
-                     <div style={{ fontSize: '1rem', fontWeight: '800', color: '#1e293b' }}>Top 10%</div>
-                     <span style={{ fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8' }}>Global Rank</span>
-                  </div>
-               </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: '1rem' }}>
-               <button style={{ flex: 1, padding: '1rem', borderRadius: '1.25rem', background: '#1e293b', color: 'white', border: 'none', fontWeight: '700', cursor: 'pointer' }}>View Skill Roadmap</button>
-               <button style={{ flex: 1, padding: '1rem', borderRadius: '1.25rem', background: 'white', border: '1px solid #e2e8f0', color: '#1e293b', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
-                  <Share01Icon size={18} /> Share Progress
-               </button>
-            </div>
-         </div>
-
-         {/* Recommendation & Badges */}
-         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            <div style={{ background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', borderRadius: '2rem', padding: '2rem', color: 'white' }}>
-               <h3 style={{ fontSize: '1.1rem', fontWeight: '800', marginBottom: '1.5rem' }}>Recommended Next Step</h3>
-               <p style={{ fontSize: '0.85rem', opacity: 0.8, lineHeight: 1.6, marginBottom: '2rem' }}>
-                  {childrenSkills[activeChild].next_step}
-               </p>
-               <button style={{ width: '100%', padding: '0.8rem', borderRadius: '1rem', background: '#f59e0b', color: '#1e293b', border: 'none', fontWeight: '800', fontSize: '0.85rem', cursor: 'pointer' }}>
-                  Encourage Next Module
-               </button>
-            </div>
-
-            <div style={{ background: '#f8fafc', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem' }}>
-               <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.5rem' }}>Recently Earned</h3>
-               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem' }}>
-                  {[1, 2, 3, 4].map(i => (
-                    <div key={i} style={{ aspectRatio: '1', borderRadius: '0.75rem', background: 'white', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                       <StarIcon size={20} color="#f59e0b" />
-                    </div>
-                  ))}
-               </div>
-            </div>
-         </div>
       </div>
-    </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-6">
+        
+        {/* Main Journey Flow */}
+        <div className="lg:col-span-8 flex flex-col gap-3">
+          <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
+            <div className="flex items-center justify-between mb-8">
+              <h3 className="text-xl font-normal text-gray-900">Level 2: Web Development</h3>
+              <span className="px-3 py-1 bg-[#146ef5]/10 text-[#146ef5] font-bold text-xs rounded-full">Current Pathway</span>
+            </div>
+            
+            <div className="relative pl-8 border-l-2 border-gray-100 space-y-10 ml-4">
+              
+              {/* Completed Module */}
+              <div className="relative">
+                <div className="absolute -left-[43px] w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center border-4 border-white shadow-sm text-white">
+                  <CheckCircleIcon className="w-4 h-4" />
+                </div>
+                <h4 className="text-lg font-medium text-gray-900">Module 1: HTML Basics</h4>
+                <p className="text-sm text-gray-500 mt-1">Completed on Sep 12. Score: 95%</p>
+              </div>
+
+              {/* In Progress Module */}
+              <div className="relative">
+                <div className="absolute -left-[43px] w-6 h-6 rounded-full bg-[#146ef5] flex items-center justify-center border-4 border-white shadow-sm ring-4 ring-[#146ef5]/20">
+                  <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+                </div>
+                <div className="bg-gray-50 rounded-xl p-5 border border-gray-100">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="text-lg font-medium text-[#146ef5]">Module 2: CSS Styling</h4>
+                    <span className="text-xs font-bold text-gray-400">40% Done</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-4">Alex is currently learning how to style web pages and make them look beautiful.</p>
+                  <button className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-blue-50 text-xs font-bold px-4 py-2 rounded-full transition-colors flex items-center gap-2">
+                    <PlayIcon className="w-4 h-4" /> Resume Learning
+                  </button>
+                </div>
+              </div>
+
+              {/* Locked Module */}
+              <div className="relative opacity-50">
+                <div className="absolute -left-[43px] w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center border-4 border-white shadow-sm text-gray-500">
+                  <LockClosedIcon className="w-3 h-3" />
+                </div>
+                <h4 className="text-lg font-medium text-gray-900">Module 3: Javascript Intro</h4>
+                <p className="text-sm text-gray-500 mt-1">Unlocks after Module 2</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        {/* Portfolio & Badges Sidebar */}
+        <div className="lg:col-span-4 flex flex-col gap-3">
+          
+          <div className="w-full bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col text-white relative overflow-hidden group">
+            <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
+            <div className="relative z-10 flex justify-between items-start mb-6">
+              <h3 className="text-xl font-normal">Alex's Portfolio</h3>
+              <CodeBracketIcon className="w-6 h-6 text-white/50" />
+            </div>
+            <div className="relative z-10 flex-1 flex flex-col justify-center">
+              <h4 className="text-lg font-medium mb-1">Personal Webpage</h4>
+              <p className="text-xs text-white/80 mb-4">First deployed project using HTML & CSS.</p>
+              <button className="w-full bg-white text-[#146ef5] text-sm font-semibold py-2.5 rounded-full hover:bg-gray-50 transition-colors shadow-sm">
+                Share Portfolio Link
+              </button>
+            </div>
+          </div>
+
+          <div className="w-full bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col flex-1">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-normal text-gray-900">Badge Case</h3>
+              <SparklesIcon className="w-5 h-5 text-orange-400" />
+            </div>
+            <div className="grid grid-cols-3 gap-4 text-center">
+              {[
+                { name: 'Fast Learner', color: 'bg-emerald-100 text-emerald-600' },
+                { name: 'Bug Squasher', color: 'bg-orange-100 text-orange-600' },
+                { name: 'Top 10%', color: 'bg-purple-100 text-purple-600' }
+              ].map((b, i) => (
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <div className={`w-14 h-14 rounded-full ${b.color} flex items-center justify-center shadow-sm border-2 border-white`}>
+                    <TrophyIcon className="w-6 h-6" />
+                  </div>
+                  <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wide leading-tight">{b.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </>
   );
 }

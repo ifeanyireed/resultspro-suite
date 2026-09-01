@@ -23,12 +23,14 @@ api.interceptors.request.use((config) => {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // 2. Attach School Slug (Tenant)
-    // In production, the backend resolves by Host header, 
-    // but the slug header allows for dev/preview environments.
-    const slug = localStorage.getItem('schoolhub_slug');
-    if (slug) {
-      config.headers['X-School-Slug'] = slug;
+    // 2. Attach School Domain (Tenant)
+    // The backend uses this to resolve the tenant ID via the introspection endpoint.
+    let domain = window.location.host;
+    if (domain.includes('localhost')) {
+      domain = 'reedbreed.resultspro.ng';
+    }
+    if (domain) {
+      config.headers['X-Tenant-Domain'] = domain;
     }
   }
 

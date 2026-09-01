@@ -1,35 +1,37 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { 
-  PlusIcon,
-  ArrowUpRightIcon,
   PlayIcon,
-  PauseIcon,
-  StopIcon,
-  EllipsisHorizontalIcon,
   CheckCircleIcon,
-  UserPlusIcon,
-  ShoppingCartIcon
+  FireIcon,
+  TrophyIcon,
+  UsersIcon,
+  VideoCameraIcon,
+  SparklesIcon,
+  BookOpenIcon,
+  ClockIcon,
+  CodeBracketSquareIcon
 } from '@heroicons/react/24/outline';
-import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
+import { FireIcon as FireSolid, StarIcon } from '@heroicons/react/24/solid';
 
-export default function AgentDashboard() {
+export default function LearnerDashboard() {
   return (
     <>
       {/* Dashboard Title & Actions */}
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 mt-2 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Agent Dashboard</h1>
-          <p className="text-sm text-gray-500 mt-1">Plan, prioritize, and accomplish your tasks with ease.</p>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Welcome back, Ada.</h1>
+          <p className="text-sm text-gray-500 mt-1">Cohort 12 • Week 4: Advanced State Management</p>
         </div>
-        <div className="flex items-center gap-3">
-          <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
-            <PlusIcon className="w-4 h-4" />
-            Register School
+        <div className="flex flex-wrap items-center gap-3">
+          <button className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
+            <VideoCameraIcon className="w-4 h-4 text-emerald-500" />
+            Join Coworking Room
           </button>
-          <button className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-[#f6f9f8] text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
-            Buy Cards
+          <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-blue-600/20 transition-all flex items-center gap-2">
+            <PlayIcon className="w-4 h-4" />
+            Resume Module
           </button>
         </div>
       </div>
@@ -37,282 +39,244 @@ export default function AgentDashboard() {
       {/* Top Metric Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         
-        {/* Card 1: Primary Dark */}
-        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
-          {/* Subtle Depth Effects */}
-          <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
-          <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
+        {/* Card 1: Streak */}
+        <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+          <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-white/10 rounded-full filter blur-[3rem] opacity-60"></div>
           
           <div className="flex justify-between items-start z-10">
-            <h3 className="text-xl font-normal text-white">Bounties Earned</h3>
-            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm group-hover:bg-white group-hover:text-[#146ef5] transition-colors">
-              <ArrowUpRightIcon className="w-4 h-4" />
+            <h3 className="text-xl font-medium text-white/90">Consistency</h3>
+            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm">
+              <FireSolid className="w-5 h-5 text-yellow-300" />
+            </div>
+          </div>
+          
+          <div className="z-10">
+            <div className="flex items-baseline gap-2">
+              <h2 className="text-5xl font-bold tracking-tight text-white font-sans">12</h2>
+              <span className="text-white/80 font-medium">Days</span>
+            </div>
+            <p className="text-sm text-white/70 mt-2 font-medium">Top 5% in your cohort</p>
+          </div>
+        </div>
+
+        {/* Card 2: Progress */}
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square hover:-translate-y-1 transition-transform group">
+          <div className="flex justify-between items-start">
+            <h3 className="text-lg font-medium text-gray-500">Journey</h3>
+            <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+              <BookOpenIcon className="w-5 h-5" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-4xl font-bold tracking-tight text-gray-900 font-sans">34%</h2>
+            <div className="w-full bg-gray-100 rounded-full h-2 mt-4 mb-2">
+              <div className="bg-blue-600 h-2 rounded-full" style={{ width: '34%' }}></div>
+            </div>
+            <p className="text-xs text-gray-500 font-medium">Module 4 of 12</p>
+          </div>
+        </div>
+
+        {/* Card 3: Points/XP */}
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square hover:-translate-y-1 transition-transform group">
+          <div className="flex justify-between items-start">
+            <h3 className="text-lg font-medium text-gray-500">Builder XP</h3>
+            <div className="w-10 h-10 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors">
+              <TrophyIcon className="w-5 h-5" />
+            </div>
+          </div>
+          <div>
+            <h2 className="text-4xl font-bold tracking-tight text-gray-900 font-sans">2,450</h2>
+            <div className="flex items-center gap-1.5 mt-3">
+              <StarIcon className="w-4 h-4 text-yellow-400" />
+              <p className="text-sm font-bold text-gray-700">Level: Architect</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 4: Upcoming */}
+        <div className="bg-[#0B1021] rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/20 rounded-full filter blur-[2rem]"></div>
+          <div className="flex justify-between items-start z-10">
+            <h3 className="text-lg font-medium text-blue-200">Next Milestone</h3>
+            <div className="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center">
+              <CodeBracketSquareIcon className="w-5 h-5" />
             </div>
           </div>
           <div className="z-10">
-            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">₦450k</h2>
-            <div className="flex items-center gap-1.5 text-xs text-white/80">
-              <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 5%</div>
-              <span>Increased from last month</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 2: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
-          <div className="flex justify-between items-start">
-            <h3 className="text-xl font-normal text-gray-900">Unpaid Earnings</h3>
-            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
-              <ArrowUpRightIcon className="w-4 h-4" />
-            </div>
-          </div>
-          <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">₦150k</h2>
-            <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 6%</div>
-              <span>Increased from last month</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 3: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
-          <div className="flex justify-between items-start">
-            <h3 className="text-xl font-normal text-gray-900">Active Schools</h3>
-            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
-              <ArrowUpRightIcon className="w-4 h-4" />
-            </div>
-          </div>
-          <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">12</h2>
-            <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 2%</div>
-              <span>Increased from last month</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 4: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
-          <div className="flex justify-between items-start">
-            <h3 className="text-xl font-normal text-gray-900">Total Cards Sold</h3>
-            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
-              <ArrowUpRightIcon className="w-4 h-4" />
-            </div>
-          </div>
-          <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">1,250</h2>
-            <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <span className="text-gray-400">On Discuss</span>
+            <h4 className="text-xl font-bold text-white mb-1">Project Demo Day</h4>
+            <p className="text-sm text-slate-400 mb-4">Presenting to Chidi & Peers</p>
+            <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/30 text-blue-300 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider">
+              <ClockIcon className="w-4 h-4" />
+              Fri, 5:00 PM
             </div>
           </div>
         </div>
 
       </div>
 
-      {/* Main Content Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
         
-        {/* Left Side (Analytics, Reminders, Leads, etc) */}
-        <div className="lg:col-span-9 flex flex-col gap-3">
+        {/* Left Column: Up Next & AI Summary */}
+        <div className="lg:col-span-4 flex flex-col gap-6">
           
-          {/* Top Row of Left Side */}
-          <div className="grid grid-cols-1 lg:grid-cols-9 gap-3">
-            {/* Analytics Bar Chart (Mock) */}
-            <div className="lg:col-span-6 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
-              <h3 className="text-xl font-normal text-gray-900 mb-6">Sales Analytics</h3>
-          <div className="flex-1 flex items-end justify-between gap-2 px-4 pb-2">
-            {[
-              { h: '60%', type: 'stripe' },
-              { h: '80%', type: 'solid-dark' },
-              { h: '65%', type: 'solid-light', tooltip: '74%' },
-              { h: '90%', type: 'solid-dark' },
-              { h: '70%', type: 'stripe' },
-              { h: '45%', type: 'stripe' },
-              { h: '55%', type: 'stripe' },
-            ].map((bar, i) => (
-              <div key={i} className="w-[12%] flex flex-col items-center gap-3">
-                <div className="w-full relative flex items-end h-[140px]">
-                  {bar.tooltip && (
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-sm text-xs font-bold px-2 py-1 rounded">
-                      {bar.tooltip}
-                    </div>
-                  )}
-                  <div 
-                    className={`w-full rounded-full transition-all hover:opacity-80 ${
-                      bar.type === 'solid-dark' ? 'bg-[#146ef5]' : 
-                      bar.type === 'solid-light' ? 'bg-[#6ba0f5]' : 
-                      'bg-gray-100'
-                    }`}
-                    style={{ 
-                      height: bar.h,
-                      backgroundImage: bar.type === 'stripe' ? 'repeating-linear-gradient(45deg, transparent, transparent 5px, #d1d5db 5px, #d1d5db 7px)' : 'none'
-                    }}
-                  ></div>
-                </div>
-                <span className="text-xs font-medium text-gray-400">
-                  {['S','M','T','W','T','F','S'][i]}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Reminders / Next Actions */}
-        <div className="lg:col-span-3 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
-          <div>
-            <h3 className="text-xl font-normal text-gray-900 mb-6">Reminders</h3>
-            <h4 className="text-xl font-normal text-gray-900 leading-tight mb-2">Meeting with<br/>Excel Academy</h4>
-            <p className="text-sm text-gray-500 mb-8 flex items-center gap-2">
-              Time : 02.00 pm - 04.00 pm
-            </p>
-          </div>
-          <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] text-white font-semibold py-3.5 rounded-full transition-colors flex items-center justify-center gap-2 shadow-sm">
-            <PlayIcon className="w-5 h-5 fill-current" />
-            Start Meeting
-          </button>
-        </div>
-
-          </div>
-
-          {/* Bottom Row of Left Side */}
-          <div className="grid grid-cols-1 lg:grid-cols-9 gap-3">
+          <div className="bg-white rounded-[1.5rem] p-6 md:p-8 shadow-sm border border-gray-100 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-blue-600"></div>
             
-            {/* Registrations List */}
-            <div className="lg:col-span-5 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-normal text-gray-900">Active Leads</h3>
-            <button className="text-[#146ef5] text-xs font-semibold px-3 py-1.5 border border-[#146ef5] rounded-full flex items-center gap-1 hover:bg-[#eef5ff] transition-colors">
-              <PlusIcon className="w-3 h-3" /> Add Lead
+            <div className="flex items-center gap-2 mb-4">
+              <span className="bg-blue-50 text-blue-600 text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">Up Next</span>
+              <span className="text-sm font-medium text-gray-500 flex items-center gap-1">
+                <ClockIcon className="w-4 h-4" /> 45 mins
+              </span>
+            </div>
+            
+            <h2 className="text-2xl font-bold text-gray-900 mb-3 tracking-tight">4.3 Building Custom React Hooks</h2>
+            <p className="text-gray-600 leading-relaxed mb-8">
+              Learn how to extract state logic into reusable functions. We'll build a useFetch hook and a useLocalStorage hook to handle persistent data across our application.
+            </p>
+            
+            <div className="bg-indigo-50/50 border border-indigo-100 rounded-xl p-5 mb-8 relative">
+              <div className="absolute -top-3 -right-3 w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center shadow-sm">
+                <SparklesIcon className="w-4 h-4 text-indigo-600" />
+              </div>
+              <h4 className="text-sm font-bold text-indigo-900 mb-2 flex items-center gap-2">
+                AI Lesson Summary
+              </h4>
+              <ul className="space-y-2">
+                <li className="text-sm text-indigo-800/80 flex gap-2">
+                  <span className="text-indigo-400">•</span> Hooks must start with "use" to leverage React's linter.
+                </li>
+                <li className="text-sm text-indigo-800/80 flex gap-2">
+                  <span className="text-indigo-400">•</span> They allow you to reuse stateful logic without changing your component hierarchy.
+                </li>
+              </ul>
+            </div>
+            
+            <button className="w-full bg-gray-900 hover:bg-black text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2">
+              <PlayIcon className="w-5 h-5" />
+              Start Lesson
             </button>
           </div>
-          <div className="space-y-5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                    <img src="/character9.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
-                <div>
-                  <h4 className="text-base font-normal text-gray-900">Greenwood High</h4>
-                  <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Onboarding Form</span></p>
+
+          {/* Submission Feedback */}
+          <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Recent Feedback</h3>
+            <div className="border border-green-100 bg-green-50/50 rounded-xl p-5">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <img src="/avatars/mentor.jpg" alt="Mentor" className="w-8 h-8 rounded-full object-cover" onError={(e) => e.currentTarget.src='https://ui-avatars.com/api/?name=Chidi&background=10B981&color=fff'} />
+                  <div>
+                    <h4 className="text-sm font-bold text-gray-900">Approved by Mentor Chidi</h4>
+                    <p className="text-xs text-gray-500">Project 3: E-commerce Cart</p>
+                  </div>
                 </div>
+                <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Passed</span>
               </div>
-              <span className="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-md">Completed</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                    <img src="/character10.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
-                <div>
-                  <h4 className="text-base font-normal text-gray-900">Lighthouse Academy</h4>
-                  <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Pricing Approval</span></p>
-                </div>
-              </div>
-              <span className="px-2 py-1 bg-yellow-50 text-yellow-600 text-[10px] font-bold rounded-md">In Progress</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                    <img src="/character11.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
-                <div>
-                  <h4 className="text-base font-normal text-gray-900">Harvard Int'l</h4>
-                  <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Initial Pitch</span></p>
-                </div>
-              </div>
-              <span className="px-2 py-1 bg-red-50 text-red-500 text-[10px] font-bold rounded-md">Pending</span>
+              <p className="text-sm text-gray-700 italic border-l-2 border-green-300 pl-3 py-1">
+                "Great separation of concerns here Ada. Your Redux slice is very clean. One small tip for next time: try using reselect for memoizing your cart total calculations. Otherwise, perfect. 🚀"
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Project Progress Donut */}
-        <div className="lg:col-span-4 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col items-center">
-          <h3 className="text-xl font-normal text-gray-900 mb-6 self-start">Target Progress</h3>
+        {/* Right Column: Classroom & Cohort */}
+        <div className="lg:col-span-3 flex flex-col gap-6">
           
-          <div className="relative w-full aspect-[2/1] max-w-[260px] flex items-end justify-center mt-2 mb-4">
-            <svg viewBox="0 0 100 50" className="w-full h-full overflow-visible">
-              <defs>
-                <pattern id="stripes-arc" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                  <line x1="0" y1="0" x2="0" y2="4" stroke="#d1d5db" strokeWidth="2" />
-                </pattern>
-              </defs>
-              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="url(#stripes-arc)" strokeWidth="15" strokeLinecap="round" strokeDasharray="125.66 125.66" strokeDashoffset="0" />
-              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#111827" strokeWidth="15" strokeLinecap="round" strokeDasharray="82.93 125.66" strokeDashoffset="0" />
-              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#146ef5" strokeWidth="15" strokeLinecap="round" strokeDasharray="51.52 125.66" strokeDashoffset="0" />
-            </svg>
-            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end translate-y-[15%]">
-              <span className="text-5xl font-normal tracking-tight text-gray-900">41%</span>
-              <span className="text-xs font-medium text-gray-500 mt-1">Target Reached</span>
+          {/* Live Classroom Status */}
+          <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                Classroom
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+              </h3>
+              <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded-md">8 Online</span>
             </div>
-          </div>
 
-          <div className="flex items-center gap-4 mt-auto w-full justify-center pt-6">
-            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#146ef5]"></div><span className="text-xs text-gray-500 font-medium">Completed</span></div>
-            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#111827]"></div><span className="text-xs text-gray-500 font-medium">In Progress</span></div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-full bg-white border border-gray-200" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 1px, #d1d5db 1px, #d1d5db 3px)' }}></div>
-              <span className="text-xs text-gray-500 font-medium">Pending</span>
-            </div>
-          </div>
-        </div>
-          </div>
-        </div>
-
-        {/* Right Sidebar Stack */}
-        <div className="lg:col-span-3 flex flex-col gap-3">
-          
-          {/* Recent Activity */}
-          <div className="w-full bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
-            <h3 className="text-xl font-normal text-gray-900 mb-6">Recent Activity</h3>
-            <div className="flex-1 flex flex-col gap-8 pb-2">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                  <CheckCircleIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-base font-normal text-gray-900">Bounty Credited</p>
-                  <p className="text-sm text-gray-500 mt-0.5">₦50k from Excel Academy</p>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <img src="/avatars/mentor.jpg" alt="Mentor" className="w-10 h-10 rounded-full border-2 border-blue-100" onError={(e) => e.currentTarget.src='/avatars/character10.jpg'} />
+                    <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5"><div className="w-2.5 h-2.5 bg-emerald-500 rounded-full"></div></div>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-gray-900">Mentor Chidi <span className="text-blue-500 text-xs">◆</span></h4>
+                    <p className="text-xs text-gray-500">Reviewing Pull Requests</p>
+                  </div>
                 </div>
               </div>
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center shrink-0">
-                  <UserPlusIcon className="w-5 h-5" />
+              
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <img src="/avatars/character1.jpg" alt="Sarah Jenkins" className="w-10 h-10 rounded-full border-2 border-white object-cover" />
+                    <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5"><div className="w-2.5 h-2.5 bg-emerald-500 rounded-full"></div></div>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-gray-900">Sarah Jenkins</h4>
+                    <p className="text-xs text-blue-600 font-medium">In Coworking Room B</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-base font-normal text-gray-900">New Lead Added</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Springfield High School</p>
-                </div>
+                <button className="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors">Join</button>
               </div>
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center shrink-0">
-                  <ShoppingCartIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-base font-normal text-gray-900">PINs Purchased</p>
-                  <p className="text-sm text-gray-500 mt-0.5">50 PINs standard pack</p>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <img src="/avatars/character2.jpg" alt="David O." className="w-10 h-10 rounded-full border-2 border-white object-cover" />
+                    <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5"><div className="w-2.5 h-2.5 bg-emerald-500 rounded-full"></div></div>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-gray-900">David O.</h4>
+                    <p className="text-xs text-gray-500">Watching Module 4.2</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-
-          <div className="rounded-[1.5rem] p-6 text-white relative overflow-hidden aspect-square flex flex-col justify-between shadow-lg group">
-            {/* Background Image */}
-            <div 
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: "url('/abstract-blue-4.jpg')" }}
-            ></div>
-            {/* Gradient Dark Overlay */}
-            <div className="absolute inset-0 bg-black/10"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+          {/* Gamification / Leaderboard snippet */}
+          <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
+            <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center justify-between">
+              Weekly Top Builders
+              <UsersIcon className="w-5 h-5 text-gray-400" />
+            </h3>
             
-            <h3 className="text-xl font-normal text-white relative z-10 text-left w-full">Time Tracker</h3>
-            <div className="relative z-10 flex flex-col items-center justify-center flex-1">
-              <div className="text-5xl font-medium tracking-tight mb-8 font-sans">01:24:08</div>
-              <div className="flex gap-4">
-                <button className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:scale-105 transition-transform shadow-md">
-                  <PauseIcon className="w-5 h-5 text-gray-900" strokeWidth={2.5} />
-                </button>
-                <button className="w-12 h-12 rounded-full bg-red-500 flex items-center justify-center hover:scale-105 transition-transform shadow-md">
-                  <StopIcon className="w-5 h-5 text-white" strokeWidth={2.5} />
-                </button>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4 bg-yellow-50/50 p-3 rounded-xl border border-yellow-100">
+                <span className="text-lg font-bold text-yellow-600 w-4 text-center">1</span>
+                <img src="/avatars/character3.jpg" alt="Michael Chen" className="w-8 h-8 rounded-full border border-yellow-200 object-cover" />
+                <div className="flex-1">
+                  <h4 className="text-sm font-bold text-gray-900">Michael Chen</h4>
+                </div>
+                <span className="text-sm font-bold text-gray-700">850 XP</span>
+              </div>
+              
+              <div className="flex items-center gap-4 p-3 rounded-xl">
+                <span className="text-lg font-bold text-gray-400 w-4 text-center">2</span>
+                <img src="/avatars/character4.jpg" alt="Ada Lovelace" className="w-8 h-8 rounded-full border border-gray-200 object-cover" />
+                <div className="flex-1">
+                  <h4 className="text-sm font-bold text-gray-900">Ada Lovelace (You)</h4>
+                </div>
+                <span className="text-sm font-bold text-gray-700">720 XP</span>
+              </div>
+
+              <div className="flex items-center gap-4 p-3 rounded-xl">
+                <span className="text-lg font-bold text-orange-400 w-4 text-center">3</span>
+                <img src="/avatars/character1.jpg" alt="Sarah Jenkins" className="w-8 h-8 rounded-full border border-gray-200 object-cover" />
+                <div className="flex-1">
+                  <h4 className="text-sm font-bold text-gray-900">Sarah Jenkins</h4>
+                </div>
+                <span className="text-sm font-bold text-gray-700">690 XP</span>
               </div>
             </div>
+            
+            <button className="w-full mt-4 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors py-2 text-center">
+              View Full Leaderboard
+            </button>
           </div>
 
         </div>

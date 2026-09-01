@@ -23,9 +23,18 @@ export default function PrincipalDashboard() {
   const [pulseData, setPulseData] = useState<any>(null);
 
   useEffect(() => {
-    api.get('/admin/pulse').catch(err => { console.error('Failed to load pulse data, using mock:', err); setPulseData(fallbackPulse); throw err; })
+    api.get('/admin/pulse')
       .then(res => setPulseData(res.data))
-      .catch(err => { console.error('Failed to load pulse data:', err); setPulseData({ school_name: 'ExamsPRO Academy', revenue: { mtd: '$124,500', yoy_growth: '+14.2%' }, admissions: { total_enrollment: '1,248', yoy_growth: '+42' }, academic_health: { average_gpa: '3.42' }, engagement: { active_parents: '892' } }); });
+      .catch(err => {
+        console.error('Failed to load pulse data, using mock:', err);
+        setPulseData({
+          school_name: 'ExamsPRO Academy',
+          revenue: { mtd: 124500, yoy_growth: '+14.2%' },
+          admissions: { total_enrollment: 1248, yoy_growth: '+42' },
+          academic_health: { average_gpa: 3.42 },
+          engagement: { active_parents: 892 }
+        });
+      });
   }, []);
 
   if (!pulseData) {
@@ -37,6 +46,21 @@ export default function PrincipalDashboard() {
   }
 
   const { admissions, academic_health, engagement, revenue, school_name } = pulseData;
+
+  const formatNumber = (num: number | string, prefix: string = '') => {
+    if (typeof num === 'string') {
+      const parsed = parseFloat(num.replace(/[^0-9.]/g, ''));
+      if (isNaN(parsed)) return num;
+      num = parsed;
+    }
+    if (num >= 1000000) {
+      return prefix + (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    }
+    if (num >= 1000) {
+      return prefix + (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    }
+    return prefix + num.toString();
+  };
 
   return (
     <>
@@ -74,7 +98,7 @@ export default function PrincipalDashboard() {
             </div>
           </div>
           <div className="z-10">
-            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">{revenue.mtd}</h2>
+            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">{formatNumber(revenue.mtd, '$')}</h2>
             <div className="flex items-center gap-1.5 text-xs text-white/80">
               <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> {revenue.yoy_growth}</div>
               <span>vs Last Year</span>
@@ -91,7 +115,7 @@ export default function PrincipalDashboard() {
             </div>
           </div>
           <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">{admissions.total_enrollment}</h2>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">{formatNumber(admissions.total_enrollment)}</h2>
             <div className="flex items-center gap-1.5 text-xs text-gray-500">
               <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> {admissions.yoy_growth}</div>
               <span>Increased this year</span>
@@ -124,7 +148,7 @@ export default function PrincipalDashboard() {
             </div>
           </div>
           <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">{engagement.active_parents}</h2>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">{formatNumber(engagement.active_parents)}</h2>
             <div className="flex items-center gap-1.5 text-xs text-gray-500">
               <span className="text-gray-400">Active this week</span>
             </div>

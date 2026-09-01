@@ -1,0 +1,819 @@
+SchoolHub
+Blueprint for a White-Label Digital Campus Platform
+Admissions, Learning, Future Skills, Communication, and School Intelligence
+Prepared for multi-campus private schools
+Confidential strategy draft
+
+1. Executive Summary
+SchoolHub is a white-label digital campus platform that gives a school one branded place to run its public website, admissions funnel, parent and student portal, academic communication, learning access, future-skills programs, and leadership dashboard.
+It is not positioned as a generic school management system. It is positioned as the school's digital front door and command center.
+The product sits on top of an ecosystem of specialist services, including ResultsPRO, ExamsPRO, ClassroomPRO, TutorsPRO, and ScholarsNG, while keeping the user experience unified and branded to each school.
+The commercial goal is simple: help schools convert more inquiries, communicate better with parents, increase student engagement, prove academic value, and open new revenue streams through future-skills and enrichment programs.
+This blueprint covers the product vision, information architecture, screen inventory, user flows, service boundaries, data schema, technology stack, monetization, roadmap, go-to-market plan, risks, and financial model.
+2. The Problem SchoolHub Solves
+School websites often exist only as static brochure pages and do not convert visitors into leads.
+Admissions follow-up is manual, inconsistent, and frequently lost in WhatsApp chats, calls, or paper forms.
+Parents must jump between different systems for results, assignments, notices, fees, and transport updates.
+Schools with multiple branches struggle to coordinate branding, communication, and reporting.
+Future-skills programs such as coding, AI, robotics, and structured after-school learning are usually disconnected from the core school experience.
+Leadership teams need one view of school health across admissions, learning, attendance, engagement, and revenue.
+3. Product Vision and Positioning
+SchoolHub should feel like a digital campus, not like software.
+The school sees one branded experience. The platform sees multiple services.
+Best positioning statement:
+SchoolHub is your school's branded digital campus — connecting admissions, learning, parent engagement, future skills, and school intelligence from one place.
+3.1 Product Principles
+White-label first: every school's brand, tone, colors, and domain lead the experience.
+Progressive activation: base plans still feel complete, while advanced modules unlock deeper value.
+Outcome-based navigation: users should see tasks and results, not internal product names.
+Service isolation: each specialist module owns its own data and workflows.
+Shared identity and settings: authentication, roles, subscriptions, branding, and feature access are centralized.
+Fast value on day one: even the base plan must support admissions, website, communication, and a coherent dashboard.
+4. Primary Users and Their Jobs
+User
+Primary Job
+Parent
+Track a child’s progress, receive school updates, apply for admission, pay fees, see future-skills progress.
+Student
+See classes, assignments, results, exams, projects, achievements, and future-skills learning.
+Teacher
+Manage classes, communicate, assess work, publish results, support learning.
+Admissions Officer
+Capture leads, manage tours, follow up, move applicants through the funnel.
+School Admin
+Handle communications, fees, transport, user access, records, and reports.
+Principal/Proprietor
+Monitor school health, performance trends, enrollment, engagement, and revenue.
+5. Information Architecture
+The information architecture should be simple on the surface and modular in the backend.
+Area
+Short Description
+Public Site
+Home, About, Academics, Future Skills, Student Life, Admissions, News, Contact.
+Admissions
+Inquiries, tours, applications, assessments, enrollment, follow-up, reports.
+Community
+Announcements, events, gallery, newsletters, messages.
+Learning
+Classes, assignments, resources, results, assessments, progress.
+Future Skills
+Coding, AI, projects, competitions, certificates, career pathways.
+Administration
+People, payments, transport, reports, settings.
+School Pulse
+Enrollment, academics, engagement, revenue, future-skills health.
+5.1 Navigation Philosophy
+Public users should see marketing-driven navigation.
+Authenticated users should see job-based navigation, such as Learning, Progress, Admissions, or School Pulse.
+Product labels should be hidden from most school users.
+Module activation should appear as extra capability, not as a separate app switch.
+6. Screen Inventory
+Below is the recommended screen list for the SchoolHub experience. The exact visibility of each screen depends on role and subscription tier.
+Screen
+Short Description
+Home
+Public landing page with hero section, school story, CTAs, achievements, latest news, and trust signals.
+About
+School history, mission, leadership, values, campus story, and differentiators.
+Academics
+Curriculum, classes, teaching approach, performance highlights, subject structure.
+Future Skills
+ScholarsNG pathway, coding, AI, robotics, innovation labs, student portfolios.
+Student Life
+Clubs, houses, competitions, sports, events, photo stories.
+Admissions
+Inquiry capture, prospectus download, tour booking, application, requirements.
+News & Events
+Announcements, event stories, gallery, newsletters.
+Contact
+Locations, branches, phone, email, maps, contact forms.
+Parent Dashboard
+Overview of children, attendance, results, notices, fees, future-skills status.
+Student Dashboard
+Timetable, homework, exams, achievements, progress, future-skills access.
+Teacher Dashboard
+Classes, tasks, assessments, feedback, result publishing, class notices.
+Admissions Dashboard
+Leads, pipeline, tour calendar, application status, conversion reports.
+School Pulse
+Leadership dashboard with enrollment, learning, engagement, revenue, future skills.
+Communications
+Broadcasts, notifications, SMS/email campaigns, templates, inbox.
+Payments
+Fees, invoices, receipts, balances, payment history.
+Transport
+Routes, vehicles, drivers, pickup schedules, notifications.
+Settings
+Branding, domain, roles, subscription, permissions, integrations.
+7. Core User Flows
+7.1 Visitor to Enrolled Parent Flow
+Visitor lands on the school website through the school’s own domain.
+Visitor reads school story, academic promises, student life, and future-skills content.
+Visitor clicks a conversion CTA such as Book a Tour or Start Application.
+The lead is captured in AdmissionsPRO and assigned a source tag.
+An automated nurture sequence sends follow-up messages and reminders.
+Parent books a tour, visits campus, and submits application documents.
+Assessment is scheduled if required.
+School issues admission offer, collects enrollment data, and activates parent access.
+7.2 Parent Daily Use Flow
+Parent logs in once through the central auth service.
+Parent lands on a branded dashboard with attendance, results, notices, assignments, and future-skills updates.
+Parent opens a child profile to review progress and communicate with the school.
+Parent receives alerts for results, fees, events, or transport updates.
+Parent can return to the website, admissions area, or portal without leaving the school’s branded environment.
+7.3 Teacher Workflow
+Teacher logs in and sees assigned classes and pending tasks.
+Teacher posts class materials or assignments in ClassroomPRO.
+Teacher creates or imports assessments in ExamsPRO.
+Teacher marks work or publishes scores to ResultsPRO.
+Teacher sees class trends and student gaps for intervention.
+7.4 Principal Workflow
+Principal opens School Pulse.
+System displays admissions, learning, engagement, and revenue snapshots.
+Principal drills down to weak subjects, low-conversion funnel stages, or transport issues.
+Principal approves campaigns, monitors growth programs, and reviews school health at a glance.
+8. Module Design
+SchoolHub is a control plane. The specialist products remain modular services with clear boundaries.
+Module
+Role
+SchoolHub Gateway
+White-label web experience, role navigation, tenant routing, dashboard aggregation, branding, settings.
+Auth Service
+Single sign-on, sessions, MFA, password reset, role and permission enforcement.
+AdmissionsPRO
+Lead capture, tour booking, application processing, pipeline, automated follow-up, admissions analytics.
+ResultsPRO
+Result generation, report cards, academic analytics, class rankings, progress tracking.
+ExamsPRO
+Assessment builder, CBT engine, question bank, scheduling, grading, exam analytics.
+ClassroomPRO
+Class pages, assignments, resources, learning feed, teacher updates.
+TutorsPRO
+After-school support, tutor discovery, session booking, progress tracking.
+ScholarsNG
+Coding, AI, robotics, projects, certifications, competitions, portfolios.
+Notification Service
+SMS, email, in-app alerts, broadcast campaigns, transaction messages.
+Billing Service
+Subscriptions, invoices, renewals, proration, plan enforcement, receipts.
+Transport Service
+Routes, buses, drivers, pickup visibility, route alerts, attendance to vehicle mapping.
+Analytics Service
+Cross-product metrics, snapshots, cache, school pulse, KPIs.
+9. Microservice-Based Experience Flow
+The experience should feel whole even though the backend is distributed. The rule is: the user never sees service boundaries.
+The school's public domain routes requests to SchoolHub based on the host header.
+SchoolHub resolves the tenant and branding profile.
+SchoolHub requests feature flags and entitlements from the subscription database.
+SchoolHub calls the active specialist services through APIs and aggregates the response.
+The UI renders a unified dashboard and hides inactive modules.
+Where a module is disabled, the interface should show a tasteful teaser or upsell, not a dead end.
+9.1 Data Flow Example: Parent Dashboard
+Parent logs in through central auth.
+SchoolHub confirms tenant, role, and entitlements.
+SchoolHub requests attendance from ClassroomPRO, results from ResultsPRO, assessments from ExamsPRO, and future-skills data from ScholarsNG.
+Aggregated data is normalized into a parent-friendly response.
+The UI renders a complete dashboard with school branding.
+10. Core Database and Schema Design
+SchoolHub should own tenant, subscription, branding, permission, and cache data. The specialist systems keep their own domain data.
+10.1 SchoolHub Database Objects
+Object
+Purpose
+schools
+id, name, domain, logo, theme, campuses, status, contact details, time zone.
+subscriptions
+school_id, plan, billing cycle, status, renewal date, payment status.
+entitlements
+school_id, module keys, feature flags, quotas, limits, activation state.
+brand_profiles
+colors, fonts, voice, hero content, banner images, CTA labels.
+roles
+role names, permission scopes, default dashboards.
+users
+lightweight identity references, linked to central auth service.
+notifications
+message type, target audience, delivery status, read status.
+school_metrics
+cached School Pulse snapshots such as enrollment, performance, engagement, revenue.
+audit_logs
+admin actions, login events, entitlement changes, content updates.
+10.2 Specialist Service Data Ownership
+AdmissionsPRO owns inquiries, applications, tours, and funnel status.
+ResultsPRO owns score sheets, result sets, report-card artifacts, and academic analytics.
+ExamsPRO owns assessment templates, question banks, exam schedules, and marks.
+ClassroomPRO owns class resources, assignments, attendance feeds, and teacher posts.
+TutorsPRO owns tutor profiles, bookings, tutoring sessions, and progress notes.
+ScholarsNG owns course pathways, projects, certificates, challenges, and achievement artifacts.
+11. Recommended Technology Stack
+Layer
+Recommendation
+Frontend
+Next.js or React, Tailwind CSS, server-side rendering for SEO, white-label theme system.
+Admin App
+React-based authenticated portal, component library, role-aware routing.
+Backend
+Go services or Node.js service layer with clear microservice boundaries and API gateway.
+Auth
+Central auth service with OIDC/OAuth2-compatible tokens, session management, MFA option.
+Database
+PostgreSQL for transactional records, Redis for sessions and caching.
+Search/Logs
+OpenSearch or Elasticsearch for search, structured logs, and event visibility.
+Storage
+Object storage for media, documents, certificates, and prospectus files.
+Messaging
+Transactional email/SMS provider and event-driven notification queue.
+Analytics
+Warehouse or reporting store for cross-service snapshots and School Pulse.
+Infrastructure
+Containerized deployment, environment-based config, CDN, automatic backups.
+11.1 Architectural Preferences
+Use an API gateway or BFF layer to compose data for the UI.
+Use event-driven messages for notifications, analytics snapshots, and state changes.
+Use aggressive caching for dashboard widgets that do not need real-time freshness.
+Avoid letting the web app talk directly to multiple services from the browser.
+12. White-Label Branding and Domain Strategy
+The public experience should load from the school’s own domain, while the platform remains masked.
+Public site: www.schooldomain.edu.ng or schooldomain.com.
+Portal subdomain: portal.schooldomain.edu.ng or app.schooldomain.edu.ng.
+SchoolHub should resolve tenant identity from host name and apply branding automatically.
+The admin side can still live on a platform domain, but the school-facing experience should remain branded as the school.
+13. Monetization Model
+The monetization approach should combine platform subscription revenue with module-based expansion and service add-ons.
+Revenue Stream
+Description
+Base Plan
+Website, admissions, community pages, basic portal, basic analytics.
+Growth Plan
+Base plan + ResultsPRO + ExamsPRO + advanced admissions automation.
+Future Ready Plan
+Growth plan + ClassroomPRO + ScholarsNG + future-skills portal.
+Add-Ons
+Transport, billing automation, extra campuses, premium support, custom modules.
+Implementation Fee
+One-time onboarding, branding, configuration, content migration, training.
+13.1 Value-Based Pricing Logic
+Schools pay for outcomes: more admissions, stronger parent trust, better visibility, and new revenue programs.
+A low-cost base plan should still feel complete and premium.
+Advanced modules should unlock measurable value, not just extra screens.
+Large multi-campus schools can justify premium pricing through coordination and growth benefits.
+14. Packaging and Feature Tiers
+Plan
+Included
+Starter
+Website, admissions, announcements, contact forms, basic parent communication.
+Growth
+Starter + learning feeds, results, assessments, reports, analytics, more automation.
+Future Ready
+Growth + ClassroomPRO, ScholarsNG, tutoring, transport, richer dashboards.
+Enterprise
+Multi-campus, advanced workflows, custom integrations, dedicated support, SLA.
+15. Product Roadmap
+Phase
+Deliverable
+Phase 1: Foundation
+Tenanting, white-label public site, central auth integration, admissions capture, basic dashboard.
+Phase 2: Core Operations
+Parent portal, dashboards, notifications, content modules, billing foundations.
+Phase 3: Engagement
+ClassroomPRO integration, student activity, notifications, School Pulse v1.
+Phase 4: Future Skills
+ScholarsNG integration, coding pathways, projects, certificates, competitions.
+Phase 5: Expansion
+Transport, deeper analytics, multi-campus controls, advanced reporting, enterprise SLAs.
+15.1 Suggested Delivery Timeline
+Window
+Focus
+0-30 days
+Design system, domain mapping, tenant model, base website, admissions capture.
+31-60 days
+Parent portal, dashboards, notifications, content modules, billing foundations.
+61-90 days
+ResultsPRO and ExamsPRO integration, reports, analytics, operational workflows.
+91-120 days
+ClassroomPRO and ScholarsNG integration, School Pulse, transport and add-ons.
+16. Go-To-Market Strategy
+SchoolHub should be sold as a digital campus transformation platform, not as isolated software.
+16.1 Target Segments
+Large private schools with multiple campuses.
+Schools with buses, parent communication pressure, and growing admin complexity.
+Schools already using digital tools but with poor cohesion.
+Schools that want to look premium, future-ready, or innovation-led.
+16.2 Sales Motion
+Start with a branded audit and a future-ready vision narrative.
+Demonstrate the white-label website and admissions funnel first.
+Show how the school can later activate learning, future-skills, and analytics modules.
+Use measurable outcomes in every pitch: conversion, trust, efficiency, engagement, revenue.
+Offer a pilot on one branch or one division before full rollout.
+16.3 Content and Demand Generation
+Create cinematic, school-brand-voice social content that looks like the school speaking to its own market.
+Use open-day landing pages and admissions campaigns as acquisition hooks.
+Publish future-skills stories around coding, AI, competitions, and student achievements.
+Capture testimonials from early adopters and convert them into case studies.
+17. KPI Framework
+Area
+Core KPIs
+Admissions
+Lead-to-tour conversion, tour-to-application conversion, application-to-enrollment conversion.
+Parent Engagement
+Monthly active parents, message open rate, portal usage, response time.
+Academic Health
+Assignment completion, result turnaround time, pass rates, class performance trends.
+Future Skills
+Coding enrollment, project submissions, certificates earned, competition participation.
+Revenue
+Subscription MRR, expansion revenue, upsell rate, retention, gross margin.
+18. Risks and Mitigation
+Risk
+Mitigation
+Adoption resistance
+Keep the base plan simple, train in phases, and show quick wins early.
+Data fragmentation
+Use clear service ownership, event contracts, and a single aggregation layer.
+School brand sensitivity
+White-label the entire external experience and hide vendor branding.
+Complexity creep
+Release in phases and avoid building every feature before commercial validation.
+Integration failures
+Define APIs, contracts, retries, and fallbacks for all services.
+Security and privacy
+Use RBAC, audit logs, encryption, backups, and least-privilege access.
+19. Financial Projections
+The following projections are directional planning numbers intended to help frame commercial potential. They should be validated against actual pricing, churn, onboarding cost, and support load.
+Year
+Active Schools
+ARPU / Month
+Annualized Revenue
+Notes
+Year 1
+5 schools
+250k
+15m
+Pilot-heavy, onboarding-intensive.
+Year 2
+18 schools
+300k
+64.8m
+Expansion from case studies and referrals.
+Year 3
+45 schools
+350k
+189m
+Multi-campus and enterprise pricing begins to matter.
+19.1 Cost Considerations
+Infrastructure and hosting.
+Product development and QA.
+Implementation and onboarding.
+Customer support and training.
+Sales and marketing production.
+Messaging and transactional usage fees.
+19.2 Margin Logic
+Software margins improve as the platform gains tenants and reuses common components.
+Implementation revenue can offset onboarding cost.
+Enterprise pricing should reflect multi-campus complexity and higher support burden.
+Add-ons such as transport, analytics, and future-skills can lift average revenue per school.
+20. Implementation Playbook for a New School
+Discovery and brand capture.
+Domain mapping and school profile setup.
+Public site launch.
+Admissions funnel activation.
+Parent and student onboarding.
+Results, exams, and classroom integrations.
+Future-skills activation through ScholarsNG.
+Leadership dashboard rollout and training.
+21. Appendix: Recommended Module Naming
+Name
+Meaning
+SchoolHub
+The white-label digital campus platform.
+AdmissionsPRO
+Admissions funnel and CRM layer.
+ResultsPRO
+Academic results and reporting layer.
+ExamsPRO
+Assessment and CBT layer.
+ClassroomPRO
+Teaching and learning coordination layer.
+TutorsPRO
+After-school and support learning layer.
+ScholarsNG
+Future-skills and innovation layer.
+21.1 Final Positioning Line
+One branded campus. One login. One experience. A whole school, digitally connected.
+
+22. Detailed Screen Descriptions
+This section expands the screen inventory into product behavior. The goal is to make the experience understandable to designers, engineers, and school stakeholders.
+Screen
+What the screen must do
+Home
+Hero message, school value proposition, key numbers, admissions CTA, featured stories, announcements, and trust signals.
+About
+History, mission, leadership, campus story, milestones, values, and accreditation or affiliation content.
+Academics
+Curriculum summary, class structure, subject highlights, teaching philosophy, academic results, and pathways.
+Future Skills
+Coding, AI, robotics, project showcases, certificates, pathways by level, and CTAs into ScholarsNG.
+Student Life
+Clubs, houses, leadership, sports, arts, competitions, photo/video stories, and event highlights.
+Admissions Home
+Overview of admissions process, application stages, deadlines, and supported documents.
+Inquiry Form
+Capture parent and learner data, class of entry, campus preference, and source attribution.
+Tour Booking
+Selectable tour slots, reminders, route directions, and follow-up actions.
+Application Portal
+Document upload, form completion, application status, payment status if applicable.
+Parent Dashboard
+Attendance, results, notices, fees, assignments, future-skills progress, and messaging.
+Student Dashboard
+Daily timetable, tasks, progress, achievements, certificates, and next actions.
+Teacher Dashboard
+Class list, attendance, assignments, assessments, grading queue, and notices.
+Admissions Dashboard
+Pipeline stages, lead sources, conversion rate, tour calendar, and follow-up tasks.
+School Pulse
+Enrollment, academic performance, engagement, revenue, future-skills, and risk indicators.
+Communications
+Broadcast center, template library, audience segmentation, delivery tracking, inbox.
+Payments
+Fee schedules, invoice list, receipts, balance due, payment history, and reminders.
+Transport
+Route map, bus list, driver profiles, pickup schedules, arrival notifications.
+Settings
+Brand profile, domain settings, roles, permissions, integrations, subscription controls.
+22.1 Empty State Rules
+Never show an empty dashboard. Use metrics, prompts, or next-step cards.
+Where no data exists, show a helpful call to action such as Set Up Admissions or Activate Future Skills.
+Inactive features should appear as tasteful locked modules with a brief explanation of their value.
+23. Roles and Permission Matrix
+Role-based access must be simple for school users but strict in the backend.
+Role
+Access scope
+Parent
+View child data, communicate, receive alerts, pay fees, book appointments, browse future skills.
+Student
+View own timetable, assignments, exams, results, achievements, projects, and learning feed.
+Teacher
+Manage classes, assign work, create assessments, mark, communicate, view class analytics.
+Admissions Officer
+Create and update leads, tours, assessments, offers, and enrollment records.
+Finance Staff
+View payments, reconcile receipts, update balances, send reminders.
+Transport Officer
+Manage routes, vehicles, driver records, trip updates, and pickup status.
+School Admin
+Manage users, content, settings, announcements, reports, and basic configurations.
+Principal
+View leadership dashboard, approve campaigns, access all reports, manage strategic settings.
+Proprietor
+View all dashboards, approve plans, review school health, finance, and growth opportunities.
+24. Event and Notification Taxonomy
+A strong event layer makes the platform feel alive. Every important action should create a clear notification, audit event, or metric update.
+Domain
+Example events
+Admissions
+Lead created, tour booked, application submitted, assessment scheduled, offer issued, enrolled.
+Learning
+Assignment posted, assignment submitted, assessment created, result published, progress updated.
+Communication
+Broadcast sent, message opened, parent replied, newsletter viewed.
+Future Skills
+Course enrolled, project submitted, certificate issued, competition joined, badge earned.
+Transport
+Bus departed, bus arrived, route changed, pickup confirmed.
+Payments
+Invoice generated, receipt received, balance due, payment failed, payment completed.
+24.1 Notification Rules
+High-priority events go to in-app, email, and SMS where appropriate.
+Administrative alerts should be batched when possible to avoid noise.
+Parents should receive only child-related, school-wide, or fee-related messages they care about.
+Staff notifications should be role-aware and action-oriented.
+25. API and Integration Design
+The UI should never be tightly coupled to internal service data structures. SchoolHub should consume stable APIs and present a uniform response.
+Endpoint
+Purpose
+GET /tenant/{school}
+Resolve school branding, navigation, and enabled modules from domain or slug.
+GET /dashboard
+Return aggregated cards for the current user role and plan.
+GET /admissions/pipeline
+Return leads, stages, counts, and conversion metrics.
+GET /learning/progress
+Return attendance, assignments, results, and class summary data.
+GET /future-skills/summary
+Return ScholarsNG pathways, projects, certificates, and progress.
+POST /notifications/send
+Dispatch messages to selected audience and log outcomes.
+POST /billing/subscribe
+Create or renew a subscription and unlock entitlements.
+GET /school-pulse
+Return leadership snapshot with cached KPIs and trend lines.
+25.1 API Design Rules
+Prefer response composition at the gateway layer rather than client-side stitching.
+Use versioned endpoints for long-term stability.
+Use idempotency keys on enrollment, billing, and notification operations.
+Keep the public website fast by caching static and semi-static content aggressively.
+26. Subscription, Billing, and Entitlement Logic
+The subscription engine is part of SchoolHub, but it should never own academic truth. It owns access, not content.
+Billing concept
+Meaning
+School-level plan
+Defines which products are visible and how many campuses or users are allowed.
+Module entitlements
+Defines whether ResultsPRO, ExamsPRO, ClassroomPRO, TutorsPRO, or ScholarsNG are active.
+Seat or usage limits
+Defines staff accounts, admin users, student capacity, or message volumes.
+Add-ons
+Transport, extra modules, custom reporting, onboarding, premium support.
+Invoices and receipts
+Manages subscriptions, payment confirmations, and renewal history.
+26.1 Subscription Experience
+A school should be able to upgrade without re-onboarding.
+When a module is activated, the navigation and dashboards should appear automatically.
+When a module expires, the UI should degrade gracefully and preserve the school experience.
+Subscription copy should emphasize outcomes, not software names.
+27. Security, Privacy, and Compliance
+Role-based access control across all services.
+Single sign-on with secure sessions and token rotation.
+Encryption in transit and at rest for sensitive school data.
+Audit logs for logins, changes, exports, and billing actions.
+Backups, retention policies, and disaster recovery plans.
+Parent and student data segregation at tenant level.
+Consent-aware messaging and permissioned communication lists.
+27.1 Security Defaults
+Use least privilege by default.
+Separate public content from authenticated personal data.
+Apply MFA for admin and leadership accounts where possible.
+Use secure file storage for results, certificates, and admissions documents.
+28. Support Model and SLA
+Support layer
+What it covers
+Onboarding
+School setup, content migration, training, go-live support.
+Tier 1 support
+Basic user questions, password help, navigation help.
+Tier 2 support
+Data issues, workflow issues, subscription issues.
+Tier 3 support
+Engineering escalation, integrations, bug fixes.
+Success management
+Monthly check-ins, usage review, expansion recommendations.
+29. Operating Model for the Vendor Team
+Sales and discovery team: identifies fit, captures requirements, and frames the school story.
+Implementation team: configures the tenant, theme, roles, and modules.
+Content team: supplies website copy, media templates, and admissions assets.
+Engineering team: maintains services, integrations, and platform stability.
+Customer success team: tracks adoption, usage, renewals, and upsells.
+30. Extended Go-To-Market Playbook
+The strongest entry point is not a feature demo. It is a vision demo.
+Phase
+Action
+Phase A
+Create school-specific cinematic content that feels like the school speaking to parents.
+Phase B
+Offer a short diagnostic audit of the school's public presence and admissions funnel.
+Phase C
+Show a white-label prototype with the school's own branding and a simple admissions journey.
+Phase D
+Pilot on one branch, one level, or one division to prove value fast.
+Phase E
+Use results to expand into learning, future skills, and leadership dashboards.
+30.1 School Segmentation for Sales
+Prestige schools: position around brand, trust, and digital polish.
+Operational schools: position around coordination, attendance, transport, and reporting.
+Growth schools: position around admissions conversion, visibility, and future skills.
+Multi-campus schools: position around consistency and leadership oversight.
+31. Extended Financial Scenarios
+These scenarios are useful for internal planning and board-level conversations. They should be refined with actual sales assumptions.
+Scenario
+Description
+Conservative
+3 schools in Year 1, low ARPU, limited add-ons, slow sales cycle.
+Base
+5 schools in Year 1, moderate ARPU, one or two add-ons per school.
+Aggressive
+8 schools in Year 1, faster referrals, stronger enterprise adoption.
+31.1 Illustrative Revenue Mix
+Revenue stream
+Share
+Subscription MRR
+55% of revenue
+Implementation fees
+20% of revenue
+Add-ons and services
+15% of revenue
+Enterprise customization
+10% of revenue
+32. Product and Content Operating Calendar
+Cadence
+What happens
+Weekly
+Admissions follow-ups, parent announcements, content refresh, support review.
+Monthly
+School Pulse review, engagement report, product health review, billing reconciliation.
+Quarterly
+Feature release, roadmap review, customer success interviews, growth campaign refresh.
+Termly
+Academic story campaigns, result reporting, open-day campaigns, future-skills showcase.
+33. Sample SchoolHub Product Story
+A parent visits the school website. The site feels like the school, not like software. The parent books a tour, receives a follow-up, enrolls the child, and later sees attendance, results, future-skills progress, and announcements from one place. The principal opens School Pulse and sees enrollment, weak subjects, future-skills participation, and revenue snapshots. The school feels more organized, more premium, and more alive.
+That is the effect SchoolHub should create across every target school.
+34. Final Positioning Line
+One branded campus. One login. One experience. A whole school, digitally connected.
+
+35. Detailed Module Requirements
+Module
+Must-have requirements
+AdmissionsPRO
+Lead capture forms, tour booking, pipeline board, follow-up automation, offer letters, application history, conversion analytics.
+ResultsPRO
+Result input, class broadsheets, report card templates, term summaries, trend charts, downloadable PDFs.
+ExamsPRO
+Question bank, exam scheduling, CBT sessions, auto-marking where possible, manual marking support, exam analytics.
+ClassroomPRO
+Class pages, resource posting, assignments, teacher notes, class messages, content archiving.
+TutorsPRO
+Tutor profiles, booking calendar, session management, support programs, parent updates.
+ScholarsNG
+Level-based learning journeys, coding lessons, AI progression, project showcase, certificates, competitions.
+36. Sample Data Dictionary
+Field
+Meaning
+school_id
+Tenant key that identifies the school across SchoolHub.
+user_id
+Central auth identity mapped to a school role.
+student_id
+Student profile identifier in school context.
+lead_id
+Admissions lead record identifier.
+event_id
+Notification or activity event identifier.
+subscription_id
+Billing and entitlement record identifier.
+metric_snapshot_id
+Cached School Pulse snapshot identifier.
+37. Onboarding Checklist for a New School
+Confirm school name, campuses, domains, logos, colors, and brand tone.
+Map current processes for admissions, results, exams, classroom, transport, and fees.
+Set up tenant in SchoolHub and connect central auth.
+Activate the public website and admissions funnel.
+Import key users and assign roles.
+Connect existing specialist services that the school has subscribed to.
+Load initial content, announcements, and prospectus materials.
+Train admin, admissions, teacher, and leadership users.
+Go live and review the first 14 days of usage.
+38. Migration Strategy from Existing Tools
+Many schools already use spreadsheets, WhatsApp, or old portals. Migration should feel low-risk and controlled.
+Phase
+Migration action
+Phase 1
+Keep the old process alive while the new portal goes live in parallel.
+Phase 2
+Move admissions and parent communication first because they create the most visible wins.
+Phase 3
+Bring in results, exams, and learning feeds after trust is established.
+Phase 4
+Introduce ScholarsNG and School Pulse when the school is already seeing usage.
+Phase 5
+Retire legacy tools once adoption and confidence are stable.
+39. Acceptance Criteria for Go-Live
+Check
+Pass condition
+Branding
+School colors, logo, typography, and messaging are visible across public and authenticated screens.
+Admissions
+A parent can inquire, book a tour, and start an application without manual assistance.
+Login
+Each role can log in and see a role-specific dashboard.
+Learning
+Results, assignments, and assessments appear correctly for the right students and parents.
+Future Skills
+ScholarsNG data appears in portal or dashboard where subscribed.
+Pulse
+Leadership dashboard shows at least the agreed baseline metrics.
+Notifications
+School can send announcements and receive delivery tracking.
+Security
+Unauthorized users cannot see other tenant data or admin-only screens.
+40. FAQ That Schools Will Ask
+Question
+Answer
+Is this another school management system?
+No. It is a branded digital campus that composes multiple specialist services into one experience.
+Can a school start with only the website and admissions?
+Yes. The base plan should still feel complete.
+Can existing services be connected later?
+Yes. The design should support progressive activation.
+Will the school see your branding?
+Not on the school-facing side. The experience should be white-labeled.
+Can multiple branches share the same platform?
+Yes. Multi-campus routing and dashboards should be built in.
+Can ScholarsNG be optional?
+Yes. It should be an add-on or plan tier, not a requirement.
+41. Suggested Leadership Dashboard Widgets
+Widget
+What it should show
+Admissions funnel
+New inquiries, tours, applications, enrollments, conversion rate.
+Academic health
+Average score, pass rate, weak subjects, class trends.
+Engagement
+Portal logins, message delivery, homework completion, parent views.
+Future skills
+Enrolled learners, projects, certificates, competitions.
+Revenue
+Fees collected, outstanding balances, renewal dates.
+Transport
+Active routes, delays, completed trips, pickup exceptions.
+42. Success Metrics for the First 12 Months
+Goal
+What success looks like
+Adoption
+At least 70% of target parents logging in monthly on participating schools.
+Admissions
+Measurable lift in inquiry-to-tour and tour-to-enrollment conversion.
+Engagement
+Regular use of announcements, assignments, and results features.
+Future Skills
+Visible uptake of ScholarsNG programs in schools that subscribe.
+Revenue
+Healthy monthly recurring revenue growth and strong renewal intent.
+Case studies
+At least two strong school transformation stories ready for sales use.
+43. Final Notes for Product, Sales, and Delivery Teams
+Sell the outcome first, not the feature stack.
+Keep the school brand in front at every touchpoint.
+Make the base plan feel complete, elegant, and useful.
+Use ScholarsNG as a major differentiator for future-focused schools.
+Never let the user experience feel fragmented even though the backend is modular.
+Treat every school as a tenant with its own identity, rules, and ambitions.
+
+44. Extended Financial Model Assumptions
+Assumption
+Planning note
+Average school monthly fee
+250k to 350k depending on plan and size.
+Implementation fee
+One-time onboarding and setup charge per school.
+Churn assumption
+Low single-digit annual churn if support and value delivery are strong.
+Upsell assumption
+Growth into add-ons such as transport, future skills, and extra branches.
+Support ratio
+Customer success load increases with live tenants but improves with templates and automation.
+44.1 3-Year Revenue Build
+Year
+Driver
+Comment
+Year 1
+5 schools x average package + setup fees
+Pilot revenue base
+Year 2
+18 schools with higher ARPU and add-ons
+Expansion revenue phase
+Year 3
+45 schools, enterprise mix, higher attach rate
+Scale revenue phase
+45. Suggested Internal Team Structure
+Role
+Main responsibility
+Product lead
+Owns roadmap, scope, prioritization, and cross-team alignment.
+Designer
+Owns white-label UI, school branding, content layout, and usability.
+Backend engineer
+Owns APIs, multi-tenant services, billing, auth, and integrations.
+Frontend engineer
+Owns website, portal, dashboard, and responsive interactions.
+QA / release
+Tests, checks tenant setup, verifies flows, and releases updates.
+Customer success
+Trains schools, manages onboarding, adoption, and renewals.
+46. Final Positioning Statement
+SchoolHub is the digital campus layer that helps a school look premium, operate intelligently, communicate clearly, and grow with future skills at the center.
+One branded campus. One login. One experience. A whole school, digitally connected.
+
+47. Launch Week Checklist
+Day
+Launch task
+Day 1
+Confirm DNS, SSL, tenant routing, and brand assets.
+Day 2
+Validate admissions forms, tour booking, and inquiry routing.
+Day 3
+Check parent login, child profiles, and role-based dashboards.
+Day 4
+Test results, assessments, and learning feeds.
+Day 5
+Send a pilot announcement and verify notifications.
+Day 6
+Train school staff on updates, approvals, and support flow.
+Day 7
+Review feedback, fix friction points, and finalize go-live.
+47.1 What the School Should Feel on Launch
+The launch should feel like the school has opened a new digital front gate.
+Parents should recognize the school instantly. Staff should see less confusion. Leadership should feel more in control. The platform should feel like part of the school, not a third-party tool.
+48. Closing Summary
+SchoolHub becomes most powerful when it is treated as a digital campus layer rather than a bundle of disconnected software products. The school-facing experience should remain branded and simple, while the backend stays modular and scalable.
+If executed well, the product can become the front door for admissions, the daily workspace for parents and students, the command center for leadership, and the growth engine for future-skills expansion through ScholarsNG.

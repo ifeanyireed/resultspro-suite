@@ -11,19 +11,22 @@ import {
 import api from '@/lib/api';
 
 export default function StudentFutureSkillsPath() {
-  const [skillsData, setSkillsData] = useState<any>(null);
+  const [cohorts, setCohorts] = useState<any[]>([]);
 
   useEffect(() => {
-    api.get('/student/future-skills')
-      .then(res => setSkillsData(res.data))
-      .catch(err => console.error('Failed to load skills data:', err));
+    api.get('/public/cohorts')
+      .then(res => setCohorts(res.data.cohorts || []))
+      .catch(err => console.error('Failed to load cohorts:', err));
   }, []);
 
-  if (!skillsData) {
-    return <div style={{ color: 'white', padding: '2rem' }}>Loading Skills Path...</div>;
+  if (!cohorts) {
+    return <div style={{ color: 'white', padding: '2rem' }}>Loading Cohorts...</div>;
   }
 
-  const { modules, badges, milestone, remaining } = skillsData;
+  // Placeholder progress data for the sidebar
+  const badges = 3;
+  const milestone = "Backend Developer Track";
+  const remaining = 2;
 
   return (
     <div style={{ maxWidth: '1200px', paddingBottom: '4rem' }}>
@@ -48,32 +51,30 @@ export default function StudentFutureSkillsPath() {
       {/* Current Progress & Milestones */}
       <div style={{ display: 'grid', gridTemplateColumns: '1.8fr 1fr', gap: '2.5rem' }}>
         <div>
-           <div style={{ background: 'white', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem', marginBottom: '2.5rem' }}>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '2rem' }}>Your Learning Roadmap</h2>
+         <div style={{ background: 'white', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem', marginBottom: '2.5rem' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '2rem' }}>Available Cohorts</h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                 {modules.map((mod: any, i: number) => (
-                   <div key={mod.id} style={{ display: 'flex', gap: '1.5rem' }}>
+                 {cohorts.length === 0 ? (
+                    <p style={{ color: '#64748b' }}>No active cohorts found.</p>
+                 ) : cohorts.map((cohort: any) => (
+                   <div key={cohort.id} style={{ display: 'flex', gap: '1.5rem' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                         <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: mod.status === 'Completed' ? '#10b981' : mod.status === 'In Progress' ? '#f59e0b' : '#f1f5f9', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
-                            {mod.status === 'Completed' ? <CheckmarkCircle02Icon size={20} /> : <div style={{ width: '10px', height: '100%' }} />}
+                         <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#f59e0b', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
+                            <StarIcon size={20} />
                          </div>
-                         {i < modules.length - 1 && <div style={{ width: '2px', flex: 1, background: '#f1f5f9' }} />}
+                         <div style={{ width: '2px', flex: 1, background: '#f1f5f9' }} />
                       </div>
                       <div style={{ flex: 1, paddingBottom: '2.5rem' }}>
                          <div style={{ padding: '1.25rem', borderRadius: '1.5rem', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                               <span style={{ fontSize: '0.7rem', fontWeight: '800', color: mod.color }}>{mod.type.toUpperCase()}</span>
-                               <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8' }}>{mod.status}</span>
+                               <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#10b981' }}>{cohort.status}</span>
+                               <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8' }}>{cohort.duration_weeks} Weeks</span>
                             </div>
-                            <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b', margin: 0 }}>{mod.title}</h3>
-                            {mod.status === 'In Progress' && (
-                               <div style={{ marginTop: '1rem' }}>
-                                  <div style={{ height: '4px', background: 'white', borderRadius: '2px', overflow: 'hidden' }}>
-                                     <div style={{ width: '40%', height: '100%', background: '#f59e0b' }} />
-                                  </div>
-                                  <button style={{ marginTop: '1rem', background: '#1e293b', color: 'white', border: 'none', padding: '0.6rem 1rem', borderRadius: '0.75rem', fontSize: '0.8rem', fontWeight: '700', cursor: 'pointer' }}>Open Module</button>
-                               </div>
-                            )}
+                            <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b', margin: 0 }}>{cohort.title}</h3>
+                            <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: '0.5rem' }}>{cohort.description}</p>
+                            <div style={{ marginTop: '1rem' }}>
+                               <button style={{ background: '#1e293b', color: 'white', border: 'none', padding: '0.6rem 1rem', borderRadius: '0.75rem', fontSize: '0.8rem', fontWeight: '700', cursor: 'pointer' }}>View Journey</button>
+                            </div>
                          </div>
                       </div>
                    </div>

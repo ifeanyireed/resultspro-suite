@@ -4,49 +4,80 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Building2, CheckCircle2, Users, CreditCard, Briefcase, FileCheck2, Sparkles, BookOpen, GraduationCap, FileText, Mail, Settings, ShieldCheck, Map, Headset } from 'lucide-react';
+import { 
+  Squares2X2Icon,
+  UserGroupIcon,
+  CreditCardIcon,
+  BriefcaseIcon,
+  BuildingOfficeIcon,
+  DocumentCheckIcon,
+  SparklesIcon,
+  BookOpenIcon,
+  AcademicCapIcon,
+  MapIcon,
+  DocumentTextIcon,
+  EnvelopeIcon,
+  LifebuoyIcon,
+  Cog6ToothIcon
+} from '@heroicons/react/24/outline';
+import {
+  Squares2X2Icon as Squares2X2Solid,
+  UserGroupIcon as UserGroupSolid,
+  CreditCardIcon as CreditCardSolid,
+  BriefcaseIcon as BriefcaseSolid,
+  BuildingOfficeIcon as BuildingOfficeSolid,
+  DocumentCheckIcon as DocumentCheckSolid,
+  SparklesIcon as SparklesSolid,
+  BookOpenIcon as BookOpenSolid,
+  AcademicCapIcon as AcademicCapSolid,
+  MapIcon as MapSolid,
+  DocumentTextIcon as DocumentTextSolid,
+  EnvelopeIcon as EnvelopeSolid,
+  LifebuoyIcon as LifebuoySolid,
+  Cog6ToothIcon as Cog6ToothSolid
+} from '@heroicons/react/24/solid';
 
 export function Sidebar() {
   const pathname = usePathname();
 
   type Section = {
     title: string;
-    links: { label: string; href: string; icon: any; badge?: string }[];
+    links: { label: string; href: string; icon: any; activeIcon: any; badge?: string }[];
   };
 
   const sections: Section[] = [
     {
       title: 'COMMAND CENTER',
       links: [
-        { label: 'Suite Overview', href: '/overview', icon: LayoutDashboard },
-        { label: 'Universal Users', href: '/users', icon: Users },
+        { label: 'Suite Overview', href: '/overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid },
+        { label: 'Universal Users', href: '/users', icon: UserGroupIcon, activeIcon: UserGroupSolid },
       ],
     },
     {
       title: 'FINANCE & BILLING',
       links: [
-        { label: 'Subscriptions & Plans', href: '/subscriptions', icon: CreditCard },
-        { label: 'Agent Network', href: '/agents', icon: Briefcase },
+        { label: 'Subscriptions & Plans', href: '/subscriptions', icon: CreditCardIcon, activeIcon: CreditCardSolid },
+        { label: 'Agent Network', href: '/agents', icon: BriefcaseIcon, activeIcon: BriefcaseSolid },
       ],
     },
     {
       title: 'MODULAR SUITE CONTROLS',
       links: [
-        { label: 'SchoolHUB (Tenants)', href: '/schoolhub', icon: Building2 },
-        { label: 'ResultPRO', href: '/resultspro', icon: FileCheck2 },
-        { label: 'ExamsPRO', href: '/exampro', icon: Sparkles },
-        { label: 'ClassroomPRO', href: '/classroompro', icon: BookOpen },
-        { label: 'TutorsPRO', href: '/tutorspro', icon: GraduationCap },
-        { label: 'CoursesPRO', href: '/coursespro', icon: Map },
+        { label: 'SchoolHUB (Tenants)', href: '/schoolhub', icon: BuildingOfficeIcon, activeIcon: BuildingOfficeSolid },
+        { label: 'ResultPRO', href: '/resultspro', icon: DocumentCheckIcon, activeIcon: DocumentCheckSolid },
+        { label: 'ExamsPRO', href: '/exampro', icon: SparklesIcon, activeIcon: SparklesSolid },
+        { label: 'ClassroomPRO', href: '/classroompro', icon: BookOpenIcon, activeIcon: BookOpenSolid },
+        { label: 'TutorsPRO', href: '/tutorspro', icon: AcademicCapIcon, activeIcon: AcademicCapSolid },
+        { label: 'CoursesPRO', href: '/coursespro', icon: MapIcon, activeIcon: MapSolid },
       ],
     },
     {
       title: 'CONTENT & SYSTEM',
       links: [
-        { label: 'Suite Blog CMS', href: '/cms/blog', icon: FileText },
-        { label: 'Email Broadcasts', href: '/cms/emails', icon: Mail },
-        { label: 'Support Desk', href: '/support', icon: Headset },
-        { label: 'Global Settings', href: '/settings', icon: Settings },
+        { label: 'Suite Blog CMS', href: '/cms/blog', icon: DocumentTextIcon, activeIcon: DocumentTextSolid },
+        { label: 'Email Broadcasts', href: '/cms/emails', icon: EnvelopeIcon, activeIcon: EnvelopeSolid },
+        { label: 'Support Desk', href: '/support', icon: LifebuoyIcon, activeIcon: LifebuoySolid },
+        { label: 'Global Settings', href: '/settings', icon: Cog6ToothIcon, activeIcon: Cog6ToothSolid },
       ],
     },
   ];
@@ -68,19 +99,19 @@ export function Sidebar() {
             <div className="space-y-1">
               {section.links.map((link) => {
                 const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
-                const Icon = link.icon;
+                const Icon = isActive ? link.activeIcon : link.icon;
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`flex items-center justify-between px-4 py-2 rounded-xl text-sm font-normal relative transition-colors ${
+                    className={`flex items-center justify-between px-4 py-2 rounded-xl text-lg font-normal relative transition-colors ${
                       isActive
                         ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full'
                         : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
                     }`}
                   >
                     <div className="flex items-center space-x-3">
-                      <Icon className="w-5 h-5" />
+                      <Icon className="w-6 h-6" />
                       <span>{link.label}</span>
                     </div>
                     {link.badge && (
@@ -104,6 +135,7 @@ export function Sidebar() {
           className="rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
           style={{ backgroundImage: "url('/abstract-blue-2.jpg')" }}
         >
+          {/* Lighter overlay for text readability matching coursespro */}
           <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
           

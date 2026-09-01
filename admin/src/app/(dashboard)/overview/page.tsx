@@ -169,36 +169,36 @@ export default function OverviewPage() {
             <WidgetCard title="Action Required">
               <div className="space-y-4">
                 <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Pending Payouts</h4>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-bold text-gray-900">Chinedu Okafor</p>
-                    <p className="text-xs text-gray-500">Zenith Bank • 1029384756</p>
-                  </div>
-                  <p className="font-bold text-orange-500">₦75,000</p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-bold text-gray-900">Folake Adeleke</p>
-                    <p className="text-xs text-gray-500">Access Bank • 0039281745</p>
-                  </div>
-                  <p className="font-bold text-orange-500">₦120,000</p>
-                </div>
+                {pendingPayouts.length === 0 ? (
+                  <p className="text-sm text-gray-500">No pending payouts.</p>
+                ) : (
+                  pendingPayouts.map(p => (
+                    <div key={p.id} className="flex items-center justify-between">
+                      <div>
+                        <p className="font-bold text-gray-900">{p.account_name}</p>
+                        <p className="text-xs text-gray-500">{p.bank_name} • {p.account_number}</p>
+                      </div>
+                      <p className="font-bold text-orange-500">₦{p.amount.toLocaleString()}</p>
+                    </div>
+                  ))
+                )}
 
                 <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-6">Recent Registrations</h4>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-bold text-gray-900">Greenwood High</p>
-                    <p className="text-xs text-gray-500">Pro Tier • Unverified</p>
-                  </div>
-                  <p className="font-bold text-blue-600">Today</p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-bold text-gray-900">Kings College</p>
-                    <p className="text-xs text-gray-500">Enterprise Tier • Verified</p>
-                  </div>
-                  <p className="font-bold text-gray-400">Yesterday</p>
-                </div>
+                {recentSchools.length === 0 ? (
+                  <p className="text-sm text-gray-500">No recent registrations.</p>
+                ) : (
+                  recentSchools.map(s => (
+                    <div key={s.id} className="flex items-center justify-between">
+                      <div>
+                        <p className="font-bold text-gray-900">{s.name}</p>
+                        <p className="text-xs text-gray-500 capitalize">{s.subscription_tier?.toLowerCase() || 'Free'} Tier • {s.verification_status?.toLowerCase()}</p>
+                      </div>
+                      <p className="font-bold text-gray-400">
+                        {new Date(s.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  ))
+                )}
               </div>
             </WidgetCard>
           </div>

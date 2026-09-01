@@ -16,7 +16,7 @@ const dmSans = DM_Sans({
 });
 
 async function getTenant(host: string) {
-  const searchDomain = host.includes('localhost') ? 'loral.resultspro.ng' : host;
+  const searchDomain = host.includes('localhost') ? 'reedbreed.resultspro.ng' : host;
   try {
     const res = await fetch(`http://localhost:7000/api/public/tenant/resolve?domain=${searchDomain}`, { 
       next: { revalidate: 60 }

@@ -44,6 +44,12 @@ export default function SharedLoginPage({
       const res = await api.post(loginEndpoint, { email, password });
       if (res.data.token) {
         setAuth(res.data.user, res.data.token);
+        
+        // Option B: Store session slug securely in a cookie for the Next.js proxy to read
+        // In reality, this would be set as HttpOnly by the backend, but we'll simulate it here
+        const slug = res.data.user?.tenant_slug || 'reedbreed';
+        document.cookie = `schoolhub_slug=${slug}; path=/; max-age=86400; SameSite=Lax`;
+        
         alert("Login successful!");
         router.push(redirectPath);
       }

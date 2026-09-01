@@ -1,139 +1,75 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Message01Icon, Mail01Icon, Notification03Icon, Search01Icon, FilterIcon, MoreHorizontalIcon } from 'hugeicons-react';
-import api from '@/lib/api';
+import React from 'react';
+import { 
+  EnvelopeIcon,
+  PencilSquareIcon
+} from '@heroicons/react/24/outline';
 
-export default function CommunicationsPage() {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get('/parent/communications');
-        setData(response.data);
-      } catch (error) {
-        console.error('Failed to fetch communications data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (loading) return <div style={{ padding: '2rem' }}>Loading Messages...</div>;
-  if (!data) return <div style={{ padding: '2rem' }}>Failed to load messages data.</div>;
-
+export default function ParentCommunicationsPage() {
   return (
-    <div style={{ maxWidth: '1200px', paddingBottom: '4rem' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
+    <>
+      <div className="flex items-end justify-between mb-8 mt-2">
         <div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
-            Communications
-          </h1>
-          <p style={{ color: '#64748b', fontSize: '1.1rem', fontWeight: '500' }}>
-            Stay connected with the school through newsletters, teacher updates, and official broadcasts.
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Communications</h1>
+          <p className="text-sm text-gray-500 mt-1">Direct messages with teachers and school admin.</p>
         </div>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <div style={{ position: 'relative' }}>
-             <input 
-               type="text" 
-               placeholder="Search messages..." 
-               style={{ padding: '0.8rem 1rem 0.8rem 2.5rem', borderRadius: '1rem', border: '1px solid #e2e8f0', fontSize: '0.9rem', width: '250px', outline: 'none' }}
-             />
-             <Search01Icon size={18} color="#94a3b8" style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)' }} />
+        <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
+          <PencilSquareIcon className="w-4 h-4" />
+          New Message
+        </button>
+      </div>
+
+      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 flex h-[600px] overflow-hidden">
+        {/* Inbox List */}
+        <div className="w-1/3 border-r border-gray-100 flex flex-col">
+          <div className="p-4 border-b border-gray-100 bg-gray-50">
+            <h3 className="font-medium text-gray-900">Inbox</h3>
           </div>
-          <button style={{ background: 'white', border: '1px solid #e2e8f0', padding: '0.8rem', borderRadius: '1rem', cursor: 'pointer', color: '#64748b' }}>
-             <FilterIcon size={20} />
-          </button>
-        </div>
-      </header>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '2.5rem' }}>
-        {/* Sidebar Folders */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-           {data.folders?.map((folder: any, i: number) => (
-             <button
-               key={i}
-               style={{
-                 display: 'flex',
-                 alignItems: 'center',
-                 justifyContent: 'space-between',
-                 padding: '1rem 1.25rem',
-                 borderRadius: '1.25rem',
-                 border: 'none',
-                 background: folder.active ? '#eff6ff' : 'transparent',
-                 color: folder.active ? '#146ef5' : '#64748b',
-                 fontWeight: '700',
-                 cursor: 'pointer',
-                 textAlign: 'left',
-                 transition: 'all 0.2s ease'
-               }}
-             >
-               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                 {folder.icon === 'message' && <Message01Icon size={20} />}
-                 {folder.icon === 'notification' && <Notification03Icon size={20} />}
-                 {folder.icon === 'mail' && <Mail01Icon size={20} />}
-                 {folder.icon === 'filter' && <FilterIcon size={20} />}
-                 <span>{folder.name}</span>
-               </div>
-               <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>{folder.count}</span>
-             </button>
-           ))}
+          <div className="flex-1 overflow-y-auto">
+            {[
+              { name: 'Mr. Davies', subject: 'Math Project Update', time: '10:42 AM', unread: true },
+              { name: 'School Admin', subject: 'Term 2 Fee Schedule', time: 'Yesterday', unread: false },
+              { name: 'Coach Smith', subject: 'Soccer Tryouts', time: 'Oct 12', unread: false },
+            ].map((m, i) => (
+              <div key={i} className={`p-4 border-b border-gray-50 cursor-pointer hover:bg-gray-50 transition-colors ${m.unread ? 'bg-blue-50/50' : ''}`}>
+                <div className="flex justify-between items-start mb-1">
+                  <h4 className={`text-sm ${m.unread ? 'font-bold text-gray-900' : 'font-medium text-gray-700'}`}>{m.name}</h4>
+                  <span className="text-[10px] text-gray-400">{m.time}</span>
+                </div>
+                <p className="text-xs text-gray-500 truncate">{m.subject}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Message List */}
-        <div style={{ background: 'white', borderRadius: '2rem', border: '1px solid #f1f5f9', overflow: 'hidden' }}>
-          {data.messages?.map((msg: any, i: number) => (
-            <motion.div
-              key={msg.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
-              whileHover={{ background: '#f8fafc' }}
-              style={{
-                padding: '1.5rem 2rem',
-                borderBottom: i === data.messages.length - 1 ? 'none' : '1px solid #f1f5f9',
-                cursor: 'pointer',
-                display: 'flex',
-                gap: '1.5rem',
-                position: 'relative'
-              }}
-            >
-              {msg.unread && (
-                <div style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', width: '8px', height: '8px', borderRadius: '50%', background: '#146ef5' }} />
-              )}
-              
-              <div style={{ width: '48px', height: '48px', borderRadius: '1rem', background: `${msg.color}15`, color: msg.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', flexShrink: 0 }}>
-                {msg.sender.charAt(0)}
-              </div>
-
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
-                  <h3 style={{ fontSize: '1rem', fontWeight: msg.unread ? '800' : '700', color: '#1e293b', margin: 0 }}>{msg.sender}</h3>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '600' }}>{msg.time}</span>
-                </div>
-                <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '0.9rem', marginBottom: '0.5rem' }}>{msg.subject}</div>
-                <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0, lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                  {msg.excerpt}
-                </p>
-                <div style={{ marginTop: '0.75rem' }}>
-                   <span style={{ fontSize: '0.65rem', fontWeight: '800', color: msg.color, background: `${msg.color}10`, padding: '0.2rem 0.6rem', borderRadius: '0.5rem', border: `1px solid ${msg.color}20` }}>
-                     {msg.category.toUpperCase()}
-                   </span>
-                </div>
-              </div>
-
-              <button style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', alignSelf: 'flex-start' }}>
-                 <MoreHorizontalIcon size={20} />
+        {/* Message Thread */}
+        <div className="flex-1 flex flex-col bg-gray-50/30">
+          <div className="p-6 border-b border-gray-100 flex items-center gap-4 bg-white">
+            <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+              <img src="/avatars/character2.jpg" alt="Teacher" className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900">Mr. Davies</h3>
+              <p className="text-xs text-gray-500">Advanced Mathematics</p>
+            </div>
+          </div>
+          <div className="flex-1 p-6 overflow-y-auto flex flex-col gap-4">
+            <div className="self-start max-w-[80%] bg-white border border-gray-100 p-4 rounded-2xl rounded-tl-sm shadow-sm">
+              <p className="text-sm text-gray-700">Hello Mrs. Smith, I just wanted to let you know Alex is doing great in Algebra this week.</p>
+              <span className="text-[10px] text-gray-400 mt-2 block">10:42 AM</span>
+            </div>
+          </div>
+          <div className="p-4 bg-white border-t border-gray-100">
+            <div className="relative">
+              <input type="text" placeholder="Reply to Mr. Davies..." className="w-full bg-gray-50 border border-gray-200 rounded-full py-3 pl-4 pr-12 text-sm outline-none focus:border-[#146ef5] transition-colors" />
+              <button className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-[#146ef5] text-white rounded-full flex items-center justify-center">
+                <EnvelopeIcon className="w-4 h-4" />
               </button>
-            </motion.div>
-          ))}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

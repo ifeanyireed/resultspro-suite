@@ -11,6 +11,7 @@ import (
 	"service_coursespro/db"
 	"service_coursespro/handlers"
 	"service_coursespro/middleware"
+	"service_coursespro/ws"
 )
 
 func main() {
@@ -59,16 +60,21 @@ func main() {
 		protected.GET("/mentor/submissions", h.GetPendingSubmissions)
 		protected.POST("/mentor/submissions/:id/review", h.ReviewSubmission)
 
-		// Classroom & Presence
+		// Classroom & Peers
 		protected.GET("/classroom/presence", h.GetPresence)
 		protected.POST("/classroom/heartbeat", h.PresenceHeartbeat)
-
-		// Peers
+		protected.GET("/classroom/ws", ws.HandleWS)
 		protected.GET("/peers/roster", h.GetPeers)
 
 		// Admin Endpoints
 		protected.GET("/admin/cohorts", h.AdminGetCohorts)
+		protected.POST("/admin/cohorts", h.AdminCreateCohort)
+		protected.POST("/admin/stages", h.AdminCreateStage)
+		protected.POST("/admin/modules", h.AdminCreateModule)
 		protected.GET("/admin/enrollments", h.AdminGetEnrollments)
+
+		// AI Features
+		protected.POST("/ai/modules/:moduleId/generate-quiz", h.GenerateQuiz)
 	}
 
 	port := os.Getenv("PORT")
