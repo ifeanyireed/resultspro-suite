@@ -61,7 +61,7 @@ export default function SettingsPage() {
                 <label className="block text-slate-500 font-semibold mb-1">Users & Identity Service (Go)</label>
                 <input
                   type="text"
-                  defaultValue="http://localhost:7000"
+                  defaultValue="https://resultspro-service-users.onrender.com"
                   className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-slate-800"
                 />
               </div>

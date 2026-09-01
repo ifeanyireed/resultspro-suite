@@ -22,7 +22,7 @@ func NewHandler() *Handler {
 func (h *Handler) ProxyAuth(c *gin.Context) {
 	usersURL := os.Getenv("USERS_SERVICE_URL")
 	if usersURL == "" {
-		usersURL = "http://localhost:7000"
+		usersURL = "https://resultspro-service-users.onrender.com"
 	}
 
 	targetURL := usersURL + c.Request.URL.Path

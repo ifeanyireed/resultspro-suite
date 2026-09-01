@@ -42,7 +42,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		usersURL := os.Getenv("USERS_SERVICE_URL")
 		if usersURL == "" {
-			usersURL = "http://localhost:7000"
+			usersURL = "https://resultspro-service-users.onrender.com"
 		}
 
 		domain := c.GetHeader("X-Tenant-Domain")

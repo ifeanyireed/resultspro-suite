@@ -36,7 +36,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		usersURL := os.Getenv("USERS_SERVICE_URL")
 		if usersURL == "" {
-			usersURL = "http://localhost:7000"
+			usersURL = "https://resultspro-service-users.onrender.com"
 		}
 
 		domain := c.GetHeader("X-Tenant-Domain")
@@ -86,7 +86,7 @@ func OptionalAuthMiddleware() gin.HandlerFunc {
 			token := strings.TrimPrefix(authHeader, "Bearer ")
 			usersURL := os.Getenv("USERS_SERVICE_URL")
 			if usersURL == "" {
-				usersURL = "http://localhost:7000"
+				usersURL = "https://resultspro-service-users.onrender.com"
 			}
 			payload, _ := json.Marshal(map[string]string{"token": token})
 			req, err := http.NewRequest("POST", usersURL+"/auth/introspect", bytes.NewBuffer(payload))

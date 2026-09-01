@@ -1,6 +1,6 @@
 import { User, School, SubscriptionPlan, Invoice, PayoutRequest, ScratchCardBatch, BlogPost, SuiteStats } from './types';
 
-const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'http://localhost:7000';
+const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
 const RESULTS_API = process.env.NEXT_PUBLIC_RESULTS_API || 'http://localhost:5000';
 const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'http://localhost:8080';
 const CLASSROOM_API = process.env.NEXT_PUBLIC_CLASSROOM_API || 'http://localhost:8080';
