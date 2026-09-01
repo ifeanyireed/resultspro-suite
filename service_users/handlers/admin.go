@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"service_users/db"
-	"service_users/utils"
+	"service_users.resultspro.ng/db"
+	"service_users.resultspro.ng/utils"
 )
 
 // HandleGetSuiteStats returns global platform telemetrics for the admin dashboard
