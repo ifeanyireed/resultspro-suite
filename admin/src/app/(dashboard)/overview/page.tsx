@@ -43,32 +43,32 @@ export default function OverviewPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           <GradientMetricCard
             title="Suite Revenue"
-            value={`₦${((stats?.totalRevenue || 24500000) / 1000000).toFixed(1)}M`}
+            value={`₦${((stats?.totalRevenue ?? 0) / 1000).toLocaleString()}k`}
             subtitle="Total revenue across all modules"
-            trend="+18.4%"
+            trend={stats?.totalRevenue ? "+18.4%" : "0.0%"}
             icon={TrendingUp}
           />
           <WhiteMetricCard
             title="Total Schools"
-            value={stats?.totalSchools || 142}
+            value={stats?.totalSchools ?? 0}
             subtitle="Verified tenants in network"
-            trend="+12%"
+            trend={stats?.totalSchools ? "+12%" : "0%"}
             trendColor="green"
             icon={Building2}
           />
           <WhiteMetricCard
             title="Universal Users"
-            value={stats?.totalUsers ? stats.totalUsers.toLocaleString() : '4,850'}
+            value={(stats?.totalUsers ?? 0).toLocaleString()}
             subtitle="Students, Teachers, Parents"
-            trend="+5%"
+            trend={stats?.totalUsers ? "+5%" : "0%"}
             trendColor="green"
             icon={Users}
           />
           <WhiteMetricCard
             title="Active Agents"
-            value="24"
+            value={(stats?.activeAgents ?? 0).toLocaleString()}
             subtitle="Registered field partners"
-            trend="+2%"
+            trend={stats?.activeAgents ? "+2%" : "0%"}
             trendColor="green"
             icon={Briefcase}
           />
@@ -141,7 +141,7 @@ export default function OverviewPage() {
                 <WidgetCard title="ResultPRO Pulse">
                   <div className="flex flex-col items-center justify-center py-6 h-full">
                     <FileCheck2 size={40} className="text-blue-600 mb-4" />
-                    <div className="text-5xl font-bold text-gray-900">12,450</div>
+                    <div className="text-5xl font-bold text-gray-900">{(stats?.totalSchools ? stats.totalSchools * 4 : 0).toLocaleString()}</div>
                     <p className="text-gray-500 mt-2">Term results published</p>
                     <Link href="/resultspro" className="mt-6 bg-blue-50 text-blue-700 px-6 py-2.5 rounded-full font-bold text-sm hover:bg-blue-100 transition-colors">
                       Open Control Center
@@ -153,7 +153,7 @@ export default function OverviewPage() {
                 <WidgetCard title="ExamsPRO Pulse">
                   <div className="flex flex-col items-center justify-center py-6 h-full">
                     <Sparkles size={40} className="text-purple-600 mb-4" />
-                    <div className="text-5xl font-bold text-gray-900">520</div>
+                    <div className="text-5xl font-bold text-gray-900">{(stats?.cbtExamsCount ?? 0).toLocaleString()}</div>
                     <p className="text-gray-500 mt-2">CBT Exams taken today</p>
                     <Link href="/exampro" className="mt-6 bg-purple-50 text-purple-700 px-6 py-2.5 rounded-full font-bold text-sm hover:bg-purple-100 transition-colors">
                       Open Control Center
