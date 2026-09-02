@@ -284,3 +284,148 @@ func HandleListInvoices(w http.ResponseWriter, r *http.Request) {
 		"invoices": invoices,
 	})
 }
+
+// HandleListAgents returns the directory of all agents
+func HandleListAgents(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	query := `
+		SELECT u.id, u.full_name, u.email, u.account_status, 
+		       COALESCE(s.tier, 'STANDARD') as tier,
+		       COALESCE((SELECT SUM(amount) FROM agent_earnings WHERE agent_id = u.id), 0) as total_earnings
+		FROM users u
+		INNER JOIN user_subscriptions s ON u.id = s.user_id AND s.type = 'AGENT'
+		ORDER BY u.created_at DESC
+	`
+
+	rows, err := db.DB.Query(query)
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Database error")
+		return
+	}
+	defer rows.Close()
+
+	var agents []map[string]interface{}
+	for rows.Next() {
+		var id, fullName, email, status, tier string
+		var totalEarnings float64
+
+		if err := rows.Scan(&id, &fullName, &email, &status, &tier, &totalEarnings); err != nil {
+			continue
+		}
+
+		agents = append(agents, map[string]interface{}{
+			"id": id,
+			"firstName": fullName,
+			"lastName": "",
+			"email": email,
+			"uniqueReferralCode": "REF-" + id[:6],
+			"subscriptionTier": tier,
+			"totalCommissionEarned": totalEarnings,
+			"status": status,
+		})
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"agents": agents,
+	})
+}
+
+// HandleListReferrals returns pending referrals from agents
+func HandleListReferrals(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	query := `
+		SELECT t.id, t.name, u.full_name, t.created_at,
+		       COALESCE(e.amount, 0) as commission,
+		       COALESCE(e.status, 'PENDING') as status
+		FROM tenants t
+		INNER JOIN users u ON t.referred_by_agent_id = u.id
+		LEFT JOIN agent_earnings e ON e.tenant_id = t.id AND e.agent_id = u.id
+		ORDER BY t.created_at DESC
+	`
+
+	rows, err := db.DB.Query(query)
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Database error")
+		return
+	}
+	defer rows.Close()
+
+	var referrals []map[string]interface{}
+	for rows.Next() {
+		var id, schoolName, agentName, createdAt, status string
+		var commission float64
+
+		if err := rows.Scan(&id, &schoolName, &agentName, &createdAt, &commission, &status); err != nil {
+			continue
+		}
+
+		referrals = append(referrals, map[string]interface{}{
+			"id": id,
+			"agentName": agentName,
+			"schoolName": schoolName,
+			"commissionAmount": commission,
+			"status": status,
+			"createdAt": createdAt,
+		})
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"referrals": referrals,
+	})
+}
+
+// HandleListAssignments returns schools assigned to agents
+func HandleListAssignments(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	query := `
+		SELECT r.id, u.full_name, t.name, r.role, r.created_at, COALESCE(c.default_rate, 10.0)
+		FROM user_tenant_roles r
+		INNER JOIN users u ON r.user_id = u.id
+		INNER JOIN tenants t ON r.tenant_id = t.id
+		LEFT JOIN agent_commissions c ON c.agent_id = u.id
+		WHERE r.role = 'agent'
+		ORDER BY r.created_at DESC
+	`
+
+	rows, err := db.DB.Query(query)
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Database error")
+		return
+	}
+	defer rows.Close()
+
+	var assignments []map[string]interface{}
+	for rows.Next() {
+		var id, agentName, schoolName, role, createdAt string
+		var rate float64
+
+		if err := rows.Scan(&id, &agentName, &schoolName, &role, &createdAt, &rate); err != nil {
+			continue
+		}
+
+		assignments = append(assignments, map[string]interface{}{
+			"id": id,
+			"agentName": agentName,
+			"schoolName": schoolName,
+			"role": role,
+			"commissionRate": rate,
+			"assignedAt": createdAt,
+		})
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"assignments": assignments,
+	})
+}

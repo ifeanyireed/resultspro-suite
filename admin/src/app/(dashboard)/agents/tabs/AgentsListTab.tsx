@@ -2,8 +2,14 @@ import React, { useState } from 'react';
 import { Badge } from '@/components/Badge';
 import { Search, MoreVertical, Plus } from 'lucide-react';
 
+import { fetchAgents } from '@/lib/api';
+
 export default function AgentsListTab() {
   const [agents, setAgents] = useState<any[]>([]);
+
+  React.useEffect(() => {
+    fetchAgents().then(setAgents);
+  }, []);
 
   return (
     <div className="space-y-6">

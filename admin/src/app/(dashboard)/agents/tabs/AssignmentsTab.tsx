@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { Trash2, Plus } from 'lucide-react';
 
+import { fetchAgentAssignments } from '@/lib/api';
+
 export default function AssignmentsTab() {
   const [assignments, setAssignments] = useState<any[]>([]);
+
+  React.useEffect(() => {
+    fetchAgentAssignments().then(setAssignments);
+  }, []);
 
   return (
     <div className="space-y-6">

@@ -304,3 +304,44 @@ export async function fetchCoursesproEnrollments() {
   }
 }
 
+
+// 5. Agents
+export async function fetchAgents() {
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/admin/agents`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return data.agents || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchAgentReferrals() {
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/admin/agents/referrals`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return data.referrals || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchAgentAssignments() {
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/admin/agents/assignments`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return data.assignments || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchAgentPayouts() {
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/admin/payouts`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return data.payouts || [];
+  } catch {
+    return [];
+  }
+}

@@ -169,6 +169,9 @@ func main() {
 	mux.HandleFunc("/api/v1/admin/payouts", handlers.HandleGetAdminPayouts)
 	mux.HandleFunc("/api/v1/admin/plans", handlers.HandleListPlans)
 	mux.HandleFunc("/api/v1/admin/invoices", handlers.HandleListInvoices)
+	mux.HandleFunc("/api/v1/admin/agents", handlers.HandleListAgents)
+	mux.HandleFunc("/api/v1/admin/agents/referrals", handlers.HandleListReferrals)
+	mux.HandleFunc("/api/v1/admin/agents/assignments", handlers.HandleListAssignments)
 
 	mux.HandleFunc("/api/v1/tenants", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {

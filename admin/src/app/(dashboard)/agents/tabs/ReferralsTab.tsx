@@ -2,8 +2,14 @@ import React, { useState } from 'react';
 import { Badge } from '@/components/Badge';
 import { CheckCircle, XCircle } from 'lucide-react';
 
+import { fetchAgentReferrals } from '@/lib/api';
+
 export default function ReferralsTab() {
   const [referrals, setReferrals] = useState<any[]>([]);
+
+  React.useEffect(() => {
+    fetchAgentReferrals().then(setReferrals);
+  }, []);
 
   return (
     <div className="space-y-6">
