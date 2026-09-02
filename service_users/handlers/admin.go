@@ -439,3 +439,81 @@ func HandleListAssignments(w http.ResponseWriter, r *http.Request) {
 		"assignments": assignments,
 	})
 }
+
+// HandleCreateAgent creates a new agent profile
+func HandleCreateAgent(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var req struct {
+		Email          string  `json:"email"`
+		FullName       string  `json:"full_name"`
+		Tier           string  `json:"tier"`
+		CommissionRate float64 `json:"commission_rate"`
+		BankName       string  `json:"bank_name"`
+		AccountNumber  string  `json:"account_number"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+
+	if req.Email == "" || req.FullName == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Email and Full Name are required")
+		return
+	}
+
+	if req.Tier == "" {
+		req.Tier = "STANDARD"
+	}
+	if req.CommissionRate == 0 {
+		req.CommissionRate = 10.0
+	}
+
+	// Create or get user
+	var userId string
+	err := db.DB.QueryRow("SELECT id FROM users WHERE email = ?", req.Email).Scan(&userId)
+	if err == sql.ErrNoRows {
+		userId = "usr-" + utils.GenerateUUID()[:8]
+		_, err = db.DB.Exec("INSERT INTO users (id, email, full_name, account_status) VALUES (?, ?, ?, 'active')", userId, req.Email, req.FullName)
+		if err != nil {
+			utils.JSONError(w, http.StatusInternalServerError, "Failed to create user")
+			return
+		}
+	} else if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Database error")
+		return
+	}
+
+	// Upsert Agent Subscription
+	subId := "sub-ag-" + utils.GenerateUUID()[:8]
+	_, err = db.DB.Exec(`
+		INSERT INTO user_subscriptions (id, user_id, type, tier, status) 
+		VALUES (?, ?, 'AGENT', ?, 'ACTIVE')
+		ON DUPLICATE KEY UPDATE tier = ?
+	`, subId, userId, req.Tier, req.Tier)
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to set agent subscription")
+		return
+	}
+
+	// Upsert Agent Commission
+	_, err = db.DB.Exec(`
+		INSERT INTO agent_commissions (agent_id, default_rate, bank_name, account_number, account_name) 
+		VALUES (?, ?, ?, ?, ?)
+		ON DUPLICATE KEY UPDATE default_rate = ?, bank_name = ?, account_number = ?, account_name = ?
+	`, userId, req.CommissionRate, req.BankName, req.AccountNumber, req.FullName,
+		req.CommissionRate, req.BankName, req.AccountNumber, req.FullName)
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to set agent commission profile")
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]string{
+		"message": "Agent created successfully",
+		"id": userId,
+	})
+}
