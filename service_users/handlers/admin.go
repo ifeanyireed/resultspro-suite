@@ -5,6 +5,9 @@ import (
 	"net/http"
 	"strings"
 
+	"database/sql"
+	"github.com/google/uuid"
+
 	"service_users.resultspro.ng/db"
 	"service_users.resultspro.ng/utils"
 )
@@ -477,7 +480,7 @@ func HandleCreateAgent(w http.ResponseWriter, r *http.Request) {
 	var userId string
 	err := db.DB.QueryRow("SELECT id FROM users WHERE email = ?", req.Email).Scan(&userId)
 	if err == sql.ErrNoRows {
-		userId = "usr-" + utils.GenerateUUID()[:8]
+		userId = "usr-" + uuid.New().String()[:8]
 		_, err = db.DB.Exec("INSERT INTO users (id, email, full_name, account_status) VALUES (?, ?, ?, 'active')", userId, req.Email, req.FullName)
 		if err != nil {
 			utils.JSONError(w, http.StatusInternalServerError, "Failed to create user")
@@ -489,7 +492,7 @@ func HandleCreateAgent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Upsert Agent Subscription
-	subId := "sub-ag-" + utils.GenerateUUID()[:8]
+	subId := "sub-ag-" + uuid.New().String()[:8]
 	_, err = db.DB.Exec(`
 		INSERT INTO user_subscriptions (id, user_id, type, tier, status) 
 		VALUES (?, ?, 'AGENT', ?, 'ACTIVE')
