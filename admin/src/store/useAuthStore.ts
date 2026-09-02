@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import api from '@/lib/api';
+import api from '@/lib/api-legacy';
 import { Role } from '@/lib/roles';
 
 interface User {

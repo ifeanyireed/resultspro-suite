@@ -1,4 +1,4 @@
-import api from './api';
+import api from './api-legacy';
 
 export interface Notification {
   id: string;

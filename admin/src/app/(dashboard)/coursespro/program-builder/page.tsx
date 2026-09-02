@@ -64,7 +64,6 @@ export default function ProgramBuilderPage() {
           </div>
         </div>
       </div>
-      </div>
 
       {/* AI Quiz Generator Section */}
       <div className="mt-8 bg-gradient-to-br from-indigo-900 to-slate-900 rounded-[1.5rem] p-8 shadow-lg border border-indigo-500/30 text-white">

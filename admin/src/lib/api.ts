@@ -97,9 +97,9 @@ export async function updateUserStatus(userId: string, status: string): Promise<
 // 4. Subscriptions & Billing
 export async function fetchPlans(): Promise<SubscriptionPlan[]> {
   try {
-    const res = await fetch(`${USERS_API}/api/v1/billing/plans`, { headers: getAuthHeader() });
+    const res = await fetch(`${USERS_API}/api/v1/admin/plans`, { headers: getAuthHeader() });
     const data = await res.json();
-    return Array.isArray(data) ? data : [];
+    return data.plans || [];
   } catch {
     return [];
   }
@@ -107,10 +107,10 @@ export async function fetchPlans(): Promise<SubscriptionPlan[]> {
 
 export async function fetchInvoices(schoolId?: string): Promise<Invoice[]> {
   try {
-    const url = schoolId ? `${USERS_API}/api/v1/billing/invoices/school/${schoolId}` : `${USERS_API}/api/v1/billing/invoices`;
+    const url = schoolId ? `${USERS_API}/api/v1/billing/invoices/tenant/${schoolId}` : `${USERS_API}/api/v1/admin/invoices`;
     const res = await fetch(url, { headers: getAuthHeader() });
     const data = await res.json();
-    return Array.isArray(data) ? data : [];
+    return data.invoices || (Array.isArray(data) ? data : []);
   } catch {
     return [];
   }
@@ -304,22 +304,3 @@ export async function fetchCoursesproEnrollments() {
   }
 }
 
-export async function fetchPlans() {
-  try {
-    const res = await fetch(`${USERS_API}/api/v1/admin/plans`, { headers: getAuthHeader() });
-    const data = await res.json();
-    return data.plans || [];
-  } catch {
-    return [];
-  }
-}
-
-export async function fetchInvoices() {
-  try {
-    const res = await fetch(`${USERS_API}/api/v1/admin/invoices`, { headers: getAuthHeader() });
-    const data = await res.json();
-    return data.invoices || [];
-  } catch {
-    return [];
-  }
-}
