@@ -111,9 +111,12 @@ func main() {
 	// --- 2. Universal Handshake, Discovery & Profiles ---
 	mux.HandleFunc("/intelligence/profile/", handlers.HandleGetProfile)
 	mux.HandleFunc("/user/profiles", handlers.HandleGetBulkProfiles)
+	mux.HandleFunc("/api/v1/users", handlers.HandleListAllUsers)
 	mux.HandleFunc("/api/v1/users/", func(w http.ResponseWriter, r *http.Request) {
 		if strings.HasSuffix(r.URL.Path, "/profile") {
 			handlers.HandleGetProfile(w, r)
+		} else if strings.HasSuffix(r.URL.Path, "/status") {
+			handlers.HandleUpdateUserStatus(w, r)
 		} else {
 			handlers.HandleGetUserDetail(w, r)
 		}

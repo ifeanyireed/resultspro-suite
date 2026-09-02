@@ -14,15 +14,13 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Initial sample fallback while loading
-    setUsers([
-      { id: '1', full_name: 'Super Admin', email: 'superadmin@resultspro.ng', account_status: 'active', phone: '+2348011111111', created_at: '2026-01-01' },
-      { id: '2', full_name: 'Mr. Adeniyi', email: 'teacher@greenwoodhigh.edu.ng', account_status: 'active', phone: '+2348055555555', created_at: '2026-02-10' },
-      { id: '3', full_name: 'Jane Doe', email: 'student@example.com', account_status: 'active', phone: '+2348066666666', created_at: '2026-03-01' },
-      { id: '4', full_name: 'Mrs. Doe', email: 'parent@example.com', account_status: 'active', phone: '+2348077777777', created_at: '2026-03-01' },
-      { id: '5', full_name: 'Agent Chinedu', email: 'agent@resultspro.ng', account_status: 'active', phone: '+2348088888888', created_at: '2026-01-15' },
-    ]);
-    setLoading(false);
+    async function loadUsers() {
+      setLoading(true);
+      const data = await fetchUsers();
+      setUsers(data);
+      setLoading(false);
+    }
+    loadUsers();
   }, []);
 
   const handleToggleStatus = async (user: User) => {

@@ -95,3 +95,89 @@ func HandleGetAdminPayouts(w http.ResponseWriter, r *http.Request) {
 
 	utils.JSONResponse(w, http.StatusOK, payouts)
 }
+
+// HandleListAllUsers returns all users in the system for the global admin dashboard
+func HandleListAllUsers(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	rows, err := db.DB.Query("SELECT id, full_name, email, phone, account_status, created_at FROM users ORDER BY created_at DESC")
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Database error")
+		return
+	}
+	defer rows.Close()
+
+	var users []map[string]interface{}
+	for rows.Next() {
+		var id, email, accountStatus string
+		var fullName, phone, createdAt *string
+		if err := rows.Scan(&id, &fullName, &email, &phone, &accountStatus, &createdAt); err != nil {
+			continue
+		}
+
+		user := map[string]interface{}{
+			"id":             id,
+			"full_name":      "",
+			"email":          email,
+			"phone":          "",
+			"account_status": accountStatus,
+			"created_at":     "",
+		}
+
+		if fullName != nil {
+			user["full_name"] = *fullName
+		}
+		if phone != nil {
+			user["phone"] = *phone
+		}
+		if createdAt != nil {
+			user["created_at"] = *createdAt
+		}
+
+		users = append(users, user)
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"users": users,
+	})
+}
+
+// HandleUpdateUserStatus allows global admins to suspend or activate users
+func HandleUpdateUserStatus(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPatch {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	// Extract user ID from URL manually since we are using standard ServeMux
+	parts := strings.Split(r.URL.Path, "/")
+	if len(parts) < 5 {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid URL")
+		return
+	}
+	userId := parts[4]
+
+	var req struct {
+		Status string `json:"status"`
+	}
+	if err := utils.ParseJSONBody(r, &req); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+
+	if req.Status != "active" && req.Status != "suspended" && req.Status != "unverified" {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid status")
+		return
+	}
+
+	_, err := db.DB.Exec("UPDATE users SET account_status = ? WHERE id = ?", req.Status, userId)
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to update user status")
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "User status updated"})
+}
