@@ -223,13 +223,23 @@ func HandleListPlans(w http.ResponseWriter, r *http.Request) {
 			"storage_gb":     storage,
 			"features":       parsedFeatures,
 			"is_active":      isActive,
-			"currentSchools": 0, // Mock for now or JOIN with tenants
+			
+			"currentSchools": getPlanSchoolCount(name),
+
 		})
 	}
 
 	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
 		"plans": plans,
 	})
+}
+
+
+
+func getPlanSchoolCount(planName string) int {
+	var count int
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM tenants WHERE subscription_tier = ?", planName).Scan(&count)
+	return count
 }
 
 // HandleListInvoices returns recent invoices across all tenants
