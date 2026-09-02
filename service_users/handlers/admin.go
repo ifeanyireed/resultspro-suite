@@ -183,3 +183,104 @@ func HandleUpdateUserStatus(w http.ResponseWriter, r *http.Request) {
 
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "User status updated"})
 }
+
+// HandleListPlans returns all centralized billing plans for the global admin dashboard
+func HandleListPlans(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	rows, err := db.DB.Query("SELECT id, name, monthly_price, annual_price, max_students, max_teachers, max_results_per_term, storage_gb, features, is_active FROM plans")
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Database error")
+		return
+	}
+	defer rows.Close()
+
+	var plans []map[string]interface{}
+	for rows.Next() {
+		var id, name, features string
+		var monthlyPrice, annualPrice float64
+		var maxStudents, maxTeachers, maxResults, storage int
+		var isActive bool
+
+		if err := rows.Scan(&id, &name, &monthlyPrice, &annualPrice, &maxStudents, &maxTeachers, &maxResults, &storage, &features, &isActive); err != nil {
+			continue
+		}
+
+		var parsedFeatures []string
+		_ = json.Unmarshal([]byte(features), &parsedFeatures)
+
+		plans = append(plans, map[string]interface{}{
+			"id":             id,
+			"name":           name,
+			"monthly_price":  monthlyPrice,
+			"annual_price":   annualPrice,
+			"max_students":   maxStudents,
+			"max_teachers":   maxTeachers,
+			"max_results":    maxResults,
+			"storage_gb":     storage,
+			"features":       parsedFeatures,
+			"is_active":      isActive,
+			"currentSchools": 0, // Mock for now or JOIN with tenants
+		})
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"plans": plans,
+	})
+}
+
+// HandleListInvoices returns recent invoices across all tenants
+func HandleListInvoices(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	query := `
+		SELECT i.id, i.invoice_number, i.plan_name, i.amount, i.status, i.billing_cycle, i.due_date, t.name as tenant_name
+		FROM invoices i
+		LEFT JOIN tenants t ON i.tenant_id = t.id
+		ORDER BY i.created_at DESC LIMIT 10
+	`
+	rows, err := db.DB.Query(query)
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Database error")
+		return
+	}
+	defer rows.Close()
+
+	var invoices []map[string]interface{}
+	for rows.Next() {
+		var id, invoiceNumber, planName, status, billingCycle string
+		var tenantName *string
+		var amount float64
+		var dueDate string
+
+		if err := rows.Scan(&id, &invoiceNumber, &planName, &amount, &status, &billingCycle, &dueDate, &tenantName); err != nil {
+			continue
+		}
+
+		schoolName := "Unknown School"
+		if tenantName != nil {
+			schoolName = *tenantName
+		}
+
+		invoices = append(invoices, map[string]interface{}{
+			"id":             id,
+			"invoice_number": invoiceNumber,
+			"plan_name":      planName,
+			"amount":         amount,
+			"status":         status,
+			"billing_cycle":  billingCycle,
+			"due_date":       dueDate,
+			"tenant_name":    schoolName,
+		})
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"invoices": invoices,
+	})
+}

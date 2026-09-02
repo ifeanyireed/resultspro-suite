@@ -5,45 +5,23 @@ import { Header } from '@/components/Header';
 import { Badge } from '@/components/Badge';
 import { CreditCard, Check, DollarSign, FileText, ArrowUpRight } from 'lucide-react';
 
+import { fetchPlans, fetchInvoices } from '@/lib/api';
+
 export default function SubscriptionsPage() {
-  const plans = [
-    {
-      name: 'Free',
-      price: '₦0',
-      period: 'forever',
-      students: 100,
-      teachers: 15,
-      results: 100,
-      storage: '2 GB',
-      features: ['Up to 100 students', 'Up to 15 teachers', 'Basic report cards', 'Email verification'],
-      currentSchools: 56,
-      badge: 'STARTER',
-    },
-    {
-      name: 'Pro',
-      price: '₦25,000',
-      period: 'per month',
-      students: 2000,
-      teachers: 300,
-      results: 2000,
-      storage: '50 GB',
-      features: ['Up to 2,000 students', 'Up to 300 teachers', 'Scratch card PIN access', 'CBT exams & analytics', 'SMS notifications'],
-      currentSchools: 68,
-      badge: 'MOST POPULAR',
-    },
-    {
-      name: 'Enterprise',
-      price: '₦75,000',
-      period: 'per month',
-      students: 'Unlimited',
-      teachers: 'Unlimited',
-      results: 'Unlimited',
-      storage: '500 GB',
-      features: ['Unlimited students & staff', 'SchoolHub white-label portal', 'Custom school domain', 'Priority 24/7 account manager', 'Dedicated database backups'],
-      currentSchools: 18,
-      badge: 'FULL SUITE',
-    },
-  ];
+  const [plans, setPlans] = useState<any[]>([]);
+  const [invoices, setInvoices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  React.useEffect(() => {
+    async function loadData() {
+      setLoading(true);
+      const [p, i] = await Promise.all([fetchPlans(), fetchInvoices()]);
+      setPlans(p);
+      setInvoices(i);
+      setLoading(false);
+    }
+    loadData();
+  }, []);
 
   return (
     <div className="w-full">
@@ -78,31 +56,31 @@ export default function SubscriptionsPage() {
 
                   <h4 className="text-xl font-medium text-slate-800 text-xs">{plan.name}</h4>
                   <div className="mt-2 flex items-baseline space-x-1">
-                    <span className="text-3xl font-extrabold text-slate-900">{plan.price}</span>
-                    <span className="text-xs text-slate-500">/{plan.period}</span>
+                    <span className="text-3xl font-extrabold text-slate-900">₦{plan.monthly_price.toLocaleString()}</span>
+                    <span className="text-xs text-slate-500">/per month</span>
                   </div>
 
                   <div className="mt-6 space-y-2.5 text-xs text-slate-600">
                     <div className="flex justify-between py-1 border-b border-slate-100">
                       <span className="text-slate-400">Max Students:</span>
-                      <span className="font-medium text-slate-800 text-xs">{plan.students}</span>
+                      <span className="font-medium text-slate-800 text-xs">{plan.max_students > 900000 ? 'Unlimited' : plan.max_students.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-slate-100">
                       <span className="text-slate-400">Max Teachers:</span>
-                      <span className="font-medium text-slate-800 text-xs">{plan.teachers}</span>
+                      <span className="font-medium text-slate-800 text-xs">{plan.max_teachers > 900000 ? 'Unlimited' : plan.max_teachers.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-slate-100">
                       <span className="text-slate-400">Results / Term:</span>
-                      <span className="font-medium text-slate-800 text-xs">{plan.results}</span>
+                      <span className="font-medium text-slate-800 text-xs">{plan.max_results > 900000 ? 'Unlimited' : plan.max_results.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-slate-100">
                       <span className="text-slate-400">Storage:</span>
-                      <span className="font-medium text-slate-800 text-xs">{plan.storage}</span>
+                      <span className="font-medium text-slate-800 text-xs">{plan.storage_gb} GB</span>
                     </div>
                   </div>
 
                   <ul className="mt-6 space-y-2 text-xs text-slate-600">
-                    {plan.features.map((f, i) => (
+                    {plan.features?.map((f: string, i: number) => (
                       <li key={i} className="flex items-center space-x-2">
                         <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
                         <span>{f}</span>
@@ -123,26 +101,18 @@ export default function SubscriptionsPage() {
           </div>
 
           <div className="divide-y divide-slate-50 text-xs">
-            <div className="py-3 flex items-center justify-between">
-              <div>
-                <p className="font-medium text-slate-800 text-xs">INV-2026-001 • Greenwood High</p>
-                <p className="text-[11px] text-slate-500">Pro Plan Annual Renewal • Due Oct 1, 2026</p>
+            {invoices.map((inv) => (
+              <div key={inv.id} className="py-3 flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-slate-800 text-xs">{inv.invoice_number} • {inv.tenant_name}</p>
+                  <p className="text-[11px] text-slate-500">{inv.plan_name} Plan {inv.billing_cycle} Renewal • Due {new Date(inv.due_date).toLocaleDateString()}</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <span className="font-medium text-slate-800 text-xs">₦{inv.amount.toLocaleString()}</span>
+                  <Badge status={inv.status} />
+                </div>
               </div>
-              <div className="flex items-center space-x-3">
-                <span className="font-medium text-slate-800 text-xs">₦250,000</span>
-                <Badge status="PAID" />
-              </div>
-            </div>
-            <div className="py-3 flex items-center justify-between">
-              <div>
-                <p className="font-medium text-slate-800 text-xs">INV-2026-002 • Kings College Lagos</p>
-                <p className="text-[11px] text-slate-500">Enterprise Plan Termly • Due Nov 15, 2026</p>
-              </div>
-              <div className="flex items-center space-x-3">
-                <span className="font-medium text-slate-800 text-xs">₦750,000</span>
-                <Badge status="PAID" />
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

@@ -303,3 +303,23 @@ export async function fetchCoursesproEnrollments() {
     return [];
   }
 }
+
+export async function fetchPlans() {
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/admin/plans`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return data.plans || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchInvoices() {
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/admin/invoices`, { headers: getAuthHeader() });
+    const data = await res.json();
+    return data.invoices || [];
+  } catch {
+    return [];
+  }
+}
