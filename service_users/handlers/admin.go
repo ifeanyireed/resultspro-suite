@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
+	"strings"
 
 	"service_users.resultspro.ng/db"
 	"service_users.resultspro.ng/utils"
@@ -163,7 +165,7 @@ func HandleUpdateUserStatus(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		Status string `json:"status"`
 	}
-	if err := utils.ParseJSONBody(r, &req); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		utils.JSONError(w, http.StatusBadRequest, "Invalid request body")
 		return
 	}
