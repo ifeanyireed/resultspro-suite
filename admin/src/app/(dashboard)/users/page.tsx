@@ -90,8 +90,8 @@ export default function UsersPage() {
                 {filtered.map((user) => (
                   <tr key={user.id} className="hover:bg-blue-50/30 transition-colors group">
                     <td className="px-6 py-4 flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">
-                        {user.full_name ? user.full_name.charAt(0) : 'U'}
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs overflow-hidden shadow-sm border border-slate-200">
+                        <img src={`/avatars/character${(user.id.charCodeAt(0) % 20) + 1}.jpg`} alt={user.full_name || 'User'} className="w-full h-full object-cover" />
                       </div>
                       <div>
                         <p className="font-medium text-slate-800 text-xs">{user.full_name || 'Anonymous'}</p>

@@ -189,7 +189,7 @@ export default function AgentDashboard() {
           <div className="space-y-5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                    <img src="/character9.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <img src="/avatars/character9.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
                 <div>
                   <h4 className="text-base font-normal text-gray-900">Greenwood High</h4>
                   <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Onboarding Form</span></p>
@@ -199,7 +199,7 @@ export default function AgentDashboard() {
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                    <img src="/character10.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <img src="/avatars/character10.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
                 <div>
                   <h4 className="text-base font-normal text-gray-900">Lighthouse Academy</h4>
                   <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Pricing Approval</span></p>
@@ -209,7 +209,7 @@ export default function AgentDashboard() {
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                    <img src="/character11.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <img src="/avatars/character11.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
                 <div>
                   <h4 className="text-base font-normal text-gray-900">Harvard Int'l</h4>
                   <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Initial Pitch</span></p>

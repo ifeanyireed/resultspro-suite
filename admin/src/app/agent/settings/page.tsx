@@ -59,7 +59,7 @@ export default function SettingsPage() {
               {/* Avatar Upload */}
               <div className="flex items-center gap-6">
                 <div className="w-20 h-20 bg-gradient-to-tr from-orange-200 to-orange-100 rounded-full overflow-hidden flex items-center justify-center border-4 border-white shadow-md shrink-0">
-                  <img src="/character8.jpg" alt="Agent Avatar" className="w-full h-full object-cover" />
+                  <img src="/avatars/character8.jpg" alt="Agent Avatar" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <button className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs font-semibold px-4 py-2 rounded-lg shadow-sm transition-colors mb-2">

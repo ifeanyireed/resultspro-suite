@@ -91,8 +91,8 @@ export default function UsersTab() {
                 <tr key={u.id} className="hover:bg-indigo-50/30 transition-colors group cursor-pointer">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xs uppercase">
-                        {u.name ? u.name.charAt(0) : '?'}
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs overflow-hidden shadow-sm border border-slate-200">
+                        <img src={`/avatars/character${(u.id.charCodeAt(0) % 20) + 1}.jpg`} alt={u.name || 'User'} className="w-full h-full object-cover" />
                       </div>
                       <div>
                         <p className="font-bold text-slate-800 text-xs">{u.name}</p>
