@@ -350,6 +350,10 @@ func main() {
 
 	// --- 7. Agents & Commissions ---
 	mux.HandleFunc("/intelligence/agent/", handlers.HandleGetAgentPortfolio)
+	
+	// Protected Agent Dashboard Endpoint
+	mux.HandleFunc("/api/v1/agent/dashboard", middleware.RequireRole("agent")(handlers.HandleGetAgentDashboard))
+	
 	mux.HandleFunc("/api/v1/agents/", func(w http.ResponseWriter, r *http.Request) {
 		if strings.HasSuffix(r.URL.Path, "/portfolio") {
 			handlers.HandleGetAgentPortfolio(w, r)

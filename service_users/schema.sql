@@ -422,3 +422,31 @@ CREATE TABLE IF NOT EXISTS payment_transactions (
     CONSTRAINT fk_pay_invoice FOREIGN KEY (invoice_id) REFERENCES invoices(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
+-- 27. Agent Dashboard Additions (Schema Updates)
+-- Add Monthly Target to Agent Commissions (For the 'Target Progress' widget)
+ALTER TABLE agent_commissions 
+ADD COLUMN monthly_target FLOAT DEFAULT 1000000.00;
+
+-- Create Agent Activities Table (For the 'Recent Activity' widget)
+CREATE TABLE IF NOT EXISTS agent_activities (
+    id VARCHAR(191) PRIMARY KEY,
+    agent_id VARCHAR(191) NOT NULL,
+    activity_type VARCHAR(191) NOT NULL, -- BOUNTY_CREDITED, LEAD_ADDED, PIN_PURCHASED
+    title VARCHAR(191) NOT NULL,
+    description TEXT,
+    created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
+    INDEX idx_agent_activity (agent_id),
+    CONSTRAINT fk_agent_act_user FOREIGN KEY (agent_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Create Agent Reminders Table (For the 'Reminders' widget)
+CREATE TABLE IF NOT EXISTS agent_reminders (
+    id VARCHAR(191) PRIMARY KEY,
+    agent_id VARCHAR(191) NOT NULL,
+    title VARCHAR(191) NOT NULL,
+    time_window VARCHAR(191), -- e.g. "02.00 pm - 04.00 pm"
+    is_completed BOOLEAN DEFAULT FALSE,
+    created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
+    CONSTRAINT fk_agent_rem_user FOREIGN KEY (agent_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

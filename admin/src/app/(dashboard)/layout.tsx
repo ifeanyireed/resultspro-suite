@@ -1,3 +1,7 @@
+"use client";
+
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Sidebar } from '@/components/Sidebar';
 import { ModernDashboardLayout } from '@resultspro/design-system';
 import { Search, Bell } from 'lucide-react';
@@ -37,6 +41,34 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('resultspro_admin_token');
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+    
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const roles = payload.roles || [];
+      
+      // If the user has ONLY the agent role, redirect them to the agent dashboard
+      const isOnlyAgent = roles.includes('agent') && !roles.includes('super-admin') && !roles.includes('platform-admin');
+      if (isOnlyAgent) {
+        router.push('/agent/dashboard');
+      } else {
+        setIsAuthorized(true);
+      }
+    } catch (e) {
+      router.push('/login');
+    }
+  }, [router]);
+
+  if (!isAuthorized) return null;
+
   return (
     <ModernDashboardLayout 
       sidebarContent={<Sidebar />}
@@ -46,3 +78,4 @@ export default function DashboardLayout({
     </ModernDashboardLayout>
   );
 }
+

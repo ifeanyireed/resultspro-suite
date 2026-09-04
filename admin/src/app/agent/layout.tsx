@@ -1,9 +1,9 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { 
   MagnifyingGlassIcon,
   EnvelopeIcon,
@@ -28,8 +28,33 @@ export default function AgentLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('resultspro_admin_token');
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+    
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const roles = payload.roles || [];
+      if (!roles.includes('agent') && !roles.includes('super-admin') && !roles.includes('platform-admin')) {
+        router.push('/unauthorized');
+      } else {
+        setIsAuthorized(true);
+      }
+    } catch (e) {
+      router.push('/login');
+    }
+  }, [router]);
 
   const isActive = (path: string) => pathname === path;
+
+  if (!isAuthorized) return null;
+
 
 
   return (

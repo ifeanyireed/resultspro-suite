@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   PlusIcon,
   ArrowUpRightIcon,
@@ -15,6 +15,24 @@ import {
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 
 export default function AgentDashboard() {
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('resultspro_admin_token');
+    if (!token) return;
+
+    fetch(`${process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com'}/api/v1/agent/dashboard`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(res => res.json())
+    .then(setData)
+    .catch(console.error);
+  }, []);
+
+  if (!data) return <div className="p-8 text-center text-gray-500">Loading Dashboard...</div>;
+
   return (
     <>
       {/* Dashboard Title & Actions */}
@@ -50,7 +68,7 @@ export default function AgentDashboard() {
             </div>
           </div>
           <div className="z-10">
-            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">₦450k</h2>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white mb-2">₦{(data.bounties_earned || 0).toLocaleString()}</h2>
             <div className="flex items-center gap-1.5 text-xs text-white/80">
               <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 5%</div>
               <span>Increased from last month</span>
@@ -67,7 +85,7 @@ export default function AgentDashboard() {
             </div>
           </div>
           <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">₦150k</h2>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-gray-900 mb-2">₦{(data.unpaid_earnings || 0).toLocaleString()}</h2>
             <div className="flex items-center gap-1.5 text-xs text-gray-500">
               <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 6%</div>
               <span>Increased from last month</span>
@@ -84,7 +102,7 @@ export default function AgentDashboard() {
             </div>
           </div>
           <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">12</h2>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-gray-900 mb-2">{data.active_schools || 0}</h2>
             <div className="flex items-center gap-1.5 text-xs text-gray-500">
               <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 2%</div>
               <span>Increased from last month</span>
@@ -101,7 +119,7 @@ export default function AgentDashboard() {
             </div>
           </div>
           <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">1,250</h2>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-gray-900 mb-2">{(data.total_cards_sold || 0).toLocaleString()}</h2>
             <div className="flex items-center gap-1.5 text-xs text-gray-500">
               <span className="text-gray-400">On Discuss</span>
             </div>
@@ -187,36 +205,22 @@ export default function AgentDashboard() {
             </button>
           </div>
           <div className="space-y-5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                    <img src="/avatars/character9.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
-                <div>
-                  <h4 className="text-base font-normal text-gray-900">Greenwood High</h4>
-                  <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Onboarding Form</span></p>
+            {data.leads && data.leads.length > 0 ? data.leads.map((lead: any, i: number) => (
+              <div key={i} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border border-white shadow-sm">
+                    {lead.name.charAt(0)}
+                  </div>
+                  <div>
+                    <h4 className="text-base font-normal text-gray-900">{lead.name}</h4>
+                    <p className="text-sm text-gray-500">Status: <span className="font-medium text-gray-700">{lead.status}</span></p>
+                  </div>
                 </div>
+                <span className="px-2 py-1 bg-yellow-50 text-yellow-600 text-[10px] font-bold rounded-md">In Progress</span>
               </div>
-              <span className="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-md">Completed</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                    <img src="/avatars/character10.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
-                <div>
-                  <h4 className="text-base font-normal text-gray-900">Lighthouse Academy</h4>
-                  <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Pricing Approval</span></p>
-                </div>
-              </div>
-              <span className="px-2 py-1 bg-yellow-50 text-yellow-600 text-[10px] font-bold rounded-md">In Progress</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                    <img src="/avatars/character11.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
-                <div>
-                  <h4 className="text-base font-normal text-gray-900">Harvard Int'l</h4>
-                  <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Initial Pitch</span></p>
-                </div>
-              </div>
-              <span className="px-2 py-1 bg-red-50 text-red-500 text-[10px] font-bold rounded-md">Pending</span>
-            </div>
+            )) : (
+              <div className="text-sm text-gray-500">No active leads.</div>
+            )}
           </div>
         </div>
 
@@ -233,10 +237,10 @@ export default function AgentDashboard() {
               </defs>
               <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="url(#stripes-arc)" strokeWidth="15" strokeLinecap="round" strokeDasharray="125.66 125.66" strokeDashoffset="0" />
               <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#111827" strokeWidth="15" strokeLinecap="round" strokeDasharray="82.93 125.66" strokeDashoffset="0" />
-              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#146ef5" strokeWidth="15" strokeLinecap="round" strokeDasharray="51.52 125.66" strokeDashoffset="0" />
+              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#146ef5" strokeWidth="15" strokeLinecap="round" strokeDasharray={`${(data.target_progress || 0) * 1.2566} 125.66`} strokeDashoffset="0" />
             </svg>
             <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end translate-y-[15%]">
-              <span className="text-5xl font-normal tracking-tight text-gray-900">41%</span>
+              <span className="text-5xl font-normal tracking-tight text-gray-900">{Math.round(data.target_progress || 0)}%</span>
               <span className="text-xs font-medium text-gray-500 mt-1">Target Reached</span>
             </div>
           </div>
@@ -260,33 +264,25 @@ export default function AgentDashboard() {
           <div className="w-full bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
             <h3 className="text-xl font-normal text-gray-900 mb-6">Recent Activity</h3>
             <div className="flex-1 flex flex-col gap-8 pb-2">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                  <CheckCircleIcon className="w-5 h-5" />
+              {data.activities && data.activities.length > 0 ? data.activities.map((act: any, i: number) => (
+                <div key={i} className="flex items-start gap-4">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
+                    act.type === 'BOUNTY_CREDITED' ? 'bg-emerald-50 text-emerald-600' :
+                    act.type === 'LEAD_ADDED' ? 'bg-blue-50 text-[#146ef5]' :
+                    'bg-orange-50 text-orange-500'
+                  }`}>
+                    {act.type === 'BOUNTY_CREDITED' ? <CheckCircleIcon className="w-5 h-5" /> : 
+                     act.type === 'LEAD_ADDED' ? <UserPlusIcon className="w-5 h-5" /> : 
+                     <ShoppingCartIcon className="w-5 h-5" />}
+                  </div>
+                  <div>
+                    <p className="text-base font-normal text-gray-900">{act.title}</p>
+                    <p className="text-sm text-gray-500 mt-0.5">{act.description}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-base font-normal text-gray-900">Bounty Credited</p>
-                  <p className="text-sm text-gray-500 mt-0.5">₦50k from Excel Academy</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center shrink-0">
-                  <UserPlusIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-base font-normal text-gray-900">New Lead Added</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Springfield High School</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center shrink-0">
-                  <ShoppingCartIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-base font-normal text-gray-900">PINs Purchased</p>
-                  <p className="text-sm text-gray-500 mt-0.5">50 PINs standard pack</p>
-                </div>
-              </div>
+              )) : (
+                <div className="text-sm text-gray-500">No recent activity.</div>
+              )}
             </div>
           </div>
 

@@ -169,3 +169,89 @@ func HandleRequestPayout(w http.ResponseWriter, r *http.Request) {
 		"message":   "Payout request submitted successfully",
 	})
 }
+
+// HandleGetAgentDashboard returns aggregated metrics for the agent dashboard UI
+func HandleGetAgentDashboard(w http.ResponseWriter, r *http.Request) {
+	agentID, err := utils.GetUserIDFromRequest(r)
+	if err != nil || agentID == "" {
+		utils.JSONError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	var totalEarned sql.NullFloat64
+	db.DB.QueryRow(`SELECT SUM(amount) FROM agent_earnings WHERE agent_id = ?`, agentID).Scan(&totalEarned)
+
+	var unpaidEarnings sql.NullFloat64
+	db.DB.QueryRow(`SELECT SUM(amount) FROM agent_earnings WHERE agent_id = ? AND status = 'EARNED'`, agentID).Scan(&unpaidEarnings)
+
+	var activeSchools int
+	db.DB.QueryRow(`SELECT COUNT(*) FROM tenants WHERE referred_by_agent_id = ? AND status = 'ACTIVE'`, agentID).Scan(&activeSchools)
+
+	var target sql.NullFloat64
+	db.DB.QueryRow(`SELECT monthly_target FROM agent_commissions WHERE agent_id = ?`, agentID).Scan(&target)
+
+	total := 0.0
+	if totalEarned.Valid {
+		total = totalEarned.Float64
+	}
+	
+	unpaid := 0.0
+	if unpaidEarnings.Valid {
+		unpaid = unpaidEarnings.Float64
+	}
+
+	monthlyTarget := 1000000.0 // Default if missing
+	if target.Valid && target.Float64 > 0 {
+		monthlyTarget = target.Float64
+	}
+
+	progressPercent := (total / monthlyTarget) * 100
+
+	// Fetch Total Cards Sold (assuming source_type = 'SCRATCH_CARD')
+	var totalCardsSold int
+	db.DB.QueryRow(`SELECT COUNT(*) FROM agent_earnings WHERE agent_id = ? AND source_type = 'SCRATCH_CARD'`, agentID).Scan(&totalCardsSold)
+
+	// Fetch Leads
+	rows, _ := db.DB.Query(`SELECT name, verification_status FROM tenants WHERE referred_by_agent_id = ? AND verification_status != 'VERIFIED' LIMIT 5`, agentID)
+	type Lead struct {
+		Name   string `json:"name"`
+		Status string `json:"status"`
+	}
+	var leads []Lead
+	if rows != nil {
+		defer rows.Close()
+		for rows.Next() {
+			var l Lead
+			rows.Scan(&l.Name, &l.Status)
+			leads = append(leads, l)
+		}
+	}
+
+	// Fetch Activities
+	actRows, _ := db.DB.Query(`SELECT activity_type, title, description, created_at FROM agent_activities WHERE agent_id = ? ORDER BY created_at DESC LIMIT 5`, agentID)
+	type Activity struct {
+		Type        string `json:"type"`
+		Title       string `json:"title"`
+		Description string `json:"description"`
+		CreatedAt   string `json:"created_at"`
+	}
+	var activities []Activity
+	if actRows != nil {
+		defer actRows.Close()
+		for actRows.Next() {
+			var a Activity
+			actRows.Scan(&a.Type, &a.Title, &a.Description, &a.CreatedAt)
+			activities = append(activities, a)
+		}
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"bounties_earned": total,
+		"unpaid_earnings": unpaid,
+		"active_schools":  activeSchools,
+		"total_cards_sold": totalCardsSold,
+		"target_progress": progressPercent,
+		"leads": leads,
+		"activities": activities,
+	})
+}
