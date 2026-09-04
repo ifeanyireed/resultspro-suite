@@ -29,9 +29,24 @@ export default function SharedLoginPage({
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate network request or hook into actual login logic
+    
     setTimeout(() => {
       setIsLoading(false);
+      
+      // MOCK LOGIN LOGIC: Create fake JWT tokens based on email so RBAC works
+      let roles = ['super-admin'];
+      if (email.includes('agent')) {
+        roles = ['agent'];
+      } else if (email.includes('teacher')) {
+        roles = ['teacher'];
+      }
+      
+      const payload = btoa(JSON.stringify({ roles }));
+      const fakeToken = `mockHeader.${payload}.mockSignature`;
+      
+      localStorage.setItem('resultspro_admin_token', fakeToken);
+      localStorage.setItem('accessToken', fakeToken);
+      
       router.push(redirectPath);
     }, 1200);
   };
