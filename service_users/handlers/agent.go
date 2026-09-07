@@ -245,7 +245,77 @@ func HandleGetAgentDashboard(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+	
+	// Sales Analytics logic
+	type DailySales struct {
+		DayLabel   string  `json:"day"`
+		Total      float64 `json:"total"`
+		Percentage int     `json:"percentage"`
+		Status     string  `json:"status"`
+	}
+	var salesAnalytics []DailySales
+	dailyEarned := make(map[string]float64)
+	dailyPaid := make(map[string]float64)
+
+	now := time.Now()
+	startDate := now.AddDate(0, 0, -6).Format("2006-01-02")
+
+	saRows, saErr := db.DB.Query("SELECT DATE(created_at), SUM(amount), status FROM agent_earnings WHERE agent_id = ? AND created_at >= ? GROUP BY DATE(created_at), status", agentID, startDate)
+	if saErr == nil {
+		defer saRows.Close()
+		for saRows.Next() {
+			var d string
+			var t float64
+			var s string
+			saRows.Scan(&d, &t, &s)
+			if s == "EARNED" {
+				dailyEarned[d] += t
+			} else if s == "PAID" {
+				dailyPaid[d] += t
+			}
+		}
+	}
+
+	dailyTarget := monthlyTarget / 30.0
+	if dailyTarget <= 0 {
+		dailyTarget = 10000
+	}
+	daysOfWeek := []string{"S", "M", "T", "W", "T", "F", "S"}
+
+	for i := 6; i >= 0; i-- {
+		d := now.AddDate(0, 0, -i)
+		dateStr := d.Format("2006-01-02")
+		dayLabel := daysOfWeek[d.Weekday()]
+		
+		earned := dailyEarned[dateStr]
+		paid := dailyPaid[dateStr]
+		total := earned + paid
+		
+		perc := 0
+		if total > 0 {
+			perc = int((total / dailyTarget) * 100)
+			if perc > 100 {
+				perc = 100
+			}
+		} else {
+            perc = 15 // minimum visual baseline
+        }
+		
+		barType := "stripe"
+		if paid > earned {
+			barType = "solid-light"
+		} else if earned > 0 {
+			barType = "solid-dark"
+		}
+		
+		salesAnalytics = append(salesAnalytics, DailySales{
+			DayLabel:   dayLabel,
+			Total:      total,
+			Percentage: perc,
+			Status:     barType,
+		})
+	}
+utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
 		"bounties_earned": total,
 		"unpaid_earnings": unpaid,
 		"active_schools":  activeSchools,
@@ -253,5 +323,6 @@ func HandleGetAgentDashboard(w http.ResponseWriter, r *http.Request) {
 		"target_progress": progressPercent,
 		"leads": leads,
 		"activities": activities,
+		"sales_analytics": salesAnalytics,
 	})
 }
