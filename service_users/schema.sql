@@ -342,6 +342,7 @@ CREATE TABLE IF NOT EXISTS agent_commissions (
     bank_name VARCHAR(191),
     account_number VARCHAR(191),
     account_name VARCHAR(191),
+    monthly_target FLOAT DEFAULT 1000000.0, -- Default 1M Naira target
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     CONSTRAINT fk_agent_comm_user FOREIGN KEY (agent_id) REFERENCES users(id) ON DELETE CASCADE
