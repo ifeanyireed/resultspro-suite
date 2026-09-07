@@ -2,15 +2,10 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
 const getApiUrl = () => {
-  if (typeof window === 'undefined') return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
-  
-  // If we are in the browser and not on localhost, use the relative path /api
-  // which will be proxied by Nginx to the Go backend
-  if (!window.location.hostname.includes('localhost')) {
-    return '/api';
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
   }
-  
-  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+  return 'https://resultspro-service-examspro.onrender.com/api';
 };
 
 const API_URL = getApiUrl();

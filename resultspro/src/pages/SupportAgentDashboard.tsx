@@ -23,7 +23,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = (import.meta.env.VITE_API_URL || 'https://resultspro-service-resultspro.onrender.com/api');
 
 interface Ticket {
   id: string;

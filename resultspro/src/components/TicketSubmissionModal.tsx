@@ -12,7 +12,7 @@ import { InlineLoadingSpinner } from '@/components/LoadingSpinner';
 import axios from 'axios';
 import { useToast } from '@/hooks/use-toast';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = (import.meta.env.VITE_API_URL || 'https://resultspro-service-resultspro.onrender.com/api');
 
 interface TicketSubmissionModalProps {
   open: boolean;

@@ -6,7 +6,7 @@ export interface StaticRoutes {
 }
 
 export async function fetchStaticRoutes(): Promise<StaticRoutes> {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://resultspro-service-examspro.onrender.com/api';
   
   try {
     const res = await fetch(`${API_URL}/public/routes`, { cache: 'no-store' });

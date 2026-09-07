@@ -12,5 +12,5 @@
   • School Admin: tenant-admin@example.edu
   • Super Admin: superadmin@resultspro.ng
   • Platform Admin: platform-admin@resultspro.ng
-  • Sales Agent: agent@resultspro.ng
+  • Sales Agent: agent@resultspro.ng (Agent@123456)
   • Support Staff: support-staff@resultspro.ng

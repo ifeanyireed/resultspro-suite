@@ -11,7 +11,7 @@ import { IconBell as Bell, IconX as X, IconCircleCheck as CheckCircle, IconClock
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = (import.meta.env.VITE_API_URL || 'https://resultspro-service-resultspro.onrender.com/api');
 
 interface Notification {
   id: string;

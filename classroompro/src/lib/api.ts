@@ -2,31 +2,10 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
 const getApiUrl = () => {
-  // 1. Explicit environment variable (highest priority)
   if (process.env.NEXT_PUBLIC_API_URL) {
     return process.env.NEXT_PUBLIC_API_URL;
   }
-
-  // 2. Server-side rendering (Next.js) fallback
-  if (typeof window === 'undefined') {
-    return 'http://localhost:8080/api';
-  }
-  
-  const { hostname, port, protocol } = window.location;
-  
-  // 3. Explicit Localhost check
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    return 'http://localhost:8080/api';
-  }
-
-  // 4. Remote Dev check: Accessing via IP/Domain on a dev port (e.g. 3000)
-  // We assume the backend is on 8080 of the same host.
-  if (port && !['80', '443', '8080'].includes(port)) {
-    return `${protocol}//${hostname}:8080/api`;
-  }
-  
-  // 5. Production fallback: same host, same port (or standard 80/443), relative /api
-  return '/api';
+  return 'https://resultspro-service-classroompro.onrender.com/api';
 };
 
 const API_URL = getApiUrl();

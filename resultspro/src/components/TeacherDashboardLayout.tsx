@@ -38,7 +38,7 @@ const TeacherDashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
 
         // Fetch school motto from the server only if schoolId exists and is valid
         if (schoolId && schoolId !== 'undefined' && schoolId.trim() && token) {
-          const response = await fetch(`http://localhost:5000/api/onboarding/school/${schoolId}`, {
+          const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://resultspro-service-resultspro.onrender.com/api'}/onboarding/school/${schoolId}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           if (response.ok) {

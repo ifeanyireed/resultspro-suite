@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Create axios instance with defaults
-const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.VITE_API_URL || 'https://resultspro-service-resultspro.onrender.com/api');
 export const axiosInstance = axios.create({
   baseURL: apiUrl.endsWith('/') ? apiUrl : `${apiUrl}/`,
   timeout: 30000,
