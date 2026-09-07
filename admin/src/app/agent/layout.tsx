@@ -180,8 +180,8 @@ export default function AgentLayout({
                   <img src="/avatars/character7.jpg" alt="Agent Avatar" className="w-full h-full object-cover" />
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-sm font-bold text-gray-900 leading-tight">{user?.name || "Totok Michael"}</p>
-                  <p className="text-xs text-gray-500">{user?.email || "tmichael20@gmail.com"}</p>
+                  <p className="text-sm font-bold text-gray-900 leading-tight">{user?.full_name || "Error: Name not found"}</p>
+                  <p className="text-xs text-gray-500">{user?.email || "Error: Email not found"}</p>
                 </div>
               </div>
             </div>
