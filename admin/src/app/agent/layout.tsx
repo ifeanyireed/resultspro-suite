@@ -30,6 +30,7 @@ export default function AgentLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('resultspro_admin_token');
@@ -45,6 +46,10 @@ export default function AgentLayout({
         router.push('/unauthorized');
       } else {
         setIsAuthorized(true);
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        setUser(JSON.parse(userStr));
+      }
       }
     } catch (e) {
       router.push('/login');
@@ -175,8 +180,8 @@ export default function AgentLayout({
                   <img src="/avatars/character7.jpg" alt="Agent Avatar" className="w-full h-full object-cover" />
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-sm font-bold text-gray-900 leading-tight">Totok Michael</p>
-                  <p className="text-xs text-gray-500">tmichael20@gmail.com</p>
+                  <p className="text-sm font-bold text-gray-900 leading-tight">{user?.name || "Totok Michael"}</p>
+                  <p className="text-xs text-gray-500">{user?.email || "tmichael20@gmail.com"}</p>
                 </div>
               </div>
             </div>
