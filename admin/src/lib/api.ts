@@ -1,7 +1,7 @@
 import { User, School, SubscriptionPlan, Invoice, PayoutRequest, ScratchCardBatch, BlogPost, SuiteStats } from './types';
 
 const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-const RESULTS_API = process.env.NEXT_PUBLIC_RESULTS_API || 'http://localhost:5000';
+const RESULTS_API = process.env.NEXT_PUBLIC_RESULTS_API || 'https://resultspro-service-resultspro.onrender.com';
 const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'http://localhost:8080';
 const CLASSROOM_API = process.env.NEXT_PUBLIC_CLASSROOM_API || 'http://localhost:8080';
 const TUTORS_API = process.env.NEXT_PUBLIC_TUTORS_API || 'http://localhost:8080';
