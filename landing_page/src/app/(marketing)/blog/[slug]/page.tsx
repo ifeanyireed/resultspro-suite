@@ -29,7 +29,7 @@ interface BlogPost {
 
 export async function generateStaticParams() {
   try {
-    const res = await fetch('http://localhost:8080/api/blog');
+    const res = await fetch('https://resultspro-service-resultspro.onrender.com/api/blog');
     if (!res.ok) return [];
     const posts: BlogPost[] = await res.json();
     return posts.map((post) => ({
@@ -46,7 +46,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   
   let post: BlogPost | null = null;
   try {
-    const res = await fetch(`http://localhost:8080/api/blog/${slug}`, { next: { revalidate: 60 } });
+    const res = await fetch(`https://resultspro-service-resultspro.onrender.com/api/blog/${slug}`, { next: { revalidate: 60 } });
     if (res.ok) {
       post = await res.json();
     }

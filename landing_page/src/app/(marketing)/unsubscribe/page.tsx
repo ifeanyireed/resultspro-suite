@@ -14,7 +14,7 @@ export default function UnsubscribePage() {
     setStatus('loading');
 
     try {
-      const response = await fetch('http://localhost:8080/api/unsubscribe', {
+      const response = await fetch('https://resultspro-service-resultspro.onrender.com/api/unsubscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),

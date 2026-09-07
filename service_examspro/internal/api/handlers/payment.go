@@ -86,7 +86,7 @@ func (h *PaymentHandler) InitializePayment(c *gin.Context) {
 	// Default callback if not provided in env
 	callbackURL := os.Getenv("PAYSTACK_CALLBACK_URL")
 	if callbackURL == "" {
-		callbackURL = "http://localhost:3000/shop/verify"
+		callbackURL = "https://resultspro.ng/shop/verify"
 	}
 
 	body := map[string]interface{}{

@@ -123,7 +123,7 @@ export const Step1SchoolProfile = ({
         setSaving(true);
         setSaveError(null);
 
-        const response = await fetch('http://localhost:5000/api/onboarding/school-profile', {
+        const response = await fetch('https://resultspro-service-resultspro.onrender.com/api/onboarding/school-profile', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -177,7 +177,7 @@ export const Step1SchoolProfile = ({
       formData.append('file', file);
 
       // Upload file to backend which will upload to S3
-      const response = await fetch('http://localhost:5000/api/onboarding/logo-upload', {
+      const response = await fetch('https://resultspro-service-resultspro.onrender.com/api/onboarding/logo-upload', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken') || localStorage.getItem('accessToken')}`,

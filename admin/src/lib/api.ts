@@ -2,9 +2,9 @@ import { User, School, SubscriptionPlan, Invoice, PayoutRequest, ScratchCardBatc
 
 const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
 const RESULTS_API = process.env.NEXT_PUBLIC_RESULTS_API || 'https://resultspro-service-resultspro.onrender.com';
-const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'http://localhost:8080';
-const CLASSROOM_API = process.env.NEXT_PUBLIC_CLASSROOM_API || 'http://localhost:8080';
-const TUTORS_API = process.env.NEXT_PUBLIC_TUTORS_API || 'http://localhost:8080';
+const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'https://resultspro-service-examspro.onrender.com';
+const CLASSROOM_API = process.env.NEXT_PUBLIC_CLASSROOM_API || 'https://resultspro-service-classroompro.onrender.com';
+const TUTORS_API = process.env.NEXT_PUBLIC_TUTORS_API || 'https://resultspro-service-tutorspro.onrender.com';
 const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
 
 function getAuthHeader(): Record<string, string> {

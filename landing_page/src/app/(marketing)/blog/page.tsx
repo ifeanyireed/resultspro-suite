@@ -22,7 +22,7 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/blog')
+    fetch('https://resultspro-service-resultspro.onrender.com/api/blog')
       .then((res) => res.json())
       .then((data) => {
         setPosts(data);

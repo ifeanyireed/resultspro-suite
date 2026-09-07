@@ -149,7 +149,7 @@ export const Step2AcademicSession = ({
         setSaving(true);
         setSaveError(null);
 
-        const response = await fetch('http://localhost:5000/api/onboarding/academic-session', {
+        const response = await fetch('https://resultspro-service-resultspro.onrender.com/api/onboarding/academic-session', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

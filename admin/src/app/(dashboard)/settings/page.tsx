@@ -69,7 +69,7 @@ export default function SettingsPage() {
                 <label className="block text-slate-500 font-semibold mb-1">ResultPRO Service (Go)</label>
                 <input
                   type="text"
-                  defaultValue="http://localhost:5000"
+                  defaultValue="https://resultspro-service-resultspro.onrender.com"
                   className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-slate-800"
                 />
               </div>
@@ -77,7 +77,7 @@ export default function SettingsPage() {
                 <label className="block text-slate-500 font-semibold mb-1">ExamsPRO CBT Service (Go)</label>
                 <input
                   type="text"
-                  defaultValue="http://localhost:8080"
+                  defaultValue="https://resultspro-service-resultspro.onrender.com"
                   className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-slate-800"
                 />
               </div>
@@ -85,7 +85,7 @@ export default function SettingsPage() {
                 <label className="block text-slate-500 font-semibold mb-1">ClassroomPRO Service (Go)</label>
                 <input
                   type="text"
-                  defaultValue="http://localhost:8080"
+                  defaultValue="https://resultspro-service-resultspro.onrender.com"
                   className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-slate-800"
                 />
               </div>

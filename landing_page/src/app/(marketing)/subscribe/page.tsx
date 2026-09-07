@@ -43,7 +43,7 @@ export default function SubscribePage() {
     setStatus('loading');
 
     try {
-      const response = await fetch('http://localhost:8080/api/subscribe', {
+      const response = await fetch('https://resultspro-service-resultspro.onrender.com/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
