@@ -26,29 +26,41 @@ export default function SharedLoginPage({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    setTimeout(() => {
-      setIsLoading(false);
-      
-      // MOCK LOGIN LOGIC: Create fake JWT tokens based on email so RBAC works
-      let roles = ['super-admin'];
-      if (email.includes('agent')) {
-        roles = ['agent'];
-      } else if (email.includes('teacher')) {
-        roles = ['teacher'];
+    try {
+      const response = await fetch(loginEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || data.message || 'Login failed');
+      }
+
+      // Store tokens and user details if available
+      if (data.access_token) {
+        localStorage.setItem('resultspro_admin_token', data.access_token);
+        localStorage.setItem('accessToken', data.access_token);
       }
       
-      const payload = btoa(JSON.stringify({ roles }));
-      const fakeToken = `mockHeader.${payload}.mockSignature`;
-      
-      localStorage.setItem('resultspro_admin_token', fakeToken);
-      localStorage.setItem('accessToken', fakeToken);
-      
+      if (data.user) {
+        localStorage.setItem('user', JSON.stringify(data.user));
+      }
+
       router.push(redirectPath);
-    }, 1200);
+    } catch (error: any) {
+      alert(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
