@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_EXAMS_API: process.env.NEXT_PUBLIC_EXAMS_API || "http://localhost:8080",
     NEXT_PUBLIC_CLASSROOM_API: process.env.NEXT_PUBLIC_CLASSROOM_API || "http://localhost:8080",
     NEXT_PUBLIC_TUTORS_API: process.env.NEXT_PUBLIC_TUTORS_API || "http://localhost:8080",
+    NEXT_PUBLIC_COURSES_API: process.env.NEXT_PUBLIC_COURSES_API || "https://resultspro-service-coursespro.onrender.com",
   },
 };
 
