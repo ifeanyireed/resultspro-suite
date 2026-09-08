@@ -156,7 +156,7 @@ export default function PracticePage() {
               </span>
               <Link
                 href="/login"
-                className="ml-auto shrink-0 px-4 py-1.5 rounded-lg bg-blue text-navy text-xs font-bold hover:bg-blue/90 transition-colors"
+                className="ml-auto shrink-0 px-4 py-1.5 rounded-lg bg-blue text-white text-xs font-bold hover:bg-blue/90 transition-colors"
               >
                 Sign In
               </Link>
@@ -449,7 +449,7 @@ export default function PracticePage() {
               <div className="p-6 bg-navy/80 backdrop-blur-md border-t border-white/10">
                 <Link 
                   href={`/login?redirect=/practice/${mobilePreviewExamId}`}
-                  className="w-full h-14 rounded-2xl bg-blue text-navy font-bold flex items-center justify-center gap-2 hover:bg-blue/90 transition-all active:scale-95 text-center"
+                  className="w-full h-14 rounded-2xl bg-blue text-white font-bold flex items-center justify-center gap-2 hover:bg-blue/90 transition-all active:scale-95 text-center"
                 >
                   <Lock className="w-5 h-5" />
                   Sign In to Start Practicing
