@@ -204,11 +204,19 @@ export default function SubjectsTab() {
                       </div>
                     </div>
                     <h4 className="font-bold text-slate-800 line-clamp-1" title={sub.name}>{sub.name}</h4>
-                    <div className="flex items-center justify-between mt-auto pt-3">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{sub.slug}</span>
-                      <span className="text-xs font-semibold px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-full flex items-center gap-1">
-                        <Trophy className="w-3 h-3" /> {sub.coinUnlockCost} Coins
-                      </span>
+                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-100 mt-3">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Pool</span>
+                        <span className="text-sm font-black text-slate-700">{sub.questions?.toLocaleString() || 0}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded">
+                          {sub.mcqCount?.toLocaleString() || 0} MCQ
+                        </span>
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 bg-purple-50 text-purple-600 rounded">
+                          {sub.theoryCount?.toLocaleString() || 0} Theory
+                        </span>
+                      </div>
                     </div>
                   </div>
                 ))

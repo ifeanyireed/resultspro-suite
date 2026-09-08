@@ -126,6 +126,8 @@ func (h *ExamHandler) GetSubjectsByExam(c *gin.Context) {
 		Slug      string        `json:"slug"`
 		Name      string        `json:"name"`
 		Questions int           `json:"questions"`
+		McqCount  int           `json:"mcqCount"`
+		TheoryCount int         `json:"theoryCount"`
 		Completed int           `json:"completed"`
 		Color     string        `json:"color"`
 		Reward    int           `json:"reward"`
@@ -141,25 +143,42 @@ func (h *ExamHandler) GetSubjectsByExam(c *gin.Context) {
 
 	type TopicStats struct {
 		TopicID int
+		Type    string
 		Count   int
 	}
 	var topicStats []TopicStats
 	if len(allTopicIDs) > 0 {
-		database.DB.Model(&models.Question{}).Select("topic_id, count(*) as count").Where("topic_id IN ?", allTopicIDs).Group("topic_id").Scan(&topicStats)
+		database.DB.Model(&models.Question{}).Select("topic_id, type, count(*) as count").Where("topic_id IN ?", allTopicIDs).Group("topic_id, type").Scan(&topicStats)
 	}
 
-	topicCountMap := make(map[int]int)
+	topicTotalMap := make(map[int]int)
+
 	for _, ts := range topicStats {
-		topicCountMap[ts.TopicID] = ts.Count
+		topicTotalMap[ts.TopicID] += ts.Count
 	}
 
 	subjects := []SubjectInfo{}
 	for _, subject := range exam.Subjects {
 		var subjectTopics []SimpleTopic
 		totalQuestions := 0
+		mcqCount := 0
+		theoryCount := 0
+
 		for _, topic := range subject.Topics {
-			tq := topicCountMap[topic.ID]
+			tq := topicTotalMap[topic.ID]
 			totalQuestions += tq
+			
+			// Accumulate by type for the subject
+			for _, ts := range topicStats {
+				if ts.TopicID == topic.ID {
+					if ts.Type == "theory" || ts.Type == "practical" {
+						theoryCount += ts.Count
+					} else {
+						mcqCount += ts.Count
+					}
+				}
+			}
+
 			subjectTopics = append(subjectTopics, SimpleTopic{
 				Name:      topic.Name,
 				Questions: tq,
@@ -183,6 +202,8 @@ func (h *ExamHandler) GetSubjectsByExam(c *gin.Context) {
 			Slug:      subject.Slug,
 			Name:      subject.Name,
 			Questions: totalQuestions,
+			McqCount:  mcqCount,
+			TheoryCount: theoryCount,
 			Completed: completed,
 			Color:     subject.Color,
 			Reward:    10,
