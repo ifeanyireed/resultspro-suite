@@ -425,3 +425,42 @@ export async function deleteExamproSubject(id: number | string) {
   if (!res.ok) throw new Error('Failed to delete subject');
   return res.json();
 }
+
+export async function createExamproQuestion(data: any) {
+  const res = await fetch(`${EXAMS_API}/api/admin/questions`, {
+    method: 'POST',
+    headers: getAuthHeader(),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to create question');
+  return res.json();
+}
+
+export async function updateExamproQuestion(id: string, data: any) {
+  const res = await fetch(`${EXAMS_API}/api/admin/questions/${id}`, {
+    method: 'PUT',
+    headers: getAuthHeader(),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to update question');
+  return res.json();
+}
+
+export async function deleteExamproQuestion(id: string) {
+  const res = await fetch(`${EXAMS_API}/api/admin/questions/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeader(),
+  });
+  if (!res.ok) throw new Error('Failed to delete question');
+  return res.json();
+}
+
+export async function fetchExamproTopics(subjectId: number | string) {
+  try {
+    const res = await fetch(`${EXAMS_API}/api/exams/subjects/${subjectId}/topics`);
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data.topics || []);
+  } catch {
+    return [];
+  }
+}
