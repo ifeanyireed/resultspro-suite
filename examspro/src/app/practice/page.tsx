@@ -63,12 +63,24 @@ export default function PracticePage() {
     fetchExams();
   }, []);
 
-  const filteredCategories = (categories || []).map(cat => ({
-    ...cat,
-    exams: (cat.exams || []).filter(exam =>
-      exam.name.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  })).filter(cat => cat.exams && cat.exams.length > 0);
+  const filteredCategories = (categories || [])
+    .map(cat => ({
+      ...cat,
+      exams: (cat.exams || []).filter(exam =>
+        exam.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }))
+    .filter(cat => cat.exams && cat.exams.length > 0)
+    .sort((a, b) => {
+      // Prioritize Nigerian Exams first, Professional Exams last
+      const getPriority = (name: string) => {
+        if (name.toLowerCase().includes('nigerian')) return 1;
+        if (name.toLowerCase().includes('professional')) return 3;
+        return 2; // Everything else in the middle
+      };
+      
+      return getPriority(a.name) - getPriority(b.name);
+    });
 
   const handleExamClick = useCallback(
     (e: React.MouseEvent, exam: Exam) => {
