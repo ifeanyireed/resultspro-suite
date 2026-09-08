@@ -556,3 +556,29 @@ export async function deleteExamproTournament(id: string) {
   if (!res.ok) throw new Error('Failed to delete tournament');
   return res.json();
 }
+
+export async function fetchExamproReports(params?: { type?: string; status?: string }) {
+  try {
+    let url = `${EXAMS_API}/api/admin/reports?`;
+    if (params) {
+      const qs = new URLSearchParams();
+      if (params.type) qs.append('type', params.type);
+      if (params.status) qs.append('status', params.status);
+      url += qs.toString();
+    }
+    const res = await fetch(url, { headers: getAuthHeader() });
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+export async function updateExamproReportStatus(id: string, status: string, adminNotes: string = '') {
+  const res = await fetch(`${EXAMS_API}/api/admin/reports/${id}/status`, {
+    method: 'PATCH',
+    headers: getAuthHeader(),
+    body: JSON.stringify({ status, adminNotes }),
+  });
+  if (!res.ok) throw new Error('Failed to update report status');
+  return res.json();
+}
