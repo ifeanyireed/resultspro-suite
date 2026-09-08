@@ -169,7 +169,7 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
 
 export async function fetchExamproOverview() {
   try {
-    const res = await fetch(`${EXAMS_API}/api/v1/admin/overview`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/admin/overview`, { headers: getAuthHeader() });
     return await res.json();
   } catch {
     return null;
@@ -178,7 +178,7 @@ export async function fetchExamproOverview() {
 
 export async function fetchExamproExams() {
   try {
-    const res = await fetch(`${EXAMS_API}/api/v1/admin/exams`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/admin/exams`, { headers: getAuthHeader() });
     return await res.json();
   } catch {
     return [];
@@ -187,7 +187,7 @@ export async function fetchExamproExams() {
 
 export async function fetchExamproQuestions() {
   try {
-    const res = await fetch(`${EXAMS_API}/api/v1/admin/questions`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/admin/questions`, { headers: getAuthHeader() });
     return await res.json();
   } catch {
     return [];
@@ -196,7 +196,7 @@ export async function fetchExamproQuestions() {
 
 export async function fetchExamproBattles() {
   try {
-    const res = await fetch(`${EXAMS_API}/api/v1/admin/battles/monitor-stats`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/admin/battles/monitor-stats`, { headers: getAuthHeader() });
     return await res.json();
   } catch {
     return null;
@@ -205,7 +205,7 @@ export async function fetchExamproBattles() {
 
 export async function fetchExamproUsers() {
   try {
-    const res = await fetch(`${EXAMS_API}/api/v1/admin/users`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/admin/users`, { headers: getAuthHeader() });
     return await res.json();
   } catch {
     return [];
@@ -214,7 +214,7 @@ export async function fetchExamproUsers() {
 
 export async function fetchExamproFinancials() {
   try {
-    const res = await fetch(`${EXAMS_API}/api/v1/admin/finances/stats`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/admin/finances/stats`, { headers: getAuthHeader() });
     return await res.json();
   } catch {
     return null;
