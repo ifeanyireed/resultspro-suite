@@ -380,7 +380,8 @@ export async function deleteExamproExam(id: number | string) {
 export async function fetchExamproSubjects(examId: number | string) {
   try {
     const res = await fetch(`${EXAMS_API}/api/exams/${examId}/subjects`);
-    return await res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data.subjects || []);
   } catch {
     return [];
   }
