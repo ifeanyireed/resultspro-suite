@@ -60,7 +60,7 @@ export async function createTenant(payload: any): Promise<boolean> {
 export async function verifySchool(schoolId: string, status: 'VERIFIED' | 'REJECTED', reason?: string): Promise<boolean> {
   try {
     const res = await fetch(`${USERS_API}/api/v1/schools/${schoolId}/verify`, {
-      method: 'PATCH',
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
       body: JSON.stringify({ status, reason }),
     });
@@ -84,7 +84,7 @@ export async function fetchUsers(): Promise<User[]> {
 export async function updateUserStatus(userId: string, status: string): Promise<boolean> {
   try {
     const res = await fetch(`${USERS_API}/api/v1/users/${userId}/status`, {
-      method: 'PATCH',
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
       body: JSON.stringify({ status }),
     });
@@ -130,7 +130,7 @@ export async function fetchPayoutRequests(): Promise<PayoutRequest[]> {
 export async function processPayout(payoutId: string, action: 'APPROVE' | 'REJECT' | 'MARK_PAID'): Promise<boolean> {
   try {
     const res = await fetch(`${USERS_API}/api/v1/agents/payouts/${payoutId}`, {
-      method: 'PATCH',
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
       body: JSON.stringify({ action }),
     });
@@ -346,4 +346,33 @@ export async function fetchAgentPayouts() {
   } catch {
     return [];
   }
+}
+
+export async function createExamproExam(data: any) {
+  const res = await fetch(`${EXAMS_API}/api/admin/exams`, {
+    method: 'POST',
+    headers: getAuthHeader(),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to create exam');
+  return res.json();
+}
+
+export async function updateExamproExam(id: number | string, data: any) {
+  const res = await fetch(`${EXAMS_API}/api/admin/exams/${id}`, {
+    method: 'PUT',
+    headers: getAuthHeader(),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to update exam');
+  return res.json();
+}
+
+export async function deleteExamproExam(id: number | string) {
+  const res = await fetch(`${EXAMS_API}/api/admin/exams/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeader(),
+  });
+  if (!res.ok) throw new Error('Failed to delete exam');
+  return res.json();
 }
