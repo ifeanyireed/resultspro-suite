@@ -3,9 +3,9 @@
 
 @theme {
   --color-navy: #0D1B2A;
-  --color-green: #00C853;
+  --color-green: #dc2626;
   --color-blue: #1565C0;
-  --color-amber: #FF6F00;
+  --color-amber: #1e3a8a;
   
   --font-display: var(--font-space-grotesk);
   --font-body: var(--font-dm-sans);
@@ -37,13 +37,13 @@
   --background: #0D1B2A;
   --foreground: #ffffff;
   
-  --primary: #00C853;
+  --primary: #dc2626;
   --primary-foreground: #ffffff;
   
-  --secondary: #1565C0;
+  --secondary: #1e3a8a;
   --secondary-foreground: #ffffff;
   
-  --accent: #FF6F00;
+  --accent: #1e3a8a;
   --accent-foreground: #ffffff;
   
   --muted: #1F2937;
@@ -54,7 +54,7 @@
   
   --border: #374151;
   --input: #374151;
-  --ring: #00C853;
+  --ring: #dc2626;
 }
 
 body {

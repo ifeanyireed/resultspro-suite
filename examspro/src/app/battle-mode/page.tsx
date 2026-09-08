@@ -307,7 +307,7 @@ export default function BattleLobbyPage() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
           <div className="text-center md:text-left">
             <h1 className="text-4xl md:text-6xl font-display font-black text-navy mb-4 italic tracking-tighter">
-              BATTLE <span className="text-[#00ff88]">MODE</span>
+              BATTLE <span className="text-red-600">MODE</span>
             </h1>
             <p className="text-gray-500 max-w-md">
               Real-time head-to-head quiz battles. Stake coins, win big, 
@@ -322,7 +322,7 @@ export default function BattleLobbyPage() {
                 <div className="text-3xl font-display font-black text-navy">
                   {user?.eloRating || 1000}
                 </div>
-                <div className="text-[10px] font-bold text-[#00ff88] mt-1 flex items-center justify-center gap-1">
+                <div className="text-[10px] font-bold text-red-600 mt-1 flex items-center justify-center gap-1">
                   <Zap className="w-3 h-3 fill-current" />
                   Active
                 </div>
@@ -330,7 +330,7 @@ export default function BattleLobbyPage() {
               
               <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 shadow-sm text-center min-w-[140px]">
                 <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Balance</div>
-                <div className="text-3xl font-display font-black text-white">
+                <div className="text-3xl font-display font-black text-navy">
                   {user?.coinBalance || 0}
                 </div>
                 <div className="text-[10px] font-bold text-gray-500 mt-1">Coins</div>
@@ -340,16 +340,16 @@ export default function BattleLobbyPage() {
         </div>
 
         {/* Quick Match CTA */}
-        <div className="relative p-1 rounded-[40px] bg-gradient-to-r from-green via-blue to-purple mb-16 group overflow-hidden">
+        <div className="relative p-1 rounded-[40px] bg-gradient-to-r from-red-600 via-blue to-purple mb-16 group overflow-hidden">
           <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity animate-shimmer" />
           <div className="relative bg-white rounded-[38px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-2 h-2 rounded-full bg-green animate-pulse" />
-                <span className="text-xs font-bold text-[#00ff88] uppercase tracking-widest">{mounted ? (onlineStats.battleModeCount || onlineStats.onlineCount) : '--'} Students Online</span>
+                <div className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
+                <span className="text-xs font-bold text-red-600 uppercase tracking-widest">{mounted ? (onlineStats.battleModeCount || onlineStats.onlineCount) : '--'} Students Online</span>
               </div>
               <h2 className="text-3xl md:text-5xl font-display font-black text-navy mb-4">
-                QUICK <span className="text-[#00ff88]">MATCH</span>
+                QUICK <span className="text-red-600">MATCH</span>
               </h2>
               <p className="text-gray-500 max-w-sm mb-8">
                 Instant matchmaking with an opponent of similar skill level. 
@@ -359,11 +359,11 @@ export default function BattleLobbyPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 max-w-md">
                 <div className="space-y-2">
                    <Label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest pl-1">Target Exam</Label>
-                   <Select value={qmExam} onValueChange={(v) => { setQmExam(v); fetchSubjects(v, 'quick', true); }}>
-                    <SelectTrigger className="bg-white/5 border-white/[0.1] border-t-white/[0.15] h-11 rounded-xl text-white">
+                  <Select value={qmExam} onValueChange={(v) => { setQmExam(v); fetchSubjects(v, 'quick', true); }}>
+                    <SelectTrigger className="bg-slate-50 border border-slate-200 h-11 rounded-xl text-navy">
                       <SelectValue placeholder="Select Exam" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border-white/10 text-white">
+                    <SelectContent className="bg-white border-slate-200 text-navy">
                       {Array.isArray(exams) && exams.map((e) => (
                         <SelectItem key={e.id || e.ID} value={(e.id || e.ID)?.toString()}>{e.name}</SelectItem>
                       ))}
@@ -373,10 +373,10 @@ export default function BattleLobbyPage() {
                 <div className="space-y-2">
                    <Label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest pl-1">Subject</Label>
                    <Select value={qmSubject} onValueChange={setQmSubject}>
-                    <SelectTrigger className="bg-white/5 border-white/[0.1] border-t-white/[0.15] h-11 rounded-xl text-white">
+                    <SelectTrigger className="bg-slate-50 border border-slate-200 h-11 rounded-xl text-navy">
                       <SelectValue placeholder="Select Subject" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border-white/10 text-white">
+                    <SelectContent className="bg-white border-slate-200 text-navy">
                       {quickSubjects.map((s) => (
                         <SelectItem key={s.id} value={s.id.toString()}>{s.name}</SelectItem>
                       ))}
@@ -386,13 +386,13 @@ export default function BattleLobbyPage() {
               </div>
 
               <div className="flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/[0.1] border-t-white/[0.15]">
-                  <Coins className="w-4 h-4 text-amber" />
-                  <span className="text-sm font-bold text-white">Stake: 10 Coins</span>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 border border-slate-200">
+                  <Coins className="w-4 h-4 text-red-600" />
+                  <span className="text-sm font-bold text-navy">Stake: 10 Coins</span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/[0.1] border-t-white/[0.15]">
-                  <Shield className="w-4 h-4 text-white" />
-                  <span className="text-sm font-bold text-white">ELO Protected</span>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 border border-slate-200">
+                  <Shield className="w-4 h-4 text-navy" />
+                  <span className="text-sm font-bold text-navy">ELO Protected</span>
                 </div>
               </div>
             </div>
@@ -401,7 +401,7 @@ export default function BattleLobbyPage() {
               <Button 
                 onClick={handleQuickMatch}
                 disabled={status === 'searching' || creating}
-                className="h-20 px-12 rounded-[32px] bg-green text-navy hover:bg-green/90 transition-all hover:scale-105 flex flex-col items-center justify-center gap-1 group/btn min-w-[240px]"
+                className="h-20 px-12 rounded-[32px] bg-gradient-to-r from-red-600 to-red-800 text-white hover:opacity-90 transition-all hover:scale-105 flex flex-col items-center justify-center gap-1 group/btn min-w-[240px]"
               >
                 {status === 'searching' ? (
                   <Loader2 className="w-8 h-8 animate-spin" />
@@ -420,10 +420,10 @@ export default function BattleLobbyPage() {
                 className="h-16 px-12 rounded-[24px] border-slate-200 bg-white text-navy hover:bg-slate-50 hover:border-slate-300 transition-all hover:scale-105 flex items-center justify-center gap-2 group/bot min-w-[240px]"
               >
                 {creating ? (
-                  <Loader2 className="w-5 h-5 animate-spin text-white" />
+                  <Loader2 className="w-5 h-5 animate-spin text-navy" />
                 ) : (
                   <>
-                    <Zap className="w-5 h-5 text-white fill-current group-hover/bot:animate-pulse" />
+                    <Zap className="w-5 h-5 text-navy fill-current group-hover/bot:animate-pulse" />
                     <span className="text-sm font-bold uppercase tracking-widest">VS Computer</span>
                   </>
                 )}
@@ -468,7 +468,7 @@ export default function BattleLobbyPage() {
               </div>
             </div>
 
-            <div className="p-8 rounded-[32px] relative overflow-hidden bg-gradient-to-br from-red-500 to-red-800 text-white shadow-lg group">
+            <div className="p-8 rounded-[32px] relative overflow-hidden bg-gradient-to-br from-red-600 to-red-800 text-white shadow-lg group">
               <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                 <Trophy className="w-16 h-16 text-white" />
               </div>
@@ -500,7 +500,7 @@ export default function BattleLobbyPage() {
           <div className="lg:col-span-2">
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-xl font-display font-bold text-navy flex items-center gap-2">
-                <Sword className="w-5 h-5 text-red-500" />
+                <Sword className="w-5 h-5 text-red-600" />
                 Live Battles
               </h3>
               <div className="relative">
@@ -523,12 +523,12 @@ export default function BattleLobbyPage() {
               ) : filteredBattles.length > 0 ? filteredBattles.map((battle, idx) => (
                 <div 
                   key={battle.id}
-                  className={`group p-6 rounded-3xl transition-all flex items-center justify-between border-none shadow-sm hover:shadow-lg hover:-translate-y-1 bg-gradient-to-r text-white ${idx % 2 === 0 ? 'from-[#146ef5] to-[#0a2e70]' : 'from-red-500 to-red-800'}`}
+                  className={`group p-6 rounded-3xl transition-all flex items-center justify-between border-none shadow-sm hover:shadow-lg hover:-translate-y-1 bg-gradient-to-r text-white ${idx % 2 === 0 ? 'from-[#146ef5] to-[#0a2e70]' : 'from-red-600 to-red-800'}`}
                 >
                   <div className="flex items-center gap-6">
                     <div className="flex -space-x-3">
                       {battle.participants.map((p, i) => (
-                        <div key={i} className="w-10 h-10 rounded-full border-2 border-transparent bg-white/5 flex items-center justify-center text-[10px] font-bold text-[#00ff88] overflow-hidden">
+                        <div key={i} className="w-10 h-10 rounded-full border-2 border-transparent bg-white/5 flex items-center justify-center text-[10px] font-bold text-white overflow-hidden">
                           {p.user?.name?.charAt(0) || 'P'}
                         </div>
                       ))}
@@ -546,7 +546,7 @@ export default function BattleLobbyPage() {
                           {battle.participants.length}/2
                         </span>
                         <span>•</span>
-                        <span className="flex items-center gap-1 text-amber">
+                        <span className="flex items-center gap-1 text-white">
                           <Coins className="w-3 h-3" />
                           {battle.stakePerPlayer} Stake
                         </span>
@@ -556,7 +556,7 @@ export default function BattleLobbyPage() {
 
                   <div className="flex items-center gap-4">
                     <div className="text-right hidden sm:block">
-                      <div className={`text-[10px] font-bold uppercase tracking-widest ${battle.status === 'waiting' ? 'text-[#00ff88]' : 'text-white'}`}>
+                      <div className={`text-[10px] font-bold uppercase tracking-widest ${battle.status === 'waiting' ? 'text-white' : 'text-white'}`}>
                         {battle.status === 'waiting' ? (battle.participants.length >= battle.maxParticipants ? 'Room Full' : 'Waiting') : 'In Progress'}
                       </div>
                     </div>
@@ -576,7 +576,7 @@ export default function BattleLobbyPage() {
                         }
                       }}
                       variant={battle.status === 'waiting' && battle.participants.length < battle.maxParticipants ? 'default' : 'ghost'}
-                      className={`rounded-xl px-6 ${battle.status === 'waiting' && battle.participants.length < battle.maxParticipants ? 'bg-green text-navy hover:bg-green/90' : 'text-gray-500 hover:text-white'}`}
+                      className={`rounded-xl px-6 ${battle.status === 'waiting' && battle.participants.length < battle.maxParticipants ? 'bg-white text-navy hover:bg-slate-100' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
                     >
                       {battle.participants.some((p: any) => (p.userId || p.user?.id) === user?.id) ? 'Rejoin' : 
                        battle.status === 'waiting' ? (battle.participants.length >= battle.maxParticipants ? 'Full' : 'Join') : 'Watch'}
@@ -601,10 +601,10 @@ export default function BattleLobbyPage() {
 
       {/* Create Battle Modal */}
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-        <DialogContent className="bg-white border-white/10 text-white rounded-[32px] max-w-sm max-h-[90vh] overflow-hidden flex flex-col p-0 shadow-2xl">
+        <DialogContent className="bg-white border-slate-200 text-navy rounded-[32px] max-w-sm max-h-[90vh] overflow-hidden flex flex-col p-0 shadow-2xl">
           <DialogHeader className="p-8 pb-0">
             <DialogTitle className="text-2xl font-display font-black flex items-center gap-2">
-              <Plus className="w-6 h-6 text-[#00ff88]" />
+              <Plus className="w-6 h-6 text-red-600" />
               CREATE BATTLE
             </DialogTitle>
             <DialogDescription className="text-gray-500">
@@ -616,10 +616,10 @@ export default function BattleLobbyPage() {
             <div className="space-y-2">
               <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Select Exam</Label>
               <Select value={selectedExam} onValueChange={(v) => { setSelectedExam(v); fetchSubjects(v, 'create', true); }}>
-                <SelectTrigger className="bg-white/5 border-white/[0.1] border-t-white/[0.15] h-12 rounded-xl focus:ring-green/50 text-white">
+                <SelectTrigger className="bg-slate-50 border border-slate-200 h-12 rounded-xl focus:ring-red-600/50 text-navy">
                   <SelectValue placeholder="Choose an exam" />
                 </SelectTrigger>
-                <SelectContent className="bg-white border-white/10 text-white">
+                <SelectContent className="bg-white border-slate-200 text-navy">
                   {Array.isArray(exams) && exams.map((e) => (
                     <SelectItem key={e.id || e.ID} value={(e.id || e.ID)?.toString()}>{e.name}</SelectItem>
                   ))}
@@ -630,10 +630,10 @@ export default function BattleLobbyPage() {
             <div className="space-y-2">
               <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Select Subject</Label>
               <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-                <SelectTrigger className="bg-white/5 border-white/[0.1] border-t-white/[0.15] h-12 rounded-xl focus:ring-green/50 text-white">
+                <SelectTrigger className="bg-slate-50 border border-slate-200 h-12 rounded-xl focus:ring-red-600/50 text-navy">
                   <SelectValue placeholder="Choose a subject" />
                 </SelectTrigger>
-                <SelectContent className="bg-white border-white/10 text-white">
+                <SelectContent className="bg-white border-slate-200 text-navy">
                   {createSubjects.map((s) => (
                     <SelectItem key={s.id} value={s.id.toString()}>{s.name}</SelectItem>
                   ))}
@@ -646,12 +646,12 @@ export default function BattleLobbyPage() {
               <div className="space-y-2">
                 <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Stake (Coins)</Label>
                 <div className="relative">
-                  <Coins className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-amber" />
+                  <Coins className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-red-600" />
                   <Input 
                     type="number"
                     value={stake}
                     onChange={(e) => setStake(parseInt(e.target.value))}
-                    className="bg-white/5 border-white/[0.1] border-t-white/[0.15] h-12 rounded-xl pl-12 focus-visible:ring-green/50"
+                    className="bg-slate-50 border border-slate-200 h-12 rounded-xl pl-12 focus-visible:ring-red-600/50 text-navy"
                     min={10}
                   />
                 </div>
@@ -661,10 +661,10 @@ export default function BattleLobbyPage() {
                 <div className="space-y-2">
                   <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Contestants</Label>
                   <Select value={maxParticipants.toString()} onValueChange={(v) => setMaxParticipants(parseInt(v))}>
-                    <SelectTrigger className="bg-white/5 border-white/[0.1] border-t-white/[0.15] h-12 rounded-xl">
+                    <SelectTrigger className="bg-slate-50 border border-slate-200 h-12 rounded-xl text-navy">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border-white/10 text-white">
+                    <SelectContent className="bg-white border-slate-200 text-navy">
                       <SelectItem value="4">4 Players</SelectItem>
                       <SelectItem value="6">6 Players</SelectItem>
                       <SelectItem value="8">8 Players</SelectItem>
@@ -681,7 +681,7 @@ export default function BattleLobbyPage() {
                   <button
                     key={count}
                     onClick={() => setQuestionCount(count)}
-                    className={`py-2 rounded-xl border font-bold text-xs transition-all ${questionCount === count ? 'bg-green border-green text-navy' : 'bg-white/5 border-white/[0.1] border-t-white/[0.15] text-gray-500 hover:bg-white/10'}`}
+                    className={`py-2 rounded-xl border font-bold text-xs transition-all ${questionCount === count ? 'bg-red-600 border-red-600 text-white' : 'bg-slate-50 border border-slate-200 text-gray-500 hover:bg-slate-100'}`}
                   >
                     {count}
                   </button>
@@ -692,10 +692,10 @@ export default function BattleLobbyPage() {
             <div className="space-y-2">
               <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Duration (Secs)</Label>
               <Select value={duration.toString()} onValueChange={(v) => setDuration(parseInt(v))}>
-                <SelectTrigger className="bg-white/5 border-white/[0.1] border-t-white/[0.15] h-12 rounded-xl">
+                <SelectTrigger className="bg-slate-50 border border-slate-200 h-12 rounded-xl text-navy">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-white border-white/10 text-white">
+                <SelectContent className="bg-white border-slate-200 text-navy">
                   <SelectItem value="60">60s</SelectItem>
                   <SelectItem value="120">120s</SelectItem>
                   <SelectItem value="300">300s</SelectItem>
@@ -705,28 +705,28 @@ export default function BattleLobbyPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-white/5 border border-white/[0.1] border-t-white/[0.15]">
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200">
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">Random</span>
-                  <span className="text-[8px] text-white opacity-50 uppercase">Order</span>
+                  <span className="text-[8px] text-gray-400 uppercase">Order</span>
                 </div>
                 <Switch checked={randomizeOrder} onCheckedChange={setRandomizeOrder} />
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-white/5 border border-white/[0.1] border-t-white/[0.15]">
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200">
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">Sounds</span>
-                  <span className="text-[8px] text-white opacity-50 uppercase">Audio</span>
+                  <span className="text-[8px] text-gray-400 uppercase">Audio</span>
                 </div>
                 <Switch checked={soundActivated} onCheckedChange={setSoundActivated} />
               </div>
             </div>
 
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/[0.1] border-t-white/[0.15]">
+            <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200">
               <div className="flex items-center gap-3">
-                {isPublic ? <Globe className="w-5 h-5 text-white" /> : <Lock className="w-5 h-5 text-amber" />}
+                {isPublic ? <Globe className="w-5 h-5 text-red-600" /> : <Lock className="w-5 h-5 text-red-600" />}
                 <div>
-                  <div className="text-sm font-bold">{isPublic ? 'Public Battle' : 'Private Battle'}</div>
+                  <div className="text-sm font-bold text-navy">{isPublic ? 'Public Battle' : 'Private Battle'}</div>
                   <div className="text-[10px] text-gray-500">{isPublic ? 'Visible to everyone' : 'Join via Link/ID only'}</div>
                 </div>
               </div>
@@ -734,11 +734,11 @@ export default function BattleLobbyPage() {
             </div>
           </div>
 
-          <div className="p-8 pt-4 border-t border-white/5 bg-white/50 backdrop-blur-md">
+          <div className="p-8 pt-4 border-t border-slate-100 bg-white/50 backdrop-blur-md">
             <Button 
               onClick={handleCreateBattle}
               disabled={creating}
-              className="w-full py-6 rounded-2xl bg-green text-navy hover:bg-green/90 font-bold text-lg"
+              className="w-full py-6 rounded-2xl bg-gradient-to-r from-red-600 to-red-800 text-white hover:opacity-90 font-bold text-lg"
             >
               {creating ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Start Battle'}
             </Button>
@@ -748,10 +748,10 @@ export default function BattleLobbyPage() {
 
       {/* Join via Code Modal */}
       <Dialog open={isJoinCodeModalOpen} onOpenChange={setIsJoinCodeModalOpen}>
-        <DialogContent className="bg-white border-white/10 text-white rounded-[32px] max-w-sm">
+        <DialogContent className="bg-white border-slate-200 text-navy rounded-[32px] max-w-sm">
           <DialogHeader>
             <DialogTitle className="text-2xl font-display font-black flex items-center gap-2">
-              <Lock className="w-6 h-6 text-white" />
+              <Lock className="w-6 h-6 text-navy" />
               JOIN BATTLE
             </DialogTitle>
             <DialogDescription className="text-gray-500">
@@ -766,7 +766,7 @@ export default function BattleLobbyPage() {
                 placeholder="Enter ID (e.g. 5A3B1)"
                 value={joinCode}
                 onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                className="bg-white/5 border-white/[0.1] border-t-white/[0.15] h-12 rounded-xl focus-visible:ring-blue/50 text-center font-display font-bold tracking-widest uppercase"
+                className="bg-slate-50 border border-slate-200 h-12 rounded-xl focus-visible:ring-red-600/50 text-center font-display font-bold tracking-widest uppercase text-navy"
               />
             </div>
           </div>
@@ -775,7 +775,7 @@ export default function BattleLobbyPage() {
             <Button 
               onClick={handleJoinByCode}
               disabled={joiningByCode || !joinCode}
-              className="w-full py-6 rounded-2xl bg-blue text-white hover:bg-blue/90 font-bold text-lg"
+              className="w-full py-6 rounded-2xl bg-gradient-to-r from-red-600 to-red-800 text-white hover:opacity-90 font-bold text-lg"
             >
               {joiningByCode ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Enter Arena'}
             </Button>
