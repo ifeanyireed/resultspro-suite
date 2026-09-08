@@ -1897,3 +1897,65 @@ func (h *AdminHandler) resolveTopicID(examName, subjectName, topicName string) i
 
 	return topic.ID
 }
+
+func (h *AdminHandler) GetLiveRooms(c *gin.Context) {
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "20"))
+	search := c.Query("search")
+	status := c.Query("status")
+
+	if page < 1 {
+		page = 1
+	}
+	if limit < 1 {
+		limit = 20
+	}
+	offset := (page - 1) * limit
+
+	query := database.DB.Model(&models.LiveGameRoom{})
+
+	if search != "" {
+		query = query.Where("title LIKE ? OR id LIKE ?", "%"+search+"%", "%"+search+"%")
+	}
+	if status != "" && status != "all" {
+		query = query.Where("status = ?", status)
+	}
+
+	var total int64
+	query.Count(&total)
+
+	var rooms []models.LiveGameRoom
+	if err := query.Offset(offset).Limit(limit).Preload("Subject").Preload("Participants").Order("created_at desc").Find(&rooms).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch live rooms"})
+		return
+	}
+
+	type RoomResponse struct {
+		models.LiveGameRoom
+		Count struct {
+			Players int `json:"players"`
+		} `json:"_count"`
+	}
+
+	response := make([]RoomResponse, len(rooms))
+	for i, room := range rooms {
+		response[i].LiveGameRoom = room
+		response[i].Count.Players = len(room.Participants)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"rooms": response,
+		"total": total,
+		"page":  page,
+		"limit": limit,
+	})
+}
+
+func (h *AdminHandler) DeleteLiveRoom(c *gin.Context) {
+	id := c.Param("id")
+	if err := database.DB.Where("id = ?", id).Delete(&models.LiveGameRoom{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete room"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Room deleted"})
+}
