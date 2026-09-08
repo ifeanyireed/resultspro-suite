@@ -188,7 +188,8 @@ export async function fetchExamproExams() {
 export async function fetchExamproQuestions() {
   try {
     const res = await fetch(`${EXAMS_API}/api/admin/questions`, { headers: getAuthHeader() });
-    return await res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data.questions || []);
   } catch {
     return [];
   }
@@ -206,7 +207,8 @@ export async function fetchExamproBattles() {
 export async function fetchExamproUsers() {
   try {
     const res = await fetch(`${EXAMS_API}/api/admin/users`, { headers: getAuthHeader() });
-    return await res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data.users || []);
   } catch {
     return [];
   }
