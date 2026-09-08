@@ -226,8 +226,8 @@ export default function PracticePage() {
                             {/* Top right icon */}
                             <div className="absolute top-0 right-0">
                               {!isAuth && (
-                                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-white/10">
-                                  <Lock className="w-3 h-3 text-white" />
+                                <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center border border-white/10">
+                                  <Lock className="w-6 h-6 text-white" />
                                 </div>
                               )}
                             </div>
@@ -267,7 +267,7 @@ export default function PracticePage() {
                         {/* DESKTOP Hover Tooltip (Boundary Aware) */}
                         {!isAuth && hoveredExamId === exam.id && (
                           <div className="hidden md:block absolute left-1/2 -top-6 -translate-y-full -translate-x-1/2 z-50 animate-in fade-in zoom-in-95 duration-200 pointer-events-auto group/tooltip max-w-[calc(100vw-40px)]">
-                            <div className="relative p-0 rounded-3xl bg-white/80 border border-white/60 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] flex overflow-hidden ring-1 ring-slate-100 h-max min-w-[580px] w-max max-w-[800px]">
+                            <div className="relative p-0 rounded-3xl bg-white/95 border border-white/80 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.08)] flex overflow-hidden ring-1 ring-slate-100 h-max min-w-[580px] w-max max-w-[800px]">
                               
                               {/* Left Pane - Subjects */}
                               <div className="w-[240px] border-r border-nets-border p-4 bg-white/50 shrink-0">
