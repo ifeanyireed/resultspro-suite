@@ -58,7 +58,7 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
       try {
         const res = await api.post(`${USERS_API}/api/v1/auth/google`, { idToken: tokenResponse.access_token });
         const user = res.data.user;
-        setAuth(user, res.data.token);
+        setAuth(user, res.data.token || res.data.access_token);
         toast.success('Logged in with Google! 🎉');
         dismiss();
         // Stay on the same page after login

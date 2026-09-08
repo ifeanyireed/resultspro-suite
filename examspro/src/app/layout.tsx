@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, DM_Sans } from "next/font/google";
 import { ClientProviders } from "./providers";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 import "./nets.css";
 
 
@@ -41,6 +42,7 @@ export default function RootLayout({
         <ClientProviders>
           {children}
         </ClientProviders>
+        <Toaster position="top-right" />
       </body>
     </html>
   );
