@@ -96,7 +96,7 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
           animate-in zoom-in-95 fade-in slide-in-from-bottom-4 duration-300">
 
           {/* Gradient background */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-red-500/5 rounded-full blur-[80px] pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-red-700/5 rounded-full blur-[80px] pointer-events-none" />
           <div className="absolute bottom-0 right-0 w-[300px] h-[200px] bg-blue/5 rounded-full blur-[80px] pointer-events-none" />
 
           {/* Close button */}
@@ -111,13 +111,13 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
           <div className="relative z-10 p-8">
             {/* Logo */}
             <div className="flex justify-center mb-6">
-              <img src="/logo.png" alt="ExamsPRO Logo" className="h-16 w-auto object-contain" />
+              <img src="/logo.png" alt="ExamsPRO Logo" className="h-24 w-auto object-contain" />
             </div>
 
             {/* Text */}
             <div className="text-center mb-8">
               <div className="flex justify-center mb-3">
-                 <div className="inline-flex items-center justify-center gap-2 px-3 py-1 bg-blue/10 text-blue rounded-full border border-blue/20 text-xs font-bold uppercase tracking-wider mb-2">
+                 <div className="inline-flex items-center justify-center gap-2 px-3 py-1 bg-red-700/10 text-red-700 rounded-full border border-red-700/20 text-xs font-bold uppercase tracking-wider mb-2">
                    <BarChart3 className="w-3.5 h-3.5" /> Track Mastery
                  </div>
               </div>
@@ -143,7 +143,7 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
                   key={label}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs font-bold text-gray-600"
                 >
-                  <Icon className="w-3.5 h-3.5 text-blue" />
+                  <Icon className="w-3.5 h-3.5 text-red-700" />
                   {label}
                 </div>
               ))}
