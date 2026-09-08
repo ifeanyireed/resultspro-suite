@@ -257,7 +257,7 @@ export default function PracticePage() {
                               )}
                               {!isAuth && (
                                 <span className="px-3 py-1.5 rounded-lg bg-white/20 text-white text-[10px] font-bold uppercase tracking-wider hover:bg-white/30 transition-colors flex items-center gap-1">
-                                  <Lock className="w-3 h-3" /> Login to Practice
+                                  <Lock className="w-3 h-3" stroke={3} /> Login to Practice
                                 </span>
                               )}
                             </div>
