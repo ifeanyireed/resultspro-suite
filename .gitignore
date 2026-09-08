@@ -83,3 +83,4 @@ android/.gradle/
 tmp/
 scratch/
 examspro_seed.sql
+tmp_build
