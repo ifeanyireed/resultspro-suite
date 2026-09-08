@@ -133,7 +133,7 @@ export default function LiveGameLobby() {
             </div>
           </div>
           
-          <div className="relative overflow-hidden p-8 rounded-[40px] shadow-lg flex flex-col gap-4 bg-gradient-to-br from-[#146ef5] to-[#0a2e70] text-white">
+          <div className="relative overflow-hidden p-8 rounded-[40px] shadow-lg flex flex-col gap-4 bg-gradient-to-br from-red-500 to-red-900 text-white">
             <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-white">
               <Users className="w-6 h-6" />
             </div>
