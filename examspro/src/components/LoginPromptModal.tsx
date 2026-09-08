@@ -183,7 +183,7 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
             {/* Email login link */}
             <Link
               href="/login"
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-blue border border-blue-600 text-white text-sm font-bold hover:bg-blue/90 transition-colors group shadow-sm shadow-blue/20"
+              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-r from-[#146ef5] to-[#0a2e70] border-none text-white text-sm font-bold hover:shadow-lg transition-all group shadow-sm shadow-blue/20"
             >
               Login with Email
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
