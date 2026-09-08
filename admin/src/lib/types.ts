@@ -120,4 +120,5 @@ export interface SuiteStats {
   activeAgents: number;
   cbtExamsCount: number;
   activeTutors: number;
+  salesAnalytics?: { day: string; percentage: number; status: string; tooltip: string }[];
 }

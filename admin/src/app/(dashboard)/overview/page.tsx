@@ -84,15 +84,7 @@ export default function OverviewPage() {
               <div className="lg:col-span-6 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
                 <h3 className="text-xl font-normal text-gray-900 mb-6">Suite Analytics</h3>
                 <div className="flex-1 flex items-end justify-between gap-2 px-4 pb-2">
-                  {[
-                    { h: '60%', type: 'stripe' },
-                    { h: '80%', type: 'solid-dark' },
-                    { h: '65%', type: 'solid-light', tooltip: '₦2.4M' },
-                    { h: '90%', type: 'solid-dark' },
-                    { h: '70%', type: 'stripe' },
-                    { h: '45%', type: 'stripe' },
-                    { h: '55%', type: 'stripe' },
-                  ].map((bar, i) => (
+                  {(stats?.salesAnalytics || []).map((bar: any, i: number) => (
                     <div key={i} className="w-[12%] flex flex-col items-center gap-3">
                       <div className="w-full relative flex items-end h-[140px]">
                         {bar.tooltip && (
@@ -102,18 +94,18 @@ export default function OverviewPage() {
                         )}
                         <div 
                           className={`w-full rounded-full transition-all hover:opacity-80 ${
-                            bar.type === 'solid-dark' ? 'bg-[#146ef5]' : 
-                            bar.type === 'solid-light' ? 'bg-[#6ba0f5]' : 
+                            bar.status === 'solid-dark' ? 'bg-[#146ef5]' : 
+                            bar.status === 'solid-light' ? 'bg-[#6ba0f5]' : 
                             'bg-gray-100'
                           }`}
                           style={{ 
-                            height: bar.h,
-                            backgroundImage: bar.type === 'stripe' ? 'repeating-linear-gradient(45deg, transparent, transparent 5px, #d1d5db 5px, #d1d5db 7px)' : 'none'
+                            height: `${bar.percentage}%`,
+                            backgroundImage: bar.status === 'stripe' ? 'repeating-linear-gradient(45deg, transparent, transparent 5px, #d1d5db 5px, #d1d5db 7px)' : 'none'
                           }}
                         ></div>
                       </div>
                       <span className="text-xs font-medium text-gray-400">
-                        {['S','M','T','W','T','F','S'][i]}
+                        {bar.day}
                       </span>
                     </div>
                   ))}

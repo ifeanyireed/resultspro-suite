@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
+	"time"
 	"net/http"
 	"strings"
 
@@ -19,16 +21,25 @@ func HandleGetSuiteStats(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	type DailySales struct {
+		DayLabel   string  `json:"day"`
+		Total      float64 `json:"total"`
+		Percentage int     `json:"percentage"`
+		Status     string  `json:"status"`
+		Tooltip    string  `json:"tooltip,omitempty"`
+	}
+
 	var stats struct {
-		TotalUsers           int     `json:"totalUsers"`
-		TotalSchools         int     `json:"totalSchools"`
-		VerifiedSchools      int     `json:"verifiedSchools"`
-		PendingVerifications int     `json:"pendingVerifications"`
-		ActiveSubscriptions  int     `json:"activeSubscriptions"`
-		TotalRevenue         float64 `json:"totalRevenue"`
-		ActiveAgents         int     `json:"activeAgents"`
-		CbtExamsCount        int     `json:"cbtExamsCount"`
-		ActiveTutors         int     `json:"activeTutors"`
+		TotalUsers           int          `json:"totalUsers"`
+		TotalSchools         int          `json:"totalSchools"`
+		VerifiedSchools      int          `json:"verifiedSchools"`
+		PendingVerifications int          `json:"pendingVerifications"`
+		ActiveSubscriptions  int          `json:"activeSubscriptions"`
+		TotalRevenue         float64      `json:"totalRevenue"`
+		ActiveAgents         int          `json:"activeAgents"`
+		CbtExamsCount        int          `json:"cbtExamsCount"`
+		ActiveTutors         int          `json:"activeTutors"`
+		SalesAnalytics       []DailySales `json:"salesAnalytics"`
 	}
 
 	db.DB.QueryRow("SELECT COUNT(*) FROM users").Scan(&stats.TotalUsers)
@@ -45,6 +56,58 @@ func HandleGetSuiteStats(w http.ResponseWriter, r *http.Request) {
 	// Mock cross-service stats for now, as they would typically be pulled via internal microservice communication or a global event bus
 	stats.CbtExamsCount = 520 
 	stats.ActiveTutors = 84
+
+
+	now := time.Now()
+	startDate := now.AddDate(0, 0, -6).Format("2006-01-02")
+	dailyRevenue := make(map[string]float64)
+
+	saRows, err := db.DB.Query("SELECT DATE(created_at), SUM(amount) FROM payment_transactions WHERE status = 'SUCCESSFUL' AND created_at >= ? GROUP BY DATE(created_at)", startDate)
+	if err == nil {
+		defer saRows.Close()
+		for saRows.Next() {
+			var d string
+			var t float64
+			saRows.Scan(&d, &t)
+			dailyRevenue[d] = t
+		}
+	}
+
+	targetRevenue := 5000000.0 // 5M per day target
+	daysOfWeek := []string{"S", "M", "T", "W", "T", "F", "S"}
+
+	for i := 6; i >= 0; i-- {
+		d := now.AddDate(0, 0, -i)
+		dateStr := d.Format("2006-01-02")
+		dayLabel := daysOfWeek[d.Weekday()]
+		total := dailyRevenue[dateStr]
+		
+		perc := 15
+		barType := "stripe"
+		tooltip := ""
+		if total > 0 {
+			perc = int((total / targetRevenue) * 100)
+			if perc > 100 { perc = 100 }
+			if perc < 15 { perc = 15 }
+			barType = "solid-dark"
+			
+			if total >= 1000000 {
+				tooltip = fmt.Sprintf("₦%.1fM", total/1000000.0)
+			} else if total >= 1000 {
+				tooltip = fmt.Sprintf("₦%.1fK", total/1000.0)
+			} else {
+				tooltip = fmt.Sprintf("₦%.0f", total)
+			}
+		}
+		
+		stats.SalesAnalytics = append(stats.SalesAnalytics, DailySales{
+			DayLabel:   dayLabel,
+			Total:      total,
+			Percentage: perc,
+			Status:     barType,
+			Tooltip:    tooltip,
+		})
+	}
 
 	utils.JSONResponse(w, http.StatusOK, stats)
 }
