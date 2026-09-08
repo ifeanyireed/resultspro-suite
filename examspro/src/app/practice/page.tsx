@@ -134,7 +134,7 @@ export default function PracticePage() {
   const isAuth = mounted ? isAuthenticated : false;
 
   return (
-    <main className="min-h-screen bg-navy pb-24">
+    <main className="min-h-screen bg-light text-navy">
       <Navbar />
 
       {/* 30-second login prompt for guests */}
@@ -143,20 +143,20 @@ export default function PracticePage() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-3xl md:text-5xl font-display font-bold text-white mb-6">
-            Exam <span className="text-green">Browser</span>
+          <h1 className="text-3xl md:text-5xl font-display font-bold text-navy mb-6">
+            Exam <span className="text-blue">Browser</span>
           </h1>
 
           {/* Guest nudge banner */}
           {!isAuth && (
-            <div className="flex items-center gap-3 mb-6 px-5 py-3 rounded-2xl bg-green/5 border border-green/20 text-sm">
-              <Lock className="w-4 h-4 text-green shrink-0" />
-              <span className="text-gray-300">
-                Browse freely — <span className="text-white font-semibold">sign in to start practising</span> and track your progress.
+            <div className="flex items-center gap-3 mb-6 px-5 py-3 rounded-2xl bg-blue/5 border border-blue/20 text-sm">
+              <Lock className="w-4 h-4 text-blue shrink-0" />
+              <span className="text-gray-600">
+                Browse freely — <span className="text-navy font-semibold">sign in to start practising</span> and track your progress.
               </span>
               <Link
                 href="/login"
-                className="ml-auto shrink-0 px-4 py-1.5 rounded-lg bg-green text-navy text-xs font-bold hover:bg-green/90 transition-colors"
+                className="ml-auto shrink-0 px-4 py-1.5 rounded-lg bg-blue text-navy text-xs font-bold hover:bg-blue/90 transition-colors"
               >
                 Sign In
               </Link>
@@ -171,10 +171,10 @@ export default function PracticePage() {
                 placeholder="Search for an exam (e.g. JAMB, WAEC, SAT)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white/5 border border-white/[0.1] border-t-white/[0.15] rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-green/50 transition-colors"
+                className="w-full bg-white shadow-sm border border-nets-border rounded-2xl py-4 pl-12 pr-4 text-navy placeholder:text-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
-            <button className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white/5 border border-white/[0.1] border-t-white/[0.15] text-gray-400 hover:text-white transition-colors">
+            <button className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white shadow-sm border border-nets-border text-gray-600 hover:text-navy hover:bg-slate-50 transition-colors">
               <Filter className="w-5 h-5" />
               <span>Filters</span>
             </button>
@@ -183,7 +183,7 @@ export default function PracticePage() {
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <div className="w-12 h-12 border-4 border-green/20 border-t-green rounded-full animate-spin" />
+            <div className="w-12 h-12 border-4 border-blue/20 border-t-blue rounded-full animate-spin" />
             <p className="text-gray-500 font-medium">Loading examination catalog...</p>
           </div>
         ) : error ? (
@@ -202,13 +202,13 @@ export default function PracticePage() {
               filteredCategories.map((cat, i) => (
                 <div key={i}>
                   <div className="flex items-center gap-3 mb-8">
-                    <div className="h-px flex-1 bg-white/5" />
+                    <div className="h-px flex-1 bg-slate-200" />
                     <h2 className="text-xs font-bold uppercase tracking-[0.3em] text-gray-500">{cat.name}</h2>
-                    <div className="h-px flex-1 bg-white/5" />
+                    <div className="h-px flex-1 bg-slate-200" />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {cat.exams.map((exam) => (
+                    {cat.exams.map((exam, examIdx) => (
                       <div
                         key={exam.id}
                         className="relative"
@@ -218,58 +218,59 @@ export default function PracticePage() {
                         <Link
                           href={`/practice/${exam.id}`}
                           onClick={(e) => handleExamClick(e, exam as Exam)}
-                          className="block group relative p-8 rounded-3xl border border-white/[0.05] border-t-white/[0.1] bg-white/[0.02] backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] hover:bg-white/5 hover:border-green/30 transition-all h-full"
+                          className={`block group relative p-8 rounded-[1.5rem] shadow-sm hover:-translate-y-1 transition-transform h-full overflow-hidden bg-gradient-to-br ${examIdx % 2 === 0 ? 'from-[#146ef5] to-[#0a2e70]' : 'from-red-500 to-red-900'}`}
                         >
-                          <div className="flex justify-between items-start mb-6">
-                            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/[0.1] border-t-white/[0.15] flex items-center justify-center font-display font-black text-white text-xl group-hover:scale-110 group-hover:bg-green group-hover:text-navy transition-all">
-                              {exam.name.charAt(0)}
-                            </div>
-                            <div className="p-2 rounded-full bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
-                              {isAuth ? (
-                                <ChevronRight className="w-5 h-5 text-green" />
-                              ) : (
-                                <Lock className="w-4 h-4 text-green" />
+                          <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
+                          <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
+                          <div className="flex flex-col h-full relative z-10 justify-center min-h-[160px]">
+                            {/* Top right icon */}
+                            <div className="absolute top-0 right-0">
+                              {!isAuth && (
+                                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-white/10">
+                                  <Lock className="w-3 h-3 text-white" />
+                                </div>
                               )}
                             </div>
-                          </div>
 
-                          <h3 className="text-2xl font-display font-bold text-white mb-2">{exam.name}</h3>
+                            <div className="mt-auto pt-8">
+                              <h3 className="text-4xl font-display font-bold text-white mb-2">{exam.name}</h3>
 
-                          <div className="flex items-center gap-4 text-sm text-gray-500">
-                            <div className="flex items-center gap-1.5">
-                              <Target className="w-4 h-4" />
-                              {exam.subjects} Subjects
+                              <div className="flex items-center gap-4 text-sm text-white/80">
+                                <div className="flex items-center gap-1.5">
+                                  <Target className="w-4 h-4" />
+                                  {exam.subjects} Subjects
+                                </div>
+                                <div className="w-1 h-1 rounded-full bg-white/30" />
+                              </div>
                             </div>
-                            <div className="w-1 h-1 rounded-full bg-white/10" />
-                            <div>{exam.year_range}</div>
-                          </div>
 
-                          <div className="mt-8 flex gap-2">
-                            {exam.isPopular && (
-                              <span className="px-3 py-1 rounded-lg bg-green/10 text-green text-[10px] font-bold uppercase tracking-wider border border-green/20">
-                                Popular
-                              </span>
-                            )}
-                            {exam.isCurated && (
-                              <span className="px-3 py-1 rounded-lg bg-blue/10 text-blue text-[10px] font-bold uppercase tracking-wider border border-blue/20">
-                                Curated
-                              </span>
-                            )}
-                            {!isAuth && (
-                              <span className="px-3 py-1 rounded-lg bg-white/5 text-gray-500 text-[10px] font-bold uppercase tracking-wider border border-white/[0.1] border-t-white/[0.15] flex items-center gap-1">
-                                <Lock className="w-2.5 h-2.5" /> Login to Practice
-                              </span>
-                            )}
+                            <div className="mt-8 flex gap-2">
+                              {exam.isPopular && (
+                                <span className="px-3 py-1.5 rounded-lg bg-white/20 text-white text-[10px] font-bold uppercase tracking-wider hover:bg-white/30 transition-colors">
+                                  Popular
+                                </span>
+                              )}
+                              {exam.isCurated && (
+                                <span className="px-3 py-1.5 rounded-lg bg-white/20 text-white text-[10px] font-bold uppercase tracking-wider hover:bg-white/30 transition-colors">
+                                  Curated
+                                </span>
+                              )}
+                              {!isAuth && (
+                                <span className="px-3 py-1.5 rounded-lg bg-white/20 text-white text-[10px] font-bold uppercase tracking-wider hover:bg-white/30 transition-colors flex items-center gap-1">
+                                  <Lock className="w-3 h-3" /> Login to Practice
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </Link>
 
                         {/* DESKTOP Hover Tooltip (Boundary Aware) */}
                         {!isAuth && hoveredExamId === exam.id && (
                           <div className="hidden md:block absolute left-1/2 -top-6 -translate-y-full -translate-x-1/2 z-50 animate-in fade-in zoom-in-95 duration-200 pointer-events-auto group/tooltip max-w-[calc(100vw-40px)]">
-                            <div className="relative p-0 rounded-3xl bg-navy/80 border border-white/10 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex overflow-hidden ring-1 ring-white/20 h-max min-w-[580px] w-max max-w-[800px]">
+                            <div className="relative p-0 rounded-3xl bg-white/80 border border-white/60 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] flex overflow-hidden ring-1 ring-slate-100 h-max min-w-[580px] w-max max-w-[800px]">
                               
                               {/* Left Pane - Subjects */}
-                              <div className="w-[240px] border-r border-white/[0.1] border-t-white/[0.15] p-4 bg-white/5 shrink-0">
+                              <div className="w-[240px] border-r border-nets-border p-4 bg-white/50 shrink-0">
                                 <h4 className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 px-2">
                                   Subjects
                                   {hoverLoading && <Loader2 className="w-3 h-3 animate-spin inline-ml-2 float-right" />}
@@ -281,7 +282,7 @@ export default function PracticePage() {
                                       onMouseEnter={() => setHoveredSubjectIndex(idx)}
                                       className={`
                                         group/sub p-3 rounded-xl transition-all cursor-default flex items-center justify-between
-                                        ${hoveredSubjectIndex === idx ? 'bg-green/10 text-green shadow-[inset_0_0_20px_rgba(34,197,94,0.1)]' : 'hover:bg-white/5 text-gray-400'}
+                                        ${hoveredSubjectIndex === idx ? 'bg-blue/10 text-blue shadow-[inset_0_0_20px_rgba(20,110,245,0.1)]' : 'hover:bg-slate-200 text-gray-400'}
                                       `}
                                     >
                                       <span className="text-xs font-bold truncate pr-2">{sub.name}</span>
@@ -298,22 +299,22 @@ export default function PracticePage() {
                                 {hoverDataCache[exam.id]?.[hoveredSubjectIndex] ? (
                                   <div className="animate-in fade-in slide-in-from-right-4 duration-300">
                                     <div className="flex items-center justify-between mb-4 gap-6">
-                                      <h5 className="text-sm font-bold text-white truncate max-w-[320px]">
+                                      <h5 className="text-sm font-bold text-navy truncate max-w-[320px]">
                                         {hoverDataCache[exam.id][hoveredSubjectIndex].name}
                                       </h5>
-                                      <span className="text-[10px] font-mono font-bold text-green bg-green/10 px-2 py-0.5 rounded-full border border-green/20 shrink-0">
+                                      <span className="text-[10px] font-mono font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full border border-red-200 shrink-0">
                                         {hoverDataCache[exam.id][hoveredSubjectIndex].questions} Qs
                                       </span>
                                     </div>
                                     
                                     <div className="space-y-2 max-h-[260px] overflow-y-auto pr-2 custom-scrollbar no-scrollbar min-w-[300px]">
                                       {hoverDataCache[exam.id][hoveredSubjectIndex].topics?.map((topic: any, i: number) => (
-                                        <div key={i} className="group/topic p-3 rounded-xl bg-white/5 border border-white/[0.05] border-t-white/[0.1] hover:border-green/20 hover:bg-green/[0.02] transition-all flex items-center justify-between gap-4">
+                                        <div key={i} className="group/topic p-3 rounded-xl bg-gray-50 border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 transition-all flex items-center justify-between gap-4">
                                           <div className="flex items-center gap-3 truncate">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-green/40 group-hover/topic:scale-125 group-hover/topic:bg-green transition-all" />
-                                            <span className="text-xs text-gray-300 truncate font-medium">{topic.name}</span>
+                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-300 group-hover/topic:scale-125 group-hover/topic:bg-blue-500 transition-all" />
+                                            <span className="text-xs text-gray-600 truncate font-medium">{topic.name}</span>
                                           </div>
-                                          <span className="text-[10px] text-gray-500 font-mono font-bold shrink-0">{topic.questions}</span>
+                                          <span className="text-[10px] text-gray-400 font-mono font-bold shrink-0">{topic.questions}</span>
                                         </div>
                                       ))}
                                       {(!hoverDataCache[exam.id][hoveredSubjectIndex].topics || hoverDataCache[exam.id][hoveredSubjectIndex].topics.length === 0) && (
@@ -329,7 +330,7 @@ export default function PracticePage() {
                               </div>
 
                               {/* Tooltip Down Arrow */}
-                              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-navy/80 border-b border-r border-white/20 rotate-45 transform" />
+                              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/80 backdrop-blur-2xl border-b border-r border-white/60 rotate-45 transform" />
                             </div>
                           </div>
                         )}
@@ -372,14 +373,14 @@ export default function PracticePage() {
               {/* Mobile Content Header */}
               <div className="px-6 pb-6 border-b border-white/5 flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold font-display text-white">
+                  <h2 className="text-2xl font-bold font-display text-navy">
                     {categories.flatMap(c => c.exams).find(e => e.id === mobilePreviewExamId)?.name}
                   </h2>
                   <p className="text-xs text-gray-500 font-bold uppercase tracking-widest mt-1">Syllabus Overview</p>
                 </div>
                 <button 
                   onClick={() => setMobilePreviewExamId(null)}
-                  className="p-2 rounded-full bg-white/5 border border-white/[0.1] border-t-white/[0.15]"
+                  className="p-2 rounded-full bg-slate-200 border border-white/[0.1] border-t-white/[0.15]"
                 >
                   <X className="w-5 h-5 text-gray-400" />
                 </button>
@@ -395,8 +396,8 @@ export default function PracticePage() {
                       className={`
                         px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all border
                         ${mobileSyllabusSubjectIndex === idx 
-                          ? 'bg-green/10 text-green border-green/30' 
-                          : 'bg-white/5 text-gray-500 border-transparent hover:bg-white/10'}
+                          ? 'bg-blue/10 text-blue border-green/30' 
+                          : 'bg-slate-200 text-gray-500 border-transparent hover:bg-white/10'}
                       `}
                     >
                       {sub.name}
@@ -404,7 +405,7 @@ export default function PracticePage() {
                   ))}
                   {hoverLoading && (
                     <div className="flex items-center gap-2 px-4 py-2">
-                      <Loader2 className="w-4 h-4 text-green animate-spin" />
+                      <Loader2 className="w-4 h-4 text-blue animate-spin" />
                       <span className="text-xs text-gray-600">Loading...</span>
                     </div>
                   )}
@@ -418,16 +419,16 @@ export default function PracticePage() {
                         <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
                           {hoverDataCache[mobilePreviewExamId!][mobileSyllabusSubjectIndex].name} • Topics
                         </span>
-                        <span className="text-[10px] font-bold text-green">{hoverDataCache[mobilePreviewExamId!][mobileSyllabusSubjectIndex].questions} Questions</span>
+                        <span className="text-[10px] font-bold text-blue">{hoverDataCache[mobilePreviewExamId!][mobileSyllabusSubjectIndex].questions} Questions</span>
                       </div>
                       
                       {hoverDataCache[mobilePreviewExamId!][mobileSyllabusSubjectIndex].topics?.map((topic: any, i: number) => (
                         <div key={i} className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] flex items-center justify-between gap-4">
                           <div className="flex items-center gap-3">
-                            <span className="text-xs text-green font-mono">{String(i + 1).padStart(2, '0')}</span>
-                            <span className="text-sm text-gray-300 font-medium">{topic.name}</span>
+                            <span className="text-xs text-blue font-mono">{String(i + 1).padStart(2, '0')}</span>
+                            <span className="text-sm text-gray-600 font-medium">{topic.name}</span>
                           </div>
-                          <span className="text-[10px] text-gray-500 font-bold bg-white/5 px-2 py-0.5 rounded-lg border border-white/[0.05] border-t-white/[0.1] leading-none shrink-0">
+                          <span className="text-[10px] text-gray-500 font-bold bg-slate-200 px-2 py-0.5 rounded-lg border border-white/[0.05] border-t-white/[0.1] leading-none shrink-0">
                             {topic.questions} Qs
                           </span>
                         </div>
@@ -448,7 +449,7 @@ export default function PracticePage() {
               <div className="p-6 bg-navy/80 backdrop-blur-md border-t border-white/10">
                 <Link 
                   href={`/login?redirect=/practice/${mobilePreviewExamId}`}
-                  className="w-full h-14 rounded-2xl bg-green text-navy font-bold flex items-center justify-center gap-2 hover:bg-green/90 transition-all active:scale-95 text-center"
+                  className="w-full h-14 rounded-2xl bg-blue text-navy font-bold flex items-center justify-center gap-2 hover:bg-blue/90 transition-all active:scale-95 text-center"
                 >
                   <Lock className="w-5 h-5" />
                   Sign In to Start Practicing

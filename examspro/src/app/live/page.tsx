@@ -67,7 +67,7 @@ export default function LiveGameLobby() {
   });
 
   return (
-    <main className="min-h-screen bg-navy text-white">
+    <main className="min-h-screen bg-light text-navy">
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12 pb-24">
@@ -75,12 +75,12 @@ export default function LiveGameLobby() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <span className="px-3 py-1 rounded-full bg-green text-navy font-bold text-[10px] uppercase tracking-widest animate-pulse">Live Now</span>
+              <span className="px-3 py-1 rounded-full bg-red-600 text-white font-bold text-[10px] uppercase tracking-widest animate-pulse">Live Now</span>
               <div className="w-1 h-1 rounded-full bg-white/20" />
-              <span className="text-gray-400 text-xs font-bold uppercase tracking-widest">Admin Hosted Rooms</span>
+              <span className="text-muted text-xs font-bold uppercase tracking-widest">Admin Hosted Rooms</span>
             </div>
             <h1 className="text-3xl md:text-5xl font-display font-black uppercase tracking-tight">
-              Live Game <span className="text-green">Lobby</span>
+              Live Game <span className="text-blue">Lobby</span>
             </h1>
           </div>
           
@@ -89,7 +89,7 @@ export default function LiveGameLobby() {
             <input 
               type="text" 
               placeholder="Search rooms or subjects..."
-              className="w-full bg-white/5 border border-white/[0.1] border-t-white/[0.15] rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-green/50 transition-colors"
+              className="w-full bg-white border border-nets-border shadow-sm rounded-2xl py-4 pl-12 pr-4 text-navy placeholder:text-gray-400 focus:outline-none focus:border-blue/50 transition-colors"
             />
           </div>
         </div>
@@ -100,8 +100,8 @@ export default function LiveGameLobby() {
             onClick={() => setSelectedExam('all')}
             className={`px-6 py-3 rounded-2xl border font-bold text-sm whitespace-nowrap transition-all ${
               selectedExam === 'all' 
-              ? 'bg-green border-green text-navy shadow-lg shadow-green/20' 
-              : 'bg-white/5 border-white/[0.1] text-gray-400 hover:bg-white/10'
+              ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue/20' 
+              : 'bg-white border-nets-border shadow-sm text-gray-600 hover:bg-slate-50'
             }`}
           >
             All Exams
@@ -112,8 +112,8 @@ export default function LiveGameLobby() {
               onClick={() => setSelectedExam(exam.id.toString())}
               className={`px-6 py-3 rounded-2xl border font-bold text-sm whitespace-nowrap transition-all ${
                 selectedExam === exam.id.toString() 
-                ? 'bg-green border-green text-navy shadow-lg shadow-green/20' 
-                : 'bg-white/5 border-white/[0.1] text-gray-400 hover:bg-white/10'
+                ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue/20' 
+                : 'bg-white border-nets-border shadow-sm text-gray-600 hover:bg-slate-50'
               }`}
             >
               {exam.name}
@@ -123,33 +123,33 @@ export default function LiveGameLobby() {
 
         {/* Info Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="p-8 rounded-[40px] bg-gradient-to-br from-green/20 to-transparent border border-white/5 flex flex-col gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-green/10 flex items-center justify-center text-green">
+          <div className="p-8 rounded-[40px] bg-white shadow-sm border border-nets-border flex flex-col gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
               <Zap className="w-6 h-6" />
             </div>
             <div>
               <h4 className="text-xl font-bold">Synchronous Play</h4>
-              <p className="text-sm text-gray-400">Answer same questions at same time as everyone else.</p>
+              <p className="text-sm text-muted">Answer same questions at same time as everyone else.</p>
             </div>
           </div>
           
-          <div className="p-8 rounded-[40px] bg-gradient-to-br from-blue/20 to-transparent border border-white/5 flex flex-col gap-4">
+          <div className="p-8 rounded-[40px] bg-white shadow-sm border border-nets-border flex flex-col gap-4">
             <div className="w-12 h-12 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
               <Users className="w-6 h-6" />
             </div>
             <div>
               <h4 className="text-xl font-bold">Massive Rooms</h4>
-              <p className="text-sm text-gray-400">Compete with up to 500 students in a single room.</p>
+              <p className="text-sm text-muted">Compete with up to 500 students in a single room.</p>
             </div>
           </div>
 
-          <div className="p-8 rounded-[40px] bg-gradient-to-br from-amber/20 to-transparent border border-white/5 flex flex-col gap-4">
+          <div className="p-8 rounded-[40px] bg-white shadow-sm border border-nets-border flex flex-col gap-4">
             <div className="w-12 h-12 rounded-2xl bg-amber/10 flex items-center justify-center text-amber">
               <Trophy className="w-6 h-6" />
             </div>
             <div>
               <h4 className="text-xl font-bold">Bigger Prizes</h4>
-              <p className="text-sm text-gray-400">Large pools mean the winner takes home thousands of coins.</p>
+              <p className="text-sm text-muted">Large pools mean the winner takes home thousands of coins.</p>
             </div>
           </div>
         </div>
@@ -161,67 +161,65 @@ export default function LiveGameLobby() {
             <span className="text-xs text-gray-600 font-bold">{filteredRooms.length} rooms found</span>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {loading ? (
               // Loading Skeleton
               Array.from({ length: 2 }).map((_, i) => (
-                <div key={i} className="h-64 rounded-[32px] bg-white/5 animate-pulse" />
+                <div key={i} className="h-64 rounded-[32px] bg-slate-200 animate-pulse" />
               ))
             ) : filteredRooms.length === 0 ? (
-              <div className="col-span-full py-20 text-center bg-white/[0.02] rounded-[32px] border border-dashed border-white/[0.1] border-t-white/[0.15]">
+              <div className="col-span-full py-20 text-center bg-white shadow-sm rounded-[32px] border border-dashed border-nets-border">
                 <p className="text-gray-500">No live rooms available for this exam. Check back soon!</p>
               </div>
             ) : (
-              filteredRooms.map((room) => (
-                <div key={room.id} className="group relative p-8 rounded-[32px] border border-white/[0.05] border-t-white/[0.1] bg-white/[0.02] backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] hover:bg-white/5 hover:border-white/10 transition-all overflow-hidden">
-                  <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform">
-                    <Sword className="w-32 h-32 text-white -rotate-12" />
-                  </div>
+              filteredRooms.map((room, cardIdx) => (
+                <div key={room.id} className={`block group relative p-8 rounded-[1.5rem] shadow-sm hover:-translate-y-1 transition-transform h-full overflow-hidden bg-gradient-to-br ${cardIdx % 2 === 0 ? 'from-[#146ef5] to-[#0a2e70]' : 'from-red-500 to-red-900'}`}>
+                  <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60 pointer-events-none"></div>
+                  <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20 pointer-events-none"></div>
                   
-                  <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tighter ${room.type === 'High Stakes' ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 'bg-green/10 text-green border border-green/20'}`}>
+                  <div className="flex flex-col h-full relative z-10 justify-center min-h-[160px]">
+                    <div className="mt-auto pt-8">
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tighter ${room.type === 'High Stakes' ? 'bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/30' : 'bg-blue/20 text-blue border border-blue/30'}`}>
                           {room.type}
                         </span>
-                        <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{room.id.split('-')[0]}</span>
+                        <span className="text-[10px] text-white/60 font-bold uppercase tracking-widest">{room.id.split('-')[0]}</span>
                       </div>
-                      
-                      <h3 className="text-2xl font-display font-bold mb-1 group-hover:text-green transition-colors">{room.subject?.name || 'Untitled Subject'}</h3>
-                      <div className="text-sm text-gray-500 mb-6 flex items-center gap-2">
-                        <span>Hosted by</span>
-                        <span className="text-gray-300 font-bold">{room.adminName}</span>
-                      </div>
-                      
-                      <div className="flex flex-wrap items-center gap-6 text-sm">
-                        <div className="flex items-center gap-2 text-gray-400">
+                      <h3 className="text-3xl font-display font-bold text-white mb-2 leading-tight">
+                        {room.subject?.name || 'Untitled Subject'}
+                      </h3>
+
+                      <div className="flex items-center gap-4 text-sm text-white/80">
+                        <div className="flex items-center gap-1.5">
                           <Users className="w-4 h-4" />
-                          <span className="font-bold text-white">{room._count?.participants || 0}</span>
-                          <span className="text-gray-600">/ {room.maxPlayers}</span>
+                          <span className="font-bold text-white">{room._count?.participants || 0}</span> / {room.maxPlayers}
                         </div>
-                        <div className="flex items-center gap-2 text-gray-400">
+                        <div className="w-1 h-1 rounded-full bg-white/30" />
+                        <div className="flex items-center gap-1.5">
                           <Eye className="w-4 h-4" />
                           <span className="font-bold text-white">{room.spectatorCount}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-amber">
+                        <div className="w-1 h-1 rounded-full bg-white/30" />
+                        <div className="flex items-center gap-1.5 text-[#FFD700]">
                           <Coins className="w-4 h-4" />
-                          <span className="font-black">{room.entryFee} coins</span>
+                          <span className="font-bold">{room.entryFee} coins</span>
                         </div>
                       </div>
                     </div>
-                    
-                    <div className="flex flex-row md:flex-col items-center gap-4 shrink-0">
-                      <div className="flex items-center gap-2 text-xs font-bold text-blue uppercase tracking-widest bg-blue/10 px-4 py-2 rounded-xl">
-                        <Timer className="w-4 h-4" />
-                        {room.status === 'pending' ? 'Waiting...' : 'Starting Soon'}
-                      </div>
-                      
+
+                    <div className="mt-8 flex items-center justify-between">
                       <Button 
                         onClick={() => handleJoinRoom(room.id)}
-                        className="flex-1 md:w-full bg-green text-navy hover:bg-green/90 rounded-2xl px-8 py-6 text-lg font-black flex gap-2"
+                        className="bg-white/20 text-white hover:bg-white/30 rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-2 border border-white/10"
                       >
-                        JOIN <ArrowRight className="w-5 h-5" />
+                        JOIN ROOM <ArrowRight className="w-3 h-3" />
                       </Button>
+                      
+                      {room.status === 'pending' ? (
+                        <span className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Waiting</span>
+                      ) : (
+                        <span className="text-[10px] font-bold text-white bg-white/10 px-2 py-1 rounded-lg uppercase tracking-widest border border-white/10">Starting Soon</span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -231,14 +229,14 @@ export default function LiveGameLobby() {
         </div>
 
         {/* Footer CTA */}
-        <div className="mt-20 p-12 rounded-[40px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] text-center flex flex-col items-center gap-6">
+        <div className="mt-20 p-12 rounded-[40px] bg-white shadow-sm border border-nets-border text-center flex flex-col items-center gap-6">
           <Eye className="w-12 h-12 text-blue opacity-50" />
-          <h2 className="text-2xl md:text-4xl font-display font-bold text-white">Prefer to watch first?</h2>
+          <h2 className="text-2xl md:text-4xl font-display font-bold text-navy">Prefer to watch first?</h2>
           <p className="text-gray-400 max-w-lg mb-4 text-lg">Spectate active live games for free to learn from top players before jumping in.</p>
           <Button 
             variant="outline" 
             onClick={() => !user ? setIsLoginModalOpen(true) : router.push('/spectate')}
-            className="rounded-2xl border-white/[0.1] border-t-white/[0.15] text-white px-10 py-6 text-lg font-bold hover:bg-white/5"
+            className="rounded-2xl border border-nets-border text-navy px-10 py-6 text-lg font-bold hover:bg-slate-50"
           >
             Open Spectator Lobby
           </Button>
