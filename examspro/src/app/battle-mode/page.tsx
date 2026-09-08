@@ -436,59 +436,59 @@ export default function BattleLobbyPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Create / Join Custom */}
           <div className="lg:col-span-1 space-y-6">
-            <div className="p-8 rounded-[32px] bg-slate-50 border border-slate-200 shadow-sm">
-              <h3 className="text-xl font-display font-bold text-navy mb-6 flex items-center gap-2">
-                <Plus className="w-5 h-5 text-[#00ff88]" />
+            <div className="p-8 rounded-[32px] relative overflow-hidden shadow-lg bg-gradient-to-br from-[#146ef5] to-[#0a2e70] text-white">
+              <h3 className="text-xl font-display font-bold text-white mb-6 flex items-center gap-2">
+                <Plus className="w-5 h-5 text-white" />
                 Custom Battle
               </h3>
-              <p className="text-sm text-gray-500 mb-8">
+              <p className="text-sm text-white/80 mb-8">
                 Challenge a friend or create a public battle with custom stakes and subjects.
               </p>
-              <div className="space-y-4">
+              <div className="space-y-4 relative z-10">
                 <Button 
                   onClick={() => openCreateModal('private')}
-                  className="w-full py-6 rounded-2xl bg-slate-50 border border-slate-200 text-navy hover:bg-slate-100 font-bold"
+                  className="w-full py-6 rounded-2xl bg-white text-navy hover:bg-slate-50 font-bold"
                 >
                   Challenge a Friend
                 </Button>
                 <Button 
                   onClick={() => openCreateModal('public')}
                   variant="outline" 
-                  className="w-full py-6 rounded-2xl border-white/10 text-gray-500 hover:text-white font-bold"
+                  className="w-full py-6 rounded-2xl border-white/20 bg-white/10 text-white hover:bg-white/20 font-bold"
                 >
                   Create Public Room
                 </Button>
                 <Button 
                   onClick={() => setIsJoinCodeModalOpen(true)}
                   variant="ghost" 
-                  className="w-full py-6 rounded-2xl text-white hover:text-white-400 font-black italic tracking-tighter"
+                  className="w-full py-6 rounded-2xl text-white/80 hover:text-white font-black italic tracking-tighter"
                 >
                   Join via Room Code
                 </Button>
               </div>
             </div>
 
-            <div className="p-8 rounded-[32px] bg-gradient-to-br from-amber/10 to-transparent border border-white/5 relative overflow-hidden group">
+            <div className="p-8 rounded-[32px] relative overflow-hidden bg-gradient-to-br from-red-500 to-red-800 text-white shadow-lg group">
               <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Trophy className="w-16 h-16 text-amber" />
+                <Trophy className="w-16 h-16 text-white" />
               </div>
-              <Trophy className="w-8 h-8 text-amber mb-4 relative z-10" />
-              <h3 className="text-xl font-display font-bold text-navy mb-2 relative z-10">
+              <Trophy className="w-8 h-8 text-white mb-4 relative z-10" />
+              <h3 className="text-xl font-display font-bold text-white mb-2 relative z-10">
                 {tournamentInfo?.tournament?.title || 'Regional Tournament'}
               </h3>
-              <p className="text-sm text-gray-500 mb-6 relative z-10">
+              <p className="text-sm text-white/80 mb-6 relative z-10">
                 {tournamentInfo?.tournament?.description || 'Join the ₦50,000 prize pool tournament starting this Saturday.'}
               </p>
               
               {tournamentInfo?.isRegistered ? (
-                <div className="w-full py-4 rounded-2xl bg-green/10 border border-green/20 text-[#00ff88] flex items-center justify-center gap-2 font-bold animate-in zoom-in-95">
+                <div className="w-full py-4 rounded-2xl bg-white/20 border border-white/30 text-white flex items-center justify-center gap-2 font-bold animate-in zoom-in-95 relative z-10">
                   <Check className="w-5 h-5" /> Registered
                 </div>
               ) : (
                 <Button 
                   onClick={handleTournamentRegister}
                   disabled={registering || !tournamentInfo?.tournament}
-                  className="w-full bg-amber text-navy hover:bg-amber/90 font-bold py-6 rounded-2xl relative z-10"
+                  className="w-full bg-white text-red-600 hover:bg-slate-50 font-bold py-6 rounded-2xl relative z-10"
                 >
                   {registering ? <Loader2 className="w-5 h-5 animate-spin" /> : `Register Now (${tournamentInfo?.tournament?.registrationFee || '500'} Coins)`}
                 </Button>
