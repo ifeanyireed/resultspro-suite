@@ -376,3 +376,41 @@ export async function deleteExamproExam(id: number | string) {
   if (!res.ok) throw new Error('Failed to delete exam');
   return res.json();
 }
+
+export async function fetchExamproSubjects(examId: number | string) {
+  try {
+    const res = await fetch(`${EXAMS_API}/api/exams/${examId}/subjects`);
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+export async function createExamproSubject(data: any) {
+  const res = await fetch(`${EXAMS_API}/api/admin/subjects`, {
+    method: 'POST',
+    headers: getAuthHeader(),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to create subject');
+  return res.json();
+}
+
+export async function updateExamproSubject(id: number | string, data: any) {
+  const res = await fetch(`${EXAMS_API}/api/admin/subjects/${id}`, {
+    method: 'PUT',
+    headers: getAuthHeader(),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to update subject');
+  return res.json();
+}
+
+export async function deleteExamproSubject(id: number | string) {
+  const res = await fetch(`${EXAMS_API}/api/admin/subjects/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeader(),
+  });
+  if (!res.ok) throw new Error('Failed to delete subject');
+  return res.json();
+}
