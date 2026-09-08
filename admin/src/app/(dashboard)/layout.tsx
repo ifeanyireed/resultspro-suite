@@ -28,7 +28,11 @@ function GlobalTopNav({ user }: { user: any }) {
         </button>
         <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
           <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-full overflow-hidden flex items-center justify-center text-white font-bold text-sm border-2 border-white shadow-sm">
-            {user?.full_name ? user.full_name.charAt(0).toUpperCase() : 'A'}
+            {user?.avatar_url ? (
+              <img src={user.avatar_url} alt="User Avatar" className="w-full h-full object-cover" />
+            ) : (
+              user?.full_name ? user.full_name.charAt(0).toUpperCase() : 'A'
+            )}
           </div>
           <div className="hidden md:block">
             <p className="text-sm font-bold text-gray-900 leading-tight">{user?.full_name || "Error: Name not found"}</p>

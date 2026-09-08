@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
@@ -27,6 +27,14 @@ export default function SupportLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      setUser(JSON.parse(userStr));
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('resultspro_admin_token');
@@ -155,13 +163,16 @@ export default function SupportLayout({
                 <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
               </button>
               <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
-                <div className="w-10 h-10 bg-gradient-to-tr from-green-200 to-green-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
-                  {/* Using standard character image */}
-                  <img src="/avatars/character2.jpg" alt="Support Staff" className="w-full h-full object-cover" />
+                <div className="w-10 h-10 bg-gradient-to-tr from-green-200 to-green-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm text-gray-700 font-bold text-sm">
+                  {user?.avatar_url ? (
+                    <img src={user.avatar_url} alt="Staff Avatar" className="w-full h-full object-cover" />
+                  ) : (
+                    user?.full_name ? user.full_name.charAt(0).toUpperCase() : 'S'
+                  )}
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-sm font-bold text-gray-900 leading-tight">Sarah Johnson</p>
-                  <p className="text-xs text-gray-500">Support Staff</p>
+                  <p className="text-sm font-bold text-gray-900 leading-tight">{user?.full_name || "Error: Name not found"}</p>
+                  <p className="text-xs text-gray-500">{user?.email || "Error: Email not found"}</p>
                 </div>
               </div>
             </div>

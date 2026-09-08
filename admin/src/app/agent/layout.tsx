@@ -183,8 +183,12 @@ export default function AgentLayout({
                 <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
               </button>
               <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
-                <div className="w-10 h-10 bg-gradient-to-tr from-orange-200 to-orange-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
-                  <img src="/avatars/character7.jpg" alt="Agent Avatar" className="w-full h-full object-cover" />
+                <div className="w-10 h-10 bg-gradient-to-tr from-orange-200 to-orange-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm text-gray-700 font-bold text-sm">
+                  {user?.avatar_url ? (
+                    <img src={user.avatar_url} alt="Agent Avatar" className="w-full h-full object-cover" />
+                  ) : (
+                    user?.full_name ? user.full_name.charAt(0).toUpperCase() : 'A'
+                  )}
                 </div>
                 <div className="hidden md:block">
                   <p className="text-sm font-bold text-gray-900 leading-tight">{user?.full_name || "Error: Name not found"}</p>
