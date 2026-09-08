@@ -736,26 +736,26 @@ func (h *AdminHandler) GetQuestions(c *gin.Context) {
 		if id, err := strconv.Atoi(topicIDStr); err == nil {
 			query = query.Where("topic_id = ?", id)
 		} else {
-			query = query.Joins("JOIN topics ON questions.topic_id = topics.id").Where("topics.slug = ?", topicIDStr)
+			query = query.Joins("JOIN nat_exams_topics ON nat_exams_questions.topic_id = nat_exams_topics.id").Where("nat_exams_topics.slug = ?", topicIDStr)
 		}
 	} else if subjectIDStr != "" && subjectIDStr != "all" {
 		if id, err := strconv.Atoi(subjectIDStr); err == nil {
-			query = query.Joins("JOIN topics ON questions.topic_id = topics.id").Where("topics.subject_id = ?", id)
+			query = query.Joins("JOIN nat_exams_topics ON nat_exams_questions.topic_id = nat_exams_topics.id").Where("nat_exams_topics.subject_id = ?", id)
 		} else {
-			query = query.Joins("JOIN topics ON questions.topic_id = topics.id").
-				Joins("JOIN subjects ON topics.subject_id = subjects.id").
-				Where("subjects.slug = ? OR subjects.id = ?", subjectIDStr, subjectIDStr)
+			query = query.Joins("JOIN nat_exams_topics ON nat_exams_questions.topic_id = nat_exams_topics.id").
+				Joins("JOIN nat_exams_subjects ON nat_exams_topics.subject_id = nat_exams_subjects.id").
+				Where("nat_exams_subjects.slug = ? OR nat_exams_subjects.id = ?", subjectIDStr, subjectIDStr)
 		}
 	} else if examIDStr != "" && examIDStr != "all" {
 		if id, err := strconv.Atoi(examIDStr); err == nil {
-			query = query.Joins("JOIN topics ON questions.topic_id = topics.id").
-				Joins("JOIN subjects ON topics.subject_id = subjects.id").
-				Where("subjects.exam_id = ?", id)
+			query = query.Joins("JOIN nat_exams_topics ON nat_exams_questions.topic_id = nat_exams_topics.id").
+				Joins("JOIN nat_exams_subjects ON nat_exams_topics.subject_id = nat_exams_subjects.id").
+				Where("nat_exams_subjects.exam_id = ?", id)
 		} else {
-			query = query.Joins("JOIN topics ON questions.topic_id = topics.id").
-				Joins("JOIN subjects ON topics.subject_id = subjects.id").
-				Joins("JOIN exams ON subjects.exam_id = exams.id").
-				Where("exams.slug = ?", examIDStr)
+			query = query.Joins("JOIN nat_exams_topics ON nat_exams_questions.topic_id = nat_exams_topics.id").
+				Joins("JOIN nat_exams_subjects ON nat_exams_topics.subject_id = nat_exams_subjects.id").
+				Joins("JOIN nat_exams_exams ON nat_exams_subjects.exam_id = nat_exams_exams.id").
+				Where("nat_exams_exams.slug = ?", examIDStr)
 		}
 	}
 
