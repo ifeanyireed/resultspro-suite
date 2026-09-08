@@ -27,11 +27,11 @@ export default function BlogPostClient({ post, slug }: { post: BlogPost | null, 
 
   if (!post) {
     return (
-      <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--color-nets-navy)' }}>
+      <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--color-nets-light)' }}>
         <section style={{ paddingTop: '160px', paddingBottom: '80px', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div className="container-nets" style={{ textAlign: 'center' }}>
-            <h1 className="h1" style={{ color: 'white', marginBottom: '1.5rem' }}>Post Not Found</h1>
-            <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.7)', marginBottom: '2rem' }}>
+            <h1 className="h1" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '1.5rem' }}>Post Not Found</h1>
+            <p style={{ fontSize: '1.25rem', color: 'var(--color-nets-navy-light)', marginBottom: '2rem' }}>
               The article you're looking for doesn't exist or has been moved.
             </p>
             <Link href="/blog" className="btn btn-red" style={{ display: 'inline-flex', textDecoration: 'none' }}>
@@ -44,10 +44,10 @@ export default function BlogPostClient({ post, slug }: { post: BlogPost | null, 
   }
 
   return (
-    <main style={{ background: 'var(--color-nets-navy-dark)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <main style={{ background: 'white', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <article style={{ flex: 1 }}>
         {/* Header Section */}
-        <header style={{ paddingTop: '160px', paddingBottom: '80px', background: 'var(--color-nets-navy)' }}>
+        <header style={{ paddingTop: '160px', paddingBottom: '80px', background: 'var(--color-nets-light)' }}>
           <div className="container-nets">
             <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
               <Link href="/blog" style={{ display: 'inline-block', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: '2rem', textDecoration: 'none' }}>
@@ -58,12 +58,12 @@ export default function BlogPostClient({ post, slug }: { post: BlogPost | null, 
                 <span className="overline" style={{ color: 'var(--color-nets-red)', marginBottom: '1rem', display: 'block' }}>
                   {post.category?.name || "General"}
                 </span>
-                <h1 className="h2" style={{ color: 'white', lineHeight: 1.2 }}>
+                <h1 className="h2" style={{ color: 'var(--color-nets-navy-dark)', lineHeight: 1.2 }}>
                   {post.title}
                 </h1>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem', color: 'rgba(255,255,255,0.6)', fontSize: '0.875rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem', color: 'var(--color-nets-navy-light)', fontSize: '0.875rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <span style={{ fontWeight: 600 }}>{post.author?.name || "Admin"}</span>
                 </div>
@@ -99,7 +99,7 @@ export default function BlogPostClient({ post, slug }: { post: BlogPost | null, 
              <div style={{ marginTop: '5rem', paddingTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '2rem' }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                    {(post.tags || "").split(',').filter(t => t.trim()).map(tag => (
-                     <span key={tag} style={{ padding: '0.25rem 0.75rem', background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', borderRadius: '2px' }}>
+                     <span key={tag} style={{ padding: '0.25rem 0.75rem', background: 'white', color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', borderRadius: '2px' }}>
                         #{tag.trim()}
                      </span>
                    ))}
@@ -107,7 +107,7 @@ export default function BlogPostClient({ post, slug }: { post: BlogPost | null, 
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Share</span>
-                   <button onClick={copyLink} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'white', padding: '0.5rem 1rem', fontSize: '0.8125rem', cursor: 'pointer', borderRadius: '2px' }}>
+                   <button onClick={copyLink} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'var(--color-nets-navy-dark)', padding: '0.5rem 1rem', fontSize: '0.8125rem', cursor: 'pointer', borderRadius: '2px' }}>
                       Copy Link
                    </button>
                 </div>

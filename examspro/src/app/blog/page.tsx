@@ -45,15 +45,15 @@ export default function BlogListPage() {
   );
 
   return (
-    <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--color-nets-navy)' }}>
+    <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--color-nets-light)' }}>
       <Navbar />
       
-      <section style={{ paddingTop: '160px', paddingBottom: '80px', background: 'var(--color-nets-navy-dark)' }}>
+      <section style={{ paddingTop: '160px', paddingBottom: '80px', background: 'white' }}>
         <div className="container-nets">
           <div style={{ maxWidth: '800px' }}>
             <span className="overline" style={{ color: 'var(--color-nets-red)', marginBottom: '1rem', display: 'inline-block' }}>Blog & Updates</span>
-            <h1 className="h1" style={{ color: 'white', marginBottom: '1.5rem' }}>ResultsPRO News</h1>
-            <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, marginBottom: '2rem' }}>
+            <h1 className="h1" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '1.5rem' }}>ResultsPRO News</h1>
+            <p style={{ fontSize: '1.25rem', color: 'var(--color-nets-navy-light)', lineHeight: 1.6, marginBottom: '2rem' }}>
               Stay updated with the latest JAMB/WAEC news, study tips, and platform updates.
             </p>
             <input 
@@ -63,15 +63,15 @@ export default function BlogListPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{
                 width: '100%', maxWidth: '400px', padding: '0.875rem 1.25rem',
-                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
-                color: 'white', fontSize: '0.875rem', borderRadius: '2px', outline: 'none'
+                background: 'white', border: '1px solid rgba(255,255,255,0.1)',
+                color: 'var(--color-nets-navy-dark)', fontSize: '0.875rem', borderRadius: '2px', outline: 'none'
               }}
             />
           </div>
         </div>
       </section>
 
-      <section style={{ padding: '80px 0', background: 'var(--color-nets-navy)', flex: 1 }}>
+      <section style={{ padding: '80px 0', background: 'var(--color-nets-light)', flex: 1 }}>
         <div className="container-nets">
           {loading ? (
             <div style={{ padding: '4rem 0', color: 'rgba(255,255,255,0.5)', fontSize: '0.875rem' }}>
@@ -80,7 +80,7 @@ export default function BlogListPage() {
           ) : filteredPosts.length > 0 ? (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>
               {filteredPosts.map((post) => (
-                <Link key={post.id} href={`/blog/${post.slug}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', background: 'var(--color-nets-navy-dark)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden' }}>
+                <Link key={post.id} href={`/blog/${post.slug}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', background: 'white', border: '1px solid var(--color-nets-border)', borderRadius: '2px', overflow: 'hidden' }}>
                   <div style={{ aspectRatio: '16/10', width: '100%', background: 'rgba(255,255,255,0.02)' }}>
                     <img 
                       src={post.featuredImage || "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80"} 
@@ -95,10 +95,10 @@ export default function BlogListPage() {
                         {new Date(post.publishedAt).toLocaleDateString()}
                       </span>
                     </div>
-                    <h3 className="h5" style={{ color: 'white', marginBottom: '1rem', lineHeight: 1.4 }}>
+                    <h3 className="h5" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '1rem', lineHeight: 1.4 }}>
                       {post.title}
                     </h3>
-                    <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem', flex: 1 }}>
+                    <p style={{ color: 'var(--color-nets-navy-light)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem', flex: 1 }}>
                       {post.summary}
                     </p>
                     <span style={{ color: 'var(--color-nets-red)', fontSize: '0.8125rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>

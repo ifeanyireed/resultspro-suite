@@ -25,7 +25,7 @@ const colorMap: Record<string, { bg: string, text: string, border: string, iconB
   amber: { bg: 'bg-amber-500/10', text: 'text-amber-500', border: 'border-amber-500/30', iconBg: 'bg-amber-500/10' },
   gray: { bg: 'bg-gray-500/10', text: 'text-gray-500', border: 'border-gray-500/30', iconBg: 'bg-gray-500/10' },
   purple: { bg: 'bg-purple-500/10', text: 'text-purple-500', border: 'border-purple-500/30', iconBg: 'bg-purple-500/10' },
-  green: { bg: 'bg-green-500/10', text: 'text-green-500', border: 'border-green-500/30', iconBg: 'bg-green-500/10' },
+  green: { bg: 'bg-blue-500/10', text: 'text-blue-500', border: 'border-green-500/30', iconBg: 'bg-blue-500/10' },
 };
 
 /**
@@ -100,33 +100,33 @@ export default function CoinShopPage() {
   };
 
   return (
-    <main className="min-h-screen bg-navy pb-24">
+    <main className="min-h-screen bg-light pb-24">
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         {/* Header / Balance */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
           <div className={`text-center ${(isMounted && user) ? 'md:text-left' : 'md:text-center w-full'}`}>
-            <h1 className="text-4xl md:text-6xl font-display font-black text-white mb-4">
+            <h1 className="text-4xl md:text-6xl font-display font-black text-navy mb-4">
               COIN <span className="text-amber">SHOP</span>
             </h1>
-            <p className="text-gray-400 max-w-md mx-auto md:mx-0">
+            <p className="text-gray-600 max-w-md mx-auto md:mx-0">
               Fuel your study journey. Get coins for AI deep-dives, 
               battle stakes, and premium content.
             </p>
           </div>
           
           {isMounted && user && (
-            <div className="p-8 rounded-[40px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] flex items-center gap-6 relative overflow-hidden group">
+            <div className="p-8 rounded-[40px] bg-white shadow-sm border border-nets-border backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] flex items-center gap-6 relative overflow-hidden group">
               <div className="absolute inset-0 bg-amber/5 opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="w-16 h-16 rounded-2xl bg-amber/10 flex items-center justify-center text-amber relative z-10">
                 <Coins className="w-8 h-8" />
               </div>
               <div className="relative z-10">
                 <div className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-1">Your Balance</div>
-                <div className="text-4xl font-display font-black text-white">{isMounted ? (user?.coinBalance?.toLocaleString() || 0) : 0}</div>
+                <div className="text-4xl font-display font-black text-navy">{isMounted ? (user?.coinBalance?.toLocaleString() || 0) : 0}</div>
               </div>
-              <button className="p-3 rounded-xl bg-white/5 text-gray-400 hover:text-white transition-colors relative z-10">
+              <button className="p-3 rounded-xl bg-white shadow-sm border border-nets-border text-gray-600 hover:text-navy transition-colors relative z-10">
                 <History className="w-6 h-6" />
               </button>
             </div>
@@ -137,13 +137,13 @@ export default function CoinShopPage() {
         {premiumPack && (
           <div className="p-1 rounded-[32px] bg-gradient-to-r from-blue via-purple to-pink mb-16 relative group cursor-pointer overflow-hidden">
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity animate-shimmer" />
-            <div className="relative bg-navy rounded-[30px] p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="relative bg-light rounded-[30px] p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-4">
                   <Sparkles className="w-5 h-5 text-blue" />
                   <span className="text-xs font-bold text-blue uppercase tracking-widest">Premium Membership</span>
                 </div>
-                <h2 className="text-2xl md:text-4xl font-display font-black text-white mb-4 uppercase">
+                <h2 className="text-2xl md:text-4xl font-display font-black text-navy mb-4 uppercase">
                   {premiumPack.name}
                 </h2>
                 <ul className="space-y-3">
@@ -153,7 +153,7 @@ export default function CoinShopPage() {
                     "Access to all Past Question years",
                     "No platform fee on Battle draws"
                   ].map((item, i) => (
-                    <li key={i} className="flex items-center gap-2 text-gray-400 text-sm">
+                    <li key={i} className="flex items-center gap-2 text-gray-600 text-sm">
                       <div className="w-1.5 h-1.5 rounded-full bg-blue" />
                       {item}
                     </li>
@@ -161,7 +161,7 @@ export default function CoinShopPage() {
                 </ul>
               </div>
               <div className="text-center md:text-right">
-                <div className="text-3xl font-display font-black text-white mb-1">
+                <div className="text-3xl font-display font-black text-navy mb-1">
                   ₦{calculateFinalTotal(premiumPack.price).toLocaleString()}
                   <span className="text-sm text-gray-500 font-bold italic">/mo</span>
                 </div>
@@ -171,7 +171,7 @@ export default function CoinShopPage() {
                 <Button 
                   onClick={() => handlePurchase(premiumPack.id)}
                   disabled={loadingPack === premiumPack.id}
-                  className="mt-2 px-10 py-7 rounded-2xl bg-blue text-white hover:bg-blue/90 font-bold text-lg shadow-lg shadow-blue/20"
+                  className="mt-2 px-10 py-7 rounded-2xl bg-blue text-navy hover:bg-blue/90 font-bold text-lg shadow-lg shadow-blue/20"
                 >
                   {loadingPack === premiumPack.id ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -188,7 +188,7 @@ export default function CoinShopPage() {
         {loadingPacks ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
             <Loader2 className="w-12 h-12 text-amber animate-spin" />
-            <p className="text-gray-400 font-bold">Loading Coin Packs...</p>
+            <p className="text-gray-600 font-bold">Loading Coin Packs...</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
@@ -201,11 +201,11 @@ export default function CoinShopPage() {
                   key={i} 
                   className={`
                     group relative p-8 rounded-[40px] border transition-all flex flex-col items-center text-center
-                    ${pack.popular ? 'bg-white/5 border-green/30 scale-105 shadow-2xl shadow-green/5' : 'bg-white/[0.02] border-white/[0.05] border-t-white/[0.1] hover:bg-white/5 hover:border-white/20'}
+                    ${pack.popular ? 'bg-white shadow-sm border border-nets-border border-blue/30 scale-105 shadow-2xl shadow-blue/5' : 'bg-white shadow-sm border border-nets-border hover:border-blue-500'}
                   `}
                 >
                   {pack.popular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-green text-navy text-[10px] font-black uppercase tracking-widest">
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-blue text-navy text-[10px] font-black uppercase tracking-widest">
                       MOST POPULAR
                     </div>
                   )}
@@ -220,13 +220,13 @@ export default function CoinShopPage() {
                     <Coins className="w-10 h-10" />
                   </div>
 
-                  <h3 className="text-xl font-bold text-white mb-1">{pack.name}</h3>
-                  <div className="text-4xl font-display font-black text-white mb-2">
+                  <h3 className="text-xl font-bold text-navy mb-1">{pack.name}</h3>
+                  <div className="text-4xl font-display font-black text-navy mb-2">
                     {pack.coins.toLocaleString()} <span className="text-sm text-gray-500 uppercase tracking-tighter">Coins</span>
                   </div>
                   
-                  {pack.bonus && <div className="text-xs font-bold text-green mb-4">{pack.bonus}</div>}
-                  {pack.description && <p className="text-xs text-gray-400 mb-6 px-4">{pack.description}</p>}
+                  {pack.bonus && <div className="text-xs font-bold text-blue mb-4">{pack.bonus}</div>}
+                  {pack.description && <p className="text-xs text-gray-600 mb-6 px-4">{pack.description}</p>}
 
                   <div className="flex flex-col items-center gap-1.5 mb-8">
                     <div className="flex items-center gap-1 text-[10px] text-gray-500 font-medium">
@@ -239,7 +239,7 @@ export default function CoinShopPage() {
                     <Button 
                       onClick={() => handlePurchase(pack.id)}
                       disabled={loadingPack === pack.id}
-                      className={`w-full py-6 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 ${pack.popular ? 'bg-green text-navy hover:bg-green/90' : 'bg-white/5 text-white hover:bg-white/10'}`}
+                      className={`w-full py-6 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 ${pack.popular ? 'bg-blue text-navy hover:bg-blue/90' : 'bg-white shadow-sm border border-nets-border text-navy hover:bg-white/10'}`}
                     >
                       {loadingPack === pack.id ? (
                         <Loader2 className="w-5 h-5 animate-spin" />
@@ -255,20 +255,20 @@ export default function CoinShopPage() {
         )}
 
         {/* Security / Info */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-12 rounded-[40px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-12 rounded-[40px] bg-white shadow-sm border border-nets-border">
           <div className="flex flex-col items-center text-center gap-4">
             <div className="w-12 h-12 rounded-full bg-blue/10 flex items-center justify-center text-blue">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h4 className="font-bold text-white">Secure Payments</h4>
+            <h4 className="font-bold text-navy">Secure Payments</h4>
             <p className="text-xs text-gray-500 leading-relaxed">Encrypted transactions powered by Paystack.</p>
           </div>
           
           <div className="flex flex-col items-center text-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-green/10 flex items-center justify-center text-green">
+            <div className="w-12 h-12 rounded-full bg-blue/10 flex items-center justify-center text-blue">
               <Zap className="w-6 h-6" />
             </div>
-            <h4 className="font-bold text-white">Instant Delivery</h4>
+            <h4 className="font-bold text-navy">Instant Delivery</h4>
             <div className="text-xs text-gray-500 leading-relaxed">Coins or Premium status are added immediately after purchase.</div>
           </div>
 
@@ -276,7 +276,7 @@ export default function CoinShopPage() {
             <div className="w-12 h-12 rounded-full bg-purple/10 flex items-center justify-center text-purple">
               <Gift className="w-6 h-6" />
             </div>
-            <h4 className="font-bold text-white">Gift Coins</h4>
+            <h4 className="font-bold text-navy">Gift Coins</h4>
             <p className="text-xs text-gray-500 leading-relaxed">Coming soon: Send coin packs to your friends and students.</p>
           </div>
         </div>

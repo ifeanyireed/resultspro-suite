@@ -33,17 +33,17 @@ export default function TermsPage() {
   ];
 
   return (
-    <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--color-nets-navy)' }}>
+    <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--color-nets-light)' }}>
       <Navbar />
 
-      <section style={{ paddingTop: '160px', paddingBottom: '120px', background: 'var(--color-nets-navy-dark)', flex: 1 }}>
+      <section style={{ paddingTop: '160px', paddingBottom: '120px', background: 'white', flex: 1 }}>
         <div className="container-nets">
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             
             <div style={{ marginBottom: '4rem' }}>
               <span className="overline" style={{ color: 'var(--color-nets-red)', marginBottom: '1rem', display: 'block' }}>Legal</span>
-              <h1 className="h2" style={{ color: 'white', marginBottom: '1.5rem' }}>Terms of Service</h1>
-              <p style={{ fontSize: '1.125rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
+              <h1 className="h2" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '1.5rem' }}>Terms of Service</h1>
+              <p style={{ fontSize: '1.125rem', color: 'var(--color-nets-navy-light)', lineHeight: 1.6 }}>
                 Last Updated: April 8, 2026<br/>
                 Please read these terms carefully before using our platform.
               </p>
@@ -52,8 +52,8 @@ export default function TermsPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
               {sections.map((section, i) => (
                 <div key={i}>
-                  <h2 className="h4" style={{ color: 'white', marginBottom: '1rem' }}>{section.title}</h2>
-                  <p style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.7 }}>
+                  <h2 className="h4" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '1rem' }}>{section.title}</h2>
+                  <p style={{ color: 'var(--color-nets-navy-light)', lineHeight: 1.7 }}>
                     {section.content}
                   </p>
                 </div>
@@ -61,8 +61,8 @@ export default function TermsPage() {
             </div>
 
             <div style={{ marginTop: '5rem', paddingTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-              <h3 className="h5" style={{ color: 'white', marginBottom: '1rem' }}>Contact Us</h3>
-              <p style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.7 }}>
+              <h3 className="h5" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '1rem' }}>Contact Us</h3>
+              <p style={{ color: 'var(--color-nets-navy-light)', lineHeight: 1.7 }}>
                 Questions about our terms? Contact our legal team at <a href="mailto:legal@resultspro.ng" style={{ color: 'var(--color-nets-red)', textDecoration: 'none' }}>legal@resultspro.ng</a>.
               </p>
             </div>

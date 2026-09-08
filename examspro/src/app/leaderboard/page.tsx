@@ -57,13 +57,13 @@ export default function LeaderboardPage() {
   };
 
   return (
-    <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--color-nets-navy)' }}>
+    <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--color-nets-light)' }}>
       <Navbar />
       
-      <section style={{ paddingTop: '160px', paddingBottom: '60px', background: 'var(--color-nets-navy-dark)' }}>
+      <section style={{ paddingTop: '160px', paddingBottom: '60px', background: 'white' }}>
         <div className="container-nets" style={{ textAlign: 'center' }}>
           <span className="overline" style={{ color: 'var(--color-nets-red)', marginBottom: '1rem', display: 'inline-block' }}>Hall of Fame</span>
-          <h1 className="h1" style={{ color: 'white', marginBottom: '2rem' }}>
+          <h1 className="h1" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '2rem' }}>
             {activeTab.toUpperCase()} RANKINGS
           </h1>
           
@@ -94,21 +94,21 @@ export default function LeaderboardPage() {
         </div>
       </section>
 
-      <section style={{ padding: '60px 0 100px 0', background: 'var(--color-nets-navy)', flex: 1 }}>
+      <section style={{ padding: '60px 0 100px 0', background: 'var(--color-nets-light)', flex: 1 }}>
         <div className="container-nets">
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             {loading ? (
-              <div style={{ textAlign: 'center', padding: '4rem 0', color: 'rgba(255,255,255,0.5)' }}>
+              <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--color-nets-navy-light)' }}>
                 Loading rankings...
               </div>
             ) : (
-              <div style={{ background: 'var(--color-nets-navy-dark)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '2px' }}>
+              <div style={{ background: 'white', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '2px' }}>
                 
                 {/* Header Row */}
-                <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 120px', padding: '1.5rem 2rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  <div className="overline" style={{ color: 'rgba(255,255,255,0.5)' }}>Rank</div>
-                  <div className="overline" style={{ color: 'rgba(255,255,255,0.5)' }}>Student</div>
-                  <div className="overline" style={{ color: 'rgba(255,255,255,0.5)', textAlign: 'right' }}>Score</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 120px', padding: '1.5rem 2rem', borderBottom: '1px solid var(--color-nets-border)' }}>
+                  <div className="overline" style={{ color: 'var(--color-nets-navy-light)' }}>Rank</div>
+                  <div className="overline" style={{ color: 'var(--color-nets-navy-light)' }}>Student</div>
+                  <div className="overline" style={{ color: 'var(--color-nets-navy-light)', textAlign: 'right' }}>Score</div>
                 </div>
 
                 {/* List */}
@@ -144,10 +144,10 @@ export default function LeaderboardPage() {
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                           <img src={`/avatars/character${ (String(user.id).charCodeAt(0) % 20) || 1 }.jpg`} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
-                          <div style={{ fontSize: '1rem', fontWeight: 600, color: 'white' }}>{user.name || 'Anonymous'}</div>
+                          <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-nets-navy-dark)' }}>{user.name || 'Anonymous'}</div>
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontSize: '1.125rem', fontWeight: 900, color: 'white', fontFamily: 'var(--font-display)' }}>{getScoreValue(user).toLocaleString()}</div>
+                          <div style={{ fontSize: '1.125rem', fontWeight: 900, color: 'var(--color-nets-navy-dark)', fontFamily: 'var(--font-display)' }}>{getScoreValue(user).toLocaleString()}</div>
                           <div style={{ fontSize: '0.625rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-nets-red)' }}>{getScoreLabel()}</div>
                         </div>
                       </div>
@@ -159,18 +159,18 @@ export default function LeaderboardPage() {
                 <div style={{ padding: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.2)' }}>
                   {currentUser && myRank ? (
                     <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 120px', alignItems: 'center' }}>
-                      <div style={{ fontSize: '1.125rem', fontWeight: 900, color: 'white', fontFamily: 'var(--font-display)' }}>
+                      <div style={{ fontSize: '1.125rem', fontWeight: 900, color: 'var(--color-nets-navy-dark)', fontFamily: 'var(--font-display)' }}>
                         #{myRank.rank}
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                         <img src={`/avatars/character${ (String(currentUser.id).charCodeAt(0) % 20) || 1 }.jpg`} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
                         <div>
-                          <div style={{ fontSize: '1rem', fontWeight: 600, color: 'white' }}>You</div>
-                          <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>{myRank.nextRankGap > 0 ? `Next Rank in ${myRank.nextRankGap} pts` : 'Top Ranked!'}</div>
+                          <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-nets-navy-dark)' }}>You</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--color-nets-navy-light)' }}>{myRank.nextRankGap > 0 ? `Next Rank in ${myRank.nextRankGap} pts` : 'Top Ranked!'}</div>
                         </div>
                       </div>
                       <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '1.125rem', fontWeight: 900, color: 'white', fontFamily: 'var(--font-display)' }}>
+                        <div style={{ fontSize: '1.125rem', fontWeight: 900, color: 'var(--color-nets-navy-dark)', fontFamily: 'var(--font-display)' }}>
                           {(activeTab === 'Global' ? (myRank.user?.eloRating ?? currentUser?.eloRating ?? 0) : 
                             activeTab === 'Wealth' ? (myRank.user?.coinBalance ?? currentUser?.coinBalance ?? 0) : 
                             activeTab === 'Streaks' ? (myRank.user?.streakCurrent ?? currentUser?.streakCurrent ?? 0) : 0).toLocaleString()}
@@ -180,7 +180,7 @@ export default function LeaderboardPage() {
                     </div>
                   ) : !currentUser && (
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.875rem' }}>Sign in to see your global rank and compete.</div>
+                      <div style={{ color: 'var(--color-nets-navy-light)', fontSize: '0.875rem' }}>Sign in to see your global rank and compete.</div>
                       <button onClick={() => window.location.href = '/login'} className="btn btn-red">Login to Play</button>
                     </div>
                   )}

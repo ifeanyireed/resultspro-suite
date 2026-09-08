@@ -92,50 +92,42 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
         aria-labelledby="login-prompt-title"
         className="fixed inset-0 z-[101] flex items-center justify-center p-4 pointer-events-none"
       >
-        <div className="pointer-events-auto relative w-full max-w-md rounded-[32px] overflow-hidden border border-white/10 shadow-2xl
+        <div className="pointer-events-auto relative w-full max-w-md rounded-[32px] overflow-hidden border border-nets-border shadow-[0_20px_60px_rgba(0,0,0,0.15)] bg-white
           animate-in zoom-in-95 fade-in slide-in-from-bottom-4 duration-300">
 
           {/* Gradient background */}
-          <div className="absolute inset-0 bg-[#0d1b2a]" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-green/15 rounded-full blur-[80px] pointer-events-none" />
-          <div className="absolute bottom-0 right-0 w-[300px] h-[200px] bg-blue/10 rounded-full blur-[80px] pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-red-500/5 rounded-full blur-[80px] pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-[300px] h-[200px] bg-blue/5 rounded-full blur-[80px] pointer-events-none" />
 
           {/* Close button */}
           <button
             onClick={dismiss}
             aria-label="Dismiss login prompt"
-            className="absolute top-5 right-5 z-50 w-8 h-8 rounded-full bg-white/5 border border-white/[0.1] border-t-white/[0.15] flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors pointer-events-auto"
+            className="absolute top-5 right-5 z-50 w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-gray-500 hover:text-navy hover:bg-slate-200 transition-colors pointer-events-auto"
           >
             <X className="w-4 h-4" />
           </button>
 
           <div className="relative z-10 p-8">
-            {/* Icon badge */}
+            {/* Logo */}
             <div className="flex justify-center mb-6">
-              <div className="relative">
-                <div className="w-16 h-16 rounded-2xl bg-green/10 border border-green/20 flex items-center justify-center">
-                  <Zap className="w-8 h-8 text-green fill-current" />
-                </div>
-                <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-amber border-2 border-[#0d1b2a] flex items-center justify-center">
-                  <span className="text-[8px] font-black text-navy">✦</span>
-                </div>
-              </div>
+              <img src="/logo.png" alt="ExamsPRO Logo" className="h-16 w-auto object-contain" />
             </div>
 
             {/* Text */}
             <div className="text-center mb-8">
               <div className="flex justify-center mb-3">
-                 <div className="inline-flex items-center justify-center gap-2 px-3 py-1 bg-green/10 text-green rounded-full border border-green/20 text-xs font-bold uppercase tracking-wider mb-2">
+                 <div className="inline-flex items-center justify-center gap-2 px-3 py-1 bg-blue/10 text-blue rounded-full border border-blue/20 text-xs font-bold uppercase tracking-wider mb-2">
                    <BarChart3 className="w-3.5 h-3.5" /> Track Mastery
                  </div>
               </div>
               <h2
                 id="login-prompt-title"
-                className="text-2xl font-display font-bold text-white mb-3"
+                className="text-2xl font-display font-bold text-navy mb-3"
               >
                 Supercharge Your Prep
               </h2>
-              <p className="text-gray-400 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed">
                 Sign in to save your quiz results, track topic mastery, earn coins, and compete on the leaderboard.
               </p>
             </div>
@@ -149,9 +141,9 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
               ].map(({ icon: Icon, label }) => (
                 <div
                   key={label}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/[0.1] border-t-white/[0.15] text-xs font-bold text-gray-300"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs font-bold text-gray-600"
                 >
-                  <Icon className="w-3.5 h-3.5 text-green" />
+                  <Icon className="w-3.5 h-3.5 text-blue" />
                   {label}
                 </div>
               ))}
@@ -163,7 +155,7 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
                 id="login-prompt-google-btn"
                 onClick={() => loginWithGoogle()}
                 disabled={isLoading}
-                className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-white text-gray-900 font-bold text-sm hover:bg-white/90 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed shadow-lg mb-3"
+                className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-white border border-slate-200 text-navy font-bold text-sm hover:bg-slate-50 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed shadow-sm mb-3"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -178,10 +170,10 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
             {hasGoogleClientId && (
               <div className="relative my-4">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-white/5" />
+                  <div className="w-full border-t border-slate-200" />
                 </div>
                 <div className="relative flex justify-center">
-                  <span className="px-3 bg-[#0d1b2a] text-[10px] font-bold uppercase tracking-widest text-gray-600">
+                  <span className="px-3 bg-white text-[10px] font-bold uppercase tracking-widest text-gray-500">
                     or
                   </span>
                 </div>
@@ -191,15 +183,15 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
             {/* Email login link */}
             <Link
               href="/login"
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-white/5 border border-white/[0.1] border-t-white/[0.15] text-white text-sm font-bold hover:bg-white/10 transition-colors group"
+              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-blue border border-blue-600 text-white text-sm font-bold hover:bg-blue/90 transition-colors group shadow-sm shadow-blue/20"
             >
               Login with Email
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </Link>
 
-            <p className="text-center text-[11px] text-gray-600 mt-5">
+            <p className="text-center text-[11px] text-gray-500 mt-5">
               Don&apos;t have an account?{' '}
-              <Link href="/signup" className="text-green hover:underline font-bold">
+              <Link href="/signup" className="text-red-600 hover:underline font-bold">
                 Sign up free →
               </Link>
             </p>
