@@ -80,7 +80,7 @@ export default function LiveGameLobby() {
               <span className="text-muted text-xs font-bold uppercase tracking-widest">Admin Hosted Rooms</span>
             </div>
             <h1 className="text-3xl md:text-5xl font-display font-black uppercase tracking-tight">
-              Live Game <span className="text-blue">Lobby</span>
+              Live Game Lobby
             </h1>
           </div>
           

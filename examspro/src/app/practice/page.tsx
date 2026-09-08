@@ -144,7 +144,7 @@ export default function PracticePage() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-3xl md:text-5xl font-display font-bold text-navy mb-6">
-            Exam <span className="text-blue">Browser</span>
+            Exam Browser
           </h1>
 
           {/* Guest nudge banner */}
