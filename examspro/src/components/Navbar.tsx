@@ -98,9 +98,22 @@ export default function Navbar() {
           {/* Desktop nav */}
           <nav aria-label="Primary Desktop" style={{ gap: '2.5rem', alignItems: 'center' }} className="nav-desktop">
             {mounted ? (
-              navItems.map(l => (
-                <Link key={l.label} href={l.href} className="nav-link" style={{ color: isLanding ? "white" : "#1e3a8a" }}>{l.label}</Link>
-              ))
+              navItems.map(l => {
+                const active = isActive(l.href);
+                return (
+                  <Link 
+                    key={l.label} 
+                    href={l.href} 
+                    className="nav-link" 
+                    style={{ 
+                      color: active ? "var(--color-nets-red)" : (isLanding ? "white" : "#1e3a8a"),
+                      fontWeight: active ? 700 : 500
+                    }}
+                  >
+                    {l.label}
+                  </Link>
+                );
+              })
             ) : (
               <div style={{ display: 'flex', gap: '2.5rem' }}>
                 <div style={{ width: '60px', height: '20px', background: isLanding ? 'rgba(255,255,255,0.1)' : 'var(--color-nets-blue-light)', borderRadius: '4px' }} />
