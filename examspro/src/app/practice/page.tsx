@@ -72,10 +72,12 @@ export default function PracticePage() {
     }))
     .filter(cat => cat.exams && cat.exams.length > 0)
     .sort((a, b) => {
-      // Prioritize Nigerian Exams first, Professional Exams last
+      // Prioritize Nigerian Exams first, Professional Exams next, International Exams last
       const getPriority = (name: string) => {
-        if (name.toLowerCase().includes('nigerian')) return 1;
-        if (name.toLowerCase().includes('professional')) return 3;
+        const lowerName = name.toLowerCase();
+        if (lowerName.includes('nigerian')) return 1;
+        if (lowerName.includes('professional')) return 3;
+        if (lowerName.includes('international')) return 4;
         return 2; // Everything else in the middle
       };
       
