@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { 
   MagnifyingGlassIcon,
   EnvelopeIcon,
@@ -26,6 +26,14 @@ export default function SupportLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem('resultspro_admin_token');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
+    router.push('/login');
+  };
 
   const isActive = (path: string) => pathname === path;
 
@@ -88,10 +96,10 @@ export default function SupportLayout({
                 <QuestionMarkCircleIcon className="w-6 h-6" />
                 Help
               </Link>
-              <Link href="#" className="flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
+              <button onClick={handleLogout} className="w-full text-left flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent cursor-pointer">
                 <ArrowRightOnRectangleIcon className="w-6 h-6" />
                 Logout
-              </Link>
+              </button>
             </div>
           </div>
 
