@@ -48,7 +48,16 @@ func Authenticate() gin.HandlerFunc {
 			return
 		}
 
-		userID := claims["userId"].(string)
+		var userID string
+		if sub, ok := claims["sub"].(string); ok {
+			userID = sub
+		} else if uid, ok := claims["userId"].(string); ok {
+			userID = uid
+		} else {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: Invalid token claims, missing subject"})
+			c.Abort()
+			return
+		}
 
 		var user models.User
 		if err := database.DB.Where("id = ?", userID).First(&user).Error; err != nil {
