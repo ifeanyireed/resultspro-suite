@@ -457,7 +457,7 @@ export async function deleteExamproQuestion(id: string) {
 
 export async function fetchExamproTopics(subjectId: number | string) {
   try {
-    const res = await fetch(`${EXAMS_API}/api/exams/subjects/${subjectId}/topics`);
+    const res = await fetch(`${EXAMS_API}/api/exams/subjects/${subjectId}/topics`, { headers: getAuthHeader() });
     const data = await res.json();
     return Array.isArray(data) ? data : (data.topics || []);
   } catch {
