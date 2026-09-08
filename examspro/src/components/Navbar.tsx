@@ -66,6 +66,7 @@ export default function Navbar() {
     { label: 'Practice', href: '/practice', enabled: true },
     { label: 'Live Games', href: '/live', enabled: featureFlags['live_games_enabled'] !== 'false' },
     { label: 'Battle Mode', href: '/battle-mode', enabled: featureFlags['battle_mode_enabled'] !== 'false' },
+    { label: 'Shop', href: '/shop', enabled: true },
     { label: 'AI Tutor', href: '/study-assistant', enabled: isAuthenticated },
     { label: 'Leaderboard', href: '/leaderboard', enabled: true },
     { label: 'Admin', href: '/admin/dashboard', enabled: isAuthenticated && (user?.role === 'ADMIN' || user?.role === 'MODERATOR') },
@@ -220,7 +221,7 @@ export default function Navbar() {
                         fontWeight: active ? 600 : 500, 
                         color: active ? 'var(--color-nets-red)' : '#fff', 
                         borderLeft: active ? '3px solid var(--color-nets-red)' : '3px solid transparent',
-                        background: active ? 'rgba(192, 39, 45, 0.05)' : 'transparent',
+                        background: active ? 'rgba(220, 38, 38, 0.05)' : 'transparent',
                         transition: 'all 0.2s ease'
                       }}
                     >
