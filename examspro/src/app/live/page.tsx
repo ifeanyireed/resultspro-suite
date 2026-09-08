@@ -123,33 +123,33 @@ export default function LiveGameLobby() {
 
         {/* Info Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="p-8 rounded-[40px] bg-white shadow-sm border border-nets-border flex flex-col gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
+          <div className="relative overflow-hidden p-8 rounded-[40px] shadow-lg flex flex-col gap-4 bg-gradient-to-br from-[#146ef5] to-[#0a2e70] text-white">
+            <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-white">
               <Zap className="w-6 h-6" />
             </div>
             <div>
               <h4 className="text-xl font-bold">Synchronous Play</h4>
-              <p className="text-sm text-muted">Answer same questions at same time as everyone else.</p>
+              <p className="text-sm text-white/80">Answer same questions at same time as everyone else.</p>
             </div>
           </div>
           
-          <div className="p-8 rounded-[40px] bg-white shadow-sm border border-nets-border flex flex-col gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
+          <div className="relative overflow-hidden p-8 rounded-[40px] shadow-lg flex flex-col gap-4 bg-gradient-to-br from-[#146ef5] to-[#0a2e70] text-white">
+            <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-white">
               <Users className="w-6 h-6" />
             </div>
             <div>
               <h4 className="text-xl font-bold">Massive Rooms</h4>
-              <p className="text-sm text-muted">Compete with up to 500 students in a single room.</p>
+              <p className="text-sm text-white/80">Compete with up to 500 students in a single room.</p>
             </div>
           </div>
 
-          <div className="p-8 rounded-[40px] bg-white shadow-sm border border-nets-border flex flex-col gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-amber/10 flex items-center justify-center text-amber">
+          <div className="relative overflow-hidden p-8 rounded-[40px] shadow-lg flex flex-col gap-4 bg-gradient-to-br from-[#146ef5] to-[#0a2e70] text-white">
+            <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-white">
               <Trophy className="w-6 h-6" />
             </div>
             <div>
               <h4 className="text-xl font-bold">Bigger Prizes</h4>
-              <p className="text-sm text-muted">Large pools mean the winner takes home thousands of coins.</p>
+              <p className="text-sm text-white/80">Large pools mean the winner takes home thousands of coins.</p>
             </div>
           </div>
         </div>
@@ -229,14 +229,14 @@ export default function LiveGameLobby() {
         </div>
 
         {/* Footer CTA */}
-        <div className="mt-20 p-12 rounded-[40px] bg-white shadow-sm border border-nets-border text-center flex flex-col items-center gap-6">
-          <Eye className="w-12 h-12 text-blue opacity-50" />
-          <h2 className="text-2xl md:text-4xl font-display font-bold text-navy">Prefer to watch first?</h2>
-          <p className="text-gray-400 max-w-lg mb-4 text-lg">Spectate active live games for free to learn from top players before jumping in.</p>
+        <div className="relative overflow-hidden mt-20 p-12 rounded-[40px] shadow-2xl text-center flex flex-col items-center gap-6 bg-gradient-to-r from-[#146ef5] to-red-600 text-white">
+          <Eye className="w-12 h-12 text-white opacity-50" />
+          <h2 className="text-2xl md:text-4xl font-display font-bold text-white">Prefer to watch first?</h2>
+          <p className="text-white/80 max-w-lg mb-4 text-lg">Spectate active live games for free to learn from top players before jumping in.</p>
           <Button 
             variant="outline" 
             onClick={() => !user ? setIsLoginModalOpen(true) : router.push('/spectate')}
-            className="rounded-2xl border border-nets-border text-navy px-10 py-6 text-lg font-bold hover:bg-slate-50"
+            className="rounded-2xl border-none bg-white text-navy px-10 py-6 text-lg font-bold hover:bg-slate-100 shadow-lg"
           >
             Open Spectator Lobby
           </Button>
