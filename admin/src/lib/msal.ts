@@ -8,6 +8,7 @@ export const msalConfig: Configuration = {
   },
   cache: {
     cacheLocation: "sessionStorage",
+    // @ts-ignore
     storeAuthStateInCookie: false,
   },
 };
