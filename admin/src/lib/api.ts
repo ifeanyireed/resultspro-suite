@@ -518,3 +518,41 @@ export async function deleteExamproBattleMatch(id: string) {
   if (!res.ok) throw new Error('Failed to delete battle');
   return res.json();
 }
+
+export async function fetchExamproTournaments() {
+  try {
+    const res = await fetch(`${EXAMS_API}/api/admin/tournaments`, { headers: getAuthHeader() });
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+export async function createExamproTournament(data: any) {
+  const res = await fetch(`${EXAMS_API}/api/admin/tournaments`, {
+    method: 'POST',
+    headers: getAuthHeader(),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to create tournament');
+  return res.json();
+}
+
+export async function updateExamproTournament(id: string, data: any) {
+  const res = await fetch(`${EXAMS_API}/api/admin/tournaments/${id}`, {
+    method: 'PUT',
+    headers: getAuthHeader(),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to update tournament');
+  return res.json();
+}
+
+export async function deleteExamproTournament(id: string) {
+  const res = await fetch(`${EXAMS_API}/api/admin/tournaments/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeader(),
+  });
+  if (!res.ok) throw new Error('Failed to delete tournament');
+  return res.json();
+}
