@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import LoginPromptModal from '@/components/LoginPromptModal';
 import { IconSearch as Search, IconChevronRight as ChevronRight, IconTarget as Target, IconFilter as Filter, IconLock as Lock, IconLoader2 as Loader2, IconX as X } from '@tabler/icons-react';
@@ -483,6 +484,7 @@ export default function PracticePage() {
           </>
         )}
       </AnimatePresence>
+      <Footer />
     </main>
   );
 }

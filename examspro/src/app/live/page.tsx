@@ -236,7 +236,7 @@ export default function LiveGameLobby() {
           <Button 
             variant="outline" 
             onClick={() => !user ? setIsLoginModalOpen(true) : router.push('/spectate')}
-            className="rounded-2xl border-none bg-white text-navy px-10 py-6 text-lg font-bold hover:bg-slate-100 shadow-lg"
+            className="rounded-2xl border-none bg-red-600 text-white px-10 py-6 text-lg font-bold hover:bg-red-700 shadow-lg"
           >
             Open Spectator Lobby
           </Button>
