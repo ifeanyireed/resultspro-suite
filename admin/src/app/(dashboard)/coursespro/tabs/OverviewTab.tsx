@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, Users, Layers, GraduationCap, ArrowRight } from 'lucide-react';
-import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@resultspro/design-system';
+import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@/components/ui/Cards';
 
 export default function OverviewTab() {
   const [loading, setLoading] = useState(true);

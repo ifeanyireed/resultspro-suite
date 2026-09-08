@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Sidebar } from '@/components/Sidebar';
-import { ModernDashboardLayout } from '@resultspro/design-system';
+import { ModernDashboardLayout } from '@/components/layout/ModernDashboardLayout';
 import { Search, Bell } from 'lucide-react';
 
 function GlobalTopNav() {

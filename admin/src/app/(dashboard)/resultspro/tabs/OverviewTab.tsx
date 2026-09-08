@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Badge } from '@/components/Badge';
 import { TrendingUp, Users, Building2, DollarSign, AlertCircle, ArrowRight } from 'lucide-react';
-import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@resultspro/design-system';
+import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@/components/ui/Cards';
 import Link from 'next/link';
 
 export default function OverviewTab() {

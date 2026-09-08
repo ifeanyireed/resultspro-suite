@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { dashboardStyles as styles } from '@resultspro/design-system';
+import styles from '@/components/dashboards/Dashboard.module.css';
 import { Building2, Users, CreditCard, Briefcase, TrendingUp, FileCheck2, Sparkles } from 'lucide-react';
 import { fetchSuiteStats, fetchSchools, fetchPayoutRequests } from '@/lib/api';
-import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@resultspro/design-system';
+import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@/components/ui/Cards';
 import { SuiteStats, School, PayoutRequest } from '@/lib/types';
 import Link from 'next/link';
 
