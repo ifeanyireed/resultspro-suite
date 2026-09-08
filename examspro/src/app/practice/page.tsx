@@ -76,9 +76,10 @@ export default function PracticePage() {
       const getPriority = (name: string) => {
         const lowerName = name.toLowerCase();
         if (lowerName.includes('nigerian')) return 1;
-        if (lowerName.includes('professional')) return 3;
-        if (lowerName.includes('international')) return 4;
-        return 2; // Everything else in the middle
+        if (lowerName.includes('professional')) return 2;
+        if (lowerName.includes('post utme') || lowerName.includes('post-utme')) return 3;
+        if (lowerName.includes('international')) return 5;
+        return 4; // Everything else
       };
       
       return getPriority(a.name) - getPriority(b.name);
