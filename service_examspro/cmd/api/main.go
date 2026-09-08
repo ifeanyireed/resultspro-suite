@@ -22,7 +22,6 @@ func main() {
 	database.ConnectDB()
 
 	// Initialize Handlers
-	authHandler := &handlers.AuthHandler{}
 	userHandler := &handlers.UserHandler{}
 	examHandler := &handlers.ExamHandler{}
 	quizHandler := &handlers.QuizHandler{}
@@ -87,17 +86,7 @@ func main() {
 		api.GET("/exams/:examId/syllabus", examHandler.GetFullSyllabus)
 
 
-		// Auth Endpoints
-		auth := api.Group("/auth")
-		{
-			auth.POST("/signup", authHandler.Signup)
-			auth.POST("/login", authHandler.Login)
-			auth.POST("/google", authHandler.GoogleLogin)
-			auth.POST("/request-otp", authHandler.RequestOTP)
-			auth.POST("/verify-otp", authHandler.VerifyOTP)
-			auth.POST("/forgot-password", authHandler.ForgotPassword)
-			auth.POST("/reset-password", authHandler.ResetPassword)
-		}
+		
 
 		// --- AUTHENTICATED ROUTES ---
 		authenticated := api.Group("")

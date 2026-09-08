@@ -36,21 +36,30 @@ export default function Dashboard() {
 
     const fetchDashboard = async () => {
       try {
-        const [dashRes, historyRes, _] = await Promise.all([
-          api.get('/user/dashboard'),
-          api.get('/battles/history'),
-          fetchUser()
-        ]);
+        // Fetch dashboard data
+        const dashRes = await api.get('/user/dashboard');
         setData(dashRes.data);
-        let histData = historyRes.data;
-        if (!Array.isArray(histData)) {
-          if (histData && Array.isArray(histData.history)) histData = histData.history;
-          else if (histData && Array.isArray(histData.data)) histData = histData.data;
-          else histData = [];
+
+        // Fetch history safely
+        try {
+          const historyRes = await api.get('/battles/history');
+          let histData = historyRes.data;
+          if (!Array.isArray(histData)) {
+            if (histData && Array.isArray(histData.history)) histData = histData.history;
+            else if (histData && Array.isArray(histData.data)) histData = histData.data;
+            else histData = [];
+          }
+          setBattleHistory(histData);
+        } catch (hErr) {
+          console.warn('Failed to fetch history, ignoring:', hErr);
+          setBattleHistory([]);
         }
-        setBattleHistory(histData);
-      } catch (error) {
+
+        // Fetch user context
+        await fetchUser();
+      } catch (error: any) {
         console.error('Failed to fetch dashboard data:', error);
+        
       } finally {
         setLoading(false);
       }
@@ -87,7 +96,24 @@ export default function Dashboard() {
     );
   }
 
-  if (!data) return null;
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+        <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-red-100">
+          <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+        </div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-3 tracking-tight">
+          Dashboard Unavailable
+        </h1>
+        <p className="text-gray-500 text-base mb-8 max-w-sm mx-auto">
+          We encountered an issue while loading your learning data. Please try refreshing or logging in again.
+        </p>
+        <button onClick={() => window.location.reload()} className="inline-flex justify-center items-center bg-[#146ef5] hover:bg-[#105bd1] text-white rounded-full px-8 py-3.5 font-bold shadow-sm transition-all text-sm">
+          Refresh Page
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">

@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { IconX as X, IconBolt as Zap, IconTrophy as Trophy, IconChartBar as BarChart3, IconBrandChrome as Chrome, IconArrowRight as ArrowRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useGoogleLogin } from '@react-oauth/google';
-import api from '@/lib/api';
+import api, { USERS_API } from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
@@ -56,7 +56,7 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
     onSuccess: async (tokenResponse) => {
       setIsLoading(true);
       try {
-        const res = await api.post('/auth/google', { idToken: tokenResponse.access_token });
+        const res = await api.post(`${USERS_API}/api/v1/auth/google`, { idToken: tokenResponse.access_token });
         const user = res.data.user;
         setAuth(user, res.data.token);
         toast.success('Logged in with Google! 🎉');

@@ -57,3 +57,5 @@ api.interceptors.response.use(
 );
 
 export default api;
+
+export const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';

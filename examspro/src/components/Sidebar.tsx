@@ -48,14 +48,14 @@ export function Sidebar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`flex items-center px-4 py-2 rounded-xl text-sm font-normal relative transition-colors ${
+                    className={`flex items-center px-4 py-2 rounded-xl text-lg font-normal relative transition-colors ${
                       isActive
-                        ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full'
+                        ? 'text-red-600 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-red-600 before:rounded-full'
                         : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
                     }`}
                   >
                     <div className="flex items-center space-x-3">
-                      <Icon className="w-5 h-5" />
+                      <Icon className="w-6 h-6" />
                       <span>{link.label}</span>
                     </div>
                   </Link>
@@ -76,7 +76,7 @@ export function Sidebar() {
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
           
           <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
-            <span className="font-bold text-sm text-white">{user?.name?.charAt(0) || 'U'}</span>
+            <Image src={user?.avatarUrl || "/avatars/character1.jpg"} alt="Student Avatar" width={40} height={40} className="w-full h-full object-cover" />
           </div>
           <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{user?.name || 'Student'}</h4>
           <p className="text-[10px] text-gray-300 mb-6 relative z-10">{user?.email || 'student@examspro.com'}</p>
