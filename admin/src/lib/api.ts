@@ -185,13 +185,23 @@ export async function fetchExamproExams() {
   }
 }
 
-export async function fetchExamproQuestions() {
+export async function fetchExamproQuestions(params?: { page?: number; limit?: number; search?: string; examId?: number|string; subjectId?: number|string; topicId?: number|string }) {
   try {
-    const res = await fetch(`${EXAMS_API}/api/admin/questions`, { headers: getAuthHeader() });
-    const data = await res.json();
-    return Array.isArray(data) ? data : (data.questions || []);
+    let url = `${EXAMS_API}/api/admin/questions?`;
+    if (params) {
+      const qs = new URLSearchParams();
+      if (params.page) qs.append('page', params.page.toString());
+      if (params.limit) qs.append('limit', params.limit.toString());
+      if (params.search) qs.append('search', params.search);
+      if (params.examId) qs.append('examId', params.examId.toString());
+      if (params.subjectId) qs.append('subjectId', params.subjectId.toString());
+      if (params.topicId) qs.append('topicId', params.topicId.toString());
+      url += qs.toString();
+    }
+    const res = await fetch(url, { headers: getAuthHeader() });
+    return await res.json();
   } catch {
-    return [];
+    return { questions: [], total: 0, page: 1, limit: 20 };
   }
 }
 
