@@ -82,7 +82,7 @@ export default function Navbar() {
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
           height: '72px',
           display: 'flex', alignItems: 'center',
-          background: isLanding ? (scrolled ? 'var(--color-nets-navy-dark)' : 'transparent') : (scrolled ? 'rgba(255,255,255,0.95)' : '#ffffff'), backdropFilter: isLanding ? 'none' : 'blur(8px)',
+          background: isLanding ? (scrolled ? '#1e3a8a' : 'transparent') : (scrolled ? 'rgba(255,255,255,0.95)' : '#ffffff'), backdropFilter: isLanding ? 'none' : 'blur(8px)',
           boxShadow: isLanding ? (scrolled ? '0 1px 0 rgba(255,255,255,0.06)' : 'none') : '0 1px 0 rgba(0,0,0,0.05)',
           transition: 'background 0.3s ease, box-shadow 0.3s ease',
         }}
@@ -92,14 +92,14 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" aria-label="ExamsPRO" style={{ display: 'flex', alignItems: 'center', flexShrink: 0, transition: 'opacity 0.2s ease' }} onMouseEnter={e => e.currentTarget.style.opacity = '0.8'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
             <img src="/logo.png" alt="ExamsPRO Logo" style={{ height: '56px', width: 'auto', objectFit: 'contain' }} />
-            <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: isLanding ? 'white' : 'var(--color-nets-navy-dark)', letterSpacing: '-0.05em' }}>ExamsPRO</span>
+            <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: isLanding ? 'white' : '#1e3a8a', letterSpacing: '-0.05em' }}>ExamsPRO</span>
           </Link>
 
           {/* Desktop nav */}
           <nav aria-label="Primary Desktop" style={{ gap: '2.5rem', alignItems: 'center' }} className="nav-desktop">
             {mounted ? (
               navItems.map(l => (
-                <Link key={l.label} href={l.href} className="nav-link" style={{ color: isLanding ? "white" : "var(--color-nets-navy-dark)" }}>{l.label}</Link>
+                <Link key={l.label} href={l.href} className="nav-link" style={{ color: isLanding ? "white" : "#1e3a8a" }}>{l.label}</Link>
               ))
             ) : (
               <div style={{ display: 'flex', gap: '2.5rem' }}>
@@ -132,20 +132,20 @@ export default function Navbar() {
                 <Link href="/dashboard" className="btn btn-red btn-sm" style={{ textDecoration: 'none' }}>
                   My Account
                 </Link>
-                <Link href="/notifications" style={{ position: 'relative', color: isLanding ? 'rgba(255,255,255,0.6)' : 'var(--color-nets-navy-light)', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = isLanding ? 'white' : 'var(--color-nets-navy-dark)'} onMouseLeave={e => e.currentTarget.style.color = isLanding ? 'rgba(255,255,255,0.6)' : 'var(--color-nets-navy-light)'}>
+                <Link href="/notifications" style={{ position: 'relative', color: isLanding ? 'rgba(255,255,255,0.6)' : '#64748b', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = isLanding ? 'white' : '#1e3a8a'} onMouseLeave={e => e.currentTarget.style.color = isLanding ? 'rgba(255,255,255,0.6)' : '#64748b'}>
                   <Bell style={{ width: '20px', height: '20px' }} />
                   {unreadCount > 0 && (
-                    <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', background: 'var(--color-nets-red)', color: isLanding ? 'white' : 'var(--color-nets-navy-dark)', fontSize: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>
+                    <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', background: 'var(--color-nets-red)', color: isLanding ? 'white' : '#1e3a8a', fontSize: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
                 </Link>
                 <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', lineHeight: 1.2 }}>
-                    <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: isLanding ? 'white' : 'var(--color-nets-navy-dark)' }}>{user?.coinBalance}</span>
-                    <span style={{ fontSize: '0.625rem', fontWeight: 700, color: isLanding ? 'rgba(255,255,255,0.5)' : 'var(--color-nets-navy-light)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Coins</span>
+                    <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: isLanding ? 'white' : '#1e3a8a' }}>{user?.coinBalance}</span>
+                    <span style={{ fontSize: '0.625rem', fontWeight: 700, color: isLanding ? 'rgba(255,255,255,0.5)' : '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Coins</span>
                   </div>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: isLanding ? 'rgba(255,255,255,0.1)' : 'var(--color-nets-blue-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold', color: isLanding ? 'white' : 'var(--color-nets-navy-dark)' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: isLanding ? 'rgba(255,255,255,0.1)' : 'var(--color-nets-blue-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold', color: isLanding ? 'white' : '#1e3a8a' }}>
                     {user?.name?.charAt(0) || user?.email?.charAt(0) || 'U'}
                   </div>
                 </Link>
@@ -161,7 +161,7 @@ export default function Navbar() {
             style={{ background: 'none', border: 'none', padding: '0.5rem', flexDirection: 'column', gap: '5px', flexShrink: 0, cursor: 'pointer' }}
           >
             {[0,1,2].map(i => (
-              <span key={i} style={{ display: 'block', width: '24px', height: '2px', background: isLanding ? '#fff' : 'var(--color-nets-navy-dark)', borderRadius: '1px' }} />
+              <span key={i} style={{ display: 'block', width: '24px', height: '2px', background: isLanding ? '#fff' : '#1e3a8a', borderRadius: '1px' }} />
             ))}
           </button>
         </div>
@@ -180,7 +180,7 @@ export default function Navbar() {
               role="dialog" aria-modal aria-label="Navigation"
               style={{
                 position: 'fixed', top: 0, right: 0, bottom: 0, width: '100%', maxWidth: '400px',
-                zIndex: 300, background: 'var(--color-nets-navy-dark)',
+                zIndex: 300, background: '#1e3a8a',
                 display: 'flex', flexDirection: 'column', padding: '2rem',
                 overflowY: 'auto'
               }}
@@ -188,7 +188,7 @@ export default function Navbar() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexShrink: 0 }}>
                 <Link href="/" onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
                   <img src="/logo.png" alt="ExamsPRO Logo" style={{ height: '56px', width: 'auto', objectFit: 'contain' }} />
-                  <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: isLanding ? 'white' : 'var(--color-nets-navy-dark)', letterSpacing: '-0.05em' }}>ExamsPRO</span>
+                  <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: isLanding ? 'white' : '#1e3a8a', letterSpacing: '-0.05em' }}>ExamsPRO</span>
                 </Link>
                 <button onClick={() => setMobileOpen(false)} aria-label="Close menu"
                   style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', fontSize: '1.5rem', padding: '0.5rem', cursor: 'pointer' }}>✕</button>
@@ -239,10 +239,10 @@ export default function Navbar() {
                 {/* Contact Info */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   <a href="mailto:hello@resultspro.ng" style={{ fontSize: '0.875rem', color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <span style={{ color: isLanding ? 'rgba(255,255,255,0.5)' : 'var(--color-nets-navy-light)' }}>Email</span> hello@resultspro.ng
+                    <span style={{ color: isLanding ? 'rgba(255,255,255,0.5)' : '#64748b' }}>Email</span> hello@resultspro.ng
                   </a>
                   <div style={{ fontSize: '0.875rem', color: '#fff', display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-                    <span style={{ color: isLanding ? 'rgba(255,255,255,0.5)' : 'var(--color-nets-navy-light)' }}>HQ</span> 
+                    <span style={{ color: isLanding ? 'rgba(255,255,255,0.5)' : '#64748b' }}>HQ</span> 
                     <span>Lagos, Nigeria</span>
                   </div>
                 </div>
