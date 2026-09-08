@@ -189,9 +189,9 @@ func (h *ExamHandler) GetSubjectsByExam(c *gin.Context) {
 		if exists && totalQuestions > 0 {
 			var answeredCount int64
 			database.DB.Model(&models.UserAnswer{}).
-				Joins("JOIN questions ON questions.id = user_answers.question_id").
-				Joins("JOIN topics ON topics.id = questions.topic_id").
-				Where("user_answers.user_id = ? AND topics.subject_id = ? AND user_answers.is_correct = ?", userID, subject.ID, true).
+				Joins("JOIN nat_exams_questions ON nat_exams_questions.id = nat_exams_user_answers.question_id").
+				Joins("JOIN nat_exams_topics ON nat_exams_topics.id = nat_exams_questions.topic_id").
+				Where("nat_exams_user_answers.user_id = ? AND nat_exams_topics.subject_id = ? AND nat_exams_user_answers.is_correct = ?", userID, subject.ID, true).
 				Count(&answeredCount)
 
 			completed = int(math.Round((float64(answeredCount) / float64(totalQuestions)) * 100))
@@ -215,21 +215,21 @@ func (h *ExamHandler) GetSubjectsByExam(c *gin.Context) {
 	percentile := 0.0
 	if exists {
 		var totalUsersInExam int64
-		database.DB.Table("user_answers").
-			Joins("JOIN questions ON questions.id = user_answers.question_id").
-			Joins("JOIN topics ON topics.id = questions.topic_id").
-			Joins("JOIN subjects ON subjects.id = topics.subject_id").
-			Where("subjects.exam_id = ?", exam.ID).
-			Distinct("user_answers.user_id").
+		database.DB.Table("nat_exams_user_answers").
+			Joins("JOIN nat_exams_questions ON nat_exams_questions.id = nat_exams_user_answers.question_id").
+			Joins("JOIN nat_exams_topics ON nat_exams_topics.id = nat_exams_questions.topic_id").
+			Joins("JOIN nat_exams_subjects ON nat_exams_subjects.id = nat_exams_topics.subject_id").
+			Where("nat_exams_subjects.exam_id = ?", exam.ID).
+			Distinct("nat_exams_user_answers.user_id").
 			Count(&totalUsersInExam)
 
 		if totalUsersInExam > 0 {
 			var myScore int64
-			database.DB.Table("user_answers").
-				Joins("JOIN questions ON questions.id = user_answers.question_id").
-				Joins("JOIN topics ON topics.id = questions.topic_id").
-				Joins("JOIN subjects ON subjects.id = topics.subject_id").
-				Where("subjects.exam_id = ? AND user_answers.user_id = ? AND user_answers.is_correct = ?", exam.ID, userID, true).
+			database.DB.Table("nat_exams_user_answers").
+				Joins("JOIN nat_exams_questions ON nat_exams_questions.id = nat_exams_user_answers.question_id").
+				Joins("JOIN nat_exams_topics ON nat_exams_topics.id = nat_exams_questions.topic_id").
+				Joins("JOIN nat_exams_subjects ON nat_exams_subjects.id = nat_exams_topics.subject_id").
+				Where("nat_exams_subjects.exam_id = ? AND nat_exams_user_answers.user_id = ? AND nat_exams_user_answers.is_correct = ?", exam.ID, userID, true).
 				Count(&myScore)
 
 			var usersWithLowerScore int64
@@ -237,10 +237,10 @@ func (h *ExamHandler) GetSubjectsByExam(c *gin.Context) {
 				SELECT COUNT(*) FROM (
 					SELECT user_id, COUNT(*) as score 
 					FROM user_answers 
-					JOIN questions ON questions.id = user_answers.question_id 
-					JOIN topics ON topics.id = questions.topic_id 
-					JOIN subjects ON subjects.id = topics.subject_id 
-					WHERE subjects.exam_id = ? AND user_answers.is_correct = true
+					JOIN nat_exams_questions ON nat_exams_questions.id = nat_exams_user_answers.question_id 
+					JOIN nat_exams_topics ON nat_exams_topics.id = nat_exams_questions.topic_id 
+					JOIN nat_exams_subjects ON nat_exams_subjects.id = nat_exams_topics.subject_id 
+					WHERE nat_exams_subjects.exam_id = ? AND nat_exams_user_answers.is_correct = true
 					GROUP BY user_id
 					HAVING score < ?
 				) AS scores`, exam.ID, myScore).Scan(&usersWithLowerScore)
@@ -308,7 +308,7 @@ func (h *ExamHandler) GetTopicsBySubject(c *gin.Context) {
 	var topicAggs []TopicAgg
 	database.DB.Model(&models.Question{}).
 		Select("topic_id, count(*) as total, sum(case when difficulty='hard' then 1 else 0 end) as hard_count, sum(case when difficulty='medium' then 1 else 0 end) as medium_count, sum(coin_reward) as total_reward").
-		Where("topic_id IN (SELECT id FROM topics WHERE subject_id = ?)", subject.ID).
+		Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id = ?)", subject.ID).
 		Group("topic_id").Scan(&topicAggs)
 
 	topicAggMap := make(map[int]TopicAgg)
@@ -326,8 +326,8 @@ func (h *ExamHandler) GetTopicsBySubject(c *gin.Context) {
 
 		if exists && totalQuestions > 0 {
 			var answers []models.UserAnswer
-			database.DB.Joins("JOIN questions ON questions.id = user_answers.question_id").
-				Where("user_answers.user_id = ? AND questions.topic_id = ?", userID, topic.ID).
+			database.DB.Joins("JOIN nat_exams_questions ON nat_exams_questions.id = nat_exams_user_answers.question_id").
+				Where("nat_exams_user_answers.user_id = ? AND nat_exams_questions.topic_id = ?", userID, topic.ID).
 				Find(&answers)
 
 			correctCount := 0
@@ -411,20 +411,20 @@ func (h *ExamHandler) GetQuestionsBySubject(c *gin.Context) {
 	}
 
 	if id, err := strconv.Atoi(subjectIdStr); err == nil {
-		query = query.Where("topic_id IN (SELECT id FROM topics WHERE subject_id = ?)", id)
+		query = query.Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id = ?)", id)
 	} else {
-		query = query.Where("topic_id IN (SELECT id FROM topics WHERE subject_id IN (SELECT id FROM subjects WHERE slug = ?))", subjectIdStr)
+		query = query.Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id IN (SELECT id FROM subjects WHERE slug = ?))", subjectIdStr)
 	}
 
 	yearStr := c.Query("year")
 	if yearStr != "" {
 		if year, err := strconv.Atoi(yearStr); err == nil {
-			query = query.Where("questions.year = ?", year)
+			query = query.Where("nat_exams_questions.year = ?", year)
 		}
 	}
 
 	var questions []models.Question
-	if err := query.Select("questions.*").Order("RANDOM()").Limit(limit).Find(&questions).Error; err != nil {
+	if err := query.Select("nat_exams_questions.*").Order("RANDOM()").Limit(limit).Find(&questions).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch questions"})
 		return
 	}
@@ -512,11 +512,11 @@ func (h *ExamHandler) GetYearsBySubject(c *gin.Context) {
 	}
 
 	database.DB.Table("questions").
-		Select("questions.year, count(*) as total").
-		Joins("JOIN topics ON topics.id = questions.topic_id").
-		Where("topics.subject_id = ? AND questions.year IS NOT NULL", subject.ID).
-		Group("questions.year").
-		Order("questions.year desc").
+		Select("nat_exams_questions.year, count(*) as total").
+		Joins("JOIN nat_exams_topics ON nat_exams_topics.id = nat_exams_questions.topic_id").
+		Where("nat_exams_topics.subject_id = ? AND nat_exams_questions.year IS NOT NULL", subject.ID).
+		Group("nat_exams_questions.year").
+		Order("nat_exams_questions.year desc").
 		Scan(&rawStats)
 
 	var yearStats []YearStat
@@ -526,9 +526,9 @@ func (h *ExamHandler) GetYearsBySubject(c *gin.Context) {
 		answeredCount := int64(0)
 		if exists {
 			database.DB.Model(&models.UserAnswer{}).
-				Joins("JOIN questions ON questions.id = user_answers.question_id").
-				Joins("JOIN topics ON topics.id = questions.topic_id").
-				Where("user_answers.user_id = ? AND topics.subject_id = ? AND questions.year = ? AND user_answers.is_correct = ?", userID, subject.ID, rs.Year, true).
+				Joins("JOIN nat_exams_questions ON nat_exams_questions.id = nat_exams_user_answers.question_id").
+				Joins("JOIN nat_exams_topics ON nat_exams_topics.id = nat_exams_questions.topic_id").
+				Where("nat_exams_user_answers.user_id = ? AND nat_exams_topics.subject_id = ? AND nat_exams_questions.year = ? AND nat_exams_user_answers.is_correct = ?", userID, subject.ID, rs.Year, true).
 				Count(&answeredCount)
 		}
 
