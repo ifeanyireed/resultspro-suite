@@ -226,8 +226,8 @@ export default function PracticePage() {
                             {/* Top right icon */}
                             <div className="absolute top-0 right-0">
                               {!isAuth && (
-                                <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center border border-white/10">
-                                  <Lock className="w-6 h-6 text-white" />
+                                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center border border-white/10">
+                                  <Lock className="w-5 h-5 text-white" />
                                 </div>
                               )}
                             </div>
