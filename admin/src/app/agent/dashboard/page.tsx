@@ -172,14 +172,24 @@ export default function AgentDashboard() {
         <div className="lg:col-span-3 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
           <div>
             <h3 className="text-xl font-normal text-gray-900 mb-6">Reminders</h3>
-            <h4 className="text-xl font-normal text-gray-900 leading-tight mb-2">Meeting with<br/>Excel Academy</h4>
-            <p className="text-sm text-gray-500 mb-8 flex items-center gap-2">
-              Time : 02.00 pm - 04.00 pm
-            </p>
+            {data.reminders && data.reminders.length > 0 ? (
+              <div className="space-y-2">
+                {data.reminders.slice(0, 2).map((rem: any, i: number) => (
+                  <div key={rem.id || i} className="pb-4 border-b border-gray-50 last:border-0 last:pb-0">
+                    <h4 className="text-xl font-normal text-gray-900 leading-tight mb-2">{rem.title.split(' with ').length > 1 ? <>{rem.title.split(' with ')[0]} with<br/>{rem.title.split(' with ')[1]}</> : rem.title}</h4>
+                    <p className="text-sm text-gray-500 flex items-center gap-2">
+                      Time : {rem.time_window || "N/A"}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-sm text-gray-500">No active reminders.</div>
+            )}
           </div>
           <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] text-white font-semibold py-3.5 rounded-full transition-colors flex items-center justify-center gap-2 shadow-sm">
             <PlayIcon className="w-5 h-5 fill-current" />
-            Start Meeting
+            Start Actions
           </button>
         </div>
 

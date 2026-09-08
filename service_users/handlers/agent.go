@@ -315,6 +315,27 @@ func HandleGetAgentDashboard(w http.ResponseWriter, r *http.Request) {
 			Status:     barType,
 		})
 	}
+
+	// Fetch Reminders
+	remRows, _ := db.DB.Query(`SELECT id, title, time_window FROM agent_reminders WHERE agent_id = ? AND is_completed = FALSE ORDER BY created_at ASC LIMIT 3`, agentID)
+	type Reminder struct {
+		ID         string `json:"id"`
+		Title      string `json:"title"`
+		TimeWindow string `json:"time_window"`
+	}
+	var reminders []Reminder
+	if remRows != nil {
+		defer remRows.Close()
+		for remRows.Next() {
+			var r Reminder
+			var tw sql.NullString
+			remRows.Scan(&r.ID, &r.Title, &tw)
+			if tw.Valid {
+				r.TimeWindow = tw.String
+			}
+			reminders = append(reminders, r)
+		}
+	}
 utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
 		"bounties_earned": total,
 		"unpaid_earnings": unpaid,
@@ -324,5 +345,6 @@ utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
 		"leads": leads,
 		"activities": activities,
 		"sales_analytics": salesAnalytics,
+		"reminders": reminders,
 	})
 }
