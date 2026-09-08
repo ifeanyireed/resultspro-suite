@@ -132,12 +132,13 @@
 .btn:focus-visible { outline: 2px solid var(--color-nets-navy); outline-offset: 3px; }
 
 .btn-red {
-  background: radial-gradient(ellipse at center, #ef4444 0%, #991b1b 100%);
+  background: var(--color-nets-red);
   color: #fff;
-  border: none;
+  border-color: var(--color-nets-red);
 }
 .btn-red:hover {
-  background: radial-gradient(ellipse at center, #dc2626 0%, #7f1d1d 100%);
+  background: #B91C1C;
+  border-color: #B91C1C;
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(220,38,38,0.30);
 }

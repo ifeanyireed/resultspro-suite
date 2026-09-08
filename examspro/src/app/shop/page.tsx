@@ -136,13 +136,13 @@ export default function CoinShopPage() {
 
         {/* Subscription Promo */}
         {premiumPack && (
-          <div className="p-1 rounded-[32px] bg-gradient-to-r from-red-600 via-navy to-purple mb-16 relative group cursor-pointer overflow-hidden">
+          <div className="p-1 rounded-[32px] bg-gradient-to-r from-red-600 via-blue-600 to-transparent mb-16 relative group cursor-pointer overflow-hidden">
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity animate-shimmer" />
             <div className="relative bg-light rounded-[30px] p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-4">
-                  <Sparkles className="w-5 h-5 text-navy" />
-                  <span className="text-xs font-bold text-navy uppercase tracking-widest">Premium Membership</span>
+                  <Sparkles className="w-5 h-5 text-blue" />
+                  <span className="text-xs font-bold text-blue uppercase tracking-widest">Premium Membership</span>
                 </div>
                 <h2 className="text-2xl md:text-4xl font-display font-black text-navy mb-4 uppercase">
                   {premiumPack.name}
@@ -206,7 +206,7 @@ export default function CoinShopPage() {
                   `}
                 >
                   {pack.popular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white text-[10px] font-black uppercase tracking-widest">
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-blue text-white text-[10px] font-black uppercase tracking-widest">
                       MOST POPULAR
                     </div>
                   )}
@@ -226,7 +226,7 @@ export default function CoinShopPage() {
                     {pack.coins.toLocaleString()} <span className="text-sm text-gray-500 uppercase tracking-tighter">Coins</span>
                   </div>
                   
-                  {pack.bonus && <div className="text-xs font-bold text-navy mb-4">{pack.bonus}</div>}
+                  {pack.bonus && <div className="text-xs font-bold text-blue mb-4">{pack.bonus}</div>}
                   {pack.description && <p className="text-xs text-gray-600 mb-6 px-4">{pack.description}</p>}
 
                   <div className="flex flex-col items-center gap-1.5 mb-8">
@@ -277,7 +277,7 @@ export default function CoinShopPage() {
                     `}
                   >
                     {pack.popular && (
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white text-[10px] font-black uppercase tracking-widest">
+                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-blue text-white text-[10px] font-black uppercase tracking-widest">
                         MOST POPULAR
                       </div>
                     )}
@@ -300,7 +300,7 @@ export default function CoinShopPage() {
 
                     <h3 className="text-xl font-bold text-navy mb-2">{pack.name}</h3>
                     
-                    {pack.bonus && <div className="text-xs font-bold text-navy mb-4">{pack.bonus}</div>}
+                    {pack.bonus && <div className="text-xs font-bold text-blue mb-4">{pack.bonus}</div>}
                     {pack.description && <p className="text-xs text-gray-600 mb-6 px-4 leading-relaxed">{pack.description}</p>}
 
                     <div className="flex flex-col items-center gap-1.5 mb-8">
@@ -333,7 +333,7 @@ export default function CoinShopPage() {
         {/* Security / Info */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-12 rounded-[40px] bg-white shadow-sm border border-nets-border">
           <div className="flex flex-col items-center text-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-navy">
+            <div className="w-12 h-12 rounded-full bg-blue/10 flex items-center justify-center text-blue">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <h4 className="font-bold text-navy">Secure Payments</h4>
@@ -341,7 +341,7 @@ export default function CoinShopPage() {
           </div>
           
           <div className="flex flex-col items-center text-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-navy">
+            <div className="w-12 h-12 rounded-full bg-blue/10 flex items-center justify-center text-blue">
               <Zap className="w-6 h-6" />
             </div>
             <h4 className="font-bold text-navy">Instant Delivery</h4>
@@ -349,7 +349,7 @@ export default function CoinShopPage() {
           </div>
 
           <div className="flex flex-col items-center text-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-navy">
+            <div className="w-12 h-12 rounded-full bg-blue/10 flex items-center justify-center text-blue">
               <Gift className="w-6 h-6" />
             </div>
             <h4 className="font-bold text-navy">Gift Coins</h4>
