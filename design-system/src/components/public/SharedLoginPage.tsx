@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { IconMail as Mail, IconLock as Lock, IconShieldCheck as ShieldCheck, IconArrowRight as ArrowRight, IconLoader2 as Loader2, IconSparkles as Sparkles, IconBuilding as Building2, IconUsers as Users } from '@tabler/icons-react';
+import { IconMail as Mail, IconLock as Lock, IconShieldCheck as ShieldCheck, IconArrowRight as ArrowRight, IconLoader2 as Loader2, IconSparkles as Sparkles, IconBuilding as Building2, IconUsers as Users, IconEye as Eye, IconEyeOff as EyeOff } from '@tabler/icons-react';
 
 export interface SharedLoginPageProps {
   appName?: string;
@@ -23,6 +23,7 @@ export default function SharedLoginPage({
 }: SharedLoginPageProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -168,13 +169,20 @@ export default function SharedLoginPage({
                   <Lock className="h-5 w-5 text-slate-400" />
                 </div>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                  className="block w-full pl-11 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                   placeholder="••••••••"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
               </div>
             </div>
 
