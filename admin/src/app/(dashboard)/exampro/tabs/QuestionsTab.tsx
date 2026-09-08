@@ -303,7 +303,7 @@ export default function QuestionsTab() {
               ) : questions.map((q) => (
                 <tr key={q.id} onClick={() => openEditModal(q)} className="hover:bg-purple-50/30 transition-colors group cursor-pointer">
                   <td className="px-6 py-4">
-                    <p className="font-bold text-slate-800 text-xs line-clamp-3 max-w-sm" dangerouslySetInnerHTML={{ __html: q.bodyText || 'No text' }} />
+                    <p className="font-medium text-slate-700 text-xs line-clamp-3 max-w-sm" dangerouslySetInnerHTML={{ __html: q.bodyText || 'No text' }} />
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex flex-col gap-0.5">
