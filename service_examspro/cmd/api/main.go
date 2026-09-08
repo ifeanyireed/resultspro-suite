@@ -34,7 +34,6 @@ func main() {
 	modHandler := &handlers.ModerationHandler{}
 	studyHandler := &handlers.StudyAssistantHandler{}
 	notificationHandler := &handlers.NotificationHandler{}
-	blogHandler := &handlers.BlogHandler{}
 
 	battleHandler.StartBattleCleanupTask()
 	InitWS := handlers.InitWS()
@@ -87,12 +86,6 @@ func main() {
 		api.GET("/exams/:examId/subjects", examHandler.GetSubjectsByExam)
 		api.GET("/exams/:examId/syllabus", examHandler.GetFullSyllabus)
 
-		// Public Blog
-		api.GET("/blog", blogHandler.GetPosts)
-		api.GET("/blog/categories", blogHandler.GetCategories)
-		api.GET("/blog/:slug", blogHandler.GetPostBySlug)
-		api.GET("/blog/posts/:postId/comments", blogHandler.GetComments)
-		api.POST("/blog/comments", blogHandler.CreateComment)
 
 		// Auth Endpoints
 		auth := api.Group("/auth")
@@ -258,15 +251,6 @@ func main() {
 				admin.POST("/moderation/users/:userId/unban", middleware.IsModerator(), modHandler.UnbanUser)
 				admin.PATCH("/moderation/questions/:id/status", middleware.IsModerator(), modHandler.UpdateQuestionStatus)
 
-				// Blog Admin
-				admin.GET("/blog/posts", middleware.IsModerator(), blogHandler.AdminGetPosts)
-				admin.POST("/blog/posts", middleware.IsModerator(), blogHandler.CreatePost)
-				admin.PUT("/blog/posts/:id", middleware.IsModerator(), blogHandler.UpdatePost)
-				admin.DELETE("/blog/posts/:id", middleware.IsModerator(), blogHandler.DeletePost)
-				admin.POST("/blog/categories", middleware.IsModerator(), blogHandler.CreateCategory)
-				admin.GET("/blog/comments", middleware.IsModerator(), blogHandler.AdminGetComments)
-				admin.PATCH("/blog/comments/:id", middleware.IsModerator(), blogHandler.UpdateCommentStatus)
-				admin.DELETE("/blog/comments/:id", middleware.IsModerator(), blogHandler.DeleteComment)
 			}
 		}
 	}

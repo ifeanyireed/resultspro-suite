@@ -58,9 +58,6 @@ func ConnectDB() {
 		&models.NotificationLog{},
 		&models.NotificationCampaign{},
 		&models.PopupNotification{},
-		&models.BlogPost{},
-		&models.BlogCategory{},
-		&models.BlogComment{},
 	)
 	if err != nil {
 		log.Fatal("Failed to migrate database:", err)
@@ -90,7 +87,6 @@ func SeedSystemSettings(db *gorm.DB) {
 		{ID: "battle_mode_enabled", Value: "true", Type: "boolean", SettingGroup: "Features", Label: "Battle Mode", Desc: "Enable real-time synchronous battles"},
 		{ID: "live_games_enabled", Value: "true", Type: "boolean", SettingGroup: "Features", Label: "Live Games", Desc: "Enable admin-hosted live championship rooms"},
 		{ID: "ai_assistant_enabled", Value: "true", Type: "boolean", SettingGroup: "Features", Label: "AI Study Assistant", Desc: "Enable Claude-powered chat tutor"},
-		{ID: "auto_approve_comments", Value: "false", Type: "boolean", SettingGroup: "Features", Label: "Auto-Approve Comments", Desc: "Automatically approve blog comments"},
 		{ID: "maintenance_mode", Value: "false", Type: "boolean", SettingGroup: "Features", Label: "Maintenance Mode", Desc: "Restrict app access to admins only"},
 		{ID: "public_leaderboard", Value: "true", Type: "boolean", SettingGroup: "Features", Label: "Public Leaderboard", Desc: "Allow users to see global rankings"},
 		{ID: "global_announcement", Value: `["Welcome to ResultsPRO!", "Ace Your Exams with AI-powered prep.", "Master your subjects through gamified practice.", "Free to use as long as you keep answering correctly."]`, Type: "string", SettingGroup: "Features", Label: "Hero Text Messages", Desc: "JSON list of messages displayed in the hero section animation"},

@@ -61,9 +61,6 @@ func main() {
 		&models.NotificationLog{},
 		&models.NotificationCampaign{},
 		&models.PopupNotification{},
-		&models.BlogPost{},
-		&models.BlogCategory{},
-		&models.BlogComment{},
 	)
 	if err != nil {
 		log.Fatalf("Failed to migrate MySQL: %v", err)
@@ -207,17 +204,8 @@ func main() {
 	sqliteDB.Find(&popupNotifications)
 	if len(popupNotifications) > 0 { mysqlDB.CreateInBatches(popupNotifications, 100); log.Printf("Copied %d PopupNotifications", len(popupNotifications)) }
 
-	var blogPosts []models.BlogPost
-	sqliteDB.Find(&blogPosts)
-	if len(blogPosts) > 0 { mysqlDB.CreateInBatches(blogPosts, 100); log.Printf("Copied %d BlogPosts", len(blogPosts)) }
 
-	var blogCategories []models.BlogCategory
-	sqliteDB.Find(&blogCategories)
-	if len(blogCategories) > 0 { mysqlDB.CreateInBatches(blogCategories, 100); log.Printf("Copied %d BlogCategories", len(blogCategories)) }
 
-	var blogComments []models.BlogComment
-	sqliteDB.Find(&blogComments)
-	if len(blogComments) > 0 { mysqlDB.CreateInBatches(blogComments, 100); log.Printf("Copied %d BlogComments", len(blogComments)) }
 
 	_ = copyData // Unused function wrapper
 

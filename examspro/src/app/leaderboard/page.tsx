@@ -80,8 +80,8 @@ export default function LeaderboardPage() {
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                   background: activeTab === tab ? 'var(--color-nets-red)' : 'transparent',
-                  color: activeTab === tab ? 'white' : 'rgba(255,255,255,0.6)',
-                  border: activeTab === tab ? '1px solid var(--color-nets-red)' : '1px solid rgba(255,255,255,0.2)',
+                  color: activeTab === tab ? 'white' : 'rgba(0,0,0,0.6)',
+                  border: activeTab === tab ? '1px solid var(--color-nets-red)' : '1px solid rgba(0,0,0,0.1)',
                   cursor: 'pointer',
                   transition: 'all 0.2s',
                   borderRadius: '2px'
@@ -98,23 +98,23 @@ export default function LeaderboardPage() {
         <div className="container-nets">
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             {loading ? (
-              <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--color-nets-navy-light)' }}>
+              <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--color-nets-text-2)' }}>
                 Loading rankings...
               </div>
             ) : (
-              <div style={{ background: 'white', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '2px' }}>
+              <div style={{ background: 'white', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '2px' }}>
                 
                 {/* Header Row */}
                 <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 120px', padding: '1.5rem 2rem', borderBottom: '1px solid var(--color-nets-border)' }}>
-                  <div className="overline" style={{ color: 'var(--color-nets-navy-light)' }}>Rank</div>
-                  <div className="overline" style={{ color: 'var(--color-nets-navy-light)' }}>Student</div>
-                  <div className="overline" style={{ color: 'var(--color-nets-navy-light)', textAlign: 'right' }}>Score</div>
+                  <div className="overline" style={{ color: 'var(--color-nets-text-2)' }}>Rank</div>
+                  <div className="overline" style={{ color: 'var(--color-nets-text-2)' }}>Student</div>
+                  <div className="overline" style={{ color: 'var(--color-nets-text-2)', textAlign: 'right' }}>Score</div>
                 </div>
 
                 {/* List */}
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   {Array.isArray(leaderboard) && leaderboard.length === 0 && (
-                    <div style={{ padding: '3rem', textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem' }}>
+                    <div style={{ padding: '3rem', textAlign: 'center', color: 'rgba(0,0,0,0.4)', fontSize: '0.875rem' }}>
                       No players found in this category.
                     </div>
                   )}
@@ -128,18 +128,18 @@ export default function LeaderboardPage() {
                           gridTemplateColumns: '60px 1fr 120px', 
                           padding: '1.5rem 2rem', 
                           alignItems: 'center',
-                          borderBottom: index !== leaderboard.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
-                          background: isTop3 ? 'rgba(255,255,255,0.02)' : 'transparent',
+                          borderBottom: index !== leaderboard.length - 1 ? '1px solid rgba(0,0,0,0.05)' : 'none',
+                          background: isTop3 ? 'rgba(0,0,0,0.02)' : 'transparent',
                           transition: 'background 0.2s',
                           position: 'relative'
                         }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = isTop3 ? 'rgba(255,255,255,0.02)' : 'transparent')}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.04)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = isTop3 ? 'rgba(0,0,0,0.02)' : 'transparent')}
                       >
                         {isTop3 && (
                           <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '3px', background: 'var(--color-nets-red)' }} />
                         )}
-                        <div style={{ fontSize: isTop3 ? '1.5rem' : '1.125rem', fontWeight: 900, color: isTop3 ? 'white' : 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-display)' }}>
+                        <div style={{ fontSize: isTop3 ? '1.5rem' : '1.125rem', fontWeight: 900, color: isTop3 ? 'var(--color-nets-red)' : 'rgba(0,0,0,0.4)', fontFamily: 'var(--font-display)' }}>
                           #{index + 1}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -156,7 +156,7 @@ export default function LeaderboardPage() {
                 </div>
 
                 {/* My Rank Footer */}
-                <div style={{ padding: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.2)' }}>
+                <div style={{ padding: '2rem', borderTop: '1px solid rgba(0,0,0,0.1)', background: 'var(--color-nets-light)' }}>
                   {currentUser && myRank ? (
                     <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 120px', alignItems: 'center' }}>
                       <div style={{ fontSize: '1.125rem', fontWeight: 900, color: 'var(--color-nets-navy-dark)', fontFamily: 'var(--font-display)' }}>
@@ -166,7 +166,7 @@ export default function LeaderboardPage() {
                         <img src={`/avatars/character${ (String(currentUser.id).charCodeAt(0) % 20) || 1 }.jpg`} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
                         <div>
                           <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-nets-navy-dark)' }}>You</div>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--color-nets-navy-light)' }}>{myRank.nextRankGap > 0 ? `Next Rank in ${myRank.nextRankGap} pts` : 'Top Ranked!'}</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--color-nets-text-2)' }}>{myRank.nextRankGap > 0 ? `Next Rank in ${myRank.nextRankGap} pts` : 'Top Ranked!'}</div>
                         </div>
                       </div>
                       <div style={{ textAlign: 'right' }}>
@@ -180,7 +180,7 @@ export default function LeaderboardPage() {
                     </div>
                   ) : !currentUser && (
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div style={{ color: 'var(--color-nets-navy-light)', fontSize: '0.875rem' }}>Sign in to see your global rank and compete.</div>
+                      <div style={{ color: 'var(--color-nets-text-2)', fontSize: '0.875rem' }}>Sign in to see your global rank and compete.</div>
                       <button onClick={() => window.location.href = '/login'} className="btn btn-red">Login to Play</button>
                     </div>
                   )}

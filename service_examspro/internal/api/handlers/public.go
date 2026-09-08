@@ -12,9 +12,6 @@ func GetPublicRoutes(c *gin.Context) {
 	var exams []models.Exam
 	database.DB.Select("slug").Where("is_active = ?", true).Find(&exams)
 
-	var blogPosts []models.BlogPost
-	database.DB.Select("slug").Where("is_published = ?", true).Find(&blogPosts)
-
 	var subjects []models.Subject
 	database.DB.Preload("Exam").Find(&subjects)
 
@@ -24,11 +21,6 @@ func GetPublicRoutes(c *gin.Context) {
 	examSlugs := make([]string, len(exams))
 	for i, e := range exams {
 		examSlugs[i] = e.Slug
-	}
-
-	blogSlugs := make([]string, len(blogPosts))
-	for i, b := range blogPosts {
-		blogSlugs[i] = b.Slug
 	}
 
 	type SubjectRoute struct {
@@ -54,7 +46,6 @@ func GetPublicRoutes(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"exams":    examSlugs,
-		"blog":     blogSlugs,
 		"subjects": subjectRoutes,
 		"topics":   topicIDs,
 	})

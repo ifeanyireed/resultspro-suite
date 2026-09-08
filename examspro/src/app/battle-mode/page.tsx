@@ -401,7 +401,7 @@ export default function BattleLobbyPage() {
               <Button 
                 onClick={handleQuickMatch}
                 disabled={status === 'searching' || creating}
-                className="h-20 px-12 rounded-[32px] bg-gradient-to-r from-red-600 to-red-800 text-white hover:opacity-90 transition-all hover:scale-105 flex flex-col items-center justify-center gap-1 group/btn min-w-[240px]"
+                className="h-20 px-12 rounded-[32px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white hover:opacity-90 transition-all hover:scale-105 flex flex-col items-center justify-center gap-1 group/btn min-w-[240px]"
               >
                 {status === 'searching' ? (
                   <Loader2 className="w-8 h-8 animate-spin" />
@@ -738,7 +738,7 @@ export default function BattleLobbyPage() {
             <Button 
               onClick={handleCreateBattle}
               disabled={creating}
-              className="w-full py-6 rounded-2xl bg-gradient-to-r from-red-600 to-red-800 text-white hover:opacity-90 font-bold text-lg"
+              className="w-full py-6 rounded-2xl bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white hover:opacity-90 font-bold text-lg"
             >
               {creating ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Start Battle'}
             </Button>
@@ -775,7 +775,7 @@ export default function BattleLobbyPage() {
             <Button 
               onClick={handleJoinByCode}
               disabled={joiningByCode || !joinCode}
-              className="w-full py-6 rounded-2xl bg-gradient-to-r from-red-600 to-red-800 text-white hover:opacity-90 font-bold text-lg"
+              className="w-full py-6 rounded-2xl bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white hover:opacity-90 font-bold text-lg"
             >
               {joiningByCode ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Enter Arena'}
             </Button>
