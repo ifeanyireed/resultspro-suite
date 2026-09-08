@@ -229,10 +229,10 @@ export default function LiveGameLobby() {
         </div>
 
         {/* Footer CTA */}
-        <div className="relative overflow-hidden mt-20 p-12 rounded-[40px] shadow-2xl text-center flex flex-col items-center gap-6 bg-gradient-to-r from-[#146ef5] to-red-600 text-white">
-          <Eye className="w-12 h-12 text-white opacity-50" />
-          <h2 className="text-2xl md:text-4xl font-display font-bold text-white">Prefer to watch first?</h2>
-          <p className="text-white/80 max-w-lg mb-4 text-lg">Spectate active live games for free to learn from top players before jumping in.</p>
+        <div className="mt-20 p-12 rounded-[40px] bg-white shadow-sm border border-nets-border text-center flex flex-col items-center gap-6">
+          <Eye className="w-12 h-12 text-blue opacity-50" />
+          <h2 className="text-2xl md:text-4xl font-display font-bold text-navy">Prefer to watch first?</h2>
+          <p className="text-gray-500 max-w-lg mb-4 text-lg">Spectate active live games for free to learn from top players before jumping in.</p>
           <Button 
             variant="outline" 
             onClick={() => !user ? setIsLoginModalOpen(true) : router.push('/spectate')}

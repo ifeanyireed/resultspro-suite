@@ -156,7 +156,7 @@ export default function PracticePage() {
       {/* 30-second login prompt for guests */}
       <LoginPromptModal delayMs={30000} />
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12 pb-40">
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-3xl md:text-5xl font-display font-bold text-navy mb-6">
