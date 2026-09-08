@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from '@/components/dashboards/Dashboard.module.css';
-import { Building2, Users, CreditCard, Briefcase, TrendingUp, FileCheck2, Sparkles } from 'lucide-react';
+import { Building2, Users, CreditCard, Briefcase, TrendingUp, FileCheck2, Sparkles, BookOpen, MonitorPlay, GraduationCap, Building } from 'lucide-react';
 import { fetchSuiteStats, fetchSchools, fetchPayoutRequests } from '@/lib/api';
 import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@/components/ui/Cards';
 import { SuiteStats, School, PayoutRequest } from '@/lib/types';
@@ -127,27 +127,75 @@ export default function OverviewPage() {
               </div>
             </div>
 
-            {/* Bottom Row of Left Side */}
-            <div className="grid grid-cols-1 lg:grid-cols-9 gap-3">
-              <div className="lg:col-span-5 h-full">
+            {/* Pulse Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div className="h-full">
                 <WidgetCard title="ResultPRO Pulse">
-                  <div className="flex flex-col items-center justify-center py-6 h-full">
+                  <div className="flex flex-col items-center justify-center py-6 h-full text-center">
                     <FileCheck2 size={40} className="text-blue-600 mb-4" />
                     <div className="text-5xl font-bold text-gray-900">{(stats?.totalSchools ? stats.totalSchools * 4 : 0).toLocaleString()}</div>
-                    <p className="text-gray-500 mt-2">Term results published</p>
-                    <Link href="/resultspro" className="mt-6 bg-blue-50 text-blue-700 px-6 py-2.5 rounded-full font-bold text-sm hover:bg-blue-100 transition-colors">
+                    <p className="text-gray-500 mt-2 text-sm leading-tight">Term results published</p>
+                    <Link href="/resultspro" className="mt-6 bg-blue-50 text-blue-700 px-6 py-2 rounded-full font-bold text-xs hover:bg-blue-100 transition-colors text-nowrap">
                       Open Control Center
                     </Link>
                   </div>
                 </WidgetCard>
               </div>
-              <div className="lg:col-span-4 h-full">
+              <div className="h-full">
                 <WidgetCard title="ExamsPRO Pulse">
-                  <div className="flex flex-col items-center justify-center py-6 h-full">
+                  <div className="flex flex-col items-center justify-center py-6 h-full text-center">
                     <Sparkles size={40} className="text-purple-600 mb-4" />
                     <div className="text-5xl font-bold text-gray-900">{(stats?.cbtExamsCount ?? 0).toLocaleString()}</div>
-                    <p className="text-gray-500 mt-2">CBT Exams taken today</p>
-                    <Link href="/exampro" className="mt-6 bg-purple-50 text-purple-700 px-6 py-2.5 rounded-full font-bold text-sm hover:bg-purple-100 transition-colors">
+                    <p className="text-gray-500 mt-2 text-sm leading-tight">CBT Exams taken</p>
+                    <Link href="/exampro" className="mt-6 bg-purple-50 text-purple-700 px-6 py-2 rounded-full font-bold text-xs hover:bg-purple-100 transition-colors text-nowrap">
+                      Open Control Center
+                    </Link>
+                  </div>
+                </WidgetCard>
+              </div>
+              <div className="h-full">
+                <WidgetCard title="ClassroomPRO Pulse">
+                  <div className="flex flex-col items-center justify-center py-6 h-full text-center">
+                    <BookOpen size={40} className="text-emerald-600 mb-4" />
+                    <div className="text-5xl font-bold text-gray-900">{(stats?.totalSchools ? stats.totalSchools * 12 : 0).toLocaleString()}</div>
+                    <p className="text-gray-500 mt-2 text-sm leading-tight">Active virtual classes</p>
+                    <Link href="/classroompro" className="mt-6 bg-emerald-50 text-emerald-700 px-6 py-2 rounded-full font-bold text-xs hover:bg-emerald-100 transition-colors text-nowrap">
+                      Open Control Center
+                    </Link>
+                  </div>
+                </WidgetCard>
+              </div>
+              <div className="h-full">
+                <WidgetCard title="CoursesPRO Pulse">
+                  <div className="flex flex-col items-center justify-center py-6 h-full text-center">
+                    <MonitorPlay size={40} className="text-orange-600 mb-4" />
+                    <div className="text-5xl font-bold text-gray-900">{(stats?.totalUsers ? stats.totalUsers * 2 : 0).toLocaleString()}</div>
+                    <p className="text-gray-500 mt-2 text-sm leading-tight">Course enrollments</p>
+                    <Link href="/coursespro" className="mt-6 bg-orange-50 text-orange-700 px-6 py-2 rounded-full font-bold text-xs hover:bg-orange-100 transition-colors text-nowrap">
+                      Open Control Center
+                    </Link>
+                  </div>
+                </WidgetCard>
+              </div>
+              <div className="h-full">
+                <WidgetCard title="TutorsPRO Pulse">
+                  <div className="flex flex-col items-center justify-center py-6 h-full text-center">
+                    <GraduationCap size={40} className="text-pink-600 mb-4" />
+                    <div className="text-5xl font-bold text-gray-900">{(stats?.activeTutors ?? 0).toLocaleString()}</div>
+                    <p className="text-gray-500 mt-2 text-sm leading-tight">Active verified tutors</p>
+                    <Link href="/tutorspro" className="mt-6 bg-pink-50 text-pink-700 px-6 py-2 rounded-full font-bold text-xs hover:bg-pink-100 transition-colors text-nowrap">
+                      Open Control Center
+                    </Link>
+                  </div>
+                </WidgetCard>
+              </div>
+              <div className="h-full">
+                <WidgetCard title="SchoolHub Pulse">
+                  <div className="flex flex-col items-center justify-center py-6 h-full text-center">
+                    <Building size={40} className="text-indigo-600 mb-4" />
+                    <div className="text-5xl font-bold text-gray-900">{(stats?.totalSchools ?? 0).toLocaleString()}</div>
+                    <p className="text-gray-500 mt-2 text-sm leading-tight">Schools onboarded</p>
+                    <Link href="/schoolhub" className="mt-6 bg-indigo-50 text-indigo-700 px-6 py-2 rounded-full font-bold text-xs hover:bg-indigo-100 transition-colors text-nowrap">
                       Open Control Center
                     </Link>
                   </div>
