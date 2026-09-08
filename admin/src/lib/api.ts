@@ -491,3 +491,30 @@ export async function deleteExamproLiveRoom(id: string) {
   if (!res.ok) throw new Error('Failed to delete live room');
   return res.json();
 }
+
+export async function fetchExamproBattleMatches(params?: { page?: number; limit?: number; search?: string; status?: string }) {
+  try {
+    let url = `${EXAMS_API}/api/admin/battles?`;
+    if (params) {
+      const qs = new URLSearchParams();
+      if (params.page) qs.append('page', params.page.toString());
+      if (params.limit) qs.append('limit', params.limit.toString());
+      if (params.search) qs.append('search', params.search);
+      if (params.status) qs.append('status', params.status);
+      url += qs.toString();
+    }
+    const res = await fetch(url, { headers: getAuthHeader() });
+    return await res.json();
+  } catch {
+    return { battles: [], total: 0, page: 1, limit: 20 };
+  }
+}
+
+export async function deleteExamproBattleMatch(id: string) {
+  const res = await fetch(`${EXAMS_API}/api/admin/battles/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeader(),
+  });
+  if (!res.ok) throw new Error('Failed to delete battle');
+  return res.json();
+}
