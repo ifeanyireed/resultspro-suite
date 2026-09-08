@@ -228,6 +228,9 @@ func main() {
 				admin.DELETE("/questions/:id", middleware.IsModerator(), adminHandler.DeleteQuestion)
 				admin.GET("/liverooms", middleware.IsModerator(), adminHandler.GetLiveRooms)
 				admin.DELETE("/liverooms/:id", middleware.IsModerator(), adminHandler.DeleteLiveRoom)
+				
+				admin.GET("/battles", middleware.IsModerator(), adminHandler.GetBattles)
+				admin.DELETE("/battles/:id", middleware.IsModerator(), adminHandler.DeleteBattle)
 				admin.POST("/questions/bulk-delete", middleware.IsModerator(), adminHandler.BulkDeleteQuestions)
 				admin.POST("/questions/:questionId/generate-ai-explanation", middleware.IsModerator(), adminHandler.GenerateAIExplanation)
 				admin.POST("/questions/assist-create", middleware.IsModerator(), adminHandler.AssistCreateQuestion)

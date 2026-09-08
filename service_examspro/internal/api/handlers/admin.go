@@ -1959,3 +1959,52 @@ func (h *AdminHandler) DeleteLiveRoom(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Room deleted"})
 }
+
+func (h *AdminHandler) GetBattles(c *gin.Context) {
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "20"))
+	search := c.Query("search")
+	status := c.Query("status")
+
+	if page < 1 {
+		page = 1
+	}
+	if limit < 1 {
+		limit = 20
+	}
+	offset := (page - 1) * limit
+
+	query := database.DB.Model(&models.Battle{})
+
+	if search != "" {
+		query = query.Where("room_code LIKE ? OR id LIKE ?", "%"+search+"%", "%"+search+"%")
+	}
+	if status != "" && status != "all" {
+		query = query.Where("status = ?", status)
+	}
+
+	var total int64
+	query.Count(&total)
+
+	var battles []models.Battle
+	if err := query.Offset(offset).Limit(limit).Preload("Subject").Preload("Participants.User").Order("created_at desc").Find(&battles).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch battles"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"battles": battles,
+		"total":   total,
+		"page":    page,
+		"limit":   limit,
+	})
+}
+
+func (h *AdminHandler) DeleteBattle(c *gin.Context) {
+	id := c.Param("id")
+	if err := database.DB.Where("id = ?", id).Delete(&models.Battle{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete battle"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Battle deleted"})
+}
