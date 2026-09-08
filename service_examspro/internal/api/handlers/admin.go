@@ -770,10 +770,10 @@ func (h *AdminHandler) GetQuestions(c *gin.Context) {
 	query.Count(&total)
 
 	var questions []models.Question
-	err := query.Select("questions.*").
+	err := query.Select("nat_exams_questions.*").
 		Preload("Options").
 		Preload("Topic.Subject.Exam").
-		Order("questions.created_at desc").
+		Order("nat_exams_questions.created_at desc").
 		Limit(limit).
 		Offset(offset).
 		Find(&questions).Error
@@ -1135,9 +1135,9 @@ func (h *AdminHandler) GetOverview(c *gin.Context) {
 	// 1. Get Recent Answer Activity
 	var answers []ActivityResult
 	database.DB.Table("nat_exams_user_answers").
-		Select("users.name as user, 'Answered Question' as action, user_answers.answered_at as time, CASE WHEN is_correct = 1 THEN 'Correct' ELSE 'Wrong' END as status, 'https://ui-avatars.com/api/?name=' || users.name as img").
-		Joins("JOIN users ON user_answers.user_id = users.id").
-		Order("user_answers.answered_at desc").
+		Select("users.name as user, 'Answered Question' as action, nat_exams_user_answers.answered_at as time, CASE WHEN is_correct = 1 THEN 'Correct' ELSE 'Wrong' END as status, 'https://ui-avatars.com/api/?name=' || users.name as img").
+		Joins("JOIN users ON nat_exams_user_answers.user_id = users.id").
+		Order("nat_exams_user_answers.answered_at desc").
 		Limit(5).
 		Find(&answers)
 	activities = append(activities, answers...)
@@ -1632,11 +1632,11 @@ func (h *AdminHandler) GetAnalyticsStats(c *gin.Context) {
 	}
 	var subjStats []SubjectStat
 	database.DB.Table("nat_exams_user_answers").
-		Select("subjects.name as name, COUNT(user_answers.id) as count").
-		Joins("JOIN questions ON user_answers.question_id = questions.id").
-		Joins("JOIN topics ON questions.topic_id = topics.id").
-		Joins("JOIN subjects ON topics.subject_id = subjects.id").
-		Group("subjects.id, subjects.name").
+		Select("subjects.name as name, COUNT(nat_exams_user_answers.id) as count").
+		Joins("JOIN nat_exams_questions ON nat_exams_user_answers.question_id = nat_exams_questions.id").
+		Joins("JOIN nat_exams_topics ON nat_exams_questions.topic_id = nat_exams_topics.id").
+		Joins("JOIN nat_exams_subjects ON nat_exams_topics.subject_id = nat_exams_subjects.id").
+		Group("nat_exams_subjects.id, subjects.name").
 		Order("count DESC").
 		Limit(4).
 		Find(&subjStats)
@@ -1803,11 +1803,11 @@ func (h *AdminHandler) ProcessCampaign(campaign *models.NotificationCampaign) {
 			// Find users who have answered questions in this exam
 			var userIDs []string
 			database.DB.Table("nat_exams_user_answers").
-				Joins("JOIN questions ON user_answers.question_id = questions.id").
-				Joins("JOIN topics ON questions.topic_id = topics.id").
-				Joins("JOIN subjects ON topics.subject_id = subjects.id").
-				Where("subjects.exam_id = ?", *campaign.TargetExamID).
-				Distinct("user_answers.user_id").
+				Joins("JOIN nat_exams_questions ON nat_exams_user_answers.question_id = nat_exams_questions.id").
+				Joins("JOIN nat_exams_topics ON nat_exams_questions.topic_id = nat_exams_topics.id").
+				Joins("JOIN nat_exams_subjects ON nat_exams_topics.subject_id = nat_exams_subjects.id").
+				Where("nat_exams_subjects.exam_id = ?", *campaign.TargetExamID).
+				Distinct("nat_exams_user_answers.user_id").
 				Pluck("user_id", &userIDs)
 			
 			tx = tx.Where("id IN ?", userIDs)
