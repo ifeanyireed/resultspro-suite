@@ -1134,7 +1134,7 @@ func (h *AdminHandler) GetOverview(c *gin.Context) {
 
 	// 1. Get Recent Answer Activity
 	var answers []ActivityResult
-	database.DB.Table("user_answers").
+	database.DB.Table("nat_exams_user_answers").
 		Select("users.name as user, 'Answered Question' as action, user_answers.answered_at as time, CASE WHEN is_correct = 1 THEN 'Correct' ELSE 'Wrong' END as status, 'https://ui-avatars.com/api/?name=' || users.name as img").
 		Joins("JOIN users ON user_answers.user_id = users.id").
 		Order("user_answers.answered_at desc").
@@ -1206,6 +1206,10 @@ func (h *AdminHandler) GetOverview(c *gin.Context) {
 		Find(&userGrowth)
 
 	c.JSON(http.StatusOK, gin.H{
+		"totalUsers":    totalUsers,
+		"newUsers24h":   newUsers24h,
+		"activeBattles": activeBattles,
+		"revenueMTD":    revenueMTD,
 		"kpis": []gin.H{
 			{"label": "Total Students", "value": strconv.FormatInt(totalUsers, 10), "trend": "Active", "up": true},
 			{"label": "New (24h)", "value": strconv.FormatInt(newUsers24h, 10), "trend": "+New", "up": true},
@@ -1584,7 +1588,7 @@ func (h *AdminHandler) GetAnalyticsStats(c *gin.Context) {
 		Correct int    `gorm:"column:correct"`
 	}
 	var dailyData []DailyEngagement
-	database.DB.Table("user_answers").
+	database.DB.Table("nat_exams_user_answers").
 		Select("DATE(answered_at) as date_str, COUNT(*) as total, SUM(CASE WHEN is_correct = 1 THEN 1 ELSE 0 END) as correct").
 		Where("answered_at >= ?", startOfWeek).
 		Group("DATE(answered_at)").
@@ -1627,7 +1631,7 @@ func (h *AdminHandler) GetAnalyticsStats(c *gin.Context) {
 		Count int
 	}
 	var subjStats []SubjectStat
-	database.DB.Table("user_answers").
+	database.DB.Table("nat_exams_user_answers").
 		Select("subjects.name as name, COUNT(user_answers.id) as count").
 		Joins("JOIN questions ON user_answers.question_id = questions.id").
 		Joins("JOIN topics ON questions.topic_id = topics.id").
@@ -1798,7 +1802,7 @@ func (h *AdminHandler) ProcessCampaign(campaign *models.NotificationCampaign) {
 		if campaign.TargetExamID != nil {
 			// Find users who have answered questions in this exam
 			var userIDs []string
-			database.DB.Table("user_answers").
+			database.DB.Table("nat_exams_user_answers").
 				Joins("JOIN questions ON user_answers.question_id = questions.id").
 				Joins("JOIN topics ON questions.topic_id = topics.id").
 				Joins("JOIN subjects ON topics.subject_id = subjects.id").
