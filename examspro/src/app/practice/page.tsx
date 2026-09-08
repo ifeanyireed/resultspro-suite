@@ -212,7 +212,7 @@ export default function PracticePage() {
             </button>
           </div>
         ) : (
-          <div className="space-y-16">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="space-y-16">
             {filteredCategories.length > 0 ? (
               filteredCategories.map((cat, i) => (
                 <div key={i}>
@@ -280,12 +280,19 @@ export default function PracticePage() {
                         </Link>
 
                         {/* DESKTOP Hover Tooltip (Boundary Aware) */}
-                        {!isAuth && hoveredExamId === exam.id && (
-                          <div className="hidden md:block absolute left-1/2 -top-6 -translate-y-full -translate-x-1/2 z-50 animate-in fade-in zoom-in-95 duration-200 pointer-events-auto group/tooltip max-w-[calc(100vw-40px)]">
-                            <div className="relative p-0 rounded-3xl bg-white/95 border border-white/80 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.08)] flex overflow-hidden ring-1 ring-slate-100 h-max min-w-[580px] w-max max-w-[800px]">
-                              
-                              {/* Left Pane - Subjects */}
-                              <div className="w-[240px] border-r border-nets-border p-4 bg-white/50 shrink-0">
+                        <AnimatePresence>
+                          {!isAuth && hoveredExamId === exam.id && (
+                            <motion.div 
+                              initial={{ opacity: 0, y: -10, scale: 0.95, x: '-50%' }}
+                              animate={{ opacity: 1, y: 0, scale: 1, x: '-50%' }}
+                              exit={{ opacity: 0, y: -10, scale: 0.95, x: '-50%' }}
+                              transition={{ duration: 0.2 }}
+                              className="hidden md:block absolute left-1/2 -top-6 -translate-y-full z-50 pointer-events-auto group/tooltip max-w-[calc(100vw-40px)]"
+                            >
+                              <div className="relative p-0 rounded-3xl bg-white/40 border border-white/60 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] flex overflow-hidden ring-1 ring-slate-100 h-max min-w-[580px] w-max max-w-[800px]">
+                                
+                                {/* Left Pane - Subjects */}
+                                <div className="w-[240px] border-r border-nets-border p-4 bg-white/90 shrink-0">
                                 <h4 className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 px-2">
                                   Subjects
                                   {hoverLoading && <Loader2 className="w-3 h-3 animate-spin inline-ml-2 float-right" />}
@@ -347,8 +354,9 @@ export default function PracticePage() {
                               {/* Tooltip Down Arrow */}
                               <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/80 backdrop-blur-2xl border-b border-r border-white/60 rotate-45 transform" />
                             </div>
-                          </div>
-                        )}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
                     ))}
                   </div>
@@ -359,7 +367,7 @@ export default function PracticePage() {
                 <p className="text-gray-500 text-lg">No examinations found matching &quot;{searchQuery}&quot;</p>
               </div>
             )}
-          </div>
+          </motion.div>
         )}
       </div>
       {/* MOBILE Bottom Sheet Preview */}
