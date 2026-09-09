@@ -1,85 +1,63 @@
 package utils
 
 import (
-	"crypto/tls"
+	"bytes"
+	"encoding/json"
 	"fmt"
-	"net/smtp"
+	"log"
+	"net/http"
 	"os"
+	"time"
 )
 
-func SendEmail(to, subject, html string) error {
-	smtpHost := os.Getenv("SMTP_HOST")
-	smtpPort := os.Getenv("SMTP_PORT")
-	smtpUser := os.Getenv("SMTP_USER")
-	smtpPass := os.Getenv("SMTP_PASS")
+type EmailPayload struct {
+	To       string `json:"to"`
+	From     string `json:"from"`
+	FromName string `json:"from_name"`
+	Subject  string `json:"subject"`
+	HTML     string `json:"html"`
+	Text     string `json:"text"`
+}
 
-	if smtpHost == "" || smtpPort == "" || smtpUser == "" || smtpPass == "" {
-		return fmt.Errorf("missing SMTP configuration")
+func SendEmail(to string, subject string, htmlBody string) error {
+	payload := EmailPayload{
+		To:       to,
+		From:     "hello@resultspro.ng",
+		FromName: "ExamsPRO Guide",
+		Subject:  subject,
+		HTML:     htmlBody,
+		Text:     "Please view this email in an HTML compatible client.",
 	}
 
-	header := make(map[string]string)
-	header["From"] = "\"ResultPRO Exam Guide\" <" + smtpUser + ">"
-	header["To"] = to
-	header["Subject"] = subject
-	header["MIME-Version"] = "1.0"
-	header["Content-Type"] = "text/html; charset=\"utf-8\""
-
-	message := ""
-	for k, v := range header {
-		message += fmt.Sprintf("%s: %s\r\n", k, v)
+	jsonData, err := json.Marshal(payload)
+	if err != nil {
+		return fmt.Errorf("failed to marshal email payload: %v", err)
 	}
-	message += "\r\n" + html
 
-	auth := smtp.PlainAuth("", smtpUser, smtpPass, smtpHost)
-
-	if smtpPort == "465" {
-		// SSL/TLS
-		tlsconfig := &tls.Config{
-			InsecureSkipVerify: false,
-			ServerName:         smtpHost,
-		}
-
-		conn, err := tls.Dial("tcp", smtpHost+":"+smtpPort, tlsconfig)
-		if err != nil {
-			return err
-		}
-
-		client, err := smtp.NewClient(conn, smtpHost)
-		if err != nil {
-			return err
-		}
-
-		if err = client.Auth(auth); err != nil {
-			return err
-		}
-
-		if err = client.Mail(smtpUser); err != nil {
-			return err
-		}
-
-		if err = client.Rcpt(to); err != nil {
-			return err
-		}
-
-		w, err := client.Data()
-		if err != nil {
-			return err
-		}
-
-		_, err = w.Write([]byte(message))
-		if err != nil {
-			return err
-		}
-
-		err = w.Close()
-		if err != nil {
-			return err
-		}
-
-		client.Quit()
-		return nil
-	} else {
-		// Standard STARTTLS (usually port 587)
-		return smtp.SendMail(smtpHost+":"+smtpPort, auth, smtpUser, []string{to}, []byte(message))
+	proxyURL := "https://mail.resultspro.ng/email_proxy/api/send-email.php"
+	req, err := http.NewRequest("POST", proxyURL, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return fmt.Errorf("failed to create email request: %v", err)
 	}
+
+	req.Header.Set("Content-Type", "application/json")
+	apiKey := os.Getenv("EMAIL_API_KEY")
+	if apiKey == "" {
+		return fmt.Errorf("EMAIL_API_KEY environment variable is missing")
+	}
+	req.Header.Set("Authorization", "Bearer "+apiKey)
+
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Printf("Email proxy failed to %s: %v", to, err)
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return fmt.Errorf("email proxy returned status %d", resp.StatusCode)
+	}
+	
+	return nil
 }

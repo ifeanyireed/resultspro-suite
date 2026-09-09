@@ -1,94 +1,67 @@
 package utils
 
 import (
-	"context"
+	"os"
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"strings"
-	"sync"
+	"time"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
-	awsconfig "github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/sesv2"
-	"github.com/aws/aws-sdk-go-v2/service/sesv2/types"
-	"service_users.resultspro.ng/config"
 )
 
-type SESClientAPI interface {
-	SendEmail(ctx context.Context, params *sesv2.SendEmailInput, optFns ...func(*sesv2.Options)) (*sesv2.SendEmailOutput, error)
-}
-
-var (
-	sesClient SESClientAPI
-	sesOnce   sync.Once
-)
-
-func SetSESClient(client SESClientAPI) {
-	sesClient = client
-}
-
-func getSESClient() (SESClientAPI, error) {
-	var err error
-	sesOnce.Do(func() {
-		if sesClient != nil {
-			return
-		}
-		region := config.AWSRegion
-		if region == "" {
-			region = "us-east-1"
-		}
-		cfg, err2 := awsconfig.LoadDefaultConfig(context.TODO(), awsconfig.WithRegion(region))
-		if err2 != nil {
-			err = fmt.Errorf("unable to load AWS SDK config: %v", err2)
-			return
-		}
-		sesClient = sesv2.NewFromConfig(cfg)
-	})
-	if err != nil {
-		return nil, err
-	}
-	return sesClient, nil
+type EmailPayload struct {
+	To       string `json:"to"`
+	From     string `json:"from"`
+	FromName string `json:"from_name"`
+	Subject  string `json:"subject"`
+	HTML     string `json:"html"`
+	Text     string `json:"text"`
 }
 
 func SendEmail(to string, subject string, htmlBody string, textBody string) error {
-	client, err := getSESClient()
+	payload := EmailPayload{
+		To:       to,
+		From:     "hello@resultspro.ng",
+		FromName: "ResultsPRO",
+		Subject:  subject,
+		HTML:     htmlBody,
+		Text:     textBody,
+	}
+
+	jsonData, err := json.Marshal(payload)
 	if err != nil {
-		log.Printf("Email Warning: SES client initialization skipped or failed: %v", err)
-		return nil // Non-fatal in local/dev environments
+		return fmt.Errorf("failed to marshal email payload: %v", err)
 	}
 
-	from := config.SMTPFrom
-	if from == "" {
-		from = "noreply@resultspro.ng"
-	}
-
-	input := &sesv2.SendEmailInput{
-		FromEmailAddress: aws.String(from),
-		Destination: &types.Destination{
-			ToAddresses: []string{to},
-		},
-		Content: &types.EmailContent{
-			Simple: &types.Message{
-				Subject: &types.Content{
-					Data: aws.String(subject),
-				},
-				Body: &types.Body{
-					Html: &types.Content{
-						Data: aws.String(htmlBody),
-					},
-					Text: &types.Content{
-						Data: aws.String(textBody),
-					},
-				},
-			},
-		},
-	}
-
-	_, err = client.SendEmail(context.TODO(), input)
+	proxyURL := "https://mail.resultspro.ng/email_proxy/api/send-email.php"
+	req, err := http.NewRequest("POST", proxyURL, bytes.NewBuffer(jsonData))
 	if err != nil {
-		log.Printf("Email sending failed to %s: %v", to, err)
+		return fmt.Errorf("failed to create email request: %v", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	// Use the API key extracted from the PHP config
+	apiKey := os.Getenv("EMAIL_API_KEY")
+	if apiKey == "" {
+		return fmt.Errorf("EMAIL_API_KEY environment variable is missing")
+	}
+	req.Header.Set("Authorization", "Bearer "+apiKey)
+
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Printf("Email proxy failed to %s: %v", to, err)
 		return err
 	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return fmt.Errorf("email proxy returned status %d", resp.StatusCode)
+	}
+	
 	return nil
 }
 
