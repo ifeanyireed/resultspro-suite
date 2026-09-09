@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function GradientMetricCard({ title, value, subtitle, trend, icon: Icon, gradientFrom = 'from-[#146ef5]', gradientTo = 'to-[#0a2e70]' }: any) {
+export function GradientMetricCard({ title, value, subtitle, trend, icon: Icon, gradientFrom = 'from-[#146ef5]', gradientTo = 'to-[#0a2e70]', iconHoverColor = 'text-[#146ef5]' }: any) {
   return (
     <div className={`bg-gradient-to-br ${gradientFrom} ${gradientTo} rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform`}>
       <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
@@ -9,7 +9,7 @@ export function GradientMetricCard({ title, value, subtitle, trend, icon: Icon, 
       <div className="flex justify-between items-start z-10">
         <h3 className="text-xl font-normal text-white">{title}</h3>
         <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm group-hover:bg-white transition-colors">
-          {Icon && <Icon className="w-4 h-4 text-white group-hover:text-blue-500" />}
+          {Icon && <Icon className={`w-4 h-4 text-white group-hover:${iconHoverColor}`} />}
         </div>
       </div>
       <div className="z-10">

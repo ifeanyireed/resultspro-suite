@@ -147,6 +147,7 @@ export default function Dashboard() {
           icon={IconCoins}
           gradientFrom="from-amber-400"
           gradientTo="to-orange-500"
+          iconHoverColor="text-orange-500"
         />
         <WhiteMetricCard 
           title="Study Streak"
