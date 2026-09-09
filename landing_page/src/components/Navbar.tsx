@@ -25,7 +25,7 @@ export default function Navbar() {
     { name: 'ResultsPRO', path: '/resultspro' },
     { name: 'TutorsPRO', path: '/tutorspro' },
     { name: 'CoursesPRO', path: '/coursespro' },
-    { name: 'PuzzlePRO', path: 'https://www.learn2earnhq.com/schools' },
+    { name: 'PuzzlePRO', path: '/puzzlepro' },
   ];
 
   if (isOnboarding) return null;

@@ -26,7 +26,7 @@ export default function Home() {
               { id: 'resultspro', title: 'ResultsPRO', desc: 'AI-powered results processing and insights.', icon: IconChartBar, href: '/resultspro' },
               { id: 'tutorspro', title: 'TutorsPRO', desc: 'Vetted, curriculum-aligned private tuition.', icon: IconChalkboard, href: '/tutorspro' },
               { id: 'coursespro', title: 'CoursesPRO', desc: 'Curated digital courses and certification pathways.', icon: IconCertificate, href: '/coursespro' },
-              { id: 'puzzlepro', title: 'PuzzlePRO', desc: 'Gamified coding and tech skills for primary schools.', icon: IconPuzzle, href: 'https://www.learn2earnhq.com/schools' },
+              { id: 'puzzlepro', title: 'PuzzlePRO', desc: 'Gamified coding and tech skills for primary schools.', icon: IconPuzzle, href: '/puzzlepro' },
             ].map((cat, i) => (
               <div key={i} id={cat.id} className="card p-8 hover:shadow-card-lg transition-shadow">
                 <cat.icon className="w-8 h-8 text-red mb-6" style={{ color: 'var(--color-nets-red)' }} />
