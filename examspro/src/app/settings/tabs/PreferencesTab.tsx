@@ -13,7 +13,7 @@ export default function PreferencesTab() {
               <div className="font-bold text-gray-900">Email Notifications</div>
               <div className="text-sm text-gray-500">Receive weekly progress reports and battle challenges.</div>
             </div>
-            <Switch defaultChecked />
+            <Switch defaultChecked className="data-[state=checked]:bg-[#146ef5]" />
           </div>
 
           <div className="flex items-center justify-between p-4 rounded-xl border border-gray-100">
@@ -21,7 +21,7 @@ export default function PreferencesTab() {
               <div className="font-bold text-gray-900">Push Notifications</div>
               <div className="text-sm text-gray-500">Get instantly notified when you're invited to a Live Game.</div>
             </div>
-            <Switch defaultChecked />
+            <Switch defaultChecked className="data-[state=checked]:bg-[#146ef5]" />
           </div>
 
           <div className="flex items-center justify-between p-4 rounded-xl border border-gray-100">
@@ -29,7 +29,7 @@ export default function PreferencesTab() {
               <div className="font-bold text-gray-900">Sound Effects</div>
               <div className="text-sm text-gray-500">Play sounds during battle mode and quizzes.</div>
             </div>
-            <Switch defaultChecked />
+            <Switch defaultChecked className="data-[state=checked]:bg-[#146ef5]" />
           </div>
         </div>
       </div>
