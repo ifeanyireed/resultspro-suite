@@ -27,9 +27,13 @@ function GlobalTopNav() {
           <Bell className="w-5 h-5" />
           <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
         </button>
-        <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
-          <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm bg-gray-100">
+        <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6 cursor-pointer hover:bg-slate-50 p-1 pr-3 rounded-full transition-colors">
+          <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm bg-gray-100 shrink-0">
             <img src={user?.avatarUrl || "/avatars/character1.jpg"} alt="User Avatar" className="w-full h-full object-cover" />
+          </div>
+          <div className="hidden md:block text-left">
+            <p className="text-sm font-bold text-gray-900 leading-tight">{user?.name || "Student"}</p>
+            <p className="text-[10px] text-gray-500 tracking-wide">{user?.email || "student@examspro.com"}</p>
           </div>
         </div>
       </div>
