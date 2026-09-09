@@ -71,7 +71,7 @@ func SendVerificationEmail(to string, otp string) error {
 	htmlBody := fmt.Sprintf(`
 <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; padding: 40px; margin: 0; color: #1e293b; border: 1px solid #e2e8f0; border-radius: 12px; max-width: 580px;">
   <div style="margin-bottom: 24px; display: flex; align-items: center;">
-    <div style="font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.02em;">Results<span style="color: #2563eb;">PRO</span></div>
+    <img src="https://resultspro.ng/logo.png" alt="ResultsPRO" style="height: 40px; width: auto; object-fit: contain;" />
   </div>
   <h2 style="font-size: 20px; font-weight: 600; color: #0f172a; margin-top: 0; margin-bottom: 16px;">Verify your email address</h2>
   <p style="font-size: 14px; line-height: 22px; color: #475569; margin-bottom: 24px;">
@@ -106,7 +106,7 @@ func SendPasswordResetEmail(to string, token string, resetURL string) error {
 	htmlBody := fmt.Sprintf(`
 <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; padding: 40px; margin: 0; color: #1e293b; border: 1px solid #e2e8f0; border-radius: 12px; max-width: 580px;">
   <div style="margin-bottom: 24px; display: flex; align-items: center;">
-    <div style="font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.02em;">Results<span style="color: #2563eb;">PRO</span></div>
+    <img src="https://resultspro.ng/logo.png" alt="ResultsPRO" style="height: 40px; width: auto; object-fit: contain;" />
   </div>
   <h2 style="font-size: 20px; font-weight: 600; color: #0f172a; margin-top: 0; margin-bottom: 16px;">Password Reset Request</h2>
   <p style="font-size: 14px; line-height: 22px; color: #475569; margin-bottom: 24px;">
