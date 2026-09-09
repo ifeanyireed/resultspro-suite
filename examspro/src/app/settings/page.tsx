@@ -1,6 +1,6 @@
 "use client";
 
-import { IconBell as Bell, IconMoon as Moon, IconGlobe as Globe, IconUser as User, IconShield as Shield, IconCreditCard as CreditCard, IconLogout as LogOut, IconChevronRight as ChevronRight, IconArrowLeft as ArrowLeft } from '@tabler/icons-react';
+import { IconBell as Bell, IconMoon as Moon, IconGlobe as Globe, IconUser as User, IconShield as Shield, IconCreditCard as CreditCard, IconLogout as LogOut, IconChevronRight as ChevronRight, IconArrowLeft as ArrowLeft, IconGift as Gift } from '@tabler/icons-react';
 import Link from 'next/link';
 import { WidgetCard } from '@/components/ui/Cards';
 import { useState, useEffect } from 'react';
@@ -10,6 +10,7 @@ import AccountTab from './tabs/AccountTab';
 import SecurityTab from './tabs/SecurityTab';
 import PreferencesTab from './tabs/PreferencesTab';
 import BillingTab from './tabs/BillingTab';
+import ReferralTab from './tabs/ReferralTab';
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -42,6 +43,7 @@ export default function SettingsPage() {
     { id: 'Security', label: 'Security & Login', icon: Shield },
     { id: 'Preferences', label: 'Preferences', icon: Bell },
     { id: 'Billing', label: 'Billing & Plan', icon: CreditCard },
+    { id: 'Referral', label: 'Referrals', icon: Gift },
   ];
 
   const renderTab = () => {
@@ -50,6 +52,7 @@ export default function SettingsPage() {
       case 'Security': return <SecurityTab />;
       case 'Preferences': return <PreferencesTab />;
       case 'Billing': return <BillingTab />;
+      case 'Referral': return <ReferralTab />;
       default: return <AccountTab />;
     }
   };
