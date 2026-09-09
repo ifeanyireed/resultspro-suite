@@ -39,7 +39,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-16">
           
           <div className="lg:col-span-2">
-            <h3 className="fw-700 text-2xl mb-4 text-white tracking-tight">ResultsPRO<span style={{ color: 'var(--color-nets-red)' }}>.</span></h3>
+            <Link href="/" style={{ display: 'inline-block', marginBottom: '1.5rem', transition: 'opacity 0.2s ease' }} onMouseEnter={e => e.currentTarget.style.opacity = '0.8'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+              <img src="/logo.png" alt="ResultsPRO Logo" style={{ height: '80px', width: 'auto', objectFit: 'contain' }} />
+            </Link>
             <p className="text-muted-light text-sm mb-6 max-w-sm" style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
               Building the infrastructure to power the needed culture shift in African K12 education.
             </p>

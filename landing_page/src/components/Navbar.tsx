@@ -35,7 +35,7 @@ export default function Navbar() {
       }`}
     >
       <div className="container-nets flex items-center justify-between">
-        <Logo variant="light" />
+        <Logo />
 
         {/* Desktop Links */}
         <div className="hidden lg:flex items-center gap-8">
