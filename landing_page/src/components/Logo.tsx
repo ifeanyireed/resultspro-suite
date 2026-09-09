@@ -31,8 +31,8 @@ const Logo = ({
       />
       {showText && (
         <span className={`font-display font-bold ${textSize} ${dark ? 'text-navy' : 'text-white'} tracking-tight flex flex-col leading-none`}>
-          ResultPRO 
-          <span className="text-green text-[10px] uppercase tracking-[0.2em] mt-0.5">Exam Guide</span>
+          ResultsPro 
+          <span className="text-green text-[10px] uppercase tracking-[0.2em] mt-0.5">Edu Suite</span>
         </span>
       )}
     </Link>
