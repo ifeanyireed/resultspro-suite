@@ -117,8 +117,8 @@ export default function ReferralPage() {
           {/* Main Referral Card */}
           <div className="lg:col-span-2 space-y-8">
             {user ? (
-              <div className="p-8 md:p-12 rounded-[40px] bg-white border border-slate-200 shadow-sm backdrop-blur-xl backdrop-saturate-[1.2] shadow-md  relative overflow-hidden group">
-                <div className="absolute inset-0 bg-green/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="p-8 md:p-12 rounded-[40px] bg-white border border-slate-200 shadow-sm backdrop-blur-xl backdrop-saturate-[1.2] shadow-md relative overflow-hidden group">
+                <div className="absolute inset-0 bg-green/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                 
                 <h3 className="text-xl font-display font-bold text-slate-900 mb-8">Your Unique Referral Link</h3>
                 
