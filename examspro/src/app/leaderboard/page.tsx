@@ -105,10 +105,10 @@ export default function LeaderboardPage() {
               <div style={{ background: 'white', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '2px' }}>
                 
                 {/* Header Row */}
-                <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 120px', padding: '1.5rem 2rem', borderBottom: '1px solid var(--color-nets-border)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '60px 250px 120px', padding: '1.5rem 2rem', borderBottom: '1px solid var(--color-nets-border)' }}>
                   <div className="overline" style={{ color: 'var(--color-nets-text-2)' }}>Rank</div>
                   <div className="overline" style={{ color: 'var(--color-nets-text-2)' }}>Student</div>
-                  <div className="overline" style={{ color: 'var(--color-nets-text-2)', textAlign: 'right' }}>Score</div>
+                  <div className="overline" style={{ color: 'var(--color-nets-text-2)', textAlign: 'left' }}>Score</div>
                 </div>
 
                 {/* List */}
@@ -125,7 +125,7 @@ export default function LeaderboardPage() {
                         key={user.id}
                         style={{ 
                           display: 'grid', 
-                          gridTemplateColumns: '60px 1fr 120px', 
+                          gridTemplateColumns: '60px 250px 120px', 
                           padding: '1.5rem 2rem', 
                           alignItems: 'center',
                           borderBottom: index !== leaderboard.length - 1 ? '1px solid rgba(0,0,0,0.05)' : 'none',
@@ -146,7 +146,7 @@ export default function LeaderboardPage() {
                           <img src={`/avatars/character${ (String(user.id).charCodeAt(0) % 20) || 1 }.jpg`} alt="" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} />
                           <div style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--color-nets-navy-dark)' }}>{user.name || 'Anonymous'}</div>
                         </div>
-                        <div style={{ textAlign: 'right' }}>
+                        <div style={{ textAlign: 'left' }}>
                           <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-nets-navy-dark)' }}>{getScoreValue(user).toLocaleString()}</div>
                           <div style={{ fontSize: '0.625rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-nets-red)' }}>{getScoreLabel()}</div>
                         </div>
@@ -158,7 +158,7 @@ export default function LeaderboardPage() {
                 {/* My Rank Footer */}
                 <div style={{ padding: '2rem', borderTop: '1px solid rgba(0,0,0,0.1)', background: 'var(--color-nets-light)' }}>
                   {currentUser && myRank ? (
-                    <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 120px', alignItems: 'center' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '60px 250px 120px', alignItems: 'center' }}>
                       <div style={{ fontSize: '1.125rem', fontWeight: 900, color: 'var(--color-nets-navy-dark)', fontFamily: 'var(--font-display)' }}>
                         #{myRank.rank}
                       </div>
@@ -169,7 +169,7 @@ export default function LeaderboardPage() {
                           <div style={{ fontSize: '0.75rem', color: 'var(--color-nets-text-2)' }}>{myRank.nextRankGap > 0 ? `Next Rank in ${myRank.nextRankGap} pts` : 'Top Ranked!'}</div>
                         </div>
                       </div>
-                      <div style={{ textAlign: 'right' }}>
+                      <div style={{ textAlign: 'left' }}>
                         <div style={{ fontSize: '1.125rem', fontWeight: 900, color: 'var(--color-nets-navy-dark)', fontFamily: 'var(--font-display)' }}>
                           {(activeTab === 'Global' ? (myRank.user?.eloRating ?? currentUser?.eloRating ?? 0) : 
                             activeTab === 'Wealth' ? (myRank.user?.coinBalance ?? currentUser?.coinBalance ?? 0) : 

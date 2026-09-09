@@ -308,7 +308,7 @@ export default function Dashboard() {
           <WidgetCard title="Leaderboard" subtitle="Global Top 5">
             <div className="space-y-3">
               {Array.isArray(data.leaderboard) && data.leaderboard.map((u) => (
-                <div key={u.rank} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                <div key={u.rank} className="flex items-center justify-start gap-8 p-3 rounded-xl hover:bg-gray-50 transition-colors">
                   <div className="flex items-center gap-3">
                     <div className={`text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center ${
                       u.rank === 1 ? 'bg-amber-100 text-amber-600' : 
@@ -320,7 +320,7 @@ export default function Dashboard() {
                     <img src={u.img || `/avatars/character${(u.rank % 20) + 1}.jpg`} className="w-8 h-8 rounded-full border border-gray-200 object-cover" alt={u.name} />
                     <div className="text-xs font-medium text-gray-900">{u.name}</div>
                   </div>
-                  <div className="text-right">
+                  <div className="text-left">
                     <div className="text-xs font-semibold text-gray-900">{u.score.toLocaleString()}</div>
                     <div className="text-[9px] text-gray-400 font-medium uppercase">ELO</div>
                   </div>
