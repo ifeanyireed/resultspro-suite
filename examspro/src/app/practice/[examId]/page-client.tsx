@@ -167,9 +167,19 @@ export default function SubjectSelectionPage() {
   @media (min-width: 640px) { .checkerboard-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (min-width: 1024px) { .checkerboard-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
+  /* 1 col (mobile) - alternate */
+  @media (max-width: 639px) {
+    .checkerboard-grid > div:nth-child(even) > a {
+      --card-from: #ef4444;
+      --card-to: #7f1d1d;
+      --icon-hover: #dc2626;
+    }
+  }
+
   /* 2 cols checkerboard */
   @media (min-width: 640px) and (max-width: 1023px) {
-    .checkerboard-grid > div > a:nth-child(4n+2), .checkerboard-grid > div > a:nth-child(4n+3) {
+    .checkerboard-grid > div:nth-child(4n+2) > a, 
+    .checkerboard-grid > div:nth-child(4n+3) > a {
       --card-from: #ef4444;
       --card-to: #7f1d1d;
       --icon-hover: #dc2626;
@@ -177,7 +187,10 @@ export default function SubjectSelectionPage() {
   }
   /* 4 cols checkerboard */
   @media (min-width: 1024px) {
-    .checkerboard-grid > div > a:nth-child(8n+2), .checkerboard-grid > div > a:nth-child(8n+4), .checkerboard-grid > div > a:nth-child(8n+5), .checkerboard-grid > div > a:nth-child(8n+7) {
+    .checkerboard-grid > div:nth-child(8n+2) > a, 
+    .checkerboard-grid > div:nth-child(8n+4) > a, 
+    .checkerboard-grid > div:nth-child(8n+5) > a, 
+    .checkerboard-grid > div:nth-child(8n+7) > a {
       --card-from: #ef4444;
       --card-to: #7f1d1d;
       --icon-hover: #dc2626;
