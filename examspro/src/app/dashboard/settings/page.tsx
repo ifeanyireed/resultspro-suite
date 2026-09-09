@@ -3,8 +3,10 @@
 import { IconBell as Bell, IconMoon as Moon, IconGlobe as Globe, IconUser as User, IconShield as Shield, IconCreditCard as CreditCard, IconLogout as LogOut, IconChevronRight as ChevronRight, IconArrowLeft as ArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
 import { WidgetCard } from '@/components/ui/Cards';
+import { useState } from 'react';
 
 export default function SettingsPage() {
+  const [activeTab, setActiveTab] = useState('Account');
   const sections = [
     {
       title: "Account",
@@ -38,8 +40,25 @@ export default function SettingsPage() {
         <p className="text-sm text-gray-500 mt-1">Manage your account preferences and configurations.</p>
       </div>
 
+      {/* Horizontal Tabs */}
+      <div className="flex items-center gap-2 border-b border-gray-100 pb-4 overflow-x-auto">
+        {sections.map(s => (
+          <button 
+            key={s.title}
+            onClick={() => setActiveTab(s.title)}
+            className={`px-6 py-2.5 text-sm font-bold rounded-full transition-all whitespace-nowrap ${
+              activeTab === s.title 
+                ? 'bg-[#146ef5] text-white shadow-md' 
+                : 'text-gray-500 hover:bg-gray-100'
+            }`}
+          >
+            {s.title}
+          </button>
+        ))}
+      </div>
+
       <div className="space-y-6">
-        {sections.map((section, i) => (
+        {sections.filter(s => s.title === activeTab).map((section, i) => (
           <div key={i} className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
             <div className="p-6 border-b border-gray-100">
               <h3 className="font-bold text-gray-900">{section.title}</h3>
