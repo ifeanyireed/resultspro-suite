@@ -9,6 +9,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
+import { motion } from 'framer-motion';
 
 interface Subject {
   id: string;
@@ -152,13 +153,59 @@ export default function SubjectSelectionPage() {
             </div>
 
             {/* Subjects Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 [&>a]:from-[#146ef5] [&>a]:to-[#0a2e70] [&>a:hover_.icon-box]:text-[#146ef5] max-sm:[&>a:nth-child(even)]:from-red-500 max-sm:[&>a:nth-child(even)]:to-red-900 max-sm:[&>a:nth-child(even):hover_.icon-box]:text-red-600 sm:max-lg:[&>a:nth-child(4n+2)]:from-red-500 sm:max-lg:[&>a:nth-child(4n+2)]:to-red-900 sm:max-lg:[&>a:nth-child(4n+2):hover_.icon-box]:text-red-600 sm:max-lg:[&>a:nth-child(4n+3)]:from-red-500 sm:max-lg:[&>a:nth-child(4n+3)]:to-red-900 sm:max-lg:[&>a:nth-child(4n+3):hover_.icon-box]:text-red-600 lg:[&>a:nth-child(8n+2)]:from-red-500 lg:[&>a:nth-child(8n+2)]:to-red-900 lg:[&>a:nth-child(8n+2):hover_.icon-box]:text-red-600 lg:[&>a:nth-child(8n+4)]:from-red-500 lg:[&>a:nth-child(8n+4)]:to-red-900 lg:[&>a:nth-child(8n+4):hover_.icon-box]:text-red-600 lg:[&>a:nth-child(8n+5)]:from-red-500 lg:[&>a:nth-child(8n+5)]:to-red-900 lg:[&>a:nth-child(8n+5):hover_.icon-box]:text-red-600 lg:[&>a:nth-child(8n+7)]:from-red-500 lg:[&>a:nth-child(8n+7)]:to-red-900 lg:[&>a:nth-child(8n+7):hover_.icon-box]:text-red-600">
+            <style>{`
+  .checkerboard-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .checkerboard-grid > div > a {
+    --card-from: #146ef5;
+    --card-to: #0a2e70;
+    --icon-hover: #146ef5;
+  }
+  @media (min-width: 640px) { .checkerboard-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1024px) { .checkerboard-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+  /* 2 cols checkerboard */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .checkerboard-grid > div > a:nth-child(4n+2), .checkerboard-grid > div > a:nth-child(4n+3) {
+      --card-from: #ef4444;
+      --card-to: #7f1d1d;
+      --icon-hover: #dc2626;
+    }
+  }
+  /* 4 cols checkerboard */
+  @media (min-width: 1024px) {
+    .checkerboard-grid > div > a:nth-child(8n+2), .checkerboard-grid > div > a:nth-child(8n+4), .checkerboard-grid > div > a:nth-child(8n+5), .checkerboard-grid > div > a:nth-child(8n+7) {
+      --card-from: #ef4444;
+      --card-to: #7f1d1d;
+      --icon-hover: #dc2626;
+    }
+  }
+  
+  .checkerboard-grid > div > a {
+    background-image: linear-gradient(to bottom right, var(--card-from), var(--card-to));
+  }
+  .checkerboard-grid > div > a:hover .icon-box {
+    color: var(--icon-hover) !important;
+  }
+`}</style>
+            <motion.div 
+              initial="hidden" 
+              animate="visible" 
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+              }}
+              className="checkerboard-grid"
+            >
               {filteredSubjects.map((sub, i) => (
+                <motion.div key={sub.id} variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="h-full">
                 <Link
-                  key={i}
                   href={`/practice/${examId}/${sub.id}`}
                   onClick={(e) => handleSubjectClick(e, sub.id)}
-                  className="group p-6 rounded-[1.5rem] shadow-sm hover:-translate-y-1 transition-transform overflow-hidden relative flex flex-col h-full bg-gradient-to-br"
+                  className="group p-6 rounded-[1.5rem] shadow-sm hover:-translate-y-1 transition-transform overflow-hidden relative flex flex-col h-full"
                 >
                   <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
                   <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
@@ -199,8 +246,9 @@ export default function SubjectSelectionPage() {
                   </div>
                   </div>
                 </Link>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             {/* Exam Stats / Promo / AI Tutor */}
             <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
