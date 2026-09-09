@@ -11,7 +11,9 @@ interface User {
   streakCurrent: number;
   referralCode: string;
   isPremium: boolean;
+  premiumExpiresAt?: string;
   hasIcan: boolean;
+  icanExpiresAt?: string;
   icanPlanName?: string;
   isAdmin: boolean;
   role: 'STUDENT' | 'MODERATOR' | 'ADMIN';

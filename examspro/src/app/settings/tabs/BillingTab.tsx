@@ -9,13 +9,20 @@ export default function BillingTab() {
   
   let planName = 'Free Plan';
   let planDesc = 'You are currently on the basic free plan. Upgrade to unlock unlimited AI tutorials.';
+  let planValidity = '';
   
   if (user?.hasIcan) {
     planName = user.icanPlanName || 'ICAN Plan';
     planDesc = 'You are currently on the ICAN plan. You have access to ICAN exam resources.';
+    if (user.icanExpiresAt) {
+      planValidity = `Valid until: ${new Date(user.icanExpiresAt).toLocaleDateString()}`;
+    }
   } else if (user?.isPremium) {
     planName = 'Pro Plan';
     planDesc = 'You are currently on the Pro plan with full access to unlimited AI tutorials and features.';
+    if (user.premiumExpiresAt) {
+      planValidity = `Valid until: ${new Date(user.premiumExpiresAt).toLocaleDateString()}`;
+    }
   }
 
   return (
@@ -29,7 +36,13 @@ export default function BillingTab() {
               <IconCreditCard className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-bold text-gray-900 mb-1">{planName}</h3>
-            <p className="text-sm text-gray-500 mb-6">{planDesc}</p>
+            <p className="text-sm text-gray-500 mb-2">{planDesc}</p>
+            {planValidity && (
+              <div className="inline-block px-3 py-1 bg-white border border-[#146ef5]/20 text-[#146ef5] text-xs font-bold rounded-full mb-6 shadow-sm">
+                {planValidity}
+              </div>
+            )}
+            {!planValidity && <div className="mb-6" />}
             <Link href="/shop">
               <Button className="w-full bg-[#146ef5] text-white hover:bg-blue-700 font-bold rounded-xl h-11">
                 {planName === 'Free Plan' ? 'Upgrade to Pro' : 'Manage Subscription'}
