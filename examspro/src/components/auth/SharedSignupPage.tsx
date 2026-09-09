@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -30,6 +30,15 @@ export default function SharedSignupPage({
   signupEndpoint = "/auth/signup",
 }: SharedSignupPageProps) {
   const router = useRouter();
+  const [refCode, setRefCode] = useState('');
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      setRefCode(params.get('ref') || '');
+    }
+  }, []);
+  
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   
@@ -44,9 +53,11 @@ export default function SharedSignupPage({
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await api.post(signupEndpoint, { full_name: name, email, phone, password });
+      const payload: any = { full_name: name, email, phone, password };
+      if (refCode) payload.referral_code = refCode;
       
-      // Some APIs return the token immediately on signup, some require login or verification
+      const res = await api.post(signupEndpoint, payload);
+      
       const token = res.data.token || res.data.access_token;
       if (token) {
         setAuth(res.data.user, token);
@@ -242,8 +253,8 @@ export default function SharedSignupPage({
           <div className="mt-8 text-center">
             <p className="text-xs text-slate-400 font-medium">
               Protected by reCAPTCHA and subject to the ResultsPRO{' '}
-              <Link href="#" className="text-slate-600 hover:underline">Privacy Policy</Link> and{' '}
-              <Link href="#" className="text-slate-600 hover:underline">Terms of Service</Link>.
+              <a href="https://www.resultspro.ng/privacy" className="text-slate-600 hover:underline">Privacy Policy</a> and{' '}
+              <a href="https://www.resultspro.ng/terms" className="text-slate-600 hover:underline">Terms of Service</a>.
             </p>
           </div>
         </div>

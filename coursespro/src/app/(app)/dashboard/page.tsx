@@ -14,8 +14,22 @@ import {
   CodeBracketSquareIcon
 } from '@heroicons/react/24/outline';
 import { FireIcon as FireSolid, StarIcon } from '@heroicons/react/24/solid';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useEffect } from 'react';
 
 export default function LearnerDashboard() {
+  const router = useRouter();
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
+  if (!user) return null;
+
   return (
     <>
       {/* Dashboard Title & Actions */}

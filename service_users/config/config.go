@@ -35,7 +35,7 @@ func InitConfig() {
 
 	SMTPFrom = os.Getenv("SMTP_FROM")
 	if SMTPFrom == "" {
-		SMTPFrom = "noreply@resultspro.ng"
+		SMTPFrom = "hello@resultspro.ng"
 	}
 
 	GoogleOAuthConfig = &oauth2.Config{

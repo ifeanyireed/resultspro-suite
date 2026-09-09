@@ -3,13 +3,26 @@
 import { IconBell as Bell, IconMoon as Moon, IconGlobe as Globe, IconUser as User, IconShield as Shield, IconCreditCard as CreditCard, IconLogout as LogOut, IconChevronRight as ChevronRight, IconArrowLeft as ArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
 import { WidgetCard } from '@/components/ui/Cards';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
 import AccountTab from './tabs/AccountTab';
 import SecurityTab from './tabs/SecurityTab';
 import PreferencesTab from './tabs/PreferencesTab';
 import BillingTab from './tabs/BillingTab';
 
 export default function SettingsPage() {
+  const router = useRouter();
+  const { user } = useAuthStore();
+  
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
+  if (!user) return null;
+
   const [activeTab, setActiveTab] = useState('Account');
   const tabs = [
     { id: 'Account', label: 'Account Profile', icon: User },

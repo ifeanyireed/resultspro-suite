@@ -161,7 +161,7 @@ export default function ApplyPage() {
           <div className="mt-6 text-center">
             <p className="text-xs text-slate-400 font-medium">
               No payment required to apply. By submitting, you agree to our{' '}
-              <Link href="#" className="text-slate-600 hover:underline">Terms of Service</Link>.
+              <a href="https://www.resultspro.ng/terms" className="text-slate-600 hover:underline">Terms of Service</a>.
             </p>
           </div>
         </div>

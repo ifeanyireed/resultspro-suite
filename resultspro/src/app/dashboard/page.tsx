@@ -13,8 +13,24 @@ import {
   ShoppingCartIcon
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function AgentDashboard() {
+  const router = useRouter();
+  const [isAuth, setIsAuth] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login');
+    } else {
+      setIsAuth(true);
+    }
+  }, [router]);
+
+  if (!isAuth) return null;
+
   return (
     <>
       {/* Dashboard Title & Actions */}

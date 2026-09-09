@@ -3,9 +3,23 @@
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Settings, Shield, Server, Database, Key, CheckCircle2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useEffect } from 'react';
 
 export default function SettingsPage() {
+  const router = useRouter();
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
   const [saved, setSaved] = useState(false);
+
+  if (!user) return null;
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();

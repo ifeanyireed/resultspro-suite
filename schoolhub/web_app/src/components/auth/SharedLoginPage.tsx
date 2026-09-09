@@ -196,8 +196,8 @@ export default function SharedLoginPage({
           <div className="mt-8 text-center">
             <p className="text-xs text-slate-400 font-medium">
               Protected by reCAPTCHA and subject to the ResultsPRO{' '}
-              <Link href="#" className="text-slate-600 hover:underline">Privacy Policy</Link> and{' '}
-              <Link href="#" className="text-slate-600 hover:underline">Terms of Service</Link>.
+              <a href="https://www.resultspro.ng/privacy" className="text-slate-600 hover:underline">Privacy Policy</a> and{' '}
+              <a href="https://www.resultspro.ng/terms" className="text-slate-600 hover:underline">Terms of Service</a>.
             </p>
           </div>
         </div>

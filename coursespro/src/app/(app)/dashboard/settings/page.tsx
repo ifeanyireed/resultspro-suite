@@ -1,7 +1,22 @@
 "use client";
 import React from 'react';
 
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useEffect } from 'react';
+
 export default function SettingsPage() {
+  const router = useRouter();
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
+  if (!user) return null;
+
   return (
     <>
       <div className="flex items-end justify-between mb-8 mt-2">

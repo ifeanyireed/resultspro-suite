@@ -23,13 +23,14 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
-		Email       string `json:"email"`
-		Password    string `json:"password"`
-		FullName    string `json:"full_name"`
-		Phone       string `json:"phone"`
-		Sex         string `json:"sex"`
-		DateOfBirth string `json:"date_of_birth"`
-		Address     string `json:"address"`
+		Email        string `json:"email"`
+		Password     string `json:"password"`
+		FullName     string `json:"full_name"`
+		Phone        string `json:"phone"`
+		Sex          string `json:"sex"`
+		DateOfBirth  string `json:"date_of_birth"`
+		Address      string `json:"address"`
+		ReferralCode string `json:"referral_code"` // Added referral_code
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -51,6 +52,9 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 
 	userID := uuid.New().String()
 	now := time.Now()
+	
+	// Generate a unique referral code for this new user
+	newReferralCode := "REF-" + strings.ToUpper(userID[:6])
 
 	var dob sql.NullString
 	if input.DateOfBirth != "" {
@@ -61,8 +65,17 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	query := `INSERT INTO users (id, email, password_hash, auth_provider, full_name, phone, sex, date_of_birth, address, account_status, mfa_enabled, created_at, updated_at) 
-	          VALUES (?, ?, ?, 'local', ?, ?, ?, ?, ?, 'unverified', 0, ?, ?)`
+	var referredBy sql.NullString
+	if input.ReferralCode != "" {
+		var referrerID string
+		err := db.DB.QueryRow("SELECT id FROM users WHERE referral_code = ?", input.ReferralCode).Scan(&referrerID)
+		if err == nil {
+			referredBy = sql.NullString{String: referrerID, Valid: true}
+		}
+	}
+
+	query := `INSERT INTO users (id, email, password_hash, auth_provider, full_name, phone, sex, date_of_birth, address, account_status, mfa_enabled, referral_code, referred_by, created_at, updated_at) 
+	          VALUES (?, ?, ?, 'local', ?, ?, ?, ?, ?, 'unverified', 0, ?, ?, ?, ?)`
 
 	_, err = db.DB.Exec(query,
 		userID,
@@ -73,6 +86,8 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		sql.NullString{String: input.Sex, Valid: input.Sex != ""},
 		dob,
 		sql.NullString{String: input.Address, Valid: input.Address != ""},
+		newReferralCode,
+		referredBy,
 		now.UTC().Format("2006-01-02 15:04:05"),
 		now.UTC().Format("2006-01-02 15:04:05"),
 	)
@@ -81,6 +96,15 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Signup DB Error: %v", err)
 		utils.JSONError(w, http.StatusConflict, "User already exists or database error")
 		return
+	}
+
+	// Create a record in referrals table if a referrer exists
+	if referredBy.Valid {
+		_, refErr := db.DB.Exec("INSERT INTO referrals (id, referrer_id, referee_id, status, coins_awarded, created_at) VALUES (?, ?, ?, 'pending', 0, ?)",
+			uuid.New().String(), referredBy.String, userID, now.UTC().Format("2006-01-02 15:04:05"))
+		if refErr != nil {
+			log.Printf("Failed to create referral record: %v", refErr)
+		}
 	}
 
 	// Generate and store verification OTP

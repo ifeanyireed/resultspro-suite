@@ -24,6 +24,10 @@ export default function SettingsPage() {
   };
 
   useEffect(() => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
     const fetchProfile = async () => {
       try {
         const response = await api.get("/user/profile");
@@ -34,8 +38,11 @@ export default function SettingsPage() {
         setLoading(false);
       }
     };
+
     fetchProfile();
-  }, []);
+  }, [user, router]);
+
+  if (!user) return null;
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",

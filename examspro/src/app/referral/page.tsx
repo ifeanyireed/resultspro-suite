@@ -92,39 +92,42 @@ export default function ReferralPage() {
   const conversionRate = isArray && referrals.length > 0 ? Math.round((convertedCount / referrals.length) * 100) : 0;
 
   return (
-    <main className="min-h-screen bg-navy pb-24">
+    <main className="min-h-screen bg-slate-50 pb-24">
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green/10 border border-green/20 text-green mb-6">
-            <Gift className="w-4 h-4" />
-            <span className="text-xs font-bold uppercase tracking-widest">Refer & Earn</span>
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="px-3 py-1 rounded-full bg-green text-white font-bold text-[10px] uppercase tracking-widest">Refer & Earn</span>
+              <div className="w-1 h-1 rounded-full bg-slate-300" />
+              <span className="text-slate-500 text-xs font-bold uppercase tracking-widest">Invite Friends</span>
+            </div>
+            <h1 className="text-3xl md:text-5xl font-display font-black uppercase tracking-tight text-slate-900 mb-2">
+              Give 50, Get 50
+            </h1>
+            <p className="text-slate-600 max-w-xl text-lg leading-relaxed">
+              Invite your friends to ResultPRO. They get <span className="text-slate-900 font-bold">50</span> bonus coins on signup, and you earn <span className="text-slate-900 font-bold">50</span> coins once they complete 5 quizzes.
+            </p>
           </div>
-          <h1 className="text-4xl md:text-6xl font-display font-black text-white mb-6">
-            GIVE <span className="text-blue">50</span>, GET <span className="text-green">50</span>
-          </h1>
-          <p className="text-gray-400 max-w-xl mx-auto text-lg leading-relaxed">
-            Invite your friends to ResultPRO. They get <span className="text-white font-bold text-xl">50</span> bonus coins on signup, and you earn <span className="text-white font-bold text-xl">50</span> coins once they complete 5 quizzes.
-          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Referral Card */}
           <div className="lg:col-span-2 space-y-8">
             {user ? (
-              <div className="p-8 md:p-12 rounded-[40px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] relative overflow-hidden group">
+              <div className="p-8 md:p-12 rounded-[40px] bg-white border border-slate-200 shadow-sm backdrop-blur-xl backdrop-saturate-[1.2] shadow-md  relative overflow-hidden group">
                 <div className="absolute inset-0 bg-green/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                 
-                <h3 className="text-xl font-display font-bold text-white mb-8">Your Unique Referral Link</h3>
+                <h3 className="text-xl font-display font-bold text-slate-900 mb-8">Your Unique Referral Link</h3>
                 
                 <div className="flex flex-col md:flex-row gap-4 mb-12">
-                  <div className="flex-1 p-5 rounded-2xl bg-navy border border-white/10 text-gray-300 font-mono text-sm flex items-center justify-between group/link">
+                  <div className="flex-1 p-5 rounded-2xl bg-slate-50 border border-slate-200 text-slate-700 font-mono text-sm flex items-center justify-between group/link">
                     <span className="truncate">{referralLink}</span>
                     <button 
                       onClick={copyToClipboard}
-                      className={`p-2 rounded-lg transition-colors ${copying ? 'bg-green text-navy' : 'bg-white/5 text-gray-500 hover:text-white'}`}
+                      className={`p-2 rounded-lg transition-colors ${copying ? 'bg-green text-navy' : 'bg-slate-100 text-slate-500 hover:text-slate-900'}`}
                     >
                       {copying ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     </button>
@@ -156,15 +159,15 @@ export default function ReferralPage() {
                 </div>
               </div>
             ) : (
-                <div className="p-8 md:p-12 rounded-[40px] bg-white/[0.02] border border-blue/10 backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] text-center flex flex-col items-center justify-center gap-6 min-h-[300px]">
+                <div className="p-8 md:p-12 rounded-[40px] bg-white border border-blue/10 backdrop-blur-xl backdrop-saturate-[1.2] shadow-md  text-center flex flex-col items-center justify-center gap-6 min-h-[300px]">
                     <div className="w-16 h-16 rounded-3xl bg-blue/10 flex items-center justify-center text-blue">
                         <Lock className="w-8 h-8" />
                     </div>
                     <div>
-                        <h3 className="text-xl font-display font-bold text-white mb-2">Login to Get Your Link</h3>
-                        <p className="text-sm text-gray-500 max-w-sm mx-auto">You need an account to generate a unique referral link and start earning coins.</p>
+                        <h3 className="text-xl font-display font-bold text-slate-900 mb-2">Login to Get Your Link</h3>
+                        <p className="text-sm text-slate-500 max-w-sm mx-auto">You need an account to generate a unique referral link and start earning coins.</p>
                     </div>
-                    <Button onClick={() => window.location.href = '/login?redirect=/referral'} className="bg-blue-500 hover:bg-blue-600 text-white font-bold px-10 py-6 rounded-2xl">
+                    <Button onClick={() => window.location.href = '/login?redirect=/referral'} className="bg-blue-500 hover:bg-blue-600 text-slate-900 font-bold px-10 py-6 rounded-2xl">
                         JOIN RESULTPRO NOW
                     </Button>
                 </div>
@@ -177,10 +180,10 @@ export default function ReferralPage() {
                 { step: 2, title: "They Register", desc: "Your friend signs up and gets 50 coins instantly." },
                 { step: 3, title: "They Qualify", desc: "Once they finish 5 quizzes, you get your 50 coins reward!" },
               ].map((s, i) => (
-                <div key={i} className="p-8 rounded-[32px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] relative group hover:border-blue/30 transition-all">
-                  <div className="text-4xl font-display font-black text-white/5 absolute top-4 right-6 leading-none group-hover:text-blue/10 transition-colors">0{s.step}</div>
-                  <h4 className="font-bold text-white mb-2">{s.title}</h4>
-                  <p className="text-xs text-gray-500 leading-relaxed">{s.desc}</p>
+                <div key={i} className="p-8 rounded-[32px] bg-white border border-slate-200 shadow-sm relative group hover:border-blue/30 transition-all">
+                  <div className="text-4xl font-display font-black text-slate-900/5 absolute top-4 right-6 leading-none group-hover:text-blue-100 transition-colors">0{s.step}</div>
+                  <h4 className="font-bold text-slate-900 mb-2">{s.title}</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">{s.desc}</p>
                 </div>
               ))}
             </div>
@@ -189,8 +192,8 @@ export default function ReferralPage() {
           {/* Stats */}
           <div className="space-y-6">
             {user ? (
-                <div className="p-8 rounded-[40px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
-                <h3 className="text-xl font-display font-bold text-white mb-8">Performance</h3>
+                <div className="p-8 rounded-[40px] bg-white border border-slate-200 shadow-sm backdrop-blur-xl backdrop-saturate-[1.2] shadow-md ">
+                <h3 className="text-xl font-display font-bold text-slate-900 mb-8">Performance</h3>
                 <div className="space-y-8">
                     {[
                     { label: "Total Invited", value: isArray ? referrals.length : 0, icon: Users, color: "blue" },
@@ -198,32 +201,32 @@ export default function ReferralPage() {
                     { label: "Conversion", value: `${conversionRate}%`, icon: TrendingUp, color: "green" },
                     ].map((stat, i) => (
                     <div key={i} className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center ${
+                        <div className={`w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center ${
                             stat.color === 'blue' ? 'text-blue-400' : 
                             stat.color === 'amber' ? 'text-amber-400' : 'text-green'
                         }`}>
                         <stat.icon className="w-6 h-6" />
                         </div>
                         <div>
-                        <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{stat.label}</div>
-                        <div className="text-2xl font-display font-black text-white leading-none mt-1">{stat.value}</div>
+                        <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{stat.label}</div>
+                        <div className="text-2xl font-display font-black text-slate-900 leading-none mt-1">{stat.value}</div>
                         </div>
                     </div>
                     ))}
                 </div>
                 </div>
             ) : (
-                <div className="p-8 rounded-[40px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] opacity-50 grayscale select-none pointer-events-none">
-                    <h3 className="text-xl font-display font-bold text-white mb-8">Performance</h3>
+                <div className="p-8 rounded-[40px] bg-white border border-slate-200 shadow-sm backdrop-blur-xl backdrop-saturate-[1.2] shadow-md  opacity-50 grayscale select-none pointer-events-none">
+                    <h3 className="text-xl font-display font-bold text-slate-900 mb-8">Performance</h3>
                     <div className="space-y-8">
                         {Array.from({ length: 3 }).map((_, i) => (
                         <div key={i} className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-gray-600">
-                                <div className="w-6 h-6 bg-gray-800 rounded-full animate-pulse" />
+                            <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400">
+                                <div className="w-6 h-6 bg-slate-200 rounded-full animate-pulse" />
                             </div>
                             <div>
-                            <div className="h-2 w-16 bg-gray-800 rounded mb-2" />
-                            <div className="h-6 w-8 bg-gray-800 rounded" />
+                            <div className="h-2 w-16 bg-slate-200 rounded mb-2" />
+                            <div className="h-6 w-8 bg-slate-200 rounded" />
                             </div>
                         </div>
                         ))}
@@ -231,12 +234,12 @@ export default function ReferralPage() {
                 </div>
             )}
 
-            <div className="p-8 rounded-[40px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] relative overflow-hidden group">
+            <div className="p-8 rounded-[40px] bg-white border border-slate-200 shadow-sm relative overflow-hidden group">
                <div className="flex items-start gap-4">
                   <AlertCircle className="w-5 h-5 text-amber shrink-0 mt-1" />
                   <div>
-                    <h4 className="text-sm font-bold text-white mb-1">Qualification Rule</h4>
-                    <p className="text-xs text-gray-500 leading-relaxed">
+                    <h4 className="text-sm font-bold text-slate-900 mb-1">Qualification Rule</h4>
+                    <p className="text-xs text-slate-500 leading-relaxed">
                       To prevent spam, rewards are released only after your friends complete at least 5 study sessions.
                     </p>
                   </div>
@@ -247,13 +250,13 @@ export default function ReferralPage() {
 
         {/* Recent Referrals List */}
         <div className="mt-16">
-          <h3 className="text-xl font-display font-bold text-white mb-8">Referral History</h3>
+          <h3 className="text-xl font-display font-bold text-slate-900 mb-8">Referral History</h3>
           
           {!user ? (
-            <div className="p-12 rounded-[40px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] text-center">
-              <Users className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-              <h4 className="text-white font-bold">Login to view your referrals</h4>
-              <p className="text-gray-500 text-sm mt-1 mb-6">You need to be logged in to see your referral history and earnings.</p>
+            <div className="p-12 rounded-[40px] bg-white border border-slate-200 shadow-sm text-center">
+              <Users className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+              <h4 className="text-slate-900 font-bold">Login to view your referrals</h4>
+              <p className="text-slate-500 text-sm mt-1 mb-6">You need to be logged in to see your referral history and earnings.</p>
               <Button onClick={() => window.location.href = '/login'} className="bg-green text-navy hover:bg-green/90 font-bold px-8">
                 Login / Sign Up
               </Button>
@@ -261,39 +264,39 @@ export default function ReferralPage() {
           ) : loading ? (
             <div className="py-20 flex flex-col items-center justify-center">
               <Loader2 className="w-10 h-10 text-green animate-spin mb-4" />
-              <p className="text-gray-500 font-bold">Loading your referrals...</p>
+              <p className="text-slate-500 font-bold">Loading your referrals...</p>
             </div>
           ) : !isArray || referrals.length === 0 ? (
-            <div className="p-12 rounded-[40px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] text-center">
-              <Users className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-              <h4 className="text-white font-bold">No referrals yet</h4>
-              <p className="text-gray-500 text-sm mt-1">Start sharing your link to earn bonus coins!</p>
+            <div className="p-12 rounded-[40px] bg-white border border-slate-200 shadow-sm text-center">
+              <Users className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+              <h4 className="text-slate-900 font-bold">No referrals yet</h4>
+              <p className="text-slate-500 text-sm mt-1">Start sharing your link to earn bonus coins!</p>
             </div>
           ) : (
             <div className="space-y-3">
               {referrals.map((ref, i) => (
-                <div key={i} className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] flex items-center justify-between group hover:border-white/10 transition-all">
+                <div key={i} className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between group hover:border-slate-200 transition-all">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/[0.1] border-t-white/[0.15] flex items-center justify-center text-gray-400 font-black">
+                    <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200  flex items-center justify-center text-slate-600 font-black">
                       {(ref.referee?.name || ref.referee?.email || '?').charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-white">{ref.referee?.name || 'New Student'}</div>
-                      <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                      <div className="text-sm font-bold text-slate-900">{ref.referee?.name || 'New Student'}</div>
+                      <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
                         Joined {new Date(ref.createdAt).toLocaleDateString()}
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-8">
                     <div className="text-right hidden md:block">
-                       <div className="text-[10px] text-gray-500 font-bold uppercase mb-1">Status</div>
+                       <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Status</div>
                        <div className={`text-xs font-black uppercase tracking-widest ${ref.status === 'converted' ? 'text-green' : 'text-amber'}`}>
                         {ref.status}
                       </div>
                     </div>
                     <div className="w-24 text-right">
-                      <div className="text-[10px] text-gray-500 font-bold uppercase mb-1">Reward</div>
-                      <div className={`text-lg font-display font-black ${ref.coinsAwarded > 0 ? 'text-green' : 'text-gray-600'}`}>
+                      <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Reward</div>
+                      <div className={`text-lg font-display font-black ${ref.coinsAwarded > 0 ? 'text-green' : 'text-slate-400'}`}>
                         {ref.coinsAwarded > 0 ? `+${ref.coinsAwarded}` : '0'}
                       </div>
                     </div>

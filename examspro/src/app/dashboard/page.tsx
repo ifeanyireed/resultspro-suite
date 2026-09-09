@@ -8,6 +8,8 @@ import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@/components/ui
 import { IconFlame, IconCoins, IconTrophy, IconChevronRight, IconPlayerPlay, IconSword, IconBook, IconLoader2, IconBolt } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
+import { useRouter } from 'next/navigation';
+
 interface DashboardData {
   user: {
     name: string;
@@ -29,10 +31,11 @@ export default function Dashboard() {
   const [battleHistory, setBattleHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const { user, fetchUser } = useAuthStore();
+  const router = useRouter();
 
   useEffect(() => {
     if (!user) {
-      setLoading(false);
+      router.push('/login');
       return;
     }
 
