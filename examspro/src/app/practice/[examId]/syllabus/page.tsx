@@ -16,10 +16,12 @@ export async function generateStaticParams() {
 
 async function getSyllabus(examId: string) {
   try {
-    const res = await api.get(`/exams/${examId}/syllabus`);
-    return res.data;
-  } catch (err) {
-    console.error(`Failed to fetch syllabus: ${examId}`);
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://resultspro-service-examspro.onrender.com/api';
+    const res = await fetch(`${API_URL}/exams/${examId}/syllabus`, { next: { revalidate: 3600 } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err: any) {
+    console.warn(`[getSyllabus] Failed to fetch syllabus for examId ${examId}:`, err.message);
     return null;
   }
 }
