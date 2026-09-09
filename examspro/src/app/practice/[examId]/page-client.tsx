@@ -23,7 +23,7 @@ interface Subject {
 export default function SubjectSelectionPage() {
   const params = useParams();
   const examId = params.examId as string;
-  const { isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
   const router = useRouter();
 
   const [subjects, setSubjects] = useState<Subject[]>([]);

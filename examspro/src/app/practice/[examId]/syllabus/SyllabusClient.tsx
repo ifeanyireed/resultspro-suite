@@ -2,10 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/useAuthStore";
+import { IconLock as Lock } from "@tabler/icons-react";
 import { IconChevronLeft as ChevronLeft, IconBook as BookOpen, IconTarget as Target, IconSparkles as Sparkles, IconAlertCircle as AlertCircle, IconChevronDown as ChevronDown, IconChevronUp as ChevronUp } from '@tabler/icons-react';
 import Link from "next/link";
 
 export default function SyllabusClient({ syllabus, examId }: { syllabus: any, examId: string }) {
+  const { user } = useAuthStore();
   const router = useRouter();
   const [expandedSubjects, setExpandedSubjects] = useState<Record<number, boolean>>({});
 
@@ -30,6 +33,36 @@ export default function SyllabusClient({ syllabus, examId }: { syllabus: any, ex
   }
 
   const { exam } = syllabus;
+
+  if (examId === 'ican' && user && !user.hasIcan) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-50 px-4">
+        <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center border border-slate-200">
+          <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Lock className="w-10 h-10" />
+          </div>
+          <h2 className="text-2xl font-black font-display text-slate-900 mb-3">Premium Access Required</h2>
+          <p className="text-gray-500 mb-8">
+            You need an active ICAN Study Pack subscription to access the ICAN syllabus.
+          </p>
+          <div className="flex gap-4">
+            <button
+              onClick={() => router.push('/practice')}
+              className="flex-1 py-4 rounded-xl font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 transition-colors"
+            >
+              Back
+            </button>
+            <button
+              onClick={() => router.push('/shop')}
+              className="flex-1 py-4 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+            >
+              Go to Shop
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <main className="flex-1 max-w-5xl mx-auto w-full px-6 py-12">

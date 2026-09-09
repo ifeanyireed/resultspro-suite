@@ -31,6 +31,8 @@ type User struct {
 	LastActiveAt       *time.Time     `json:"lastActiveAt"`
 	IsPremium          bool           `gorm:"default:false" json:"isPremium"`
 	PremiumExpiresAt   *time.Time     `json:"premiumExpiresAt"`
+	HasIcan            bool           `gorm:"default:false" json:"hasIcan"`
+	IcanExpiresAt      *time.Time     `json:"icanExpiresAt"`
 	Role               Role           `gorm:"default:'STUDENT'" json:"role"`
 	IsAdmin            bool           `gorm:"default:false" json:"isAdmin"`
 	OTPCode            *string        `json:"otpCode"`
