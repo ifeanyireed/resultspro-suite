@@ -12,6 +12,8 @@ export default function Navbar() {
   const pathname = usePathname();
   const isLanding = pathname === "/";
   
+  const isOnboarding = pathname?.startsWith('/onboard');
+  
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -34,50 +36,54 @@ export default function Navbar() {
           : 'bg-transparent py-6'
       }`}
     >
-      <div className="container-nets flex items-center justify-between">
+      <div className={`container-nets flex items-center ${isOnboarding ? 'justify-center' : 'justify-between'}`}>
         <Logo />
 
         {/* Desktop Links */}
-        <div className="hidden lg:flex items-center gap-8">
-          <div className="flex items-center gap-6">
-            {navLinks.map((l) => (
-              <Link 
-                key={l.path} 
-                href={l.path}
-                className="text-sm fw-500 text-white/80 hover:text-white transition-colors"
-              >
-                {l.name}
+        {!isOnboarding && (
+          <div className="hidden lg:flex items-center gap-8">
+            <div className="flex items-center gap-6">
+              {navLinks.map((l) => (
+                <Link 
+                  key={l.path} 
+                  href={l.path}
+                  className="text-sm fw-500 text-white/80 hover:text-white transition-colors"
+                >
+                  {l.name}
+                </Link>
+              ))}
+            </div>
+            
+            <div className="w-[1px] h-6 bg-white/10" />
+            
+            <div className="flex items-center gap-4">
+              <Link href="https://auth.resultspro.ng/login" className="text-sm fw-600 text-white hover:text-white/80 transition-colors">
+                Sign In
               </Link>
-            ))}
+              <Link href="/onboard" className="btn btn-red btn-sm">
+                Get Started
+              </Link>
+            </div>
           </div>
-          
-          <div className="w-[1px] h-6 bg-white/10" />
-          
-          <div className="flex items-center gap-4">
-            <Link href="https://auth.resultspro.ng/login" className="text-sm fw-600 text-white hover:text-white/80 transition-colors">
-              Sign In
-            </Link>
-            <Link href="/onboard" className="btn btn-red btn-sm">
-              Get Started
-            </Link>
-          </div>
-        </div>
+        )}
 
         {/* Mobile Toggle */}
-        <button 
-          className="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-[5px]"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle Menu"
-        >
-          <span className={`block w-6 h-[2px] bg-white transition-transform ${mobileOpen ? 'rotate-45 translate-y-[7px]' : ''}`} />
-          <span className={`block w-6 h-[2px] bg-white transition-opacity ${mobileOpen ? 'opacity-0' : ''}`} />
-          <span className={`block w-6 h-[2px] bg-white transition-transform ${mobileOpen ? '-rotate-45 -translate-y-[7px]' : ''}`} />
-        </button>
+        {!isOnboarding && (
+          <button 
+            className="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-[5px]"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle Menu"
+          >
+            <span className={`block w-6 h-[2px] bg-white transition-transform ${mobileOpen ? 'rotate-45 translate-y-[7px]' : ''}`} />
+            <span className={`block w-6 h-[2px] bg-white transition-opacity ${mobileOpen ? 'opacity-0' : ''}`} />
+            <span className={`block w-6 h-[2px] bg-white transition-transform ${mobileOpen ? '-rotate-45 -translate-y-[7px]' : ''}`} />
+          </button>
+        )}
       </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>
-        {mobileOpen && (
+        {!isOnboarding && mobileOpen && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
