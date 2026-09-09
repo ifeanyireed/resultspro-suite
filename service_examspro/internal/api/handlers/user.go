@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"strings"
 	"time"
 
 	"exams-resultspro-backend/internal/database"
@@ -20,6 +21,12 @@ func (h *UserHandler) GetProfile(c *gin.Context) {
 	if err := database.DB.Where("id = ?", userID).First(&user).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
+	}
+
+	if user.ReferralCode == "" {
+		newCode := "REF-" + strings.ToUpper(user.ID[:6])
+		database.DB.Model(&user).Update("referral_code", newCode)
+		user.ReferralCode = newCode
 	}
 
 	if user.HasIcan {

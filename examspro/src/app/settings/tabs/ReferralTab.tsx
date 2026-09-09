@@ -84,8 +84,7 @@ export default function ReferralTab() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
-      <div className="bg-white p-8 md:p-12 rounded-[24px] border border-gray-100 shadow-sm relative overflow-hidden group">
-        <div className="absolute inset-0 bg-green-50/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+      <div className="bg-white p-8 md:p-12 rounded-[24px] border border-gray-100 shadow-sm relative overflow-hidden">
         
         <div className="flex items-center gap-3 mb-6">
           <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
@@ -152,6 +151,55 @@ export default function ReferralTab() {
             <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Coins Earned</div>
           </div>
         </div>
+      </div>
+
+      <div className="bg-white p-8 rounded-[24px] border border-gray-100 shadow-sm">
+        <h3 className="text-lg font-bold text-slate-900 mb-6">Referral History</h3>
+        
+        {loading ? (
+          <div className="py-10 text-center text-sm text-gray-500">Loading history...</div>
+        ) : !isArray || referrals.length === 0 ? (
+          <div className="py-12 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+            <IconUsers className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+            <p className="text-slate-500 text-sm font-medium">No referrals yet. Share your link to start earning!</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="text-xs text-gray-500 uppercase bg-gray-50 border-y border-gray-100">
+                <tr>
+                  <th className="px-6 py-4 font-bold tracking-wider">Referee</th>
+                  <th className="px-6 py-4 font-bold tracking-wider">Status</th>
+                  <th className="px-6 py-4 font-bold tracking-wider">Coins Awarded</th>
+                  <th className="px-6 py-4 font-bold tracking-wider">Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {referrals.map((ref: any, idx: number) => (
+                  <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-6 py-4 font-medium text-gray-900">
+                      {ref.referee?.fullName || ref.referee?.email || 'Unknown User'}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                        ref.status === 'converted' ? 'bg-emerald-100 text-emerald-700' : 
+                        'bg-amber-100 text-amber-700'
+                      }`}>
+                        {ref.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 font-bold text-gray-700">
+                      {ref.coinsAwarded > 0 ? `+${ref.coinsAwarded}` : '-'}
+                    </td>
+                    <td className="px-6 py-4 text-gray-500">
+                      {new Date(ref.createdAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
