@@ -19,7 +19,7 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: 'SchoolHub', path: '/#schoolhub' },
+    { name: 'SchoolHub', path: '/schoolhub' },
     { name: 'ExamsPRO', path: '/#examspro' },
     { name: 'ClassroomPRO', path: '/#classroompro' },
     { name: 'ResultsPRO', path: '/#resultspro' },
@@ -60,7 +60,7 @@ export default function Navbar() {
               Sign In
             </Link>
             <Link href="/onboard" className="btn btn-red btn-sm">
-              Get Started
+              Sign up for free
             </Link>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default function Navbar() {
                   href="/onboard" 
                   className="btn btn-red w-full text-center justify-center"
                 >
-                  Get Started
+                  Sign up for free
                 </Link>
               </div>
             </div>

@@ -7,7 +7,7 @@ const footerSections = [
   {
     title: 'Products',
     links: [
-      { label: 'SchoolHub',             href: '#schoolhub' },
+      { label: 'SchoolHub',             href: '/schoolhub' },
       { label: 'ExamsPRO',              href: 'https://examspro.resultspro.ng' },
       { label: 'ClassroomPRO',          href: '#classroompro' },
       { label: 'ResultsPRO',            href: '#resultspro' },
