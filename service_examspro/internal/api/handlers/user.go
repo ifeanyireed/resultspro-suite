@@ -381,12 +381,22 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 		Find(&recentCoins)
 
 	for _, tx := range recentCoins {
+		activityType := "coins"
+		if tx.Type == "PLAN_PURCHASE" {
+			activityType = "plan"
+		}
+		
+		title := tx.Type
+		if tx.Description != nil && *tx.Description != "" {
+			title = *tx.Description
+		}
+
 		recentActivity = append(recentActivity, gin.H{
-			"title":     tx.Type,
-			"type":      "coins",
+			"title":     title,
+			"type":      activityType,
 			"amount":    tx.Amount,
 			"timestamp": tx.CreatedAt,
-			"desc":      tx.Description,
+			"desc":      tx.Type, // Just store original type here if needed
 		})
 	}
 

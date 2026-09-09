@@ -305,6 +305,9 @@ func processSuccessfulPayment(reference string, metadata struct {
 		isPremium := (metadata.Type == "PREMIUM") || (purchase.PackName == "Pro Plan")
 		isIcan := (metadata.Type == "ICAN") || (purchase.PackName == "ICAN Study Pack")
 		
+		var txType string
+		var txDesc string
+
 		if isPremium {
 			expiry := time.Now().AddDate(0, 1, 0)
 			if err := tx.Model(&models.User{}).Where("id = ?", purchase.UserID).
@@ -314,11 +317,12 @@ func processSuccessfulPayment(reference string, metadata struct {
 				}).Error; err != nil {
 				return err
 			}
+			txType = "PLAN_PURCHASE"
+			txDesc = "Upgraded to Premium Access"
 		} else if isIcan {
 			expiry := time.Now().AddDate(0, 6, 0)
 			
-			// Map pack name to plan type if possible
-			planType := "Full Access" // Default
+			planType := "Full Access"
 			if purchase.PackName != "" {
 				planType = purchase.PackName
 			}
@@ -331,18 +335,23 @@ func processSuccessfulPayment(reference string, metadata struct {
 				}).Error; err != nil {
 				return err
 			}
+			txType = "PLAN_PURCHASE"
+			txDesc = "Purchased ICAN " + planType
 		} else {
 			if err := tx.Model(&models.User{}).Where("id = ?", purchase.UserID).
 				Update("coin_balance", gorm.Expr("coin_balance + ?", purchase.CoinsGranted)).Error; err != nil {
 				return err
 			}
+			txType = "COIN_PURCHASE"
+			txDesc = "Purchased " + purchase.PackName
 		}
 
 		coinTrans := models.CoinTransaction{
 			ID:          uuid.New().String(),
 			UserID:      purchase.UserID,
 			Amount:      purchase.CoinsGranted,
-			Type:        "purchase",
+			Type:        txType,
+			Description: &txDesc,
 			ReferenceID: &purchase.ID,
 		}
 		if err := tx.Create(&coinTrans).Error; err != nil {

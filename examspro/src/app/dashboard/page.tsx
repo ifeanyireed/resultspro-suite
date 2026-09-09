@@ -5,7 +5,7 @@ import Link from 'next/link';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@/components/ui/Cards';
-import { IconFlame, IconCoins, IconTrophy, IconChevronRight, IconPlayerPlay, IconSword, IconBook, IconLoader2, IconBolt } from '@tabler/icons-react';
+import { IconFlame, IconCoins, IconTrophy, IconChevronRight, IconPlayerPlay, IconSword, IconBook, IconLoader2, IconBolt, IconSparkles } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
 import { useRouter } from 'next/navigation';
@@ -340,9 +340,13 @@ export default function Dashboard() {
                 <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-gray-100 bg-white hover:border-[#146ef5]/30 hover:shadow-sm transition-all cursor-pointer group">
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                      item.type === 'study' ? 'bg-blue-50 text-blue-500' : 'bg-amber-50 text-amber-500'
+                      item.type === 'study' ? 'bg-blue-50 text-blue-500' : 
+                      item.type === 'plan' ? 'bg-purple-50 text-purple-500' : 
+                      'bg-amber-50 text-amber-500'
                     }`}>
-                      {item.type === 'study' ? <IconBook className="w-4 h-4" /> : <IconCoins className="w-4 h-4" />}
+                      {item.type === 'study' ? <IconBook className="w-4 h-4" /> : 
+                       item.type === 'plan' ? <IconSparkles className="w-4 h-4" /> : 
+                       <IconCoins className="w-4 h-4" />}
                     </div>
                     <div>
                       <div className="text-xs font-bold text-gray-900 group-hover:text-[#146ef5] transition-colors line-clamp-1">{item.title}</div>
