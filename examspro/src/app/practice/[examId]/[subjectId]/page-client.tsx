@@ -96,6 +96,10 @@ export default function TopicListPage() {
     topic.name.toLowerCase().includes(searchQuery.toLowerCase()) && topic.questions > 0
   ) || [];
 
+  const filteredYears = years?.filter(year => 
+    year.year.toString().includes(searchQuery.trim())
+  ) || [];
+
   const completedCount = topics?.filter(t => t.completed).length || 0;
 
   return (
@@ -189,7 +193,7 @@ export default function TopicListPage() {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                 <input
                   type="text"
-                  placeholder="Search topics..."
+                  placeholder={viewMode === 'topic' ? "Search topics..." : "Search years..."}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-white border border-gray-200 shadow-sm rounded-2xl py-4 pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#146ef5]/50 transition-colors"
@@ -310,8 +314,8 @@ export default function TopicListPage() {
                 )
               ) : (
                 /* Year Mode Arcade List */
-                (years || []).length > 0 ? (
-                  (years || []).map((yearStat) => (
+                (filteredYears || []).length > 0 ? (
+                  (filteredYears || []).map((yearStat) => (
                     <div
                       key={yearStat.year}
                       className="relative p-6 rounded-[22px] border bg-white border-gray-200  hover:bg-white hover:border-[#146ef5]/30 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group"
