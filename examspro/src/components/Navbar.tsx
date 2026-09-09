@@ -68,8 +68,8 @@ export default function Navbar() {
     { label: 'Live Games', href: '/live', enabled: featureFlags['live_games_enabled'] !== 'false' },
     { label: 'Battle Mode', href: '/battle-mode', enabled: featureFlags['battle_mode_enabled'] !== 'false' },
     { label: 'Leaderboard', href: '/leaderboard', enabled: true },
-    { label: 'Shop', href: '/shop', enabled: isAuthenticated },
     { label: 'AI Tutor', href: '/study-assistant', enabled: isAuthenticated },
+    { label: 'Shop', href: '/shop', enabled: isAuthenticated },
     { label: 'Admin', href: '/admin/dashboard', enabled: isAuthenticated && (user?.role === 'ADMIN' || user?.role === 'MODERATOR') },
   ].filter(i => i.enabled);
 
