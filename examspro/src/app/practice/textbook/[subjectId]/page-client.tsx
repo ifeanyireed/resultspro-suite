@@ -107,7 +107,7 @@ export default function TextbookViewerPage() {
             onClick={() => setIsReaderMode(!isReaderMode)}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs transition-all ${
               isReaderMode 
-                ? 'bg-[#146ef5] text-white text-gray-900 shadow-lg shadow-blue/20' 
+                ? 'bg-[#146ef5] text-white shadow-lg shadow-blue/20' 
                 : 'bg-white text-gray-500 border border-gray-200 shadow-sm hover:bg-gray-100 hover:text-gray-900'
             }`}
           >
@@ -130,7 +130,7 @@ export default function TextbookViewerPage() {
       <div className="flex-1 bg-[#1a1a1a] relative overflow-auto custom-scrollbar flex flex-col items-center">
         {isReaderMode ? (
           <div className="w-full max-w-3xl px-6 py-12 md:py-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <header className="mb-16 border-b border-white/10 pb-8">
+            <header className="mb-16 border-b border-gray-200 pb-8">
               <h2 className="text-[10px] font-black text-[#146ef5] uppercase tracking-[0.2em] mb-4">Reading Material</h2>
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
                 {subject.textbookTitle || subject.name}
@@ -140,7 +140,7 @@ export default function TextbookViewerPage() {
               </p>
             </header>
 
-            <div className="text-gray-600 text-lg leading-relaxed prose prose-invert max-w-none prose-p:mb-6 prose-li:mb-2 prose-headings:text-gray-900 prose-headings:font-bold prose-headings:mt-12 prose-headings:mb-6">
+            <div className="text-gray-600 text-lg leading-relaxed prose max-w-none prose-p:mb-6 prose-li:mb-2 prose-headings:text-gray-900 prose-headings:font-bold prose-headings:mt-12 prose-headings:mb-6">
               {subject.textbookContent ? (
                 <div dangerouslySetInnerHTML={{ __html: subject.textbookContent }} />
               ) : (
@@ -204,7 +204,7 @@ export default function TextbookViewerPage() {
       </div>
 
       {/* Bottom Status Bar */}
-      <footer className="h-10 bg-[#0D1B2A] border-t border-white/5 flex items-center justify-between px-6 shrink-0">
+      <footer className="h-10 bg-[#0D1B2A] border-t border-gray-200 flex items-center justify-between px-6 shrink-0">
         <p className="text-[9px] font-bold text-gray-600 uppercase tracking-widest">
           {isReaderMode ? 'Interactive Reader Mode • Enhanced Accessibility' : 'Secure Educational Viewer • Printing and Downloads Disabled'}
         </p>

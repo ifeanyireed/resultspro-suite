@@ -121,11 +121,11 @@ export default function TopicListPage() {
             <p className="text-gray-500 font-medium">Loading topics for {subjectName || subjectId}...</p>
           </div>
         ) : error ? (
-          <div className="p-8 rounded-3xl bg-red-500/10 border border-red-500/20 text-center">
+          <div className="p-8 rounded-3xl bg-red-50 border border-red-500/20 text-center">
             <p className="text-red-500 font-medium">{error}</p>
             <Link
               href={`/practice/${examId}`}
-              className="mt-4 inline-block px-6 py-2 bg-white text-gray-900 rounded-xl hover:bg-white/10 transition-colors"
+              className="mt-4 inline-block px-6 py-2 bg-white text-gray-900 rounded-xl hover:bg-gray-100 transition-colors"
             >
               Go Back
             </Link>
@@ -232,7 +232,7 @@ export default function TopicListPage() {
                             <span className={`
                               px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tighter
                               ${topic.difficulty === 'Easy' ? 'bg-[#146ef5]/10 text-[#146ef5]' :
-                                topic.difficulty === 'Medium' ? 'bg-amber/10 text-amber' : 'bg-red-500/10 text-red-500'}
+                                topic.difficulty === 'Medium' ? 'bg-amber/10 text-amber' : 'bg-red-50 text-red-500'}
                             `}>
                               {topic.difficulty}
                             </span>
@@ -277,7 +277,7 @@ export default function TopicListPage() {
                                 ${topic.active
                                   ? 'bg-gradient-to-r from-[#146ef5] to-red-500 text-white hover:scale-105 shadow-md'
                                   : isAuthenticated
-                                    ? 'bg-white text-gray-900 hover:bg-white/10'
+                                    ? 'bg-white text-gray-900 hover:bg-gray-100'
                                     : 'bg-white text-gray-500 hover:bg-[#146ef5]/10 hover:text-[#146ef5] border border-gray-200 shadow-sm'}
                               `}>
                                 {isAuthenticated ? (

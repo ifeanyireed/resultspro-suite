@@ -143,13 +143,13 @@ export default function StudyAssistantPage() {
             <p className="text-gray-500 text-lg mb-12 max-w-md mx-auto">
               Please log in to your account to unlock personalized lesson notes and start chatting with our AI Tutor.
             </p>
-            <Link href={`/login?redirect=${pathname}`} className="px-12 py-6 rounded-2xl bg-[#146ef5] text-white text-gray-900 font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all">
+            <Link href={`/login?redirect=${pathname}`} className="px-12 py-6 rounded-2xl bg-[#146ef5] text-white font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all">
               Sign In to Start
             </Link>
           </div>
         ) : !isDeducted ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-24 h-24 rounded-[32px] bg-[#146ef5] text-white/10 text-[#146ef5] flex items-center justify-center mb-8 animate-pulse">
+            <div className="w-24 h-24 rounded-[32px] bg-[#146ef5]/10 text-[#146ef5] flex items-center justify-center mb-8 animate-pulse">
               <Sparkles className="w-12 h-12" />
             </div>
             <h1 className="text-3xl md:text-5xl font-display font-bold text-gray-900 mb-4">
@@ -170,7 +170,7 @@ export default function StudyAssistantPage() {
               <button
                 onClick={handleStartStudy}
                 disabled={loading}
-                className="w-full py-4 rounded-2xl bg-[#146ef5] text-white text-gray-900 font-bold flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
+                className="w-full py-4 rounded-2xl bg-[#146ef5] text-white font-bold flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -191,7 +191,7 @@ export default function StudyAssistantPage() {
             <div className="lg:col-span-2 space-y-6">
               <div className="p-8 md:p-12 rounded-[40px] bg-white border border-gray-200  backdrop-blur-xl">
                 <div className="flex items-center gap-3 mb-8">
-                  <div className="px-3 py-1 rounded-lg bg-[#146ef5] text-white/10 text-[#146ef5] text-[10px] font-black uppercase tracking-widest border border-[#146ef5]/20">
+                  <div className="px-3 py-1 rounded-lg bg-[#146ef5]/10 text-[#146ef5] text-[10px] font-black uppercase tracking-widest border border-[#146ef5]/20">
                     Topic In Focus
                   </div>
                 </div>
@@ -213,7 +213,7 @@ export default function StudyAssistantPage() {
             {/* Right: AI Tutor Chat */}
             <div className="lg:sticky lg:top-8 flex flex-col h-[600px] rounded-[40px] bg-white border border-gray-200  backdrop-blur-xl overflow-hidden">
               <div className="p-6 bg-white border-b border-gray-200  flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-[#146ef5] text-white/10 text-[#146ef5] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-[#146ef5]/10 text-[#146ef5] flex items-center justify-center">
                   <BrainCircuit className="w-6 h-6" />
                 </div>
                 <div>
@@ -239,7 +239,7 @@ export default function StudyAssistantPage() {
                     <div className={`
                       max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed
                       ${m.role === 'user' 
-                        ? 'bg-[#146ef5] text-white text-gray-900 rounded-tr-none' 
+                        ? 'bg-[#146ef5] text-white rounded-tr-none' 
                         : 'bg-white text-gray-600 border border-gray-200  rounded-tl-none'}
                     `}>
                       {m.role === 'assistant' ? (
@@ -273,12 +273,12 @@ export default function StudyAssistantPage() {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Ask a question..."
-                    className="w-full bg-slate-50/50 border border-white/10 rounded-2xl py-4 pl-6 pr-14 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#146ef5]/50 transition-colors"
+                    className="w-full bg-slate-50/50 border border-gray-200 rounded-2xl py-4 pl-6 pr-14 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#146ef5]/50 transition-colors"
                   />
                   <button
                     type="submit"
                     disabled={!input.trim() || isTyping}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-[#146ef5] text-white/10 text-[#146ef5] flex items-center justify-center hover:bg-[#146ef5] text-white hover:text-gray-900 transition-all disabled:opacity-50 disabled:grayscale"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-[#146ef5]/10 text-[#146ef5] flex items-center justify-center hover:bg-[#146ef5] hover:text-white transition-all disabled:opacity-50 disabled:grayscale"
                   >
                     <Send className="w-5 h-5" />
                   </button>
