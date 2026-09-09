@@ -4,34 +4,29 @@ import { IconBell as Bell, IconMoon as Moon, IconGlobe as Globe, IconUser as Use
 import Link from 'next/link';
 import { WidgetCard } from '@/components/ui/Cards';
 import { useState } from 'react';
+import AccountTab from './tabs/AccountTab';
+import SecurityTab from './tabs/SecurityTab';
+import PreferencesTab from './tabs/PreferencesTab';
+import BillingTab from './tabs/BillingTab';
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState('Account');
-  const sections = [
-    {
-      title: "Account",
-      items: [
-        { label: "Personal Information", icon: User, desc: "Name, email, and phone number", href: "/dashboard/settings/account" },
-        { label: "Target Examinations", icon: Globe, desc: "Exams you're currently preparing for", href: "/dashboard/settings/exams" },
-        { label: "Security", icon: Shield, desc: "Password and 2FA settings", href: "/dashboard/settings/security" },
-      ]
-    },
-    {
-      title: "Preferences",
-      items: [
-        { label: "Notifications", icon: Bell, desc: "Daily goals, battle invites, and rewards", href: "/dashboard/settings/notifications" },
-        { label: "Appearance", icon: Moon, desc: "Dark mode, themes, and animations", href: "/dashboard/settings/appearance" },
-        { label: "Language", icon: Globe, desc: "English (Nigeria)", href: "/dashboard/settings/language" },
-      ]
-    },
-    {
-      title: "Billing",
-      items: [
-        { label: "Subscription", icon: CreditCard, desc: "Manage your Monthly Unlimited plan", href: "/shop" },
-        { label: "Coin History", icon: CreditCard, desc: "Your purchases and earnings log", href: "/dashboard/profile/transactions" },
-      ]
-    }
+  const tabs = [
+    { id: 'Account', label: 'Account Profile', icon: User },
+    { id: 'Security', label: 'Security & Login', icon: Shield },
+    { id: 'Preferences', label: 'Preferences', icon: Bell },
+    { id: 'Billing', label: 'Billing & Plan', icon: CreditCard },
   ];
+
+  const renderTab = () => {
+    switch (activeTab) {
+      case 'Account': return <AccountTab />;
+      case 'Security': return <SecurityTab />;
+      case 'Preferences': return <PreferencesTab />;
+      case 'Billing': return <BillingTab />;
+      default: return <AccountTab />;
+    }
+  };
 
   return (
     <div className="flex flex-col gap-6 max-w-4xl">
@@ -41,50 +36,29 @@ export default function SettingsPage() {
       </div>
 
       {/* Horizontal Tabs */}
-      <div className="flex items-center gap-2 border-b border-gray-100 pb-4 overflow-x-auto">
-        {sections.map(s => (
-          <button 
-            key={s.title}
-            onClick={() => setActiveTab(s.title)}
-            className={`px-6 py-2.5 text-sm font-bold rounded-full transition-all whitespace-nowrap ${
-              activeTab === s.title 
-                ? 'bg-[#146ef5] text-white shadow-md' 
-                : 'text-gray-500 hover:bg-gray-100'
-            }`}
-          >
-            {s.title}
-          </button>
-        ))}
+      <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto pb-px">
+        {tabs.map(tab => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center space-x-2 px-4 py-3 border-b-2 font-medium text-xs transition-colors whitespace-nowrap ${
+                isActive 
+                  ? 'border-[#146ef5] text-[#146ef5]' 
+                  : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+              }`}
+            >
+              <Icon className="w-4 h-4" />
+              <span className="font-bold uppercase tracking-widest">{tab.label}</span>
+            </button>
+          );
+        })}
       </div>
 
-      <div className="space-y-6">
-        {sections.filter(s => s.title === activeTab).map((section, i) => (
-          <div key={i} className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="font-bold text-gray-900">{section.title}</h3>
-            </div>
-            <div className="divide-y divide-gray-100">
-              {section.items.map((item, j) => (
-                <Link 
-                  key={j} 
-                  href={item.href}
-                  className="group flex items-center justify-between p-6 hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:text-[#146ef5] group-hover:bg-blue-50 transition-colors border border-gray-100">
-                      <item.icon className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold text-gray-900">{item.label}</div>
-                      <div className="text-xs text-gray-500">{item.desc}</div>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#146ef5] transition-colors" />
-                </Link>
-              ))}
-            </div>
-          </div>
-        ))}
+      <div className="mt-8">
+        {renderTab()}
 
         <button className="w-full flex items-center justify-center gap-2 p-4 rounded-full border border-red-200 bg-red-50 text-red-600 font-bold hover:bg-red-100 transition-colors mt-6 shadow-sm">
           <LogOut className="w-5 h-5" />
