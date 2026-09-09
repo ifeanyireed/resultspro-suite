@@ -12,6 +12,7 @@ interface User {
   referralCode: string;
   isPremium: boolean;
   hasIcan: boolean;
+  icanPlanName?: string;
   isAdmin: boolean;
   role: 'STUDENT' | 'MODERATOR' | 'ADMIN';
   emailNotifications: boolean;

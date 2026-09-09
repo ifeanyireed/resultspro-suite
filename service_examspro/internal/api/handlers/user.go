@@ -22,6 +22,14 @@ func (h *UserHandler) GetProfile(c *gin.Context) {
 		return
 	}
 
+	if user.HasIcan {
+		var lastPurchase models.Purchase
+		// Find the most recent successful purchase that has ICAN in the pack name
+		if err := database.DB.Where("user_id = ? AND status = ? AND pack_name LIKE ?", userID, "success", "%ICAN%").Order("created_at desc").First(&lastPurchase).Error; err == nil {
+			user.IcanPlanName = lastPurchase.PackName
+		}
+	}
+
 	c.JSON(http.StatusOK, user)
 }
 

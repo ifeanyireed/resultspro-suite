@@ -11,7 +11,7 @@ export default function BillingTab() {
   let planDesc = 'You are currently on the basic free plan. Upgrade to unlock unlimited AI tutorials.';
   
   if (user?.hasIcan) {
-    planName = 'ICAN Plan';
+    planName = user.icanPlanName || 'ICAN Plan';
     planDesc = 'You are currently on the ICAN plan. You have access to ICAN exam resources.';
   } else if (user?.isPremium) {
     planName = 'Pro Plan';
