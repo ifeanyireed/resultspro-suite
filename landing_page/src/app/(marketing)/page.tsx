@@ -1,7 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
-import { IconSchool, IconBrain, IconBook, IconTrophy, IconUserPlus, IconChartBar, IconDeviceLaptop, IconChalkboard } from '@tabler/icons-react';
+import { IconSchool, IconBrain, IconBook, IconTrophy, IconUserPlus, IconChartBar, IconDeviceLaptop, IconChalkboard, IconCertificate, IconPuzzle } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function Home() {
@@ -20,17 +20,19 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {[
-              { id: 'schoolhub', title: 'SchoolHub', desc: 'Mobile-First Digital Campus experience.', icon: IconSchool },
-              { id: 'examspro', title: 'ExamsPRO', desc: 'Gamified CBT preparation for external exams.', icon: IconTrophy },
-              { id: 'classroompro', title: 'ClassroomPRO', desc: 'Offline-first digital classroom resources.', icon: IconDeviceLaptop },
-              { id: 'resultspro', title: 'ResultsPRO', desc: 'AI-powered results processing and insights.', icon: IconChartBar },
-              { id: 'tutorspro', title: 'TutorsPRO', desc: 'Vetted, curriculum-aligned private tuition.', icon: IconChalkboard },
+              { id: 'schoolhub', title: 'SchoolHub', desc: 'Mobile-First Digital Campus experience.', icon: IconSchool, href: '/schoolhub' },
+              { id: 'examspro', title: 'ExamsPRO', desc: 'Gamified CBT preparation for external exams.', icon: IconTrophy, href: '/examspro' },
+              { id: 'classroompro', title: 'ClassroomPRO', desc: 'Offline-first digital classroom resources.', icon: IconDeviceLaptop, href: '/classroompro' },
+              { id: 'resultspro', title: 'ResultsPRO', desc: 'AI-powered results processing and insights.', icon: IconChartBar, href: '/resultspro' },
+              { id: 'tutorspro', title: 'TutorsPRO', desc: 'Vetted, curriculum-aligned private tuition.', icon: IconChalkboard, href: '/tutorspro' },
+              { id: 'coursespro', title: 'CoursesPRO', desc: 'Curated digital courses and certification pathways.', icon: IconCertificate, href: '/coursespro' },
+              { id: 'puzzlepro', title: 'PuzzlePRO', desc: 'Gamified coding and tech skills for primary schools.', icon: IconPuzzle, href: 'https://www.learn2earnhq.com/schools' },
             ].map((cat, i) => (
               <div key={i} id={cat.id} className="card p-8 hover:shadow-card-lg transition-shadow">
                 <cat.icon className="w-8 h-8 text-red mb-6" style={{ color: 'var(--color-nets-red)' }} />
                 <h3 className="text-xl fw-600 mb-2">{cat.title}</h3>
                 <p className="text-muted text-sm mb-6">{cat.desc}</p>
-                <Link href={`/${cat.id}`} className="nav-link text-navy" style={{ color: 'var(--color-nets-navy)' }}>
+                <Link href={cat.href} className="nav-link text-navy" style={{ color: 'var(--color-nets-navy)' }}>
                   Learn more &rarr;
                 </Link>
               </div>

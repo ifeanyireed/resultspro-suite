@@ -24,6 +24,8 @@ export default function Navbar() {
     { name: 'ClassroomPRO', path: '/classroompro' },
     { name: 'ResultsPRO', path: '/resultspro' },
     { name: 'TutorsPRO', path: '/tutorspro' },
+    { name: 'CoursesPRO', path: '/coursespro' },
+    { name: 'PuzzlePRO', path: 'https://www.learn2earnhq.com/schools' },
   ];
 
   if (isOnboarding) return null;
@@ -60,7 +62,7 @@ export default function Navbar() {
               Sign In
             </Link>
             <Link href="/onboard" className="btn btn-red btn-sm">
-              Sign up for free
+              Get Started
             </Link>
           </div>
         </div>
@@ -108,7 +110,7 @@ export default function Navbar() {
                   href="/onboard" 
                   className="btn btn-red w-full text-center justify-center"
                 >
-                  Sign up for free
+                  Get Started
                 </Link>
               </div>
             </div>

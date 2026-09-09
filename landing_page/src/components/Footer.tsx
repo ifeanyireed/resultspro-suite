@@ -12,6 +12,8 @@ const footerSections = [
       { label: 'ClassroomPRO',          href: '/classroompro' },
       { label: 'ResultsPRO',            href: '/resultspro' },
       { label: 'TutorsPRO',             href: '/tutorspro' },
+      { label: 'CoursesPRO',            href: '/coursespro' },
+      { label: 'PuzzlePRO',             href: 'https://www.learn2earnhq.com/schools' },
     ],
   },
   {
