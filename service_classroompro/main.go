@@ -38,7 +38,6 @@ func main() {
 	api := r.Group("/api")
 	{
 		// Proxied auth endpoints to central service_users
-		api.Any("/auth/*any", h.ProxyAuth)
 
 		// Public Content (with optional auth)
 		content := api.Group("")

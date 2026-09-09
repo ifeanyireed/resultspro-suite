@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import api from '@/lib/api';
@@ -66,9 +67,8 @@ export default function Navbar() {
     { label: 'Practice', href: '/practice', enabled: true },
     { label: 'Live Games', href: '/live', enabled: featureFlags['live_games_enabled'] !== 'false' },
     { label: 'Battle Mode', href: '/battle-mode', enabled: featureFlags['battle_mode_enabled'] !== 'false' },
-    { label: 'Shop', href: '/shop', enabled: true },
-    { label: 'AI Tutor', href: '/study-assistant', enabled: isAuthenticated },
     { label: 'Leaderboard', href: '/leaderboard', enabled: true },
+    { label: 'AI Tutor', href: '/study-assistant', enabled: isAuthenticated },
     { label: 'Admin', href: '/admin/dashboard', enabled: isAuthenticated && (user?.role === 'ADMIN' || user?.role === 'MODERATOR') },
   ].filter(i => i.enabled);
 
@@ -124,15 +124,11 @@ export default function Navbar() {
             )}
             
             {/* Always show a red primary action button at the end of nav links */}
-            {mounted && !isAuthenticated ? (
+            {mounted && !isAuthenticated && (
               <Link href="https://www.resultspro.ng" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
                 Sign Up Free
               </Link>
-            ) : mounted && isAuthenticated ? (
-              <Link href="/shop" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
-                Shop
-              </Link>
-            ) : null}
+            )}
           </nav>
 
           {/* Desktop actions (Auth/Profile) */}
@@ -159,8 +155,8 @@ export default function Navbar() {
                     <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: isLanding ? 'white' : '#1e3a8a' }}>{user?.coinBalance}</span>
                     <span style={{ fontSize: '0.625rem', fontWeight: 700, color: isLanding ? 'rgba(255,255,255,0.5)' : '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Coins</span>
                   </div>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: isLanding ? 'rgba(255,255,255,0.1)' : 'var(--color-nets-blue-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold', color: isLanding ? 'white' : '#1e3a8a' }}>
-                    {user?.name?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', overflow: 'hidden', border: isLanding ? '2px solid rgba(255,255,255,0.2)' : '2px solid var(--color-nets-blue-light)', flexShrink: 0 }}>
+                    <Image src={user?.avatarUrl || "/avatars/character1.jpg"} alt={user?.name || "Student"} width={32} height={32} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
                 </Link>
               </div>

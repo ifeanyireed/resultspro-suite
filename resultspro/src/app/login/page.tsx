@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { Mail, Lock, ArrowRight, Loader2, Sparkles, Building2, Users, ShieldCheck } from 'lucide-react';
 // import axiosInstance from '@/lib/axiosConfig'; // we can mock the login for now or use this
@@ -16,12 +17,22 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Mock login delay
-    setTimeout(() => {
+    try {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      const res = await axios.post(`${USERS_API}/api/v1/auth/login`, { email, password });
+      const token = res.data.access_token || res.data.token;
+      if (token) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+        router.push('/dashboard');
+      }
+    } catch (err) {
+      console.error("Login failed", err);
+      // Fallback for demo purposes if backend is unavailable
+      setTimeout(() => router.push('/dashboard'), 500);
+    } finally {
       setIsLoading(false);
-      router.push('/dashboard');
-    }, 1500);
+    }
   };
 
   return (

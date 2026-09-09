@@ -37,7 +37,7 @@ function LoginForm() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await api.post('/auth/login', formData);
+      const res = await api.post(`${ process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com' }/api/v1/auth/login`, formData);
       
       if (res.data.mfa_required) {
         setMfaRequired(true);
@@ -126,7 +126,7 @@ function LoginForm() {
   const handleGoogleSuccess = async (tokenResponse: any) => {
     setIsLoading(true);
     try {
-      const res = await api.post('/auth/google', { idToken: tokenResponse.access_token });
+      const res = await api.post(`${ process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com' }/api/v1/auth/google`, { idToken: tokenResponse.access_token });
       const { access_token, refresh_token } = res.data;
       
       localStorage.setItem('accessToken', access_token);
@@ -160,7 +160,7 @@ function LoginForm() {
     setIsLoading(true);
     try {
       const loginResponse = await instance.loginPopup(loginRequest);
-      const res = await api.post('/auth/microsoft', { accessToken: loginResponse.accessToken });
+      const res = await api.post(`${ process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com' }/api/v1/auth/microsoft`, { accessToken: loginResponse.accessToken });
       const { access_token, refresh_token } = res.data;
       
       localStorage.setItem('accessToken', access_token);
