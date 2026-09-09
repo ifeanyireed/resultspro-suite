@@ -12,6 +12,7 @@ import (
 
 	"exams-resultspro-backend/internal/database"
 	"exams-resultspro-backend/internal/models"
+	"exams-resultspro-backend/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -615,6 +616,47 @@ func (h *BattleHandler) SubmitScore(c *gin.Context) {
 	}
 
 	now := time.Now()
+
+	// Update User Streak
+	var user models.User
+	if err := database.DB.Where("id = ?", userID).First(&user).Error; err == nil {
+		today := now.Truncate(24 * time.Hour)
+		isNewStreakDay := false
+
+		if user.LastActiveAt == nil {
+			user.StreakCurrent = 1
+			isNewStreakDay = true
+		} else {
+			lastActive := user.LastActiveAt.Truncate(24 * time.Hour)
+			if lastActive.Equal(today.AddDate(0, 0, -1)) {
+				user.StreakCurrent++
+				isNewStreakDay = true
+			} else if lastActive.Before(today.AddDate(0, 0, -1)) {
+				user.StreakCurrent = 1
+				isNewStreakDay = true
+			}
+		}
+
+		updateData := map[string]interface{}{
+			"last_active_at": &now,
+			"streak_current": user.StreakCurrent,
+		}
+		
+		database.DB.Model(&user).Updates(updateData)
+
+		if isNewStreakDay && user.StreakCurrent > 0 && user.StreakCurrent % 7 == 0 {
+			database.DB.Model(&user).Update("coin_balance", gorm.Expr("coin_balance + ?", 15))
+			database.DB.Create(&models.CoinTransaction{
+				ID:          uuid.New().String(),
+				UserID:      userID,
+				Amount:      15,
+				Type:        "STREAK_BONUS",
+				Description: stringPtr(fmt.Sprintf("%d-day study streak reached via Battle Mode!", user.StreakCurrent)),
+			})
+			utils.SendNotification(user.ID, "7-Day Streak!", fmt.Sprintf("You earned 15 bonus coins for maintaining a %d-day study streak. Keep it up!", user.StreakCurrent), models.NotificationTypeReward, models.NotificationRouteBoth)
+		}
+	}
+
 	participant.Score = input.Score
 	participant.Status = "completed"
 	participant.FinishedAt = &now

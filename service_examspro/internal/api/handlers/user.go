@@ -162,17 +162,6 @@ func (h *UserHandler) GetRank(c *gin.Context) {
 	}
 
 
-	overallReadiness := 0
-	if len(examStats) > 0 {
-		total := 0
-		for _, ex := range examStats {
-			if r, ok := ex["readiness"].(int); ok {
-				total += r
-			}
-		}
-		overallReadiness = total / len(examStats)
-	}
-
 	c.JSON(http.StatusOK, gin.H{
 		"rank":        myRank,
 		"nextRankGap": gap,
@@ -465,17 +454,6 @@ func (h *UserHandler) GetAnalytics(c *gin.Context) {
 	database.DB.Model(&models.User{}).Where("is_banned = ? AND elo_rating > ?", false, user.EloRating).Count(&rank)
 	myRank := fmt.Sprintf("#%d", rank+1)
 
-
-	overallReadiness := 0
-	if len(examStats) > 0 {
-		total := 0
-		for _, ex := range examStats {
-			if r, ok := ex["readiness"].(int); ok {
-				total += r
-			}
-		}
-		overallReadiness = total / len(examStats)
-	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"stats": gin.H{
