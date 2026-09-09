@@ -60,10 +60,7 @@ export default function SettingsPage() {
       <div className="mt-8">
         {renderTab()}
 
-        <button className="w-full flex items-center justify-center gap-2 p-4 rounded-full border border-red-200 bg-red-50 text-red-600 font-bold hover:bg-red-100 transition-colors mt-6 shadow-sm">
-          <LogOut className="w-5 h-5" />
-          Sign Out
-        </button>
+
         
         <div className="text-center pt-8 pb-4">
           <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">ResultsPRO Exams v1.0.4 (Beta)</p>

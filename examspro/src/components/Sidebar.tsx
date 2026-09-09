@@ -4,12 +4,12 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { IconHome, IconBook, IconBolt, IconSword, IconBrain, IconTrophy, IconUserPlus, IconNews, IconShoppingBag, IconSettings, IconHelp } from '@tabler/icons-react';
+import { IconHome, IconBook, IconBolt, IconSword, IconBrain, IconTrophy, IconUserPlus, IconNews, IconShoppingBag, IconSettings, IconHelp, IconLogout } from '@tabler/icons-react';
 import { useAuthStore } from '@/store/useAuthStore';
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
 
@@ -23,7 +23,8 @@ export function Sidebar() {
     {
       title: 'SETTINGS',
       links: [
-        { label: 'Settings', href: '/dashboard/settings', icon: IconSettings },
+        { label: 'Settings', href: '/settings', icon: IconSettings },
+        { label: 'Sign Out', href: '#', icon: IconLogout, isAction: true },
       ],
     },
   ];
@@ -46,6 +47,24 @@ export function Sidebar() {
               {section.links.map((link) => {
                 const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
                 const Icon = link.icon;
+                if (link.isAction) {
+                  return (
+                    <button
+                      key={link.label}
+                      onClick={() => {
+                        logout();
+                        window.location.href = '/login';
+                      }}
+                      className="flex items-center px-4 py-2 rounded-xl text-lg font-normal relative transition-colors text-red-600 hover:bg-red-50 w-full text-left"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <Icon className="w-6 h-6" />
+                        <span>{link.label}</span>
+                      </div>
+                    </button>
+                  );
+                }
+
                 return (
                   <Link
                     key={link.href}
