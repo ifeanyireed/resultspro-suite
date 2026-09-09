@@ -108,7 +108,7 @@ const Hero = () => {
           </motion.p>
 
           <motion.div variants={staggerItem} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem', alignItems: 'center' }}>
-            <Link href="https://auth.resultspro.ng/signup" className="btn btn-red btn-lg">
+            <Link href="/onboard" className="btn btn-red btn-lg">
               Get Started
             </Link>
             <Link href="#schoolhub" className="btn btn-outline-white btn-lg">
@@ -173,7 +173,7 @@ const Hero = () => {
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.75rem', marginTop: '1rem' }}>
-                <Link href="https://auth.resultspro.ng/signup" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
+                <Link href="/onboard" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
                   Proceed to Onboarding &rarr;
                 </Link>
               </div>

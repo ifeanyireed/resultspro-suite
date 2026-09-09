@@ -57,7 +57,7 @@ export default function Navbar() {
             <Link href="https://auth.resultspro.ng/login" className="text-sm fw-600 text-white hover:text-white/80 transition-colors">
               Sign In
             </Link>
-            <Link href="https://auth.resultspro.ng/signup" className="btn btn-red btn-sm">
+            <Link href="/onboard" className="btn btn-red btn-sm">
               Get Started
             </Link>
           </div>
@@ -103,7 +103,7 @@ export default function Navbar() {
                   Sign In
                 </Link>
                 <Link 
-                  href="https://auth.resultspro.ng/signup" 
+                  href="/onboard" 
                   className="btn btn-red w-full text-center justify-center"
                 >
                   Get Started

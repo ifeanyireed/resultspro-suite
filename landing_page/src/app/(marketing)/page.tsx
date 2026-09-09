@@ -68,7 +68,7 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <Link href="https://auth.resultspro.ng/signup" className="btn btn-navy">Deploy Infrastructure</Link>
+              <Link href="/onboard" className="btn btn-navy">Deploy Infrastructure</Link>
             </div>
             
             <div className="relative">
@@ -86,7 +86,7 @@ export default function Home() {
             Start your transformation journey today. Set up your digital campus in minutes.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="https://auth.resultspro.ng/signup" className="btn btn-red btn-lg">Partner With Us</Link>
+            <Link href="/onboard" className="btn btn-red btn-lg">Partner With Us</Link>
             <Link href="/contact" className="btn btn-outline-white btn-lg">Contact Sales</Link>
           </div>
         </div>
