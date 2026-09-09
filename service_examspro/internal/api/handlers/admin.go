@@ -2008,3 +2008,38 @@ func (h *AdminHandler) DeleteBattle(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Battle deleted"})
 }
+
+func (h *AdminHandler) GetUsersAccess(c *gin.Context) {
+	var users []models.User
+	if err := database.DB.Select("id, name, email, has_ican, ican_expires_at, ican_plan, ican_targets, is_premium, premium_expires_at").Order("created_at desc").Limit(100).Find(&users).Error; err != nil {
+		c.JSON(500, gin.H{"error": "Failed to fetch users"})
+		return
+	}
+	c.JSON(200, users)
+}
+
+func (h *AdminHandler) UpdateUserAccess(c *gin.Context) {
+	userID := c.Param("id")
+	var input struct {
+		HasIcan       bool       `json:"has_ican"`
+		IcanPlan      *string    `json:"ican_plan"`
+		IcanTargets   *string    `json:"ican_targets"`
+		IcanExpiresAt *time.Time `json:"ican_expires_at"`
+	}
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := database.DB.Model(&models.User{}).Where("id = ?", userID).Updates(map[string]interface{}{
+		"has_ican":        input.HasIcan,
+		"ican_plan":       input.IcanPlan,
+		"ican_targets":    input.IcanTargets,
+		"ican_expires_at": input.IcanExpiresAt,
+	}).Error; err != nil {
+		c.JSON(500, gin.H{"error": "Failed to update access"})
+		return
+	}
+
+	c.JSON(200, gin.H{"message": "Access updated successfully"})
+}

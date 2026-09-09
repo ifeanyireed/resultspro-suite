@@ -315,11 +315,19 @@ func processSuccessfulPayment(reference string, metadata struct {
 				return err
 			}
 		} else if isIcan {
-			expiry := time.Now().AddDate(0, 6, 0) // 6 months access for ICAN? Or maybe 1 month? Let's say 3 months, or 6 months. Wait, let's just use 1 month like premium for now, or 1 year. I'll make it 6 months.
+			expiry := time.Now().AddDate(0, 6, 0)
+			
+			// Map pack name to plan type if possible
+			planType := "Full Access" // Default
+			if purchase.PackName != "" {
+				planType = purchase.PackName
+			}
+
 			if err := tx.Model(&models.User{}).Where("id = ?", purchase.UserID).
 				Updates(map[string]interface{}{
 					"has_ican":       true,
 					"ican_expires_at": &expiry,
+					"ican_plan":      &planType,
 				}).Error; err != nil {
 				return err
 			}

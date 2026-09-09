@@ -48,6 +48,22 @@ func (h *QuizHandler) GetQuestionsByTopic(c *gin.Context) {
 		return db.Select("id", "question_id", "option_text", "order_index") // Hide IsCorrect
 	}).Preload("Topic").Preload("Topic.Subject").Preload("Topic.Subject.Exam").Where("topic_id = ? AND status = ?", topicId, "published")
 
+	var topic models.Topic
+	database.DB.Preload("Subject.Exam").First(&topic, topicId)
+
+	if topic.Subject != nil && topic.Subject.Exam != nil {
+		userIDVal, exists := c.Get("userId")
+		if exists {
+			var user models.User
+			if err := database.DB.Where("id = ?", userIDVal).First(&user).Error; err == nil {
+				if err := utils.CheckIcanAccess(&user, topic.Subject.Exam.Name, fmt.Sprintf("%d", topic.Subject.ID)); err != nil {
+					c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+					return
+				}
+			}
+		}
+	}
+
 	if qType != "" {
 		query = query.Where("type = ?", qType)
 	}

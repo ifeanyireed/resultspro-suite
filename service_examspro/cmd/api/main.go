@@ -177,6 +177,9 @@ func main() {
 				// Admin Only
 				admin.GET("/user-details/:userId", middleware.IsAdmin(), adminHandler.GetUserDetail)
 				admin.GET("/users", middleware.IsAdmin(), adminHandler.GetUsers)
+				admin.GET("/users-access", middleware.IsAdmin(), adminHandler.GetUsersAccess)
+				admin.PUT("/users-access/:id", middleware.IsAdmin(), adminHandler.UpdateUserAccess)
+
 				admin.POST("/users", middleware.IsAdmin(), adminHandler.CreateUser)
 				admin.POST("/users/import", middleware.IsAdmin(), adminHandler.ImportUsers)
 				admin.PUT("/users/:userId", middleware.IsAdmin(), adminHandler.UpdateUser)

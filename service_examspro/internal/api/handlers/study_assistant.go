@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -255,6 +256,16 @@ func (h *StudyAssistantHandler) GetTopicStudyAssistant(c *gin.Context) {
 	if err := database.DB.Preload("Subject.Exam").Where("id = ?", topicIdStr).First(&topic).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Topic not found"})
 		return
+	}
+
+	if topic.Subject != nil && topic.Subject.Exam != nil {
+		var user models.User
+		if err := database.DB.Where("id = ?", userID).First(&user).Error; err == nil {
+			if err := utils.CheckIcanAccess(&user, topic.Subject.Exam.Name, fmt.Sprintf("%d", topic.Subject.ID)); err != nil {
+				c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+				return
+			}
+		}
 	}
 
 	// Check if user has already unlocked this topic (session exists)
