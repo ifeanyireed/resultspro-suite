@@ -58,16 +58,16 @@ export default function SubjectSelectionPage() {
 
   const getColorClass = (color: string) => {
     const colors: Record<string, string> = {
-      green: 'bg-green/20 text-green',
-      blue: 'bg-blue/20 text-blue',
-      amber: 'bg-amber/20 text-amber',
+      green: 'bg-[#146ef5]/20 text-[#146ef5]',
+      blue: 'bg-blue/20 text-[#146ef5]',
+      amber: 'bg-amber/20 text-orange-500',
       purple: 'bg-purple/20 text-purple',
       pink: 'bg-pink/20 text-pink',
       orange: 'bg-orange/20 text-orange',
       indigo: 'bg-indigo/20 text-indigo',
       cyan: 'bg-cyan/20 text-cyan',
     };
-    return colors[color] || 'bg-blue/20 text-blue';
+    return colors[color] || 'bg-blue/20 text-[#146ef5]';
   };
 
   /** Clicking a subject card requires auth */
@@ -82,7 +82,7 @@ export default function SubjectSelectionPage() {
   );
 
   return (
-    <main className="min-h-screen bg-navy pb-24">
+    <main className="min-h-screen bg-slate-50 text-navy relative overflow-hidden">
       <Navbar />
 
       {/* 30-second login prompt for guests */}
@@ -92,7 +92,7 @@ export default function SubjectSelectionPage() {
         {/* Breadcrumbs */}
         <Link
           href="/practice"
-          className="inline-flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-8 group"
+          className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors mb-8 group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span className="text-sm font-medium">Back to Exams</span>
@@ -108,7 +108,7 @@ export default function SubjectSelectionPage() {
             <p className="text-red-500 font-medium">{error}</p>
             <Link
               href="/practice"
-              className="mt-4 inline-block px-6 py-2 bg-white/5 text-white rounded-xl hover:bg-white/10 transition-colors"
+              className="mt-4 inline-block px-6 py-2 bg-white text-gray-900 rounded-xl hover:bg-gray-100 transition-colors"
             >
               Go Back
             </Link>
@@ -119,20 +119,20 @@ export default function SubjectSelectionPage() {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="px-3 py-1 rounded-lg bg-green/10 text-green text-[10px] font-bold uppercase tracking-widest border border-green/20">
+                  <span className="px-3 py-1 rounded-lg bg-[#146ef5]/10 text-[#146ef5] text-[10px] font-bold uppercase tracking-widest border border-[#146ef5]/20">
                     Active Exam
                   </span>
                 </div>
-                <h1 className="text-4xl md:text-6xl font-display font-bold text-white uppercase tracking-tight">
-                  {examName} <span className="text-blue">Subjects</span>
+                <h1 className="text-4xl md:text-6xl font-display font-bold text-gray-900 uppercase tracking-tight">
+                  {examName} <span className="text-[#146ef5]">Subjects</span>
                 </h1>
 
                 {/* Guest nudge */}
                 {!isAuthenticated && (
-                  <p className="mt-3 text-sm text-gray-400 flex items-center gap-2">
-                    <Lock className="w-4 h-4 text-green" />
+                  <p className="mt-3 text-sm text-gray-500 flex items-center gap-2">
+                    <Lock className="w-4 h-4 text-[#146ef5]" />
                     <span>
-                      <Link href="/login" className="text-green font-semibold hover:underline">Sign in</Link>
+                      <Link href="/login" className="text-[#146ef5] font-semibold hover:underline">Sign in</Link>
                       &nbsp;to start practising and track your progress
                     </span>
                   </p>
@@ -146,7 +146,7 @@ export default function SubjectSelectionPage() {
                   placeholder="Search subjects..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white/5 border border-white/[0.1] border-t-white/[0.15] rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-blue/50 transition-colors"
+                  className="w-full bg-white border border-gray-200  rounded-2xl py-4 pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-blue/50 transition-colors"
                 />
               </div>
             </div>
@@ -158,41 +158,45 @@ export default function SubjectSelectionPage() {
                   key={i}
                   href={`/practice/${examId}/${sub.id}`}
                   onClick={(e) => handleSubjectClick(e, sub.id)}
-                  className="group p-6 rounded-3xl border border-white/[0.05] border-t-white/[0.1] bg-white/[0.02] backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] hover:bg-white/5 hover:border-white/20 transition-all flex flex-col h-full"
+                  className={`group p-6 rounded-[1.5rem] shadow-sm hover:-translate-y-1 transition-transform overflow-hidden relative flex flex-col h-full bg-gradient-to-br ${i % 2 === 0 ? 'from-[#146ef5] to-[#0a2e70]' : 'from-red-500 to-red-900'}`}
                 >
+                  <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
+                  <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
+                  <div className="relative z-10 flex flex-col h-full">
                   <div className="flex justify-between items-start mb-6">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${getColorClass(sub.color)} group-hover:scale-110 transition-transform`}>
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white group-hover:scale-110 group-hover:bg-white group-hover:text-blue-500 transition-all">
                       <BookOpen className="w-6 h-6" />
                     </div>
-                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-amber/10 text-amber border border-amber/20">
+                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/20 text-white border border-white/10">
                       <Coins className="w-3.5 h-3.5" />
                       <span className="text-[10px] font-bold">+{sub.reward}</span>
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-green transition-colors">{sub.name}</h3>
-                  <p className="text-sm text-gray-500 mb-6">{sub.questions.toLocaleString()} Practice Questions</p>
+                  <h3 className="text-xl font-bold text-white mb-2">{sub.name}</h3>
+                  <p className="text-sm text-white/80 mb-6">{sub.questions.toLocaleString()} Practice Questions</p>
 
-                  <div className="mt-auto pt-6 border-t border-white/5">
+                  <div className="mt-auto pt-6 border-t border-white/10">
                     {isAuthenticated ? (
                       <>
                         <div className="flex justify-between items-center mb-2">
-                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Completion</span>
+                          <span className="text-[10px] font-bold text-white/80 uppercase tracking-wider">Completion</span>
                           <span className="text-[10px] font-bold text-white">{sub.completed}%</span>
                         </div>
-                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                        <div className="h-1.5 w-full bg-white/20 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-green transition-all duration-1000"
+                            className="h-full bg-white transition-all duration-1000"
                             style={{ width: `${sub.completed}%` }}
                           />
                         </div>
                       </>
                     ) : (
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <div className="flex items-center gap-2 text-xs text-white/80">
                         <Lock className="w-3.5 h-3.5" />
                         <span>Sign in to practice</span>
                       </div>
                     )}
+                  </div>
                   </div>
                 </Link>
               ))}
@@ -200,36 +204,36 @@ export default function SubjectSelectionPage() {
 
             {/* Exam Stats / Promo / AI Tutor */}
             <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="lg:col-span-2 p-8 rounded-3xl bg-gradient-to-br from-green/20 via-blue/10 to-transparent border border-green/20 flex items-center justify-between group overflow-hidden relative">
+              <div className="lg:col-span-2 p-8 rounded-3xl bg-gradient-to-br from-blue-50 via-white to-blue-50 border border-[#146ef5]/20 flex items-center justify-between group overflow-hidden relative">
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-4">
-                    <Zap className="w-5 h-5 text-green fill-green" />
-                    <span className="text-xs font-bold text-green uppercase tracking-widest">Premium AI Help</span>
+                    <Zap className="w-5 h-5 text-[#146ef5] fill-[#146ef5]" />
+                    <span className="text-xs font-bold text-[#146ef5] uppercase tracking-widest">Premium AI Help</span>
                   </div>
-                  <h4 className="text-2xl font-display font-bold text-white mb-2">AI STYDY TUTOR</h4>
-                  <p className="text-sm text-gray-400 max-w-xs mb-6">Struggling with {examName} concepts? Our AI tutor knows the entire syllabus.</p>
+                  <h4 className="text-2xl font-display font-bold text-gray-900 mb-2">AI STYDY TUTOR</h4>
+                  <p className="text-sm text-gray-500 max-w-xs mb-6">Struggling with {examName} concepts? Our AI tutor knows the entire syllabus.</p>
                   <Link 
                     href="/study-assistant"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-green text-navy rounded-xl font-bold hover:scale-105 transition-transform"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#146ef5] text-white rounded-xl font-bold hover:scale-105 transition-transform"
                   >
                     ASK TUTOR NOW
                     <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
                 <div className="relative shrink-0 hidden sm:block">
-                  <div className="w-32 h-32 rounded-full bg-green/20 blur-3xl absolute -inset-4" />
-                  <BookOpen className="w-24 h-24 text-green/20 rotate-12 group-hover:rotate-0 transition-transform duration-500" />
+                  <div className="w-32 h-32 rounded-full bg-[#146ef5]/20 blur-3xl absolute -inset-4" />
+                  <BookOpen className="w-24 h-24 text-[#146ef5]/20 rotate-12 group-hover:rotate-0 transition-transform duration-500" />
                 </div>
               </div>
 
-              <div className="p-8 rounded-3xl bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] flex flex-col gap-4">
-                <Trophy className={`w-10 h-10 ${percentile > 0 ? 'text-amber' : 'text-gray-600'}`} />
-                <h4 className="text-xl font-bold text-white">
+              <div className="p-8 rounded-3xl bg-white border border-gray-100  flex flex-col gap-4">
+                <Trophy className={`w-10 h-10 ${percentile > 0 ? 'text-orange-500' : 'text-gray-400'}`} />
+                <h4 className="text-xl font-bold text-gray-900">
                   {percentile > 0 
                     ? `Top ${Math.max(1, 100 - Math.floor(percentile))}% Percentile` 
                     : 'Not Ranked Yet'}
                 </h4>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-gray-500">
                   {percentile > 0 
                     ? `Performing better than ${Math.floor(percentile)}% of students in ${examName}.` 
                     : `Start practicing to see how you compare against other ${examName} students.`}
@@ -238,13 +242,13 @@ export default function SubjectSelectionPage() {
 
               <Link 
                 href={`/practice/${examId}/syllabus`}
-                className="p-8 rounded-3xl bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] flex flex-col justify-center items-center text-center gap-4 group cursor-pointer hover:bg-white/5 transition-colors"
+                className="p-8 rounded-3xl bg-white border border-gray-100  flex flex-col justify-center items-center text-center gap-4 group cursor-pointer hover:bg-white transition-colors"
               >
-                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-green group-hover:text-navy transition-all">
+                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center group-hover:bg-[#146ef5] group-hover:text-navy transition-all">
                   <ChevronRight className="w-6 h-6" />
                 </div>
-                <h4 className="text-xl font-bold text-white">Full Syllabus</h4>
-                <p className="text-sm text-gray-400">View official {examName} requirements.</p>
+                <h4 className="text-xl font-bold text-gray-900">Full Syllabus</h4>
+                <p className="text-sm text-gray-500">View official {examName} requirements.</p>
               </Link>
             </div>
           </>
