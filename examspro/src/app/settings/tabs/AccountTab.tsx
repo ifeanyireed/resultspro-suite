@@ -3,12 +3,30 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import api from '@/lib/api';
+import { toast } from 'react-hot-toast';
+import { IconLoader2 } from '@tabler/icons-react';
 
 export default function AccountTab() {
   const { user } = useAuthStore();
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
   const [phone, setPhone] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const { updateUser } = useAuthStore();
+
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      await api.put('/user/profile', { name, phone });
+      updateUser({ name }); // Update global store so the top navbar updates instantly!
+      toast.success('Profile updated successfully!');
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || 'Failed to update profile');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
@@ -47,8 +65,13 @@ export default function AccountTab() {
         </div>
 
         <div className="mt-8 flex justify-end">
-          <Button className="bg-[#146ef5] text-white hover:bg-blue-700 rounded-xl px-8 h-12 font-bold">
-            Save Changes
+          <Button 
+            onClick={handleSave}
+            disabled={isSaving}
+            className="bg-[#146ef5] text-white hover:bg-blue-700 rounded-xl px-8 h-12 font-bold flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+          >
+            {isSaving && <IconLoader2 className="w-4 h-4 animate-spin" />}
+            {isSaving ? 'Saving...' : 'Save Changes'}
           </Button>
         </div>
       </div>
