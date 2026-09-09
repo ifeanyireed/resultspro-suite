@@ -139,16 +139,16 @@ export default function LeaderboardPage() {
                         {isTop3 && (
                           <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '3px', background: 'var(--color-nets-red)' }} />
                         )}
-                        <div style={{ fontSize: isTop3 ? '1.5rem' : '1.125rem', fontWeight: 900, color: isTop3 ? 'var(--color-nets-red)' : 'rgba(0,0,0,0.4)', fontFamily: 'var(--font-display)' }}>
+                        <div style={{ fontSize: isTop3 ? '1.125rem' : '1rem', fontWeight: 700, color: isTop3 ? 'var(--color-nets-red)' : 'rgba(0,0,0,0.4)' }}>
                           #{index + 1}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                          <img src={`/avatars/character${ (String(user.id).charCodeAt(0) % 20) || 1 }.jpg`} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
-                          <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-nets-navy-dark)' }}>{user.name || 'Anonymous'}</div>
+                          <img src={`/avatars/character${ (String(user.id).charCodeAt(0) % 20) || 1 }.jpg`} alt="" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} />
+                          <div style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--color-nets-navy-dark)' }}>{user.name || 'Anonymous'}</div>
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontSize: '1.125rem', fontWeight: 900, color: 'var(--color-nets-navy-dark)', fontFamily: 'var(--font-display)' }}>{getScoreValue(user).toLocaleString()}</div>
-                          <div style={{ fontSize: '0.625rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-nets-red)' }}>{getScoreLabel()}</div>
+                          <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-nets-navy-dark)' }}>{getScoreValue(user).toLocaleString()}</div>
+                          <div style={{ fontSize: '0.625rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-nets-red)' }}>{getScoreLabel()}</div>
                         </div>
                       </div>
                     )

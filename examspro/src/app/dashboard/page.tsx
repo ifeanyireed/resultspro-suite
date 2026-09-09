@@ -310,7 +310,7 @@ export default function Dashboard() {
               {Array.isArray(data.leaderboard) && data.leaderboard.map((u) => (
                 <div key={u.rank} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors">
                   <div className="flex items-center gap-3">
-                    <div className={`text-xs font-black w-6 h-6 rounded-full flex items-center justify-center ${
+                    <div className={`text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center ${
                       u.rank === 1 ? 'bg-amber-100 text-amber-600' : 
                       u.rank === 2 ? 'bg-gray-200 text-gray-600' : 
                       u.rank === 3 ? 'bg-orange-100 text-orange-600' : 'text-gray-400 bg-gray-50'
@@ -318,11 +318,11 @@ export default function Dashboard() {
                       {u.rank}
                     </div>
                     <img src={u.img || `/avatars/character${(u.rank % 20) + 1}.jpg`} className="w-8 h-8 rounded-full border border-gray-200 object-cover" alt={u.name} />
-                    <div className="text-sm font-bold text-gray-900">{u.name}</div>
+                    <div className="text-xs font-medium text-gray-900">{u.name}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-black text-gray-900">{u.score.toLocaleString()}</div>
-                    <div className="text-[9px] text-gray-400 font-bold uppercase">ELO</div>
+                    <div className="text-xs font-semibold text-gray-900">{u.score.toLocaleString()}</div>
+                    <div className="text-[9px] text-gray-400 font-medium uppercase">ELO</div>
                   </div>
                 </div>
               ))}
