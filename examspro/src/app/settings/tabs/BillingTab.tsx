@@ -2,8 +2,22 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { IconCreditCard, IconCoins } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useAuthStore } from '@/store/useAuthStore';
 
 export default function BillingTab() {
+  const { user } = useAuthStore();
+  
+  let planName = 'Free Plan';
+  let planDesc = 'You are currently on the basic free plan. Upgrade to unlock unlimited AI tutorials.';
+  
+  if (user?.hasIcan) {
+    planName = 'ICAN Plan';
+    planDesc = 'You are currently on the ICAN plan. You have access to ICAN exam resources.';
+  } else if (user?.isPremium) {
+    planName = 'Pro Plan';
+    planDesc = 'You are currently on the Pro plan with full access to unlimited AI tutorials and features.';
+  }
+
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       <div className="bg-white p-8 rounded-[24px] border border-gray-100 shadow-sm">
@@ -14,11 +28,11 @@ export default function BillingTab() {
             <div className="w-12 h-12 rounded-full bg-[#146ef5]/10 text-[#146ef5] flex items-center justify-center mb-4">
               <IconCreditCard className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-1">Free Plan</h3>
-            <p className="text-sm text-gray-500 mb-6">You are currently on the basic free plan. Upgrade to unlock unlimited AI tutorials.</p>
+            <h3 className="text-lg font-bold text-gray-900 mb-1">{planName}</h3>
+            <p className="text-sm text-gray-500 mb-6">{planDesc}</p>
             <Link href="/shop">
               <Button className="w-full bg-[#146ef5] text-white hover:bg-blue-700 font-bold rounded-xl h-11">
-                Upgrade to Pro
+                {planName === 'Free Plan' ? 'Upgrade to Pro' : 'Manage Subscription'}
               </Button>
             </Link>
           </div>
@@ -28,6 +42,10 @@ export default function BillingTab() {
               <IconCoins className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-bold text-gray-900 mb-1">Coin Balance</h3>
+            <div className="flex items-baseline gap-2 mb-2">
+              <span className="text-2xl font-black text-slate-900">{user?.coinBalance || 0}</span>
+              <span className="text-xs text-gray-500 font-bold uppercase">Coins</span>
+            </div>
             <p className="text-sm text-gray-500 mb-6">Manage your earned coins and purchase history.</p>
             <Link href="/dashboard">
               <Button className="w-full bg-gray-900 text-white hover:bg-black font-bold rounded-xl h-11 border-none shadow-sm">
