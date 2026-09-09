@@ -123,8 +123,8 @@ export default function SubjectSelectionPage() {
                     Active Exam
                   </span>
                 </div>
-                <h1 className="text-4xl md:text-6xl font-display font-bold text-gray-900 uppercase tracking-tight">
-                  {examName} <span className="text-[#146ef5]">Subjects</span>
+                <h1 className="text-4xl md:text-6xl font-display font-bold text-[#146ef5] uppercase tracking-tight">
+                  {examName} Subjects
                 </h1>
 
                 {/* Guest nudge */}

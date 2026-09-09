@@ -159,7 +159,7 @@ export default function PracticePage() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12 pb-40">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-3xl md:text-5xl font-display font-bold text-navy mb-6">
+          <h1 className="text-3xl md:text-5xl font-display font-bold text-[#146ef5] mb-6">
             Exam Browser
           </h1>
 
