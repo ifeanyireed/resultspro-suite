@@ -92,7 +92,7 @@ export default function SyllabusClient({ syllabus, examId }: { syllabus: any, ex
                                )}
                             </div>
                             <Link href={`/practice/study/${topic.id}`}>
-                              <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#146ef5]/10 text-[#146ef5] font-bold border border-[#146ef5]/20 hover:bg-gradient-to-r hover:from-[#146ef5] hover:to-red-500 hover:text-white hover:scale-105 shadow-md transition-all shrink-0">
+                              <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#146ef5]/10 text-[#146ef5] font-bold border border-[#146ef5]/20 hover:bg-gradient-to-r hover:from-[#146ef5] hover:to-blue-400 hover:text-white hover:scale-105 shadow-md transition-all shrink-0">
                                  <Sparkles className="w-4 h-4" />
                                  <span className="text-xs hidden md:inline">STUDY TOPIC</span>
                               </button>

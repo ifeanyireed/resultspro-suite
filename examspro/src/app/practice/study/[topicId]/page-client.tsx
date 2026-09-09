@@ -34,6 +34,7 @@ export default function StudyAssistantPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDeducted, setIsDeducted] = useState(false);
+  const [showShopPopup, setShowShopPopup] = useState(false);
   
   // Chat state
   const [messages, setMessages] = useState<Message[]>([]);
@@ -84,8 +85,12 @@ export default function StudyAssistantPage() {
     } catch (err: any) {
       console.error('Error starting study session:', err);
       const msg = err.response?.data?.error || 'Failed to start study session.';
-      setError(msg);
-      toast.error(msg);
+      if (msg.includes('Insufficient coins')) {
+        setShowShopPopup(true);
+      } else {
+        setError(msg);
+        toast.error(msg);
+      }
     } finally {
       setLoading(false);
     }
@@ -288,6 +293,26 @@ export default function StudyAssistantPage() {
           </div>
         )}
       </div>
+
+      {showShopPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="bg-white rounded-[32px] p-8 max-w-sm w-full shadow-2xl text-center">
+            <div className="w-16 h-16 bg-amber/10 text-amber rounded-full flex items-center justify-center mx-auto mb-6">
+              <Coins className="w-8 h-8" />
+            </div>
+            <h3 className="text-2xl font-black text-slate-800 mb-2">Out of Coins!</h3>
+            <p className="text-slate-500 mb-8 text-sm">You need 5 coins to unlock this AI Study Assistant pack. Head over to the shop to top up your balance.</p>
+            <div className="space-y-3">
+              <button onClick={() => router.push('/shop')} className="w-full py-3.5 rounded-xl bg-[#146ef5] text-white font-bold shadow-md shadow-blue-500/20 hover:scale-[1.02] transition-transform">
+                Visit Coin Shop
+              </button>
+              <button onClick={() => setShowShopPopup(false)} className="w-full py-3.5 rounded-xl bg-slate-50 text-slate-600 font-bold hover:bg-slate-100 transition-colors">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
