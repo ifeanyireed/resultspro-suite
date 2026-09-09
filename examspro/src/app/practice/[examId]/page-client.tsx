@@ -152,7 +152,7 @@ export default function SubjectSelectionPage() {
             </div>
 
             {/* Subjects Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 [&>a]:from-[#146ef5] [&>a]:to-[#0a2e70] max-sm:[&>a:nth-child(even)]:from-red-500 max-sm:[&>a:nth-child(even)]:to-red-900 sm:max-lg:[&>a:nth-child(4n+2)]:from-red-500 sm:max-lg:[&>a:nth-child(4n+2)]:to-red-900 sm:max-lg:[&>a:nth-child(4n+3)]:from-red-500 sm:max-lg:[&>a:nth-child(4n+3)]:to-red-900 lg:[&>a:nth-child(8n+2)]:from-red-500 lg:[&>a:nth-child(8n+2)]:to-red-900 lg:[&>a:nth-child(8n+4)]:from-red-500 lg:[&>a:nth-child(8n+4)]:to-red-900 lg:[&>a:nth-child(8n+5)]:from-red-500 lg:[&>a:nth-child(8n+5)]:to-red-900 lg:[&>a:nth-child(8n+7)]:from-red-500 lg:[&>a:nth-child(8n+7)]:to-red-900">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 [&>a]:from-[#146ef5] [&>a]:to-[#0a2e70] [&>a:hover_.icon-box]:text-[#146ef5] max-sm:[&>a:nth-child(even)]:from-red-500 max-sm:[&>a:nth-child(even)]:to-red-900 max-sm:[&>a:nth-child(even):hover_.icon-box]:text-red-600 sm:max-lg:[&>a:nth-child(4n+2)]:from-red-500 sm:max-lg:[&>a:nth-child(4n+2)]:to-red-900 sm:max-lg:[&>a:nth-child(4n+2):hover_.icon-box]:text-red-600 sm:max-lg:[&>a:nth-child(4n+3)]:from-red-500 sm:max-lg:[&>a:nth-child(4n+3)]:to-red-900 sm:max-lg:[&>a:nth-child(4n+3):hover_.icon-box]:text-red-600 lg:[&>a:nth-child(8n+2)]:from-red-500 lg:[&>a:nth-child(8n+2)]:to-red-900 lg:[&>a:nth-child(8n+2):hover_.icon-box]:text-red-600 lg:[&>a:nth-child(8n+4)]:from-red-500 lg:[&>a:nth-child(8n+4)]:to-red-900 lg:[&>a:nth-child(8n+4):hover_.icon-box]:text-red-600 lg:[&>a:nth-child(8n+5)]:from-red-500 lg:[&>a:nth-child(8n+5)]:to-red-900 lg:[&>a:nth-child(8n+5):hover_.icon-box]:text-red-600 lg:[&>a:nth-child(8n+7)]:from-red-500 lg:[&>a:nth-child(8n+7)]:to-red-900 lg:[&>a:nth-child(8n+7):hover_.icon-box]:text-red-600">
               {filteredSubjects.map((sub, i) => (
                 <Link
                   key={i}
@@ -164,7 +164,7 @@ export default function SubjectSelectionPage() {
                   <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
                   <div className="relative z-10 flex flex-col h-full">
                   <div className="flex justify-between items-start mb-6">
-                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white group-hover:scale-110 group-hover:bg-white group-hover:text-blue-500 transition-all">
+                    <div className="icon-box w-12 h-12 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white group-hover:scale-110 group-hover:bg-white transition-all">
                       <BookOpen className="w-6 h-6" />
                     </div>
                     <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/20 text-white border border-white/10">
