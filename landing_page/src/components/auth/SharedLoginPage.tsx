@@ -199,7 +199,7 @@ export default function SharedLoginPage({
           <div className="mt-6 text-center">
             <p className="text-sm font-medium text-slate-600">
               Don't have an account?{' '}
-              <Link href="/signup" className="text-blue-600 hover:text-blue-700 font-bold hover:underline">
+              <Link href="/onboard" className="text-blue-600 hover:text-blue-700 font-bold hover:underline">
                 Sign up
               </Link>
             </p>
