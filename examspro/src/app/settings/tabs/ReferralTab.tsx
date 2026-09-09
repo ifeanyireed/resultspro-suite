@@ -87,7 +87,7 @@ export default function ReferralTab() {
       <div className="bg-white p-8 md:p-12 rounded-[24px] border border-gray-100 shadow-sm relative overflow-hidden">
         
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-[#146ef5]/10 text-[#146ef5] flex items-center justify-center">
             <IconGift className="w-6 h-6" />
           </div>
           <div>
@@ -103,14 +103,14 @@ export default function ReferralTab() {
             <span className="truncate mr-4">{referralLink}</span>
             <button 
               onClick={copyToClipboard}
-              className={`p-2 rounded-lg transition-colors shrink-0 ${copying ? 'bg-green-100 text-green-700' : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200'}`}
+              className={`p-2 rounded-lg transition-colors shrink-0 ${copying ? 'bg-[#146ef5]/10 text-[#146ef5]' : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200'}`}
             >
               {copying ? <IconCircleCheck className="w-4 h-4" /> : <IconCopy className="w-4 h-4" />}
             </button>
           </div>
           <Button 
             onClick={handleShare}
-            className="py-6 px-8 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold flex items-center gap-2 shadow-sm"
+            className="py-6 px-8 rounded-xl bg-[#146ef5] hover:bg-[#105bd1] text-white font-bold flex items-center gap-2 shadow-sm"
           >
             <IconShare2 className="w-5 h-5" />
             SHARE NOW
@@ -136,17 +136,17 @@ export default function ReferralTab() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-slate-100">
           <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center justify-center text-center">
-            <IconUsers className="w-8 h-8 text-blue-500 mb-2 opacity-80" />
+            <IconUsers className="w-8 h-8 text-[#146ef5] mb-2 opacity-80" />
             <div className="text-2xl font-black text-slate-900">{isArray ? referrals.length : 0}</div>
             <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Invites</div>
           </div>
           <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center justify-center text-center">
-            <IconCircleCheck className="w-8 h-8 text-emerald-500 mb-2 opacity-80" />
+            <IconCircleCheck className="w-8 h-8 text-[#146ef5] mb-2 opacity-80" />
             <div className="text-2xl font-black text-slate-900">{convertedCount}</div>
             <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Converted</div>
           </div>
           <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center justify-center text-center">
-            <IconCoins className="w-8 h-8 text-amber-500 mb-2 opacity-80" />
+            <IconCoins className="w-8 h-8 text-[#146ef5] mb-2 opacity-80" />
             <div className="text-2xl font-black text-amber-600">{totalEarned}</div>
             <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Coins Earned</div>
           </div>

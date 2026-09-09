@@ -17,7 +17,7 @@ const footerSections = [
     links: [
       { label: 'Leaderboard',               href: '/leaderboard' },
       { label: 'Blog',                      href: '/blog' },
-      { label: 'Refer & Earn',              href: '/referral' },
+      { label: 'Refer & Earn',              href: '/settings?tab=Referral' },
       { label: 'Coin Shop',                 href: '/shop' },
     ],
   },
