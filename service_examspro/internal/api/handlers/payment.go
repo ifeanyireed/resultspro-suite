@@ -62,7 +62,8 @@ func (h *PaymentHandler) InitializePayment(c *gin.Context) {
 	userID, _ := c.Get("userId")
 
 	var input struct {
-		PackID string `json:"packId" binding:"required"`
+		PackID      string `json:"packId" binding:"required"`
+		CallbackURL string `json:"callbackUrl"`
 	}
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Pack ID is required"})
@@ -86,10 +87,13 @@ func (h *PaymentHandler) InitializePayment(c *gin.Context) {
 
 	url := "https://api.paystack.co/transaction/initialize"
 	
-	// Default callback if not provided in env
-	callbackURL := os.Getenv("PAYSTACK_CALLBACK_URL")
+	// Prioritize frontend-provided callback, then env, then hardcoded fallback
+	callbackURL := input.CallbackURL
 	if callbackURL == "" {
-		callbackURL = "https://resultspro.ng/shop/verify"
+		callbackURL = os.Getenv("PAYSTACK_CALLBACK_URL")
+		if callbackURL == "" {
+			callbackURL = "https://resultspro.ng/shop/verify"
+		}
 	}
 
 	body := map[string]interface{}{

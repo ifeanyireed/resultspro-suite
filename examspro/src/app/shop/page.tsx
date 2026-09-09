@@ -89,7 +89,10 @@ export default function CoinShopPage() {
     }
     setLoadingPack(packId);
     try {
-      const res = await api.post('/payment/initialize', { packId });
+      const res = await api.post('/payment/initialize', { 
+        packId,
+        callbackUrl: window.location.origin + '/shop/verify'
+      });
       // Redirect to Paystack checkout
       window.location.href = res.data.authorization_url;
     } catch (err) {
