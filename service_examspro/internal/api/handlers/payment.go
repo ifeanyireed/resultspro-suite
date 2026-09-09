@@ -133,7 +133,7 @@ func (h *PaymentHandler) InitializePayment(c *gin.Context) {
 	}
 
 	if !result.Status {
-		c.JSON(http.StatusBadRequest, gin.H{"error": result.Message})
+		fmt.Printf("PAYSTACK ERROR: %s\n", result.Message); c.JSON(http.StatusBadRequest, gin.H{"error": result.Message})
 		return
 	}
 
