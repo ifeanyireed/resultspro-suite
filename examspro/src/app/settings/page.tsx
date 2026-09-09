@@ -14,16 +14,26 @@ import BillingTab from './tabs/BillingTab';
 export default function SettingsPage() {
   const router = useRouter();
   const { user } = useAuthStore();
+  const [activeTab, setActiveTab] = useState('Account');
   
   useEffect(() => {
     if (!user) {
       router.push('/login');
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get('tab');
+    const hash = window.location.hash.replace('#', '');
+    
+    if (tabParam) {
+      setActiveTab(tabParam);
+    } else if (hash) {
+      setActiveTab(hash.charAt(0).toUpperCase() + hash.slice(1));
     }
   }, [user, router]);
 
   if (!user) return null;
-
-  const [activeTab, setActiveTab] = useState('Account');
   const tabs = [
     { id: 'Account', label: 'Account Profile', icon: User },
     { id: 'Security', label: 'Security & Login', icon: Shield },
