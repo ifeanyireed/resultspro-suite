@@ -10,7 +10,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-  const isOnboarding = pathname?.startsWith('/onboard');
+  const isOnboarding = pathname?.startsWith('/onboard') || pathname?.startsWith('/login');
   
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
@@ -56,7 +56,7 @@ export default function Navbar() {
           <div className="w-[1px] h-6 bg-white/10" />
           
           <div className="flex items-center gap-4">
-            <Link href="https://auth.resultspro.ng/login" className="text-sm fw-600 text-white hover:text-white/80 transition-colors">
+            <Link href="/login" className="text-sm fw-600 text-white hover:text-white/80 transition-colors">
               Sign In
             </Link>
             <Link href="/onboard" className="btn btn-red btn-sm">
@@ -99,7 +99,7 @@ export default function Navbar() {
               ))}
               <div className="flex flex-col gap-3 mt-4">
                 <Link 
-                  href="https://auth.resultspro.ng/login" 
+                  href="/login" 
                   className="btn btn-outline-white w-full text-center justify-center"
                 >
                   Sign In

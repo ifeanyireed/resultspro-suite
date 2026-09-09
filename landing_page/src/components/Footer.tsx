@@ -35,7 +35,7 @@ const footerSections = [
 
 export default function Footer() {
   const pathname = usePathname();
-  const isOnboarding = pathname?.startsWith('/onboard');
+  const isOnboarding = pathname?.startsWith('/onboard') || pathname?.startsWith('/login');
 
   if (isOnboarding) return null;
 
