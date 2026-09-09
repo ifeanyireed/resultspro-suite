@@ -161,6 +161,18 @@ func (h *UserHandler) GetRank(c *gin.Context) {
 		gap = nextUser.EloRating - user.EloRating
 	}
 
+
+	overallReadiness := 0
+	if len(examStats) > 0 {
+		total := 0
+		for _, ex := range examStats {
+			if r, ok := ex["readiness"].(int); ok {
+				total += r
+			}
+		}
+		overallReadiness = total / len(examStats)
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"rank":        myRank,
 		"nextRankGap": gap,
@@ -210,6 +222,10 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 	}
 
 	// Dynamic Database Logic
+	var higherRanked int64
+	database.DB.Model(&models.User{}).Where("elo_rating > ? AND is_banned = ?", user.EloRating, false).Count(&higherRanked)
+	globalRank := higherRanked + 1
+
 	var target string = "General Exam"
 	var daysToGo int = 45
 
@@ -389,13 +405,27 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 		recentActivity = recentActivity[:8]
 	}
 
+
+	overallReadiness := 0
+	if len(examStats) > 0 {
+		total := 0
+		for _, ex := range examStats {
+			if r, ok := ex["readiness"].(int); ok {
+				total += r
+			}
+		}
+		overallReadiness = total / len(examStats)
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"user": gin.H{
-			"name":     name,
-			"coins":    user.CoinBalance,
-			"streak":   user.StreakCurrent,
-			"target":   target,
-			"daysToGo": daysToGo,
+			"name":             name,
+			"coins":            user.CoinBalance,
+			"streak":           user.StreakCurrent,
+			"target":           target,
+			"daysToGo":         daysToGo,
+			"globalRank":       globalRank,
+			"overallReadiness": overallReadiness,
 		},
 		"subjects":       subjectStats,
 		"exams":          examStats,
@@ -434,6 +464,18 @@ func (h *UserHandler) GetAnalytics(c *gin.Context) {
 	var rank int64
 	database.DB.Model(&models.User{}).Where("is_banned = ? AND elo_rating > ?", false, user.EloRating).Count(&rank)
 	myRank := fmt.Sprintf("#%d", rank+1)
+
+
+	overallReadiness := 0
+	if len(examStats) > 0 {
+		total := 0
+		for _, ex := range examStats {
+			if r, ok := ex["readiness"].(int); ok {
+				total += r
+			}
+		}
+		overallReadiness = total / len(examStats)
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"stats": gin.H{

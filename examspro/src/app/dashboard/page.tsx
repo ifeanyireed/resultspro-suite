@@ -15,6 +15,8 @@ interface DashboardData {
     streak: number;
     target: string;
     daysToGo: number;
+    overallReadiness?: number;
+    globalRank?: number;
   };
   subjects: Array<{ id: number, name: string, progress: number, color: string, questions: number }>;
   exams: Array<{ id: number, slug: string, name: string, readiness: number, category: string }>;
@@ -154,14 +156,14 @@ export default function Dashboard() {
         />
         <WhiteMetricCard 
           title="Overall Readiness"
-          value="78%"
-          trend="+5% from last week"
+          value={`${data.user?.overallReadiness || 0}%`}
+          trend="Based on practice"
           icon={IconBook}
         />
         <WhiteMetricCard 
           title="Global Rank"
-          value="#42"
-          trend="Top 1% of students"
+          value={`#${data.user?.globalRank || '-'}`}
+          trend="Based on ELO rating"
           icon={IconTrophy}
         />
       </div>
