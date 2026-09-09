@@ -100,8 +100,8 @@ export function Sidebar() {
             {mounted && <Image src={user?.avatarUrl || "/avatars/character1.jpg"} alt="Student Avatar" width={40} height={40} className="w-full h-full object-cover" />}
             {!mounted && <Image src="/avatars/character1.jpg" alt="Student Avatar" width={40} height={40} className="w-full h-full object-cover" />}
           </div>
-          <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (user?.name || 'Student') : 'Student'}</h4>
-          <p className="text-[10px] text-gray-300 mb-6 relative z-10">{mounted ? (user?.email || 'student@examspro.com') : 'student@examspro.com'}</p>
+          <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (user?.name || 'Error: Name not found') : 'Loading...'}</h4>
+          <p className="text-[10px] text-gray-300 mb-6 relative z-10">{mounted ? (user?.email || 'Error: Email not found') : 'Loading...'}</p>
           
           <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] transition-colors text-white text-xs font-semibold py-3 rounded-full relative z-10 shadow-md">
             View Profile

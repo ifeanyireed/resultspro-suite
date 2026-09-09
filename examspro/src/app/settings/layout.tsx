@@ -6,8 +6,12 @@ import { IconSearch as Search, IconBell as Bell } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/useAuthStore';
 
+import { useEffect, useState } from 'react';
+
 function GlobalTopNav() {
   const { user } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   
   return (
     <>
@@ -30,11 +34,15 @@ function GlobalTopNav() {
         </Link>
         <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6 cursor-pointer hover:bg-slate-50 p-1 pr-3 rounded-full transition-colors">
           <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm bg-gray-100 shrink-0">
-            <img src={user?.avatarUrl || "/avatars/character1.jpg"} alt="User Avatar" className="w-full h-full object-cover" />
+            {mounted ? (
+              <img src={user?.avatarUrl || "/avatars/character1.jpg"} alt="User Avatar" className="w-full h-full object-cover" />
+            ) : (
+              <img src="/avatars/character1.jpg" alt="User Avatar" className="w-full h-full object-cover" />
+            )}
           </div>
           <div className="hidden md:block text-left">
-            <p className="text-sm font-bold text-gray-900 leading-tight">{user?.name || "Student"}</p>
-            <p className="text-[10px] text-gray-500 tracking-wide">{user?.email || "student@examspro.com"}</p>
+            <p className="text-sm font-bold text-gray-900 leading-tight">{mounted ? (user?.name || "Error: Name not found") : "Loading..."}</p>
+            <p className="text-[10px] text-gray-500 tracking-wide">{mounted ? (user?.email || "Error: Email not found") : "Loading..."}</p>
           </div>
         </div>
       </div>
