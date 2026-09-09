@@ -108,7 +108,7 @@ All microservices write to the single, centrally managed remote MySQL instance:
 ## ⚙️ Microservices Overview
 
 ### 1. [`service_users`](./service_users) (Port 7000)
-* **Identity & Auth**: Multi-tenant authentication, email OTP verification via AWS SES, Google/Microsoft OAuth 2.0, JWT token rotation, TOTP MFA, and server-to-server token introspection (`POST /auth/introspect`).
+* **Identity & Auth**: Multi-tenant authentication, email OTP verification, Google/Microsoft OAuth 2.0, JWT token rotation, TOTP MFA, and server-to-server token introspection (`POST /auth/introspect`).
 * **Institutional Roles**: Multi-role assignment (`student`, `teacher`, `parent`, `school-admin`, `super-admin`, `agent`).
 * **White-Label Branding**: Dynamic skinning endpoints for SchoolHub (`logo_url`, `logo_emoji`, theme colors, motto, layout settings).
 * **Family Graph**: Parent-child relationship linking and instant validation (`GET /intelligence/verify-relation`).
@@ -155,7 +155,7 @@ The Master Control Centre for super-administrators:
 * Subscription plans, limits, and invoice oversight.
 * Agent commission payouts authorization.
 * Cryptographic scratch card batch generation.
-* Blog CMS & AWS SES system-wide email broadcast dispatcher.
+* Blog CMS & system-wide email broadcast dispatcher.
 
 ### 2. Modular Apps
 * [`resultspro`](./resultspro): School admin marks entry and student report card portal.

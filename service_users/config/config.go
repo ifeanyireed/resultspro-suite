@@ -14,7 +14,6 @@ var (
 	JWTSecret            string
 	GoogleOAuthConfig    *oauth2.Config
 	MicrosoftOAuthConfig *oauth2.Config
-	AWSRegion            string
 	SMTPFrom             string
 )
 
@@ -32,11 +31,6 @@ func InitConfig() {
 	JWTSecret = os.Getenv("JWT_SECRET")
 	if JWTSecret == "" {
 		JWTSecret = "resultspro-central-secret-key-change-in-production"
-	}
-
-	AWSRegion = os.Getenv("AWS_REGION")
-	if AWSRegion == "" {
-		AWSRegion = "us-east-1"
 	}
 
 	SMTPFrom = os.Getenv("SMTP_FROM")

@@ -224,7 +224,7 @@ export const mockPeers: Peer[] = [
     name: 'Kofi Mensah',
     avatar: '/avatars/character2.jpg',
     role: 'Backend Engineer',
-    skills: ['Go', 'Docker', 'AWS SES', 'PostgreSQL'],
+    skills: ['Go', 'Docker', 'PostgreSQL'],
     currentStage: 'Stage 02: Applications',
     timezone: 'GMT (UTC+0)',
     isPair: false,

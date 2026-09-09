@@ -612,10 +612,10 @@ func (h *AdminHandler) UploadTextbook(c *gin.Context) {
 		return
 	}
 
-	// Upload to S3
-	fileURL, err := utils.UploadToS3(file, "textbooks")
+	// Save file locally
+	fileURL, err := utils.UploadFile(file, "textbooks")
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Failed to upload to S3: %v", err)})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Failed to upload file: %v", err)})
 		return
 	}
 
@@ -638,10 +638,10 @@ func (h *AdminHandler) UploadImage(c *gin.Context) {
 
 	folder := c.DefaultQuery("folder", "images")
 
-	// Upload to S3
-	fileURL, err := utils.UploadToS3(file, folder)
+	// Save file locally
+	fileURL, err := utils.UploadFile(file, folder)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Failed to upload to S3: %v", err)})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Failed to upload file: %v", err)})
 		return
 	}
 
