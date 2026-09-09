@@ -264,7 +264,8 @@ func (h *PaymentHandler) VerifyPayment(c *gin.Context) {
 	// Try to unmarshal metadata, but don't fail hard if it's empty/null
 	_ = json.Unmarshal(result.Data.Metadata, &metadata)
 
-	if err := processSuccessfulPayment(reference, metadata); err != nil {
+	purchase, err := processSuccessfulPayment(reference, metadata)
+	if err != nil {
 		if err.Error() == "Purchase record not found" {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Purchase record not found"})
 			return
@@ -275,6 +276,8 @@ func (h *PaymentHandler) VerifyPayment(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Payment verified successfully",
+		"packName": purchase.PackName,
+		"coins": purchase.CoinsGranted,
 	})
 }
 
@@ -284,17 +287,17 @@ func processSuccessfulPayment(reference string, metadata struct {
 	UserID string `json:"user_id"`
 	Coins  int    `json:"coins"`
 	Type   string `json:"type"`
-}) error {
+}) (*models.Purchase, error) {
 	var purchase models.Purchase
 	if err := database.DB.Where("payment_reference = ?", reference).First(&purchase).Error; err != nil {
-		return fmt.Errorf("Purchase record not found")
+		return nil, fmt.Errorf("Purchase record not found")
 	}
 
 	if purchase.Status == "success" {
-		return nil // Already processed
+		return &purchase, nil // Already processed
 	}
 
-	return database.DB.Transaction(func(tx *gorm.DB) error {
+	err := database.DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Model(&purchase).Update("status", "success").Error; err != nil {
 			return err
 		}
@@ -330,6 +333,10 @@ func processSuccessfulPayment(reference string, metadata struct {
 
 		return nil
 	})
+	if err != nil {
+		return nil, err
+	}
+	return &purchase, nil
 }
 
 
@@ -380,7 +387,7 @@ func (h *PaymentHandler) PaystackWebhook(c *gin.Context) {
 		_ = json.Unmarshal(payload.Data.Metadata, &metadata)
 		
 		// Process the payment
-		if err := processSuccessfulPayment(payload.Data.Reference, metadata); err != nil {
+		if _, err := processSuccessfulPayment(payload.Data.Reference, metadata); err != nil {
 			log.Printf("Webhook processing failed for reference %s: %v", payload.Data.Reference, err)
 			// Return 200 anyway so Paystack doesn't retry infinitely on a DB constraint or non-existent record
 		}
