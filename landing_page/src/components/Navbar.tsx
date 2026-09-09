@@ -20,10 +20,10 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'SchoolHub', path: '/schoolhub' },
-    { name: 'ExamsPRO', path: '/#examspro' },
-    { name: 'ClassroomPRO', path: '/#classroompro' },
-    { name: 'ResultsPRO', path: '/#resultspro' },
-    { name: 'TutorsPRO', path: '/#tutorspro' },
+    { name: 'ExamsPRO', path: '/examspro' },
+    { name: 'ClassroomPRO', path: '/classroompro' },
+    { name: 'ResultsPRO', path: '/resultspro' },
+    { name: 'TutorsPRO', path: '/tutorspro' },
   ];
 
   if (isOnboarding) return null;

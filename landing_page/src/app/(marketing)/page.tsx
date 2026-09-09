@@ -30,7 +30,7 @@ export default function Home() {
                 <cat.icon className="w-8 h-8 text-red mb-6" style={{ color: 'var(--color-nets-red)' }} />
                 <h3 className="text-xl fw-600 mb-2">{cat.title}</h3>
                 <p className="text-muted text-sm mb-6">{cat.desc}</p>
-                <Link href={`#${cat.id}`} className="nav-link text-navy" style={{ color: 'var(--color-nets-navy)' }}>
+                <Link href={`/${cat.id}`} className="nav-link text-navy" style={{ color: 'var(--color-nets-navy)' }}>
                   Learn more &rarr;
                 </Link>
               </div>
