@@ -39,7 +39,7 @@ export default function PrivacyPage() {
             <div style={{ marginBottom: '4rem' }}>
               <span className="overline" style={{ color: 'var(--color-nets-red)', marginBottom: '1rem', display: 'block' }}>Legal</span>
               <h1 className="h2" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '1.5rem' }}>Privacy Policy</h1>
-              <p style={{ fontSize: '1.125rem', color: 'var(--color-nets-navy-light)', lineHeight: 1.6 }}>
+              <p style={{ fontSize: '1.125rem', color: 'var(--color-nets-text-2)', lineHeight: 1.6 }}>
                 Effective Date: April 8, 2026<br/>
                 Your privacy is critically important to us. This policy explains what data we collect, how it's used, and your rights regarding your personal information.
               </p>
@@ -49,7 +49,7 @@ export default function PrivacyPage() {
               {sections.map((section, i) => (
                 <div key={i}>
                   <h2 className="h4" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '1rem' }}>{section.title}</h2>
-                  <p style={{ color: 'var(--color-nets-navy-light)', lineHeight: 1.7 }}>
+                  <p style={{ color: 'var(--color-nets-text-2)', lineHeight: 1.7 }}>
                     {section.content}
                   </p>
                 </div>
@@ -58,7 +58,7 @@ export default function PrivacyPage() {
 
             <div style={{ marginTop: '5rem', paddingTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
               <h3 className="h5" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '1rem' }}>Contact Us</h3>
-              <p style={{ color: 'var(--color-nets-navy-light)', lineHeight: 1.7 }}>
+              <p style={{ color: 'var(--color-nets-text-2)', lineHeight: 1.7 }}>
                 If you have any questions or concerns regarding this Privacy Policy, please contact our Data Protection Officer at <a href="mailto:privacy@resultspro.ng" style={{ color: 'var(--color-nets-red)', textDecoration: 'none' }}>privacy@resultspro.ng</a>.
               </p>
             </div>

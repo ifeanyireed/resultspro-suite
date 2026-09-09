@@ -33,7 +33,7 @@ export default function SupportPage() {
           <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
             <span className="overline" style={{ color: 'var(--color-nets-red)', marginBottom: '1rem', display: 'inline-block' }}>Support</span>
             <h1 className="h1" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '1.5rem' }}>How can we help?</h1>
-            <p style={{ fontSize: '1.25rem', color: 'var(--color-nets-navy-light)', lineHeight: 1.6 }}>
+            <p style={{ fontSize: '1.25rem', color: 'var(--color-nets-text-2)', lineHeight: 1.6 }}>
               Everything you need to know about ResultsPRO, how to get started, and how to reach our team.
             </p>
           </div>
@@ -50,7 +50,7 @@ export default function SupportPage() {
                 {faqs.map((faq, i) => (
                   <div key={i} style={{ padding: '2rem', background: 'white', borderLeft: '4px solid var(--color-nets-red)', borderRadius: '2px' }}>
                     <h4 className="h5" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '1rem' }}>{faq.q}</h4>
-                    <p style={{ color: 'var(--color-nets-navy-light)', lineHeight: 1.6, fontSize: '0.9375rem' }}>{faq.a}</p>
+                    <p style={{ color: 'var(--color-nets-text-2)', lineHeight: 1.6, fontSize: '0.9375rem' }}>{faq.a}</p>
                   </div>
                 ))}
               </div>
@@ -60,13 +60,13 @@ export default function SupportPage() {
               <div style={{ position: 'sticky', top: '120px' }}>
                 <h2 className="h4" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '2rem' }}>Get in Touch</h2>
                 
-                <div style={{ padding: '2rem', background: 'var(--color-nets-red)', color: 'var(--color-nets-navy-dark)', borderRadius: '2px', marginBottom: '2rem' }}>
-                  <h3 className="h5" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '0.5rem' }}>Contact Sales & Support</h3>
+                <div style={{ padding: '2rem', background: 'var(--color-nets-red)', color: 'white', borderRadius: '2px', marginBottom: '2rem' }}>
+                  <h3 className="h5" style={{ color: 'white', marginBottom: '0.5rem' }}>Contact Sales & Support</h3>
                   <p style={{ fontSize: '0.875rem', marginBottom: '1.5rem', opacity: 0.9 }}>We typically respond within 2 hours during business hours.</p>
                   <a href="mailto:support@resultspro.ng" className="btn" style={{ background: 'white', color: 'var(--color-nets-red)', width: '100%', justifyContent: 'center', marginBottom: '1rem', textDecoration: 'none' }}>
                     Email Us
                   </a>
-                  <a href="https://wa.me/2349167919439" target="_blank" rel="noopener noreferrer" className="btn" style={{ background: 'transparent', color: 'var(--color-nets-navy-dark)', border: '1px solid white', width: '100%', justifyContent: 'center', textDecoration: 'none' }}>
+                  <a href="https://wa.me/2349167919439" target="_blank" rel="noopener noreferrer" className="btn" style={{ background: 'transparent', color: 'white', border: '1px solid white', width: '100%', justifyContent: 'center', textDecoration: 'none' }}>
                     Chat on WhatsApp
                   </a>
                 </div>
