@@ -9,7 +9,7 @@ type AIProvider interface {
 	GenerateTutorResponse(ctx context.Context, query string, history []map[string]string, weakTopics []string, syllabusContext string) (string, error)
 	ValidateTheoryAnswer(ctx context.Context, questionBody string, referenceAnswer *string, userAnswer string) (bool, string, error)
 	GenerateExplanation(ctx context.Context, question string, options []string, correctOption string) (string, error)
-	GenerateTopicLessonNote(ctx context.Context, topicName string, syllabusContent *string) (string, error)
+	GenerateTopicLessonNote(ctx context.Context, topicName string, syllabusContent *string, examName string) (string, error)
 }
 
 func GetAIProvider() AIProvider {
@@ -32,8 +32,8 @@ func GenerateExplanation(ctx context.Context, question string, options []string,
 	return GetAIProvider().GenerateExplanation(ctx, question, options, correctOption)
 }
 
-func GenerateTopicLessonNote(ctx context.Context, topicName string, syllabusContent *string) (string, error) {
-	return GetAIProvider().GenerateTopicLessonNote(ctx, topicName, syllabusContent)
+func GenerateTopicLessonNote(ctx context.Context, topicName string, syllabusContent *string, examName string) (string, error) {
+	return GetAIProvider().GenerateTopicLessonNote(ctx, topicName, syllabusContent, examName)
 }
 
 // ExtractJSON attempts to find and extract a JSON object from a string that might contain model chatter.

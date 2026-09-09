@@ -252,7 +252,7 @@ func (h *StudyAssistantHandler) GetTopicStudyAssistant(c *gin.Context) {
 	topicIdStr := c.Param("topicId")
 
 	var topic models.Topic
-	if err := database.DB.Where("id = ?", topicIdStr).First(&topic).Error; err != nil {
+	if err := database.DB.Preload("Subject.Exam").Where("id = ?", topicIdStr).First(&topic).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Topic not found"})
 		return
 	}
@@ -302,7 +302,11 @@ func (h *StudyAssistantHandler) GetTopicStudyAssistant(c *gin.Context) {
 	// Check if AI notes already exist
 	if topic.AiLessonNotes == nil || *topic.AiLessonNotes == "" {
 		// Generate using Gemini
-		lessonNote, err := utils.GenerateTopicLessonNote(context.Background(), topic.Name, topic.SyllabusContent)
+		examName := "General"
+		if topic.Subject != nil && topic.Subject.Exam != nil {
+			examName = topic.Subject.Exam.Name
+		}
+		lessonNote, err := utils.GenerateTopicLessonNote(context.Background(), topic.Name, topic.SyllabusContent, examName)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "AI generation failed: " + err.Error()})
 			return

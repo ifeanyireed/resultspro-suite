@@ -183,14 +183,14 @@ func (m *MistralProvider) GenerateExplanation(ctx context.Context, question stri
 	return m.callMistral(ctx, messages)
 }
 
-func (m *MistralProvider) GenerateTopicLessonNote(ctx context.Context, topicName string, syllabusContent *string) (string, error) {
+func (m *MistralProvider) GenerateTopicLessonNote(ctx context.Context, topicName string, syllabusContent *string, examName string) (string, error) {
 	syllabus := "No official syllabus detail available."
 	if syllabusContent != nil {
 		syllabus = *syllabusContent
 	}
 
 	prompt := fmt.Sprintf(`
-      You are "ResultPRO Study Assistant", an expert WAEC and JAMB tutor.
+      You are "ResultPRO Study Assistant", an expert tutor for the %s examination.
       
       TASK: Create a comprehensive, easy-to-read Lesson Note for the topic: "%s".
       
@@ -198,9 +198,9 @@ func (m *MistralProvider) GenerateTopicLessonNote(ctx context.Context, topicName
       %s
       
       STRUCTURE:
-      1. Introduction: Hook the student and explain why this topic is important for JAMB/WAEC.
+      1. Introduction: Hook the student and explain why this topic is important for the %s exam.
       2. Key Concepts: Break down the main points into clear, bulleted sub-sections.
-      3. Practical Examples: Provide real-life examples related to the Nigerian context.
+      3. Practical Examples: Provide real-life examples relevant to the context of this exam (e.g. professional/corporate examples for ICAN, relatable everyday examples for WAEC/JAMB).
       4. Summary: A quick wrap-up of what they should remember.
       5. "ResultPRO Tip": A short exam strategy related to this topic.
       
@@ -208,8 +208,9 @@ func (m *MistralProvider) GenerateTopicLessonNote(ctx context.Context, topicName
       - Use professional but accessible Markdown.
       - Use bold text for key terms.
       - Keep it academic, accurate, and highly structured.
-      - Length: Approximately 400-600 words.
-    `, topicName, syllabus)
+      - If the exam is ICAN or a professional certification, ensure the tone, vocabulary, and depth of complexity reflect advanced professional standards.
+      - Length: Approximately 400-800 words.
+    `, examName, topicName, syllabus, examName)
 
 	messages := []mistralMessage{
 		{Role: "user", Content: prompt},

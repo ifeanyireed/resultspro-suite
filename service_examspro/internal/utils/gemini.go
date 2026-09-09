@@ -197,7 +197,7 @@ func (g *GeminiProvider) GenerateExplanation(ctx context.Context, question strin
 	return "", nil
 }
 
-func (g *GeminiProvider) GenerateTopicLessonNote(ctx context.Context, topicName string, syllabusContent *string) (string, error) {
+func (g *GeminiProvider) GenerateTopicLessonNote(ctx context.Context, topicName string, syllabusContent *string, examName string) (string, error) {
 	apiKey := GetSettingWithFallback("gemini_api_key", "GEMINI_API_KEY")
 	if apiKey == "" {
 		return "", fmt.Errorf("GEMINI_API_KEY is not set")
@@ -221,7 +221,7 @@ func (g *GeminiProvider) GenerateTopicLessonNote(ctx context.Context, topicName 
 	}
 
 	prompt := fmt.Sprintf(`
-      You are "ResultPRO Study Assistant", an expert WAEC and JAMB tutor.
+      You are "ResultPRO Study Assistant", an expert tutor for the %s examination.
       
       TASK: Create a comprehensive, easy-to-read Lesson Note for the topic: "%s".
       
@@ -229,9 +229,9 @@ func (g *GeminiProvider) GenerateTopicLessonNote(ctx context.Context, topicName 
       %s
       
       STRUCTURE:
-      1. Introduction: Hook the student and explain why this topic is important for JAMB/WAEC.
+      1. Introduction: Hook the student and explain why this topic is important for the %s exam.
       2. Key Concepts: Break down the main points into clear, bulleted sub-sections.
-      3. Practical Examples: Provide real-life examples related to the Nigerian context.
+      3. Practical Examples: Provide real-life examples relevant to the context of this exam (e.g. professional/corporate examples for ICAN, relatable everyday examples for WAEC/JAMB).
       4. Summary: A quick wrap-up of what they should remember.
       5. "ResultPRO Tip": A short exam strategy related to this topic.
       
@@ -239,8 +239,9 @@ func (g *GeminiProvider) GenerateTopicLessonNote(ctx context.Context, topicName 
       - Use professional but accessible Markdown.
       - Use bold text for key terms.
       - Keep it academic, accurate, and highly structured.
-      - Length: Approximately 400-600 words.
-    `, topicName, syllabus)
+      - If the exam is ICAN or a professional certification, ensure the tone, vocabulary, and depth of complexity reflect advanced professional standards.
+      - Length: Approximately 400-800 words.
+    `, examName, topicName, syllabus, examName)
 
 	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {
