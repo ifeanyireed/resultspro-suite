@@ -133,6 +133,11 @@ export default function Dashboard() {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          <Link href="/practice">
+            <button className="bg-white hover:bg-gray-50 text-[#146ef5] border border-[#146ef5] text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-all flex items-center gap-2">
+              PRACTICE NOW
+            </button>
+          </Link>
           <Link href="/battle-mode">
             <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
               <IconPlayerPlay className="w-4 h-4 fill-current" /> QUICK BATTLE

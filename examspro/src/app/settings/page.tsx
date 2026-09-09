@@ -13,7 +13,7 @@ import BillingTab from './tabs/BillingTab';
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { user } = useAuthStore();
+  const { user, fetchUser } = useAuthStore();
   const [activeTab, setActiveTab] = useState('Account');
   
   useEffect(() => {
@@ -21,6 +21,9 @@ export default function SettingsPage() {
       router.push('/login');
       return;
     }
+
+    // Refresh user data from backend to ensure we have the latest flags like hasIcan
+    fetchUser();
 
     const params = new URLSearchParams(window.location.search);
     const tabParam = params.get('tab');
@@ -31,7 +34,7 @@ export default function SettingsPage() {
     } else if (hash) {
       setActiveTab(hash.charAt(0).toUpperCase() + hash.slice(1));
     }
-  }, [user, router]);
+  }, [user?.id, router, fetchUser]);
 
   if (!user) return null;
   const tabs = [
