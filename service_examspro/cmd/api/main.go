@@ -72,6 +72,7 @@ func main() {
 			c.JSON(200, gin.H{"status": "ok", "message": "API connectivity is working for new routes"})
 		})
 		api.GET("/payment/packs", paymentHandler.GetCoinPacks)
+		api.POST("/payment/webhook", paymentHandler.PaystackWebhook)
 		api.GET("/user/leaderboard", userHandler.GetLeaderboard)
 		
 		// Public Battle & Live Lists

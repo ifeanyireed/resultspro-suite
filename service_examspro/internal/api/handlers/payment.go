@@ -2,6 +2,9 @@ package handlers
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha512"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -257,27 +260,41 @@ func (h *PaymentHandler) VerifyPayment(c *gin.Context) {
 	// Try to unmarshal metadata, but don't fail hard if it's empty/null
 	_ = json.Unmarshal(result.Data.Metadata, &metadata)
 
-	// Find the purchase
+	if err := processSuccessfulPayment(reference, metadata); err != nil {
+		if err.Error() == "Purchase record not found" {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Purchase record not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to finalize purchase"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Payment verified successfully",
+	})
+}
+
+
+func processSuccessfulPayment(reference string, metadata struct {
+	PackID string `json:"pack_id"`
+	UserID string `json:"user_id"`
+	Coins  int    `json:"coins"`
+	Type   string `json:"type"`
+}) error {
 	var purchase models.Purchase
 	if err := database.DB.Where("payment_reference = ?", reference).First(&purchase).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Purchase record not found"})
-		return
+		return fmt.Errorf("Purchase record not found")
 	}
 
 	if purchase.Status == "success" {
-		c.JSON(http.StatusOK, gin.H{"message": "Payment already processed", "packName": purchase.PackName})
-		return
+		return nil // Already processed
 	}
 
-	// Atomically update user balance and purchase status
-	err = database.DB.Transaction(func(tx *gorm.DB) error {
-		// Update purchase
+	return database.DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Model(&purchase).Update("status", "success").Error; err != nil {
 			return err
 		}
 
-		// Grant coins if type is COIN
-		// Fallback: If metadata is missing, check or default based on pack name
 		isPremium := (metadata.Type == "PREMIUM") || (purchase.PackName == "Pro Plan")
 		
 		if !isPremium {
@@ -286,7 +303,6 @@ func (h *PaymentHandler) VerifyPayment(c *gin.Context) {
 				return err
 			}
 		} else {
-			// Update user premium status
 			expiry := time.Now().AddDate(0, 1, 0)
 			if err := tx.Model(&models.User{}).Where("id = ?", purchase.UserID).
 				Updates(map[string]interface{}{
@@ -297,7 +313,6 @@ func (h *PaymentHandler) VerifyPayment(c *gin.Context) {
 			}
 		}
 
-		// Record coin transaction
 		coinTrans := models.CoinTransaction{
 			ID:          uuid.New().String(),
 			UserID:      purchase.UserID,
@@ -311,15 +326,61 @@ func (h *PaymentHandler) VerifyPayment(c *gin.Context) {
 
 		return nil
 	})
+}
 
+
+func (h *PaymentHandler) PaystackWebhook(c *gin.Context) {
+	// Read body securely for HMAC validation
+	body, err := io.ReadAll(c.Request.Body)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to finalize purchase"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to read body"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Payment successful",
-		"packName": purchase.PackName,
-		"coins": purchase.CoinsGranted,
-	})
+	// Validate Paystack HMAC signature
+	paystackSignature := c.GetHeader("x-paystack-signature")
+	secret := os.Getenv("PAYSTACK_SECRET_KEY")
+	
+	mac := hmac.New(sha512.New, []byte(secret))
+	mac.Write(body)
+	expectedSignature := hex.EncodeToString(mac.Sum(nil))
+
+	if paystackSignature != expectedSignature {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid signature"})
+		return
+	}
+
+	// Parse payload
+	var payload struct {
+		Event string `json:"event"`
+		Data  struct {
+			Reference string          `json:"reference"`
+			Status    string          `json:"status"`
+			Metadata  json.RawMessage `json:"metadata"`
+		} `json:"data"`
+	}
+
+	if err := json.Unmarshal(body, &payload); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
+		return
+	}
+
+	// We only care about charge.success
+	if payload.Event == "charge.success" && payload.Data.Status == "success" {
+		var metadata struct {
+			PackID string `json:"pack_id"`
+			UserID string `json:"user_id"`
+			Coins  int    `json:"coins"`
+			Type   string `json:"type"`
+		}
+		_ = json.Unmarshal(payload.Data.Metadata, &metadata)
+		
+		// Process the payment
+		if err := processSuccessfulPayment(payload.Data.Reference, metadata); err != nil {
+			log.Printf("Webhook processing failed for reference %s: %v", payload.Data.Reference, err)
+			// Return 200 anyway so Paystack doesn't retry infinitely on a DB constraint or non-existent record
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
