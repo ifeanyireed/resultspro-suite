@@ -75,7 +75,7 @@ export default function FullSyllabusPage() {
   };
 
   return (
-    <main className="min-h-screen bg-navy pb-24">
+    <main className="min-h-screen bg-slate-50 pb-24">
       <Navbar />
 
       <div className="max-w-4xl mx-auto px-4 md:px-8 pt-8">
@@ -83,7 +83,7 @@ export default function FullSyllabusPage() {
         <div className="flex justify-between items-center mb-8">
           <Link
             href={`/practice/${examId}`}
-            className="inline-flex items-center gap-2 text-gray-500 hover:text-white transition-colors group"
+            className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span className="text-sm font-medium">Back to Examination</span>
@@ -92,7 +92,7 @@ export default function FullSyllabusPage() {
           {!loading && examData && (
             <button
               onClick={toggleAll}
-              className="px-4 py-2 rounded-xl bg-white/5 border border-white/[0.1] border-t-white/[0.15] text-xs font-bold text-gray-400 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 uppercase tracking-widest"
+              className="px-4 py-2 rounded-xl bg-white border border-gray-200 shadow-sm text-xs font-bold text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all flex items-center gap-2 uppercase tracking-widest"
             >
               {expandedSubjects.size === examData.subjects.length ? (
                 <>
@@ -111,7 +111,7 @@ export default function FullSyllabusPage() {
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <div className="w-12 h-12 border-4 border-blue/20 border-t-blue rounded-full animate-spin" />
+            <div className="w-12 h-12 border-4 border-[#146ef5]/20 border-t-blue rounded-full animate-spin" />
             <p className="text-gray-500 font-medium">Fetching official syllabus...</p>
           </div>
         ) : error ? (
@@ -122,15 +122,15 @@ export default function FullSyllabusPage() {
           <>
             <header className="mb-12">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 rounded-lg bg-blue/10 text-blue">
+                <div className="p-2 rounded-lg bg-[#146ef5] text-white/10 text-[#146ef5]">
                   <Book className="w-5 h-5" />
                 </div>
-                <span className="text-blue font-bold text-sm uppercase tracking-widest">Official Curriculum</span>
+                <span className="text-[#146ef5] font-bold text-sm uppercase tracking-widest">Official Curriculum</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-display font-bold text-white mb-4">
-                {examData.name} <span className="text-blue">Full Syllabus</span>
+              <h1 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
+                {examData.name} <span className="text-[#146ef5]">Full Syllabus</span>
               </h1>
-              <p className="text-gray-400 text-lg">Detailed breakdown of all subjects and topics required for your examination.</p>
+              <p className="text-gray-500 text-lg">Detailed breakdown of all subjects and topics required for your examination.</p>
             </header>
 
             <div className="space-y-6">
@@ -138,18 +138,18 @@ export default function FullSyllabusPage() {
                 const isExpanded = expandedSubjects.has(subject.id);
                 return (
                   <div key={subject.id} className="p-0.5 rounded-[32px] bg-gradient-to-b from-white/10 to-transparent transition-all">
-                    <div className="bg-navy/80 backdrop-blur-xl rounded-[30px] overflow-hidden border border-white/5">
+                    <div className="bg-slate-50/80 backdrop-blur-xl rounded-[30px] overflow-hidden border border-white/5">
                       {/* Header Toggler */}
                       <div 
                         onClick={() => toggleSubject(subject.id)}
-                        className="w-full p-6 md:p-8 bg-white/5 border-b border-white/[0.05] border-t-white/[0.1] flex items-center justify-between group transition-colors hover:bg-white/10 cursor-pointer"
+                        className="w-full p-6 md:p-8 bg-white border-b border-gray-200  flex items-center justify-between group transition-colors hover:bg-gray-100 cursor-pointer"
                       >
                         <div className="flex items-center gap-4">
-                          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${isExpanded ? 'bg-blue text-white' : 'bg-blue/20 text-blue group-hover:bg-blue/30'}`}>
+                          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${isExpanded ? 'bg-[#146ef5] text-white text-gray-900' : 'bg-[#146ef5] text-white/20 text-[#146ef5] group-hover:bg-[#146ef5] text-white/30'}`}>
                             <BookOpen className="w-6 h-6" />
                           </div>
                           <div className="text-left">
-                            <h2 className="text-2xl font-bold text-white group-hover:text-blue transition-colors">{subject.name}</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 group-hover:text-[#146ef5] transition-colors">{subject.name}</h2>
                             <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{(subject.topics?.length || 0)} Topics Available</span>
                           </div>
                         </div>
@@ -159,14 +159,14 @@ export default function FullSyllabusPage() {
                               href={`/practice/textbook/${subject.id}`}
                               onClick={(e) => e.stopPropagation()}
                               title={subject.textbookTitle || `Read ${subject.name} Textbook`}
-                              className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-blue/10 text-blue border border-blue/20 hover:bg-blue hover:text-white transition-all text-[10px] font-black uppercase tracking-widest whitespace-nowrap"
+                              className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-[#146ef5] text-white/10 text-[#146ef5] border border-[#146ef5]/20 hover:bg-[#146ef5] text-white hover:text-gray-900 transition-all text-[10px] font-black uppercase tracking-widest whitespace-nowrap"
                             >
                               <FileText className="w-3.5 h-3.5 shrink-0" />
                               <span>{subject.textbookTitle || 'Recommended Text'}</span>
                             </Link>
                           )}
-                          <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-all">
-                            {isExpanded ? <ChevronUp className="w-5 h-5 text-white" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+                          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center group-hover:bg-gray-100 transition-all">
+                            {isExpanded ? <ChevronUp className="w-5 h-5 text-gray-900" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
                           </div>
                         </div>
                       </div>
@@ -182,11 +182,11 @@ export default function FullSyllabusPage() {
                           >
                             <div className="divide-y divide-white/5">
                               {(subject.topics || []).map((topic) => (
-                                <div key={topic.id} className="p-6 md:p-8 hover:bg-white/[0.02] transition-colors group">
+                                <div key={topic.id} className="p-6 md:p-8 hover:bg-white transition-colors group">
                                   <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                                     <div className="flex-1">
-                                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue transition-colors">{topic.name}</h3>
-                                      <div className="text-gray-400 text-sm leading-relaxed prose prose-invert max-w-none">
+                                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#146ef5] transition-colors">{topic.name}</h3>
+                                      <div className="text-gray-500 text-sm leading-relaxed prose prose-invert max-w-none">
                                         {topic.syllabusContent ? (
                                           <p>{topic.syllabusContent}</p>
                                         ) : (
@@ -196,7 +196,7 @@ export default function FullSyllabusPage() {
                                     </div>
                                     
                                     <Link href={`/practice/study/${topic.id}`} className="shrink-0">
-                                      <button className="flex items-center gap-2 px-6 py-3 rounded-xl bg-blue/10 text-blue font-bold border border-blue/20 hover:bg-blue hover:text-white transition-all">
+                                      <button className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#146ef5] text-white/10 text-[#146ef5] font-bold border border-[#146ef5]/20 hover:bg-[#146ef5] text-white hover:text-gray-900 transition-all">
                                         <Sparkles className="w-4 h-4" />
                                         <span>Study Topic</span>
                                         <ChevronRight className="w-4 h-4" />

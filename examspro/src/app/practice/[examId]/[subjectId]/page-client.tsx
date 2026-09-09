@@ -99,7 +99,7 @@ export default function TopicListPage() {
   const completedCount = topics?.filter(t => t.completed).length || 0;
 
   return (
-    <main className="min-h-screen bg-navy pb-24">
+    <main className="min-h-screen bg-slate-50 pb-24">
       <Navbar />
 
       {/* 30-second login prompt for guests */}
@@ -109,7 +109,7 @@ export default function TopicListPage() {
         {/* Breadcrumbs */}
         <Link
           href={`/practice/${examId}`}
-          className="inline-flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-8 group"
+          className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors mb-8 group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span className="text-sm font-medium">Back to Subjects</span>
@@ -117,7 +117,7 @@ export default function TopicListPage() {
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <div className="w-12 h-12 border-4 border-green/20 border-t-green rounded-full animate-spin" />
+            <div className="w-12 h-12 border-4 border-[#146ef5]/20 border-t-green rounded-full animate-spin" />
             <p className="text-gray-500 font-medium">Loading topics for {subjectName || subjectId}...</p>
           </div>
         ) : error ? (
@@ -125,7 +125,7 @@ export default function TopicListPage() {
             <p className="text-red-500 font-medium">{error}</p>
             <Link
               href={`/practice/${examId}`}
-              className="mt-4 inline-block px-6 py-2 bg-white/5 text-white rounded-xl hover:bg-white/10 transition-colors"
+              className="mt-4 inline-block px-6 py-2 bg-white text-gray-900 rounded-xl hover:bg-white/10 transition-colors"
             >
               Go Back
             </Link>
@@ -135,14 +135,14 @@ export default function TopicListPage() {
             {/* Header */}
             <div className="mb-12">
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-blue font-bold text-sm uppercase tracking-widest">{examId.toUpperCase()}</span>
+                <span className="text-[#146ef5] font-bold text-sm uppercase tracking-widest">{examId.toUpperCase()}</span>
                 <div className="w-1 h-1 rounded-full bg-white/20" />
-                <span className="text-gray-400 text-sm font-medium">{subjectName}</span>
+                <span className="text-gray-500 text-sm font-medium">{subjectName}</span>
               </div>
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
                 <div>
-                  <h1 className="text-3xl md:text-5xl font-display font-bold text-white mb-2">
-                    Select a <span className="text-green">{viewMode === 'topic' ? 'Topic' : 'Year'}</span>
+                  <h1 className="text-3xl md:text-5xl font-display font-bold text-gray-900 mb-2">
+                    Select a <span className="text-[#146ef5]">{viewMode === 'topic' ? 'Topic' : 'Year'}</span>
                   </h1>
                   <p className="text-gray-500 font-medium">
                     {viewMode === 'topic' 
@@ -152,12 +152,12 @@ export default function TopicListPage() {
                 </div>
 
                 {/* View Mode Toggle */}
-                <div className="flex p-1 rounded-2xl bg-white/5 border border-white/[0.1] border-t-white/[0.15] w-fit shrink-0">
+                <div className="flex p-1 rounded-2xl bg-white border border-gray-200 shadow-sm w-fit shrink-0">
                   <button
                     onClick={() => setViewMode('topic')}
                     className={`
                       px-6 py-2.5 rounded-xl font-bold text-sm transition-all
-                      ${viewMode === 'topic' ? 'bg-blue text-white shadow-lg' : 'text-gray-500 hover:text-gray-300'}
+                      ${viewMode === 'topic' ? 'bg-gradient-to-r from-[#146ef5] to-[#0a2e70] text-white shadow-lg' : 'text-gray-500 hover:text-gray-600'}
                     `}
                   >
                     Topic
@@ -166,7 +166,7 @@ export default function TopicListPage() {
                     onClick={() => setViewMode('year')}
                     className={`
                       px-6 py-2.5 rounded-xl font-bold text-sm transition-all
-                      ${viewMode === 'year' ? 'bg-blue text-white shadow-lg' : 'text-gray-500 hover:text-gray-300'}
+                      ${viewMode === 'year' ? 'bg-gradient-to-r from-[#146ef5] to-[#0a2e70] text-white shadow-lg' : 'text-gray-500 hover:text-gray-600'}
                     `}
                   >
                     Year
@@ -176,10 +176,10 @@ export default function TopicListPage() {
 
               {/* Guest nudge */}
               {!isAuthenticated && (
-                <div className="mb-6 flex items-center gap-3 px-5 py-3 rounded-2xl bg-green/5 border border-green/20 text-sm">
-                  <Lock className="w-4 h-4 text-green shrink-0" />
-                  <span className="text-gray-300">
-                    <Link href="/login" className="text-green font-semibold hover:underline">Sign in</Link>
+                <div className="mb-6 flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#146ef5]/5 border border-[#146ef5]/20 text-sm">
+                  <Lock className="w-4 h-4 text-[#146ef5] shrink-0" />
+                  <span className="text-gray-600">
+                    <Link href="/login" className="text-[#146ef5] font-semibold hover:underline">Sign in</Link>
                     &nbsp;to start practising — it&apos;s free!
                   </span>
                 </div>
@@ -192,7 +192,7 @@ export default function TopicListPage() {
                   placeholder="Search topics..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white/5 border border-white/[0.1] border-t-white/[0.15] rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-green/50 transition-colors"
+                  className="w-full bg-white border border-gray-200 shadow-sm rounded-2xl py-4 pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#146ef5]/50 transition-colors"
                 />
               </div>
             </div>
@@ -206,19 +206,19 @@ export default function TopicListPage() {
                       key={topic.id}
                       className={`
                         group p-1 rounded-[24px] transition-all
-                        ${topic.active ? 'bg-gradient-to-r from-green to-blue' : 'bg-transparent'}
+                        ${topic.active ? 'bg-gradient-to-r from-[#146ef5] to-red-500' : 'bg-transparent shadow-sm'}
                       `}
                     >
                       <div className={`
                         relative p-6 rounded-[22px] border transition-all flex flex-col md:flex-row md:items-center gap-6
-                        ${topic.active ? 'bg-navy border-transparent' : 'bg-white/[0.02] border-white/[0.05] border-t-white/[0.1] hover:bg-white/5 hover:border-white/10'}
+                        ${topic.active ? 'bg-white border-transparent shadow-md' : 'bg-white border-gray-200  hover:bg-white hover:border-[#146ef5]/30'}
                         ${topic.locked ? 'opacity-60 grayscale-[0.5]' : 'opacity-100'}
                       `}>
                         {/* Status Icon */}
                         <div className={`
                           w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all
-                          ${topic.completed ? 'bg-green/10 text-green' : topic.active ? 'bg-blue/10 text-blue' : 'bg-white/5 text-gray-500'}
-                          ${topic.locked ? 'bg-white/5 text-gray-700' : ''}
+                          ${topic.completed ? 'bg-[#146ef5]/10 text-[#146ef5]' : topic.active ? 'bg-[#146ef5] text-white' : 'bg-white text-gray-500'}
+                          ${topic.locked ? 'bg-white text-gray-700' : ''}
                         `}>
                           {topic.completed ? <CheckCircle2 className="w-7 h-7" /> :
                           topic.locked ? <Lock className="w-6 h-6" /> :
@@ -228,10 +228,10 @@ export default function TopicListPage() {
                         {/* Info */}
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-1">
-                            <h3 className="text-xl font-bold text-white">{topic.name}</h3>
+                            <h3 className="text-xl font-bold text-gray-900">{topic.name}</h3>
                             <span className={`
                               px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tighter
-                              ${topic.difficulty === 'Easy' ? 'bg-green/10 text-green' :
+                              ${topic.difficulty === 'Easy' ? 'bg-[#146ef5]/10 text-[#146ef5]' :
                                 topic.difficulty === 'Medium' ? 'bg-amber/10 text-amber' : 'bg-red-500/10 text-red-500'}
                             `}>
                               {topic.difficulty}
@@ -248,7 +248,7 @@ export default function TopicListPage() {
                               {topic.reward} coin/correct
                             </div>
                             {topic.mastery > 0 && (
-                              <div className="flex items-center gap-1.5 text-blue">
+                              <div className="flex items-center gap-1.5 text-[#146ef5]">
                                 <Star className="w-4 h-4 fill-current" />
                                 {topic.mastery}% Mastery
                               </div>
@@ -260,7 +260,7 @@ export default function TopicListPage() {
                         <div className="flex items-center gap-3">
                           {isAuthenticated && !topic.locked && (
                             <Link href={`/practice/study/${topic.id}`}>
-                              <button className="p-3 rounded-xl bg-white/5 text-blue hover:bg-blue/10 border border-white/[0.1] border-t-white/[0.15] transition-all group/study" title="AI Study Assistant">
+                              <button className="p-3 rounded-xl bg-white text-[#146ef5] hover:bg-gray-50 border border-gray-200 shadow-sm transition-all group/study" title="AI Study Assistant">
                                 <Sparkles className="w-5 h-5 group-hover/study:scale-110 transition-transform" />
                               </button>
                             </Link>
@@ -275,10 +275,10 @@ export default function TopicListPage() {
                               <button className={`
                                 w-full md:w-auto px-8 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all
                                 ${topic.active
-                                  ? 'bg-green text-navy hover:scale-105 shadow-[0_0_20px_rgba(0,200,83,0.3)]'
+                                  ? 'bg-gradient-to-r from-[#146ef5] to-red-500 text-white hover:scale-105 shadow-md'
                                   : isAuthenticated
-                                    ? 'bg-white/5 text-white hover:bg-white/10'
-                                    : 'bg-white/5 text-gray-400 hover:bg-green/10 hover:text-green border border-white/[0.1] border-t-white/[0.15]'}
+                                    ? 'bg-white text-gray-900 hover:bg-white/10'
+                                    : 'bg-white text-gray-500 hover:bg-[#146ef5]/10 hover:text-[#146ef5] border border-gray-200 shadow-sm'}
                               `}>
                                 {isAuthenticated ? (
                                   <>
@@ -294,7 +294,7 @@ export default function TopicListPage() {
                               </button>
                             </Link>
                           ) : (
-                            <button className="w-full md:w-auto px-8 py-3 rounded-xl bg-white/5 text-gray-500 font-bold flex items-center justify-center gap-2 cursor-not-allowed">
+                            <button className="w-full md:w-auto px-8 py-3 rounded-xl bg-white text-gray-500 font-bold flex items-center justify-center gap-2 cursor-not-allowed">
                               <Coins className="w-4 h-4" />
                               Unlock for 10
                             </button>
@@ -304,7 +304,7 @@ export default function TopicListPage() {
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-20 bg-white/[0.02] rounded-3xl border border-white/[0.05] border-t-white/[0.1]">
+                  <div className="text-center py-20 bg-white rounded-3xl border border-gray-200 ">
                     <p className="text-gray-500">No topics found matching your search.</p>
                   </div>
                 )
@@ -314,24 +314,24 @@ export default function TopicListPage() {
                   (years || []).map((yearStat) => (
                     <div
                       key={yearStat.year}
-                      className="relative p-6 rounded-[22px] border bg-white/[0.02] border-white/[0.05] border-t-white/[0.1] hover:bg-white/5 hover:border-white/10 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group"
+                      className="relative p-6 rounded-[22px] border bg-white border-gray-200  hover:bg-white hover:border-[#146ef5]/30 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group"
                     >
                       <div className="flex items-center gap-6">
                         {/* Arcade/Year Icon */}
                         <div className={`
                           w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all
-                          ${yearStat.isCompleted ? 'bg-green/10 text-green' : 'bg-blue/10 text-blue'}
+                          ${yearStat.isCompleted ? 'bg-[#146ef5]/10 text-[#146ef5]' : 'bg-[#146ef5] text-white'}
                         `}>
                           {yearStat.isCompleted ? <Trophy className="w-7 h-7" /> : <Play className="w-7 h-7" />}
                         </div>
 
                         <div>
-                          <h3 className="text-2xl font-black text-white group-hover:text-blue transition-colors">
+                          <h3 className="text-2xl font-black text-gray-900 group-hover:text-[#146ef5] transition-colors">
                             {yearStat.year} <span className="text-sm font-medium text-gray-500">Examination</span>
                           </h3>
                           <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
                             <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {yearStat.questions} Qs Mixed</span>
-                            <span className={`flex items-center gap-1.5 ${yearStat.mastery > 0 ? 'text-blue' : ''}`}>
+                            <span className={`flex items-center gap-1.5 ${yearStat.mastery > 0 ? 'text-[#146ef5]' : ''}`}>
                               <Star className={`w-4 h-4 ${yearStat.mastery > 0 ? 'fill-current' : ''}`} /> 
                               {yearStat.mastery}% Accuracy
                             </span>
@@ -343,7 +343,7 @@ export default function TopicListPage() {
                         href={`/quiz?subjectId=${subjectId}&year=${yearStat.year}`}
                         onClick={(e) => handleStartPractice(e, 0)}
                       >
-                        <button className="w-full md:w-auto px-10 py-3.5 rounded-2xl bg-white/5 text-white font-bold hover:bg-blue hover:text-white border border-white/[0.1] border-t-white/[0.15] transition-all flex items-center justify-center gap-2">
+                        <button className="w-full md:w-auto px-10 py-3.5 rounded-2xl bg-white text-gray-900 font-bold hover:bg-gradient-to-r hover:from-[#146ef5] hover:to-red-500 hover:text-white border border-gray-200 shadow-sm transition-all flex items-center justify-center gap-2">
                           <Play className="w-4 h-4 fill-current" />
                           Start Arcade
                         </button>
@@ -351,7 +351,7 @@ export default function TopicListPage() {
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-20 bg-white/[0.02] rounded-3xl border border-white/[0.05] border-t-white/[0.1]">
+                  <div className="text-center py-20 bg-white rounded-3xl border border-gray-200 ">
                     <p className="text-gray-500">No past year exams found for this subject.</p>
                   </div>
                 )
@@ -359,23 +359,23 @@ export default function TopicListPage() {
             </div>
 
             {/* Motivation Card */}
-            <div className="mt-12 p-8 rounded-[32px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] relative overflow-hidden group">
+            <div className="mt-12 p-8 rounded-[32px] bg-white border border-gray-200  relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform">
-                <Trophy className="w-40 h-40 text-white" />
+                <Trophy className="w-40 h-40 text-gray-900" />
               </div>
               <div className="relative z-10">
-                <h2 className="text-2xl font-display font-bold text-white mb-2">
+                <h2 className="text-2xl font-display font-bold text-gray-900 mb-2">
                   {viewMode === 'topic' ? `Master the ${subjectName} Module` : `You are ${readyPercent}% Ready`}
                 </h2>
-                <p className="text-gray-400 mb-6 max-w-md">
+                <p className="text-gray-500 mb-6 max-w-md">
                   {viewMode === 'topic' 
                     ? `Complete all topics in this section with 80% or higher to earn a "${subjectName} Master" badge and 50 bonus coins.`
                     : `Your simulation readiness score is based on your mixed-topic performance across all past examination years.`}
                 </p>
                 <div className="flex items-center gap-4">
-                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+                  <div className="flex-1 h-2 bg-white rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-blue transition-all duration-1000"
+                      className="h-full bg-[#146ef5] text-white transition-all duration-1000"
                       style={{ 
                         width: viewMode === 'topic' 
                           ? `${(topics || []).length > 0 ? (completedCount / (topics || []).length) * 100 : 0}%`
@@ -383,7 +383,7 @@ export default function TopicListPage() {
                       }}
                     />
                   </div>
-                  <span className="text-sm font-bold text-blue">
+                  <span className="text-sm font-bold text-[#146ef5]">
                     {viewMode === 'topic' 
                       ? `${completedCount}/${(topics || []).length} Completed`
                       : `${readyPercent}% Ready`}
