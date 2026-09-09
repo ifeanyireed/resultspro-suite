@@ -123,7 +123,7 @@ export default function SubjectSelectionPage() {
                     Active Exam
                   </span>
                 </div>
-                <h1 className="text-4xl md:text-6xl font-display font-bold text-[#146ef5] uppercase tracking-tight">
+                <h1 className="text-4xl md:text-6xl font-display font-bold text-navy uppercase tracking-tight">
                   {examName} Subjects
                 </h1>
 
