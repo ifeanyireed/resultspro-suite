@@ -61,9 +61,18 @@ export default function TopicListPage() {
     setLoading(true);
     try {
       const response = await api.get(`/exams/subjects/${subjectId}/years`);
-      setYears(response.data.years);
-      setReadyPercent(response.data.readyPercent);
-      setSubjectName(response.data.subjectName);
+
+      const data = response.data;
+      if (Array.isArray(data.years)) {
+        setYears(data.years);
+      } else if (Array.isArray(data)) {
+        setYears(data);
+      } else {
+        setYears([]);
+      }
+      setReadyPercent(data.readyPercent || 0);
+      setSubjectName(data.subjectName || '');
+
     } catch (err) {
       console.error('Error fetching years:', err);
       setError('Failed to load years for this subject.');
@@ -96,9 +105,11 @@ export default function TopicListPage() {
     topic.name.toLowerCase().includes(searchQuery.toLowerCase()) && topic.questions > 0
   ) || [];
 
-  const filteredYears = years?.filter(year => 
-    year.year.toString().includes(searchQuery.trim())
-  ) || [];
+  const filteredYears = years?.filter(y => {
+    const yearVal = (y as any).year || (y as any).examYear || (y as any).name || (y as any).id;
+    if (!yearVal) return false;
+    return yearVal.toString().toLowerCase().includes(searchQuery.trim().toLowerCase());
+  }) || [];
 
   const completedCount = topics?.filter(t => t.completed).length || 0;
 
@@ -317,7 +328,7 @@ export default function TopicListPage() {
                 (filteredYears || []).length > 0 ? (
                   (filteredYears || []).map((yearStat) => (
                     <div
-                      key={yearStat.year}
+                      key={(yearStat as any).year || (yearStat as any).examYear || (yearStat as any).id || Math.random()}
                       className="relative p-6 rounded-[22px] border bg-white border-gray-200  hover:bg-white hover:border-[#146ef5]/30 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group"
                     >
                       <div className="flex items-center gap-6">
@@ -331,7 +342,7 @@ export default function TopicListPage() {
 
                         <div>
                           <h3 className="text-2xl font-black text-gray-900 group-hover:text-[#146ef5] transition-colors">
-                            {yearStat.year} <span className="text-sm font-medium text-gray-500">Examination</span>
+                            {(yearStat as any).year || (yearStat as any).examYear || (yearStat as any).name || "Past"} <span className="text-sm font-medium text-gray-500">Examination</span>
                           </h3>
                           <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
                             <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {yearStat.questions} Qs Mixed</span>
