@@ -44,7 +44,7 @@ export default function SharedSignupPage({
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await api.post(signupEndpoint, { name, email, phone, password });
+      const res = await api.post(signupEndpoint, { full_name: name, email, phone, password });
       
       // Some APIs return the token immediately on signup, some require login or verification
       const token = res.data.token || res.data.access_token;
