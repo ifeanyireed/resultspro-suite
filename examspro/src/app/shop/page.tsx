@@ -167,7 +167,7 @@ export default function CoinShopPage() {
                   <span className="text-sm text-gray-500 font-bold italic">/mo</span>
                 </div>
                 <div className="text-[10px] text-gray-500 mb-4 italic flex items-center justify-center md:justify-end gap-1">
-                   <Info className="w-3 h-3" /> Includes 7.5% VAT & Fees
+                   <Info className="w-3 h-3" stroke={3} /> Includes 7.5% VAT & Fees
                 </div>
                 <Button 
                   onClick={() => handlePurchase(premiumPack.id)}
@@ -231,7 +231,7 @@ export default function CoinShopPage() {
 
                   <div className="flex flex-col items-center gap-1.5 mb-8">
                     <div className="flex items-center gap-1 text-[10px] text-gray-500 font-medium">
-                      <Info className="w-3 h-3" />
+                      <Info className="w-3 h-3" stroke={3} />
                       <span>₦{pack.price.toLocaleString()} + VAT & Fees</span>
                     </div>
                   </div>
@@ -305,7 +305,7 @@ export default function CoinShopPage() {
 
                     <div className="flex flex-col items-center gap-1.5 mb-8">
                       <div className="flex items-center gap-1 text-[10px] text-gray-500 font-medium">
-                        <Info className="w-3 h-3" />
+                        <Info className="w-3 h-3" stroke={3} />
                         <span>₦{pack.price.toLocaleString()} + VAT & Fees</span>
                       </div>
                     </div>
