@@ -10,13 +10,13 @@ import {
 
 export const metadata = {
   title: 'PuzzlePRO | ResultsPro Edu Suite',
-  description: 'Learn to code with 636 interactive coding exercises for kids. Master Scratch Blocks, HTML, CSS, JavaScript, and Python through fun gamified adventures!',
+  description: 'Learn to code with 636 coding games for kids in HTML, CSS, JavaScript, and Python. Master tech skills through fun gamified adventures!',
 };
 
 const FEATURES = [
   {
     icon: IconCode,
-    title: '636 Interactive Exercises',
+    title: '636 Coding Games',
     desc: 'Take students from basic logic with Scratch Blocks all the way to advanced HTML, CSS, JavaScript, and Python through immersive coding worlds.'
   },
   {
@@ -53,7 +53,7 @@ export default function PuzzleProPage() {
               Inspiring the next generation of <span style={{ fontWeight: 700, color: 'white' }}>young coders.</span>
             </h1>
             <p className="text-body-lg text-white/70 mt-6 max-w-2xl">
-              Turn screen time into skill time. PuzzlePRO offers 636 gamified coding exercises spanning from visual Blocks to Python, fully equipped with a powerful Educator Portal for schools.
+              Turn screen time into skill time. PuzzlePRO offers 636 coding games for kids in HTML, CSS, JavaScript, and Python, fully equipped with a powerful Educator Portal for schools.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-10">
