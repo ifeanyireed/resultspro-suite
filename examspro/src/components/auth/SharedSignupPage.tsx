@@ -4,53 +4,60 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { IconMail as Mail, IconLock as Lock, IconShieldCheck as ShieldCheck, IconArrowRight as ArrowRight, IconLoader2 as Loader2, IconSparkles as Sparkles, IconBuilding as Building2, IconUsers as Users, IconEye as Eye, IconEyeOff as EyeOff } from '@tabler/icons-react';
+import { IconMail as Mail, IconLock as Lock, IconShieldCheck as ShieldCheck, IconArrowRight as ArrowRight, IconLoader2 as Loader2, IconSparkles as Sparkles, IconBuilding as Building2, IconUsers as Users, IconEye as Eye, IconEyeOff as EyeOff, IconUser as UserIcon, IconPhone as Phone } from '@tabler/icons-react';
 
 import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
 import api from '@/lib/api';
 
-export interface SharedLoginPageProps {
+export interface SharedSignupPageProps {
   appName?: string;
   appDescription?: string;
   brandTitle?: string;
   brandSubtitle?: string;
   logoSrc?: string;
   redirectPath?: string;
-  loginEndpoint?: string;
+  signupEndpoint?: string;
 }
 
-export default function SharedLoginPage({
+export default function SharedSignupPage({
   appName = "Edu Suite",
   appDescription = "The Engine Powering Modern Education.",
   brandTitle = "ResultsPRO",
   brandSubtitle = "EDU SUITE",
   logoSrc = "/logo.png",
   redirectPath = "/dashboard",
-  loginEndpoint = "/auth/login",
-  children,
-}: SharedLoginPageProps & { children?: React.ReactNode }) {
+  signupEndpoint = "/auth/signup",
+}: SharedSignupPageProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   
   const setAuth = useAuthStore((state) => state.setAuth);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await api.post(loginEndpoint, { email, password });
+      const res = await api.post(signupEndpoint, { name, email, phone, password });
+      
+      // Some APIs return the token immediately on signup, some require login or verification
       const token = res.data.token || res.data.access_token;
       if (token) {
         setAuth(res.data.user, token);
-        toast.success("Login successful!");
+        toast.success("Account created successfully!");
         router.push(redirectPath);
+      } else {
+        toast.success("Account created! Please log in.");
+        router.push('/login');
       }
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Login failed");
+      toast.error(err.response?.data?.error || err.response?.data?.message || "Signup failed");
     } finally {
       setIsLoading(false);
     }
@@ -84,7 +91,7 @@ export default function SharedLoginPage({
               {appDescription}
             </h2>
             <p className="text-slate-400 text-lg leading-relaxed mb-10">
-              Manage schools, tutors, assessments, and payments across the entire ecosystem from one centralized command center.
+              Join thousands of students and educators across Nigeria and beyond.
             </p>
 
             <div className="flex space-x-8">
@@ -117,22 +124,38 @@ export default function SharedLoginPage({
         </div>
       </div>
 
-      {/* Right Panel - Login Form */}
-      <div className="w-full lg:w-[45%] bg-white flex items-center justify-center p-8 sm:p-16 relative">
+      {/* Right Panel - Signup Form */}
+      <div className="w-full lg:w-[45%] bg-white flex items-center justify-center p-8 sm:p-16 relative overflow-y-auto">
         {/* Mobile Logo overlay */}
         <div className="absolute top-8 left-8 lg:hidden flex items-center space-x-2">
            <Image src={logoSrc} alt={brandTitle} width={48} height={48} className="bg-slate-900 rounded-lg p-1" />
            <span className="font-bold text-slate-900">{brandTitle}</span>
         </div>
 
-        <div className="w-full max-w-md">
-          <div className="mb-10 text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Welcome Back</h2>
-            <p className="text-slate-500 font-medium">Enter your credentials to access the admin hub.</p>
+        <div className="w-full max-w-md py-12">
+          <div className="mb-8 text-center lg:text-left">
+            <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Create an Account</h2>
+            <p className="text-slate-500 font-medium">Join {brandTitle} and start learning today.</p>
           </div>
 
-          {children || (
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleSignup} className="space-y-5">
+            <div className="space-y-1.5">
+              <label className="block text-sm font-semibold text-slate-700">Full Name</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <UserIcon className="h-5 w-5 text-slate-400" />
+                </div>
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                  placeholder="John Doe"
+                />
+              </div>
+            </div>
+
             <div className="space-y-1.5">
               <label className="block text-sm font-semibold text-slate-700">Email Address</label>
               <div className="relative">
@@ -145,18 +168,29 @@ export default function SharedLoginPage({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                  placeholder="admin@resultspro.ng"
+                  placeholder="student@example.com"
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="block text-sm font-semibold text-slate-700">Password</label>
-                <Link href="#" className="text-sm font-semibold text-blue-600 hover:text-blue-700">
-                  Forgot password?
-                </Link>
+              <label className="block text-sm font-semibold text-slate-700">Phone Number (Optional)</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <Phone className="h-5 w-5 text-slate-400" />
+                </div>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                  placeholder="08012345678"
+                />
               </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-sm font-semibold text-slate-700">Password</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <Lock className="h-5 w-5 text-slate-400" />
@@ -168,6 +202,7 @@ export default function SharedLoginPage({
                   onChange={(e) => setPassword(e.target.value)}
                   className="block w-full pl-11 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                   placeholder="••••••••"
+                  minLength={6}
                 />
                 <button
                   type="button"
@@ -182,25 +217,24 @@ export default function SharedLoginPage({
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed group"
+              className="w-full flex justify-center items-center py-3.5 px-4 mt-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed group"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  Sign in to Dashboard
+                  Create Account
                   <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
             </button>
           </form>
-          )}
 
           <div className="mt-6 text-center">
             <p className="text-sm font-medium text-slate-600">
-              Don't have an account?{' '}
-              <Link href="/signup" className="text-blue-600 hover:text-blue-700 font-bold hover:underline">
-                Sign up
+              Already have an account?{' '}
+              <Link href="/login" className="text-blue-600 hover:text-blue-700 font-bold hover:underline">
+                Sign in
               </Link>
             </p>
           </div>
