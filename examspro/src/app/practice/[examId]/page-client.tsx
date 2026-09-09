@@ -152,13 +152,13 @@ export default function SubjectSelectionPage() {
             </div>
 
             {/* Subjects Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 [&>a]:from-[#146ef5] [&>a]:to-[#0a2e70] max-sm:[&>a:nth-child(even)]:from-red-500 max-sm:[&>a:nth-child(even)]:to-red-900 sm:max-lg:[&>a:nth-child(4n+2)]:from-red-500 sm:max-lg:[&>a:nth-child(4n+2)]:to-red-900 sm:max-lg:[&>a:nth-child(4n+3)]:from-red-500 sm:max-lg:[&>a:nth-child(4n+3)]:to-red-900 lg:[&>a:nth-child(8n+2)]:from-red-500 lg:[&>a:nth-child(8n+2)]:to-red-900 lg:[&>a:nth-child(8n+4)]:from-red-500 lg:[&>a:nth-child(8n+4)]:to-red-900 lg:[&>a:nth-child(8n+5)]:from-red-500 lg:[&>a:nth-child(8n+5)]:to-red-900 lg:[&>a:nth-child(8n+7)]:from-red-500 lg:[&>a:nth-child(8n+7)]:to-red-900">
               {filteredSubjects.map((sub, i) => (
                 <Link
                   key={i}
                   href={`/practice/${examId}/${sub.id}`}
                   onClick={(e) => handleSubjectClick(e, sub.id)}
-                  className={`group p-6 rounded-[1.5rem] shadow-sm hover:-translate-y-1 transition-transform overflow-hidden relative flex flex-col h-full bg-gradient-to-br ${i % 2 === 0 ? 'from-[#146ef5] to-[#0a2e70]' : 'from-red-500 to-red-900'}`}
+                  className="group p-6 rounded-[1.5rem] shadow-sm hover:-translate-y-1 transition-transform overflow-hidden relative flex flex-col h-full bg-gradient-to-br"
                 >
                   <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
                   <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>

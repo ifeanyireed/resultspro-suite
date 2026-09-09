@@ -223,7 +223,7 @@ export default function PracticePage() {
                     <div className="h-px flex-1 bg-slate-200" />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 [&>div>a]:from-[#146ef5] [&>div>a]:to-[#0a2e70] max-md:[&>div:nth-child(even)>a]:from-red-500 max-md:[&>div:nth-child(even)>a]:to-red-900 md:max-lg:[&>div:nth-child(4n+2)>a]:from-red-500 md:max-lg:[&>div:nth-child(4n+2)>a]:to-red-900 md:max-lg:[&>div:nth-child(4n+3)>a]:from-red-500 md:max-lg:[&>div:nth-child(4n+3)>a]:to-red-900 lg:[&>div:nth-child(even)>a]:from-red-500 lg:[&>div:nth-child(even)>a]:to-red-900">
                     {cat.exams.map((exam, examIdx) => (
                       <div
                         key={exam.id}
@@ -234,7 +234,7 @@ export default function PracticePage() {
                         <Link
                           href={`/practice/${exam.id}`}
                           onClick={(e) => handleExamClick(e, exam as Exam)}
-                          className={`block group relative p-8 rounded-[1.5rem] shadow-sm hover:-translate-y-1 transition-transform h-full overflow-hidden bg-gradient-to-br ${examIdx % 2 === 0 ? 'from-[#146ef5] to-[#0a2e70]' : 'from-red-500 to-red-900'}`}
+                          className="block group relative p-8 rounded-[1.5rem] shadow-sm hover:-translate-y-1 transition-transform h-full overflow-hidden bg-gradient-to-br"
                         >
                           <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
                           <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
