@@ -23,6 +23,7 @@ import { Label } from "@/components/ui/label";
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useRouter } from 'next/navigation';
@@ -340,9 +341,14 @@ export default function BattleLobbyPage() {
         </div>
 
         {/* Quick Match CTA */}
-        <div className="relative p-1 rounded-[40px] bg-gradient-to-r from-red-600 via-blue to-purple mb-16 group overflow-hidden">
-          <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity animate-shimmer" />
-          <div className="relative bg-white rounded-[38px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="relative p-1 rounded-[40px] mb-16 group overflow-hidden">
+          <motion.div 
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 5, ease: "linear" }}
+            className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0_200deg,#dc2626_260deg,#2563eb_310deg,#9333ea_360deg)]"
+          />
+          <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity animate-shimmer z-10" />
+          <div className="relative bg-white rounded-[38px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 z-20">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
