@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const footerSections = [
   {
@@ -33,6 +34,11 @@ const footerSections = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+  const isOnboarding = pathname?.startsWith('/onboard');
+
+  if (isOnboarding) return null;
+
   return (
     <footer className="bg-navy text-white" style={{ backgroundColor: 'var(--color-nets-navy-dark)', paddingTop: '5rem', paddingBottom: '3rem' }}>
       <div className="container-nets">

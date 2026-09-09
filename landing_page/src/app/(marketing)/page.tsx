@@ -47,7 +47,7 @@ export default function Home() {
               <div className="overline" style={{ marginBottom: '1rem' }}>The Mission</div>
               <h2 className="text-d3 fw-300 mb-6">Prepare Africa for Takeover.</h2>
               <p className="text-body-lg text-muted mb-8">
-                From the parent's seat at the kitchen table, through the teacher's classroom, the exam hall, the report card, the tutor's screen, and the principal's office, we are building an infrastructure to power the needed culture shift.
+                From the parent&apos;s seat at the kitchen table, through the teacher&apos;s classroom, the exam hall, the report card, the tutor&apos;s screen, and the principal&apos;s office, we are building an infrastructure to power the needed culture shift.
               </p>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
