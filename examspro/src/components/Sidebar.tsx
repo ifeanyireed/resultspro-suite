@@ -71,7 +71,7 @@ export function Sidebar() {
                     href={link.href}
                     className={`flex items-center px-4 py-2 rounded-xl text-lg font-normal relative transition-colors ${
                       isActive
-                        ? 'text-red-600 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-red-600 before:rounded-full'
+                        ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full'
                         : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
                     }`}
                   >
