@@ -511,7 +511,7 @@ func (h *ExamHandler) GetYearsBySubject(c *gin.Context) {
 		Total int
 	}
 
-	database.DB.Table("questions").
+	database.DB.Table("nat_exams_questions").
 		Select("nat_exams_questions.year, count(*) as total").
 		Joins("JOIN nat_exams_topics ON nat_exams_topics.id = nat_exams_questions.topic_id").
 		Where("nat_exams_topics.subject_id = ? AND nat_exams_questions.year IS NOT NULL", subject.ID).
