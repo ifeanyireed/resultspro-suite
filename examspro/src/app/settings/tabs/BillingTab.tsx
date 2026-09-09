@@ -29,7 +29,7 @@ export default function BillingTab() {
             </div>
             <h3 className="text-lg font-bold text-gray-900 mb-1">Coin Balance</h3>
             <p className="text-sm text-gray-500 mb-6">Manage your earned coins and purchase history.</p>
-            <Link href="/dashboard/profile/transactions">
+            <Link href="/dashboard">
               <Button className="w-full bg-gray-900 text-white hover:bg-black font-bold rounded-xl h-11 border-none shadow-sm">
                 View History
               </Button>
