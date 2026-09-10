@@ -31,7 +31,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
   return (
     <main className="min-h-screen bg-light" style={{ background: 'var(--color-nets-light)' }}>
       {/* Hero Section styled like Product Pages */}
-      <section className="bg-navy text-white relative overflow-hidden" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '10rem', paddingBottom: '10rem' }}>
+      <section className="bg-navy text-white relative overflow-hidden" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '10rem', paddingBottom: '16rem' }}>
         <div className="absolute top-0 right-0 w-[50%] h-[100%] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
         
         <div className="container-nets relative z-10">
@@ -68,7 +68,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
             <div className="max-w-4xl mx-auto">
               
               {/* Featured Image */}
-              <div className="w-full aspect-[21/9] rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.1)] border border-nets-border bg-nets-light mb-16 relative z-20" style={{ marginTop: "-8rem" }}>
+              <div className="w-full aspect-[21/9] rounded-2xl overflow-hidden shadow-2xl shadow-navy/20 border border-nets-border bg-nets-light mb-16 relative z-20" style={{ marginTop: "-12rem" }}>
                 <img 
                   src={post.cover_image || "/photo08.jpeg"} 
                   alt={post.title}
