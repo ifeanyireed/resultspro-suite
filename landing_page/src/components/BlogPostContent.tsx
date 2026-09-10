@@ -76,11 +76,10 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
               </div>
             </div>
 
-            {/* Card 2 Row: Share + Body */}
-            <div className="flex gap-8">
-              
-              {/* Floating Share Side-Nav */}
-              <div className="hidden lg:flex flex-col items-center gap-4 w-12 shrink-0 pt-8">
+                            {/* Card 2: Main Prose Content */}
+              <div className="bg-white shadow-xl w-full p-8 md:p-16 mb-8 relative">
+                {/* Floating Share Side-Nav */}
+              <div className="hidden lg:flex flex-col items-center gap-4 w-12 absolute top-8 -left-20">
                 <span className="text-xs text-muted fw-600 mb-2">share</span>
                 <button className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors">
                   <IconBrandFacebook size={18} />
@@ -95,11 +94,6 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                   <IconMail size={18} />
                 </button>
               </div>
-
-                            {/* Main Content Column */}
-              <div className="flex-1 flex flex-col w-full min-w-0">
-                {/* Card 2: Main Prose Content */}
-              <div className="bg-white shadow-xl w-full p-8 md:p-16 mb-8">
                 <div 
                   className="prose prose-lg prose-nets max-w-none"
                   dangerouslySetInnerHTML={{ __html: post.content }} 
@@ -239,8 +233,6 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                   </div>
                 </div>
               </div>
-              </div>
-            </div>
           </ScrollReveal>
         </div>
       </div>
