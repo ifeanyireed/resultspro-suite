@@ -23,14 +23,7 @@ export default function CoursesProTenantManager() {
     enabled_modules: ['coursepro'] // Default module
   });
 
-  const toggleModule = (moduleKey: string) => {
-    setNewTenantData(prev => {
-      if (prev.enabled_modules.includes(moduleKey)) {
-        return { ...prev, enabled_modules: prev.enabled_modules.filter(m => m !== moduleKey) };
-      }
-      return { ...prev, enabled_modules: [...prev.enabled_modules, moduleKey] };
-    });
-  };
+
 
   async function load() {
     setLoading(true);
@@ -289,38 +282,7 @@ export default function CoursesProTenantManager() {
                   />
                 </div>
               </div>
-              <div className="space-y-1.5 pt-2 border-t border-slate-100">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Enable Modules</label>
-                <div className="grid grid-cols-2 gap-2 mt-2">
-                  <label className="flex items-center space-x-2 cursor-pointer bg-slate-50 p-2 rounded-lg border border-slate-200 hover:border-blue-300">
-                    <input 
-                      type="checkbox" 
-                      checked={newTenantData.enabled_modules.includes('coursepro')}
-                      onChange={() => toggleModule('coursepro')}
-                      className="rounded text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-xs font-medium text-slate-700">CoursePRO</span>
-                  </label>
-                  <label className="flex items-center space-x-2 cursor-pointer bg-slate-50 p-2 rounded-lg border border-slate-200 hover:border-blue-300">
-                    <input 
-                      type="checkbox" 
-                      checked={newTenantData.enabled_modules.includes('resultspro')}
-                      onChange={() => toggleModule('resultspro')}
-                      className="rounded text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-xs font-medium text-slate-700">ResultsPRO</span>
-                  </label>
-                  <label className="flex items-center space-x-2 cursor-pointer bg-slate-50 p-2 rounded-lg border border-slate-200 hover:border-blue-300">
-                    <input 
-                      type="checkbox" 
-                      checked={newTenantData.enabled_modules.includes('classroompro')}
-                      onChange={() => toggleModule('classroompro')}
-                      className="rounded text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-xs font-medium text-slate-700">ClassroomPRO</span>
-                  </label>
-                </div>
-              </div>
+
               <div className="pt-4 flex gap-3">
                 <button 
                   type="button" 

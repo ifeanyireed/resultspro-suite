@@ -22,12 +22,6 @@ export default function CoursesProAdminLayout({
 
   const navItems = [
     { label: 'Tenant Manager', href: '/coursespro/tenants', icon: BuildingOfficeIcon },
-    { label: 'Program Builder', href: '/coursespro/program-builder', icon: Square3Stack3DIcon },
-    { label: 'Cohort Configurator', href: '/coursespro/cohorts', icon: CalendarDaysIcon },
-    { label: 'Mentor Management', href: '/coursespro/mentors', icon: AcademicCapIcon },
-    { label: 'Payments', href: '/coursespro/payments', icon: CreditCardIcon },
-    { label: 'Reports', href: '/coursespro/reports', icon: ChartBarIcon },
-    { label: 'Settings', href: '/coursespro/settings', icon: Cog6ToothIcon },
   ];
 
   return (

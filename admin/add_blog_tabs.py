@@ -1,7 +1,11 @@
-'use client';
+import re
+
+with open('src/app/(dashboard)/cms/blog/page.tsx', 'r') as f:
+    content = f.read()
+
+new_content = """'use client';
 
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Badge } from '@/components/Badge';
 import { StatCard } from '@/components/StatCard';
@@ -40,44 +44,35 @@ export default function BlogCMSPage() {
       <Header
         title="Suite Blog CMS"
         subtitle="Manage global articles, categories, tags, and comments across the suite"
-      />
+      >
+        <button className="flex items-center gap-2 bg-[#146ef5] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+          <PlusIcon className="w-4 h-4" />
+          {activeTab === 'posts' ? 'Create Post' : activeTab === 'categories' ? 'Add Category' : activeTab === 'tags' ? 'Add Tag' : 'Settings'}
+        </button>
+      </Header>
 
       <div className="p-8 space-y-8">
         
-        {/* Header Actions */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex bg-slate-100 p-1 rounded-full shadow-inner border border-slate-200 overflow-x-auto whitespace-nowrap hide-scrollbar">
-            {TABS.map((tab) => {
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center space-x-2 px-5 py-2 rounded-full text-xs font-bold capitalize transition-all ${
-                    activeTab === tab.id ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-                  }`}
-                >
-                  <Icon className="w-3.5 h-3.5 stroke-2" />
-                  <span>{tab.name}</span>
-                </button>
-              )
-            })}
-          </div>
-          <div className="flex items-center gap-3">
-            {activeTab === 'posts' ? (
-              <Link href="/cms/blog/create" className="flex items-center space-x-2 px-5 py-2.5 rounded-full bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-colors shadow-sm">
-                <PlusIcon className="w-4 h-4" />
-                <span>Create Post</span>
-              </Link>
-            ) : (
-              <button className="flex items-center space-x-2 px-5 py-2.5 rounded-full bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-colors shadow-sm">
-                <PlusIcon className="w-4 h-4" />
-                <span>
-                  {activeTab === 'categories' ? 'Add Category' : activeTab === 'tags' ? 'Add Tag' : 'Settings'}
-                </span>
+        {/* Tabs */}
+        <div className="border-b border-slate-200">
+          <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+            {TABS.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`
+                  flex items-center gap-2 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm
+                  ${activeTab === tab.id
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+                  }
+                `}
+              >
+                <tab.icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-blue-500' : 'text-slate-400'}`} />
+                {tab.name}
               </button>
-            )}
-          </div>
+            ))}
+          </nav>
         </div>
 
         {/* Tab Content */}
@@ -246,3 +241,7 @@ export default function BlogCMSPage() {
     </div>
   );
 }
+"""
+
+with open('src/app/(dashboard)/cms/blog/page.tsx', 'w') as f:
+    f.write(new_content)
