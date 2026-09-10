@@ -63,10 +63,10 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
-                    <img src="/photo04.jpeg" className="w-full h-full object-cover" alt={typeof post.author === "string" ? post.author : (post.author?.full_name || "Admin")} />
+                    <img src="/photo04.jpeg" className="w-full h-full object-cover" alt={typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")} />
                   </div>
                   <div>
-                    <p className="text-sm fw-600 text-navy mb-0.5">by: {typeof post.author === "string" ? post.author : (post.author?.full_name || "Admin")}</p>
+                    <p className="text-sm fw-600 text-navy mb-0.5">by: {typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")}</p>
                     <p className="text-xs text-muted">on: {formattedDate}</p>
                   </div>
                 </div>
@@ -103,10 +103,10 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
               {/* Card 3: Author Bio */}
               <div className="bg-white shadow-xl w-full p-8 md:p-12 mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start text-center md:text-left">
                 <div className="w-24 h-24 rounded-full bg-gray-200 shrink-0 overflow-hidden">
-                  <img src="/photo04.jpeg" className="w-full h-full object-cover" alt={typeof post.author === "string" ? post.author : (post.author?.full_name || "Admin")} />
+                  <img src="/photo04.jpeg" className="w-full h-full object-cover" alt={typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")} />
                 </div>
                 <div>
-                  <h3 className="text-xl fw-700 text-navy mb-2">{typeof post.author === "string" ? post.author : (post.author?.full_name || "Admin")} - Author</h3>
+                  <h3 className="text-xl fw-700 text-navy mb-2">{typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")} - Author</h3>
                   <p className="text-sm text-muted mb-4 leading-relaxed">
                     ResultsPRO's dedicated content team bridging the gap between cutting edge ed-tech and practical classroom implementation.
                   </p>
