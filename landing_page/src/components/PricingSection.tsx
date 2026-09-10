@@ -148,7 +148,7 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
                   ))}
                 </ul>
                 <Link 
-                  href={activeTab === 'School' ? '/onboard/school' : activeTab === 'Family' ? 'https://schoolhub.resultspro.ng' : '/onboard/agent'}
+                  href={activeTab === 'School' ? '/onboard/school' : activeTab === 'Family' ? '/onboard/family' : '/onboard/agent'}
                   className={`btn ${plan.highlight ? 'btn-primary' : 'btn-outline'} w-full mt-auto`}
                 >
                   {plan.cta}
