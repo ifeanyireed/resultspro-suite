@@ -168,7 +168,7 @@ export default function BlogCMSPage() {
                             <p className="font-medium text-slate-900">{post.title}</p>
                             <p className="text-xs text-slate-500 mt-1 max-w-xs truncate">{post.excerpt}</p>
                           </td>
-                          <td className="px-6 py-4">{post.author}</td>
+                          <td className="px-6 py-4">{typeof post.author === "string" ? post.author : (post.author?.full_name || "Admin")}</td>
                           <td className="px-6 py-4">{categories.find((c: any) => c.id === post.category_id)?.name || "-"}</td>
                           <td className="px-6 py-4">
                             <Badge status={post.status} />

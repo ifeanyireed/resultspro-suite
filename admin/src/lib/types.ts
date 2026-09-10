@@ -104,7 +104,7 @@ export interface BlogPost {
   slug: string;
   excerpt: string;
   content: string;
-  author: string;
+  author: { full_name?: string } | string;
   category: string;
   category_id?: string;
   status: 'DRAFT' | 'PUBLISHED';
