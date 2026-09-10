@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
-import { Check, Edit, Trash2, Plus, School, Users, UserCog, Building, LayoutDashboard, Receipt, GraduationCap, Map, Home, Briefcase } from 'lucide-react';
+import { Check, Edit, Trash2, Plus, School, Users, UserCog, Building, LayoutDashboard, Receipt, GraduationCap, Map, Home, Briefcase, Puzzle } from 'lucide-react';
 import { Badge } from '@/components/Badge';
 
 const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
@@ -57,6 +57,7 @@ export default function SubscriptionsCommandCenter() {
     { id: 'ResultsPRO', label: 'ResultsPRO', icon: LayoutDashboard },
     { id: 'ExamsPRO', label: 'ExamsPRO', icon: Edit },
     { id: 'ClassroomPRO', label: 'ClassroomPRO', icon: Users },
+    { id: 'PuzzlePRO', label: 'PuzzlePRO', icon: Puzzle },
     { id: 'TutorsPRO', label: 'TutorsPRO', icon: GraduationCap },
     { id: 'CoursesPRO', label: 'CoursesPRO', icon: Map },
     { id: 'FamilyHub', label: 'FamilyHub', icon: Home },
