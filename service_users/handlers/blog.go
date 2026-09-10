@@ -32,7 +32,7 @@ func HandleGetPosts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var posts []models.BlogPost
-	if err := db.GormDB.Order("created_at desc").Find(&posts).Error; err != nil {
+	if err := db.GormDB.Preload("Author").Order("created_at desc").Find(&posts).Error; err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to fetch posts")
 		return
 	}

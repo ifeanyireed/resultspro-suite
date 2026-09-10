@@ -26,6 +26,7 @@ type BlogPost struct {
 	Content     string     `json:"content" gorm:"type:longtext"`
 	CoverImage  *string    `json:"cover_image"`
 	AuthorID    string     `json:"author_id" gorm:"type:varchar(191)"`
+	Author      *User      `json:"author" gorm:"foreignKey:AuthorID"`
 	CategoryID  *string    `json:"category_id" gorm:"type:varchar(191)"`
 	Status      string     `json:"status"` // DRAFT, PUBLISHED
 	PublishedAt *time.Time `json:"published_at"`

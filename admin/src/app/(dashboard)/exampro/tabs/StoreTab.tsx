@@ -171,7 +171,7 @@ export default function StoreTab() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
         <div>
           <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-            <ShoppingCart className="w-5 h-5 text-indigo-600" /> Store & Plans Management
+            <ShoppingCart className="w-5 h-5 text-indigo-600" /> Coins & Referrals Management
           </h2>
           <p className="text-xs text-slate-500 mt-1">Manage Coin Packs and Subscription Plans independently</p>
         </div>
