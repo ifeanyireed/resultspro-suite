@@ -12,7 +12,8 @@ export default function StoreTab() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
-  const [activeView, setActiveView] = useState<'COIN' | 'PLAN'>('COIN');
+  const [activeView, setActiveView] = useState<'COIN' | 'ACTIVITY' | 'REFERRAL'>('COIN');
+  const [settings, setSettings] = useState<any[]>([]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -80,6 +81,16 @@ export default function StoreTab() {
       });
     }
     setIsModalOpen(true);
+  };
+
+  const updateSetting = async (id: string, value: string) => {
+    try {
+      await api.put(`/admin/settings/${id}`, { value });
+      toast.success('Setting updated');
+      fetchData();
+    } catch (err) {
+      toast.error('Failed to update setting');
+    }
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -170,20 +181,126 @@ export default function StoreTab() {
         <div className="flex gap-3">
           <div className="flex bg-slate-100 p-1 rounded-lg">
             <button onClick={() => setActiveView('COIN')} className={`px-4 py-1.5 text-xs font-bold rounded-md ${activeView === 'COIN' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}>Coin Packs</button>
-            <button onClick={() => setActiveView('PLAN')} className={`px-4 py-1.5 text-xs font-bold rounded-md ${activeView === 'PLAN' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}>Subscriptions</button>
+            <button onClick={() => setActiveView('ACTIVITY')} className={`px-4 py-1.5 text-xs font-bold rounded-md ${activeView === 'ACTIVITY' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}>Activity Deductions</button>
+            <button onClick={() => setActiveView('REFERRAL')} className={`px-4 py-1.5 text-xs font-bold rounded-md ${activeView === 'REFERRAL' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}>Referral Settings</button>
           </div>
-          <button onClick={() => handleOpenModal(null, activeView)} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-full text-xs font-bold hover:bg-indigo-700 transition-colors shadow-sm">
-            <Plus className="w-4 h-4" /> Add {activeView === 'COIN' ? 'Pack' : 'Plan'}
-          </button>
+          {activeView === 'COIN' && (
+            <button onClick={() => handleOpenModal(null, 'COIN')} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-full text-xs font-bold hover:bg-indigo-700 transition-colors shadow-sm">
+              <Plus className="w-4 h-4" /> Add Pack
+            </button>
+          )}
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-slate-400 font-medium">Loading store items...</div>
+        <div className="text-center py-12 text-slate-400 font-medium">Loading settings...</div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {activeView === 'COIN' ? packs.map(p => renderCard(p, 'COIN')) : plans.map(p => renderCard(p, 'PLAN'))}
-        </div>
+        <>
+          {activeView === 'COIN' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {packs.map(p => renderCard(p, 'COIN'))}
+            </div>
+          )}
+
+          {activeView === 'ACTIVITY' && (
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 max-w-2xl">
+              <h3 className="font-bold text-slate-800 mb-6">Coin Deductions & Rewards</h3>
+              <div className="space-y-6">
+                {[
+                  { id: 'quiz_retake_fee', label: 'Quiz Retake Fee', desc: 'Coins deducted when a user retakes a quiz.' },
+                  { id: 'hint_cost', label: 'Hint Cost', desc: 'Coins deducted when a user buys a hint during a test.' },
+                  { id: 'signup_reward', label: 'Sign-up Reward', desc: 'Coins granted to new users upon registration.' },
+                  { id: 'daily_login_reward', label: 'Daily Login Reward', desc: 'Coins granted every day the user logs in.' },
+                ].map(setting => {
+                  const val = settings.find(s => s.id === setting.id)?.value || '0';
+                  return (
+                    <div key={setting.id} className="flex justify-between items-center pb-4 border-b border-slate-100 last:border-0 last:pb-0">
+                      <div>
+                        <p className="font-semibold text-slate-800">{setting.label}</p>
+                        <p className="text-xs text-slate-500 mt-1">{setting.desc}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input 
+                          type="number" 
+                          defaultValue={val}
+                          onBlur={(e) => {
+                            if (e.target.value !== val) {
+                              updateSetting(setting.id, e.target.value);
+                            }
+                          }}
+                          className="w-24 px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 text-right" 
+                        />
+                        <span className="text-sm font-bold text-slate-400">Coins</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {activeView === 'REFERRAL' && (
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 max-w-2xl">
+              <h3 className="font-bold text-slate-800 mb-6">Referral Configuration</h3>
+              <div className="space-y-6">
+                <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+                  <div>
+                    <p className="font-semibold text-slate-800">Referral Bonus (Coins)</p>
+                    <p className="text-xs text-slate-500 mt-1">Coins awarded to the referrer when a friend signs up.</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="number" 
+                      defaultValue={settings.find(s => s.id === 'referral_bonus')?.value || '150'}
+                      onBlur={(e) => {
+                        const v = settings.find(s => s.id === 'referral_bonus')?.value || '150';
+                        if (e.target.value !== v) updateSetting('referral_bonus', e.target.value);
+                      }}
+                      className="w-24 px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 text-right" 
+                    />
+                    <span className="text-sm font-bold text-slate-400">Coins</span>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+                  <div>
+                    <p className="font-semibold text-slate-800">Referral Discount Percentage</p>
+                    <p className="text-xs text-slate-500 mt-1">Discount given to the referred user upon subscription conversion.</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="number" 
+                      defaultValue={settings.find(s => s.id === 'referral_discount_percentage')?.value || '10'}
+                      onBlur={(e) => {
+                        const v = settings.find(s => s.id === 'referral_discount_percentage')?.value || '10';
+                        if (e.target.value !== v) updateSetting('referral_discount_percentage', e.target.value);
+                      }}
+                      className="w-24 px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 text-right" 
+                    />
+                    <span className="text-sm font-bold text-slate-400">% OFF</span>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-semibold text-slate-800">Referral Program Status</p>
+                    <p className="text-xs text-slate-500 mt-1">Enable or disable the entire referral system.</p>
+                  </div>
+                  <div>
+                    <select
+                      value={settings.find(s => s.id === 'referral_enabled')?.value || 'true'}
+                      onChange={(e) => updateSetting('referral_enabled', e.target.value)}
+                      className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 font-bold"
+                    >
+                      <option value="true">Enabled</option>
+                      <option value="false">Disabled</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
 
       {isModalOpen && (

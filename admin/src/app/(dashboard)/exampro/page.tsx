@@ -28,7 +28,7 @@ export default function ExamsProCommandCenter() {
     { id: 'users', label: 'Candidates', icon: Users },
     { id: 'moderation', label: 'Moderation', icon: FileText },
     { id: 'financials', label: 'Financials', icon: DollarSign },
-    { id: 'store', label: 'Store & Plans', icon: ShoppingCart },
+    { id: 'store', label: 'Coins & Referrals', icon: ShoppingCart },
   ];
 
   return (

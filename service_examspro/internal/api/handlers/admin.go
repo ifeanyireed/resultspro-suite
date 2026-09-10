@@ -326,9 +326,26 @@ func (h *AdminHandler) UpdateSetting(c *gin.Context) {
 		return
 	}
 
-	if err := database.DB.Model(&models.SystemSetting{}).Where("id = ?", id).Update("value", input.Value).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update setting"})
-		return
+	var setting models.SystemSetting
+	if err := database.DB.Where("id = ?", id).First(&setting).Error; err != nil {
+		// Doesn't exist, let's create it dynamically
+		setting = models.SystemSetting{
+			ID:           id,
+			Value:        input.Value,
+			Type:         "string", // default
+			SettingGroup: "dynamic",
+			Label:        id,
+		}
+		if err := database.DB.Create(&setting).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create setting"})
+			return
+		}
+	} else {
+		// Update existing
+		if err := database.DB.Model(&setting).Update("value", input.Value).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update setting"})
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Setting updated successfully"})
