@@ -5,36 +5,10 @@ import styles from '@/app/(marketing)/pricing/Pricing.module.css';
 import ScrollReveal from '@/components/ScrollReveal';
 import Link from 'next/link';
 
-const productTypes = ['ExamsPRO', 'ICAN', 'ClassroomPRO', 'PuzzlePRO', 'CoursesPRO', 'TutorsPRO'];
+const productTypes = ['ICAN (ExamsPRO)', 'ClassroomPRO', 'PuzzlePRO', 'CoursesPRO', 'TutorsPRO'];
 
 const productPlans = {
-  ExamsPRO: [
-    {
-      name: 'STARTER',
-      price: '₦5,000',
-      period: 'per month',
-      features: ['Up to 500 Students', 'Standard CBT System', 'Basic Question Bank', 'Email Support'],
-      cta: 'Start with Starter',
-      highlight: false
-    },
-    {
-      name: 'PRO',
-      price: '₦15,000',
-      period: 'per month',
-      features: ['Unlimited Students', 'Advanced Anti-cheat', 'Custom Question Banks', 'Priority Support'],
-      cta: 'Upgrade to Pro',
-      highlight: true
-    },
-    {
-      name: 'ENTERPRISE',
-      price: '₦50,000',
-      period: 'per month',
-      features: ['Unlimited Students', 'Custom Domain', 'White-labeling', 'Dedicated Support'],
-      cta: 'Contact Sales',
-      highlight: false
-    }
-  ],
-  ICAN: [
+  "ICAN (ExamsPRO)": [
     {
       name: 'SINGLE PAPER',
       price: '₦3,000',
@@ -191,7 +165,7 @@ const productPlans = {
 };
 
 export default function ProductPricingSection() {
-  const [activeTab, setActiveTab] = useState('ExamsPRO');
+  const [activeTab, setActiveTab] = useState('ICAN (ExamsPRO)');
 
   return (
     <section className="section section-white pt-12 md:pt-16 pb-24 md:pb-32 bg-gray-50">
