@@ -231,7 +231,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		"user": map[string]interface{}{
 			"id":             user.ID,
 			"email":          user.Email,
-			"full_name":      user.FullName,
+			"name":      user.FullName,
 			"avatar_url":     user.AvatarURL,
 			"account_status": user.AccountStatus,
 		},

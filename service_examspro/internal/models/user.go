@@ -19,7 +19,7 @@ type User struct {
 	ID                 string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	Email              string         `gorm:"uniqueIndex;not null" json:"email"`
 	Phone              *string        `gorm:"uniqueIndex" json:"phone"`
-	Name               *string        `json:"name"`
+	Name               *string        `gorm:"column:full_name" json:"name"`
 	Password           string         `json:"-"`
 	GoogleID           *string        `gorm:"uniqueIndex" json:"googleId"`
 	MicrosoftID        *string        `gorm:"uniqueIndex" json:"microsoftId"`
