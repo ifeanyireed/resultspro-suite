@@ -115,7 +115,7 @@ const productPlans = {
       name: 'FAMILY',
       price: '$12',
       period: 'per month',
-      features: ['Up to 3 Subjects', 'Up to 5 Sessions / Week', 'Multi-student Support', 'Detailed Parent Analytics'],
+      features: ['Up to 3 Students', 'Up to 3 Subjects', 'Up to 6 Sessions / Week', 'Detailed Parent Analytics'],
       cta: 'Get Family Plan',
       highlight: true
     },
