@@ -107,7 +107,7 @@ const productPlans = {
       name: 'SOLO',
       price: '₦2,500',
       period: 'per month',
-      features: ['1 Mentor', 'Up to 50 Students', 'Single Tutor Profile', 'Basic Scheduling', 'Standard Video Calling', 'Email Support'],
+      features: ['1 Subject', 'Up to 2 Sessions / Week', 'Single Student Focus', 'Basic Progress Tracking'],
       cta: 'Start Solo',
       highlight: false
     },
@@ -115,7 +115,7 @@ const productPlans = {
       name: 'FAMILY',
       price: '₦6,000',
       period: 'per month',
-      features: ['Up to 5 Mentors', 'Up to 200 Students', 'Featured Profile Status', 'Session Recording', 'Priority Support'],
+      features: ['Up to 3 Subjects', 'Up to 5 Sessions / Week', 'Multi-student Support', 'Detailed Parent Analytics'],
       cta: 'Get Family Plan',
       highlight: true
     },
@@ -123,7 +123,7 @@ const productPlans = {
       name: 'SCHOOL STARTER',
       price: '₦15,000',
       period: 'per month',
-      features: ['Up to 20 Mentors', 'Up to 500 Students', 'Basic Booking System', 'Standard Analytics', 'Email Support'],
+      features: ['Up to 10 Subjects', 'Up to 20 Sessions / Week', 'Small Group Classes', 'Basic School Analytics'],
       cta: 'Start with Starter',
       highlight: false
     },
@@ -131,7 +131,7 @@ const productPlans = {
       name: 'SCHOOL PRO',
       price: '₦30,000',
       period: 'per month',
-      features: ['Unlimited Mentors & Students', 'School-wide Booking System', 'Advanced Analytics', 'Dedicated Support'],
+      features: ['Unlimited Subjects', 'Unlimited Sessions', 'Unlimited Multi-students', 'Advanced School & Parent Analytics'],
       cta: 'Contact Sales',
       highlight: false
     }
