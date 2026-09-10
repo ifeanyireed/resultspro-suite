@@ -5,15 +5,15 @@ import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Badge } from '@/components/Badge';
 import { StatCard } from '@/components/StatCard';
-import { DocumentTextIcon, CheckCircleIcon, DocumentIcon, PlusIcon, TagIcon, ChatBubbleLeftIcon, FolderIcon } from '@heroicons/react/24/outline';
+import { FileText, CheckCircle2, File, Plus, Tag, MessageSquare, Folder } from 'lucide-react';
 import { fetchBlogPosts } from '@/lib/api';
 import { BlogPost } from '@/lib/types';
 
 const TABS = [
-  { id: 'posts', name: 'Posts', icon: DocumentTextIcon },
-  { id: 'categories', name: 'Categories', icon: FolderIcon },
-  { id: 'tags', name: 'Tags', icon: TagIcon },
-  { id: 'comments', name: 'Comments', icon: ChatBubbleLeftIcon },
+  { id: 'posts', name: 'Posts', icon: FileText },
+  { id: 'categories', name: 'Categories', icon: Folder },
+  { id: 'tags', name: 'Tags', icon: Tag },
+  { id: 'comments', name: 'Comments', icon: MessageSquare },
 ];
 
 export default function BlogCMSPage() {
@@ -66,12 +66,12 @@ export default function BlogCMSPage() {
           <div className="flex items-center gap-3">
             {activeTab === 'posts' ? (
               <Link href="/cms/blog/create" className="flex items-center space-x-2 px-5 py-2.5 rounded-full bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-colors shadow-sm">
-                <PlusIcon className="w-4 h-4" />
+                <Plus className="w-4 h-4" />
                 <span>Create Post</span>
               </Link>
             ) : (
               <button className="flex items-center space-x-2 px-5 py-2.5 rounded-full bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-colors shadow-sm">
-                <PlusIcon className="w-4 h-4" />
+                <Plus className="w-4 h-4" />
                 <span>
                   {activeTab === 'categories' ? 'Add Category' : activeTab === 'tags' ? 'Add Tag' : 'Settings'}
                 </span>
@@ -85,9 +85,9 @@ export default function BlogCMSPage() {
           <div className="space-y-8 animate-in fade-in duration-300">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
-                { label: 'Total Posts', value: loading ? '...' : totalPosts, icon: DocumentTextIcon, color: 'text-blue-500', bg: 'bg-blue-50' },
-                { label: 'Published', value: loading ? '...' : published, icon: CheckCircleIcon, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-                { label: 'Drafts', value: loading ? '...' : drafts, icon: DocumentIcon, color: 'text-amber-500', bg: 'bg-amber-50' },
+                { label: 'Total Posts', value: loading ? '...' : totalPosts, icon: FileText, color: 'text-blue-500', bg: 'bg-blue-50' },
+                { label: 'Published', value: loading ? '...' : published, icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+                { label: 'Drafts', value: loading ? '...' : drafts, icon: File, color: 'text-amber-500', bg: 'bg-amber-50' },
               ].map((stat, idx) => {
                 const Icon = stat.icon;
                 return (
