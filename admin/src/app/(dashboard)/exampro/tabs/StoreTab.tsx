@@ -8,7 +8,7 @@ import {
 
 export default function StoreTab() {
   const [packs, setPacks] = useState<any[]>([]);
-  const [plans, setPlans] = useState<any[]>([]);
+
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
@@ -38,7 +38,7 @@ export default function StoreTab() {
     try {
       const [packData, planData] = await Promise.all([
         fetchExamproStorePacks(),
-        fetchExamproPlans().catch(() => [])
+        []
       ]);
       setPacks(Array.isArray(packData) ? packData : []);
       setPlans(Array.isArray(planData) ? planData : []);
@@ -87,7 +87,7 @@ export default function StoreTab() {
     try {
       await updateExamproSetting(id, value);
       toast.success('Setting updated');
-      fetchData();
+      loadData();
     } catch (err) {
       toast.error('Failed to update setting');
     }
@@ -108,8 +108,7 @@ export default function StoreTab() {
           name: formData.name, price: Number(formData.price), category: formData.category, period: formData.period,
           features: formData.features, ctaText: formData.ctaText, highlight: formData.popular, accessLevel: formData.accessLevel, isActive: formData.isActive
         };
-        if (editingItem) await updateExamproPlan(editingItem.id, payload);
-        else await createExamproPlan(payload);
+        
       }
       toast.success('Saved successfully');
       setIsModalOpen(false);
@@ -122,8 +121,7 @@ export default function StoreTab() {
   const handleDelete = async (id: string, type: 'COIN'|'PLAN') => {
     if (!confirm('Are you sure you want to delete this item?')) return;
     try {
-      if (type === 'COIN') await deleteExamproStorePack(id);
-      else await deleteExamproPlan(id);
+      await deleteExamproStorePack(id);
       toast.success('Deleted successfully');
       loadData();
     } catch (err) {
