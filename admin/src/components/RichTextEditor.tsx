@@ -5,6 +5,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
+import toast from 'react-hot-toast';
 import { 
   Bold, Italic, Strikethrough, Code, List, ListOrdered, 
   Quote, Undo, Redo, Heading1, Heading2, Link as LinkIcon, ImageIcon 
@@ -37,10 +38,39 @@ const MenuBar = ({ editor }: { editor: any }) => {
   };
 
   const addImage = () => {
-    const url = window.prompt('Image URL');
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    
+    input.onchange = async (e: any) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const loadingToast = toast.loading('Uploading image...');
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('target_path', 'blog/content');
+
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        
+        if (res.ok && data.url) {
+          editor.chain().focus().setImage({ src: data.url }).run();
+          toast.success('Image added', { id: loadingToast });
+        } else {
+          toast.error(data.error || 'Upload failed', { id: loadingToast });
+        }
+      } catch (err) {
+        toast.error('Something went wrong', { id: loadingToast });
+      }
+    };
+    
+    input.click();
   };
 
   const buttons = [

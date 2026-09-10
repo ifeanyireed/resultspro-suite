@@ -15,6 +15,36 @@ export default function CreateBlogPost() {
   const [category, setCategory] = useState('');
   const [tags, setTags] = useState('');
   const [content, setContent] = useState('');
+  const [coverImage, setCoverImage] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('target_path', 'blog/covers');
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setCoverImage(data.url);
+        toast.success('Cover image uploaded!');
+      } else {
+        toast.error(data.error || 'Upload failed');
+      }
+    } catch (err) {
+      toast.error('Something went wrong');
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const handleSave = (status: 'DRAFT' | 'PUBLISHED') => {
     if (!title) {
@@ -123,9 +153,25 @@ export default function CreateBlogPost() {
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">Cover Image</label>
-                <div className="w-full h-32 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 flex flex-col items-center justify-center text-slate-500 hover:bg-slate-100 hover:border-blue-400 transition-colors cursor-pointer">
-                  <span className="text-sm font-medium">Click to upload</span>
+                <div className="relative w-full h-40 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 flex flex-col items-center justify-center text-slate-500 hover:bg-slate-100 hover:border-blue-400 transition-colors cursor-pointer overflow-hidden">
+                  {coverImage ? (
+                    <img src={coverImage} alt="Cover" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-sm font-medium">{isUploading ? 'Uploading...' : 'Click to upload'}</span>
+                  )}
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={isUploading}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+                  />
                 </div>
+                {coverImage && (
+                  <button onClick={() => setCoverImage('')} className="text-xs text-rose-500 font-medium mt-2 hover:underline">
+                    Remove Image
+                  </button>
+                )}
               </div>
             </div>
           </div>
