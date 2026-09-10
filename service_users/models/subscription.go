@@ -99,3 +99,16 @@ type PaymentTransaction struct {
 	PaidAt        *time.Time `json:"paid_at,omitempty"`
 	CreatedAt     time.Time  `json:"created_at"`
 }
+
+type DiscountLink struct {
+	ID                 string    `json:"id" gorm:"primaryKey"`
+	Code               string    `json:"code" gorm:"uniqueIndex"`
+	PlanID             string    `json:"plan_id"`
+	DiscountPercentage float64   `json:"discount_percentage"`
+	MaxUses            int       `json:"max_uses"`
+	Uses               int       `json:"uses"`
+	ExpiresAt          *time.Time `json:"expires_at"`
+	IsActive           bool      `json:"is_active"`
+	CreatedAt          time.Time `json:"created_at"`
+	UpdatedAt          time.Time `json:"updated_at"`
+}
