@@ -152,6 +152,10 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
       <div className="w-full px-6 md:px-16 lg:px-24 mx-auto">
         <ScrollReveal animation="fade-up">
 
+                    <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-nets-navy)] mb-4">Suite Bundle Plans</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">Unlock the full potential of the ecosystem. Choose a comprehensive bundle plan tailored to your exact requirements.</p>
+          </div>
           <div className={styles.tabs}>
             {planTypes.map((type) => (
               <button
@@ -178,7 +182,7 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
                   </div>
                 </div>
                 <ul className={styles.featureList}>
-                  {plan.features.map((feature, idx) => (
+                  {plan.features.map((feature: string, idx: number) => (
                     <li key={idx} className={styles.featureItem}>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={styles.check}>
                         <polyline points="20 6 9 17 4 12"></polyline>
