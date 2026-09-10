@@ -40,8 +40,13 @@
   margin: 0 auto;
 }
 
-.card {
+.revealWrapper {
   flex: 1;
+  display: flex;
+}
+
+.card {
+  width: 100%;
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 1.5rem;
@@ -152,7 +157,7 @@
     flex-wrap: wrap;
   }
   
-  .card {
+  .revealWrapper {
     min-width: 300px;
     flex: 1 1 calc(50% - 2rem);
   }
@@ -163,8 +168,11 @@
     flex-direction: column;
   }
   
-  .card {
+  .revealWrapper {
     min-width: 100%;
+  }
+  
+  .card {
     transform: none !important;
   }
   
