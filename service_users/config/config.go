@@ -15,6 +15,8 @@ var (
 	GoogleOAuthConfig    *oauth2.Config
 	MicrosoftOAuthConfig *oauth2.Config
 	SMTPFrom             string
+	CDNURL               string
+	CDNSecret            string
 )
 
 func InitConfig() {
@@ -37,6 +39,9 @@ func InitConfig() {
 	if SMTPFrom == "" {
 		SMTPFrom = "hello@resultspro.ng"
 	}
+
+	CDNURL = os.Getenv("CDN_URL")
+	CDNSecret = os.Getenv("CDN_SECRET")
 
 	GoogleOAuthConfig = &oauth2.Config{
 		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
