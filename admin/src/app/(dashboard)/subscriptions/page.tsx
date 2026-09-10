@@ -7,7 +7,7 @@ import { CreditCard, Check, DollarSign, FileText, ArrowUpRight } from 'lucide-re
 
 import { fetchPlans, fetchInvoices } from '@/lib/api';
 
-import { BuildingOffice, Home, Briefcase, Sparkles } from 'lucide-react';
+import { Building, Home, Briefcase, Sparkles } from 'lucide-react';
 
 export default function SubscriptionsPage() {
   const [plans, setPlans] = useState<any[]>([]);
@@ -16,7 +16,7 @@ export default function SubscriptionsPage() {
   const [activeTab, setActiveTab] = useState('SchoolHub');
 
   const tabs = [
-    { id: 'SchoolHub', label: 'SchoolHub', icon: BuildingOffice },
+    { id: 'SchoolHub', label: 'SchoolHub', icon: Building },
     { id: 'FamilyHub', label: 'FamilyHub', icon: Home },
     { id: 'AgentNetwork', label: 'Agent Network', icon: Briefcase },
     { id: 'ExamsPRO', label: 'ExamsPRO', icon: Sparkles },
