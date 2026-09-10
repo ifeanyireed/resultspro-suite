@@ -5,7 +5,7 @@ import styles from '@/app/(marketing)/pricing/Pricing.module.css';
 import ScrollReveal from '@/components/ScrollReveal';
 import Link from 'next/link';
 
-const productTypes = ['ResultsPRO', 'ExamsPRO', 'ClassroomPRO', 'PuzzlePRO', 'CoursesPRO', 'TutorsPRO'];
+const productTypes = ['ClassroomPRO', 'PuzzlePRO', 'CoursesPRO', 'TutorsPRO'];
 
 const productPlans = {
   ResultsPRO: [
@@ -119,14 +119,14 @@ const productPlans = {
 };
 
 export default function ProductPricingSection() {
-  const [activeTab, setActiveTab] = useState('ResultsPRO');
+  const [activeTab, setActiveTab] = useState('ClassroomPRO');
 
   return (
     <section className="section section-white pt-12 md:pt-16 pb-24 md:pb-32 bg-gray-50">
       <div className="container">
         <ScrollReveal animation="fade-up">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-nets-navy)] mb-4">Product-Specific Plans</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-nets-navy)] mb-4">Single Product Plans</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">Only need a specific tool? Choose individual product plans tailored to your exact requirements.</p>
           </div>
           <div className={styles.tabs} style={{ flexWrap: 'wrap' }}>
