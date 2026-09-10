@@ -8,112 +8,108 @@ import Link from 'next/link';
 const productTypes = ['ClassroomPRO', 'PuzzlePRO', 'CoursesPRO', 'TutorsPRO'];
 
 const productPlans = {
-  ResultsPRO: [
-    {
-      name: 'BASIC',
-      price: '₦5,000',
-      period: 'per month',
-      features: ['Basic Report Cards', 'Standard Templates', 'Email Support'],
-      cta: 'Get ResultsPRO',
-      highlight: false
-    },
-    {
-      name: 'PRO',
-      price: '₦15,000',
-      period: 'per month',
-      features: ['Advanced Analytics', 'Custom Templates', 'Priority Support'],
-      cta: 'Upgrade to Pro',
-      highlight: true
-    }
-  ],
-  ExamsPRO: [
-    {
-      name: 'BASIC',
-      price: '₦5,000',
-      period: 'per month',
-      features: ['Standard CBT', 'Question Bank Access', 'Email Support'],
-      cta: 'Get ExamsPRO',
-      highlight: false
-    },
-    {
-      name: 'PRO',
-      price: '₦15,000',
-      period: 'per month',
-      features: ['Advanced Anti-cheat', 'Custom Question Banks', 'Priority Support'],
-      cta: 'Upgrade to Pro',
-      highlight: true
-    }
-  ],
   ClassroomPRO: [
     {
-      name: 'BASIC',
-      price: '₦5,000',
+      name: 'SOLO',
+      price: '₦2,000',
       period: 'per month',
-      features: ['Virtual Classrooms', 'Assignment Tracking', 'Email Support'],
-      cta: 'Get ClassroomPRO',
+      features: ['Single Educator Access', 'Virtual Classrooms', 'Basic Assignment Tracking', 'Email Support'],
+      cta: 'Start Solo',
       highlight: false
     },
     {
-      name: 'PRO',
-      price: '₦15,000',
+      name: 'FAMILY',
+      price: '₦5,000',
       period: 'per month',
-      features: ['Interactive Whiteboard', 'Live Lesson Recording', 'Priority Support'],
-      cta: 'Upgrade to Pro',
+      features: ['Up to 5 Users', 'Interactive Whiteboard', 'Live Lesson Recording', 'Priority Support'],
+      cta: 'Get Family Plan',
       highlight: true
+    },
+    {
+      name: 'SCHOOL',
+      price: '₦20,000',
+      period: 'per month',
+      features: ['Unlimited Teachers & Students', 'School-wide Analytics', 'Custom Branding', 'Dedicated Support'],
+      cta: 'Contact Sales',
+      highlight: false
     }
   ],
   PuzzlePRO: [
     {
-      name: 'BASIC',
-      price: '₦2,000',
+      name: 'SOLO',
+      price: '₦1,000',
       period: 'per month',
-      features: ['Standard Educational Games', 'Basic Progress Tracking', 'Email Support'],
-      cta: 'Get PuzzlePRO',
+      features: ['Single Student Access', 'Standard Educational Games', 'Basic Progress Tracking', 'Email Support'],
+      cta: 'Start Solo',
       highlight: false
     },
     {
-      name: 'PRO',
-      price: '₦5,000',
+      name: 'FAMILY',
+      price: '₦3,000',
       period: 'per month',
-      features: ['All Premium Games', 'Detailed Cognitive Reports', 'Priority Support'],
-      cta: 'Upgrade to Pro',
+      features: ['Up to 5 Students', 'All Premium Games', 'Detailed Cognitive Reports', 'Priority Support'],
+      cta: 'Get Family Plan',
       highlight: true
+    },
+    {
+      name: 'SCHOOL',
+      price: '₦15,000',
+      period: 'per month',
+      features: ['Unlimited Students', 'School-wide Leaderboards', 'Curriculum Integration', 'Dedicated Support'],
+      cta: 'Contact Sales',
+      highlight: false
     }
   ],
   CoursesPRO: [
     {
-      name: 'BASIC',
-      price: '₦5,000',
+      name: 'SOLO',
+      price: '₦3,000',
       period: 'per month',
-      features: ['Course Creator', 'Standard Video Hosting', 'Email Support'],
-      cta: 'Get CoursesPRO',
+      features: ['Single Creator Access', 'Course Creator Tool', 'Standard Video Hosting', 'Email Support'],
+      cta: 'Start Solo',
       highlight: false
     },
     {
-      name: 'PRO',
-      price: '₦15,000',
+      name: 'FAMILY',
+      price: '₦7,500',
       period: 'per month',
-      features: ['Advanced Course Builder', 'Certificate Generation', 'Priority Support'],
-      cta: 'Upgrade to Pro',
+      features: ['Up to 5 Family Members', 'Advanced Course Builder', 'Certificate Generation', 'Priority Support'],
+      cta: 'Get Family Plan',
       highlight: true
+    },
+    {
+      name: 'SCHOOL',
+      price: '₦25,000',
+      period: 'per month',
+      features: ['Unlimited Access', 'Custom Domain', 'White-label Certificates', 'Dedicated Support'],
+      cta: 'Contact Sales',
+      highlight: false
     }
   ],
   TutorsPRO: [
     {
-      name: 'BASIC',
-      price: '₦5,000',
+      name: 'SOLO',
+      price: '₦2,500',
       period: 'per month',
-      features: ['Tutor Profile', 'Basic Scheduling', 'Standard Video Calling', 'Email Support'],
-      cta: 'Get TutorsPRO',
+      features: ['Single Tutor Profile', 'Basic Scheduling', 'Standard Video Calling', 'Email Support'],
+      cta: 'Start Solo',
       highlight: false
     },
     {
-      name: 'PRO',
-      price: '₦15,000',
+      name: 'FAMILY',
+      price: '₦6,000',
       period: 'per month',
-      features: ['Featured Profile', 'Advanced Booking System', 'Session Recording', 'Priority Support'],
-      cta: 'Upgrade to Pro',
+      features: ['Multiple Profiles', 'Featured Profile Status', 'Session Recording', 'Priority Support'],
+      cta: 'Get Family Plan',
       highlight: true
+    },
+    {
+      name: 'SCHOOL',
+      price: '₦20,000',
+      period: 'per month',
+      features: ['Unlimited Tutors', 'School-wide Booking System', 'Advanced Analytics', 'Dedicated Support'],
+      cta: 'Contact Sales',
+      highlight: false
     }
   ]
 };
