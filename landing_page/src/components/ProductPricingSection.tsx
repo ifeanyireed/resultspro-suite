@@ -1,181 +1,79 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from '@/app/(marketing)/pricing/Pricing.module.css';
 import ScrollReveal from '@/components/ScrollReveal';
 import Link from 'next/link';
 
-const productTypes = ['ICAN (ExamsPRO)', 'ClassroomPRO', 'PuzzlePRO', 'CoursesPRO', 'TutorsPRO'];
-
-const productPlans = {
-  "ICAN (ExamsPRO)": [
-    {
-      name: 'SINGLE PAPER',
-      price: '₦3,000',
-      period: 'per month',
-      features: ['Access to 1 ICAN Paper', 'Past Questions Access', 'AI Tutor Guidance', 'Email Support'],
-      cta: 'Buy Single Paper',
-      highlight: false
-    },
-    {
-      name: 'COMPLETE LEVEL',
-      price: '₦7,000',
-      period: 'per month',
-      features: ['Access to 1 Complete Level', 'All Papers in Level', 'AI Tutor Guidance', 'Priority Support'],
-      cta: 'Buy Complete Level',
-      highlight: true
-    },
-    {
-      name: 'FULL DIET ACCESS',
-      price: '₦10,000',
-      period: 'per month',
-      features: ['Unlimited ICAN Levels', 'Unlimited Papers', 'Advanced AI Insights', 'Priority Support'],
-      cta: 'Get Full Access',
-      highlight: false
-    }
-  ],
-  ClassroomPRO: [
-    {
-      name: 'SOLO',
-      price: '₦2,000',
-      period: 'per month',
-      features: ['1 Teacher', 'Up to 50 Students', 'Virtual Classrooms', 'Basic Assignment Tracking', 'Email Support'],
-      cta: 'Start Solo',
-      highlight: false
-    },
-    {
-      name: 'FAMILY',
-      price: '₦5,000',
-      period: 'per month',
-      features: ['Up to 5 Teachers', 'Up to 200 Students', 'Interactive Whiteboard', 'Live Lesson Recording', 'Priority Support'],
-      cta: 'Get Family Plan',
-      highlight: true
-    },
-    {
-      name: 'SCHOOL STARTER',
-      price: '₦15,000',
-      period: 'per month',
-      features: ['Up to 20 Teachers', 'Up to 500 Students', 'Basic School Analytics', 'Standard Branding', 'Email Support'],
-      cta: 'Start with Starter',
-      highlight: false
-    },
-    {
-      name: 'SCHOOL PRO',
-      price: '₦35,000',
-      period: 'per month',
-      features: ['Unlimited Teachers & Students', 'School-wide Analytics', 'Custom Branding', 'Dedicated Support'],
-      cta: 'Contact Sales',
-      highlight: false
-    }
-  ],
-  PuzzlePRO: [
-    {
-      name: 'SOLO',
-      price: '₦1,000',
-      period: 'per month',
-      features: ['1 Student', 'Standard Educational Games', 'Basic Progress Tracking', 'Email Support'],
-      cta: 'Start Solo',
-      highlight: false
-    },
-    {
-      name: 'FAMILY',
-      price: '₦3,000',
-      period: 'per month',
-      features: ['Up to 5 Students', 'All Premium Games', 'Detailed Cognitive Reports', 'Priority Support'],
-      cta: 'Get Family Plan',
-      highlight: true
-    },
-    {
-      name: 'SCHOOL STARTER',
-      price: '₦10,000',
-      period: 'per month',
-      features: ['Up to 500 Students', 'Basic Leaderboards', 'Standard Games', 'Email Support'],
-      cta: 'Start with Starter',
-      highlight: false
-    },
-    {
-      name: 'SCHOOL PRO',
-      price: '₦25,000',
-      period: 'per month',
-      features: ['Unlimited Students', 'School-wide Leaderboards', 'Curriculum Integration', 'Dedicated Support'],
-      cta: 'Contact Sales',
-      highlight: false
-    }
-  ],
-  CoursesPRO: [
-    {
-      name: 'STARTER',
-      price: '₦15,000',
-      period: 'per month',
-      features: ['Up to 100 Students', 'Up to 5 Courses', 'Course Creator Tool', 'Standard Video Hosting', 'Basic Certificates', 'Email Support'],
-      cta: 'Start with Starter',
-      highlight: false
-    },
-    {
-      name: 'PRO',
-      price: '₦35,000',
-      period: 'per month',
-      features: ['Up to 1,000 Students', 'Up to 25 Courses', 'Advanced Course Builder', 'Certificate Generation', 'Custom Domain', 'Priority Support'],
-      cta: 'Upgrade to Pro',
-      highlight: true
-    },
-    {
-      name: 'ENTERPRISE',
-      price: '₦80,000',
-      period: 'per month',
-      features: ['Unlimited Students', 'Unlimited Courses', 'White-label Certificates', 'Dedicated Account Manager', '24/7 Support'],
-      cta: 'Contact Sales',
-      highlight: false
-    }
-  ],
-  TutorsPRO: [
-    {
-      name: 'SOLO',
-      price: '$15',
-      period: 'per hour',
-      features: ['Billed in blocks of 5 hours', '1 Subject Focus', 'Flexible Scheduling', 'Basic Progress Tracking'],
-      cta: 'Start Solo',
-      highlight: false
-    },
-    {
-      name: 'FAMILY',
-      price: '$12',
-      period: 'per hour',
-      features: ['Billed in blocks of 20 hours', 'Up to 3 Subjects', 'Multi-student Support', 'Detailed Parent Analytics'],
-      cta: 'Get Family Plan',
-      highlight: true
-    },
-    {
-      name: 'SCHOOL STARTER',
-      price: '$10',
-      period: 'per hour',
-      features: ['Billed in blocks of 100 hours', 'Unlimited Subjects', 'Small Group Classes', 'Basic School Analytics'],
-      cta: 'Start with Starter',
-      highlight: false
-    },
-    {
-      name: 'SCHOOL PRO',
-      price: '$8',
-      period: 'per hour',
-      features: ['Billed in blocks of 500 hours', 'Unlimited Subjects', 'Unlimited Multi-students', 'Advanced School Analytics'],
-      cta: 'Contact Sales',
-      highlight: false
-    }
-  ]
-};
+const productTypes = ['ExamsPRO', 'ClassroomPRO', 'PuzzlePRO', 'CoursesPRO', 'TutorsPRO'];
 
 export default function ProductPricingSection() {
-  const [activeTab, setActiveTab] = useState('ICAN (ExamsPRO)');
+  const [activeTab, setActiveTab] = useState('ExamsPRO');
+  const [dbPlans, setDbPlans] = useState<Record<string, any[]>>({
+    'ExamsPRO': [],
+    'ClassroomPRO': [],
+    'PuzzlePRO': [],
+    'CoursesPRO': [],
+    'TutorsPRO': []
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+        const res = await fetch(`${USERS_API}/api/v1/billing/plans`);
+        if (res.ok) {
+          const responseData = await res.json();
+          const data = responseData.plans || responseData || [];
+          if (Array.isArray(data) && data.length > 0) {
+            const grouped: Record<string, any[]> = {
+              'ExamsPRO': [],
+              'ClassroomPRO': [],
+              'PuzzlePRO': [],
+              'CoursesPRO': [],
+              'TutorsPRO': []
+            };
+            data.forEach((p: any) => {
+              const cat = p.app_module || 'ExamsPRO';
+              if (grouped[cat] !== undefined) {
+                grouped[cat].push({
+                  name: p.name,
+                  price: (p.currency === 'USD' ? '$' : '₦') + (p.monthly_price || p.price || 0).toLocaleString(),
+                  period: p.period || 'per month',
+                  features: (typeof p.features === 'string' && p.features.startsWith('[')) ? JSON.parse(p.features) : (p.features || []),
+                  cta: p.ctaText || 'Get Started',
+                  highlight: p.highlight
+                });
+              }
+            });
+            setDbPlans(grouped);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch product plans', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPlans();
+  }, []);
 
   return (
-    <section className="section section-white pt-12 md:pt-16 pb-24 md:pb-32 bg-gray-50">
+    <section className="section bg-light pt-24 md:pt-32 pb-24 md:pb-32" id="product-pricing">
       <div className="w-full px-6 md:px-16 lg:px-24 mx-auto">
         <ScrollReveal animation="fade-up">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-nets-navy)] mb-4">Single Product Plans</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">Only need a specific tool? Choose individual product plans tailored to your exact requirements.</p>
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-4xl md:text-5xl font-display font-black text-navy mb-6">
+              Modular Apps <span className="text-blue">Pricing</span>
+            </h2>
+            <p className="text-gray-600 text-lg">
+              Get standalone subscriptions for our powerful specialized apps. 
+              Perfect for independent creators, standalone academies, or specific use-cases.
+            </p>
           </div>
-          <div className={styles.tabs} style={{ flexWrap: 'wrap' }}>
+
+          <div className={styles.tabs}>
             {productTypes.map((type) => (
               <button
                 key={type}
@@ -189,7 +87,7 @@ export default function ProductPricingSection() {
         </ScrollReveal>
 
         <div className={styles.grid}>
-          {productPlans[activeTab as keyof typeof productPlans].map((plan, i) => (
+          {!loading && dbPlans[activeTab] && dbPlans[activeTab].map((plan, i) => (
             <ScrollReveal key={plan.name} animation="fade-up" delay={i * 100} className={styles.revealWrapper}>
               <div className={`${styles.card} ${plan.highlight ? styles.highlight : ''}`}>
                 {plan.highlight && <div className={styles.badge}>Most Popular</div>}
@@ -201,7 +99,7 @@ export default function ProductPricingSection() {
                   </div>
                 </div>
                 <ul className={styles.featureList}>
-                  {plan.features.map((feature, idx) => (
+                  {plan.features.map((feature: string, idx: number) => (
                     <li key={idx} className={styles.featureItem}>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={styles.check}>
                         <polyline points="20 6 9 17 4 12"></polyline>
@@ -211,7 +109,7 @@ export default function ProductPricingSection() {
                   ))}
                 </ul>
                 <Link 
-                  href="/onboard/school"
+                  href={`/onboard/${activeTab.toLowerCase()}`}
                   className={`btn ${plan.highlight ? 'btn-primary' : 'btn-outline'} w-full mt-auto`}
                 >
                   {plan.cta}
@@ -219,6 +117,11 @@ export default function ProductPricingSection() {
               </div>
             </ScrollReveal>
           ))}
+          {!loading && dbPlans[activeTab] && dbPlans[activeTab].length === 0 && (
+            <div className="col-span-1 md:col-span-3 text-center py-12 text-slate-500">
+              Pricing configuring for {activeTab}. Please check back later.
+            </div>
+          )}
         </div>
       </div>
     </section>

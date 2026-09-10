@@ -63,14 +63,28 @@ export default function CoinShopPage() {
 
   const fetchCoinPacks = async () => {
     try {
-      const res = await api.get('/payment/packs');
-      let packsData = res.data;
-      if (!Array.isArray(packsData)) {
-        if (packsData && Array.isArray(packsData.packs)) packsData = packsData.packs;
-        else if (packsData && Array.isArray(packsData.data)) packsData = packsData.data;
-        else packsData = [];
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      const res = await fetch(`${USERS_API}/api/v1/billing/plans`);
+      const data = await res.json();
+      let packsRaw = data.plans || data || [];
+      
+      if (!Array.isArray(packsRaw)) {
+        if (packsRaw && Array.isArray(packsRaw.packs)) packsRaw = packsRaw.packs;
+        else if (packsRaw && Array.isArray(packsRaw.data)) packsRaw = packsRaw.data;
+        else packsRaw = [];
       }
-      setAllPacks(packsData);
+      
+      // Adapt the models so it fits the UI's expected schema
+      const mappedPacks = packsRaw.map((p: any) => ({
+        id: p.id,
+        name: p.name,
+        price: p.monthly_price || p.price || 0,
+        type: p.category === 'ICAN' ? 'ICAN' : (p.category === 'COIN' ? 'COIN' : p.category),
+        popular: p.highlight,
+        color: 'blue',
+        access_level: p.access_level
+      }));
+      setAllPacks(mappedPacks);
     } catch (err) {
       console.error('Failed to fetch coin packs:', err);
     } finally {
@@ -89,12 +103,26 @@ export default function CoinShopPage() {
     }
     setLoadingPack(packId);
     try {
-      const res = await api.post('/payment/initialize', { 
-        packId,
-        callbackUrl: window.location.origin + '/shop/verify'
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${USERS_API}/api/v1/billing/initialize`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          packId,
+          callbackUrl: window.location.origin + '/shop/verify',
+          type: 'PLAN'
+        })
       });
+      
+      if (!res.ok) throw new Error('Initialization failed');
+      const data = await res.json();
+      
       // Redirect to Paystack checkout
-      window.location.href = res.data.authorization_url;
+      window.location.href = data.authorization_url;
     } catch (err) {
       console.error('Payment initialization failed:', err);
       alert('Failed to initialize payment. Please try again.');
@@ -292,9 +320,9 @@ export default function CoinShopPage() {
                     )}
 
                     <div className={`w-20 h-20 rounded-3xl ${colorConfig.iconBg} flex items-center justify-center ${colorConfig.text} mb-8 group-hover:scale-110 transition-transform`}>
-                      {pack.id === 'ican_single' ? (
+                      {pack.access_level === 'ICAN_SINGLE' ? (
                       <IconBook className="w-10 h-10" />
-                    ) : pack.id === 'ican_level' ? (
+                    ) : pack.access_level === 'ICAN_GROUP' ? (
                       <IconBooks className="w-10 h-10" />
                     ) : (
                       <IconCertificate className="w-10 h-10" />

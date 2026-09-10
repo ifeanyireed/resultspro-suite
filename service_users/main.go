@@ -345,6 +345,7 @@ func main() {
 	mux.HandleFunc("/api/v1/subscriptions/user/", handlers.HandleGetUserSubscription)
 	mux.HandleFunc("/api/v1/subscriptions/limits", handlers.HandleCheckSubscriptionLimits)
 	mux.HandleFunc("GET /api/v1/billing/plans", handlers.HandleGetPlans)
+	mux.HandleFunc("POST /api/v1/billing/initialize", handlers.HandleInitializePayment)
 	mux.HandleFunc("POST /api/v1/billing/plans", handlers.HandleCreatePlan)
 	mux.HandleFunc("PUT /api/v1/billing/plans/{id}", handlers.HandleUpdatePlan)
 	mux.HandleFunc("DELETE /api/v1/billing/plans/{id}", handlers.HandleDeletePlan)

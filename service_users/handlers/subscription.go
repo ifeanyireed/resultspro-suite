@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/golang-jwt/jwt/v5"
 	"service_users.resultspro.ng/db"
 	"service_users.resultspro.ng/models"
 	"service_users.resultspro.ng/utils"
@@ -430,4 +431,119 @@ func HandleDeletePlan(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Plan deleted successfully"})
+}
+
+
+// HandleInitializePayment initializes a transaction with Paystack for a Plan or Coin Pack
+func HandleInitializePayment(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var input struct {
+		PackID      string `json:"packId"`
+		CallbackURL string `json:"callbackUrl"`
+		Type        string `json:"type"` // "PLAN" or "COIN"
+	}
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+
+	// Assuming we extract userID from context/token. For now, since exams frontends
+	// use auth middleware, we should get it.
+	// We'll require Authorization header in this route!
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		utils.JSONError(w, http.StatusUnauthorized, "Missing Authorization header")
+		return
+	}
+	tokenString := strings.Split(authHeader, " ")[1]
+	token, err := utils.VerifyToken(tokenString)
+	if err != nil || !token.Valid {
+		utils.JSONError(w, http.StatusUnauthorized, "Invalid token")
+		return
+	}
+	claims := token.Claims.(jwt.MapClaims)
+	userID := claims["sub"].(string)
+
+	var userEmail string
+	if err := db.DB.QueryRow("SELECT email FROM users WHERE id = ?", userID).Scan(&userEmail); err != nil {
+		utils.JSONError(w, http.StatusNotFound, "User not found")
+		return
+	}
+
+	var amount float64
+	var accessLevel string
+
+	if input.Type == "PLAN" || input.Type == "" {
+		var plan models.Plan
+		if err := db.GormDB.Where("id = ?", input.PackID).First(&plan).Error; err != nil {
+			utils.JSONError(w, http.StatusNotFound, "Plan not found")
+			return
+		}
+		amount = plan.MonthlyPrice
+		accessLevel = plan.AccessLevel
+		input.Type = "PLAN"
+	} else {
+		// Mock coin packs since they aren't fully migrated yet
+		// We'll support coins later, just mock for now or return error
+		utils.JSONError(w, http.StatusBadRequest, "Coin packs initialization currently disabled")
+		return
+	}
+
+	paystackSecret := os.Getenv("PAYSTACK_SECRET_KEY")
+	if paystackSecret == "" {
+		utils.JSONError(w, http.StatusInternalServerError, "Payment gateway not configured")
+		return
+	}
+
+	// Construct Paystack Payload
+	payload := map[string]interface{}{
+		"email":        userEmail,
+		"amount":       int(amount * 100), // convert to kobo
+		"callback_url": input.CallbackURL,
+		"metadata": map[string]interface{}{
+			"pack_id": input.PackID,
+			"user_id": userID,
+			"type":    input.Type,
+			"access":  accessLevel,
+		},
+	}
+
+	payloadBytes, _ := json.Marshal(payload)
+	req, err := http.NewRequest("POST", "https://api.paystack.co/transaction/initialize", strings.NewReader(string(payloadBytes)))
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to build payment request")
+		return
+	}
+	req.Header.Set("Authorization", "Bearer "+paystackSecret)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to contact payment gateway")
+		return
+	}
+	defer resp.Body.Close()
+
+	var result map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to parse payment gateway response")
+		return
+	}
+
+	if status, ok := result["status"].(bool); !ok || !status {
+		utils.JSONError(w, http.StatusBadRequest, "Payment initialization failed at gateway")
+		return
+	}
+
+	data := result["data"].(map[string]interface{})
+	
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"authorization_url": data["authorization_url"],
+		"reference":         data["reference"],
+	})
 }
