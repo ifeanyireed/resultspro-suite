@@ -123,7 +123,7 @@ const productPlans = {
       name: 'SCHOOL STARTER',
       price: '$25',
       period: 'per month',
-      features: ['Up to 10 Subjects', 'Up to 20 Sessions / Week', 'Small Group Classes', 'Basic School Analytics'],
+      features: ['Up to 20 Students', 'Unlimited Subjects', 'Up to 200 Sessions / Week', 'Basic School Analytics'],
       cta: 'Start with Starter',
       highlight: false
     },
