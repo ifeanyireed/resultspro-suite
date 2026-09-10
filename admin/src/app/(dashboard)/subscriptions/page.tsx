@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
-import { Check, Edit, Trash2, Plus, School, Users, UserCog, Building, LayoutDashboard, Receipt, GraduationCap, Map, Home, Briefcase, Puzzle } from 'lucide-react';
+import { Check, Edit, Trash2, Plus, School, Users, UserCog, Building, LayoutDashboard, Receipt, GraduationCap, Map, Home, Briefcase, Puzzle, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/Badge';
 
 const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
@@ -317,11 +317,16 @@ export default function SubscriptionsCommandCenter() {
                 </div>
               ))}
               
-              {filteredPlans.length === 0 && (
+              {loading ? (
+                <div className="col-span-3 flex flex-col items-center justify-center py-24 text-slate-400">
+                  <Loader2 className="w-8 h-8 animate-spin text-blue-500 mb-4" />
+                  <p className="text-sm font-semibold">Loading plans...</p>
+                </div>
+              ) : filteredPlans.length === 0 ? (
                 <div className="col-span-3 text-center py-12 text-slate-400">
                   No plans configured for {activeTab} yet.
                 </div>
-              )}
+              ) : null}
             </div>
           </div>
         )}

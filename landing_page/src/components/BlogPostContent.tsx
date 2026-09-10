@@ -5,20 +5,22 @@ import ScrollReveal from './ScrollReveal';
 import Link from 'next/link';
 
 interface Comment {
-  id: number;
+  id: string | number;
   created_at: string;
   author: string;
   content: string;
 }
 
 interface BlogPost {
-  id: number;
+  id: string | number;
   created_at: string;
   title: string;
   slug: string;
   content: string;
   author: string;
-  comments: Comment[];
+  comments?: Comment[];
+  cover_image?: string;
+  published_at?: string;
 }
 
 export default function BlogPostContent({ post }: { post: BlogPost }) {
@@ -26,8 +28,8 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
     <main>
       <PhotoHero 
         title={post.title} 
-        subtitle={`By ${post.author} — ${new Date(post.created_at).toLocaleDateString()}`} 
-        image="/photo08.jpeg" 
+        subtitle={`By ${post.author} — ${new Date(post.published_at || post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`} 
+        image={post.cover_image || "/photo08.jpeg"} 
         tagline="In-Depth Insight"
       />
 

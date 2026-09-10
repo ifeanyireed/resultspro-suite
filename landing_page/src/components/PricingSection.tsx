@@ -187,7 +187,12 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
         </ScrollReveal>
 
         <div className={styles.grid}>
-          {dbPlans[activeTab as keyof typeof plans].map((plan, i) => {
+          {loading && (
+            <div className="col-span-1 md:col-span-3 flex justify-center py-12">
+              <div className="w-8 h-8 border-4 border-blue border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
+          {!loading && dbPlans[activeTab as keyof typeof plans] && dbPlans[activeTab as keyof typeof plans].map((plan, i) => {
             const rawMonthly = plan.monthly_price !== undefined ? plan.monthly_price : parsePrice(plan.price || '0');
             const rawAnnual = plan.annual_price !== undefined ? plan.annual_price : rawMonthly * 11;
             const currency = plan.currency || '₦';

@@ -140,6 +140,11 @@ export default function ProductPricingSection() {
               </div>
             </ScrollReveal>
           );})}
+          {loading && (
+            <div className="col-span-1 md:col-span-3 flex justify-center py-12">
+              <div className="w-8 h-8 border-4 border-blue border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
           {!loading && dbPlans[activeTab] && dbPlans[activeTab].length === 0 && (
             <div className="col-span-1 md:col-span-3 text-center py-12 text-slate-500">
               Pricing configuring for {activeTab}. Please check back later.

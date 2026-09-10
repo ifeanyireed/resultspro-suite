@@ -151,7 +151,7 @@ export default function BlogCMSPage() {
                               : new Date(post.created_at).toLocaleDateString()}
                           </td>
                           <td className="px-6 py-4 text-right">
-                            <button className="text-blue-600 hover:text-blue-800 text-sm font-medium mr-3">Edit</button>
+                            <Link href={`/cms/blog/create?edit=${post.id}`} className="text-blue-600 hover:text-blue-800 text-sm font-medium mr-3">Edit</Link>
                             <button className="text-rose-600 hover:text-rose-800 text-sm font-medium">Delete</button>
                           </td>
                         </tr>
