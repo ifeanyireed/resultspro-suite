@@ -96,60 +96,146 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                 </button>
               </div>
 
-              {/* Card 2: Main Prose Content */}
-              <div className="bg-white shadow-xl flex-1 p-8 md:p-16">
+                            {/* Card 2: Main Prose Content */}
+              <div className="bg-white shadow-xl w-full p-8 md:p-16 mb-8">
                 <div 
                   className="prose prose-lg prose-nets max-w-none"
                   dangerouslySetInnerHTML={{ __html: post.content }} 
                 />
+              </div>
 
-                {/* Comments Section */}
-                <div className="mt-20">
-                  <h3 className="text-xl fw-700 text-navy mb-8">Comments</h3>
-                  
-                  {post.comments && post.comments.length > 0 ? (
-                    <div className="space-y-8">
-                      {post.comments.map((comment) => (
-                        <div key={comment.id} className="flex gap-4">
-                          <div className="w-10 h-10 rounded-full bg-gray-200 shrink-0 overflow-hidden">
-                            <img src="/photo13.jpeg" className="w-full h-full object-cover" />
-                          </div>
-                          <div className="flex-1 bg-nets-light p-5 rounded-tr-xl rounded-br-xl rounded-bl-xl border border-nets-border">
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="fw-600 text-navy text-sm">{comment.author}</span>
-                              <button className="text-xs font-semibold text-muted hover:text-navy flex items-center gap-1">
-                                <IconMessageCircle size={14} /> Reply
-                              </button>
-                            </div>
-                            <span className="text-[10px] text-muted uppercase tracking-wider block mb-3">
-                              {new Date(comment.created_at).toLocaleDateString()}
-                            </span>
-                            <p className="text-sm text-navy/80 leading-relaxed m-0">{comment.content}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="bg-nets-light border border-nets-border rounded-xl p-8 text-center text-muted text-sm">
-                      No comments yet. Be the first to share your thoughts!
-                    </div>
-                  )}
-
-                  {/* Leave Comment Form (Dummy) */}
-                  <div className="mt-16 bg-nets-light border border-nets-border rounded-xl p-8">
-                    <h4 className="text-lg fw-600 text-navy mb-6">Leave your Comments</h4>
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <input type="text" placeholder="First Name" className="w-full px-4 py-3 rounded-lg border border-nets-border text-sm focus:outline-none focus:border-blue-500" />
-                      <input type="text" placeholder="Last Name" className="w-full px-4 py-3 rounded-lg border border-nets-border text-sm focus:outline-none focus:border-blue-500" />
-                    </div>
-                    <input type="email" placeholder="Email Address" className="w-full px-4 py-3 rounded-lg border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-4" />
-                    <textarea placeholder="Your Comment" rows={4} className="w-full px-4 py-3 rounded-lg border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-6"></textarea>
-                    <button className="btn" style={{ backgroundColor: "var(--color-nets-red)", color: "white" }}>
-                      Submit your Comment
+              {/* Card 3: Author Bio */}
+              <div className="bg-white shadow-xl w-full p-8 md:p-12 mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start text-center md:text-left">
+                <div className="w-24 h-24 rounded-full bg-gray-200 shrink-0 overflow-hidden">
+                  <img src="/photo04.jpeg" className="w-full h-full object-cover" alt={post.author} />
+                </div>
+                <div>
+                  <h3 className="text-xl fw-700 text-navy mb-2">{post.author} - Author</h3>
+                  <p className="text-sm text-muted mb-4 leading-relaxed">
+                    ResultsPRO's dedicated content team bridging the gap between cutting edge ed-tech and practical classroom implementation.
+                  </p>
+                  <div className="flex items-center justify-center md:justify-start gap-4">
+                    <button className="w-8 h-8 flex items-center justify-center rounded-full bg-nets-light text-navy hover:bg-gray-200 transition-colors">
+                      <IconBrandFacebook size={16} />
+                    </button>
+                    <button className="w-8 h-8 flex items-center justify-center rounded-full bg-nets-light text-navy hover:bg-gray-200 transition-colors">
+                      <IconBrandTwitter size={16} />
+                    </button>
+                    <button className="w-8 h-8 flex items-center justify-center rounded-full bg-nets-light text-navy hover:bg-gray-200 transition-colors">
+                      <IconBrandLinkedin size={16} />
                     </button>
                   </div>
                 </div>
+              </div>
 
+              {/* Card 4: Comments List */}
+              <div className="bg-white shadow-xl w-full p-8 md:p-12 mb-8">
+                <h3 className="text-2xl fw-700 text-navy mb-8">Comments</h3>
+                
+                {post.comments && post.comments.length > 0 ? (
+                  <div className="space-y-8">
+                    {post.comments.map((comment) => (
+                      <div key={comment.id} className="flex gap-4">
+                        <div className="w-12 h-12 rounded-full bg-gray-200 shrink-0 overflow-hidden">
+                          <img src="/photo13.jpeg" className="w-full h-full object-cover" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="fw-700 text-navy text-sm">{comment.author}</span>
+                            <button className="text-xs font-bold text-muted hover:text-navy flex items-center gap-1">
+                              <IconMessageCircle size={14} /> Reply
+                            </button>
+                          </div>
+                          <span className="text-[10px] text-muted uppercase tracking-wider block mb-3">
+                            {new Date(comment.created_at).toLocaleDateString()}
+                          </span>
+                          <p className="text-sm text-navy/80 leading-relaxed m-0 bg-nets-light p-4 rounded-tr-xl rounded-br-xl rounded-bl-xl border border-nets-border">
+                            {comment.content}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-nets-light border border-nets-border rounded-xl p-8 text-center text-muted text-sm">
+                    No comments yet. Be the first to share your thoughts!
+                  </div>
+                )}
+              </div>
+
+              {/* Card 5: Leave Comment Form */}
+              <div className="bg-white shadow-xl w-full p-8 md:p-12">
+                <h3 className="text-2xl fw-700 text-navy mb-8">Leave your Comments</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <input type="text" placeholder="First Name" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500" />
+                  <input type="text" placeholder="Last Name" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500" />
+                </div>
+                <input type="email" placeholder="Email Address" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-4" />
+                <textarea placeholder="Your Comment" rows={5} className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-6"></textarea>
+                <button className="btn" style={{ backgroundColor: "var(--color-nets-red)", color: "white", padding: "0.75rem 2rem" }}>
+                  Submit your Comment
+                </button>
+              </div>
+              {/* Card 6: Subscribe */}
+              <div className="bg-white shadow-xl w-full p-8 md:p-12 mb-8 text-center flex flex-col items-center">
+                <h3 className="text-2xl fw-700 text-navy mb-4">Subscribe to our Blog</h3>
+                <p className="text-sm text-muted mb-8 max-w-md mx-auto">
+                  Get the latest educational insights, product updates, and thought leadership delivered straight to your inbox.
+                </p>
+                <div className="flex w-full max-w-md mx-auto relative">
+                  <input type="email" placeholder="Enter email address..." className="w-full px-5 py-3 rounded-full bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 pr-32" />
+                  <button className="absolute right-1 top-1 bottom-1 px-6 rounded-full text-white text-xs fw-700 transition-colors" style={{ backgroundColor: "var(--color-nets-red)" }}>
+                    Subscribe
+                  </button>
+                </div>
+              </div>
+
+              {/* Card 7: Related Posts */}
+              <div className="w-full mt-8">
+                <h3 className="text-2xl fw-700 text-navy mb-6 text-center">Related Posts</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Dummy Related Post 1 */}
+                  <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-nets-border flex flex-col">
+                    <div className="h-32 bg-gray-200">
+                      <img src="/photo04.jpeg" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="p-5 flex-1 flex flex-col">
+                      <span className="text-[10px] fw-700 text-muted uppercase tracking-widest mb-2">Education</span>
+                      <h4 className="text-sm fw-700 text-navy leading-snug mb-3">Bridging the gap with Edge-Sync Learning</h4>
+                      <div className="mt-auto">
+                        <span className="text-xs fw-600 text-red" style={{ color: "var(--color-nets-red)" }}>Read full article</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Dummy Related Post 2 */}
+                  <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-nets-border flex flex-col">
+                    <div className="h-32 bg-gray-200">
+                      <img src="/photo13.jpeg" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="p-5 flex-1 flex flex-col">
+                      <span className="text-[10px] fw-700 text-muted uppercase tracking-widest mb-2">Product</span>
+                      <h4 className="text-sm fw-700 text-navy leading-snug mb-3">How we built ExamsPRO for offline CBT</h4>
+                      <div className="mt-auto">
+                        <span className="text-xs fw-600 text-red" style={{ color: "var(--color-nets-red)" }}>Read full article</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Dummy Related Post 3 */}
+                  <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-nets-border flex flex-col">
+                    <div className="h-32 bg-gray-200">
+                      <img src="/photo08.jpeg" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="p-5 flex-1 flex flex-col">
+                      <span className="text-[10px] fw-700 text-muted uppercase tracking-widest mb-2">Marketing</span>
+                      <h4 className="text-sm fw-700 text-navy leading-snug mb-3">5 Ways to increase school admissions in 2026</h4>
+                      <div className="mt-auto">
+                        <span className="text-xs fw-600 text-red" style={{ color: "var(--color-nets-red)" }}>Read full article</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </ScrollReveal>
