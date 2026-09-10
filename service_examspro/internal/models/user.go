@@ -20,6 +20,7 @@ type User struct {
 	Email              string         `gorm:"uniqueIndex;not null" json:"email"`
 	Phone              *string        `gorm:"uniqueIndex" json:"phone"`
 	Name               *string        `gorm:"column:full_name" json:"name"`
+	AvatarUrl          *string        `json:"avatarUrl"`
 	Password           string         `json:"-"`
 	GoogleID           *string        `gorm:"uniqueIndex" json:"googleId"`
 	MicrosoftID        *string        `gorm:"uniqueIndex" json:"microsoftId"`

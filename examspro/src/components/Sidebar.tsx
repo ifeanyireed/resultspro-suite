@@ -97,7 +97,7 @@ export function Sidebar() {
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
           
           <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
-            {mounted && <Image src={user?.avatarUrl || "/avatars/character1.jpg"} alt="Student Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+            {mounted && <Image src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="Student Avatar" width={40} height={40} className="w-full h-full object-cover" />}
             {!mounted && <Image src="/avatars/character1.jpg" alt="Student Avatar" width={40} height={40} className="w-full h-full object-cover" />}
           </div>
           <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (user?.name || 'Error: Name not found') : 'Loading...'}</h4>

@@ -128,7 +128,7 @@ func (h *UserHandler) GetLeaderboard(c *gin.Context) {
 		order = "elo_rating desc"
 	}
 
-	if err := database.DB.Select("id, name, elo_rating, coin_balance, streak_current").
+	if err := database.DB.Select("id, full_name, avatar_url, elo_rating, coin_balance, streak_current").
 		Where("is_banned = ?", false).
 		Order(order).
 		Limit(100).
@@ -148,7 +148,7 @@ func (h *UserHandler) GetRank(c *gin.Context) {
 	}
 
 	var user models.User
-	if err := database.DB.Select("id, name, elo_rating, coin_balance, streak_current").Where("id = ?", userID).First(&user).Error; err != nil {
+	if err := database.DB.Select("id, full_name, avatar_url, elo_rating, coin_balance, streak_current").Where("id = ?", userID).First(&user).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
 	}
@@ -190,7 +190,7 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 	}
 
 	var leaderboard []models.User
-	database.DB.Select("id, name, email, elo_rating").
+	database.DB.Select("id, full_name, avatar_url, email, elo_rating").
 		Where("is_banned = ?", false).
 		Order("elo_rating desc").
 		Limit(5).
@@ -208,7 +208,7 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 			"name":  name,
 			"score": u.EloRating,
 			"rank":  i + 1,
-			"img":   "https://i.pravatar.cc/150?u=" + u.ID,
+			"img":   u.AvatarUrl,
 		})
 	}
 

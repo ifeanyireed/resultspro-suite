@@ -14,31 +14,31 @@ const plans = {
       name: 'FREE',
       price: '₦0',
       period: 'forever',
-      features: ['Branded School Website', 'Mobile App Access (SchoolHub)', 'Basic School Profile', 'Community Support'],
+      features: ['Up to 100 Students & 15 Teachers', 'Basic report cards', 'Free ExamsPRO', '2GB Storage'],
       cta: 'Get Started Free',
       highlight: false
     },
     {
-      name: 'BASIC',
-      price: '₦50,000',
-      period: 'per term',
-      features: ['Up to 100 Students', 'Full Ecosystem Access (4 Sub-apps)', 'Branded Website & Apps', 'Standard Support'],
-      cta: 'Start with Basic',
+      name: 'STARTER',
+      price: '₦15,000',
+      period: 'per month',
+      features: ['Up to 500 Students & 50 Teachers', 'Standard CBT', 'Scratch card PIN access', '15GB Storage'],
+      cta: 'Start with Starter',
       highlight: false
     },
     {
       name: 'PRO',
-      price: '₦150,000',
-      period: 'per term',
-      features: ['Up to 500 Students', 'AI Performance Insights', 'Full Ecosystem Access', 'Priority Support'],
+      price: '₦35,000',
+      period: 'per month',
+      features: ['Up to 2,000 Students & 300 Teachers', 'SMS Notifications', 'Advanced Analytics', 'TutorsPRO integration', '50GB Storage'],
       cta: 'Upgrade to Pro',
       highlight: true
     },
     {
-      name: 'PREMIUM',
-      price: 'Contact Us',
-      period: 'custom',
-      features: ['Manage Multiple Schools', 'Multi-school Dashboard', 'Unlimited Students', 'Dedicated Support'],
+      name: 'ENTERPRISE',
+      price: '₦80,000',
+      period: 'per month',
+      features: ['Unlimited Students & Teachers', 'Custom Domain & White-labeling', 'Dedicated Account Manager', '500GB Storage'],
       cta: 'Contact Sales',
       highlight: false
     }

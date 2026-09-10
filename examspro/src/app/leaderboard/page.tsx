@@ -143,7 +143,7 @@ export default function LeaderboardPage() {
                           #{index + 1}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                          <img src={`/avatars/character${ (String(user.id).charCodeAt(0) % 20) || 1 }.jpg`} alt="" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} />
+                          <img src={user.avatarUrl || user.avatar_url || user.img || `/avatars/character${ (String(user.id).charCodeAt(0) % 20) || 1 }.jpg`} alt="" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} />
                           <div style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--color-nets-navy-dark)' }}>{user.name || 'Anonymous'}</div>
                         </div>
                         <div style={{ textAlign: 'left' }}>
