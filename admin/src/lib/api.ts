@@ -651,3 +651,39 @@ export async function deleteExamproStorePack(id: string): Promise<any> {
   if (!res.ok) throw new Error('Failed to delete store pack');
   return res.json();
 }
+
+// ExamsPRO Plan Management (Legacy / Local module plans)
+export async function fetchExamproPlans(): Promise<any[]> {
+  const res = await fetch(`${EXAMS_API}/api/v1/admin/plans`, { headers: getAuthHeader() });
+  if (!res.ok) throw new Error('Failed to fetch exampro plans');
+  return res.json();
+}
+
+export async function createExamproPlan(data: any): Promise<any> {
+  const res = await fetch(`${EXAMS_API}/api/v1/admin/plans`, {
+    method: 'POST',
+    headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) throw new Error('Failed to create exampro plan');
+  return res.json();
+}
+
+export async function updateExamproPlan(id: string, data: any): Promise<any> {
+  const res = await fetch(`${EXAMS_API}/api/v1/admin/plans/${id}`, {
+    method: 'PUT',
+    headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) throw new Error('Failed to update exampro plan');
+  return res.json();
+}
+
+export async function deleteExamproPlan(id: string): Promise<any> {
+  const res = await fetch(`${EXAMS_API}/api/v1/admin/plans/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeader()
+  });
+  if (!res.ok) throw new Error('Failed to delete exampro plan');
+  return res.json();
+}
