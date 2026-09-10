@@ -46,7 +46,8 @@ export default function ProductPricingSection() {
                   period: p.period || 'per month',
                   features: (typeof p.features === 'string' && p.features.startsWith('[')) ? JSON.parse(p.features) : (p.features || []),
                   cta: p.ctaText || 'Get Started',
-                  highlight: p.highlight
+                  highlight: p.highlight,
+                  redirectUrl: p.redirect_url
                 });
               }
             });
@@ -132,7 +133,7 @@ export default function ProductPricingSection() {
                   ))}
                 </ul>
                 <Link 
-                  href={`/onboard/${activeTab.toLowerCase()}`}
+                  href={plan.redirectUrl || `/onboard/${activeTab.toLowerCase()}`}
                   className={`btn ${plan.highlight ? 'btn-primary' : 'btn-outline'} w-full mt-auto`}
                 >
                   {plan.cta}

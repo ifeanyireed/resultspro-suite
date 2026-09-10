@@ -445,9 +445,9 @@ export default function SubscriptionsCommandCenter() {
               </div>
 
               <div className="border-t border-slate-100 pt-4">
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Post-Purchase Redirect URL</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Pricing Card Button Redirect URL</label>
                 <input value={formData.redirect_url} onChange={e => setFormData({...formData, redirect_url: e.target.value})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" placeholder="e.g. /onboard/school" />
-                <p className="text-[10px] text-slate-400 mt-1">If set, users will be redirected here after clicking 'Get Started' or successfully purchasing the plan.</p>
+                <p className="text-[10px] text-slate-400 mt-1">If set, users will be sent to this link when they click the Call-to-Action button on the public pricing page.</p>
               </div>
 
               <div className="border-t border-slate-100 pt-4 flex space-x-6">

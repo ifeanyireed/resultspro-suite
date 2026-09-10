@@ -1,15 +1,51 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { RichTextEditor } from '@/components/RichTextEditor';
 import { ArrowLeft, Save, Send } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 export default function CreateBlogPost() {
-  const router = useRouter();
+  return (
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <CreateBlogPostContent />
+    </React.Suspense>
+  );
+}
+
+function CreateBlogPostContent() {
+    const router = useRouter();
+  const searchParams = useSearchParams();
+  const editId = searchParams.get('edit');
+
+  useEffect(() => {
+    if (editId) {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      fetch(`${USERS_API}/api/v1/cms/blog/posts`)
+        .then(res => res.json())
+        .then(data => {
+          const posts = Array.isArray(data) ? data : (data.posts || []);
+          const post = posts.find((p: any) => p.id === editId);
+          if (post) {
+            setTitle(post.title || '');
+            setExcerpt(post.excerpt || '');
+            setCategory(post.category || '');
+            setContent(post.content || '');
+            setCoverImage(post.cover_image || '');
+            // Wait a tick for editor to initialize
+            setTimeout(() => {
+              if ((window as any).tinymce || document.querySelector('.tiptap')) {
+                // Not ideal but works for this level of abstraction
+              }
+            }, 500);
+          }
+        });
+    }
+  }, [editId]);
+
   const [title, setTitle] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [category, setCategory] = useState('');

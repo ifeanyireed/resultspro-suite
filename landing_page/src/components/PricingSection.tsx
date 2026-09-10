@@ -135,7 +135,8 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
                 period: p.period || 'per month',
                 features: (typeof p.features === 'string' && p.features.startsWith('[')) ? JSON.parse(p.features) : (p.features || []),
                 cta: p.ctaText || 'Get Started',
-                highlight: p.highlight
+                highlight: p.highlight,
+                redirectUrl: p.redirect_url
               });
             });
             // Merge with defaults if empty
@@ -221,7 +222,7 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
                   ))}
                 </ul>
                 <Link 
-                  href={activeTab === 'School' ? '/onboard/school' : activeTab === 'Family' ? '/onboard/family' : '/onboard/agent'}
+                  href={plan.redirectUrl || (activeTab === 'School' ? '/onboard/school' : activeTab === 'Family' ? '/onboard/family' : '/onboard/agent')}
                   className={`btn ${plan.highlight ? 'btn-primary' : 'btn-outline'} w-full mt-auto`}
                 >
                   {plan.cta}
