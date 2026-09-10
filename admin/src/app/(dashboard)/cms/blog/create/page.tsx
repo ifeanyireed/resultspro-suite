@@ -37,7 +37,7 @@ function CreateBlogPostContent() {
           if (post) {
             setTitle(post.title || '');
             setExcerpt(post.excerpt || '');
-            setCategory(post.category || '');
+            setCategory(post.category_id || '');
             setContent(post.content || '');
             let imgUrl = post.cover_image || '';
             if (imgUrl && imgUrl.startsWith('/')) imgUrl = 'https://resultspro.ng' + imgUrl;

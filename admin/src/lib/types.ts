@@ -106,6 +106,7 @@ export interface BlogPost {
   content: string;
   author: string;
   category: string;
+  category_id?: string;
   status: 'DRAFT' | 'PUBLISHED';
   published_at?: string;
   created_at: string;

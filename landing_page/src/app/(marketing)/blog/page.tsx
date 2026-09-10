@@ -11,11 +11,26 @@ export const metadata = {
 async function getBlogPosts() {
   try {
     const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-    const res = await fetch(`${USERS_API}/api/v1/cms/blog/posts`, { next: { revalidate: 60 } });
-    if (!res.ok) return [];
-    const posts = await res.json();
+    const [postsRes, catRes] = await Promise.all([
+      fetch(`${USERS_API}/api/v1/cms/blog/posts`, { next: { revalidate: 60 } }),
+      fetch(`${USERS_API}/api/v1/cms/blog/categories`, { next: { revalidate: 60 } })
+    ]);
+    
+    let posts = [];
+    if (postsRes.ok) posts = await postsRes.json();
     if (!posts || !Array.isArray(posts)) return [];
-    return posts.filter((p: any) => p.status === 'PUBLISHED');
+    
+    const published = posts.filter((p: any) => p.status === 'PUBLISHED');
+    
+    if (catRes.ok) {
+      const categories = await catRes.json();
+      published.forEach((p: any) => {
+        const cat = categories.find((c: any) => c.id === p.category_id);
+        if (cat) p.category = cat.name;
+      });
+    }
+    
+    return published;
   } catch (error) {
     console.error('Failed to fetch blog posts', error);
     return [];
