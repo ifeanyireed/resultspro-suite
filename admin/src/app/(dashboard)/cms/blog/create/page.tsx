@@ -98,6 +98,15 @@ function CreateBlogPostContent() {
     
     try {
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      let author_id = "0eef95ef-57e0-4a7d-ae31-c8376fe28fd0";
+      try {
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+          const u = JSON.parse(userStr);
+          if (u.id) author_id = u.id;
+        }
+      } catch(e) {}
+
       const payload: any = {
         title,
         excerpt,
@@ -105,7 +114,7 @@ function CreateBlogPostContent() {
         cover_image: coverImage,
         category_id: category || null,
         status,
-        author_id: "0eef95ef-57e0-4a7d-ae31-c8376fe28fd0" // dummy admin user
+        author_id
       };
 
       let url = `${USERS_API}/api/v1/cms/blog/posts`;

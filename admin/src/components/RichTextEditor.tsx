@@ -125,6 +125,12 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
     },
   });
 
+  React.useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content);
+    }
+  }, [content, editor]);
+
   return (
     <div className="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-sm">
       <MenuBar editor={editor} />
