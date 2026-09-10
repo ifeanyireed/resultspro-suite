@@ -72,6 +72,7 @@ func main() {
 			c.JSON(200, gin.H{"status": "ok", "message": "API connectivity is working for new routes"})
 		})
 		api.GET("/payment/packs", paymentHandler.GetCoinPacks)
+		api.GET("/payment/plans", paymentHandler.GetPlans)
 		api.POST("/payment/webhook", paymentHandler.PaystackWebhook)
 		api.GET("/user/leaderboard", userHandler.GetLeaderboard)
 		
@@ -192,6 +193,10 @@ func main() {
 				admin.POST("/coin-packs", middleware.IsAdmin(), adminHandler.CreateCoinPack)
 				admin.PUT("/coin-packs/:id", middleware.IsAdmin(), adminHandler.UpdateCoinPack)
 				admin.DELETE("/coin-packs/:id", middleware.IsAdmin(), adminHandler.DeleteCoinPack)
+				admin.GET("/plans", middleware.IsAdmin(), adminHandler.GetPlans)
+				admin.POST("/plans", middleware.IsAdmin(), adminHandler.CreatePlan)
+				admin.PUT("/plans/:id", middleware.IsAdmin(), adminHandler.UpdatePlan)
+				admin.DELETE("/plans/:id", middleware.IsAdmin(), adminHandler.DeletePlan)
 				admin.GET("/tournaments", middleware.IsAdmin(), battleHandler.GetAllTournaments)
 				admin.POST("/tournaments", middleware.IsAdmin(), battleHandler.CreateTournament)
 				admin.PUT("/tournaments/:id", middleware.IsAdmin(), battleHandler.UpdateTournament)

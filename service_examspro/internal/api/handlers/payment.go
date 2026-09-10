@@ -10,6 +10,7 @@ import (
 	"io"
 	"log"
 	"math"
+	"strings"
 	"net/http"
 	"os"
 	"time"
@@ -71,8 +72,26 @@ func (h *PaymentHandler) InitializePayment(c *gin.Context) {
 	}
 
 	var pack models.CoinPack
-	if err := database.DB.Where("id = ?", input.PackID).First(&pack).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Coin pack not found"})
+	var plan models.SubscriptionPlan
+	var itemName, itemType, itemAccessLevel string
+	var itemPrice, itemCoins int
+
+	if err := database.DB.Where("id = ?", input.PackID).First(&pack).Error; err == nil {
+		itemName = pack.Name
+		itemType = pack.Type // 'COIN' or 'PREMIUM'
+		itemPrice = pack.Price
+		itemCoins = pack.Coins
+		if itemType == "PREMIUM" {
+			itemAccessLevel = "PREMIUM"
+		}
+	} else if err := database.DB.Where("id = ?", input.PackID).First(&plan).Error; err == nil {
+		itemName = plan.Name
+		itemType = "PLAN"
+		itemPrice = plan.Price
+		itemCoins = 0
+		itemAccessLevel = plan.AccessLevel
+	} else {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Item not found"})
 		return
 	}
 
@@ -82,7 +101,7 @@ func (h *PaymentHandler) InitializePayment(c *gin.Context) {
 		return
 	}
 
-	finalAmount := calculateFinalTotal(float64(pack.Price))
+	finalAmount := calculateFinalTotal(float64(itemPrice))
 	amountKobo := finalAmount * 100
 
 	url := "https://api.paystack.co/transaction/initialize"
@@ -101,10 +120,11 @@ func (h *PaymentHandler) InitializePayment(c *gin.Context) {
 		"amount":       amountKobo,
 		"callback_url": callbackURL,
 		"metadata": map[string]interface{}{
-			"pack_id": pack.ID,
+			"pack_id": input.PackID,
 			"user_id": user.ID,
-			"coins":   pack.Coins,
-			"type":    pack.Type,
+			"coins":   itemCoins,
+			"type":    itemType,
+			"access":  itemAccessLevel,
 		},
 	}
 
@@ -145,8 +165,9 @@ func (h *PaymentHandler) InitializePayment(c *gin.Context) {
 	purchase := models.Purchase{
 		ID:               uuid.New().String(),
 		UserID:           user.ID,
-		PackName:         pack.Name,
-		CoinsGranted:     pack.Coins,
+		PackName:         itemName,
+		ItemType:         itemType,
+		CoinsGranted:     itemCoins,
 		AmountNgn:        finalAmount,
 		PaymentReference: &result.Data.Reference,
 		Status:           "pending",
@@ -260,6 +281,7 @@ func (h *PaymentHandler) VerifyPayment(c *gin.Context) {
 		UserID string `json:"user_id"`
 		Coins  int    `json:"coins"`
 		Type   string `json:"type"`
+		Access string `json:"access"`
 	}
 	// Try to unmarshal metadata, but don't fail hard if it's empty/null
 	_ = json.Unmarshal(result.Data.Metadata, &metadata)
@@ -287,6 +309,7 @@ func processSuccessfulPayment(reference string, metadata struct {
 	UserID string `json:"user_id"`
 	Coins  int    `json:"coins"`
 	Type   string `json:"type"`
+	Access string `json:"access"`
 }) (*models.Purchase, error) {
 	var purchase models.Purchase
 	if err := database.DB.Where("payment_reference = ?", reference).First(&purchase).Error; err != nil {
@@ -302,13 +325,14 @@ func processSuccessfulPayment(reference string, metadata struct {
 			return err
 		}
 
-		isPremium := (metadata.Type == "PREMIUM") || (purchase.PackName == "Pro Plan")
-		isIcan := (metadata.Type == "ICAN") || (purchase.PackName == "ICAN Study Pack")
+		isPlan := metadata.Type == "PLAN" || metadata.Type == "PREMIUM"
+		isPremium := isPlan && (metadata.Access == "PREMIUM" || (!strings.Contains(strings.ToLower(purchase.PackName), "ican")))
+		isIcan := isPlan && (metadata.Access == "ICAN_FULL" || metadata.Access == "ICAN_SINGLE" || strings.Contains(strings.ToLower(purchase.PackName), "ican"))
 		
 		var txType string
 		var txDesc string
 
-		if isPremium {
+		if isPlan && isPremium {
 			expiry := time.Now().AddDate(0, 1, 0)
 			if err := tx.Model(&models.User{}).Where("id = ?", purchase.UserID).
 				Updates(map[string]interface{}{
@@ -462,6 +486,7 @@ func (h *PaymentHandler) PaystackWebhook(c *gin.Context) {
 			UserID string `json:"user_id"`
 			Coins  int    `json:"coins"`
 			Type   string `json:"type"`
+			Access string `json:"access"`
 		}
 		_ = json.Unmarshal(payload.Data.Metadata, &metadata)
 		
@@ -520,4 +545,13 @@ func (h *PaymentHandler) RequestPayout(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Payout requested successfully", "amount": available})
+}
+
+func (h *PaymentHandler) GetPlans(c *gin.Context) {
+	var plans []models.SubscriptionPlan
+	if err := database.DB.Where("is_active = ?", true).Order("price asc").Find(&plans).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch plans"})
+		return
+	}
+	c.JSON(http.StatusOK, plans)
 }

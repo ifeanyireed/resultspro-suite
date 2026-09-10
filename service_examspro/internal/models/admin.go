@@ -59,6 +59,7 @@ type Purchase struct {
 	UserID           string         `gorm:"index" json:"userId"`
 	User             *User          `json:"user,omitempty"`
 	PackName         string         `json:"packName"`
+	ItemType         string         `gorm:"default:'COIN'" json:"itemType"` // 'COIN' or 'PLAN'
 	CoinsGranted     int            `json:"coinsGranted"`
 	AmountNgn        int            `json:"amountNgn"`
 	PaymentReference *string        `json:"paymentReference"`
@@ -83,4 +84,21 @@ type Withdrawal struct {
 	CreatedAt     time.Time      `json:"createdAt"`
 	UpdatedAt     time.Time      `json:"updatedAt"`
 	DeletedAt     gorm.DeletedAt `gorm:"index" json:"-"`
+}
+
+type SubscriptionPlan struct {
+	TenantID    string         `gorm:"size:64;index" json:"tenant_id"`
+	ID          string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
+	Name        string         `json:"name"`
+	Category    string         `json:"category"` // e.g. 'School', 'Family', 'Agent', 'ICAN'
+	Price       int            `json:"price"`    // Base price in NGN
+	Period      string         `json:"period"`   // e.g. 'per month', 'forever'
+	Features    string         `gorm:"type:text" json:"features"` // JSON string array
+	CtaText     string         `json:"ctaText"`
+	Highlight   bool           `gorm:"default:false" json:"highlight"`
+	AccessLevel string         `json:"accessLevel"` // 'PREMIUM', 'ICAN_SINGLE', 'ICAN_FULL'
+	IsActive    bool           `gorm:"default:true" json:"isActive"`
+	CreatedAt   time.Time      `json:"createdAt"`
+	UpdatedAt   time.Time      `json:"updatedAt"`
+	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
 }

@@ -2070,3 +2070,41 @@ func (h *AdminHandler) UpdatePayoutStatus(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Payout status updated"})
 }
+
+// Subscription Plans
+func (h *AdminHandler) GetPlans(c *gin.Context) {
+	var plans []models.SubscriptionPlan
+	database.DB.Order("price asc").Find(&plans)
+	c.JSON(http.StatusOK, plans)
+}
+
+func (h *AdminHandler) CreatePlan(c *gin.Context) {
+	var plan models.SubscriptionPlan
+	if err := c.ShouldBindJSON(&plan); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid payload"})
+		return
+	}
+	plan.ID = uuid.New().String()
+	if err := database.DB.Create(&plan).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create plan"})
+		return
+	}
+	c.JSON(http.StatusOK, plan)
+}
+
+func (h *AdminHandler) UpdatePlan(c *gin.Context) {
+	id := c.Param("id")
+	var input map[string]interface{}
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid payload"})
+		return
+	}
+	database.DB.Model(&models.SubscriptionPlan{}).Where("id = ?", id).Updates(input)
+	c.JSON(http.StatusOK, gin.H{"message": "Plan updated"})
+}
+
+func (h *AdminHandler) DeletePlan(c *gin.Context) {
+	id := c.Param("id")
+	database.DB.Delete(&models.SubscriptionPlan{}, "id = ?", id)
+	c.JSON(http.StatusOK, gin.H{"message": "Plan deleted"})
+}
