@@ -41,8 +41,7 @@ export default function StoreTab() {
         []
       ]);
       setPacks(Array.isArray(packData) ? packData : []);
-      setPlans(Array.isArray(planData) ? planData : []);
-    } catch (e) {
+          } catch (e) {
       toast.error('Failed to load store items');
     } finally {
       setLoading(false);
