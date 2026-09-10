@@ -60,6 +60,7 @@ function CreateBlogPostContent() {
   const [content, setContent] = useState('');
   const [coverImage, setCoverImage] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,6 +92,7 @@ function CreateBlogPostContent() {
   };
 
   const handleSave = async (status: 'DRAFT' | 'PUBLISHED') => {
+    setIsSaving(true);
     if (!title) {
       toast.error('Title is required');
       return;
@@ -142,6 +144,8 @@ function CreateBlogPostContent() {
       }
     } catch (e) {
       toast.error('Network error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -162,17 +166,19 @@ function CreateBlogPostContent() {
           <div className="flex items-center gap-3">
             <button 
               onClick={() => handleSave('DRAFT')}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-100 transition-colors shadow-sm"
+              disabled={isSaving}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-sm transition-colors shadow-sm ${isSaving ? 'opacity-50 cursor-not-allowed' : 'hover:bg-slate-100'}`}
             >
               <Save className="w-4 h-4" />
-              Save Draft
+              {isSaving ? 'Saving...' : 'Save Draft'}
             </button>
             <button 
               onClick={() => handleSave('PUBLISHED')}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition-colors shadow-sm"
+              disabled={isSaving}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold text-sm transition-colors shadow-sm ${isSaving ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
             >
               <Send className="w-4 h-4" />
-              Publish Post
+              {isSaving ? 'Publishing...' : (editId ? 'Update Post' : 'Publish Post')}
             </button>
           </div>
         </div>
