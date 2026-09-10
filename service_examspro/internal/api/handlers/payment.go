@@ -362,33 +362,48 @@ func processSuccessfulPayment(reference string, metadata struct {
 		var referral models.Referral
 		// If this user was referred, and the referral is still 'pending'
 		if err := tx.Where("referee_id = ? AND status = ?", purchase.UserID, "pending").First(&referral).Error; err == nil {
-			// Convert the referral!
+			
+			// Fetch Referral Settings
+			var coinRewardSetting models.SystemSetting
+			var fiatRewardSetting models.SystemSetting
 			rewardCoins := 50
+			rewardFiat := 0
+			if tx.Where("id = ?", "referral_coin_reward").First(&coinRewardSetting).Error == nil {
+				fmt.Sscanf(coinRewardSetting.Value, "%d", &rewardCoins)
+			}
+			if tx.Where("id = ?", "referral_fiat_reward").First(&fiatRewardSetting).Error == nil {
+				fmt.Sscanf(fiatRewardSetting.Value, "%d", &rewardFiat)
+			}
 
-			// 1. Update the referral status and coins_awarded
+			// 1. Update the referral status, coins_awarded and fiat_awarded
 			if err := tx.Model(&referral).Updates(map[string]interface{}{
 				"status":        "converted",
 				"coins_awarded": rewardCoins,
+				"fiat_awarded":  rewardFiat,
 			}).Error; err != nil {
 				log.Printf("Failed to update referral: %v", err)
 			}
 
 			// 2. Award coins to the referrer
-			if err := tx.Model(&models.User{}).Where("id = ?", referral.ReferrerID).
-				Update("coin_balance", gorm.Expr("coin_balance + ?", rewardCoins)).Error; err == nil {
-				
-				// 3. Create a coin transaction for the referrer
-				desc := "Referral Bonus"
-				refTx := models.CoinTransaction{
-					ID:          uuid.New().String(),
-					UserID:      referral.ReferrerID,
-					Amount:      rewardCoins,
-					Type:        "REFERRAL_BONUS",
-					Description: &desc,
-					ReferenceID: &referral.ID,
+			if rewardCoins > 0 {
+				if err := tx.Model(&models.User{}).Where("id = ?", referral.ReferrerID).
+					Update("coin_balance", gorm.Expr("coin_balance + ?", rewardCoins)).Error; err == nil {
+					
+					// 3. Create a coin transaction for the referrer
+					desc := "Referral Bonus"
+					refTx := models.CoinTransaction{
+						ID:          uuid.New().String(),
+						UserID:      referral.ReferrerID,
+						Amount:      rewardCoins,
+						Type:        "REFERRAL_BONUS",
+						Description: &desc,
+						ReferenceID: &referral.ID,
+					}
+					tx.Create(&refTx)
 				}
-				tx.Create(&refTx)
 			}
+			
+			// 3. (Fiat/discount is added to their 'wallet' virtually via sum(fiat_awarded), handled at payout time)
 		}
 
 		return nil
@@ -454,4 +469,51 @@ func (h *PaymentHandler) PaystackWebhook(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
+}
+
+func (h *PaymentHandler) RequestPayout(c *gin.Context) {
+	userID, _ := c.Get("userId")
+	uid := userID.(string)
+
+	var req struct {
+		BankName      string `json:"bankName"`
+		AccountNumber string `json:"accountNumber"`
+		AccountName   string `json:"accountName"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
+		return
+	}
+
+	// Calculate Available Balance
+	var totalFiat int64
+	database.DB.Model(&models.Referral{}).Where("referrer_id = ? AND status = ?", uid, "converted").Select("COALESCE(SUM(fiat_awarded), 0)").Row().Scan(&totalFiat)
+
+	var withdrawnFiat int64
+	database.DB.Model(&models.Withdrawal{}).Where("user_id = ? AND status IN ?", uid, []string{"pending", "approved", "completed"}).Select("COALESCE(SUM(amount_ngn), 0)").Row().Scan(&withdrawnFiat)
+
+	available := int(totalFiat - withdrawnFiat)
+	if available <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No available fiat balance to withdraw"})
+		return
+	}
+
+	// Create withdrawal request
+	withdrawal := models.Withdrawal{
+		ID:            uuid.New().String(),
+		UserID:        uid,
+		CoinAmount:    0,
+		AmountNgn:     available,
+		BankName:      req.BankName,
+		AccountNumber: req.AccountNumber,
+		AccountName:   req.AccountName,
+		Status:        "pending",
+	}
+
+	if err := database.DB.Create(&withdrawal).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to request payout"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Payout requested successfully", "amount": available})
 }

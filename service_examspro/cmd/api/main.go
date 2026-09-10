@@ -169,6 +169,7 @@ func main() {
 			// Payments & Moderation
 			authenticated.POST("/payment/initialize", paymentHandler.InitializePayment)
 			authenticated.GET("/payment/verify", paymentHandler.VerifyPayment)
+			authenticated.POST("/payment/payout", paymentHandler.RequestPayout)
 			authenticated.POST("/moderation/report", modHandler.SubmitReport)
 
 			// --- ADMIN ---
@@ -225,6 +226,8 @@ func main() {
 				admin.POST("/upload-image", middleware.IsModerator(), adminHandler.UploadImage)
 				
 				admin.GET("/referrals/stats", middleware.IsAdmin(), adminHandler.GetReferralStats)
+				admin.GET("/payouts", middleware.IsAdmin(), adminHandler.GetPayouts)
+				admin.PUT("/payouts/:id", middleware.IsAdmin(), adminHandler.UpdatePayoutStatus)
 				admin.GET("/battles/monitor-stats", middleware.IsAdmin(), adminHandler.GetBattleMonitorStats)
 				admin.GET("/finances/stats", middleware.IsAdmin(), adminHandler.GetFinancialStats)
 				admin.GET("/analytics/stats", middleware.IsAdmin(), adminHandler.GetAnalyticsStats)

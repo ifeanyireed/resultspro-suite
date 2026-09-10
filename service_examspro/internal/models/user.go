@@ -71,6 +71,7 @@ type Referral struct {
 	RefereeID    string    `gorm:"index" json:"refereeId"`
 	Status       string    `gorm:"default:'pending'" json:"status"`
 	CoinsAwarded int       `gorm:"default:0" json:"coinsAwarded"`
+	FiatAwarded  int       `gorm:"default:0" json:"fiatAwarded"`
 	CreatedAt    time.Time `json:"createdAt"`
 	Referee      User      `gorm:"foreignKey:RefereeID" json:"referee,omitempty"`
 }

@@ -1,0 +1,26 @@
+--- admin/src/app/(dashboard)/exampro/page.tsx
++++ admin/src/app/(dashboard)/exampro/page.tsx
+@@ -10,6 +10,7 @@
+ import ModerationTab from './tabs/ModerationTab';
+ import FinancialsTab from './tabs/FinancialsTab';
+ import AccessTab from './tabs/AccessTab';
++import ReferralsTab from './tabs/ReferralsTab';
+ import { IconDatabase } from '@tabler/icons-react';
+ 
+ const TABS = [
+@@ -21,6 +22,7 @@
+   { id: 'moderation', label: 'Moderation', icon: ShieldAlert },
+   { id: 'financials', label: 'Financials', icon: DollarSign },
+   { id: 'access', label: 'ICAN Access', icon: Key },
++  { id: 'referrals', label: 'Referrals', icon: Users },
+ ];
+ 
+ export default function ExamsProCommandCenter() {
+@@ -58,6 +60,7 @@
+         {activeTab === 'moderation' && <ModerationTab />}
+         {activeTab === 'financials' && <FinancialsTab />}
+         {activeTab === 'access' && <AccessTab />}
++        {activeTab === 'referrals' && <ReferralsTab />}
+       </div>
+     </div>
+   );

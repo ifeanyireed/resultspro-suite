@@ -2043,3 +2043,30 @@ func (h *AdminHandler) UpdateUserAccess(c *gin.Context) {
 
 	c.JSON(200, gin.H{"message": "Access updated successfully"})
 }
+
+// Payout Management
+func (h *AdminHandler) GetPayouts(c *gin.Context) {
+	var withdrawals []models.Withdrawal
+	if err := database.DB.Preload("User").Order("created_at desc").Find(&withdrawals).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch payouts"})
+		return
+	}
+	c.JSON(http.StatusOK, withdrawals)
+}
+
+func (h *AdminHandler) UpdatePayoutStatus(c *gin.Context) {
+	id := c.Param("id")
+	var input struct {
+		Status string `json:"status"` // 'approved', 'completed', 'rejected'
+	}
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := database.DB.Model(&models.Withdrawal{}).Where("id = ?", id).Update("status", input.Status).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update status"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Payout status updated"})
+}

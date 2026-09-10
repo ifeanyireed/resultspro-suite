@@ -9,7 +9,8 @@ import {
   AcademicCapIcon,
   CreditCardIcon,
   ChartBarIcon,
-  Cog6ToothIcon
+  Cog6ToothIcon,
+  BuildingOfficeIcon
 } from '@heroicons/react/24/outline';
 
 export default function CoursesProAdminLayout({
@@ -26,6 +27,7 @@ export default function CoursesProAdminLayout({
     { label: 'Payments', href: '/coursespro/payments', icon: CreditCardIcon },
     { label: 'Reports', href: '/coursespro/reports', icon: ChartBarIcon },
     { label: 'Settings', href: '/coursespro/settings', icon: Cog6ToothIcon },
+    { label: 'Tenant Manager', href: '/coursespro/tenants', icon: BuildingOfficeIcon },
   ];
 
   return (

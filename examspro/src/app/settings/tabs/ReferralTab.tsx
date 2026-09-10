@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 export default function ReferralTab() {
   const { user } = useAuthStore();
   const [referrals, setReferrals] = useState<any[]>([]);
+  const [withdrawn, setWithdrawn] = useState(0);
   const [loading, setLoading] = useState(true);
   const [copying, setCopying] = useState(false);
   const [origin, setOrigin] = useState('https://exams.resultspro.ng');
@@ -30,6 +31,8 @@ export default function ReferralTab() {
       const res = await api.get('/user/referrals');
       let refData = res.data;
       if (!Array.isArray(refData)) {
+        if (refData.totalWithdrawn !== undefined) setWithdrawn(refData.totalWithdrawn);
+        
         if (refData && Array.isArray(refData.referrals)) refData = refData.referrals;
         else if (refData && Array.isArray(refData.data)) refData = refData.data;
         else refData = [];
@@ -81,6 +84,8 @@ export default function ReferralTab() {
   const isArray = Array.isArray(referrals);
   const convertedCount = isArray ? referrals.filter(r => r.status === 'converted').length : 0;
   const totalEarned = isArray ? referrals.reduce((acc, curr) => acc + (curr.coinsAwarded || 0), 0) : 0;
+  const totalFiatEarned = isArray ? referrals.reduce((acc, curr) => acc + (curr.fiatAwarded || 0), 0) : 0;
+  const availableBalance = Math.max(0, totalFiatEarned - withdrawn);
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
@@ -150,6 +155,42 @@ export default function ReferralTab() {
             <div className="text-2xl font-black text-amber-600">{totalEarned}</div>
             <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Coins Earned</div>
           </div>
+        </div>
+      </div>
+
+      {/* Wallet Section */}
+      <div className="bg-white p-8 rounded-[24px] border border-gray-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <h3 className="text-lg font-bold text-slate-900 mb-1">Referral Wallet</h3>
+          <p className="text-sm text-gray-500">Earn cash when your friends purchase a plan.</p>
+        </div>
+        <div className="flex items-center gap-6">
+          <div className="text-right">
+            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Available Balance</div>
+            <div className="text-3xl font-black text-green-600">₦{availableBalance.toLocaleString()}</div>
+          </div>
+          <Button 
+            disabled={availableBalance <= 0}
+            onClick={async () => {
+              const bankName = prompt("Enter your Bank Name:");
+              if (!bankName) return;
+              const accountNumber = prompt("Enter your Account Number:");
+              if (!accountNumber) return;
+              const accountName = prompt("Enter your Account Name:");
+              if (!accountName) return;
+
+              try {
+                const res = await api.post('/payment/payout', { bankName, accountNumber, accountName });
+                toast.success(res.data.message || "Payout requested successfully!");
+                setWithdrawn(prev => prev + availableBalance);
+              } catch (err: any) {
+                toast.error(err.response?.data?.error || "Failed to request payout");
+              }
+            }}
+            className="bg-green-600 hover:bg-green-700 text-white rounded-full px-6 shadow-sm"
+          >
+            Request Payout
+          </Button>
         </div>
       </div>
 

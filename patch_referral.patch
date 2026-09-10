@@ -1,0 +1,31 @@
+--- examspro/src/app/settings/tabs/ReferralTab.tsx
++++ examspro/src/app/settings/tabs/ReferralTab.tsx
+@@ -155,6 +155,30 @@
+         </div>
+       </div>
+ 
++      {/* Wallet Section */}
++      <div className="bg-white p-8 rounded-[24px] border border-gray-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
++        <div>
++          <h3 className="text-lg font-bold text-slate-900 mb-1">Referral Wallet</h3>
++          <p className="text-sm text-gray-500">Earn cash when your friends purchase a plan.</p>
++        </div>
++        <div className="flex items-center gap-6">
++          <div className="text-right">
++            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Available Balance</div>
++            <div className="text-3xl font-black text-green-600">₦{availableBalance.toLocaleString()}</div>
++          </div>
++          <Button 
++            disabled={availableBalance <= 0}
++            onClick={() => {
++              alert("Payout Request functionality coming soon! You will be prompted to enter your bank details.");
++            }}
++            className="bg-green-600 hover:bg-green-700 text-white rounded-full px-6 shadow-sm"
++          >
++            Request Payout
++          </Button>
++        </div>
++      </div>
++
+       <div className="bg-white p-8 rounded-[24px] border border-gray-100 shadow-sm">
+         <h3 className="text-lg font-bold text-slate-900 mb-6">Referral History</h3>

@@ -110,7 +110,13 @@ func (h *UserHandler) GetReferrals(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, referrals)
+	var withdrawnFiat int64
+	database.DB.Model(&models.Withdrawal{}).Where("user_id = ? AND status IN ?", userID, []string{"pending", "approved", "completed"}).Select("COALESCE(SUM(amount_ngn), 0)").Row().Scan(&withdrawnFiat)
+
+	c.JSON(http.StatusOK, gin.H{
+		"referrals":      referrals,
+		"totalWithdrawn": withdrawnFiat,
+	})
 }
 
 func (h *UserHandler) GetLeaderboard(c *gin.Context) {
