@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Plus, Edit2, Trash2, Tag, Zap, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { 
+import api, { 
   fetchExamproStorePacks, createExamproStorePack, updateExamproStorePack, deleteExamproStorePack,
   fetchExamproPlans, createExamproPlan, updateExamproPlan, deleteExamproPlan
 } from '@/lib/api';
