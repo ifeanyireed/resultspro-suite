@@ -13,7 +13,7 @@ const productPlans = {
       name: 'SOLO',
       price: '₦2,000',
       period: 'per month',
-      features: ['Single Educator Access', 'Virtual Classrooms', 'Basic Assignment Tracking', 'Email Support'],
+      features: ['1 Teacher', 'Up to 50 Students', 'Virtual Classrooms', 'Basic Assignment Tracking', 'Email Support'],
       cta: 'Start Solo',
       highlight: false
     },
@@ -21,7 +21,7 @@ const productPlans = {
       name: 'FAMILY',
       price: '₦5,000',
       period: 'per month',
-      features: ['Up to 5 Users', 'Interactive Whiteboard', 'Live Lesson Recording', 'Priority Support'],
+      features: ['Up to 5 Teachers', 'Up to 200 Students', 'Interactive Whiteboard', 'Live Lesson Recording', 'Priority Support'],
       cta: 'Get Family Plan',
       highlight: true
     },
@@ -29,7 +29,7 @@ const productPlans = {
       name: 'SCHOOL STARTER',
       price: '₦15,000',
       period: 'per month',
-      features: ['Up to 500 Students', 'Basic School Analytics', 'Standard Branding', 'Email Support'],
+      features: ['Up to 20 Teachers', 'Up to 500 Students', 'Basic School Analytics', 'Standard Branding', 'Email Support'],
       cta: 'Start with Starter',
       highlight: false
     },
@@ -47,7 +47,7 @@ const productPlans = {
       name: 'SOLO',
       price: '₦1,000',
       period: 'per month',
-      features: ['Single Student Access', 'Standard Educational Games', 'Basic Progress Tracking', 'Email Support'],
+      features: ['1 Student', 'Standard Educational Games', 'Basic Progress Tracking', 'Email Support'],
       cta: 'Start Solo',
       highlight: false
     },
@@ -81,7 +81,7 @@ const productPlans = {
       name: 'STARTER',
       price: '₦15,000',
       period: 'per month',
-      features: ['Course Creator Tool', 'Standard Video Hosting', 'Basic Certificates', 'Email Support'],
+      features: ['Up to 100 Students', 'Up to 5 Courses', 'Course Creator Tool', 'Standard Video Hosting', 'Basic Certificates', 'Email Support'],
       cta: 'Start with Starter',
       highlight: false
     },
@@ -89,7 +89,7 @@ const productPlans = {
       name: 'PRO',
       price: '₦35,000',
       period: 'per month',
-      features: ['Advanced Course Builder', 'Certificate Generation', 'Custom Domain', 'Priority Support'],
+      features: ['Up to 1,000 Students', 'Up to 25 Courses', 'Advanced Course Builder', 'Certificate Generation', 'Custom Domain', 'Priority Support'],
       cta: 'Upgrade to Pro',
       highlight: true
     },
@@ -97,7 +97,7 @@ const productPlans = {
       name: 'ENTERPRISE',
       price: '₦80,000',
       period: 'per month',
-      features: ['Unlimited Access', 'White-label Certificates', 'Dedicated Account Manager', '24/7 Support'],
+      features: ['Unlimited Students', 'Unlimited Courses', 'White-label Certificates', 'Dedicated Account Manager', '24/7 Support'],
       cta: 'Contact Sales',
       highlight: false
     }
@@ -107,7 +107,7 @@ const productPlans = {
       name: 'SOLO',
       price: '₦2,500',
       period: 'per month',
-      features: ['Single Tutor Profile', 'Basic Scheduling', 'Standard Video Calling', 'Email Support'],
+      features: ['1 Mentor', 'Up to 50 Students', 'Single Tutor Profile', 'Basic Scheduling', 'Standard Video Calling', 'Email Support'],
       cta: 'Start Solo',
       highlight: false
     },
@@ -115,7 +115,7 @@ const productPlans = {
       name: 'FAMILY',
       price: '₦6,000',
       period: 'per month',
-      features: ['Multiple Profiles', 'Featured Profile Status', 'Session Recording', 'Priority Support'],
+      features: ['Up to 5 Mentors', 'Up to 200 Students', 'Featured Profile Status', 'Session Recording', 'Priority Support'],
       cta: 'Get Family Plan',
       highlight: true
     },
@@ -123,7 +123,7 @@ const productPlans = {
       name: 'SCHOOL STARTER',
       price: '₦15,000',
       period: 'per month',
-      features: ['Up to 10 Tutors', 'Basic Booking System', 'Standard Analytics', 'Email Support'],
+      features: ['Up to 20 Mentors', 'Up to 500 Students', 'Basic Booking System', 'Standard Analytics', 'Email Support'],
       cta: 'Start with Starter',
       highlight: false
     },
@@ -131,7 +131,7 @@ const productPlans = {
       name: 'SCHOOL PRO',
       price: '₦30,000',
       period: 'per month',
-      features: ['Unlimited Tutors', 'School-wide Booking System', 'Advanced Analytics', 'Dedicated Support'],
+      features: ['Unlimited Mentors & Students', 'School-wide Booking System', 'Advanced Analytics', 'Dedicated Support'],
       cta: 'Contact Sales',
       highlight: false
     }
