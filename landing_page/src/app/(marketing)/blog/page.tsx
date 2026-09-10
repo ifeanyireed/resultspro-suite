@@ -84,30 +84,7 @@ export default async function BlogPage() {
               ))}
             </div>
           )}
-                </div>
-                
-                <div className="p-6 flex flex-col flex-1">
-                  <div className="flex items-center justify-between text-xs text-muted mb-3">
-                    <span>{post.date}</span>
-                    <span>{post.author}</span>
-                  </div>
-                  <h2 className="text-xl fw-600 mb-3 text-navy leading-tight line-clamp-2">
-                    {post.title}
-                  </h2>
-                  <p className="text-sm text-muted mb-6 flex-1 line-clamp-3">
-                    {post.excerpt}
-                  </p>
-                  
-                  <div className="mt-auto pt-4 border-t border-nets-border">
-                    {/* Link to slug once detail page is built, for now just # */}
-                    <Link href={`/blog/${post.slug}`} className="flex items-center gap-2 text-sm fw-600 text-red hover:opacity-80 transition-opacity" style={{ color: 'var(--color-nets-red)' }}>
-                      Read Article <IconArrowRight size={16} />
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+
 
           <div className="mt-16 text-center">
             <button className="btn btn-outline-navy">
