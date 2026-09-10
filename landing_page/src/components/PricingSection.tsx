@@ -13,7 +13,7 @@ const plans = {
       name: 'FREE',
       price: '₦0',
       period: 'forever',
-      features: ['Up to 100 Students & 15 Teachers', 'Basic report cards', 'Free ExamsPRO', '2GB Storage'],
+      features: ['Up to 100 Students & 15 Teachers', 'ResultsPRO (Basic)', 'ExamsPRO (Free)', '2GB Storage'],
       cta: 'Get Started Free',
       highlight: false
     },
@@ -21,7 +21,7 @@ const plans = {
       name: 'STARTER',
       price: '₦15,000',
       period: 'per month',
-      features: ['Up to 500 Students & 50 Teachers', 'Standard CBT', 'Scratch card PIN access', '15GB Storage'],
+      features: ['Up to 500 Students & 50 Teachers', 'ResultsPRO (Full)', 'ExamsPRO (Standard CBT)', '15GB Storage'],
       cta: 'Start with Starter',
       highlight: false
     },
@@ -29,7 +29,7 @@ const plans = {
       name: 'PRO',
       price: '₦35,000',
       period: 'per month',
-      features: ['Up to 2,000 Students & 300 Teachers', 'SMS Notifications', 'Advanced Analytics', 'TutorsPRO integration', '50GB Storage'],
+      features: ['Up to 2,000 Students & 300 Teachers', 'ResultsPRO & ExamsPRO', 'TutorsPRO Integration', '50GB Storage'],
       cta: 'Upgrade to Pro',
       highlight: true
     },
@@ -37,7 +37,7 @@ const plans = {
       name: 'ENTERPRISE',
       price: '₦80,000',
       period: 'per month',
-      features: ['Unlimited Students & Teachers', 'Custom Domain & White-labeling', 'Dedicated Account Manager', '500GB Storage'],
+      features: ['Unlimited Students & Teachers', 'Access to All Suite Products', 'Custom Domain & White-labeling', '500GB Storage'],
       cta: 'Contact Sales',
       highlight: false
     }
@@ -47,7 +47,7 @@ const plans = {
       name: 'FREE',
       price: '₦0',
       period: 'forever',
-      features: ['1 Student Profile', 'Basic Progress View', 'Community Access', 'Mobile App'],
+      features: ['1 Student Profile', 'ResultsPRO Parent Portal', 'Community Access', 'Mobile App'],
       cta: 'Join Free',
       highlight: false
     },
@@ -55,7 +55,7 @@ const plans = {
       name: 'BASIC',
       price: '₦5,000',
       period: 'per month',
-      features: ['1 Student Tracking', 'Full Ecosystem Access (4 Sub-apps)', 'Detailed Progress Reports', 'Standard Support'],
+      features: ['1 Student Tracking', 'Access to 4 Core Sub-apps', 'Detailed Progress Reports', 'Standard Support'],
       cta: 'Choose Basic',
       highlight: false
     },
@@ -63,7 +63,7 @@ const plans = {
       name: 'PRO',
       price: '₦12,000',
       period: 'per month',
-      features: ['Up to 3 Students', 'Detailed AI Insights', 'Full Ecosystem Access', 'Priority Support'],
+      features: ['Up to 3 Students', 'Full Ecosystem Access', 'Detailed AI Insights', 'Priority Support'],
       cta: 'Go Pro',
       highlight: true
     },
@@ -71,7 +71,7 @@ const plans = {
       name: 'PREMIUM',
       price: '₦20,000',
       period: 'per month',
-      features: ['Up to 5 Students', 'Weekly Expert Consult', 'Full Ecosystem Access', 'Full Dashboard'],
+      features: ['Up to 5 Students', 'Full Ecosystem Access', 'Weekly Expert Consult', 'Priority Support'],
       cta: 'Get Premium',
       highlight: false
     }
