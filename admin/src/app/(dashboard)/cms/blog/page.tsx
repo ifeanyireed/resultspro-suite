@@ -215,7 +215,7 @@ export default function BlogCMSPage() {
                     <tr key={cat.id} className="hover:bg-slate-50 transition-colors">
                       <td className="px-6 py-4 font-medium text-slate-900">{cat.name}</td>
                       <td className="px-6 py-4 text-slate-500">{cat.slug}</td>
-                      <td className="px-6 py-4 text-slate-500">-</td>
+                      <td className="px-6 py-4 text-slate-500">{posts.filter((p: any) => p.category_id === cat.id).length}</td>
                       <td className="px-6 py-4 text-right">
                         <button className="text-rose-600 hover:text-rose-800 text-sm font-medium">Delete</button>
                       </td>
