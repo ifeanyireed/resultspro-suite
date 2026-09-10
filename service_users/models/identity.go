@@ -20,6 +20,11 @@ type User struct {
 	AccountStatus string     `json:"account_status"` // unverified, active, suspended, deactivated
 	MFAEnabled    bool       `json:"mfa_enabled"`
 	MFASecret     *string    `json:"-"`
+	CoinBalance   int        `json:"coin_balance"`
+	HasIcan       bool       `json:"has_ican"`
+	IcanExpiresAt *time.Time `json:"ican_expires_at,omitempty"`
+	IcanPlan      *string    `json:"ican_plan,omitempty"`
+	IcanTarget    *string    `json:"ican_target,omitempty"`
 	CreatedAt     time.Time  `json:"created_at"`
 	UpdatedAt     time.Time  `json:"updated_at"`
 }

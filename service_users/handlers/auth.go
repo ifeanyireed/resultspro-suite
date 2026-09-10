@@ -202,7 +202,15 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Issue JWT tokens
-	accessToken, err := utils.GenerateAccessToken(user.ID, roles)
+	customClaims := map[string]interface{}{
+		"has_ican": user.HasIcan,
+		"coin_balance": user.CoinBalance,
+	}
+	if user.IcanPlan != nil { customClaims["ican_plan"] = *user.IcanPlan }
+	if user.IcanTarget != nil { customClaims["ican_target"] = *user.IcanTarget }
+	if user.IcanExpiresAt != nil { customClaims["ican_expires_at"] = user.IcanExpiresAt.Format("2006-01-02T15:04:05Z") }
+	
+	accessToken, err := utils.GenerateAccessToken(user.ID, roles, customClaims)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to generate access token")
 		return
@@ -289,7 +297,18 @@ func HandleTokenRefresh(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	accessToken, err := utils.GenerateAccessToken(userID, roles)
+	var u models.User
+	db.DB.QueryRow("SELECT coin_balance, has_ican, ican_expires_at, ican_plan, ican_target FROM users WHERE id = ?", userID).Scan(&u.CoinBalance, &u.HasIcan, &u.IcanExpiresAt, &u.IcanPlan, &u.IcanTarget)
+	
+	customClaims := map[string]interface{}{
+		"has_ican": u.HasIcan,
+		"coin_balance": u.CoinBalance,
+	}
+	if u.IcanPlan != nil { customClaims["ican_plan"] = *u.IcanPlan }
+	if u.IcanTarget != nil { customClaims["ican_target"] = *u.IcanTarget }
+	if u.IcanExpiresAt != nil { customClaims["ican_expires_at"] = u.IcanExpiresAt.Format("2006-01-02T15:04:05Z") }
+
+	accessToken, err := utils.GenerateAccessToken(userID, roles, customClaims)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to generate access token")
 		return

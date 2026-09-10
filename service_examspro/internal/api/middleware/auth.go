@@ -5,10 +5,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
-
-	"exams-resultspro-backend/internal/database"
-	"exams-resultspro-backend/internal/models"
+	
+		"exams-resultspro-backend/internal/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -74,29 +72,30 @@ func Authenticate() gin.HandlerFunc {
 			return
 		}
 
+		// Build the user object directly from JWT claims instead of querying the DB
 		var user models.User
-		if err := database.DB.Where("id = ?", userID).First(&user).Error; err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
-			c.Abort()
-			return
-		}
+		user.ID = userID
 
-		// Check if user is banned
-		if user.IsBanned {
-			if user.BanExpiresAt != nil && time.Now().After(*user.BanExpiresAt) {
-				// Ban expired, unban automatically
-				user.IsBanned = false
-				user.BanReason = nil
-				user.BanExpiresAt = nil
-				database.DB.Save(&user)
-			} else {
-				c.JSON(http.StatusForbidden, gin.H{
-					"error":     "User is banned",
-					"reason":    user.BanReason,
-					"expiresAt": user.BanExpiresAt,
-				})
-				c.Abort()
-				return
+		if hasIcan, ok := claims["has_ican"].(bool); ok {
+			user.HasIcan = hasIcan
+		}
+		if coinBalance, ok := claims["coin_balance"].(float64); ok {
+			user.CoinBalance = int(coinBalance)
+		}
+		if icanPlan, ok := claims["ican_plan"].(string); ok {
+			user.IcanPlan = &icanPlan
+		}
+		if icanTarget, ok := claims["ican_target"].(string); ok {
+			user.IcanTargets = &icanTarget
+		}
+		
+		// Map roles (if present)
+		if rolesInterface, ok := claims["roles"].([]interface{}); ok {
+			for _, r := range rolesInterface {
+				if rStr, ok := r.(string); ok && rStr == "ADMIN" {
+					user.IsAdmin = true
+					user.Role = models.RoleAdmin
+				}
 			}
 		}
 

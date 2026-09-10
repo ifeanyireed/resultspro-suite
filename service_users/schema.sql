@@ -20,6 +20,11 @@ CREATE TABLE IF NOT EXISTS users (
     account_status VARCHAR(191) DEFAULT 'unverified', -- unverified, active, suspended, deactivated
     mfa_enabled BOOLEAN DEFAULT FALSE,
     mfa_secret TEXT,
+    coin_balance INT DEFAULT 0,
+    has_ican BOOLEAN DEFAULT FALSE,
+    ican_expires_at DATETIME(3),
+    ican_plan VARCHAR(191),
+    ican_target VARCHAR(191),
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     INDEX idx_user_email (email),

@@ -1,10 +1,15 @@
 package handlers
 
 import (
+	"crypto/hmac"
+	"crypto/sha512"
 	"database/sql"
+	"encoding/hex"
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -289,13 +294,65 @@ func HandleProcessWebhook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var payload map[string]interface{}
-	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
-		utils.JSONError(w, http.StatusBadRequest, "Invalid webhook payload")
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Failed to read body")
 		return
 	}
 
-	// Webhook handled successfully
+	paystackSignature := r.Header.Get("x-paystack-signature")
+	secret := os.Getenv("PAYSTACK_SECRET_KEY")
+	
+	if secret != "" && paystackSignature != "" {
+		mac := hmac.New(sha512.New, []byte(secret))
+		mac.Write(body)
+		expectedSignature := hex.EncodeToString(mac.Sum(nil))
+		if paystackSignature != expectedSignature {
+			utils.JSONError(w, http.StatusUnauthorized, "Invalid signature")
+			return
+		}
+	}
+
+	var payload struct {
+		Event string `json:"event"`
+		Data  struct {
+			Reference string          `json:"reference"`
+			Status    string          `json:"status"`
+			Metadata  json.RawMessage `json:"metadata"`
+		} `json:"data"`
+	}
+
+	if err := json.Unmarshal(body, &payload); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid JSON")
+		return
+	}
+
+	if payload.Event == "charge.success" && payload.Data.Status == "success" {
+		var metadata struct {
+			PackID string `json:"pack_id"`
+			UserID string `json:"user_id"`
+			Coins  int    `json:"coins"`
+			Type   string `json:"type"`
+			Access string `json:"access"`
+		}
+		_ = json.Unmarshal(payload.Data.Metadata, &metadata)
+		
+		// Run ExamsPRO-style coin/ICAN upgrades using db.GormDB if it is an ExamsPRO purchase
+		if metadata.Type == "PLAN" {
+			var p models.Plan
+			if err := db.GormDB.Where("id = ?", metadata.PackID).First(&p).Error; err == nil {
+				if p.AppModule == "ExamsPRO" {
+					if metadata.Access == "ICAN_SINGLE" || metadata.Access == "ICAN_GROUP" || metadata.Access == "ICAN_FULL" {
+						now := time.Now().AddDate(0, 1, 0) // 1 month
+						db.GormDB.Exec("UPDATE users SET has_ican = ?, ican_plan = ?, ican_expires_at = ? WHERE id = ?", true, metadata.Access, now, metadata.UserID)
+					}
+				}
+			}
+		} else if metadata.Type == "COIN" {
+			db.GormDB.Exec("UPDATE users SET coin_balance = coin_balance + ? WHERE id = ?", metadata.Coins, metadata.UserID)
+		}
+	}
+
 	utils.JSONResponse(w, http.StatusOK, map[string]string{
 		"status":  "success",
 		"message": "Webhook processed successfully",

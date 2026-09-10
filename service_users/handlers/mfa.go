@@ -181,7 +181,7 @@ func HandleMFAChallenge(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	accessToken, err := utils.GenerateAccessToken(input.UserID, roles)
+	accessToken, err := utils.GenerateAccessToken(input.UserID, roles, nil)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to generate access token")
 		return

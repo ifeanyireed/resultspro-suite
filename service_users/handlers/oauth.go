@@ -207,7 +207,7 @@ func processOAuthUser(w http.ResponseWriter, r *http.Request, googleID, microsof
 		}
 	}
 
-	accessToken, err := utils.GenerateAccessToken(user.ID, roles)
+	accessToken, err := utils.GenerateAccessToken(user.ID, roles, nil)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to generate access token")
 		return
