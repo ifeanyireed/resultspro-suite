@@ -105,7 +105,7 @@ const productPlans = {
   TutorsPRO: [
     {
       name: 'SOLO',
-      price: '$5',
+      price: '$29',
       period: 'per month',
       features: ['1 Subject', 'Up to 2 Sessions / Week', 'Single Student Focus', 'Basic Progress Tracking'],
       cta: 'Start Solo',
@@ -113,7 +113,7 @@ const productPlans = {
     },
     {
       name: 'FAMILY',
-      price: '$12',
+      price: '$79',
       period: 'per month',
       features: ['Up to 3 Students', 'Up to 3 Subjects', 'Up to 6 Sessions / Week', 'Detailed Parent Analytics'],
       cta: 'Get Family Plan',
@@ -121,7 +121,7 @@ const productPlans = {
     },
     {
       name: 'SCHOOL STARTER',
-      price: '$25',
+      price: '$249',
       period: 'per month',
       features: ['Up to 20 Students', 'Unlimited Subjects', 'Up to 200 Sessions / Week', 'Basic School Analytics'],
       cta: 'Start with Starter',
@@ -129,7 +129,7 @@ const productPlans = {
     },
     {
       name: 'SCHOOL PRO',
-      price: '$50',
+      price: '$499',
       period: 'per month',
       features: ['Unlimited Subjects', 'Unlimited Sessions', 'Unlimited Multi-students', 'Advanced School & Parent Analytics'],
       cta: 'Contact Sales',
