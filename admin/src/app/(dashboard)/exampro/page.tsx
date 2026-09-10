@@ -54,7 +54,7 @@ export default function ExamsProCommandCenter() {
                     : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className="w-4 h-4 stroke-2" />
                 <span>{tab.label}</span>
               </button>
             )

@@ -59,7 +59,7 @@ export default function EmailsPage() {
                     activeSubTab === tab.id ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                   }`}
                 >
-                  <Icon className="w-3.5 h-3.5" />
+                  <Icon className="w-3.5 h-3.5 stroke-2" />
                   <span>{tab.label}</span>
                 </button>
               )
