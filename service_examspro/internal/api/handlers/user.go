@@ -429,6 +429,13 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 		overallReadiness = total / len(examStats)
 	}
 
+	// Calculate Referral Wallet Balance
+	var totalFiat int64
+	database.DB.Model(&models.Referral{}).Where("referrer_id = ? AND status = ?", userID, "converted").Select("COALESCE(SUM(fiat_awarded), 0)").Row().Scan(&totalFiat)
+	var withdrawnFiat int64
+	database.DB.Model(&models.Withdrawal{}).Where("user_id = ? AND status IN ?", userID, []string{"pending", "approved", "completed"}).Select("COALESCE(SUM(amount_ngn), 0)").Row().Scan(&withdrawnFiat)
+	availableBalance := totalFiat - withdrawnFiat
+
 	c.JSON(http.StatusOK, gin.H{
 		"user": gin.H{
 			"name":             name,
@@ -438,6 +445,7 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 			"daysToGo":         daysToGo,
 			"globalRank":       globalRank,
 			"overallReadiness": overallReadiness,
+			"walletBalance":    availableBalance,
 		},
 		"subjects":       subjectStats,
 		"exams":          examStats,

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@/components/ui/Cards';
-import { IconFlame, IconCoins, IconTrophy, IconChevronRight, IconPlayerPlay, IconSword, IconBook, IconLoader2, IconBolt, IconSparkles } from '@tabler/icons-react';
+import { IconFlame, IconCoins, IconTrophy, IconChevronRight, IconPlayerPlay, IconSword, IconBook, IconLoader2, IconBolt, IconSparkles, IconWallet } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
 import { useRouter } from 'next/navigation';
@@ -170,10 +170,10 @@ export default function Dashboard() {
           icon={IconBook}
         />
         <WhiteMetricCard 
-          title="Global Rank"
-          value={`#${data.user?.globalRank || '-'}`}
-          trend="Based on ELO rating"
-          icon={IconTrophy}
+          title="Referral Wallet"
+          value={`₦${(data.user?.walletBalance || 0).toLocaleString()}`}
+          trend="Available cash"
+          icon={IconWallet}
         />
       </div>
 

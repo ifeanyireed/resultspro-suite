@@ -13,8 +13,6 @@ import UsersTab from './tabs/UsersTab';
 import TournamentsTab from './tabs/TournamentsTab';
 import ModerationTab from './tabs/ModerationTab';
 import FinancialsTab from './tabs/FinancialsTab';
-import AccessTab from './tabs/AccessTab';
-
 
 export default function ExamsProCommandCenter() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -29,7 +27,6 @@ export default function ExamsProCommandCenter() {
     { id: 'users', label: 'Candidates', icon: Users },
     { id: 'moderation', label: 'Moderation', icon: FileText },
     { id: 'financials', label: 'Financials', icon: DollarSign },
-    { id: 'access', label: 'Access Mgmt', icon: Users },
   ];
 
   return (
@@ -72,7 +69,6 @@ export default function ExamsProCommandCenter() {
         {activeTab === 'tournaments' && <TournamentsTab />}
         {activeTab === 'moderation' && <ModerationTab />}
         {activeTab === 'financials' && <FinancialsTab />}
-        {activeTab === 'access' && <AccessTab />}
       </div>
     </div>
   );
