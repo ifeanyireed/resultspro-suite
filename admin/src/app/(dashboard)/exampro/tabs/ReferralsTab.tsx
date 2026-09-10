@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { WidgetCard } from '@/components/ui/Cards';
 import { RefreshCw, Save, CheckCircle } from 'lucide-react';
-import api from '@/lib/api';
+import { fetchExamproSettings, updateExamproSetting, fetchExamproPayouts, updateExamproPayoutStatus } from '@/lib/api';
 import toast from 'react-hot-toast';
 
 export default function ReferralsTab() {
@@ -22,15 +22,15 @@ export default function ReferralsTab() {
     try {
       setLoading(true);
       const [settingsRes, payoutsRes] = await Promise.all([
-        api.get('/examspro/admin/settings'),
-        api.get('/examspro/admin/payouts')
+        fetchExamproSettings(),
+        fetchExamproPayouts()
       ]);
 
-      setSettings(settingsRes.data || []);
-      setPayouts(payoutsRes.data || []);
+      setSettings(settingsRes || []);
+      setPayouts(payoutsRes || []);
 
-      const coinSet = settingsRes.data?.find((s: any) => s.id === 'referral_coin_reward');
-      const fiatSet = settingsRes.data?.find((s: any) => s.id === 'referral_fiat_reward');
+      const coinSet = settingsRes?.find((s: any) => s.id === 'referral_coin_reward');
+      const fiatSet = settingsRes?.find((s: any) => s.id === 'referral_fiat_reward');
       if (coinSet) setCoinReward(coinSet.value);
       if (fiatSet) setFiatReward(fiatSet.value);
 
@@ -44,8 +44,8 @@ export default function ReferralsTab() {
   const handleSaveSettings = async () => {
     try {
       setSavingSettings(true);
-      await api.put('/examspro/admin/settings/referral_coin_reward', { value: coinReward });
-      await api.put('/examspro/admin/settings/referral_fiat_reward', { value: fiatReward });
+      await updateExamproSetting('referral_coin_reward', coinReward);
+      await updateExamproSetting('referral_fiat_reward', fiatReward);
       toast.success('Referral settings updated!');
       fetchData();
     } catch (err) {
@@ -58,7 +58,7 @@ export default function ReferralsTab() {
   const handleMarkPaid = async (id: string) => {
     if (!window.confirm("Are you sure you want to mark this payout as completed? This means you have manually transferred the funds to their bank.")) return;
     try {
-      await api.put(`/examspro/admin/payouts/${id}`, { status: 'completed' });
+      await updateExamproPayoutStatus(id, 'completed');
       toast.success('Payout marked as completed!');
       fetchData();
     } catch (err) {

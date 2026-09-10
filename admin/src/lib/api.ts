@@ -582,3 +582,36 @@ export async function updateExamproReportStatus(id: string, status: string, admi
   if (!res.ok) throw new Error('Failed to update report status');
   return res.json();
 }
+
+// ExamsPRO Admin Referral Settings
+export async function fetchExamproSettings(): Promise<any[]> {
+  const res = await fetch(`${EXAMS_API}/api/v1/admin/settings`, { headers: getAuthHeader() });
+  if (!res.ok) throw new Error('Failed to fetch settings');
+  return res.json();
+}
+
+export async function updateExamproSetting(id: string, value: string): Promise<any> {
+  const res = await fetch(`${EXAMS_API}/api/v1/admin/settings/${id}`, {
+    method: 'PUT',
+    headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ value })
+  });
+  if (!res.ok) throw new Error('Failed to update setting');
+  return res.json();
+}
+
+export async function fetchExamproPayouts(): Promise<any[]> {
+  const res = await fetch(`${EXAMS_API}/api/v1/admin/payouts`, { headers: getAuthHeader() });
+  if (!res.ok) throw new Error('Failed to fetch payouts');
+  return res.json();
+}
+
+export async function updateExamproPayoutStatus(id: string, status: string): Promise<any> {
+  const res = await fetch(`${EXAMS_API}/api/v1/admin/payouts/${id}`, {
+    method: 'PUT',
+    headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status })
+  });
+  if (!res.ok) throw new Error('Failed to update payout');
+  return res.json();
+}
