@@ -358,3 +358,76 @@ func HandleProcessWebhook(w http.ResponseWriter, r *http.Request) {
 		"message": "Webhook processed successfully",
 	})
 }
+
+
+// HandleCreatePlan creates a new subscription plan
+func HandleCreatePlan(w http.ResponseWriter, r *http.Request) {
+	var input models.Plan
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+	
+	input.ID = uuid.New().String()
+	input.IsActive = true
+	
+	if err := db.GormDB.Create(&input).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to create plan")
+		return
+	}
+	utils.JSONResponse(w, http.StatusCreated, input)
+}
+
+// HandleUpdatePlan updates an existing plan
+func HandleUpdatePlan(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("id")
+	if id == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Missing plan ID")
+		return
+	}
+
+	var input models.Plan
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+
+	var existing models.Plan
+	if err := db.GormDB.Where("id = ?", id).First(&existing).Error; err != nil {
+		utils.JSONError(w, http.StatusNotFound, "Plan not found")
+		return
+	}
+
+	// Update fields safely
+	existing.Name = input.Name
+	existing.AppModule = input.AppModule
+	existing.Category = input.Category
+	existing.MonthlyPrice = input.MonthlyPrice
+	existing.AnnualPrice = input.AnnualPrice
+	existing.Period = input.Period
+	existing.Features = input.Features
+	existing.CtaText = input.CtaText
+	existing.Highlight = input.Highlight
+	existing.AccessLevel = input.AccessLevel
+
+	if err := db.GormDB.Save(&existing).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to update plan")
+		return
+	}
+	utils.JSONResponse(w, http.StatusOK, existing)
+}
+
+// HandleDeletePlan deletes (softly or hard deletes) a plan
+func HandleDeletePlan(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("id")
+	if id == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Missing plan ID")
+		return
+	}
+
+	if err := db.GormDB.Where("id = ?", id).Delete(&models.Plan{}).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to delete plan")
+		return
+	}
+	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Plan deleted successfully"})
+}
