@@ -13,6 +13,7 @@ import (
 
 	"exams-resultspro-backend/internal/database"
 	"exams-resultspro-backend/internal/models"
+	"exams-resultspro-backend/internal/utils"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -410,10 +411,26 @@ func (h *ExamHandler) GetQuestionsBySubject(c *gin.Context) {
 		query = query.Where("type = ?", qType)
 	}
 
+	var subject models.Subject
 	if id, err := strconv.Atoi(subjectIdStr); err == nil {
 		query = query.Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id = ?)", id)
+		database.DB.Preload("Exam").First(&subject, id)
 	} else {
 		query = query.Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id IN (SELECT id FROM subjects WHERE slug = ?))", subjectIdStr)
+		database.DB.Preload("Exam").Where("slug = ?", subjectIdStr).First(&subject)
+	}
+
+	if subject.Exam != nil {
+		userIDVal, exists := c.Get("userId")
+		if exists {
+			var user models.User
+			if err := database.DB.Where("id = ?", userIDVal).First(&user).Error; err == nil {
+				if err := utils.CheckIcanAccess(&user, subject.Exam.Name, fmt.Sprintf("%d", subject.ID)); err != nil {
+					c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+					return
+				}
+			}
+		}
 	}
 
 	yearStr := c.Query("year")
