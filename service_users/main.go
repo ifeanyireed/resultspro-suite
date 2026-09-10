@@ -366,6 +366,45 @@ func main() {
 		}
 	})
 
+	// --- 8. Blog CMS Management ---
+	mux.HandleFunc("/api/v1/cms/blog/posts", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			handlers.HandleGetPosts(w, r)
+		} else if r.Method == http.MethodPost {
+			handlers.HandleCreatePost(w, r)
+		} else {
+			utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		}
+	})
+	
+	mux.HandleFunc("/api/v1/cms/blog/categories", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			handlers.HandleGetCategories(w, r)
+		} else if r.Method == http.MethodPost {
+			handlers.HandleCreateCategory(w, r)
+		} else {
+			utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		}
+	})
+
+	mux.HandleFunc("/api/v1/cms/blog/tags", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			handlers.HandleGetTags(w, r)
+		} else if r.Method == http.MethodPost {
+			handlers.HandleCreateTag(w, r)
+		} else {
+			utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		}
+	})
+
+	mux.HandleFunc("/api/v1/cms/blog/comments", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			handlers.HandleGetComments(w, r)
+		} else {
+			utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		}
+	})
+
 	// Wrap entire handler tree with CORS middleware
 	handler := middleware.EnableCORS(mux)
 

@@ -239,39 +239,20 @@ func HandleCheckSubscriptionLimits(w http.ResponseWriter, r *http.Request) {
 
 // HandleGetPlans returns all available subscription plans with pricing and features
 func HandleGetPlans(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.DB.Query("SELECT id, name, monthly_price, annual_price, currency, max_students, max_teachers, max_results_per_term, storage_gb, features, is_active, created_at FROM plans WHERE is_active = 1")
-	if err != nil {
-		// Fallback plans if database table not yet populated
-		plans := []models.Plan{
-			{
-				ID: "plan-free", Name: "Free", MonthlyPrice: 0, AnnualPrice: 0, Currency: "NGN",
-				MaxStudents: 100, MaxTeachers: 15, MaxResultsPerTerm: 100, StorageGB: 2,
-				Features: `["up_to_100_students", "up_to_15_teachers", "basic_report_cards"]`, IsActive: true,
-			},
-			{
-				ID: "plan-pro", Name: "Pro", MonthlyPrice: 25000, AnnualPrice: 250000, Currency: "NGN",
-				MaxStudents: 2000, MaxTeachers: 300, MaxResultsPerTerm: 2000, StorageGB: 50,
-				Features: `["up_to_2000_students", "up_to_300_teachers", "cbt_exams", "scratch_cards", "analytics"]`, IsActive: true,
-			},
-			{
-				ID: "plan-enterprise", Name: "Enterprise", MonthlyPrice: 75000, AnnualPrice: 750000, Currency: "NGN",
-				MaxStudents: 999999, MaxTeachers: 999999, MaxResultsPerTerm: 999999, StorageGB: 500,
-				Features: `["unlimited_students", "unlimited_teachers", "white_label_portal", "custom_domain", "priority_support"]`, IsActive: true,
-			},
-		}
-		utils.JSONResponse(w, http.StatusOK, plans)
+	var plans []models.Plan
+	if err := db.GormDB.Where("is_active = ?", true).Order("monthly_price asc").Find(&plans).Error; err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"success": false,
+			"error":   "Failed to fetch plans",
+		})
 		return
 	}
-	defer rows.Close()
 
-	plans := []models.Plan{}
-	for rows.Next() {
-		var p models.Plan
-		if err := rows.Scan(&p.ID, &p.Name, &p.MonthlyPrice, &p.AnnualPrice, &p.Currency, &p.MaxStudents, &p.MaxTeachers, &p.MaxResultsPerTerm, &p.StorageGB, &p.Features, &p.IsActive, &p.CreatedAt); err == nil {
-			plans = append(plans, p)
-		}
-	}
-	utils.JSONResponse(w, http.StatusOK, plans)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"success": true,
+		"plans":   plans,
+	})
 }
 
 // HandleGetTenantInvoices retrieves billing invoice history for a tenant

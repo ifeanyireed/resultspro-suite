@@ -58,9 +58,9 @@ func main() {
 		{"PRO", "FamilyHub", "Family", 12000, "per month", []string{"Up to 3 Students", "Full Ecosystem Access", "Detailed AI Insights", "Priority Support"}, "Go Pro", true, "PREMIUM"},
 		{"PREMIUM", "FamilyHub", "Family", 20000, "per month", []string{"Up to 5 Students", "Full Ecosystem Access", "Weekly Expert Consult", "Priority Support"}, "Get Premium", false, "PREMIUM"},
 
-		{"STARTER", "AgentNetwork", "Agent", 0, "forever", []string{"10% Commission Rate", "Standard Marketing Assets", "Basic Dashboard", "Email Support"}, "Become an Agent", false, "PREMIUM"},
-		{"PRO", "AgentNetwork", "Agent", 5000, "per month", []string{"15% Commission Rate", "Premium Marketing Assets", "Advanced Analytics", "Priority Support", "Dedicated Account Manager"}, "Upgrade to Pro", true, "PREMIUM"},
-		{"AGENCY", "AgentNetwork", "Agent", 20000, "per month", []string{"20% Commission Rate", "White-label Marketing Assets", "Team Management", "VIP Support", "Revenue Share Pool"}, "Start an Agency", false, "PREMIUM"},
+		{"BASIC", "AgentNetwork", "Agent", 10000, "per month", []string{"Manage up to 5 Schools", "Basic Commission Tracking", "Marketing Materials", "Email Support"}, "Become an Agent", false, "PREMIUM"},
+		{"PRO", "AgentNetwork", "Agent", 30000, "per month", []string{"Manage up to 20 Schools", "Advanced Analytics", "Training Workshops", "Priority Support"}, "Growth Plan", true, "PREMIUM"},
+		{"PREMIUM", "AgentNetwork", "Agent", 100000, "per month", []string{"Unlimited Schools", "Master Agent Status", "Team Management", "Direct Executive Support"}, "Master Plan", false, "PREMIUM"},
 		
 		{"ICAN SINGLE", "ExamsPRO", "ICAN", 3500, "per month", []string{"Access to 1 ICAN Subject", "Past Questions", "Mock Exams", "Performance Analytics"}, "Subscribe", false, "ICAN_SINGLE"},
 		{"ICAN FULL", "ExamsPRO", "ICAN", 15000, "per month", []string{"Access to All ICAN Subjects", "Unlimited Past Questions", "Live Classes", "Premium Analytics", "Tutor Support"}, "Get Full Access", true, "ICAN_FULL"},

@@ -457,3 +457,58 @@ CREATE TABLE IF NOT EXISTS agent_reminders (
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     CONSTRAINT fk_agent_rem_user FOREIGN KEY (agent_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 9. CMS: Blog Posts, Categories, Tags, Comments
+CREATE TABLE IF NOT EXISTS blog_categories (
+    id VARCHAR(191) PRIMARY KEY,
+    name VARCHAR(191) NOT NULL,
+    slug VARCHAR(191) UNIQUE NOT NULL,
+    created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
+    updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS blog_tags (
+    id VARCHAR(191) PRIMARY KEY,
+    name VARCHAR(191) NOT NULL,
+    slug VARCHAR(191) UNIQUE NOT NULL,
+    created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
+    updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS blog_posts (
+    id VARCHAR(191) PRIMARY KEY,
+    title VARCHAR(191) NOT NULL,
+    slug VARCHAR(191) UNIQUE NOT NULL,
+    excerpt TEXT,
+    content LONGTEXT,
+    cover_image TEXT,
+    author_id VARCHAR(191) NOT NULL,
+    category_id VARCHAR(191),
+    status VARCHAR(50) DEFAULT 'DRAFT',
+    published_at DATETIME(3),
+    created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
+    updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    FOREIGN KEY (category_id) REFERENCES blog_categories(id) ON DELETE SET NULL,
+    FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_blog_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS blog_post_tags (
+    post_id VARCHAR(191),
+    tag_id VARCHAR(191),
+    PRIMARY KEY (post_id, tag_id),
+    FOREIGN KEY (post_id) REFERENCES blog_posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES blog_tags(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS blog_comments (
+    id VARCHAR(191) PRIMARY KEY,
+    post_id VARCHAR(191) NOT NULL,
+    author_id VARCHAR(191) NOT NULL,
+    content TEXT,
+    status VARCHAR(50) DEFAULT 'PENDING',
+    created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
+    updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    FOREIGN KEY (post_id) REFERENCES blog_posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
