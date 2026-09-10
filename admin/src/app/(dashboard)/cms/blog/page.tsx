@@ -83,25 +83,23 @@ export default function BlogCMSPage() {
         {/* Tab Content */}
         {activeTab === 'posts' && (
           <div className="space-y-8 animate-in fade-in duration-300">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <StatCard
-                title="Total Posts"
-                value={loading ? '...' : totalPosts}
-                icon={DocumentTextIcon}
-                color="blue"
-              />
-              <StatCard
-                title="Published"
-                value={loading ? '...' : published}
-                icon={CheckCircleIcon}
-                color="emerald"
-              />
-              <StatCard
-                title="Drafts"
-                value={loading ? '...' : drafts}
-                icon={DocumentIcon}
-                color="amber"
-              />
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {[
+                { label: 'Total Posts', value: loading ? '...' : totalPosts, icon: DocumentTextIcon, color: 'text-blue-500', bg: 'bg-blue-50' },
+                { label: 'Published', value: loading ? '...' : published, icon: CheckCircleIcon, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+                { label: 'Drafts', value: loading ? '...' : drafts, icon: DocumentIcon, color: 'text-amber-500', bg: 'bg-amber-50' },
+              ].map((stat, idx) => {
+                const Icon = stat.icon;
+                return (
+                  <div key={idx} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-3 ${stat.bg}`}>
+                      <Icon className={`w-4 h-4 ${stat.color}`} />
+                    </div>
+                    <p className="text-slate-500 text-[10px] uppercase tracking-widest font-bold mb-1">{stat.label}</p>
+                    <p className="text-2xl font-bold text-slate-800">{stat.value}</p>
+                  </div>
+                )
+              })}
             </div>
 
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
