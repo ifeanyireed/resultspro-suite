@@ -378,6 +378,8 @@ func main() {
 			handlers.HandleGetPosts(w, r)
 		} else if r.Method == http.MethodPost {
 			handlers.HandleCreatePost(w, r)
+		} else if r.Method == http.MethodPut {
+			handlers.HandleUpdatePost(w, r)
 		} else {
 			utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		}

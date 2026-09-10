@@ -24,7 +24,9 @@ export default function InvoicesPage() {
     plan_id: '',
     discount_percentage: 0,
     max_uses: 0,
-    is_active: true
+    is_active: true,
+    pre_assigned_emails: '',
+    validity_days: 30
   });
 
   const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
@@ -72,7 +74,9 @@ export default function InvoicesPage() {
           plan_id: formData.plan_id,
           discount_percentage: Number(formData.discount_percentage),
           max_uses: Number(formData.max_uses),
-          is_active: formData.is_active
+          is_active: formData.is_active,
+          pre_assigned_emails: formData.pre_assigned_emails,
+          validity_days: Number(formData.validity_days)
         })
       });
       if (!res.ok) throw new Error('Failed to create link');
@@ -189,7 +193,7 @@ export default function InvoicesPage() {
           <div className="flex justify-between items-center mb-4">
             <p className="text-sm text-slate-500">Create shareable links that auto-apply a discount to a specific plan.</p>
             <button onClick={() => {
-              setFormData({ code: '', plan_id: '', discount_percentage: 0, max_uses: 0, is_active: true });
+              setFormData({ code: '', plan_id: '', discount_percentage: 0, max_uses: 0, is_active: true, pre_assigned_emails: '', validity_days: 30 });
               setIsModalOpen(true);
             }} className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 transition-colors">
               <Plus className="w-4 h-4" /> New Link
@@ -291,16 +295,41 @@ export default function InvoicesPage() {
                 </div>
               </div>
 
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">Max Uses (0 = Infinite)</label>
+                  <input 
+                    type="number"
+                    value={formData.max_uses} 
+                    onChange={e => setFormData({...formData, max_uses: Number(e.target.value)})}
+                    placeholder="e.g. 100"
+                    min="0"
+                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">Validity Days</label>
+                  <input 
+                    type="number"
+                    value={formData.validity_days} 
+                    onChange={e => setFormData({...formData, validity_days: Number(e.target.value)})}
+                    placeholder="e.g. 30"
+                    min="1"
+                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Max Uses (0 = Infinite)</label>
-                <input 
-                  type="number"
-                  value={formData.max_uses} 
-                  onChange={e => setFormData({...formData, max_uses: Number(e.target.value)})}
-                  placeholder="e.g. 100"
-                  min="0"
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Pre-Assigned Emails (Optional)</label>
+                <textarea 
+                  value={formData.pre_assigned_emails} 
+                  onChange={e => setFormData({...formData, pre_assigned_emails: e.target.value})}
+                  placeholder="student1@school.com, student2@school.com"
                   className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500"
+                  rows={2}
                 />
+                <p className="text-[10px] text-slate-400 mt-1">If provided, only these emails will be upgraded automatically upon signing up or logging in with this link.</p>
               </div>
 
               <button 
