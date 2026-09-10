@@ -17,6 +17,7 @@ export default function ProductPricingSection() {
     'TutorsPRO': []
   });
   const [loading, setLoading] = useState(true);
+  const [isAnnual, setIsAnnual] = useState(false);
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -39,7 +40,9 @@ export default function ProductPricingSection() {
               if (grouped[cat] !== undefined) {
                 grouped[cat].push({
                   name: p.name,
-                  price: (p.currency === 'USD' ? '$' : '₦') + (p.monthly_price || p.price || 0).toLocaleString(),
+                  monthly_price: p.monthly_price || p.price || 0,
+                  annual_price: p.annual_price || ((p.monthly_price || p.price || 0) * 11),
+                  currency: p.currency === 'USD' ? '$' : '₦',
                   period: p.period || 'per month',
                   features: (typeof p.features === 'string' && p.features.startsWith('[')) ? JSON.parse(p.features) : (p.features || []),
                   cta: p.ctaText || 'Get Started',
@@ -84,18 +87,38 @@ export default function ProductPricingSection() {
               </button>
             ))}
           </div>
+
+          <div className="flex justify-center items-center mt-8 mb-4 space-x-4">
+            <span className={`text-sm font-semibold ${!isAnnual ? 'text-navy' : 'text-slate-400'}`}>Monthly</span>
+            <button 
+              onClick={() => setIsAnnual(!isAnnual)}
+              className="relative inline-flex h-6 w-12 items-center rounded-full bg-navy transition-colors focus:outline-none"
+            >
+              <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isAnnual ? 'translate-x-7' : 'translate-x-1'}`} />
+            </button>
+            <span className={`text-sm font-semibold ${isAnnual ? 'text-navy' : 'text-slate-400'}`}>
+              Annually <span className="text-xs text-red-500 font-bold ml-1">(Save 8%)</span>
+            </span>
+          </div>
         </ScrollReveal>
 
         <div className={styles.grid}>
-          {!loading && dbPlans[activeTab] && dbPlans[activeTab].map((plan, i) => (
+          {!loading && dbPlans[activeTab] && dbPlans[activeTab].map((plan, i) => {
+            const rawMonthly = plan.monthly_price !== undefined ? plan.monthly_price : (parseInt(String(plan.price).replace(/[^0-9]/g, ''), 10) || 0);
+            const rawAnnual = plan.annual_price !== undefined ? plan.annual_price : rawMonthly * 11;
+            const currency = plan.currency || '₦';
+            const displayPrice = isAnnual ? `${currency}${rawAnnual.toLocaleString()}` : `${currency}${rawMonthly.toLocaleString()}`;
+            const displayPeriod = plan.period === 'forever' ? 'forever' : (isAnnual ? 'per year' : 'per month');
+            
+            return (
             <ScrollReveal key={plan.name} animation="fade-up" delay={i * 100} className={styles.revealWrapper}>
               <div className={`${styles.card} ${plan.highlight ? styles.highlight : ''}`}>
                 {plan.highlight && <div className={styles.badge}>Most Popular</div>}
                 <div className={styles.planHeader}>
                   <div className={styles.planName}>{plan.name}</div>
                   <div className={styles.planPrice}>
-                    {plan.price}
-                    {plan.period !== 'custom' && <span className={styles.period}> / {plan.period}</span>}
+                    {displayPrice}
+                    {displayPeriod !== 'forever' && <span className={styles.period}> / {displayPeriod}</span>}
                   </div>
                 </div>
                 <ul className={styles.featureList}>
@@ -116,7 +139,7 @@ export default function ProductPricingSection() {
                 </Link>
               </div>
             </ScrollReveal>
-          ))}
+          );})}
           {!loading && dbPlans[activeTab] && dbPlans[activeTab].length === 0 && (
             <div className="col-span-1 md:col-span-3 text-center py-12 text-slate-500">
               Pricing configuring for {activeTab}. Please check back later.
