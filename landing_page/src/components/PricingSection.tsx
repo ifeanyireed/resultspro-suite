@@ -108,13 +108,10 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
   const [activeTab, setActiveTab] = useState(initialTab);
 
   return (
-    <section className="section section-white pb-24 md:pb-32">
+    <section className="section section-white pt-24 md:pt-32 pb-24 md:pb-32">
       <div className="container">
         <ScrollReveal animation="fade-up">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-nets-navy)] mb-4">Flexible Pricing for Everyone</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">Choose the plan that fits your needs. Empower your educational journey with our comprehensive infrastructure.</p>
-          </div>
+
           <div className={styles.tabs}>
             {planTypes.map((type) => (
               <button
