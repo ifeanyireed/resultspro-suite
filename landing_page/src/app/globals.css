@@ -106,3 +106,39 @@ h1, h2, h3, h4, h5, h6 {
   @apply bg-black/40 p-4 rounded-xl my-4 overflow-x-auto;
 }
 
+
+/* Blog Content Styles */
+.prose-nets p {
+  margin-bottom: 1.5em;
+  color: var(--color-nets-navy);
+}
+.prose-nets h2 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  color: var(--color-nets-navy-dark);
+}
+.prose-nets h3 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+  color: var(--color-nets-navy);
+}
+.prose-nets ul, .prose-nets ol {
+  margin-bottom: 1.5em;
+  padding-left: 1.5em;
+}
+.prose-nets li {
+  margin-bottom: 0.5em;
+}
+.prose-nets img {
+  border-radius: 1rem;
+  margin: 2em 0;
+  width: 100%;
+}
+.prose-nets a {
+  color: var(--color-nets-red);
+  text-decoration: underline;
+}
