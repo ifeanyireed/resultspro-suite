@@ -105,7 +105,7 @@ const productPlans = {
   TutorsPRO: [
     {
       name: 'SOLO',
-      price: '₦2,500',
+      price: '$5',
       period: 'per month',
       features: ['1 Subject', 'Up to 2 Sessions / Week', 'Single Student Focus', 'Basic Progress Tracking'],
       cta: 'Start Solo',
@@ -113,7 +113,7 @@ const productPlans = {
     },
     {
       name: 'FAMILY',
-      price: '₦6,000',
+      price: '$12',
       period: 'per month',
       features: ['Up to 3 Subjects', 'Up to 5 Sessions / Week', 'Multi-student Support', 'Detailed Parent Analytics'],
       cta: 'Get Family Plan',
@@ -121,7 +121,7 @@ const productPlans = {
     },
     {
       name: 'SCHOOL STARTER',
-      price: '₦15,000',
+      price: '$25',
       period: 'per month',
       features: ['Up to 10 Subjects', 'Up to 20 Sessions / Week', 'Small Group Classes', 'Basic School Analytics'],
       cta: 'Start with Starter',
@@ -129,7 +129,7 @@ const productPlans = {
     },
     {
       name: 'SCHOOL PRO',
-      price: '₦30,000',
+      price: '$50',
       period: 'per month',
       features: ['Unlimited Subjects', 'Unlimited Sessions', 'Unlimited Multi-students', 'Advanced School & Parent Analytics'],
       cta: 'Contact Sales',
