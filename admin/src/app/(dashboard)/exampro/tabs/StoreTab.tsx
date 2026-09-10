@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Plus, Edit2, Trash2, Tag, Zap, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
-import api, { 
+import { 
   fetchExamproStorePacks, createExamproStorePack, updateExamproStorePack, deleteExamproStorePack,
-  fetchExamproPlans, createExamproPlan, updateExamproPlan, deleteExamproPlan
+  fetchExamproSettings, updateExamproSetting
 } from '@/lib/api';
 
 export default function StoreTab() {
@@ -85,7 +85,7 @@ export default function StoreTab() {
 
   const updateSetting = async (id: string, value: string) => {
     try {
-      await api.put(`/admin/settings/${id}`, { value });
+      await updateExamproSetting(id, value);
       toast.success('Setting updated');
       fetchData();
     } catch (err) {
