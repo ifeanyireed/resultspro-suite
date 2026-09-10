@@ -12,6 +12,7 @@ export interface User {
 
 export interface School {
   id: string;
+  type?: string;
   name: string;
   slug: string;
   school_code?: string;

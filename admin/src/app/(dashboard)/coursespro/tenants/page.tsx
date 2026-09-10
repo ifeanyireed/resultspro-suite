@@ -19,6 +19,7 @@ export default function CoursesProTenantManager() {
     slug: '',
     contact_email: '',
     primary_color: '#2563eb',
+    type: 'COURSESPRO',
     enabled_modules: ['coursepro'] // Default module
   });
 
@@ -52,7 +53,7 @@ export default function CoursesProTenantManager() {
     setCreating(false);
     if (ok) {
       setIsModalOpen(false);
-      setNewTenantData({ name: '', slug: '', contact_email: '', primary_color: '#2563eb', enabled_modules: ['coursepro'] });
+      setNewTenantData({ name: '', slug: '', contact_email: '', primary_color: '#2563eb', type: 'COURSESPRO', enabled_modules: ['coursepro'] });
       load();
     } else {
       alert("Failed to create tenant");
@@ -69,10 +70,11 @@ export default function CoursesProTenantManager() {
   };
 
   const filtered = schools.filter((s) => {
+    const matchType = s.type === 'COURSESPRO';
     const matchSearch = s.name.toLowerCase().includes(search.toLowerCase()) || (s.contact_email && s.contact_email.toLowerCase().includes(search.toLowerCase()));
     const matchTier = filterTier === 'ALL' || s.subscription_tier === filterTier;
     const matchStatus = filterStatus === 'ALL' || s.verification_status === filterStatus;
-    return matchSearch && matchTier && matchStatus;
+    return matchType && matchSearch && matchTier && matchStatus;
   });
 
   return (
@@ -128,7 +130,7 @@ export default function CoursesProTenantManager() {
             className="flex items-center gap-2 px-5 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 shadow-sm transition-all text-xs ml-4"
           >
             <Plus className="w-4 h-4" />
-            New Tenant
+            New CoursesPro Tenant
           </button>
         </div>
       </div>
@@ -228,7 +230,7 @@ export default function CoursesProTenantManager() {
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
               <h3 className="font-bold text-slate-800 flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-blue-600" />
-                Provision New Tenant
+                Provision CoursesPro Tenant
               </h3>
               <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
                 <X className="w-5 h-5" />
@@ -236,7 +238,7 @@ export default function CoursesProTenantManager() {
             </div>
             <form onSubmit={handleCreateTenant} className="p-6 space-y-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tenant / School Name</label>
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">CoursesPro Tenant Name</label>
                 <input 
                   type="text" required
                   value={newTenantData.name}

@@ -4,7 +4,7 @@ import "time"
 
 type Tenant struct {
 	ID                    string     `json:"id"`
-	Type                  string     `json:"type"` // SCHOOL, FAMILY, CORPORATE
+	Type                  string     `json:"type"` // SCHOOL, FAMILY, CORPORATE, COURSESPRO
 	Name                  string     `json:"name"`
 	Slug                  string     `json:"slug"`
 	DefaultSubdomain      string     `json:"default_subdomain"` // e.g., oxford.resultspro.ng

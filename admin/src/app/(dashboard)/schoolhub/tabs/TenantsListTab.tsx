@@ -17,6 +17,7 @@ export default function TenantsListTab() {
     slug: '',
     contact_email: '',
     primary_color: '#2563eb',
+    type: 'SCHOOL',
     enabled_modules: ['resultspro'] // Default module
   });
 
@@ -50,7 +51,7 @@ export default function TenantsListTab() {
     setCreating(false);
     if (ok) {
       setIsModalOpen(false);
-      setNewTenantData({ name: '', slug: '', contact_email: '', primary_color: '#2563eb', enabled_modules: ['resultspro'] });
+      setNewTenantData({ name: '', slug: '', contact_email: '', primary_color: '#2563eb', type: 'SCHOOL', enabled_modules: ['resultspro'] });
       load();
     } else {
       alert("Failed to create tenant");
@@ -67,10 +68,11 @@ export default function TenantsListTab() {
   };
 
   const filtered = schools.filter((s) => {
+    const matchType = !s.type || s.type === 'SCHOOL';
     const matchSearch = s.name.toLowerCase().includes(search.toLowerCase()) || (s.contact_email && s.contact_email.toLowerCase().includes(search.toLowerCase()));
     const matchTier = filterTier === 'ALL' || s.subscription_tier === filterTier;
     const matchStatus = filterStatus === 'ALL' || s.verification_status === filterStatus;
-    return matchSearch && matchTier && matchStatus;
+    return matchType && matchSearch && matchTier && matchStatus;
   });
 
   return (

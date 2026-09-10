@@ -36,6 +36,9 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		LGA               string `json:"lga"`
 		AgentID           string `json:"agent_id"` // referred_by_agent_id
 		SubscriptionTier  string `json:"subscription_tier"`
+		Type              string `json:"type"`
+		PrimaryColor      string `json:"primary_color"`
+		EnabledModules    string `json:"enabled_modules"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -60,14 +63,23 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
 
+	tenantType := input.Type
+	if tenantType == "" {
+		tenantType = "SCHOOL"
+	}
+
+	defaultSubdomain := input.Slug + ".resultspro.ng"
+
 	query := `
-		INSERT INTO tenants (id, name, slug, tenant_code, short_name, motto, contact_email, contact_phone, contact_person_name, full_address, state, lga, status, verification_status, referred_by_agent_id, subscription_tier, created_at, updated_at) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', 'PENDING_VERIFICATION', ?, ?, ?, ?)`
+		INSERT INTO tenants (id, type, name, slug, default_subdomain, tenant_code, short_name, motto, contact_email, contact_phone, contact_person_name, full_address, state, lga, primary_color, enabled_modules, status, verification_status, referred_by_agent_id, subscription_tier, created_at, updated_at) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', 'PENDING_VERIFICATION', ?, ?, ?, ?)`
 
 	_, err := db.DB.Exec(query,
 		tenantID,
+		tenantType,
 		input.Name,
 		input.Slug,
+		defaultSubdomain,
 		sql.NullString{String: input.TenantCode, Valid: input.TenantCode != ""},
 		sql.NullString{String: input.ShortName, Valid: input.ShortName != ""},
 		sql.NullString{String: input.Motto, Valid: input.Motto != ""},
@@ -77,6 +89,8 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		sql.NullString{String: input.FullAddress, Valid: input.FullAddress != ""},
 		sql.NullString{String: input.State, Valid: input.State != ""},
 		sql.NullString{String: input.LGA, Valid: input.LGA != ""},
+		sql.NullString{String: input.PrimaryColor, Valid: input.PrimaryColor != ""},
+		sql.NullString{String: input.EnabledModules, Valid: input.EnabledModules != ""},
 		sql.NullString{String: input.AgentID, Valid: input.AgentID != ""},
 		tier,
 		now,
@@ -460,7 +474,7 @@ func HandleUpdateTenantBranding(w http.ResponseWriter, r *http.Request) {
 
 // HandleListTenants returns a paginated/filtered list of tenants
 func HandleListTenants(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.DB.Query("SELECT id, name, slug, status, verification_status, state, lga, subscription_tier, created_at FROM tenants ORDER BY created_at DESC LIMIT 200")
+	rows, err := db.DB.Query("SELECT id, type, name, slug, status, verification_status, state, lga, subscription_tier, created_at FROM tenants ORDER BY created_at DESC LIMIT 200")
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
 		return
@@ -469,6 +483,7 @@ func HandleListTenants(w http.ResponseWriter, r *http.Request) {
 
 	type TenantSummary struct {
 		ID                 string    `json:"id"`
+		Type               string    `json:"type"`
 		Name               string    `json:"name"`
 		Slug               string    `json:"slug"`
 		Status             string    `json:"status"`
@@ -482,8 +497,11 @@ func HandleListTenants(w http.ResponseWriter, r *http.Request) {
 	tenants := []TenantSummary{}
 	for rows.Next() {
 		var s TenantSummary
-		var state, lga, tier sql.NullString
-		if err := rows.Scan(&s.ID, &s.Name, &s.Slug, &s.Status, &s.VerificationStatus, &state, &lga, &tier, &s.CreatedAt); err == nil {
+		var state, lga, tier, tenantType sql.NullString
+		if err := rows.Scan(&s.ID, &tenantType, &s.Name, &s.Slug, &s.Status, &s.VerificationStatus, &state, &lga, &tier, &s.CreatedAt); err == nil {
+			if tenantType.Valid {
+				s.Type = tenantType.String
+			}
 			if state.Valid {
 				s.State = state.String
 			}
