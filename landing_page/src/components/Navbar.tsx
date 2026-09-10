@@ -19,13 +19,10 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: 'SchoolHub', path: '/schoolhub' },
-    { name: 'ExamsPRO', path: '/examspro' },
-    { name: 'ClassroomPRO', path: '/classroompro' },
-    { name: 'ResultsPRO', path: '/resultspro' },
-    { name: 'TutorsPRO', path: '/tutorspro' },
-    { name: 'CoursesPRO', path: '/coursespro' },
-    { name: 'PuzzlePRO', path: '/puzzlepro' },
+    { name: 'About', path: '/about' },
+    { name: 'Contact', path: '/contact' },
+    { name: 'Pricing', path: '/pricing' },
+    { name: 'Products', path: '/products' },
   ];
 
   if (isOnboarding) return null;

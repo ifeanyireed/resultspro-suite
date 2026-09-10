@@ -358,6 +358,39 @@ func processSuccessfulPayment(reference string, metadata struct {
 			return err
 		}
 
+		// Handle Referral Conversion
+		var referral models.Referral
+		// If this user was referred, and the referral is still 'pending'
+		if err := tx.Where("referee_id = ? AND status = ?", purchase.UserID, "pending").First(&referral).Error; err == nil {
+			// Convert the referral!
+			rewardCoins := 50
+
+			// 1. Update the referral status and coins_awarded
+			if err := tx.Model(&referral).Updates(map[string]interface{}{
+				"status":        "converted",
+				"coins_awarded": rewardCoins,
+			}).Error; err != nil {
+				log.Printf("Failed to update referral: %v", err)
+			}
+
+			// 2. Award coins to the referrer
+			if err := tx.Model(&models.User{}).Where("id = ?", referral.ReferrerID).
+				Update("coin_balance", gorm.Expr("coin_balance + ?", rewardCoins)).Error; err == nil {
+				
+				// 3. Create a coin transaction for the referrer
+				desc := "Referral Bonus"
+				refTx := models.CoinTransaction{
+					ID:          uuid.New().String(),
+					UserID:      referral.ReferrerID,
+					Amount:      rewardCoins,
+					Type:        "REFERRAL_BONUS",
+					Description: &desc,
+					ReferenceID: &referral.ID,
+				}
+				tx.Create(&refTx)
+			}
+		}
+
 		return nil
 	})
 	if err != nil {
