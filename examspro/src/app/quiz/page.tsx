@@ -6,10 +6,25 @@ import { Button } from '@/components/ui/button';
 import { IconClock as Timer, IconCoins as Coins, IconChevronRight as ChevronRight, IconX as X, IconAlertCircle as AlertCircle, IconCircleCheck as CheckCircle2, IconBrain as Brain, IconLoader2 as Loader2, IconCheck as Check, IconBolt as Zap, IconSword as Sword } from '@tabler/icons-react';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
+import 'katex/dist/katex.min.css';
+// @ts-ignore
+import { InlineMath } from 'react-katex';
 import api from '@/lib/api';
 
 function QuizContent() {
   const searchParams = useSearchParams();
+  
+  const renderTextWithMath = (text: string) => {
+    if (!text) return null;
+    const parts = text.split(/(\\(.*?\\))/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('\(') && part.endsWith('\)')) {
+        const math = part.slice(2, -2);
+        return <InlineMath key={i} math={math} />;
+      }
+      return <span key={i}>{part}</span>;
+    });
+  };
   const router = useRouter();
   const topicId = searchParams.get('topicId');
   const subjectId = searchParams.get('subjectId');
@@ -530,7 +545,7 @@ function QuizContent() {
           <div className="flex justify-center gap-4 pt-12">
             <Button 
                onClick={() => router.push('/dashboard')}
-               className="px-12 py-6 rounded-2xl bg-gradient-to-r from-[#146ef5] to-red-500 text-white hover:scale-105 shadow-md font-bold text-lg"
+               className="px-12 py-6 rounded-2xl bg-[#146ef5] text-white hover:bg-blue-600 hover:scale-105 shadow-md font-bold text-lg"
             >
               Back to Dashboard
             </Button>
@@ -612,7 +627,7 @@ function QuizContent() {
         {/* Question Area */}
         <div className="mb-12">
           <h2 className="text-2xl md:text-3xl font-display font-bold leading-tight mb-8">
-            {question.bodyText}
+            {renderTextWithMath(question.bodyText)}
           </h2>
           
           {question.bodyImageUrl && (
@@ -675,7 +690,7 @@ function QuizContent() {
                       {String.fromCharCode(65 + opt.orderIndex)}
                     </div>
                     <span className={`flex-1 font-medium ${isUserSelected || (isActuallyCorrect && quizMode === 'study') ? 'text-gray-900' : 'text-gray-500'}`}>
-                      {opt.optionText}
+                      {renderTextWithMath(opt.optionText)}
                       {hiddenOptionIds.includes(opt.id) && <span className="ml-2 text-xs opacity-50 italic">(Eliminated)</span>}
                     </span>
                     
@@ -728,14 +743,14 @@ function QuizContent() {
               <Button
                 disabled={(questionType === 'mcq' ? selectedOption === null : !theoryAnswer.trim()) || isAnswered}
                 onClick={handleVerify}
-                className="w-full md:px-12 py-6 text-lg font-bold bg-gradient-to-r from-[#146ef5] to-red-500 text-white hover:scale-105 shadow-md rounded-xl"
+                className="w-full md:px-12 py-6 text-lg font-bold bg-[#146ef5] text-white hover:bg-blue-600 hover:scale-105 shadow-md rounded-xl"
               >
                 {isAnswered ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : (quizMode === 'exam' ? "Save & Next" : "Verify Answer")}
               </Button>
             ) : (
               <Button
                 onClick={handleContinue}
-                className="w-full md:px-12 py-6 text-lg font-bold bg-gradient-to-r from-[#146ef5] to-red-500 text-white hover:scale-105 shadow-md rounded-xl flex gap-2 justify-center"
+                className="w-full md:px-12 py-6 text-lg font-bold bg-[#146ef5] text-white hover:bg-blue-600 hover:scale-105 shadow-md rounded-xl flex gap-2 justify-center"
               >
                 Continue
                 <ChevronRight className="w-5 h-5" />

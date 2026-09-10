@@ -1,11 +1,13 @@
 package utils
 
 import (
+	"context"
 	"fmt"
-	"io"
 	"mime/multipart"
 	"os"
-	"path/filepath"
+
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
 
 func UploadFile(file multipart.File, header *multipart.FileHeader, folder string) (string, error) {
@@ -13,25 +15,23 @@ func UploadFile(file multipart.File, header *multipart.FileHeader, folder string
 		folder = "uploads"
 	}
 
-	uploadDir := filepath.Join(".", folder)
-	if err := os.MkdirAll(uploadDir, os.ModePerm); err != nil {
-		return "", fmt.Errorf("failed to create upload directory: %v", err)
+	cloudinaryURL := os.Getenv("CLOUDINARY_URL")
+	if cloudinaryURL == "" {
+		cloudinaryURL = "cloudinary://914619779136733:Ke9yYpcXrl0uD0_7GhVj76elkx0@qsdwzejd"
 	}
 
-	filename := header.Filename
-	filePath := filepath.Join(uploadDir, filename)
-
-	out, err := os.Create(filePath)
+	cld, err := cloudinary.NewFromURL(cloudinaryURL)
 	if err != nil {
-		return "", fmt.Errorf("failed to create file: %v", err)
-	}
-	defer out.Close()
-
-	if _, err := io.Copy(out, file); err != nil {
-		return "", fmt.Errorf("failed to save file: %v", err)
+		return "", fmt.Errorf("failed to initialize cloudinary: %v", err)
 	}
 
-	// Return a relative URL
-	url := fmt.Sprintf("/%s/%s", folder, filename)
-	return url, nil
+	ctx := context.Background()
+	resp, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{
+		Folder: folder,
+	})
+	if err != nil {
+		return "", fmt.Errorf("cloudinary upload error: %v", err)
+	}
+
+	return resp.SecureURL, nil
 }

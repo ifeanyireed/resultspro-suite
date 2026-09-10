@@ -1,4 +1,11 @@
 import { NextResponse } from 'next/server';
+import { v2 as cloudinary } from 'cloudinary';
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'qsdwzejd',
+  api_key: process.env.CLOUDINARY_API_KEY || '914619779136733',
+  api_secret: process.env.CLOUDINARY_API_SECRET || 'Ke9yYpcXrl0uD0_7GhVj76elkx0',
+});
 
 export async function POST(request: Request) {
   try {
@@ -10,32 +17,24 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    // Forward to CDN
-    const cdnUrl = process.env.CDN_URL || 'https://cdn.resultspro.ng';
-    const cdnSecret = process.env.CDN_SECRET || 'cdn_sec_resultspro_9921_xya'; // fallback for local dev if missing
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    const cdnFormData = new FormData();
-    cdnFormData.append('file', file);
-    if (targetPath) {
-      cdnFormData.append('target_path', targetPath);
-    }
-
-    const cdnResponse = await fetch(`${cdnUrl}/upload.php`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${cdnSecret}`,
-      },
-      body: cdnFormData as any, // FormData from next/server works perfectly here
+    const uploadResult = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: targetPath || 'uploads' },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(buffer);
     });
 
-    if (!cdnResponse.ok) {
-      const errorText = await cdnResponse.text();
-      console.error('CDN Error:', errorText);
-      return NextResponse.json({ error: 'CDN Upload failed' }, { status: 500 });
-    }
-
-    const data = await cdnResponse.json();
-    return NextResponse.json(data);
+    return NextResponse.json({
+      url: (uploadResult as any).secure_url,
+      path: (uploadResult as any).public_id
+    });
   } catch (error) {
     console.error('Upload API Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
