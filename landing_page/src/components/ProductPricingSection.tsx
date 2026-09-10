@@ -143,7 +143,7 @@ export default function ProductPricingSection() {
 
   return (
     <section className="section section-white pt-12 md:pt-16 pb-24 md:pb-32 bg-gray-50">
-      <div className="container">
+      <div className="w-full px-4 md:px-8 mx-auto">
         <ScrollReveal animation="fade-up">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-nets-navy)] mb-4">Single Product Plans</h2>

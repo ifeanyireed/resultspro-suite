@@ -36,7 +36,8 @@
   flex-direction: row;
   justify-content: center;
   gap: 2rem;
-  max-width: 1200px;
+  max-width: 100%;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -96,7 +97,7 @@
 
 .planHeader {
   margin-bottom: 2rem;
-  text-align: left;
+  text-align: center;
 }
 
 .planName {
@@ -139,7 +140,9 @@
 
 .featureItem {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 12px;
   font-size: 0.875rem;
   color: #475569;

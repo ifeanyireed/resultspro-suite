@@ -109,7 +109,7 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
 
   return (
     <section className="section section-white pt-24 md:pt-32 pb-24 md:pb-32">
-      <div className="container">
+      <div className="w-full px-4 md:px-8 mx-auto">
         <ScrollReveal animation="fade-up">
 
           <div className={styles.tabs}>
