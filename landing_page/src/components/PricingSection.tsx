@@ -13,7 +13,7 @@ const plans = {
       name: 'FREE',
       price: '₦0',
       period: 'forever',
-      features: ['Up to 100 Students & 15 Teachers', 'ResultsPRO (Basic)', 'ExamsPRO (Free)', '2GB Storage'],
+      features: ['Up to 100 Students & 15 Teachers', 'SchoolHub Mobile Apps', 'ResultsPRO (Basic)', 'ExamsPRO (Free)', '2GB Storage'],
       cta: 'Get Started Free',
       highlight: false
     },
@@ -21,7 +21,7 @@ const plans = {
       name: 'STARTER',
       price: '₦15,000',
       period: 'per month',
-      features: ['Up to 500 Students & 50 Teachers', 'ResultsPRO (Full)', 'ExamsPRO (Standard CBT)', '15GB Storage'],
+      features: ['Up to 500 Students & 50 Teachers', 'SchoolHub Mobile Apps', 'ResultsPRO (Full)', 'ExamsPRO (Standard CBT)', '15GB Storage'],
       cta: 'Start with Starter',
       highlight: false
     },
@@ -29,7 +29,7 @@ const plans = {
       name: 'PRO',
       price: '₦35,000',
       period: 'per month',
-      features: ['Up to 2,000 Students & 300 Teachers', 'ResultsPRO & ExamsPRO', 'TutorsPRO Integration', '50GB Storage'],
+      features: ['Up to 2,000 Students & 300 Teachers', 'SchoolHub Mobile Apps', 'ResultsPRO & ExamsPRO', 'TutorsPRO Integration', '50GB Storage'],
       cta: 'Upgrade to Pro',
       highlight: true
     },
@@ -37,7 +37,7 @@ const plans = {
       name: 'ENTERPRISE',
       price: '₦80,000',
       period: 'per month',
-      features: ['Unlimited Students & Teachers', 'Access to All Suite Products', 'Custom Domain & White-labeling', '500GB Storage'],
+      features: ['Unlimited Students & Teachers', 'SchoolHub Mobile Apps', 'ResultsPRO & ExamsPRO', 'Access to All Suite Products', 'Custom Domain & White-labeling', '500GB Storage'],
       cta: 'Contact Sales',
       highlight: false
     }
