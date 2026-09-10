@@ -11,7 +11,7 @@ export default function ReferralsTab() {
 
   // Form states
   const [coinReward, setCoinReward] = useState('50');
-  const [fiatReward, setFiatReward] = useState('2000');
+  const [fiatPercent, setFiatPercent] = useState('10');
   const [savingSettings, setSavingSettings] = useState(false);
 
   useEffect(() => {
@@ -30,9 +30,9 @@ export default function ReferralsTab() {
       setPayouts(payoutsRes || []);
 
       const coinSet = settingsRes?.find((s: any) => s.id === 'referral_coin_reward');
-      const fiatSet = settingsRes?.find((s: any) => s.id === 'referral_fiat_reward');
+      const fiatSet = settingsRes?.find((s: any) => s.id === 'referral_fiat_percent');
       if (coinSet) setCoinReward(coinSet.value);
-      if (fiatSet) setFiatReward(fiatSet.value);
+      if (fiatSet) setFiatPercent(fiatSet.value);
 
     } catch (err: any) {
       toast.error('Failed to load referral data');
@@ -45,7 +45,7 @@ export default function ReferralsTab() {
     try {
       setSavingSettings(true);
       await updateExamproSetting('referral_coin_reward', coinReward);
-      await updateExamproSetting('referral_fiat_reward', fiatReward);
+      await updateExamproSetting('referral_fiat_percent', fiatPercent);
       toast.success('Referral settings updated!');
       fetchData();
     } catch (err) {
@@ -89,14 +89,14 @@ export default function ReferralsTab() {
               <p className="text-xs text-gray-500 mt-1">Amount of coins to give the referrer.</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Fiat Discount / Cash (₦)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Referral Cash Reward (%)</label>
               <input 
                 type="number" 
-                value={fiatReward} 
-                onChange={e => setFiatReward(e.target.value)}
+                value={fiatPercent} 
+                onChange={e => setFiatPercent(e.target.value)}
                 className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#146ef5]"
               />
-              <p className="text-xs text-gray-500 mt-1">Cash amount (in Naira) added to referrer's wallet.</p>
+              <p className="text-xs text-gray-500 mt-1">Percentage of the first purchased plan price added to referrer's wallet.</p>
             </div>
             <button 
               onClick={handleSaveSettings} 

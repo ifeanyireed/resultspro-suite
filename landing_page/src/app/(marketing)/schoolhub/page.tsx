@@ -1,3 +1,4 @@
+import HeroAnimationWrapper from '@/components/HeroAnimationWrapper';
 import PricingSection from '@/components/PricingSection';
 import Link from 'next/link';
 import { 
@@ -52,6 +53,7 @@ export default function SchoolHubPage() {
         <div className="absolute top-0 right-0 w-[50%] h-[100%] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
         
         <div className="container-nets relative z-10">
+          <HeroAnimationWrapper>
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-sm fw-600 mb-6 backdrop-blur-sm text-blue-300">
               <IconSchool size={16} />
@@ -73,6 +75,7 @@ export default function SchoolHubPage() {
               </Link>
             </div>
           </div>
+          </HeroAnimationWrapper>
         </div>
       </section>
 

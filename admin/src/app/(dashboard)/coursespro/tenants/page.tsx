@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { Badge } from '@/components/Badge';
 import { Building2, Search, Filter, ExternalLink, Plus, X } from 'lucide-react';

@@ -365,15 +365,16 @@ func processSuccessfulPayment(reference string, metadata struct {
 			
 			// Fetch Referral Settings
 			var coinRewardSetting models.SystemSetting
-			var fiatRewardSetting models.SystemSetting
+			var fiatPercentSetting models.SystemSetting
 			rewardCoins := 50
-			rewardFiat := 0
+			fiatPercent := 10
 			if tx.Where("id = ?", "referral_coin_reward").First(&coinRewardSetting).Error == nil {
 				fmt.Sscanf(coinRewardSetting.Value, "%d", &rewardCoins)
 			}
-			if tx.Where("id = ?", "referral_fiat_reward").First(&fiatRewardSetting).Error == nil {
-				fmt.Sscanf(fiatRewardSetting.Value, "%d", &rewardFiat)
+			if tx.Where("id = ?", "referral_fiat_percent").First(&fiatPercentSetting).Error == nil {
+				fmt.Sscanf(fiatPercentSetting.Value, "%d", &fiatPercent)
 			}
+			rewardFiat := (purchase.AmountNgn * fiatPercent) / 100
 
 			// 1. Update the referral status, coins_awarded and fiat_awarded
 			if err := tx.Model(&referral).Updates(map[string]interface{}{
