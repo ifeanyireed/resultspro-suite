@@ -9,6 +9,7 @@ import (
 
 	"exams-resultspro-backend/internal/database"
 	"exams-resultspro-backend/internal/models"
+	"exams-resultspro-backend/internal/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -504,3 +505,4 @@ func (h *UserHandler) GetAnalytics(c *gin.Context) {
 		},
 	})
 }
+

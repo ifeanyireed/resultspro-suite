@@ -8,23 +8,17 @@ import (
 	"path/filepath"
 )
 
-func UploadFile(file *multipart.FileHeader, folder string) (string, error) {
+func UploadFile(file multipart.File, header *multipart.FileHeader, folder string) (string, error) {
 	if folder == "" {
 		folder = "uploads"
 	}
-
-	f, err := file.Open()
-	if err != nil {
-		return "", fmt.Errorf("failed to open file: %v", err)
-	}
-	defer f.Close()
 
 	uploadDir := filepath.Join(".", folder)
 	if err := os.MkdirAll(uploadDir, os.ModePerm); err != nil {
 		return "", fmt.Errorf("failed to create upload directory: %v", err)
 	}
 
-	filename := file.Filename
+	filename := header.Filename
 	filePath := filepath.Join(uploadDir, filename)
 
 	out, err := os.Create(filePath)
@@ -33,7 +27,7 @@ func UploadFile(file *multipart.FileHeader, folder string) (string, error) {
 	}
 	defer out.Close()
 
-	if _, err := io.Copy(out, f); err != nil {
+	if _, err := io.Copy(out, file); err != nil {
 		return "", fmt.Errorf("failed to save file: %v", err)
 	}
 

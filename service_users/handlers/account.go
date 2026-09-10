@@ -11,6 +11,7 @@ import (
 	"github.com/google/uuid"
 	"service_users.resultspro.ng/db"
 	"service_users.resultspro.ng/utils"
+	"service_users.resultspro.ng/models"
 )
 
 func HandleVerifyEmail(w http.ResponseWriter, r *http.Request) {
@@ -389,4 +390,53 @@ func HandleChangeEmail(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Email updated. A verification code has been sent to your new email."})
+}
+
+func HandleUploadAvatar(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+		userID, err := utils.GetUserIDFromRequest(r)
+	if err != nil {
+		utils.JSONError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	err = r.ParseMultipartForm(10 << 20) // 10 MB
+	if err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "File too large")
+		return
+	}
+
+	file, header, err := r.FormFile("avatar")
+	if err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "No avatar file provided")
+		return
+	}
+	defer file.Close()
+
+	url, err := utils.UploadFile(file, header, "uploads/avatars")
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to upload avatar")
+		return
+	}
+
+	var user models.User
+	if err := db.GormDB.Where("id = ?", userID).First(&user).Error; err != nil {
+		utils.JSONError(w, http.StatusNotFound, "User not found")
+		return
+	}
+
+	user.AvatarURL = &url
+	if err := db.GormDB.Save(&user).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to update user avatar")
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"message": "Avatar uploaded successfully",
+		"avatarUrl": url,
+	})
 }
