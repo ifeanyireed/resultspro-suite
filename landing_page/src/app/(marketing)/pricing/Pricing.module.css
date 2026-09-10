@@ -27,7 +27,7 @@
 
 .tab.active {
   background: white;
-  color: var(--color-sky-blue);
+  color: #146ef5;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
@@ -44,45 +44,49 @@
   flex: 1;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 1rem;
-  padding: 2rem;
+  border-radius: 1.5rem;
+  padding: 2.5rem 2rem;
   display: flex;
   flex-direction: column;
   position: relative;
   transition: all 0.3s ease;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15);
   border-color: #cbd5e1;
 }
 
 .card.highlight {
-  border-color: var(--color-sky-blue);
-  box-shadow: 0 1px 3px 0 rgba(20, 110, 245, 0.1), 0 1px 2px -1px rgba(20, 110, 245, 0.1);
+  border: 2px solid #146ef5;
+  box-shadow: 0 20px 40px -10px rgba(20, 110, 245, 0.15);
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  transform: scale(1.03);
+  z-index: 10;
 }
 
 .card.highlight:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 25px 50px -12px rgba(20, 110, 245, 0.25);
-  border-color: var(--color-sky-blue);
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 35px 60px -15px rgba(20, 110, 245, 0.25);
+  border-color: #146ef5;
 }
 
 .badge {
   position: absolute;
-  top: -12px;
-  right: 2rem;
-  background: var(--color-sky-blue);
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #146ef5;
   color: white;
-  padding: 4px 12px;
+  padding: 6px 16px;
   border-radius: 100px;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  box-shadow: 0 2px 4px rgba(20, 110, 245, 0.3);
+  letter-spacing: 0.15em;
+  box-shadow: 0 4px 12px rgba(20, 110, 245, 0.4);
 }
 
 .planHeader {
@@ -98,15 +102,16 @@
 }
 
 .card.highlight .planName {
-  color: var(--color-sky-blue);
+  color: #146ef5;
 }
 
 .planPrice {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 800;
   color: #0f172a;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  margin-top: 0.5rem;
 }
 
 .period {
@@ -131,13 +136,13 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   color: #475569;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .check {
-  color: var(--color-sky-blue);
+  color: #146ef5;
   flex-shrink: 0;
   margin-top: 2px;
 }

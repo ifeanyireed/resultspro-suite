@@ -1,5 +1,4 @@
 import HeroAnimationWrapper from '@/components/HeroAnimationWrapper';
-import PricingSection from '@/components/PricingSection';
 import Link from 'next/link';
 import { 
   IconTrophy, 
@@ -49,7 +48,7 @@ export default function ExamsProPage() {
         <div className="container-nets relative z-10">
           <HeroAnimationWrapper>
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-sm fw-600 mb-6 backdrop-blur-sm text-purple-300">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-sm fw-600 mb-6 backdrop-blur-sm text-blue-300">
               <IconTrophy size={16} />
               <span>ResultsPro ExamsPRO</span>
             </div>
@@ -133,9 +132,6 @@ export default function ExamsProPage() {
           </div>
         </div>
       </section>
-
-      {/* Pricing Section */}
-      <PricingSection />
 
       {/* CTA Section */}
       <section className="py-24 bg-navy text-white relative overflow-hidden" style={{ background: 'var(--color-nets-navy-dark)' }}>

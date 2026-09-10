@@ -108,7 +108,7 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
   const [activeTab, setActiveTab] = useState(initialTab);
 
   return (
-    <section className="section section-white">
+    <section className="section section-white pb-24 md:pb-32">
       <div className="container">
         <ScrollReveal animation="fade-up">
           <div className="text-center mb-12">
