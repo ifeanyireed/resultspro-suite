@@ -96,7 +96,9 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                 </button>
               </div>
 
-                            {/* Card 2: Main Prose Content */}
+                            {/* Main Content Column */}
+              <div className="flex-1 flex flex-col w-full min-w-0">
+                {/* Card 2: Main Prose Content */}
               <div className="bg-white shadow-xl w-full p-8 md:p-16 mb-8">
                 <div 
                   className="prose prose-lg prose-nets max-w-none"
@@ -236,6 +238,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                     </div>
                   </div>
                 </div>
+              </div>
               </div>
             </div>
           </ScrollReveal>
