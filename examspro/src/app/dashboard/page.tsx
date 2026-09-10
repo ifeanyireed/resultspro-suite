@@ -192,7 +192,7 @@ export default function Dashboard() {
           >
             <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
               {Array.isArray(data.subjects) && data.subjects.length > 0 ? data.subjects.map((sub) => (
-                <div key={sub.id} className="min-w-[240px] p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#146ef5]/30 transition-all cursor-pointer group shrink-0">
+                <Link key={sub.id} href={`/practice/${sub.examSlug || 'general'}/${sub.slug || sub.id}`} className="min-w-[240px] p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#146ef5]/30 hover:shadow-sm transition-all cursor-pointer group shrink-0 block">
                   <div className="flex justify-between items-start mb-4">
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-sm text-${sub.color}-500`}>
                       <IconBook className="w-5 h-5" />
@@ -208,7 +208,7 @@ export default function Dashboard() {
                     </div>
                     <span className="text-xs font-bold text-gray-700">{sub.progress}%</span>
                   </div>
-                </div>
+                </Link>
               )) : (
                 <div className="w-full py-8 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                   <p className="text-gray-500 font-medium mb-3">Select a Subject and Start Practicing</p>

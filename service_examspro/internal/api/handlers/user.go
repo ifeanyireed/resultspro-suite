@@ -245,7 +245,7 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 
 	if len(practicedSubjectIDs) > 0 {
 		var subjects []models.Subject
-		database.DB.Where("id IN ?", practicedSubjectIDs).Find(&subjects)
+		database.DB.Preload("Exam").Where("id IN ?", practicedSubjectIDs).Find(&subjects)
 
 		for _, sub := range subjects {
 			practicedExamsMap[sub.ExamID] = true
@@ -268,8 +268,16 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 				progress = int((float64(correctAnswers) / float64(totalQuestions)) * 100)
 			}
 
+			
+			var examSlug string
+			if sub.Exam != nil {
+				examSlug = sub.Exam.Slug
+			}
+			
 			subjectStats = append(subjectStats, gin.H{
 				"id":        sub.ID,
+				"slug":      sub.Slug,
+				"examSlug":  examSlug,
 				"name":      sub.Name,
 				"progress":  progress,
 				"color":     sub.Color,
