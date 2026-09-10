@@ -24,13 +24,12 @@ export default async function BlogPage() {
 
   return (
     <main className="min-h-screen bg-light" style={{ background: 'var(--color-nets-light)' }}>
-      {/* Blog Hero */}
       <section className="bg-navy text-white" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '6rem' }}>
         <div className="container-nets">
           <div className="max-w-3xl">
             <div className="overline-dark" style={{ marginBottom: '1.5rem' }}>Our Blog</div>
             <h1 className="fw-300" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
-              Insights, Updates <br/>& <span style={{ fontWeight: 700 }}>Transformations.</span>
+              Insights, Updates <br />&amp; <span style={{ fontWeight: 700 }}>Transformations.</span>
             </h1>
             <p className="text-body-lg text-white/70">
               Read the latest news from the ResultsPRO suite, deep-dives into educational technology, and success stories from our partner schools.
@@ -39,52 +38,53 @@ export default async function BlogPage() {
         </div>
       </section>
 
-      {/* Blog Grid */}
-            <section className="section-py">
+      <section className="section-py">
         <div className="container-nets">
           {posts.length === 0 ? (
             <div className="text-center text-muted py-12">No blog posts found.</div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.map((post: any) => (
-                <article key={post.id} className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-nets-border">
-                  <div className="relative h-48 overflow-hidden bg-nets-light">
-                    <img 
-                      src={post.cover_image || '/photo13.jpeg'} 
-                      alt={post.title} 
-                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-white/90 backdrop-blur-sm text-navy text-xs fw-600 px-3 py-1 rounded-sm">
-                        {/* If category name exists in response, otherwise fallback */}
-                        {post.category || 'Blog'}
-                      </span>
+              {posts.map((post: any) => {
+                return (
+                  <article key={post.id} className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-nets-border">
+                    <div className="relative h-48 overflow-hidden bg-nets-light">
+                      <img 
+                        src={post.cover_image || '/photo13.jpeg'} 
+                        alt={post.title} 
+                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                      />
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-white/90 backdrop-blur-sm text-navy text-xs fw-600 px-3 py-1 rounded-sm">
+                          {post.category || 'Blog'}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className="p-6 flex flex-col flex-1">
-                    <div className="flex items-center justify-between text-xs text-muted mb-3">
-                      <span>{new Date(post.published_at || post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                      <span>ResultsPRO</span>
-                    </div>
-                    <h2 className="text-xl fw-600 mb-3 text-navy leading-tight line-clamp-2">
-                      {post.title}
-                    </h2>
-                    <p className="text-sm text-muted mb-6 flex-1 line-clamp-3">
-                      {post.excerpt}
-                    </p>
                     
-                    <div className="mt-auto pt-4 border-t border-nets-border">
-                      <Link href={`/blog/${post.slug}`} className="flex items-center gap-2 text-sm fw-600 text-red hover:opacity-80 transition-opacity" style={{ color: 'var(--color-nets-red)' }}>
-                        Read Article <IconArrowRight size={16} />
-                      </Link>
+                    <div className="p-6 flex flex-col flex-1">
+                      <div className="flex items-center justify-between text-xs text-muted mb-3">
+                        <span>
+                          {new Date(post.published_at || post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </span>
+                        <span>ResultsPRO</span>
+                      </div>
+                      <h2 className="text-xl fw-600 mb-3 text-navy leading-tight line-clamp-2">
+                        {post.title}
+                      </h2>
+                      <p className="text-sm text-muted mb-6 flex-1 line-clamp-3">
+                        {post.excerpt}
+                      </p>
+                      
+                      <div className="mt-auto pt-4 border-t border-nets-border">
+                        <Link href={`/blog/${post.slug}`} className="flex items-center gap-2 text-sm fw-600 text-red hover:opacity-80 transition-opacity" style={{ color: 'var(--color-nets-red)' }}>
+                          Read Article <IconArrowRight size={16} />
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                );
+              })}
             </div>
           )}
-
 
           <div className="mt-16 text-center">
             <button className="btn btn-outline-navy">
