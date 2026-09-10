@@ -120,14 +120,16 @@ func HandleGetTenant(w http.ResponseWriter, r *http.Request) {
 	var tenantCode, shortName, motto, logoURL, logoEmoji, primaryColor, secondaryColor, accentColor sql.NullString
 	var contactEmail, contactPhone, contactPerson, fullAddress, state, lga, agentID, subTier, subExpires, settings sql.NullString
 
+	var tenantType, enabledModules sql.NullString
+
 	query := `
-		SELECT id, name, slug, tenant_code, short_name, motto, logo_url, logo_emoji, primary_color, secondary_color, accent_color, contact_email, contact_phone, contact_person_name, full_address, state, lga, status, verification_status, referred_by_agent_id, subscription_tier, subscription_expires_at, settings, created_at, updated_at 
+		SELECT id, type, name, slug, tenant_code, short_name, motto, logo_url, logo_emoji, primary_color, secondary_color, accent_color, contact_email, contact_phone, contact_person_name, full_address, state, lga, status, verification_status, referred_by_agent_id, subscription_tier, subscription_expires_at, enabled_modules, settings, created_at, updated_at 
 		FROM tenants WHERE id = ? OR slug = ?`
 
 	err := db.DB.QueryRow(query, identifier, identifier).Scan(
-		&s.ID, &s.Name, &s.Slug, &tenantCode, &shortName, &motto, &logoURL, &logoEmoji, &primaryColor, &secondaryColor, &accentColor,
+		&s.ID, &tenantType, &s.Name, &s.Slug, &tenantCode, &shortName, &motto, &logoURL, &logoEmoji, &primaryColor, &secondaryColor, &accentColor,
 		&contactEmail, &contactPhone, &contactPerson, &fullAddress, &state, &lga, &s.Status, &s.VerificationStatus, &agentID,
-		&subTier, &subExpires, &settings, &s.CreatedAt, &s.UpdatedAt,
+		&subTier, &subExpires, &enabledModules, &settings, &s.CreatedAt, &s.UpdatedAt,
 	)
 
 	if err == sql.ErrNoRows {
@@ -185,6 +187,12 @@ func HandleGetTenant(w http.ResponseWriter, r *http.Request) {
 	}
 	if subTier.Valid {
 		s.SubscriptionTier = subTier.String
+	}
+	if tenantType.Valid {
+		s.Type = tenantType.String
+	}
+	if enabledModules.Valid {
+		s.EnabledModules = enabledModules.String
 	}
 	if settings.Valid {
 		s.Settings = settings.String
@@ -646,14 +654,14 @@ func HandleResolveTenant(w http.ResponseWriter, r *http.Request) {
 
 	var t models.Tenant
 	var tenantCode, shortName, motto, logoURL, logoEmoji, primaryColor, secondaryColor, accentColor sql.NullString
-	var enabledModules, settings sql.NullString
+	var tenantType, enabledModules, settings sql.NullString
 
 	query := `
-		SELECT id, name, slug, default_subdomain, custom_domain, tenant_code, short_name, motto, logo_url, logo_emoji, primary_color, secondary_color, accent_color, enabled_modules, settings 
+		SELECT id, type, name, slug, default_subdomain, custom_domain, tenant_code, short_name, motto, logo_url, logo_emoji, primary_color, secondary_color, accent_color, enabled_modules, settings 
 		FROM tenants WHERE default_subdomain = ? OR custom_domain = ?`
 
 	err := db.DB.QueryRow(query, domain, domain).Scan(
-		&t.ID, &t.Name, &t.Slug, &t.DefaultSubdomain, &t.CustomDomain, &tenantCode, &shortName, &motto, &logoURL, &logoEmoji, &primaryColor, &secondaryColor, &accentColor,
+		&t.ID, &tenantType, &t.Name, &t.Slug, &t.DefaultSubdomain, &t.CustomDomain, &tenantCode, &shortName, &motto, &logoURL, &logoEmoji, &primaryColor, &secondaryColor, &accentColor,
 		&enabledModules, &settings,
 	)
 
@@ -666,6 +674,7 @@ func HandleResolveTenant(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if tenantCode.Valid { t.TenantCode = tenantCode.String }
+	if tenantType.Valid { t.Type = tenantType.String }
 	if shortName.Valid { t.ShortName = shortName.String }
 	if motto.Valid { t.Motto = motto.String }
 	if logoURL.Valid { t.LogoURL = logoURL.String }
