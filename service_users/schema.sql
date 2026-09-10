@@ -377,14 +377,20 @@ CREATE TABLE IF NOT EXISTS payout_requests (
 CREATE TABLE IF NOT EXISTS plans (
     id VARCHAR(191) PRIMARY KEY,
     name VARCHAR(191) NOT NULL, -- Free, Pro, Enterprise
+    app_module VARCHAR(191) DEFAULT 'SchoolHub', -- SchoolHub, Family, Agent, ExamsPRO
+    category VARCHAR(191) DEFAULT 'School', -- For landing page grouping
     monthly_price FLOAT DEFAULT 0.0,
     annual_price FLOAT DEFAULT 0.0,
+    period VARCHAR(191) DEFAULT 'per month',
     currency VARCHAR(10) DEFAULT 'NGN',
     max_students INT DEFAULT 100,
     max_teachers INT DEFAULT 15,
     max_results_per_term INT DEFAULT 100,
     storage_gb INT DEFAULT 2,
     features TEXT, -- JSON array
+    cta_text VARCHAR(191) DEFAULT 'Get Started',
+    highlight BOOLEAN DEFAULT FALSE,
+    access_level VARCHAR(191) DEFAULT 'PREMIUM',
     is_active BOOLEAN DEFAULT TRUE,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

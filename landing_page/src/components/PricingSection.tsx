@@ -114,10 +114,11 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'https://resultspro-service-examspro.onrender.com';
-        const res = await fetch(`${EXAMS_API}/api/v1/payment/plans`);
+        const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+        const res = await fetch(`${USERS_API}/api/v1/billing/plans`);
         if (res.ok) {
-          const data = await res.json();
+          const responseData = await res.json();
+          const data = responseData.plans || responseData || [];
           if (Array.isArray(data) && data.length > 0) {
             // Group by category
             const grouped: Record<string, any[]> = { School: [], Family: [], Agent: [] };
@@ -126,9 +127,9 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
               if (!grouped[cat]) grouped[cat] = [];
               grouped[cat].push({
                 name: p.name,
-                price: `₦${p.price.toLocaleString()}`,
+                price: `₦${(p.monthly_price || p.price || 0).toLocaleString()}`,
                 period: p.period || 'per month',
-                features: p.features ? JSON.parse(p.features) : [],
+                features: (typeof p.features === 'string' && p.features.startsWith('[')) ? JSON.parse(p.features) : (p.features || []),
                 cta: p.ctaText || 'Get Started',
                 highlight: p.highlight
               });

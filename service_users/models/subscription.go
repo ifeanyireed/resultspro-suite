@@ -53,14 +53,20 @@ type SubscriptionCheckResponse struct {
 type Plan struct {
 	ID                string    `json:"id"`
 	Name              string    `json:"name"` // Free, Pro, Enterprise
+	AppModule         string    `json:"app_module"` // SchoolHub, Family, Agent, ExamsPRO
+	Category          string    `json:"category"` // For landing page grouping (School, Family, Agent)
 	MonthlyPrice      float64   `json:"monthly_price"`
 	AnnualPrice       float64   `json:"annual_price"`
+	Period            string    `json:"period"` // 'per month', 'forever'
 	Currency          string    `json:"currency"` // NGN, USD
 	MaxStudents       int       `json:"max_students"`
 	MaxTeachers       int       `json:"max_teachers"`
 	MaxResultsPerTerm int       `json:"max_results_per_term"`
 	StorageGB         int       `json:"storage_gb"`
 	Features          string    `json:"features"` // JSON array of features
+	CtaText           string    `json:"ctaText"`
+	Highlight         bool      `json:"highlight"`
+	AccessLevel       string    `json:"accessLevel"` // e.g. PREMIUM, ICAN_FULL
 	IsActive          bool      `json:"is_active"`
 	CreatedAt         time.Time `json:"created_at"`
 }

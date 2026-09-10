@@ -7,10 +7,20 @@ import { CreditCard, Check, DollarSign, FileText, ArrowUpRight } from 'lucide-re
 
 import { fetchPlans, fetchInvoices } from '@/lib/api';
 
+import { BuildingOffice, Home, Briefcase, Sparkles } from 'lucide-react';
+
 export default function SubscriptionsPage() {
   const [plans, setPlans] = useState<any[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('SchoolHub');
+
+  const tabs = [
+    { id: 'SchoolHub', label: 'SchoolHub', icon: BuildingOffice },
+    { id: 'FamilyHub', label: 'FamilyHub', icon: Home },
+    { id: 'AgentNetwork', label: 'Agent Network', icon: Briefcase },
+    { id: 'ExamsPRO', label: 'ExamsPRO', icon: Sparkles },
+  ];
 
   React.useEffect(() => {
     async function loadData() {
@@ -23,6 +33,8 @@ export default function SubscriptionsPage() {
     loadData();
   }, []);
 
+  const filteredPlans = plans.filter(p => (p.app_module || p.category) === activeTab || p.app_module === activeTab || (p.category === 'School' && activeTab === 'SchoolHub') || (p.category === 'Family' && activeTab === 'FamilyHub') || (p.category === 'Agent' && activeTab === 'AgentNetwork') || (p.category === 'ICAN' && activeTab === 'ExamsPRO'));
+
   return (
     <div className="w-full">
       <Header
@@ -30,14 +42,37 @@ export default function SubscriptionsPage() {
         subtitle="Manage standardized subscription tiers, quotas, and invoice ledgers across the suite"
       />
 
+      <div className="px-8 pt-4">
+        <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto pb-px">
+          {tabs.map(tab => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center space-x-2 px-4 py-3 border-b-2 font-medium text-xs transition-colors whitespace-nowrap ${
+                  isActive 
+                    ? 'border-blue-600 text-blue-600' 
+                    : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
+                }`}
+              >
+                <Icon className="w-4 h-4 stroke-2" />
+                <span>{tab.label}</span>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
       <div className="p-8 space-y-8">
         {/* Tier Plans */}
         <div>
           <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4">
-            Centrally Enforced Plan Boundaries
+            {activeTab} Plans & Quotas
           </h3>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {plans.map((plan) => (
+            {filteredPlans.map((plan) => (
               <div
                 key={plan.name}
                 className={`bg-white rounded-2xl border p-6 shadow-sm relative flex flex-col justify-between ${

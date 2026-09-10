@@ -95,11 +95,11 @@ export async function updateUserStatus(userId: string, status: string): Promise<
 }
 
 // 4. Subscriptions & Billing
-export async function fetchPlans(): Promise<SubscriptionPlan[]> {
+export async function fetchPlans(): Promise<any[]> {
   try {
-    const res = await fetch(`${USERS_API}/api/v1/admin/plans`, { headers: getAuthHeader() });
+    const res = await fetch(`${USERS_API}/api/v1/billing/plans`, { headers: getAuthHeader() });
     const data = await res.json();
-    return data.plans || [];
+    return data.plans || data || [];
   } catch {
     return [];
   }
