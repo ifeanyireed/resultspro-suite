@@ -24,6 +24,11 @@ function CreateBlogPostContent() {
   useEffect(() => {
     if (editId) {
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      fetch(`${USERS_API}/api/v1/cms/blog/categories`)
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) setCategories(data);
+        });
       fetch(`${USERS_API}/api/v1/cms/blog/posts`)
         .then(res => res.json())
         .then(data => {
@@ -53,6 +58,7 @@ function CreateBlogPostContent() {
   const [content, setContent] = useState('');
   const [coverImage, setCoverImage] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+  const [categories, setCategories] = useState<any[]>([]);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -170,9 +176,9 @@ function CreateBlogPostContent() {
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm font-medium text-slate-700 appearance-none"
                 >
                   <option value="">Select Category...</option>
-                  <option value="announcements">Announcements</option>
-                  <option value="tips">Study Tips</option>
-                  <option value="updates">Product Updates</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.name}>{c.name}</option>
+                  ))}
                 </select>
               </div>
 

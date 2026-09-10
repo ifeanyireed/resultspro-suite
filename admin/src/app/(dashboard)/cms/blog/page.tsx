@@ -19,12 +19,20 @@ const TABS = [
 export default function BlogCMSPage() {
   const [activeTab, setActiveTab] = useState('posts');
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
       setLoading(true);
       const data = await fetchBlogPosts();
+      try {
+        const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "https://resultspro-service-users.onrender.com";
+        const catRes = await fetch(`${USERS_API}/api/v1/cms/blog/categories`);
+        if (catRes.ok) {
+          setCategories(await catRes.json());
+        }
+      } catch (e) {}
       setPosts(data);
       setLoading(false);
     }
@@ -32,6 +40,26 @@ export default function BlogCMSPage() {
   }, []);
 
   const totalPosts = posts.length;
+
+  const handleCreateCategory = async () => {
+    const name = window.prompt("Enter category name:");
+    if (!name) return;
+    try {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "https://resultspro-service-users.onrender.com";
+      const res = await fetch(`${USERS_API}/api/v1/cms/blog/categories`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name })
+      });
+      if (res.ok) {
+        const newCat = await res.json();
+        setCategories([...categories, newCat]);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const published = posts.filter(p => p.status === 'PUBLISHED').length;
   const drafts = posts.filter(p => p.status === 'DRAFT').length;
 
@@ -70,7 +98,7 @@ export default function BlogCMSPage() {
                 <span>Create Post</span>
               </Link>
             ) : (
-              <button className="flex items-center space-x-2 px-5 py-2.5 rounded-full bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-colors shadow-sm">
+              <button onClick={activeTab === "categories" ? handleCreateCategory : undefined} className="flex items-center space-x-2 px-5 py-2.5 rounded-full bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-colors shadow-sm cursor-pointer">
                 <Plus className="w-4 h-4" />
                 <span>
                   {activeTab === 'categories' ? 'Add Category' : activeTab === 'tags' ? 'Add Tag' : 'Settings'}
@@ -180,7 +208,20 @@ export default function BlogCMSPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-500">No categories found. Add one to get started.</td></tr>
+                {categories.length === 0 ? (
+                  <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-500">No categories found. Add one to get started.</td></tr>
+                ) : (
+                  categories.map((cat: any) => (
+                    <tr key={cat.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-6 py-4 font-medium text-slate-900">{cat.name}</td>
+                      <td className="px-6 py-4 text-slate-500">{cat.slug}</td>
+                      <td className="px-6 py-4 text-slate-500">-</td>
+                      <td className="px-6 py-4 text-right">
+                        <button className="text-rose-600 hover:text-rose-800 text-sm font-medium">Delete</button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
