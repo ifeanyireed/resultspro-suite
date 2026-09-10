@@ -104,8 +104,47 @@ const plans = {
   ]
 };
 
+import { useEffect } from 'react';
+
 export default function PricingSection({ initialTab = 'School' }: { initialTab?: string }) {
   const [activeTab, setActiveTab] = useState(initialTab);
+  const [dbPlans, setDbPlans] = useState<Record<string, any[]>>(plans);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'https://resultspro-service-examspro.onrender.com';
+        const res = await fetch(`${EXAMS_API}/api/v1/payment/plans`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            // Group by category
+            const grouped: Record<string, any[]> = { School: [], Family: [], Agent: [] };
+            data.forEach((p: any) => {
+              const cat = p.category || 'School';
+              if (!grouped[cat]) grouped[cat] = [];
+              grouped[cat].push({
+                name: p.name,
+                price: `₦${p.price.toLocaleString()}`,
+                period: p.period || 'per month',
+                features: p.features ? JSON.parse(p.features) : [],
+                cta: p.ctaText || 'Get Started',
+                highlight: p.highlight
+              });
+            });
+            // Merge with defaults if empty
+            if (grouped['School'].length > 0) setDbPlans(grouped);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch plans', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPlans();
+  }, []);
 
   return (
     <section className="section section-white pt-24 md:pt-32 pb-24 md:pb-32">
@@ -126,7 +165,7 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
         </ScrollReveal>
 
         <div className={styles.grid}>
-          {plans[activeTab as keyof typeof plans].map((plan, i) => (
+          {dbPlans[activeTab as keyof typeof plans].map((plan, i) => (
             <ScrollReveal key={plan.name} animation="fade-up" delay={i * 100} className={styles.revealWrapper}>
               <div className={`${styles.card} ${plan.highlight ? styles.highlight : ''}`}>
                 {plan.highlight && <div className={styles.badge}>Most Popular</div>}
