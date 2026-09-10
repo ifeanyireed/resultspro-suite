@@ -105,33 +105,33 @@ const productPlans = {
   TutorsPRO: [
     {
       name: 'SOLO',
-      price: '$29',
-      period: 'per month',
-      features: ['1 Subject', 'Up to 2 Sessions / Week', 'Single Student Focus', 'Basic Progress Tracking'],
+      price: '$15',
+      period: 'per hour',
+      features: ['Billed in blocks of 5 hours', '1 Subject Focus', 'Flexible Scheduling', 'Basic Progress Tracking'],
       cta: 'Start Solo',
       highlight: false
     },
     {
       name: 'FAMILY',
-      price: '$79',
-      period: 'per month',
-      features: ['Up to 3 Students', 'Up to 3 Subjects', 'Up to 6 Sessions / Week', 'Detailed Parent Analytics'],
+      price: '$12',
+      period: 'per hour',
+      features: ['Billed in blocks of 20 hours', 'Up to 3 Subjects', 'Multi-student Support', 'Detailed Parent Analytics'],
       cta: 'Get Family Plan',
       highlight: true
     },
     {
       name: 'SCHOOL STARTER',
-      price: '$249',
-      period: 'per month',
-      features: ['Up to 20 Students', 'Unlimited Subjects', 'Up to 200 Sessions / Week', 'Basic School Analytics'],
+      price: '$10',
+      period: 'per hour',
+      features: ['Billed in blocks of 100 hours', 'Unlimited Subjects', 'Small Group Classes', 'Basic School Analytics'],
       cta: 'Start with Starter',
       highlight: false
     },
     {
       name: 'SCHOOL PRO',
-      price: '$499',
-      period: 'per month',
-      features: ['Unlimited Subjects', 'Unlimited Sessions', 'Unlimited Multi-students', 'Advanced School & Parent Analytics'],
+      price: '$8',
+      period: 'per hour',
+      features: ['Billed in blocks of 500 hours', 'Unlimited Subjects', 'Unlimited Multi-students', 'Advanced School Analytics'],
       cta: 'Contact Sales',
       highlight: false
     }
