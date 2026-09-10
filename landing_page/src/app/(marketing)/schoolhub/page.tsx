@@ -1,3 +1,4 @@
+import PricingSection from '@/components/PricingSection';
 import Link from 'next/link';
 import { 
   IconBuildingBank, 
@@ -135,6 +136,9 @@ export default function SchoolHubPage() {
           </div>
         </div>
       </section>
+
+      {/* Pricing Section */}
+      <PricingSection />
 
       {/* CTA Section */}
       <section className="py-24 bg-navy text-white relative overflow-hidden" style={{ background: 'var(--color-nets-navy-dark)' }}>
