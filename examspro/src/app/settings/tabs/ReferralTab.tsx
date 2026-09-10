@@ -89,6 +89,42 @@ export default function ReferralTab() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
+      {/* Wallet Section */}
+      <div className="bg-white p-8 rounded-[24px] border border-gray-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <h3 className="text-lg font-bold text-slate-900 mb-1">Referral Wallet</h3>
+          <p className="text-sm text-gray-500">Earn cash when your friends purchase a plan.</p>
+        </div>
+        <div className="flex items-center gap-6">
+          <div className="text-right">
+            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Available Balance</div>
+            <div className="text-3xl font-black text-green-600">₦{availableBalance.toLocaleString()}</div>
+          </div>
+          <Button 
+            disabled={availableBalance <= 0}
+            onClick={async () => {
+              const bankName = prompt("Enter your Bank Name:");
+              if (!bankName) return;
+              const accountNumber = prompt("Enter your Account Number:");
+              if (!accountNumber) return;
+              const accountName = prompt("Enter your Account Name:");
+              if (!accountName) return;
+
+              try {
+                const res = await api.post('/payment/payout', { bankName, accountNumber, accountName });
+                toast.success(res.data.message || "Payout requested successfully!");
+                setWithdrawn(prev => prev + availableBalance);
+              } catch (err: any) {
+                toast.error(err.response?.data?.error || "Failed to request payout");
+              }
+            }}
+            className="bg-green-600 hover:bg-green-700 text-white rounded-full px-6 shadow-sm"
+          >
+            Request Payout
+          </Button>
+        </div>
+      </div>
+
       <div className="bg-white p-8 md:p-12 rounded-[24px] border border-gray-100 shadow-sm relative overflow-hidden">
         
         <div className="flex items-center gap-3 mb-6">
@@ -158,41 +194,7 @@ export default function ReferralTab() {
         </div>
       </div>
 
-      {/* Wallet Section */}
-      <div className="bg-white p-8 rounded-[24px] border border-gray-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
-        <div>
-          <h3 className="text-lg font-bold text-slate-900 mb-1">Referral Wallet</h3>
-          <p className="text-sm text-gray-500">Earn cash when your friends purchase a plan.</p>
-        </div>
-        <div className="flex items-center gap-6">
-          <div className="text-right">
-            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Available Balance</div>
-            <div className="text-3xl font-black text-green-600">₦{availableBalance.toLocaleString()}</div>
-          </div>
-          <Button 
-            disabled={availableBalance <= 0}
-            onClick={async () => {
-              const bankName = prompt("Enter your Bank Name:");
-              if (!bankName) return;
-              const accountNumber = prompt("Enter your Account Number:");
-              if (!accountNumber) return;
-              const accountName = prompt("Enter your Account Name:");
-              if (!accountName) return;
-
-              try {
-                const res = await api.post('/payment/payout', { bankName, accountNumber, accountName });
-                toast.success(res.data.message || "Payout requested successfully!");
-                setWithdrawn(prev => prev + availableBalance);
-              } catch (err: any) {
-                toast.error(err.response?.data?.error || "Failed to request payout");
-              }
-            }}
-            className="bg-green-600 hover:bg-green-700 text-white rounded-full px-6 shadow-sm"
-          >
-            Request Payout
-          </Button>
-        </div>
-      </div>
+      
 
       <div className="bg-white p-8 rounded-[24px] border border-gray-100 shadow-sm">
         <h3 className="text-lg font-bold text-slate-900 mb-6">Referral History</h3>
