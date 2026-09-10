@@ -4,9 +4,10 @@ import { notFound } from 'next/navigation';
 export const revalidate = 60;
 export const dynamicParams = true;
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
   const posts = await getBlogPosts();
-  const post = posts.find((p: any) => p.slug === params.slug);
+  const post = posts.find((p: any) => p.slug === resolvedParams.slug);
   return {
     title: post ? `${post.title} | ResultsPRO Suite` : 'Article Not Found',
   };
@@ -26,9 +27,10 @@ async function getBlogPosts() {
   }
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
   const posts = await getBlogPosts();
-  const post = posts.find((p: any) => p.slug === params.slug);
+  const post = posts.find((p: any) => p.slug === resolvedParams.slug);
   
   if (!post) {
     notFound();
