@@ -46,8 +46,8 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
       </div>
 
       {/* Content Container Overlapping Image */}
-      <div className="container-nets relative z-10" style={{ marginTop: '-15vh' }}>
-        <div className="max-w-[900px] mx-auto flex gap-8">
+      <div className="container-nets relative z-10" style={{ marginTop: '-25vh' }}>
+        <div className="max-w-[1100px] mx-auto flex gap-8">
           
           {/* Floating Share Side-Nav (Visible on large screens) */}
           <div className="hidden lg:flex flex-col items-center gap-4 mt-32 w-12 shrink-0">
