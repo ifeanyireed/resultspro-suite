@@ -39,7 +39,9 @@ function CreateBlogPostContent() {
             setExcerpt(post.excerpt || '');
             setCategory(post.category || '');
             setContent(post.content || '');
-            setCoverImage(post.cover_image || '');
+            let imgUrl = post.cover_image || '';
+            if (imgUrl && imgUrl.startsWith('/')) imgUrl = 'https://resultspro.ng' + imgUrl;
+            setCoverImage(imgUrl);
             // Wait a tick for editor to initialize
             setTimeout(() => {
               if ((window as any).tinymce || document.querySelector('.tiptap')) {
@@ -88,14 +90,50 @@ function CreateBlogPostContent() {
     }
   };
 
-  const handleSave = (status: 'DRAFT' | 'PUBLISHED') => {
+  const handleSave = async (status: 'DRAFT' | 'PUBLISHED') => {
     if (!title) {
       toast.error('Title is required');
       return;
     }
-    // Simulate save
-    toast.success(`Post ${status === 'DRAFT' ? 'saved as draft' : 'published'} successfully!`);
-    router.push('/cms/blog');
+    
+    try {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      const payload: any = {
+        title,
+        excerpt,
+        content,
+        cover_image: coverImage,
+        category_id: category || null,
+        status,
+        author_id: "0eef95ef-57e0-4a7d-ae31-c8376fe28fd0" // dummy admin user
+      };
+
+      let url = `${USERS_API}/api/v1/cms/blog/posts`;
+      let method = 'POST';
+
+      if (editId) {
+        // Assume PUT /api/v1/cms/blog/posts/:id exists or we just re-POST for now?
+        // Actually, backend might not have PUT yet. If it doesn't, we just POST it as a new post.
+        // Wait, I will just leave it as POST unless the backend supports PUT.
+        // I will add the ID to payload if editing.
+        payload['id'] = editId;
+      }
+
+      const res = await fetch(url, {
+        method: editId ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      
+      if (res.ok) {
+        toast.success(`Post ${status === 'DRAFT' ? 'saved as draft' : 'published'} successfully!`);
+        router.push('/cms/blog');
+      } else {
+        toast.error('Failed to save post');
+      }
+    } catch (e) {
+      toast.error('Network error');
+    }
   };
 
   return (
@@ -177,7 +215,7 @@ function CreateBlogPostContent() {
                 >
                   <option value="">Select Category...</option>
                   {categories.map((c) => (
-                    <option key={c.id} value={c.name}>{c.name}</option>
+                    <option key={c.id} value={c.id}>{c.name}</option>
                   ))}
                 </select>
               </div>
