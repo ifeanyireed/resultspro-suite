@@ -12,6 +12,7 @@ async function getBlogPosts() {
     const res = await fetch(`${USERS_API}/api/v1/cms/blog/posts`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     const posts = await res.json();
+    if (!posts || !Array.isArray(posts)) return [];
     return posts.filter((p: any) => p.status === 'PUBLISHED');
   } catch (error) {
     console.error('Failed to fetch blog posts', error);
