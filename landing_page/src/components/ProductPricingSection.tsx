@@ -5,9 +5,61 @@ import styles from '@/app/(marketing)/pricing/Pricing.module.css';
 import ScrollReveal from '@/components/ScrollReveal';
 import Link from 'next/link';
 
-const productTypes = ['ClassroomPRO', 'PuzzlePRO', 'CoursesPRO', 'TutorsPRO'];
+const productTypes = ['ExamsPRO', 'ICAN', 'ClassroomPRO', 'PuzzlePRO', 'CoursesPRO', 'TutorsPRO'];
 
 const productPlans = {
+  ExamsPRO: [
+    {
+      name: 'STARTER',
+      price: '₦5,000',
+      period: 'per month',
+      features: ['Up to 500 Students', 'Standard CBT System', 'Basic Question Bank', 'Email Support'],
+      cta: 'Start with Starter',
+      highlight: false
+    },
+    {
+      name: 'PRO',
+      price: '₦15,000',
+      period: 'per month',
+      features: ['Unlimited Students', 'Advanced Anti-cheat', 'Custom Question Banks', 'Priority Support'],
+      cta: 'Upgrade to Pro',
+      highlight: true
+    },
+    {
+      name: 'ENTERPRISE',
+      price: '₦50,000',
+      period: 'per month',
+      features: ['Unlimited Students', 'Custom Domain', 'White-labeling', 'Dedicated Support'],
+      cta: 'Contact Sales',
+      highlight: false
+    }
+  ],
+  ICAN: [
+    {
+      name: 'SINGLE PAPER',
+      price: '₦3,000',
+      period: 'per month',
+      features: ['Access to 1 ICAN Paper', 'Past Questions Access', 'AI Tutor Guidance', 'Email Support'],
+      cta: 'Buy Single Paper',
+      highlight: false
+    },
+    {
+      name: 'COMPLETE LEVEL',
+      price: '₦7,000',
+      period: 'per month',
+      features: ['Access to 1 Complete Level', 'All Papers in Level', 'AI Tutor Guidance', 'Priority Support'],
+      cta: 'Buy Complete Level',
+      highlight: true
+    },
+    {
+      name: 'FULL DIET ACCESS',
+      price: '₦10,000',
+      period: 'per month',
+      features: ['Unlimited ICAN Levels', 'Unlimited Papers', 'Advanced AI Insights', 'Priority Support'],
+      cta: 'Get Full Access',
+      highlight: false
+    }
+  ],
   ClassroomPRO: [
     {
       name: 'SOLO',
@@ -139,7 +191,7 @@ const productPlans = {
 };
 
 export default function ProductPricingSection() {
-  const [activeTab, setActiveTab] = useState('ClassroomPRO');
+  const [activeTab, setActiveTab] = useState('ExamsPRO');
 
   return (
     <section className="section section-white pt-12 md:pt-16 pb-24 md:pb-32 bg-gray-50">
