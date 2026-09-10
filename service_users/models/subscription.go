@@ -65,6 +65,7 @@ type Plan struct {
 	StorageGB         int       `json:"storage_gb"`
 	Features          string    `json:"features"` // JSON array of features
 	CtaText           string    `json:"ctaText"`
+	RedirectURL       string    `json:"redirect_url"`
 	Highlight         bool      `json:"highlight"`
 	AccessLevel       string    `json:"accessLevel"` // e.g. PREMIUM, ICAN_FULL
 	IsActive          bool      `json:"is_active"`

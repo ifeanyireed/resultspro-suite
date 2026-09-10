@@ -46,6 +46,7 @@ export default function SubscriptionsCommandCenter() {
     max_teachers: 0,
     max_results_per_term: 0,
     storage_gb: 0,
+    redirect_url: '',
     highlight: false,
     is_active: true
   });
@@ -62,7 +63,6 @@ export default function SubscriptionsCommandCenter() {
     { id: 'CoursesPRO', label: 'CoursesPRO', icon: Map },
     { id: 'FamilyHub', label: 'FamilyHub', icon: Home },
     { id: 'AgentNetwork', label: 'Agent Network', icon: Briefcase },
-    { id: 'Invoices', label: 'Invoices', icon: Receipt },
   ];
 
   const loadData = async () => {
@@ -104,6 +104,7 @@ export default function SubscriptionsCommandCenter() {
         max_teachers: plan.max_teachers || 0,
         max_results_per_term: plan.max_results_per_term || 0,
         storage_gb: plan.storage_gb || 0,
+        redirect_url: plan.redirect_url || '',
         highlight: !!plan.highlight,
         is_active: plan.is_active !== false
       });
@@ -126,6 +127,7 @@ export default function SubscriptionsCommandCenter() {
         max_teachers: 0,
         max_results_per_term: 0,
         storage_gb: 0,
+        redirect_url: '',
         highlight: false,
         is_active: true
       });
@@ -435,6 +437,12 @@ export default function SubscriptionsCommandCenter() {
                     Add
                   </button>
                 </div>
+              </div>
+
+              <div className="border-t border-slate-100 pt-4">
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Post-Purchase Redirect URL</label>
+                <input value={formData.redirect_url} onChange={e => setFormData({...formData, redirect_url: e.target.value})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" placeholder="e.g. /onboard/school" />
+                <p className="text-[10px] text-slate-400 mt-1">If set, users will be redirected here after clicking 'Get Started' or successfully purchasing the plan.</p>
               </div>
 
               <div className="border-t border-slate-100 pt-4 flex space-x-6">

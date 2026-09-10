@@ -410,6 +410,7 @@ func HandleUpdatePlan(w http.ResponseWriter, r *http.Request) {
 	existing.CtaText = input.CtaText
 	existing.Highlight = input.Highlight
 	existing.AccessLevel = input.AccessLevel
+	existing.RedirectURL = input.RedirectURL
 	existing.IsActive = input.IsActive
 	existing.MaxStudents = input.MaxStudents
 	existing.MaxTeachers = input.MaxTeachers

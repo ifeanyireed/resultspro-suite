@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { IconArrowRight } from '@tabler/icons-react';
 
+export const revalidate = 60;
+
 export const metadata = {
   title: 'Blog | ResultsPRO Suite',
   description: 'Latest insights, updates, and stories from the ResultsPRO team.',

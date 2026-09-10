@@ -57,6 +57,7 @@ export function Sidebar() {
       title: 'FINANCE & BILLING',
       links: [
         { label: 'Subscriptions & Plans', href: '/subscriptions', icon: CreditCardIcon, activeIcon: CreditCardSolid },
+        { label: 'Invoices & Billing', href: '/invoices', icon: DocumentTextIcon, activeIcon: DocumentTextSolid },
         { label: 'Agent Network', href: '/agents', icon: BriefcaseIcon, activeIcon: BriefcaseSolid },
       ],
     },

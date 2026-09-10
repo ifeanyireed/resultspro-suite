@@ -157,7 +157,7 @@ export async function generateScratchCardBatch(schoolId: string, quantity: numbe
 // 7. Blog & CMS
 export async function fetchBlogPosts(): Promise<BlogPost[]> {
   try {
-    const res = await fetch(`${EXAMS_API}/api/blog`);
+    const res = await fetch(`${USERS_API}/api/v1/cms/blog/posts`);
     const data = await res.json();
     return Array.isArray(data) ? data : (data.posts || []);
   } catch {

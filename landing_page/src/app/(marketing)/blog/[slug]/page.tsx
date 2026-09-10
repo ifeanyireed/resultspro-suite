@@ -1,6 +1,9 @@
 import BlogPostContent from '@/components/BlogPostContent';
 import { notFound } from 'next/navigation';
 
+export const revalidate = 60;
+export const dynamicParams = true;
+
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const posts = await getBlogPosts();
   const post = posts.find((p: any) => p.slug === params.slug);
