@@ -6,40 +6,22 @@ export const metadata = {
   description: 'Latest insights, updates, and stories from the ResultsPRO team.',
 };
 
-const DUMMY_POSTS = [
-  {
-    id: 1,
-    title: "How Digital Campuses Are Transforming African Schools",
-    excerpt: "Discover the tangible impact of mobile-first educational infrastructure on student performance and parent engagement.",
-    author: "ResultsPRO Team",
-    date: "Sep 8, 2026",
-    slug: "how-digital-campuses-transform-schools",
-    category: "Education",
-    image: "/photo13.jpeg"
-  },
-  {
-    id: 2,
-    title: "Gamifying WAEC Preparation: The ExamsPRO Approach",
-    excerpt: "Why traditional study methods are failing modern students, and how gamified CBT engines build extreme readiness.",
-    author: "ResultsPRO Team",
-    date: "Sep 2, 2026",
-    slug: "gamifying-waec-preparation",
-    category: "Exams",
-    image: "/photo03.jpeg"
-  },
-  {
-    id: 3,
-    title: "Introducing ClassroomPRO: Offline-First Learning",
-    excerpt: "Internet access shouldn't limit education. Learn how our offline-first architecture is keeping students connected to their curriculum.",
-    author: "Product Team",
-    date: "Aug 25, 2026",
-    slug: "introducing-classroompro-offline-first",
-    category: "Product",
-    image: "/photo04.jpeg"
+async function getBlogPosts() {
+  try {
+    const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+    const res = await fetch(`${USERS_API}/api/v1/cms/blog/posts`, { next: { revalidate: 60 } });
+    if (!res.ok) return [];
+    const posts = await res.json();
+    return posts.filter((p: any) => p.status === 'PUBLISHED');
+  } catch (error) {
+    console.error('Failed to fetch blog posts', error);
+    return [];
   }
-];
+}
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const posts = await getBlogPosts();
+
   return (
     <main className="min-h-screen bg-light" style={{ background: 'var(--color-nets-light)' }}>
       {/* Blog Hero */}
@@ -58,22 +40,50 @@ export default function BlogPage() {
       </section>
 
       {/* Blog Grid */}
-      <section className="section-py">
+            <section className="section-py">
         <div className="container-nets">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {DUMMY_POSTS.map((post) => (
-              <article key={post.id} className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-nets-border">
-                <div className="relative h-48 overflow-hidden bg-nets-light">
-                  <img 
-                    src={post.image} 
-                    alt={post.title} 
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-white/90 backdrop-blur-sm text-navy text-xs fw-600 px-3 py-1 rounded-sm">
-                      {post.category}
-                    </span>
+          {posts.length === 0 ? (
+            <div className="text-center text-muted py-12">No blog posts found.</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {posts.map((post: any) => (
+                <article key={post.id} className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-nets-border">
+                  <div className="relative h-48 overflow-hidden bg-nets-light">
+                    <img 
+                      src={post.cover_image || '/photo13.jpeg'} 
+                      alt={post.title} 
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-white/90 backdrop-blur-sm text-navy text-xs fw-600 px-3 py-1 rounded-sm">
+                        {/* If category name exists in response, otherwise fallback */}
+                        {post.category || 'Blog'}
+                      </span>
+                    </div>
                   </div>
+                  
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="flex items-center justify-between text-xs text-muted mb-3">
+                      <span>{new Date(post.published_at || post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                      <span>ResultsPRO</span>
+                    </div>
+                    <h2 className="text-xl fw-600 mb-3 text-navy leading-tight line-clamp-2">
+                      {post.title}
+                    </h2>
+                    <p className="text-sm text-muted mb-6 flex-1 line-clamp-3">
+                      {post.excerpt}
+                    </p>
+                    
+                    <div className="mt-auto pt-4 border-t border-nets-border">
+                      <Link href={`/blog/${post.slug}`} className="flex items-center gap-2 text-sm fw-600 text-red hover:opacity-80 transition-opacity" style={{ color: 'var(--color-nets-red)' }}>
+                        Read Article <IconArrowRight size={16} />
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
                 </div>
                 
                 <div className="p-6 flex flex-col flex-1">

@@ -42,8 +42,15 @@ export default function SubscriptionsCommandCenter() {
     app_module: '',
     category: '',
     access_level: 'PREMIUM',
-    features: '[]'
+    max_students: 0,
+    max_teachers: 0,
+    max_results_per_term: 0,
+    storage_gb: 0,
+    highlight: false,
+    is_active: true
   });
+  const [featuresList, setFeaturesList] = useState<string[]>([]);
+  const [newFeature, setNewFeature] = useState('');
 
   const tabs = [
     { id: 'SchoolHub', label: 'SchoolHub', icon: School },
@@ -92,8 +99,18 @@ export default function SubscriptionsCommandCenter() {
         app_module: plan.app_module || activeTab,
         category: plan.category || '',
         access_level: plan.access_level || 'PREMIUM',
-        features: typeof plan.features === 'string' ? plan.features : JSON.stringify(plan.features || [])
+        max_students: plan.max_students || 0,
+        max_teachers: plan.max_teachers || 0,
+        max_results_per_term: plan.max_results_per_term || 0,
+        storage_gb: plan.storage_gb || 0,
+        highlight: !!plan.highlight,
+        is_active: plan.is_active !== false
       });
+      let parsed = [];
+      try {
+        parsed = typeof plan.features === 'string' ? JSON.parse(plan.features) : (plan.features || []);
+      } catch (e) {}
+      setFeaturesList(Array.isArray(parsed) ? parsed : []);
     } else {
       setEditingPlan(null);
       setFormData({
@@ -104,8 +121,15 @@ export default function SubscriptionsCommandCenter() {
         app_module: activeTab,
         category: activeTab,
         access_level: 'PREMIUM',
-        features: '[]'
+        max_students: 0,
+        max_teachers: 0,
+        max_results_per_term: 0,
+        storage_gb: 0,
+        highlight: false,
+        is_active: true
       });
+      setFeaturesList([]);
+      setNewFeature('');
     }
     setIsModalOpen(true);
   };
@@ -124,7 +148,12 @@ export default function SubscriptionsCommandCenter() {
         body: JSON.stringify({
            ...formData,
            monthly_price: Number(formData.monthly_price),
-           annual_price: Number(formData.annual_price)
+           annual_price: Number(formData.annual_price),
+           max_students: Number(formData.max_students),
+           max_teachers: Number(formData.max_teachers),
+           max_results_per_term: Number(formData.max_results_per_term),
+           storage_gb: Number(formData.storage_gb),
+           features: JSON.stringify(featuresList)
         })
       });
       if (res.ok) {
@@ -326,16 +355,99 @@ export default function SubscriptionsCommandCenter() {
                   <input required value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" />
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Access Level (e.g., PREMIUM, ICAN_SINGLE)</label>
-                <input required value={formData.access_level} onChange={e => setFormData({...formData, access_level: e.target.value})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">Access Level Role</label>
+                  <select required value={formData.access_level} onChange={e => setFormData({...formData, access_level: e.target.value})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500 bg-white">
+                    <option value="FREE">FREE</option>
+                    <option value="BASIC">BASIC</option>
+                    <option value="PRO">PRO</option>
+                    <option value="PREMIUM">PREMIUM</option>
+                    <option value="ENTERPRISE">ENTERPRISE</option>
+                    <option value="ICAN_SINGLE">ICAN_SINGLE (ExamsPRO)</option>
+                    <option value="ICAN_GROUP">ICAN_GROUP (ExamsPRO)</option>
+                    <option value="ICAN_FULL">ICAN_FULL (ExamsPRO)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">Billing Period</label>
+                  <select required value={formData.period} onChange={e => setFormData({...formData, period: e.target.value})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500 bg-white">
+                    <option value="per month">Per Month</option>
+                    <option value="per year">Per Year</option>
+                    <option value="forever">Lifetime / One-off</option>
+                  </select>
+                </div>
               </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Features (JSON Array)</label>
-                <textarea rows={4} required value={formData.features} onChange={e => setFormData({...formData, features: e.target.value})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500 font-mono text-xs" />
+
+              <div className="border-t border-slate-100 pt-4">
+                <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Hard Limits & Quotas (Use 999999 for unlimited)</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Max Students</label>
+                    <input type="number" value={formData.max_students} onChange={e => setFormData({...formData, max_students: Number(e.target.value)})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Max Teachers</label>
+                    <input type="number" value={formData.max_teachers} onChange={e => setFormData({...formData, max_teachers: Number(e.target.value)})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Max Results / Term</label>
+                    <input type="number" value={formData.max_results_per_term} onChange={e => setFormData({...formData, max_results_per_term: Number(e.target.value)})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Storage (GB)</label>
+                    <input type="number" value={formData.storage_gb} onChange={e => setFormData({...formData, storage_gb: Number(e.target.value)})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t border-slate-100 pt-4">
+                <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Features Matrix</h4>
+                <div className="space-y-2 mb-3">
+                  {featuresList.map((feat, idx) => (
+                    <div key={idx} className="flex items-center justify-between bg-slate-50 px-3 py-2 rounded-lg border border-slate-100">
+                      <span className="text-xs font-medium text-slate-700">{feat}</span>
+                      <button type="button" onClick={() => setFeaturesList(featuresList.filter((_, i) => i !== idx))} className="text-slate-400 hover:text-red-500">
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex space-x-2">
+                  <input 
+                    value={newFeature} 
+                    onChange={e => setNewFeature(e.target.value)} 
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (newFeature.trim()) { setFeaturesList([...featuresList, newFeature.trim()]); setNewFeature(''); }
+                      }
+                    }}
+                    className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500" 
+                    placeholder="e.g. Full API Access" 
+                  />
+                  <button 
+                    type="button"
+                    onClick={() => { if (newFeature.trim()) { setFeaturesList([...featuresList, newFeature.trim()]); setNewFeature(''); } }}
+                    className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+
+              <div className="border-t border-slate-100 pt-4 flex space-x-6">
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input type="checkbox" checked={formData.is_active} onChange={e => setFormData({...formData, is_active: e.target.checked})} className="rounded text-blue-600 focus:ring-blue-500 w-4 h-4" />
+                  <span className="text-xs font-semibold text-slate-700">Plan is Active</span>
+                </label>
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input type="checkbox" checked={formData.highlight} onChange={e => setFormData({...formData, highlight: e.target.checked})} className="rounded text-blue-600 focus:ring-blue-500 w-4 h-4" />
+                  <span className="text-xs font-semibold text-slate-700">Highlight (Most Popular)</span>
+                </label>
               </div>
               
-              <div className="pt-4 flex justify-end space-x-3 border-t border-slate-100">
+              <div className="pt-4 flex justify-end space-x-3 border-t border-slate-100 mt-4">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">Cancel</button>
                 <button type="submit" className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">Save Plan</button>
               </div>
