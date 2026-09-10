@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
-import { LayoutDashboard, BookOpen, Swords, Users, Trophy, DollarSign, FileText } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Swords, Users, Trophy, DollarSign, FileText, ShoppingCart } from 'lucide-react';
 
 import OverviewTab from './tabs/OverviewTab';
 import SubjectsTab from './tabs/SubjectsTab';
@@ -13,6 +13,7 @@ import UsersTab from './tabs/UsersTab';
 import TournamentsTab from './tabs/TournamentsTab';
 import ModerationTab from './tabs/ModerationTab';
 import FinancialsTab from './tabs/FinancialsTab';
+import StoreTab from './tabs/StoreTab';
 
 export default function ExamsProCommandCenter() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -27,6 +28,7 @@ export default function ExamsProCommandCenter() {
     { id: 'users', label: 'Candidates', icon: Users },
     { id: 'moderation', label: 'Moderation', icon: FileText },
     { id: 'financials', label: 'Financials', icon: DollarSign },
+    { id: 'store', label: 'Store & Plans', icon: ShoppingCart },
   ];
 
   return (
@@ -69,6 +71,7 @@ export default function ExamsProCommandCenter() {
         {activeTab === 'tournaments' && <TournamentsTab />}
         {activeTab === 'moderation' && <ModerationTab />}
         {activeTab === 'financials' && <FinancialsTab />}
+        {activeTab === 'store' && <StoreTab />}
       </div>
     </div>
   );

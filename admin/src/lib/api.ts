@@ -615,3 +615,39 @@ export async function updateExamproPayoutStatus(id: string, status: string): Pro
   if (!res.ok) throw new Error('Failed to update payout');
   return res.json();
 }
+
+// ExamsPRO Store Management
+export async function fetchExamproStorePacks(): Promise<any[]> {
+  const res = await fetch(`${EXAMS_API}/api/v1/admin/coin-packs`, { headers: getAuthHeader() });
+  if (!res.ok) throw new Error('Failed to fetch store packs');
+  return res.json();
+}
+
+export async function createExamproStorePack(data: any): Promise<any> {
+  const res = await fetch(`${EXAMS_API}/api/v1/admin/coin-packs`, {
+    method: 'POST',
+    headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) throw new Error('Failed to create store pack');
+  return res.json();
+}
+
+export async function updateExamproStorePack(id: string, data: any): Promise<any> {
+  const res = await fetch(`${EXAMS_API}/api/v1/admin/coin-packs/${id}`, {
+    method: 'PUT',
+    headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) throw new Error('Failed to update store pack');
+  return res.json();
+}
+
+export async function deleteExamproStorePack(id: string): Promise<any> {
+  const res = await fetch(`${EXAMS_API}/api/v1/admin/coin-packs/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeader()
+  });
+  if (!res.ok) throw new Error('Failed to delete store pack');
+  return res.json();
+}
