@@ -29,7 +29,7 @@ const plans = {
       name: 'PRO',
       price: '₦35,000',
       period: 'per month',
-      features: ['Up to 2,000 Students & 300 Teachers', 'SchoolHub Mobile Apps', 'ResultsPRO & ExamsPRO', 'ClassroomPRO', 'TutorsPRO Integration', '50GB Storage'],
+      features: ['Up to 2,000 Students & 300 Teachers', 'SchoolHub Mobile Apps', 'ResultsPRO & ExamsPRO', 'ClassroomPRO', 'PuzzlePRO', 'TutorsPRO Integration', '50GB Storage'],
       cta: 'Upgrade to Pro',
       highlight: true
     },
