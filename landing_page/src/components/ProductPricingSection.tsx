@@ -78,34 +78,26 @@ const productPlans = {
   ],
   CoursesPRO: [
     {
-      name: 'SOLO',
-      price: '₦3,000',
-      period: 'per month',
-      features: ['Single Creator Access', 'Course Creator Tool', 'Standard Video Hosting', 'Email Support'],
-      cta: 'Start Solo',
-      highlight: false
-    },
-    {
-      name: 'FAMILY',
-      price: '₦7,500',
-      period: 'per month',
-      features: ['Up to 5 Family Members', 'Advanced Course Builder', 'Certificate Generation', 'Priority Support'],
-      cta: 'Get Family Plan',
-      highlight: true
-    },
-    {
-      name: 'SCHOOL STARTER',
+      name: 'STARTER',
       price: '₦15,000',
       period: 'per month',
-      features: ['Up to 500 Students', 'Standard Domain', 'Basic Certificates', 'Email Support'],
+      features: ['Course Creator Tool', 'Standard Video Hosting', 'Basic Certificates', 'Email Support'],
       cta: 'Start with Starter',
       highlight: false
     },
     {
-      name: 'SCHOOL PRO',
+      name: 'PRO',
       price: '₦35,000',
       period: 'per month',
-      features: ['Unlimited Access', 'Custom Domain', 'White-label Certificates', 'Dedicated Support'],
+      features: ['Advanced Course Builder', 'Certificate Generation', 'Custom Domain', 'Priority Support'],
+      cta: 'Upgrade to Pro',
+      highlight: true
+    },
+    {
+      name: 'ENTERPRISE',
+      price: '₦80,000',
+      period: 'per month',
+      features: ['Unlimited Access', 'White-label Certificates', 'Dedicated Account Manager', '24/7 Support'],
       cta: 'Contact Sales',
       highlight: false
     }
