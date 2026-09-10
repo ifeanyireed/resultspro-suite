@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
 export default function CoursesProAdminRoot() {
-  redirect('/coursespro/program-builder');
+  redirect('/coursespro/tenants');
 }

@@ -21,13 +21,13 @@ export default function CoursesProAdminLayout({
   const pathname = usePathname();
 
   const navItems = [
+    { label: 'Tenant Manager', href: '/coursespro/tenants', icon: BuildingOfficeIcon },
     { label: 'Program Builder', href: '/coursespro/program-builder', icon: Square3Stack3DIcon },
     { label: 'Cohort Configurator', href: '/coursespro/cohorts', icon: CalendarDaysIcon },
     { label: 'Mentor Management', href: '/coursespro/mentors', icon: AcademicCapIcon },
     { label: 'Payments', href: '/coursespro/payments', icon: CreditCardIcon },
     { label: 'Reports', href: '/coursespro/reports', icon: ChartBarIcon },
     { label: 'Settings', href: '/coursespro/settings', icon: Cog6ToothIcon },
-    { label: 'Tenant Manager', href: '/coursespro/tenants', icon: BuildingOfficeIcon },
   ];
 
   return (

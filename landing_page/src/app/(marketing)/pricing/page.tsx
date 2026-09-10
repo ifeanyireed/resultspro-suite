@@ -1,6 +1,7 @@
 'use client';
 
 import PricingSection from '@/components/PricingSection';
+import ProductPricingSection from '@/components/ProductPricingSection';
 import HeroAnimationWrapper from '@/components/HeroAnimationWrapper';
 import { IconCreditCard } from '@tabler/icons-react';
 
@@ -30,6 +31,9 @@ export default function PricingPage() {
       </section>
       
       <PricingSection />
+      
+      {/* Product Specific Plans */}
+      <ProductPricingSection />
     </main>
   );
 }
