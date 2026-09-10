@@ -26,8 +26,16 @@ const productPlans = {
       highlight: true
     },
     {
-      name: 'SCHOOL',
-      price: '₦20,000',
+      name: 'SCHOOL STARTER',
+      price: '₦15,000',
+      period: 'per month',
+      features: ['Up to 500 Students', 'Basic School Analytics', 'Standard Branding', 'Email Support'],
+      cta: 'Start with Starter',
+      highlight: false
+    },
+    {
+      name: 'SCHOOL PRO',
+      price: '₦35,000',
       period: 'per month',
       features: ['Unlimited Teachers & Students', 'School-wide Analytics', 'Custom Branding', 'Dedicated Support'],
       cta: 'Contact Sales',
@@ -52,8 +60,16 @@ const productPlans = {
       highlight: true
     },
     {
-      name: 'SCHOOL',
-      price: '₦15,000',
+      name: 'SCHOOL STARTER',
+      price: '₦10,000',
+      period: 'per month',
+      features: ['Up to 500 Students', 'Basic Leaderboards', 'Standard Games', 'Email Support'],
+      cta: 'Start with Starter',
+      highlight: false
+    },
+    {
+      name: 'SCHOOL PRO',
+      price: '₦25,000',
       period: 'per month',
       features: ['Unlimited Students', 'School-wide Leaderboards', 'Curriculum Integration', 'Dedicated Support'],
       cta: 'Contact Sales',
@@ -78,8 +94,16 @@ const productPlans = {
       highlight: true
     },
     {
-      name: 'SCHOOL',
-      price: '₦25,000',
+      name: 'SCHOOL STARTER',
+      price: '₦15,000',
+      period: 'per month',
+      features: ['Up to 500 Students', 'Standard Domain', 'Basic Certificates', 'Email Support'],
+      cta: 'Start with Starter',
+      highlight: false
+    },
+    {
+      name: 'SCHOOL PRO',
+      price: '₦35,000',
       period: 'per month',
       features: ['Unlimited Access', 'Custom Domain', 'White-label Certificates', 'Dedicated Support'],
       cta: 'Contact Sales',
@@ -104,8 +128,16 @@ const productPlans = {
       highlight: true
     },
     {
-      name: 'SCHOOL',
-      price: '₦20,000',
+      name: 'SCHOOL STARTER',
+      price: '₦15,000',
+      period: 'per month',
+      features: ['Up to 10 Tutors', 'Basic Booking System', 'Standard Analytics', 'Email Support'],
+      cta: 'Start with Starter',
+      highlight: false
+    },
+    {
+      name: 'SCHOOL PRO',
+      price: '₦30,000',
       period: 'per month',
       features: ['Unlimited Tutors', 'School-wide Booking System', 'Advanced Analytics', 'Dedicated Support'],
       cta: 'Contact Sales',
