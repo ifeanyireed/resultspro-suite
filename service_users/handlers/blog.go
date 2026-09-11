@@ -355,6 +355,13 @@ func HandleCreateComment(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleSubscribeNewsletter(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		var subs []models.NewsletterSubscriber
+		db.GormDB.Order("created_at desc").Find(&subs)
+		utils.JSONResponse(w, 200, subs)
+		return
+	}
+
 	if r.Method != http.MethodPost {
 		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return

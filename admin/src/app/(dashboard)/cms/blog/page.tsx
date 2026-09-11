@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Badge } from '@/components/Badge';
 import { StatCard } from '@/components/StatCard';
-import { FileText, CheckCircle2, File, Plus, Tag, MessageSquare, Folder } from 'lucide-react';
+import { FileText, CheckCircle2, File, Plus, Tag, MessageSquare, Folder, Users } from 'lucide-react';
 import { fetchBlogPosts } from '@/lib/api';
 import { BlogPost } from '@/lib/types';
 import toast from 'react-hot-toast';
@@ -15,6 +15,7 @@ const TABS = [
   { id: 'categories', name: 'Categories', icon: Folder },
   { id: 'tags', name: 'Tags', icon: Tag },
   { id: 'comments', name: 'Comments', icon: MessageSquare },
+  { id: 'subscribers', name: 'Subscribers', icon: Users },
 ];
 
 export default function BlogCMSPage() {
@@ -22,6 +23,8 @@ export default function BlogCMSPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [tagsList, setTagsList] = useState<any[]>([]);
+  const [subscribers, setSubscribers] = useState<any[]>([]);
+  const [comments, setComments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,6 +41,16 @@ export default function BlogCMSPage() {
         if (tagRes.ok) {
           setTagsList(await tagRes.json());
         }
+        
+        try {
+            const subRes = await fetch(`${USERS_API}/api/v1/cms/blog/subscribe`);
+            if (subRes.ok) setSubscribers(await subRes.json() || []);
+        } catch(e) {}
+        try {
+            const comRes = await fetch(`${USERS_API}/api/v1/cms/blog/comments`);
+            if (comRes.ok) setComments(await comRes.json() || []);
+        } catch(e) {}
+
       } catch (e) {}
       setPosts(data);
       setLoading(false);
