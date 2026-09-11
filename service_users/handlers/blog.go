@@ -467,3 +467,15 @@ func HandleDeleteSubscriber(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.JSONResponse(w, 200, map[string]string{"message": "Subscriber deleted"})
 }
+
+func HandleDebugTable2(w http.ResponseWriter, r *http.Request) {
+	var result struct {
+		Table       string `gorm:"column:Table"`
+		CreateTable string `gorm:"column:Create Table"`
+	}
+	if err := db.GormDB.Raw("SHOW CREATE TABLE blog_comments").Scan(&result).Error; err != nil {
+		utils.JSONError(w, 500, err.Error())
+		return
+	}
+	utils.JSONResponse(w, 200, result)
+}
