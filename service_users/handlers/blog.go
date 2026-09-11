@@ -411,3 +411,57 @@ func HandleDebugTable(w http.ResponseWriter, r *http.Request) {
 	db.GormDB.Raw("SHOW COLUMNS FROM blog_comments").Scan(&columns)
 	utils.JSONResponse(w, 200, columns)
 }
+
+func HandleUpdateCommentStatus(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPut {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+	var input struct {
+		ID     string `json:"id"`
+		Status string `json:"status"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+	if err := db.GormDB.Model(&models.BlogComment{}).Where("id = ?", input.ID).Update("status", input.Status).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to update comment")
+		return
+	}
+	utils.JSONResponse(w, 200, map[string]string{"message": "Comment updated"})
+}
+
+func HandleDeleteComment(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodDelete {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		utils.JSONError(w, http.StatusBadRequest, "ID is required")
+		return
+	}
+	if err := db.GormDB.Where("id = ?", id).Delete(&models.BlogComment{}).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to delete comment")
+		return
+	}
+	utils.JSONResponse(w, 200, map[string]string{"message": "Comment deleted"})
+}
+
+func HandleDeleteSubscriber(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodDelete {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		utils.JSONError(w, http.StatusBadRequest, "ID is required")
+		return
+	}
+	if err := db.GormDB.Where("id = ?", id).Delete(&models.NewsletterSubscriber{}).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to delete subscriber")
+		return
+	}
+	utils.JSONResponse(w, 200, map[string]string{"message": "Subscriber deleted"})
+}

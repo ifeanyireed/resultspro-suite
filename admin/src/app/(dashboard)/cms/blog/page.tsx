@@ -82,6 +82,58 @@ export default function BlogCMSPage() {
     }
   };
 
+  
+  const handleUpdateCommentStatus = async (id: string, status: string) => {
+    try {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "https://resultspro-service-users.onrender.com";
+      const res = await fetch(`${USERS_API}/api/v1/cms/blog/comments/status`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status })
+      });
+      if (res.ok) {
+        setComments(comments.map((c: any) => c.id === id ? { ...c, status } : c));
+        toast.success(`Comment ${status.toLowerCase()}!`);
+      } else {
+        toast.error("Failed to update status");
+      }
+    } catch (e) {
+      toast.error("Error updating comment");
+    }
+  };
+
+  const handleDeleteComment = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this comment?")) return;
+    try {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "https://resultspro-service-users.onrender.com";
+      const res = await fetch(`${USERS_API}/api/v1/cms/blog/comments/delete?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setComments(comments.filter((c: any) => c.id !== id));
+        toast.success("Comment deleted!");
+      } else {
+        toast.error("Failed to delete comment");
+      }
+    } catch (e) {
+      toast.error("Error deleting comment");
+    }
+  };
+
+  const handleDeleteSubscriber = async (id: string) => {
+    if (!window.confirm("Are you sure you want to remove this subscriber?")) return;
+    try {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "https://resultspro-service-users.onrender.com";
+      const res = await fetch(`${USERS_API}/api/v1/cms/blog/subscribe/delete?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setSubscribers(subscribers.filter((s: any) => s.id !== id));
+        toast.success("Subscriber removed!");
+      } else {
+        toast.error("Failed to remove subscriber");
+      }
+    } catch (e) {
+      toast.error("Error removing subscriber");
+    }
+  };
+
   const handleCreateTag = async () => {
     const name = window.prompt("Enter tag name:");
     if (!name) return;
@@ -338,8 +390,13 @@ export default function BlogCMSPage() {
                       </td>
                       <td className="px-6 py-4 text-slate-500">{new Date(comment.created_at).toLocaleDateString()}</td>
                       <td className="px-6 py-4 text-right space-x-3">
-                        <button className="text-emerald-600 hover:text-emerald-800 text-sm font-medium">Approve</button>
-                        <button className="text-rose-600 hover:text-rose-800 text-sm font-medium">Delete</button>
+                        {comment.status !== 'APPROVED' && (
+                          <button onClick={() => handleUpdateCommentStatus(comment.id, 'APPROVED')} className="text-emerald-600 hover:text-emerald-800 text-sm font-medium">Approve</button>
+                        )}
+                        {comment.status === 'APPROVED' && (
+                          <button onClick={() => handleUpdateCommentStatus(comment.id, 'PENDING')} className="text-amber-600 hover:text-amber-800 text-sm font-medium">Hide</button>
+                        )}
+                        <button onClick={() => handleDeleteComment(comment.id)} className="text-rose-600 hover:text-rose-800 text-sm font-medium">Delete</button>
                       </td>
                     </tr>
                   ))
@@ -377,7 +434,7 @@ export default function BlogCMSPage() {
                       </td>
                       <td className="px-6 py-4 text-slate-500">{new Date(sub.created_at).toLocaleDateString()}</td>
                       <td className="px-6 py-4 text-right space-x-3">
-                        <button className="text-rose-600 hover:text-rose-800 text-sm font-medium">Remove</button>
+                        <button onClick={() => handleDeleteSubscriber(sub.id)} className="text-rose-600 hover:text-rose-800 text-sm font-medium">Remove</button>
                       </td>
                     </tr>
                   ))
