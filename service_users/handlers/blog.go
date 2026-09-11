@@ -342,7 +342,8 @@ func HandleCreateComment(w http.ResponseWriter, r *http.Request) {
 		ID:       generateID("cmt"),
 		PostID:   input.PostID,
 		Content:  input.Content,
-		AuthorID: user.ID,
+		UserID: user.ID,
+		UserName: input.Name,
 		Status:   "PENDING",
 	}
 

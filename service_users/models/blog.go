@@ -42,12 +42,13 @@ type BlogPostTag struct {
 
 type BlogComment struct {
 	ID        string    `json:"id" gorm:"primaryKey"`
-	PostID    string    `json:"post_id"`
-	AuthorID  string    `json:"author_id" gorm:"column:author_id"`
-	Content   string    `json:"content" gorm:"type:text"`
-	Status    string    `json:"status"` // PENDING, APPROVED, SPAM
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	PostID    string    `json:"post_id" gorm:"column:post_id"`
+	UserID    string    `json:"user_id" gorm:"column:user_id"`
+	UserName  string    `json:"user_name" gorm:"column:user_name"`
+	Content   string    `json:"content" gorm:"type:text;column:content"`
+	Status    string    `json:"status" gorm:"column:status"` // PENDING, APPROVED, SPAM
+	CreatedAt time.Time `json:"created_at" gorm:"column:created_at"`
+	UpdatedAt time.Time `json:"updated_at" gorm:"column:updated_at"`
 }
 
 type NewsletterSubscriber struct {
