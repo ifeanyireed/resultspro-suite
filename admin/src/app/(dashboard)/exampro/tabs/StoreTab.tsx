@@ -14,6 +14,8 @@ export default function StoreTab() {
   const [editingItem, setEditingItem] = useState<any>(null);
   const [activeView, setActiveView] = useState<'COIN' | 'ACTIVITY' | 'REFERRAL'>('COIN');
   const [settings, setSettings] = useState<any[]>([]);
+  const [pendingSettings, setPendingSettings] = useState<Record<string, string>>({});
+  const [savingSettings, setSavingSettings] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -41,7 +43,11 @@ export default function StoreTab() {
         fetchExamproSettings()
       ]);
       setPacks(Array.isArray(packData) ? packData : []);
-      setSettings(Array.isArray(settingsData) ? settingsData : []);
+      const sData = Array.isArray(settingsData) ? settingsData : [];
+      setSettings(sData);
+      const pSettings: Record<string, string> = {};
+      sData.forEach(s => pSettings[s.id] = s.value);
+      setPendingSettings(pSettings);
     } catch (e) {
       toast.error('Failed to load store items');
     } finally {
@@ -81,6 +87,22 @@ export default function StoreTab() {
       });
     }
     setIsModalOpen(true);
+  };
+
+  
+  const handleSaveSettings = async () => {
+    setSavingSettings(true);
+    try {
+      for (const [id, value] of Object.entries(pendingSettings)) {
+        await updateExamproSetting(id, value);
+      }
+      toast.success('Settings saved successfully');
+      loadData();
+    } catch (err) {
+      toast.error('Failed to save settings');
+    } finally {
+      setSavingSettings(false);
+    }
   };
 
   const updateSetting = async (id: string, value: string) => {
@@ -220,12 +242,9 @@ export default function StoreTab() {
                       <div className="flex items-center gap-2">
                         <input 
                           type="number" 
-                          defaultValue={val}
-                          onBlur={(e) => {
-                            if (e.target.value !== val) {
-                              updateSetting(setting.id, e.target.value);
-                            }
-                          }}
+                          value={pendingSettings[setting.id] !== undefined ? pendingSettings[setting.id] : val}
+                          onChange={(e) => setPendingSettings({...pendingSettings, [setting.id]: e.target.value})}
+                          
                           className="w-24 px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 text-right" 
                         />
                         <span className="text-sm font-bold text-slate-400">Coins</span>
@@ -233,6 +252,11 @@ export default function StoreTab() {
                     </div>
                   )
                 })}
+                              <div className="mt-8 flex justify-end">
+                  <button onClick={handleSaveSettings} disabled={savingSettings} className="px-6 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 disabled:opacity-50">
+                    {savingSettings ? 'Saving...' : 'Save Settings'}
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -249,11 +273,9 @@ export default function StoreTab() {
                   <div className="flex items-center gap-2">
                     <input 
                       type="number" 
-                      defaultValue={settings.find(s => s.id === 'referral_bonus')?.value || '150'}
-                      onBlur={(e) => {
-                        const v = settings.find(s => s.id === 'referral_bonus')?.value || '150';
-                        if (e.target.value !== v) updateSetting('referral_bonus', e.target.value);
-                      }}
+                      value={pendingSettings['referral_bonus'] !== undefined ? pendingSettings['referral_bonus'] : (settings.find(s => s.id === 'referral_bonus')?.value || '150')}
+                      onChange={(e) => setPendingSettings({...pendingSettings, 'referral_bonus': e.target.value})}
+                      
                       className="w-24 px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 text-right" 
                     />
                     <span className="text-sm font-bold text-slate-400">Coins</span>
@@ -268,11 +290,9 @@ export default function StoreTab() {
                   <div className="flex items-center gap-2">
                     <input 
                       type="number" 
-                      defaultValue={settings.find(s => s.id === 'referral_discount_percentage')?.value || '10'}
-                      onBlur={(e) => {
-                        const v = settings.find(s => s.id === 'referral_discount_percentage')?.value || '10';
-                        if (e.target.value !== v) updateSetting('referral_discount_percentage', e.target.value);
-                      }}
+                      value={pendingSettings['referral_discount_percentage'] !== undefined ? pendingSettings['referral_discount_percentage'] : (settings.find(s => s.id === 'referral_discount_percentage')?.value || '10')}
+                      onChange={(e) => setPendingSettings({...pendingSettings, 'referral_discount_percentage': e.target.value})}
+                      
                       className="w-24 px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 text-right" 
                     />
                     <span className="text-sm font-bold text-slate-400">% OFF</span>
@@ -286,14 +306,19 @@ export default function StoreTab() {
                   </div>
                   <div>
                     <select
-                      value={settings.find(s => s.id === 'referral_enabled')?.value || 'true'}
-                      onChange={(e) => updateSetting('referral_enabled', e.target.value)}
+                      value={pendingSettings['referral_enabled'] !== undefined ? pendingSettings['referral_enabled'] : (settings.find(s => s.id === 'referral_enabled')?.value || 'true')}
+                      onChange={(e) => setPendingSettings({...pendingSettings, 'referral_enabled': e.target.value})}
                       className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 font-bold"
                     >
                       <option value="true">Enabled</option>
                       <option value="false">Disabled</option>
                     </select>
                   </div>
+                </div>
+                <div className="mt-8 flex justify-end">
+                  <button onClick={handleSaveSettings} disabled={savingSettings} className="px-6 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 disabled:opacity-50">
+                    {savingSettings ? 'Saving...' : 'Save Settings'}
+                  </button>
                 </div>
               </div>
             </div>
