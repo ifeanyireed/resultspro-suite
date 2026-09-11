@@ -409,6 +409,8 @@ func main() {
 	mux.HandleFunc("/api/v1/cms/blog/comments", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			handlers.HandleGetComments(w, r)
+		} else if r.Method == http.MethodPost {
+			handlers.HandleCreateComment(w, r)
 		} else {
 			utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		}
