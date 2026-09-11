@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"fmt"
 	"strings"
 	"github.com/google/uuid"
 	"time"
@@ -348,6 +349,11 @@ func HandleCreateComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := db.GormDB.Create(&comment).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to create comment: " + err.Error() + " | UserID passed: [" + user.ID + "] | len: " + fmt.Sprintf("%d", len(user.ID))) 
+		return
+	}
+
+	if false {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to create comment: " + err.Error())
 		return
 	}
