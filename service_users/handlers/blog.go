@@ -317,7 +317,7 @@ func HandleCreateComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	db.GormDB.AutoMigrate(&models.BlogComment{})
+	db.GormDB.AutoMigrate(&models.BlogComment{}); db.GormDB.Exec("ALTER TABLE blog_comments ADD COLUMN parent_id VARCHAR(191)")
 
 	// Create guest user if email doesn't exist to satisfy foreign key constraint
 	guestEmail := input.Email
