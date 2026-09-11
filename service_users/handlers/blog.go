@@ -389,3 +389,13 @@ func HandleSubscribeNewsletter(w http.ResponseWriter, r *http.Request) {
 
 	utils.JSONResponse(w, http.StatusCreated, sub)
 }
+
+func HandleDebugTable(w http.ResponseWriter, r *http.Request) {
+	type ColumnInfo struct {
+		Field string `json:"field"`
+		Type  string `json:"type"`
+	}
+	var columns []ColumnInfo
+	db.GormDB.Raw("SHOW COLUMNS FROM blog_comments").Scan(&columns)
+	utils.JSONResponse(w, 200, columns)
+}

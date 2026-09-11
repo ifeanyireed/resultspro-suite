@@ -43,7 +43,7 @@ type BlogPostTag struct {
 type BlogComment struct {
 	ID        string    `json:"id" gorm:"primaryKey"`
 	PostID    string    `json:"post_id"`
-	AuthorID  string    `json:"author_id"`
+	AuthorID  string    `json:"author_id" gorm:"column:author_id"`
 	Content   string    `json:"content" gorm:"type:text"`
 	Status    string    `json:"status"` // PENDING, APPROVED, SPAM
 	CreatedAt time.Time `json:"created_at"`
