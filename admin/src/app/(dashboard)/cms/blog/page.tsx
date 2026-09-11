@@ -311,30 +311,77 @@ export default function BlogCMSPage() {
         {activeTab === 'comments' && (
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-300">
             <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-              <h3 className="font-semibold text-slate-800">Comments</h3>
-              <div className="flex gap-2">
-                <select className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option>All Status</option>
-                  <option>Pending</option>
-                  <option>Approved</option>
-                  <option>Spam</option>
-                </select>
-                <input type="text" placeholder="Search comments..." className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-              </div>
+              <h3 className="font-semibold text-slate-800">Blog Comments</h3>
             </div>
             <table className="w-full text-left text-sm text-slate-600">
               <thead className="bg-white border-b border-slate-200 text-xs uppercase font-semibold text-slate-500">
                 <tr>
-                  <th className="px-6 py-4">Author</th>
-                  <th className="px-6 py-4">Comment</th>
-                  <th className="px-6 py-4">In Response To</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4">Date</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
+                  <th className="px-6 py-3">Author</th>
+                  <th className="px-6 py-3">Content</th>
+                  <th className="px-6 py-3">Status</th>
+                  <th className="px-6 py-3">Date</th>
+                  <th className="px-6 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                <tr><td colSpan={6} className="px-6 py-8 text-center text-slate-500">No comments found.</td></tr>
+                {comments.length === 0 ? (
+                  <tr><td colSpan={5} className="px-6 py-8 text-center text-slate-500">No comments found.</td></tr>
+                ) : (
+                  comments.map((comment: any) => (
+                    <tr key={comment.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-6 py-4 font-medium text-slate-900">{comment.user_name || "Guest"}</td>
+                      <td className="px-6 py-4 text-slate-600 truncate max-w-xs">{comment.content}</td>
+                      <td className="px-6 py-4">
+                        <span className={`px-2.5 py-1 rounded-md text-xs font-semibold ${comment.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                          {comment.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-slate-500">{new Date(comment.created_at).toLocaleDateString()}</td>
+                      <td className="px-6 py-4 text-right space-x-3">
+                        <button className="text-emerald-600 hover:text-emerald-800 text-sm font-medium">Approve</button>
+                        <button className="text-rose-600 hover:text-rose-800 text-sm font-medium">Delete</button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+        
+        {activeTab === 'subscribers' && (
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-300">
+            <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+              <h3 className="font-semibold text-slate-800">Newsletter Subscribers</h3>
+            </div>
+            <table className="w-full text-left text-sm text-slate-600">
+              <thead className="bg-white border-b border-slate-200 text-xs uppercase font-semibold text-slate-500">
+                <tr>
+                  <th className="px-6 py-3">Email</th>
+                  <th className="px-6 py-3">Status</th>
+                  <th className="px-6 py-3">Date</th>
+                  <th className="px-6 py-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {subscribers.length === 0 ? (
+                  <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-500">No subscribers found.</td></tr>
+                ) : (
+                  subscribers.map((sub: any) => (
+                    <tr key={sub.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-6 py-4 font-medium text-slate-900">{sub.email}</td>
+                      <td className="px-6 py-4">
+                        <span className={`px-2.5 py-1 rounded-md text-xs font-semibold ${sub.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>
+                          {sub.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-slate-500">{new Date(sub.created_at).toLocaleDateString()}</td>
+                      <td className="px-6 py-4 text-right space-x-3">
+                        <button className="text-rose-600 hover:text-rose-800 text-sm font-medium">Remove</button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
