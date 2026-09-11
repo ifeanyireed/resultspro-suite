@@ -20,6 +20,7 @@ export default function BlogCMSPage() {
   const [activeTab, setActiveTab] = useState('posts');
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
+  const [tagsList, setTagsList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,6 +32,10 @@ export default function BlogCMSPage() {
         const catRes = await fetch(`${USERS_API}/api/v1/cms/blog/categories`);
         if (catRes.ok) {
           setCategories(await catRes.json());
+        }
+        const tagRes = await fetch(`${USERS_API}/api/v1/cms/blog/tags`);
+        if (tagRes.ok) {
+          setTagsList(await tagRes.json());
         }
       } catch (e) {}
       setPosts(data);
@@ -54,6 +59,25 @@ export default function BlogCMSPage() {
       if (res.ok) {
         const newCat = await res.json();
         setCategories([...categories, newCat]);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleCreateTag = async () => {
+    const name = window.prompt("Enter tag name:");
+    if (!name) return;
+    try {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "https://resultspro-service-users.onrender.com";
+      const res = await fetch(`${USERS_API}/api/v1/cms/blog/tags`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name })
+      });
+      if (res.ok) {
+        const newTag = await res.json();
+        setTagsList([...tagsList, newTag]);
       }
     } catch (e) {
       console.error(e);
@@ -98,7 +122,7 @@ export default function BlogCMSPage() {
                 <span>Create Post</span>
               </Link>
             ) : (
-              <button onClick={activeTab === "categories" ? handleCreateCategory : undefined} className="flex items-center space-x-2 px-5 py-2.5 rounded-full bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-colors shadow-sm cursor-pointer">
+              <button onClick={activeTab === "categories" ? handleCreateCategory : activeTab === "tags" ? handleCreateTag : undefined} className="flex items-center space-x-2 px-5 py-2.5 rounded-full bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-colors shadow-sm cursor-pointer">
                 <Plus className="w-4 h-4" />
                 <span>
                   {activeTab === 'categories' ? 'Add Category' : activeTab === 'tags' ? 'Add Tag' : 'Settings'}
@@ -243,7 +267,22 @@ export default function BlogCMSPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-500">No tags found. Add one to get started.</td></tr>
+                {tagsList.length === 0 ? (
+                  <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-500">No tags found. Add one to get started.</td></tr>
+                ) : (
+                  tagsList.map((tag: any) => (
+                    <tr key={tag.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-6 py-4 font-medium text-slate-900">{tag.name}</td>
+                      <td className="px-6 py-4 text-slate-500">{tag.slug}</td>
+                      <td className="px-6 py-4 text-slate-500">
+                        {posts.filter((p: any) => p.tags && p.tags.includes(tag.name)).length}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <button className="text-rose-600 hover:text-rose-800 text-sm font-medium">Delete</button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
