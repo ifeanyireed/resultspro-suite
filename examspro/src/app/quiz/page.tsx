@@ -16,9 +16,9 @@ function QuizContent() {
   
   const renderTextWithMath = (text: string) => {
     if (!text) return null;
-    const parts = text.split(/(\\(.*?\\))/g);
+    const parts = text.split(/(\\\(.*?\\\))/g);
     return parts.map((part, i) => {
-      if (part.startsWith('\(') && part.endsWith('\)')) {
+      if (part.startsWith('\\(') && part.endsWith('\\)')) {
         const math = part.slice(2, -2);
         return <InlineMath key={i} math={math} />;
       }

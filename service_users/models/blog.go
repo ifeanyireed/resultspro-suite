@@ -32,6 +32,7 @@ type BlogPost struct {
 	PublishedAt *time.Time `json:"published_at"`
 	CreatedAt   time.Time  `json:"created_at"`
 	UpdatedAt   time.Time  `json:"updated_at"`
+	Tags        string     `json:"tags" gorm:"-"`
 }
 
 type BlogPostTag struct {

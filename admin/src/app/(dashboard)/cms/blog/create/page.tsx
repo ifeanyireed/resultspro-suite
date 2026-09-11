@@ -39,6 +39,7 @@ function CreateBlogPostContent() {
             setExcerpt(post.excerpt || '');
             setCategory(post.category_id || '');
             setContent(post.content || '');
+            setTags(post.tags || '');
             let imgUrl = post.cover_image || '';
             if (imgUrl && imgUrl.startsWith('/')) imgUrl = 'https://resultspro.ng' + imgUrl;
             setCoverImage(imgUrl);
@@ -115,6 +116,7 @@ function CreateBlogPostContent() {
         content,
         cover_image: coverImage,
         category_id: category || null,
+        tags,
         status,
         author_id
       };

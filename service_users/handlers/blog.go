@@ -36,6 +36,7 @@ func HandleGetPosts(w http.ResponseWriter, r *http.Request) {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to fetch posts")
 		return
 	}
+	posts = loadTags(posts)
 	utils.JSONResponse(w, http.StatusOK, posts)
 }
 
@@ -55,6 +56,7 @@ func HandleUpdatePost(w http.ResponseWriter, r *http.Request) {
 		AuthorID   string  `json:"author_id"`
 		CategoryID *string `json:"category_id"`
 		Status     string  `json:"status"`
+		Tags       string  `json:"tags"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -84,6 +86,8 @@ func HandleUpdatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	syncTags(post.ID, input.Tags)
+	post.Tags = input.Tags
 	utils.JSONResponse(w, http.StatusOK, post)
 }
 
@@ -102,6 +106,7 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 		AuthorID   string  `json:"author_id"`
 		CategoryID *string `json:"category_id"`
 		Status     string  `json:"status"`
+		Tags       string  `json:"tags"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -136,6 +141,8 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	syncTags(post.ID, input.Tags)
+	post.Tags = input.Tags
 	utils.JSONResponse(w, http.StatusCreated, post)
 }
 
@@ -258,3 +265,32 @@ func HandleGetComments(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusOK, comments)
 }
 
+
+func syncTags(postID string, tagsStr string) {
+	if tagsStr == "" {
+		db.GormDB.Exec("DELETE FROM blog_post_tags WHERE post_id = ?", postID)
+		return
+	}
+	db.GormDB.Exec("DELETE FROM blog_post_tags WHERE post_id = ?", postID)
+	tags := strings.Split(tagsStr, ",")
+	for _, t := range tags {
+		t = strings.TrimSpace(t)
+		if t == "" { continue }
+		slug := strings.ToLower(strings.ReplaceAll(t, " ", "-"))
+		var tag models.BlogTag
+		if err := db.GormDB.Where("slug = ?", slug).First(&tag).Error; err != nil {
+			tag = models.BlogTag{ID: generateID("tag"), Name: t, Slug: slug}
+			db.GormDB.Create(&tag)
+		}
+		db.GormDB.Exec("INSERT INTO blog_post_tags (post_id, tag_id) VALUES (?, ?)", postID, tag.ID)
+	}
+}
+
+func loadTags(posts []models.BlogPost) []models.BlogPost {
+	for i, p := range posts {
+		var tags []string
+		db.GormDB.Raw("SELECT t.name FROM blog_tags t JOIN blog_post_tags pt ON t.id = pt.tag_id WHERE pt.post_id = ?", p.ID).Scan(&tags)
+		posts[i].Tags = strings.Join(tags, ", ")
+	}
+	return posts
+}
