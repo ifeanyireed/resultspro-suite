@@ -243,25 +243,54 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                 
                 {post.comments && post.comments.length > 0 ? (
                   <div className="space-y-8">
-                    {post.comments.map((comment) => (
-                      <div key={comment.id} className="flex gap-4">
-                        <div className="w-12 h-12 rounded-full bg-gray-200 shrink-0 overflow-hidden">
-                          <img src="/photo13.jpeg" className="w-full h-full object-cover" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="fw-700 text-navy text-sm">{comment.user_name || "Guest"}</span>
-                            <button onClick={() => handleReplyClick(comment.user_name || "Guest", comment.id.toString())} className="text-xs font-bold text-muted hover:text-navy flex items-center gap-1 cursor-pointer">
-                              <IconMessageCircle size={14} /> Reply
-                            </button>
+                    {(post.comments || []).filter((c: any) => !c.parent_id).map((comment: any) => (
+                      <div key={comment.id} className="flex flex-col gap-6">
+                        <div className="flex gap-4">
+                          <div className="w-12 h-12 rounded-full bg-gray-200 shrink-0 overflow-hidden">
+                            <img src="/photo13.jpeg" className="w-full h-full object-cover" />
                           </div>
-                          <span className="text-[10px] text-muted uppercase tracking-wider block mb-3">
-                            {new Date(comment.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                          </span>
-                          <p className="text-sm text-navy/80 leading-relaxed m-0 bg-nets-light p-4 rounded-tr-xl rounded-br-xl rounded-bl-xl border border-nets-border">
-                            {comment.content}
-                          </p>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="fw-700 text-navy text-sm">{comment.user_name || "Guest"}</span>
+                              <button onClick={() => handleReplyClick(comment.user_name || "Guest", comment.id.toString())} className="text-xs font-bold text-muted hover:text-navy flex items-center gap-1 cursor-pointer">
+                                <IconMessageCircle size={14} /> Reply
+                              </button>
+                            </div>
+                            <span className="text-[10px] text-muted uppercase tracking-wider block mb-3">
+                              {new Date(comment.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                            </span>
+                            <p className="text-sm text-navy/80 leading-relaxed m-0 bg-nets-light p-4 rounded-tr-xl rounded-br-xl rounded-bl-xl border border-nets-border whitespace-pre-wrap">
+                              {renderCommentContent(comment.content)}
+                            </p>
+                          </div>
                         </div>
+
+                        {/* Nested Replies */}
+                        {(post.comments || []).filter((r: any) => r.parent_id === comment.id).length > 0 && (
+                          <div className="ml-14 flex flex-col gap-6">
+                            {(post.comments || []).filter((r: any) => r.parent_id === comment.id).map((reply: any) => (
+                              <div key={reply.id} className="flex gap-4">
+                                <div className="w-10 h-10 rounded-full bg-gray-200 shrink-0 overflow-hidden">
+                                  <img src="/photo13.jpeg" className="w-full h-full object-cover" />
+                                </div>
+                                <div className="flex-1">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <span className="fw-700 text-navy text-sm">{reply.user_name || "Guest"}</span>
+                                    <button onClick={() => handleReplyClick(reply.user_name || "Guest", comment.id.toString())} className="text-xs font-bold text-muted hover:text-navy flex items-center gap-1 cursor-pointer">
+                                      <IconMessageCircle size={14} /> Reply
+                                    </button>
+                                  </div>
+                                  <span className="text-[10px] text-muted uppercase tracking-wider block mb-3">
+                                    {new Date(reply.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                                  </span>
+                                  <p className="text-sm text-navy/80 leading-relaxed m-0 bg-nets-light p-4 rounded-tr-xl rounded-br-xl rounded-bl-xl border border-nets-border whitespace-pre-wrap">
+                                    {renderCommentContent(reply.content)}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
