@@ -8,6 +8,7 @@ import { StatCard } from '@/components/StatCard';
 import { FileText, CheckCircle2, File, Plus, Tag, MessageSquare, Folder } from 'lucide-react';
 import { fetchBlogPosts } from '@/lib/api';
 import { BlogPost } from '@/lib/types';
+import toast from 'react-hot-toast';
 
 const TABS = [
   { id: 'posts', name: 'Posts', icon: FileText },
@@ -59,9 +60,12 @@ export default function BlogCMSPage() {
       if (res.ok) {
         const newCat = await res.json();
         setCategories([...categories, newCat]);
+        toast.success("Category added!");
+      } else {
+        toast.error("Failed to add category (might already exist)");
       }
     } catch (e) {
-      console.error(e);
+      toast.error("Network error");
     }
   };
 
@@ -78,9 +82,12 @@ export default function BlogCMSPage() {
       if (res.ok) {
         const newTag = await res.json();
         setTagsList([...tagsList, newTag]);
+        toast.success("Tag added!");
+      } else {
+        toast.error("Failed to add tag (might already exist)");
       }
     } catch (e) {
-      console.error(e);
+      toast.error("Network error");
     }
   };
 
