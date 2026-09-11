@@ -271,8 +271,8 @@ export default function BlogCMSPage() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             {post.published_at 
-                              ? new Date(post.published_at).toLocaleDateString() 
-                              : new Date(post.created_at).toLocaleDateString()}
+                              ? new Date(post.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) 
+                              : new Date(post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                           </td>
                           <td className="px-6 py-4 text-right">
                             <Link href={`/cms/blog/create?edit=${post.id}`} className="text-blue-600 hover:text-blue-800 text-sm font-medium mr-3">Edit</Link>
@@ -388,7 +388,7 @@ export default function BlogCMSPage() {
                           {comment.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-slate-500">{new Date(comment.created_at).toLocaleDateString()}</td>
+                      <td className="px-6 py-4 text-slate-500">{new Date(comment.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
                       <td className="px-6 py-4 text-right space-x-3">
                         {comment.status !== 'APPROVED' && (
                           <button onClick={() => handleUpdateCommentStatus(comment.id, 'APPROVED')} className="text-emerald-600 hover:text-emerald-800 text-sm font-medium">Approve</button>
@@ -432,7 +432,7 @@ export default function BlogCMSPage() {
                           {sub.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-slate-500">{new Date(sub.created_at).toLocaleDateString()}</td>
+                      <td className="px-6 py-4 text-slate-500">{new Date(sub.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
                       <td className="px-6 py-4 text-right space-x-3">
                         <button onClick={() => handleDeleteSubscriber(sub.id)} className="text-rose-600 hover:text-rose-800 text-sm font-medium">Remove</button>
                       </td>

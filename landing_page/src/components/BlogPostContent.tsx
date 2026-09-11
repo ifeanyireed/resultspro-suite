@@ -233,7 +233,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                             </button>
                           </div>
                           <span className="text-[10px] text-muted uppercase tracking-wider block mb-3">
-                            {new Date(comment.created_at).toLocaleDateString()}
+                            {new Date(comment.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                           </span>
                           <p className="text-sm text-navy/80 leading-relaxed m-0 bg-nets-light p-4 rounded-tr-xl rounded-br-xl rounded-bl-xl border border-nets-border">
                             {comment.content}
