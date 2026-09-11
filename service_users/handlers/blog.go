@@ -330,7 +330,7 @@ func HandleCreateComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := db.GormDB.Create(&comment).Error; err != nil {
-		utils.JSONError(w, http.StatusInternalServerError, "Failed to create comment")
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to create comment: " + err.Error())
 		return
 	}
 
