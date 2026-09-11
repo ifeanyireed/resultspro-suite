@@ -405,6 +405,7 @@ func main() {
 		}
 	})
 
+	mux.HandleFunc("/api/v1/cms/blog/subscribe", handlers.HandleSubscribeNewsletter)
 	mux.HandleFunc("/api/v1/cms/blog/comments", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			handlers.HandleGetComments(w, r)

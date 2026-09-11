@@ -49,3 +49,11 @@ type BlogComment struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+type NewsletterSubscriber struct {
+	ID        string    `json:"id" gorm:"primaryKey"`
+	Email     string    `json:"email" gorm:"uniqueIndex"`
+	Status    string    `json:"status"` // ACTIVE, UNSUBSCRIBED
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}

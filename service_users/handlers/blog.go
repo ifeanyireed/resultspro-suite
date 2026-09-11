@@ -295,3 +295,80 @@ func loadTags(posts []models.BlogPost) []models.BlogPost {
 	}
 	return posts
 }
+
+func HandleCreateComment(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var input struct {
+		PostID  string `json:"post_id"`
+		Content string `json:"content"`
+		Name    string `json:"name"`
+		Email   string `json:"email"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+
+	db.GormDB.AutoMigrate(&models.BlogComment{})
+
+	authorString := input.Name
+	if input.Email != "" {
+		authorString = input.Name + " (" + input.Email + ")"
+	}
+
+	comment := models.BlogComment{
+		ID:       generateID("cmt"),
+		PostID:   input.PostID,
+		Content:  input.Content,
+		AuthorID: authorString,
+		Status:   "PENDING",
+	}
+
+	if err := db.GormDB.Create(&comment).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to create comment")
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusCreated, comment)
+}
+
+func HandleSubscribeNewsletter(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var input struct {
+		Email string `json:"email"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+
+	if input.Email == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Email is required")
+		return
+	}
+
+	db.GormDB.AutoMigrate(&models.NewsletterSubscriber{})
+
+	sub := models.NewsletterSubscriber{
+		ID:     generateID("sub"),
+		Email:  input.Email,
+		Status: "ACTIVE",
+	}
+
+	if err := db.GormDB.Create(&sub).Error; err != nil {
+		utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Already subscribed or error"})
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusCreated, sub)
+}

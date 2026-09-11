@@ -1,4 +1,5 @@
 'use client';
+import React from "react";
 
 import ScrollReveal from './ScrollReveal';
 import Link from 'next/link';
@@ -25,6 +26,70 @@ interface BlogPost {
 }
 
 export default function BlogPostContent({ post }: { post: BlogPost }) {
+    const [commentFirstName, setCommentFirstName] = React.useState('');
+  const [commentLastName, setCommentLastName] = React.useState('');
+  const [commentEmail, setCommentEmail] = React.useState('');
+  const [commentContent, setCommentContent] = React.useState('');
+  const [commentLoading, setCommentLoading] = React.useState(false);
+
+  const [subEmail, setSubEmail] = React.useState('');
+  const [subLoading, setSubLoading] = React.useState(false);
+
+  const handleCommentSubmit = async () => {
+    if (!commentFirstName || !commentContent) {
+      alert("Name and comment are required");
+      return;
+    }
+    setCommentLoading(true);
+    try {
+      const res = await fetch("https://resultspro-service-users.onrender.com/api/v1/cms/blog/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          post_id: post.id,
+          name: `${commentFirstName} ${commentLastName}`.trim(),
+          email: commentEmail,
+          content: commentContent
+        })
+      });
+      if (res.ok) {
+        alert("Comment submitted successfully!");
+        setCommentFirstName(''); setCommentLastName(''); setCommentEmail(''); setCommentContent('');
+      } else {
+        alert("Failed to submit comment");
+      }
+    } catch(e) {
+      alert("Network error");
+    } finally {
+      setCommentLoading(false);
+    }
+  };
+
+  const handleSubscribeSubmit = async () => {
+    if (!subEmail) {
+      alert("Email is required");
+      return;
+    }
+    setSubLoading(true);
+    try {
+      const res = await fetch("https://resultspro-service-users.onrender.com/api/v1/cms/blog/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: subEmail })
+      });
+      if (res.ok) {
+        alert("Subscribed successfully!");
+        setSubEmail('');
+      } else {
+        alert("Failed to subscribe");
+      }
+    } catch(e) {
+      alert("Network error");
+    } finally {
+      setSubLoading(false);
+    }
+  };
+
   const formattedDate = new Date(post.published_at || post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   
   return (
@@ -163,13 +228,13 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
               <div className="bg-white shadow-xl w-full p-8 md:p-12">
                 <h3 className="text-2xl fw-700 text-navy mb-8">Leave your Comments</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <input type="text" placeholder="First Name" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500" />
-                  <input type="text" placeholder="Last Name" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500" />
+                  <input type="text" value={commentFirstName} onChange={e => setCommentFirstName(e.target.value)} placeholder="First Name" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500" />
+                  <input type="text" value={commentLastName} onChange={e => setCommentLastName(e.target.value)} placeholder="Last Name" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500" />
                 </div>
-                <input type="email" placeholder="Email Address" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-4" />
-                <textarea placeholder="Your Comment" rows={5} className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-6"></textarea>
-                <button className="btn" style={{ backgroundColor: "var(--color-nets-red)", color: "white", padding: "0.75rem 2rem" }}>
-                  Submit your Comment
+                <input type="email" value={commentEmail} onChange={e => setCommentEmail(e.target.value)} placeholder="Email Address" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-4" />
+                <textarea value={commentContent} onChange={e => setCommentContent(e.target.value)} placeholder="Your Comment" rows={5} className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-6"></textarea>
+                <button onClick={handleCommentSubmit} disabled={commentLoading} className="btn" style={{ backgroundColor: "var(--color-nets-red)", color: "white", padding: "0.75rem 2rem", opacity: commentLoading ? 0.7 : 1 }}>
+                  {commentLoading ? "Submitting..." : "Submit your Comment"}
                 </button>
               </div>
               {/* Card 6: Subscribe */}
