@@ -87,6 +87,13 @@ func SeedSystemSettings(db *gorm.DB) {
 		{ID: "subject_unlock_default", Value: "100", Type: "number", SettingGroup: "Economy", Label: "Default Subject Unlock", Desc: "Default cost to unlock a subject if not specified"},
 		{ID: "premium_monthly_coins", Value: "500", Type: "number", SettingGroup: "Economy", Label: "Premium Monthly Coins", Desc: "Monthly coin stipend for premium members"},
 
+		// Activity Deductions & Referral Config used by StoreTab
+		{ID: "quiz_retake_fee", Value: "0", Type: "number", SettingGroup: "Economy", Label: "Quiz Retake Fee", Desc: "Coins deducted when a user retakes a quiz."},
+		{ID: "hint_cost", Value: "0", Type: "number", SettingGroup: "Economy", Label: "Hint Cost", Desc: "Coins deducted when a user buys a hint during a test."},
+		{ID: "signup_reward", Value: "50", Type: "number", SettingGroup: "Economy", Label: "Sign-up Reward", Desc: "Coins granted to new users upon registration."},
+		{ID: "referral_discount_percentage", Value: "10", Type: "number", SettingGroup: "Economy", Label: "Referral Discount Percentage", Desc: "Discount given to the referred user upon subscription conversion."},
+		{ID: "referral_enabled", Value: "true", Type: "boolean", SettingGroup: "Economy", Label: "Referral Program Status", Desc: "Enable or disable the entire referral system."},
+
 		{ID: "battle_mode_enabled", Value: "true", Type: "boolean", SettingGroup: "Features", Label: "Battle Mode", Desc: "Enable real-time synchronous battles"},
 		{ID: "live_games_enabled", Value: "true", Type: "boolean", SettingGroup: "Features", Label: "Live Games", Desc: "Enable admin-hosted live championship rooms"},
 		{ID: "ai_assistant_enabled", Value: "true", Type: "boolean", SettingGroup: "Features", Label: "AI Study Assistant", Desc: "Enable Claude-powered chat tutor"},
