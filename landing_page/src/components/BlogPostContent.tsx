@@ -269,9 +269,9 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                   Get the latest educational insights, product updates, and thought leadership delivered straight to your inbox.
                 </p>
                 <div className="flex w-full max-w-md mx-auto relative">
-                  <input type="email" placeholder="Enter email address..." className="w-full px-5 py-3 rounded-full bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 pr-32" />
-                  <button className="absolute right-1 top-1 bottom-1 px-6 rounded-full text-white text-xs fw-700 transition-colors" style={{ backgroundColor: "var(--color-nets-red)" }}>
-                    Subscribe
+                  <input type="email" value={subEmail} onChange={e => setSubEmail(e.target.value)} placeholder="Enter email address..." className="w-full px-5 py-3 rounded-full bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 pr-32" />
+                  <button onClick={handleSubscribeSubmit} disabled={subLoading} className="absolute right-1 top-1 bottom-1 px-6 rounded-full text-white text-xs fw-700 transition-colors" style={{ backgroundColor: "var(--color-nets-red)", opacity: subLoading ? 0.7 : 1 }}>
+                    {subLoading ? "..." : "Subscribe"}
                   </button>
                 </div>
               </div>
