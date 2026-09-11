@@ -335,9 +335,9 @@ export default function Dashboard() {
           </WidgetCard>
 
           <WidgetCard title="Recent Activity">
-            <div className="space-y-3 max-h-[300px] overflow-y-auto no-scrollbar pr-1">
+            <div className="flex flex-col max-h-[300px] overflow-y-auto no-scrollbar pr-1">
               {Array.isArray(data.recentActivity) && data.recentActivity.length > 0 ? data.recentActivity.map((item, i) => (
-                <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-gray-100 bg-white hover:border-[#146ef5]/30 hover:shadow-sm transition-all cursor-pointer group">
+                <div key={i} className="flex items-center justify-between py-3 px-1 border-b border-gray-100 last:border-0 hover:bg-slate-50 transition-colors cursor-pointer group">
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
                       item.type === 'study' ? 'bg-blue-50 text-blue-500' : 
