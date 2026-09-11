@@ -26,6 +26,17 @@ interface BlogPost {
   category?: string;
 }
 
+
+const renderCommentContent = (text: string) => {
+  if (!text) return text;
+  return text.split(/(?=\s)|(?<=\s)/).map((word, idx) => {
+    if (word.trim().startsWith('@')) {
+      return <span key={idx} className="text-blue-600 font-bold bg-blue-50 px-1 rounded">{word}</span>;
+    }
+    return word;
+  });
+};
+
 export default function BlogPostContent({ post }: { post: BlogPost }) {
     const [commentFirstName, setCommentFirstName] = React.useState('');
   const [commentLastName, setCommentLastName] = React.useState('');
