@@ -8,31 +8,27 @@ interface ModernDashboardLayoutProps {
 
 export function ModernDashboardLayout({ sidebarContent, headerContent, children }: ModernDashboardLayoutProps) {
   return (
-    <div className="dashboard-page min-h-screen bg-[#f9fafc] font-sans text-gray-900 flex flex-col overflow-hidden">
-      {/* Main App Container */}
-      <div className="w-full flex flex-1 overflow-hidden h-screen">
+    <div className="dashboard-page min-h-screen bg-[#f9fafc] font-sans text-gray-900 flex">
+      {/* Sidebar - Sticky */}
+      <aside className="w-[280px] bg-white border-r border-gray-100 flex flex-col justify-between py-4 shrink-0 h-screen sticky top-0 overflow-hidden">
+        {sidebarContent}
+      </aside>
+
+      {/* Main Content Area - Native Scroll */}
+      <main className="flex-1 flex flex-col min-h-screen">
         
-        {/* Sidebar */}
-        <aside className="w-[280px] bg-white border-r border-gray-100 flex flex-col justify-between py-4 shrink-0 h-full overflow-y-auto">
-          {sidebarContent}
-        </aside>
+        {/* Header */}
+        {headerContent && (
+          <header className="h-24 px-6 flex items-center justify-between shrink-0 sticky top-0 bg-[#f9fafc] z-10">
+            {headerContent}
+          </header>
+        )}
 
-        {/* Main Content Area */}
-        <main className="flex-1 flex flex-col h-full overflow-hidden">
-          
-          {/* Header */}
-          {headerContent && (
-            <header className="h-24 px-3 flex items-center justify-between shrink-0">
-              {headerContent}
-            </header>
-          )}
-
-          {/* Scrollable Dashboard Content */}
-          <div className="flex-1 overflow-y-auto px-3 pb-3">
-            {children}
-          </div>
-        </main>
-      </div>
+        {/* Dashboard Content */}
+        <div className="flex-1 px-6 pb-6">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }
