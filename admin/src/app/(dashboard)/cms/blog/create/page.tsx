@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { RichTextEditor } from '@/components/RichTextEditor';
+import { TagsInput } from '@/components/TagsInput';
 import { ArrowLeft, Save, Send } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -239,13 +240,7 @@ function CreateBlogPostContent() {
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">Tags (Comma separated)</label>
-                <input 
-                  type="text" 
-                  value={tags}
-                  onChange={(e) => setTags(e.target.value)}
-                  placeholder="e.g. ICAN, Exams, Study"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm font-medium text-slate-700"
-                />
+                <TagsInput value={tags} onChange={setTags} />
               </div>
 
               <div>
