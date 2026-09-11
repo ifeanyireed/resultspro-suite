@@ -65,6 +65,30 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
     }
   };
 
+  const handleShare = (platform: 'facebook' | 'twitter' | 'linkedin' | 'email') => {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(post.title || "Check out this post from ResultsPRO");
+    let shareUrl = "";
+
+    if (platform === 'facebook') {
+      shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+    } else if (platform === 'twitter') {
+      shareUrl = `https://twitter.com/intent/tweet?text=${title}&url=${url}`;
+    } else if (platform === 'linkedin') {
+      shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+    } else if (platform === 'email') {
+      window.location.href = `mailto:?subject=${title}&body=Check out this article: ${url}`;
+      return;
+    }
+
+    // Open popup
+    const width = 600;
+    const height = 400;
+    const left = window.innerWidth / 2 - width / 2;
+    const top = window.innerHeight / 2 - height / 2;
+    window.open(shareUrl, 'share_popup', `width=${width},height=${height},top=${top},left=${left},scrollbars=no,resizable=no`);
+  };
+
   const handleSubscribeSubmit = async () => {
     if (!subEmail) {
       alert("Email is required");
@@ -146,16 +170,16 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                 {/* Floating Share Side-Nav */}
               <div className="hidden lg:flex flex-col items-center gap-4 w-12 absolute top-8 -left-20">
                 <span className="text-xs text-muted fw-600 mb-2">share</span>
-                <button className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors">
+                <button onClick={() => handleShare('facebook')} className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors">
                   <IconBrandFacebook size={18} />
                 </button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors">
+                <button onClick={() => handleShare('twitter')} className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors">
                   <IconBrandTwitter size={18} />
                 </button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors">
+                <button onClick={() => handleShare('linkedin')} className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors">
                   <IconBrandLinkedin size={18} />
                 </button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors">
+                <button onClick={() => handleShare('email')} className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors">
                   <IconMail size={18} />
                 </button>
               </div>
