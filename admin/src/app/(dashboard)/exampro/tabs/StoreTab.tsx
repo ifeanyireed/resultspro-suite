@@ -36,12 +36,13 @@ export default function StoreTab() {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [packData, planData] = await Promise.all([
+      const [packData, settingsData] = await Promise.all([
         fetchExamproStorePacks(),
-        []
+        fetchExamproSettings()
       ]);
       setPacks(Array.isArray(packData) ? packData : []);
-          } catch (e) {
+      setSettings(Array.isArray(settingsData) ? settingsData : []);
+    } catch (e) {
       toast.error('Failed to load store items');
     } finally {
       setLoading(false);

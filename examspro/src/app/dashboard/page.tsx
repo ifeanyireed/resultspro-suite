@@ -19,6 +19,7 @@ interface DashboardData {
     daysToGo: number;
     overallReadiness?: number;
     globalRank?: number;
+    walletBalance?: number;
   };
   subjects: Array<{ id: number, name: string, progress: number, color: string, questions: number }>;
   exams: Array<{ id: number, slug: string, name: string, readiness: number, category: string }>;

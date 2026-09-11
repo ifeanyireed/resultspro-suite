@@ -216,7 +216,7 @@ export async function fetchExamproBattles() {
 
 export async function fetchExamproUsers() {
   try {
-    const res = await fetch(`${EXAMS_API}/api/admin/users`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/admin/users-access`, { headers: getAuthHeader() });
     const data = await res.json();
     return Array.isArray(data) ? data : (data.users || []);
   } catch {
@@ -585,13 +585,13 @@ export async function updateExamproReportStatus(id: string, status: string, admi
 
 // ExamsPRO Admin Referral Settings
 export async function fetchExamproSettings(): Promise<any[]> {
-  const res = await fetch(`${EXAMS_API}/api/v1/admin/settings`, { headers: getAuthHeader() });
+  const res = await fetch(`${EXAMS_API}/api/admin/settings`, { headers: getAuthHeader() });
   if (!res.ok) throw new Error('Failed to fetch settings');
   return res.json();
 }
 
 export async function updateExamproSetting(id: string, value: string): Promise<any> {
-  const res = await fetch(`${EXAMS_API}/api/v1/admin/settings/${id}`, {
+  const res = await fetch(`${EXAMS_API}/api/admin/settings/${id}`, {
     method: 'PUT',
     headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ value })
@@ -601,13 +601,13 @@ export async function updateExamproSetting(id: string, value: string): Promise<a
 }
 
 export async function fetchExamproPayouts(): Promise<any[]> {
-  const res = await fetch(`${EXAMS_API}/api/v1/admin/payouts`, { headers: getAuthHeader() });
+  const res = await fetch(`${EXAMS_API}/api/admin/payouts`, { headers: getAuthHeader() });
   if (!res.ok) throw new Error('Failed to fetch payouts');
   return res.json();
 }
 
 export async function updateExamproPayoutStatus(id: string, status: string): Promise<any> {
-  const res = await fetch(`${EXAMS_API}/api/v1/admin/payouts/${id}`, {
+  const res = await fetch(`${EXAMS_API}/api/admin/payouts/${id}`, {
     method: 'PUT',
     headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ status })
@@ -618,13 +618,13 @@ export async function updateExamproPayoutStatus(id: string, status: string): Pro
 
 // ExamsPRO Store Management
 export async function fetchExamproStorePacks(): Promise<any[]> {
-  const res = await fetch(`${EXAMS_API}/api/v1/admin/coin-packs`, { headers: getAuthHeader() });
+  const res = await fetch(`${EXAMS_API}/api/admin/coin-packs`, { headers: getAuthHeader() });
   if (!res.ok) throw new Error('Failed to fetch store packs');
   return res.json();
 }
 
 export async function createExamproStorePack(data: any): Promise<any> {
-  const res = await fetch(`${EXAMS_API}/api/v1/admin/coin-packs`, {
+  const res = await fetch(`${EXAMS_API}/api/admin/coin-packs`, {
     method: 'POST',
     headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
@@ -634,7 +634,7 @@ export async function createExamproStorePack(data: any): Promise<any> {
 }
 
 export async function updateExamproStorePack(id: string, data: any): Promise<any> {
-  const res = await fetch(`${EXAMS_API}/api/v1/admin/coin-packs/${id}`, {
+  const res = await fetch(`${EXAMS_API}/api/admin/coin-packs/${id}`, {
     method: 'PUT',
     headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
@@ -644,7 +644,7 @@ export async function updateExamproStorePack(id: string, data: any): Promise<any
 }
 
 export async function deleteExamproStorePack(id: string): Promise<any> {
-  const res = await fetch(`${EXAMS_API}/api/v1/admin/coin-packs/${id}`, {
+  const res = await fetch(`${EXAMS_API}/api/admin/coin-packs/${id}`, {
     method: 'DELETE',
     headers: getAuthHeader()
   });
@@ -654,13 +654,13 @@ export async function deleteExamproStorePack(id: string): Promise<any> {
 
 // ExamsPRO Plan Management (Legacy / Local module plans)
 export async function fetchExamproPlans(): Promise<any[]> {
-  const res = await fetch(`${EXAMS_API}/api/v1/admin/plans`, { headers: getAuthHeader() });
+  const res = await fetch(`${EXAMS_API}/api/admin/plans`, { headers: getAuthHeader() });
   if (!res.ok) throw new Error('Failed to fetch exampro plans');
   return res.json();
 }
 
 export async function createExamproPlan(data: any): Promise<any> {
-  const res = await fetch(`${EXAMS_API}/api/v1/admin/plans`, {
+  const res = await fetch(`${EXAMS_API}/api/admin/plans`, {
     method: 'POST',
     headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
@@ -670,7 +670,7 @@ export async function createExamproPlan(data: any): Promise<any> {
 }
 
 export async function updateExamproPlan(id: string, data: any): Promise<any> {
-  const res = await fetch(`${EXAMS_API}/api/v1/admin/plans/${id}`, {
+  const res = await fetch(`${EXAMS_API}/api/admin/plans/${id}`, {
     method: 'PUT',
     headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
@@ -680,7 +680,7 @@ export async function updateExamproPlan(id: string, data: any): Promise<any> {
 }
 
 export async function deleteExamproPlan(id: string): Promise<any> {
-  const res = await fetch(`${EXAMS_API}/api/v1/admin/plans/${id}`, {
+  const res = await fetch(`${EXAMS_API}/api/admin/plans/${id}`, {
     method: 'DELETE',
     headers: getAuthHeader()
   });

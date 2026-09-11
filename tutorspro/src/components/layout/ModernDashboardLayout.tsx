@@ -13,7 +13,7 @@ export function ModernDashboardLayout({ sidebarContent, headerContent, children 
       <div className="w-full max-w-[1600px] bg-[#f9fafc] rounded-[2rem] shadow-xl border border-gray-100 flex overflow-hidden h-[calc(100vh-3rem)]">
         
         {/* Sidebar */}
-        <aside className="w-[280px] bg-white border-r border-gray-100 flex flex-col justify-between py-4 shrink-0 h-full overflow-y-auto">
+        <aside className="w-[280px] bg-white border-r border-gray-100 flex flex-col justify-between py-4 shrink-0 h-full overflow-hidden">
           {sidebarContent}
         </aside>
 

@@ -52,7 +52,7 @@ export default function UsersTab() {
 
   const handleSave = async (userId: string) => {
     try {
-      await fetch(`${EXAMS_API}/api/v1/admin/users-access/${userId}`, {
+      await fetch(`${EXAMS_API}/api/admin/users-access/${userId}`, {
         method: 'PUT',
         headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify({
