@@ -267,6 +267,7 @@ func HandleGetComments(w http.ResponseWriter, r *http.Request) {
 
 
 func syncTags(postID string, tagsStr string) {
+	db.GormDB.AutoMigrate(&models.BlogTag{}, &models.BlogPostTag{})
 	if tagsStr == "" {
 		db.GormDB.Exec("DELETE FROM blog_post_tags WHERE post_id = ?", postID)
 		return
