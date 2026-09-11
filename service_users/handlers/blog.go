@@ -353,10 +353,7 @@ func HandleCreateComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if false {
-		utils.JSONError(w, http.StatusInternalServerError, "Failed to create comment: " + err.Error())
-		return
-	}
+
 
 	utils.JSONResponse(w, http.StatusCreated, comment)
 }
