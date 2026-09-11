@@ -335,7 +335,7 @@ func HandleCreateComment(w http.ResponseWriter, r *http.Request) {
 			nameCopy := input.Name
 			user.FullName = &nameCopy
 		}
-		db.GormDB.Create(&user)
+		if err := db.GormDB.Create(&user).Error; err != nil { utils.JSONError(w, http.StatusInternalServerError, "Failed to create guest user: " + err.Error()); return }
 	}
 
 	comment := models.BlogComment{
