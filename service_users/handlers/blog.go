@@ -317,7 +317,7 @@ func HandleCreateComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	db.GormDB.AutoMigrate(&models.BlogComment{}); db.GormDB.Exec("ALTER TABLE blog_comments ADD COLUMN parent_id VARCHAR(191)")
+	if err := db.GormDB.Exec("ALTER TABLE blog_comments ADD COLUMN parent_id VARCHAR(191)").Error; err != nil && !strings.Contains(err.Error(), "Duplicate column name") { utils.JSONError(w, http.StatusInternalServerError, "ALTER TABLE FAILED: " + err.Error()); return }
 
 	// Create guest user if email doesn't exist to satisfy foreign key constraint
 	guestEmail := input.Email
