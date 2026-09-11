@@ -34,7 +34,7 @@ func HandleGetPosts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var posts []models.BlogPost
-	if err := db.GormDB.Preload("Author").Order("created_at desc").Find(&posts).Error; err != nil {
+	if err := db.GormDB.Preload("Author").Preload("Comments").Order("created_at desc").Find(&posts).Error; err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to fetch posts")
 		return
 	}
@@ -346,7 +346,7 @@ func HandleCreateComment(w http.ResponseWriter, r *http.Request) {
 		Content:  input.Content,
 		UserID: user.ID,
 		UserName: input.Name,
-		Status:   "PENDING",
+		Status:   "APPROVED",
 	}
 
 	if err := db.GormDB.Create(&comment).Error; err != nil {

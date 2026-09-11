@@ -33,6 +33,7 @@ type BlogPost struct {
 	CreatedAt   time.Time  `json:"created_at"`
 	UpdatedAt   time.Time  `json:"updated_at"`
 	Tags        string     `json:"tags" gorm:"-"`
+	Comments    []BlogComment `json:"comments" gorm:"foreignKey:PostID"`
 }
 
 type BlogPostTag struct {

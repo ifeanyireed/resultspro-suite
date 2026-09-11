@@ -8,7 +8,7 @@ import { IconArrowLeft, IconMessageCircle, IconBrandTwitter, IconBrandFacebook, 
 interface Comment {
   id: string | number;
   created_at: string;
-  author: string;
+  user_name: string;
   content: string;
 }
 
@@ -18,7 +18,8 @@ interface BlogPost {
   title: string;
   slug: string;
   content: string;
-  author: string;
+  author: any;
+  user_name?: string;
   comments?: Comment[];
   cover_image?: string;
   published_at?: string;
@@ -226,7 +227,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="fw-700 text-navy text-sm">{comment.author}</span>
+                            <span className="fw-700 text-navy text-sm">{comment.user_name || "Guest"}</span>
                             <button className="text-xs font-bold text-muted hover:text-navy flex items-center gap-1">
                               <IconMessageCircle size={14} /> Reply
                             </button>
