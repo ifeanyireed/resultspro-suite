@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"strings"
+	"github.com/google/uuid"
 	"time"
 	"math/rand"
 	"encoding/json"
@@ -316,16 +317,32 @@ func HandleCreateComment(w http.ResponseWriter, r *http.Request) {
 
 	db.GormDB.AutoMigrate(&models.BlogComment{})
 
-	authorString := input.Name
-	if input.Email != "" {
-		authorString = input.Name + " (" + input.Email + ")"
+	// Create guest user if email doesn't exist to satisfy foreign key constraint
+	guestEmail := input.Email
+	if guestEmail == "" {
+		guestEmail = "guest_" + uuid.New().String()[:8] + "@guest.local"
+	}
+	
+	var user models.User
+	if err := db.GormDB.Where("email = ?", guestEmail).First(&user).Error; err != nil {
+		user = models.User{
+			ID:            uuid.New().String(),
+			Email:         guestEmail,
+			AuthProvider:  "local",
+			AccountStatus: "unverified",
+		}
+		if input.Name != "" {
+			nameCopy := input.Name
+			user.FullName = &nameCopy
+		}
+		db.GormDB.Create(&user)
 	}
 
 	comment := models.BlogComment{
 		ID:       generateID("cmt"),
 		PostID:   input.PostID,
 		Content:  input.Content,
-		AuthorID: authorString,
+		AuthorID: user.ID,
 		Status:   "PENDING",
 	}
 
