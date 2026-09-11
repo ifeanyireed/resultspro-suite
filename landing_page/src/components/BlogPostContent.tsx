@@ -32,6 +32,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
   const [commentEmail, setCommentEmail] = React.useState('');
   const [commentContent, setCommentContent] = React.useState('');
   const [commentLoading, setCommentLoading] = React.useState(false);
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const [subEmail, setSubEmail] = React.useState('');
   const [subLoading, setSubLoading] = React.useState(false);
@@ -88,6 +89,14 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
     const left = window.innerWidth / 2 - width / 2;
     const top = window.innerHeight / 2 - height / 2;
     window.open(shareUrl, 'share_popup', `width=${width},height=${height},top=${top},left=${left},scrollbars=no,resizable=no`);
+  };
+
+    const handleReplyClick = (userName: string) => {
+    setCommentContent(`@${userName} `);
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+      textareaRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   };
 
   const handleSubscribeSubmit = async () => {
@@ -228,7 +237,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-1">
                             <span className="fw-700 text-navy text-sm">{comment.user_name || "Guest"}</span>
-                            <button className="text-xs font-bold text-muted hover:text-navy flex items-center gap-1">
+                            <button onClick={() => handleReplyClick(comment.user_name || "Guest")} className="text-xs font-bold text-muted hover:text-navy flex items-center gap-1 cursor-pointer">
                               <IconMessageCircle size={14} /> Reply
                             </button>
                           </div>
@@ -257,7 +266,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                   <input type="text" value={commentLastName} onChange={e => setCommentLastName(e.target.value)} placeholder="Last Name" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500" />
                 </div>
                 <input type="email" value={commentEmail} onChange={e => setCommentEmail(e.target.value)} placeholder="Email Address" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-4" />
-                <textarea value={commentContent} onChange={e => setCommentContent(e.target.value)} placeholder="Your Comment" rows={5} className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-6"></textarea>
+                <textarea ref={textareaRef} value={commentContent} onChange={e => setCommentContent(e.target.value)} placeholder="Your Comment" rows={5} className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-6"></textarea>
                 <button onClick={handleCommentSubmit} disabled={commentLoading} className="btn" style={{ backgroundColor: "var(--color-nets-red)", color: "white", padding: "0.75rem 2rem", opacity: commentLoading ? 0.7 : 1 }}>
                   {commentLoading ? "Submitting..." : "Submit your Comment"}
                 </button>
