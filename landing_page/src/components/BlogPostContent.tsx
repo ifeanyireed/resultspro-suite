@@ -249,7 +249,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
               </div>
 
               {/* Card 5: Leave Comment Form */}
-              <div className="bg-white shadow-xl w-full p-8 md:p-12">
+              <div className="bg-white shadow-xl w-full p-8 md:p-12 mb-8">
                 <h3 className="text-2xl fw-700 text-navy mb-8">Leave your Comments</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <input type="text" value={commentFirstName} onChange={e => setCommentFirstName(e.target.value)} placeholder="First Name" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500" />
