@@ -44,6 +44,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
   const [commentContent, setCommentContent] = React.useState('');
   const [commentLoading, setCommentLoading] = React.useState(false);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+  const [replyingTo, setReplyingTo] = React.useState<string | null>(null);
 
   const [subEmail, setSubEmail] = React.useState('');
   const [subLoading, setSubLoading] = React.useState(false);
@@ -62,12 +63,13 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
           post_id: post.id,
           name: `${commentFirstName} ${commentLastName}`.trim(),
           email: commentEmail,
-          content: commentContent
+          content: commentContent,
+          parent_id: replyingTo
         })
       });
       if (res.ok) {
         alert("Comment submitted successfully!");
-        setCommentFirstName(''); setCommentLastName(''); setCommentEmail(''); setCommentContent('');
+        setCommentFirstName(''); setCommentLastName(''); setCommentEmail(''); setCommentContent(''); setReplyingTo(null);
       } else {
         alert("Failed to submit comment");
       }
@@ -102,7 +104,8 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
     window.open(shareUrl, 'share_popup', `width=${width},height=${height},top=${top},left=${left},scrollbars=no,resizable=no`);
   };
 
-    const handleReplyClick = (userName: string) => {
+    const handleReplyClick = (userName: string, commentId: string) => {
+    setReplyingTo(commentId);
     setCommentContent(`@${userName} `);
     if (textareaRef.current) {
       textareaRef.current.focus();
@@ -248,7 +251,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-1">
                             <span className="fw-700 text-navy text-sm">{comment.user_name || "Guest"}</span>
-                            <button onClick={() => handleReplyClick(comment.user_name || "Guest")} className="text-xs font-bold text-muted hover:text-navy flex items-center gap-1 cursor-pointer">
+                            <button onClick={() => handleReplyClick(comment.user_name || "Guest", comment.id.toString())} className="text-xs font-bold text-muted hover:text-navy flex items-center gap-1 cursor-pointer">
                               <IconMessageCircle size={14} /> Reply
                             </button>
                           </div>
@@ -277,7 +280,13 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                   <input type="text" value={commentLastName} onChange={e => setCommentLastName(e.target.value)} placeholder="Last Name" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500" />
                 </div>
                 <input type="email" value={commentEmail} onChange={e => setCommentEmail(e.target.value)} placeholder="Email Address" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-4" />
-                <textarea ref={textareaRef} value={commentContent} onChange={e => setCommentContent(e.target.value)} placeholder="Your Comment" rows={5} className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-6"></textarea>
+                {replyingTo && (
+                  <div className="flex justify-between items-center bg-blue-50 text-blue-800 text-xs px-3 py-2 rounded-t-lg border border-b-0 border-blue-100">
+                    <span className="font-semibold">Replying to comment...</span>
+                    <button onClick={() => { setReplyingTo(null); setCommentContent(''); }} className="hover:text-blue-900 font-bold">&times; Cancel</button>
+                  </div>
+                )}
+                <textarea ref={textareaRef} value={commentContent} onChange={e => setCommentContent(e.target.value)} placeholder="Your Comment" rows={5} className={`w-full px-4 py-3 bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-6 ${replyingTo ? 'rounded-b-lg border-t-0' : 'rounded-lg'}`}></textarea>
                 <button onClick={handleCommentSubmit} disabled={commentLoading} className="btn" style={{ backgroundColor: "var(--color-nets-red)", color: "white", padding: "0.75rem 2rem", opacity: commentLoading ? 0.7 : 1 }}>
                   {commentLoading ? "Submitting..." : "Submit your Comment"}
                 </button>

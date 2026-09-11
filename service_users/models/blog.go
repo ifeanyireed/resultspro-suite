@@ -48,6 +48,7 @@ type BlogComment struct {
 	UserName  string    `json:"user_name" gorm:"column:user_name"`
 	Content   string    `json:"content" gorm:"type:text;column:content"`
 	Status    string    `json:"status" gorm:"column:status"` // PENDING, APPROVED, SPAM
+	ParentID  *string   `json:"parent_id,omitempty" gorm:"column:parent_id;index"`
 	CreatedAt time.Time `json:"created_at" gorm:"column:created_at"`
 	UpdatedAt time.Time `json:"updated_at" gorm:"column:updated_at"`
 }

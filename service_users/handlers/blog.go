@@ -309,6 +309,7 @@ func HandleCreateComment(w http.ResponseWriter, r *http.Request) {
 		Content string `json:"content"`
 		Name    string `json:"name"`
 		Email   string `json:"email"`
+		ParentID *string `json:"parent_id"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -347,6 +348,7 @@ func HandleCreateComment(w http.ResponseWriter, r *http.Request) {
 		UserID: user.ID,
 		UserName: input.Name,
 		Status:   "APPROVED",
+		ParentID: input.ParentID,
 	}
 
 	if err := db.GormDB.Create(&comment).Error; err != nil {
