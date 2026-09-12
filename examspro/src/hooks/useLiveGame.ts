@@ -6,7 +6,7 @@ import api from '@/lib/api';
 import { audioPlayer } from '@/lib/audio';
 
 const getWsUrl = () => {
-  if (typeof window === 'undefined') return process.env.NEXT_PUBLIC_WS_URL || 'wss://resultspro-service-examspro.vercel.app/ws';
+  if (typeof window === 'undefined') return process.env.NEXT_PUBLIC_WS_URL || 'wss://resultspro-service-examspro.onrender.com/ws';
   
   const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
   
@@ -15,7 +15,7 @@ const getWsUrl = () => {
     return `${protocol}//${window.location.host}/ws`;
   }
   
-  return process.env.NEXT_PUBLIC_WS_URL || `${protocol}//resultspro-service-examspro.vercel.app/ws`;
+  return process.env.NEXT_PUBLIC_WS_URL || `${protocol}//resultspro-service-examspro.onrender.com/ws`;
 };
 
 const WS_URL = getWsUrl();
