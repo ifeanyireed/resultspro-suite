@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -39,6 +39,29 @@ export default function SharedLoginPage({
   const [showOTP, setShowOTP] = useState(false);
   const [otp, setOtp] = useState('');
   const [verificationLoading, setVerificationLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendCountdown, setResendCountdown] = useState(0);
+  
+  useEffect(() => {
+    if (resendCountdown > 0) {
+      const timer = setTimeout(() => setResendCountdown(resendCountdown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendCountdown]);
+
+  const handleResend = async () => {
+    if (resendCountdown > 0) return;
+    setResendLoading(true);
+    try {
+      await api.post('/auth/resend-verification', { email });
+      setResendCountdown(60);
+      toast.success('Verification code resent successfully.');
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || err.response?.data?.message || 'Failed to resend code');
+    } finally {
+      setResendLoading(false);
+    }
+  };
   
   const setAuth = useAuthStore((state) => state.setAuth);
 
@@ -172,18 +195,25 @@ export default function SharedLoginPage({
               >
                 {verificationLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <span>Verify Account</span>}
               </button>
+              <div className="flex justify-between items-center mt-4">
+                <span className="text-sm text-slate-500">Didn't receive the code?</span>
+                <button
+                  type="button"
+                  onClick={handleResend}
+                  disabled={resendLoading || resendCountdown > 0}
+                  className="text-sm font-semibold text-blue-600 hover:text-blue-700 disabled:opacity-50"
+                >
+                  {resendLoading ? "Resending..." : resendCountdown > 0 ? `Resend in ${resendCountdown}s` : "Resend Code"}
+                </button>
+              </div>
             </form>
           </div>
         ) : (
         <div className="w-full max-w-md py-12 lg:py-0">
           
           {/* Mobile Logo standalone */}
-          <div className="lg:hidden flex items-center space-x-3 mb-10 justify-center">
-            <Image src={logoSrc} alt={brandTitle} width={56} height={56} className="bg-slate-900 rounded-xl p-1.5 shadow-md" />
-            <div className="text-left">
-              <h1 className="font-bold text-slate-900 text-2xl tracking-tight">{brandTitle}</h1>
-              <p className="text-blue-600 font-bold text-[10px] uppercase tracking-widest">{brandSubtitle}</p>
-            </div>
+          <div className="lg:hidden flex items-center justify-center mb-10">
+            <Image src={logoSrc} alt={brandTitle} width={64} height={64} className="object-contain" priority />
           </div>
           <div className="mb-10 text-center lg:text-left">
             <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Welcome Back</h2>

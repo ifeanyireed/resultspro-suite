@@ -238,9 +238,14 @@ export default function Navbar() {
                 style={{ marginTop: '2.5rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}
               >
                 {!isAuthenticated ? (
-                  <Link href="/signup" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
-                    Sign Up Free
-                  </Link>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
+                    <Link href="/signup" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
+                      Sign Up Free
+                    </Link>
+                    <Link href="/login" onClick={() => setMobileOpen(false)} className="btn btn-outline-white" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: '1px solid rgba(255,255,255,0.3)', color: '#fff', cursor: 'pointer', textDecoration: 'none', textAlign: 'center', borderRadius: '4px' }}>
+                      Log In
+                    </Link>
+                  </div>
                 ) : (
                   <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
                     Go to Dashboard

@@ -86,9 +86,8 @@ export default function PlatformSignupPage() {
       {/* Right Panel - Signup Form */}
       <div className="w-full lg:w-[45%] bg-white flex items-center justify-center p-8 sm:p-16 relative">
         {/* Mobile Logo overlay */}
-        <div className="absolute top-8 left-8 lg:hidden flex items-center space-x-2">
-           <Image src="/logo.png" alt="CoursesPRO" width={48} height={48} className="bg-slate-900 rounded-lg p-1" />
-           <span className="font-bold text-slate-900">CoursesPRO</span>
+        <div className="lg:hidden flex items-center justify-center mb-10 w-full absolute top-8 left-0 right-0">
+           <Image src={logoSrc || "/logo.png"} alt="Logo" width={64} height={64} className="object-contain" />
         </div>
 
         <div className="w-full max-w-md">

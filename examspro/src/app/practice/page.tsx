@@ -227,7 +227,7 @@ export default function PracticePage() {
                     {cat.exams.map((exam, examIdx) => (
                       <div
                         key={exam.id}
-                        className={`relative ${hoveredExamId === exam.id ? "z-[200]" : "z-10"}`}
+                        className={`relative ${hoveredExamId === exam.id ? "z-50" : "z-10"}`}
                         onMouseEnter={() => handleMouseEnter(exam.id)}
                         onMouseLeave={handleMouseLeaveFinal}
                       >
