@@ -73,11 +73,18 @@ export default function CoursesProTenantManager() {
   };
 
   const handleVerify = async (schoolId: string, status: 'VERIFIED' | 'REJECTED') => {
-    const ok = await verifySchool(schoolId, status);
-    if (ok) {
-      setSchools((prev) =>
-        prev.map((s) => (s.id === schoolId ? { ...s, verification_status: status } : s))
-      );
+    try {
+      const ok = await verifySchool(schoolId, status);
+      if (ok) {
+        setSchools((prev) =>
+          prev.map((s) => (s.id === schoolId ? { ...s, verification_status: status } : s))
+        );
+        alert(`Successfully ${status === 'VERIFIED' ? 'approved' : 'rejected'} tenant.`);
+      } else {
+        alert("Failed to verify tenant. Please try again.");
+      }
+    } catch (err: any) {
+      alert(`Error verifying: ${err.message}`);
     }
   };
 

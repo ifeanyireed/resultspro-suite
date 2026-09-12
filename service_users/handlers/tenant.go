@@ -244,10 +244,16 @@ func HandleVerifyTenant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	now := time.Now().UTC().Format("2006-01-02 15:04:05")
-	_, err := db.DB.Exec("UPDATE tenants SET verification_status = ?, status = 'ACTIVE', updated_at = ? WHERE id = ?", input.Status, now, tenantID)
-	if err != nil {
-		utils.JSONError(w, http.StatusInternalServerError, "Database error")
+	now := time.Now().UTC()
+	updates := map[string]interface{}{
+		"verification_status": input.Status,
+		"status":              "ACTIVE",
+		"updated_at":          now,
+	}
+
+	if err := db.GormDB.Model(&models.Tenant{}).Where("id = ?", tenantID).Updates(updates).Error; err != nil {
+		log.Printf("Verify Tenant DB Error: %v", err)
+		utils.JSONError(w, http.StatusInternalServerError, "Database error: "+err.Error())
 		return
 	}
 
