@@ -99,10 +99,17 @@ export default function InvoicesPage() {
     } catch (err) {}
   };
 
-  const copyLink = (code: string) => {
-    const link = `https://resultspro.ng/d/${code}`;
+  const copyLink = (code: string, appModule: string) => {
+    let baseUrl = 'https://resultspro.ng';
+    if (appModule) {
+      const moduleLower = appModule.toLowerCase();
+      if (['examspro', 'coursespro', 'classroompro', 'schoolhub', 'tutorspro'].includes(moduleLower)) {
+        baseUrl = `https://${moduleLower}.resultspro.ng`;
+      }
+    }
+    const link = `${baseUrl}/signup?discountCode=${code}`;
     navigator.clipboard.writeText(link);
-    toast.success('Link copied to clipboard!');
+    toast.success('Sign-up link copied to clipboard!');
   };
 
   return (
@@ -224,12 +231,19 @@ export default function InvoicesPage() {
                         <tr key={link.id} className="hover:bg-slate-50 transition-colors">
                           <td className="px-6 py-4 text-sm font-bold text-slate-900 flex items-center gap-2">
                             {link.code}
-                            <button onClick={() => copyLink(link.code)} className="text-slate-400 hover:text-blue-600 transition-colors" title="Copy Link">
+                            <button onClick={() => copyLink(link.code, plan?.app_module || '')} className="text-slate-400 hover:text-blue-600 transition-colors" title="Copy Link">
                               <Copy className="w-4 h-4" />
                             </button>
                           </td>
-                          <td className="px-6 py-4 text-sm font-medium text-blue-600">
-                            {plan ? `${plan.name} (${plan.app_module || 'Unknown'})` : 'Deleted Plan'}
+                          <td className="px-6 py-4">
+                            <div className="text-sm font-medium text-blue-600">
+                              {plan ? `${plan.name} (${plan.app_module || 'Unknown'})` : 'Deleted Plan'}
+                            </div>
+                            {link.pre_assigned_emails && (
+                              <div className="text-xs text-slate-500 mt-1 max-w-[200px] truncate" title={link.pre_assigned_emails}>
+                                {link.pre_assigned_emails}
+                              </div>
+                            )}
                           </td>
                           <td className="px-6 py-4 text-sm font-bold text-green-600">{link.discount_percentage}% OFF</td>
                           <td className="px-6 py-4 text-sm text-slate-500">{link.uses} / {link.max_uses === 0 ? '∞' : link.max_uses}</td>
