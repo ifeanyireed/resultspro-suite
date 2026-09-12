@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
 	"github.com/joho/godotenv"
 )
 
@@ -17,7 +17,7 @@ func main() {
 		log.Fatal("DATABASE_URL is required to seed database")
 	}
 
-	db, err := sql.Open("mysql", dbURL)
+	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
 		log.Fatalf("Database connection error: %v", err)
 	}
@@ -48,7 +48,7 @@ func main() {
 	}
 
 	for _, u := range users {
-		seed(db, `INSERT IGNORE INTO users (id, email, password_hash, auth_provider, full_name, phone, sex, account_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+		seed(db, `INSERT INTO users (id, email, password_hash, auth_provider, full_name, phone, sex, account_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT DO NOTHING`,
 			u.ID, u.Email, u.Pass, u.Provider, u.Name, u.Phone, u.Sex, u.Status)
 	}
 
@@ -67,16 +67,16 @@ func main() {
 	}
 
 	for _, a := range apps {
-		seed(db, "INSERT IGNORE INTO apps (id, name, secret_key) VALUES (?, ?, ?)", a.ID, a.Name, a.Secret)
+		seed(db, "INSERT INTO apps (id, name, secret_key) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", a.ID, a.Name, a.Secret)
 	}
 
 	// 3. Curriculums
-	seed(db, "INSERT IGNORE INTO curriculums (id, name, country) VALUES (?, ?, ?)", "cur-1", "Nigerian National Curriculum (NERDC)", "Nigeria")
-	seed(db, "INSERT IGNORE INTO curriculums (id, name, country) VALUES (?, ?, ?)", "cur-2", "British National Curriculum (Cambridge)", "United Kingdom")
+	seed(db, "INSERT INTO curriculums (id, name, country) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", "cur-1", "Nigerian National Curriculum (NERDC)", "Nigeria")
+	seed(db, "INSERT INTO curriculums (id, name, country) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", "cur-2", "British National Curriculum (Cambridge)", "United Kingdom")
 
 	// 4. Sample Tenant: Greenwood High
-	seed(db, `INSERT IGNORE INTO tenants (id, name, slug, tenant_code, short_name, motto, logo_url, primary_color, secondary_color, accent_color, contact_email, full_address, status, verification_status, referred_by_agent_id, subscription_tier, settings) 
-	          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', 'VERIFIED', ?, 'PRO', ?)`,
+	seed(db, `INSERT INTO tenants (id, name, slug, tenant_code, short_name, motto, logo_url, primary_color, secondary_color, accent_color, contact_email, full_address, status, verification_status, referred_by_agent_id, subscription_tier, settings) 
+	          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 'ACTIVE', 'VERIFIED', $13, 'PRO', $14) ON CONFLICT DO NOTHING`,
 		"tenant-1", "Greenwood High", "greenwood-high", "GHS001", "GHS", "Excellence and Integrity",
 		"https://auth.resultspro.ng/logos/greenwood.png", "#2563eb", "#1e293b", "#f59e0b",
 		"info@greenwoodhigh.edu.ng", "123 Academic Way, Owerri, Imo State",
@@ -84,58 +84,58 @@ func main() {
 		`{"theme": "modern", "hero_title": "Welcome to Greenwood High", "hero_subtitle": "Fostering academic excellence and character building."}`)
 
 	// 5. User Tenant Roles
-	seed(db, "INSERT IGNORE INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES (?, ?, ?, ?, ?)", "role-1", "bfb51c68-ccb0-401f-b58f-27fd41c6a856", "tenant-1", "super-admin", "active")
-	seed(db, "INSERT IGNORE INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES (?, ?, ?, ?, ?)", "role-2", "8d3a7776-5d21-4f1e-9a6d-e4c1d63e9f02", "tenant-1", "tenant-admin", "active")
-	seed(db, "INSERT IGNORE INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES (?, ?, ?, ?, ?)", "role-3", "2db093ed-bdc9-47c4-b71c-66869f0f1ea7", "tenant-1", "teacher", "active")
-	seed(db, "INSERT IGNORE INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES (?, ?, ?, ?, ?)", "role-4", "111efa7d-e12d-4ed1-9902-d341c6826b50", "tenant-1", "student", "active")
-	seed(db, "INSERT IGNORE INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES (?, ?, ?, ?, ?)", "role-5", "dac38ffd-866f-47ab-8ac4-ecf6ea520ba8", "tenant-1", "parent", "active")
+	seed(db, "INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "role-1", "bfb51c68-ccb0-401f-b58f-27fd41c6a856", "tenant-1", "super-admin", "active")
+	seed(db, "INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "role-2", "8d3a7776-5d21-4f1e-9a6d-e4c1d63e9f02", "tenant-1", "tenant-admin", "active")
+	seed(db, "INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "role-3", "2db093ed-bdc9-47c4-b71c-66869f0f1ea7", "tenant-1", "teacher", "active")
+	seed(db, "INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "role-4", "111efa7d-e12d-4ed1-9902-d341c6826b50", "tenant-1", "student", "active")
+	seed(db, "INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "role-5", "dac38ffd-866f-47ab-8ac4-ecf6ea520ba8", "tenant-1", "parent", "active")
 
 	// 6. Academic Sessions & Terms
-	seed(db, "INSERT IGNORE INTO academic_sessions (id, tenant_id, name, is_current) VALUES (?, ?, ?, ?)", "session-1", "tenant-1", "2025/2026", 1)
-	seed(db, "INSERT IGNORE INTO terms (id, session_id, name, is_current) VALUES (?, ?, ?, ?)", "term-1", "session-1", "First Term", 1)
-	seed(db, "INSERT IGNORE INTO terms (id, session_id, name, is_current) VALUES (?, ?, ?, ?)", "term-2", "session-1", "Second Term", 0)
-	seed(db, "INSERT IGNORE INTO terms (id, session_id, name, is_current) VALUES (?, ?, ?, ?)", "term-3", "session-1", "Third Term", 0)
+	seed(db, "INSERT INTO academic_sessions (id, tenant_id, name, is_current) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "session-1", "tenant-1", "2025/2026", 1)
+	seed(db, "INSERT INTO terms (id, session_id, name, is_current) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "term-1", "session-1", "First Term", 1)
+	seed(db, "INSERT INTO terms (id, session_id, name, is_current) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "term-2", "session-1", "Second Term", 0)
+	seed(db, "INSERT INTO terms (id, session_id, name, is_current) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "term-3", "session-1", "Third Term", 0)
 
 	// 7. Classes & Sections
-	seed(db, "INSERT IGNORE INTO classes (id, tenant_id, curriculum_id, name, level) VALUES (?, ?, ?, ?, ?)", "class-1", "tenant-1", "cur-1", "Grade 10 (SS1)", 10)
-	seed(db, "INSERT IGNORE INTO classes (id, tenant_id, curriculum_id, name, level) VALUES (?, ?, ?, ?, ?)", "class-2", "tenant-1", "cur-1", "Grade 11 (SS2)", 11)
-	seed(db, "INSERT IGNORE INTO sections (id, class_id, name, room_number) VALUES (?, ?, ?, ?)", "section-1", "class-1", "10A (Science)", "Room 101")
-	seed(db, "INSERT IGNORE INTO sections (id, class_id, name, room_number) VALUES (?, ?, ?, ?)", "section-2", "class-1", "10B (Arts)", "Room 102")
+	seed(db, "INSERT INTO classes (id, tenant_id, curriculum_id, name, level) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "class-1", "tenant-1", "cur-1", "Grade 10 (SS1)", 10)
+	seed(db, "INSERT INTO classes (id, tenant_id, curriculum_id, name, level) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "class-2", "tenant-1", "cur-1", "Grade 11 (SS2)", 11)
+	seed(db, "INSERT INTO sections (id, class_id, name, room_number) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "section-1", "class-1", "10A (Science)", "Room 101")
+	seed(db, "INSERT INTO sections (id, class_id, name, room_number) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "section-2", "class-1", "10B (Arts)", "Room 102")
 
 	// 8. Subjects
-	seed(db, "INSERT IGNORE INTO subjects (id, tenant_id, name, code) VALUES (?, ?, ?, ?)", "subject-1", "tenant-1", "Mathematics", "MTH101")
-	seed(db, "INSERT IGNORE INTO subjects (id, tenant_id, name, code) VALUES (?, ?, ?, ?)", "subject-2", "tenant-1", "English Language", "ENG101")
-	seed(db, "INSERT IGNORE INTO subjects (id, tenant_id, name, code) VALUES (?, ?, ?, ?)", "subject-3", "tenant-1", "Physics", "PHY101")
-	seed(db, "INSERT IGNORE INTO subjects (id, tenant_id, name, code) VALUES (?, ?, ?, ?)", "subject-4", "tenant-1", "Chemistry", "CHM101")
+	seed(db, "INSERT INTO subjects (id, tenant_id, name, code) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "subject-1", "tenant-1", "Mathematics", "MTH101")
+	seed(db, "INSERT INTO subjects (id, tenant_id, name, code) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "subject-2", "tenant-1", "English Language", "ENG101")
+	seed(db, "INSERT INTO subjects (id, tenant_id, name, code) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "subject-3", "tenant-1", "Physics", "PHY101")
+	seed(db, "INSERT INTO subjects (id, tenant_id, name, code) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "subject-4", "tenant-1", "Chemistry", "CHM101")
 
 	// 9. Syllabus Weeks & Topics
-	seed(db, "INSERT IGNORE INTO syllabus_weeks (id, subject_id, week_number, term) VALUES (?, ?, ?, ?)", "week-1", "subject-1", 1, 1)
-	seed(db, "INSERT IGNORE INTO syllabus_weeks (id, subject_id, week_number, term) VALUES (?, ?, ?, ?)", "week-2", "subject-1", 2, 1)
-	seed(db, "INSERT IGNORE INTO topics (id, syllabus_week_id, name, description, `order`) VALUES (?, ?, ?, ?, ?)", "topic-1", "week-1", "Quadratic Equations", "Solving quadratics by factorisation and formula", 1)
-	seed(db, "INSERT IGNORE INTO topics (id, syllabus_week_id, name, description, `order`) VALUES (?, ?, ?, ?, ?)", "topic-2", "week-2", "Simultaneous Equations", "Linear and non-linear simultaneous equations", 1)
+	seed(db, "INSERT INTO syllabus_weeks (id, subject_id, week_number, term) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "week-1", "subject-1", 1, 1)
+	seed(db, "INSERT INTO syllabus_weeks (id, subject_id, week_number, term) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "week-2", "subject-1", 2, 1)
+	seed(db, "INSERT INTO topics (id, syllabus_week_id, name, description, "order") VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "topic-1", "week-1", "Quadratic Equations", "Solving quadratics by factorisation and formula", 1)
+	seed(db, "INSERT INTO topics (id, syllabus_week_id, name, description, "order") VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "topic-2", "week-2", "Simultaneous Equations", "Linear and non-linear simultaneous equations", 1)
 
 	// 10. Enrollments & Assignments
-	seed(db, "INSERT IGNORE INTO enrollments (id, student_id, section_id, session_id, status) VALUES (?, ?, ?, ?, ?)",
+	seed(db, "INSERT INTO enrollments (id, student_id, section_id, session_id, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING",
 		"enroll-1", "111efa7d-e12d-4ed1-9902-d341c6826b50", "section-1", "session-1", "active")
 
-	seed(db, "INSERT IGNORE INTO assignments (id, section_id, subject_id, teacher_id, term_id) VALUES (?, ?, ?, ?, ?)",
+	seed(db, "INSERT INTO assignments (id, section_id, subject_id, teacher_id, term_id) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING",
 		"assign-1", "section-1", "subject-1", "2db093ed-bdc9-47c4-b71c-66869f0f1ea7", "term-1")
 
 	// 11. Family Relationships
-	seed(db, "INSERT IGNORE INTO family_relationships (id, parent_user_id, child_user_id, relationship_type, is_emergency_contact) VALUES (?, ?, ?, ?, ?)",
+	seed(db, "INSERT INTO family_relationships (id, parent_user_id, child_user_id, relationship_type, is_emergency_contact) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING",
 		"rel-1", "dac38ffd-866f-47ab-8ac4-ecf6ea520ba8", "111efa7d-e12d-4ed1-9902-d341c6826b50", "mother", 1)
 
 	// 12. Agent Commissions & Earnings
-	seed(db, "INSERT IGNORE INTO agent_commissions (agent_id, default_rate, bank_name, account_number, account_name) VALUES (?, ?, ?, ?, ?)",
+	seed(db, "INSERT INTO agent_commissions (agent_id, default_rate, bank_name, account_number, account_name) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING",
 		"999efa7d-e12d-4ed1-9902-d341c6826b99", 15.0, "Zenith Bank", "1029384756", "Chinedu Okafor")
-	seed(db, "INSERT IGNORE INTO agent_earnings (id, agent_id, tenant_id, amount, source_type, status) VALUES (?, ?, ?, ?, ?, ?)",
+	seed(db, "INSERT INTO agent_earnings (id, agent_id, tenant_id, amount, source_type, status) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING",
 		"earn-1", "999efa7d-e12d-4ed1-9902-d341c6826b99", "tenant-1", 75000.0, "SUBSCRIPTION", "EARNED")
 
 	// 13. Exam Bodies & National Exams
-	seed(db, "INSERT IGNORE INTO exam_bodies (id, name) VALUES (?, ?)", "body-1", "West African Examinations Council (WAEC)")
-	seed(db, "INSERT IGNORE INTO exam_bodies (id, name) VALUES (?, ?)", "body-2", "Joint Admissions and Matriculation Board (JAMB)")
-	seed(db, "INSERT IGNORE INTO national_exams (id, exam_body_id, name) VALUES (?, ?, ?)", "exam-1", "body-1", "WASSCE May/June")
-	seed(db, "INSERT IGNORE INTO national_exams (id, exam_body_id, name) VALUES (?, ?, ?)", "exam-2", "body-2", "UTME CBT Exam")
+	seed(db, "INSERT INTO exam_bodies (id, name) VALUES ($1, $2) ON CONFLICT DO NOTHING", "body-1", "West African Examinations Council (WAEC)")
+	seed(db, "INSERT INTO exam_bodies (id, name) VALUES ($1, $2) ON CONFLICT DO NOTHING", "body-2", "Joint Admissions and Matriculation Board (JAMB)")
+	seed(db, "INSERT INTO national_exams (id, exam_body_id, name) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", "exam-1", "body-1", "WASSCE May/June")
+	seed(db, "INSERT INTO national_exams (id, exam_body_id, name) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", "exam-2", "body-2", "UTME CBT Exam")
 
 	fmt.Println("✅ service_users database seeding completed successfully!")
 }
