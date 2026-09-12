@@ -39,6 +39,7 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		Type              string `json:"type"`
 		PrimaryColor      string `json:"primary_color"`
 		EnabledModules    string `json:"enabled_modules"`
+		UserID            string `json:"user_id"` // Optional creator ID to automatically assign tenant-admin role
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -101,6 +102,15 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error creating tenant: %v", err)
 		utils.JSONError(w, http.StatusConflict, "Tenant with this name or slug already exists")
 		return
+	}
+
+	if input.UserID != "" {
+		roleID := uuid.New().String()
+		roleQuery := `INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status, created_at, updated_at) VALUES (?, ?, ?, 'tenant-admin', 'active', ?, ?)`
+		_, roleErr := db.DB.Exec(roleQuery, roleID, input.UserID, tenantID, now, now)
+		if roleErr != nil {
+			log.Printf("Error assigning tenant-admin role to user %s for tenant %s: %v", input.UserID, tenantID, roleErr)
+		}
 	}
 
 	utils.JSONResponse(w, http.StatusCreated, map[string]interface{}{
