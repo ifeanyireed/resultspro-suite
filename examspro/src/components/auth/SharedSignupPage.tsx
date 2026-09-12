@@ -8,7 +8,7 @@ import { IconMail as Mail, IconLock as Lock, IconShieldCheck as ShieldCheck, Ico
 
 import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
-import api from '@/lib/api';
+import api, { USERS_API } from '@/lib/api';
 
 export interface SharedSignupPageProps {
   appName?: string;
@@ -58,7 +58,7 @@ export default function SharedSignupPage({
     if (resendCountdown > 0) return;
     setResendLoading(true);
     try {
-      await api.post('/auth/resend-verification', { email });
+      await api.post(`${USERS_API}/api/v1/auth/resend-verification`, { email });
       setResendCountdown(60);
       toast.success('Verification code resent successfully.');
     } catch (err: any) {
@@ -83,7 +83,6 @@ export default function SharedSignupPage({
       if (refCode) payload.referral_code = refCode;
       
       const res = await api.post(signupEndpoint, payload);
-      
       const token = res.data.token || res.data.access_token;
       if (token) {
         setAuth(res.data.user, token);
@@ -128,7 +127,7 @@ export default function SharedSignupPage({
               {appDescription}
             </h2>
             <p className="text-slate-400 text-lg leading-relaxed mb-10">
-              Join thousands of students and educators across Nigeria and beyond.
+              Manage schools, tutors, assessments, and payments across the entire ecosystem from one centralized command center.
             </p>
 
             <div className="flex space-x-8">
@@ -179,7 +178,7 @@ export default function SharedSignupPage({
               e.preventDefault();
               setVerificationLoading(true);
               try {
-                await api.post('/account/verify-email', { token: otp });
+                await api.post(`${USERS_API}/api/v1/auth/verify-email`, { token: otp });
                 toast.success("Email verified successfully!");
                 router.push('/login');
               } catch (err: any) {

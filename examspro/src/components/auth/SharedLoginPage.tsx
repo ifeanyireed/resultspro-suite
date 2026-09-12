@@ -8,7 +8,7 @@ import { IconMail as Mail, IconLock as Lock, IconShieldCheck as ShieldCheck, Ico
 
 import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
-import api from '@/lib/api';
+import api, { USERS_API } from '@/lib/api';
 
 export interface SharedLoginPageProps {
   appName?: string;
@@ -53,7 +53,7 @@ export default function SharedLoginPage({
     if (resendCountdown > 0) return;
     setResendLoading(true);
     try {
-      await api.post('/auth/resend-verification', { email });
+      await api.post(`${USERS_API}/api/v1/auth/resend-verification`, { email });
       setResendCountdown(60);
       toast.success('Verification code resent successfully.');
     } catch (err: any) {
@@ -167,7 +167,7 @@ export default function SharedLoginPage({
               e.preventDefault();
               setVerificationLoading(true);
               try {
-                await api.post('/account/verify-email', { token: otp });
+                await api.post(`${USERS_API}/api/v1/auth/verify-email`, { token: otp });
                 toast.success("Email verified successfully! Logging you in...");
                 // Automatically log them in now
                 handleLogin(new Event('submit') as any);

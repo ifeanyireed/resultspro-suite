@@ -81,6 +81,9 @@ func main() {
 
 	// Account Management
 	mux.HandleFunc("/auth/verify-email", handlers.HandleVerifyEmail)
+	mux.HandleFunc("/auth/resend-verification", handlers.HandleResendVerification)
+	mux.HandleFunc("/api/v1/auth/resend-verification", handlers.HandleResendVerification)
+
 	mux.HandleFunc("/api/v1/auth/verify-email", handlers.HandleVerifyEmail)
 
 	mux.HandleFunc("/auth/forgot-password", handlers.HandleForgotPassword)
