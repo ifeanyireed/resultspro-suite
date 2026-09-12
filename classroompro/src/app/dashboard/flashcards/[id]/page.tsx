@@ -4,7 +4,7 @@ export const dynamicParams = false;
 
 export async function generateStaticParams() {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://resultspro-service-users.onrender.com/api';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://resultspro-service-classroompro.onrender.com/api';
     const res = await fetch(`${apiUrl}/flashcards`);
     const responseData = await res.json();
     

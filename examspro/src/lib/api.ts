@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
 const getApiUrl = () => {
-  return process.env.NEXT_PUBLIC_API_URL || 'https://resultspro-service-users.onrender.com/api';
+  return process.env.NEXT_PUBLIC_API_URL || 'https://resultspro-service-examspro.onrender.com/api';
 };
 
 const API_URL = getApiUrl();
