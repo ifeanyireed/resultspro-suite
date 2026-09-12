@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { 
   Squares2X2Icon,
   UserGroupIcon,
@@ -18,7 +18,8 @@ import {
   DocumentTextIcon,
   EnvelopeIcon,
   LifebuoyIcon,
-  Cog6ToothIcon
+  Cog6ToothIcon,
+  ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
 import {
   Squares2X2Icon as Squares2X2Solid,
@@ -39,6 +40,13 @@ import {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    localStorage.removeItem('resultspro_admin_token');
+    localStorage.removeItem('user');
+    router.push('/login');
+  };
 
   type Section = {
     title: string;
@@ -128,6 +136,18 @@ export function Sidebar() {
             </div>
           </div>
         ))}
+        
+        <div className="pt-2 border-t border-gray-100">
+          <button
+            onClick={handleSignOut}
+            className="w-full flex items-center justify-between px-4 py-2 rounded-xl text-lg font-normal relative transition-colors text-gray-500 hover:text-red-600 hover:bg-red-50"
+          >
+            <div className="flex items-center space-x-3">
+              <ArrowRightOnRectangleIcon className="w-6 h-6" />
+              <span>Sign out</span>
+            </div>
+          </button>
+        </div>
       </div>
 
       {/* Admin User Info */}
