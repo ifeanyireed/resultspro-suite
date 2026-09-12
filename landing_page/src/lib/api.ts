@@ -5,7 +5,7 @@ const getApiUrl = () => {
   if (process.env.NEXT_PUBLIC_API_URL) {
     return process.env.NEXT_PUBLIC_API_URL;
   }
-  return 'https://resultspro-service-examspro.onrender.com/api';
+  return 'https://resultspro-service-examspro.vercel.app/api';
 };
 
 const API_URL = getApiUrl();

@@ -14,7 +14,7 @@ export default function AccountTab() {
   const { user } = useAuthStore();
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
-  const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl || user?.avatar || '');
+  const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl || (user as any)?.avatar || '');
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [phone, setPhone] = useState('');
@@ -39,7 +39,7 @@ export default function AccountTab() {
       });
       
       setAvatarUrl(res.data.avatarUrl);
-      updateUser({ avatarUrl: res.data.avatarUrl, avatar: res.data.avatarUrl });
+      updateUser({ avatarUrl: res.data.avatarUrl, avatar: res.data.avatarUrl } as any);
       toast.success('Avatar uploaded successfully!');
     } catch (err: any) {
       toast.error(err.response?.data?.error || 'Failed to upload avatar');

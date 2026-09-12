@@ -490,7 +490,7 @@ func (h *ExamHandler) GetSubjectById(c *gin.Context) {
 	if subject.TextbookURL != nil && strings.HasPrefix(*subject.TextbookURL, "/uploads") {
 		baseURL := os.Getenv("BACKEND_URL")
 		if baseURL == "" {
-			baseURL = "https://resultspro-service-examspro.onrender.com" // Fallback
+			baseURL = "https://resultspro-service-examspro.vercel.app" // Fallback
 		}
 		normalized := baseURL + *subject.TextbookURL
 		subject.TextbookURL = &normalized

@@ -4,7 +4,7 @@ import { Badge } from '@/components/Badge';
 import { fetchExamproUsers } from '@/lib/api';
 import toast from 'react-hot-toast';
 
-const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'https://resultspro-service-examspro.onrender.com';
+const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'https://resultspro-service-examspro.vercel.app';
 
 function getAuthHeader(): Record<string, string> {
   if (typeof window === 'undefined') return {};

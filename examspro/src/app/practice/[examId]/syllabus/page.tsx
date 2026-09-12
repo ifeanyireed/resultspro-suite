@@ -16,7 +16,7 @@ export async function generateStaticParams() {
 
 async function getSyllabus(examId: string) {
   try {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://resultspro-service-examspro.onrender.com/api';
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://resultspro-service-examspro.vercel.app/api';
     const res = await fetch(`${API_URL}/exams/${examId}/syllabus`, { next: { revalidate: 3600 } });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();

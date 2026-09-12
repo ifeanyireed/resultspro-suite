@@ -318,7 +318,7 @@ export default function Dashboard() {
                     {u.rank}
                   </div>
                   <div className="flex items-center gap-3 min-w-0">
-                    <img src={u.img || `/avatars/character${ (String(u.id || u.name).charCodeAt(0) % 20) || 1 }.jpg`} className="w-8 h-8 rounded-full border border-gray-200 object-cover shrink-0" alt={u.name} />
+                    <img src={u.img || `/avatars/character${ (String((u as any).id || u.name).charCodeAt(0) % 20) || 1 }.jpg`} className="w-8 h-8 rounded-full border border-gray-200 object-cover shrink-0" alt={u.name} />
                     <div className="text-xs font-medium text-gray-900 truncate">{u.name}</div>
                   </div>
                   <div className="text-left">
