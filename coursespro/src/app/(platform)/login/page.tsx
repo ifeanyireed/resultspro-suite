@@ -13,13 +13,20 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
     try {
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-      const res = await axios.post(`${USERS_API}/api/v1/auth/login`, { email, password });
+      
+      const res = await axios.post(`${USERS_API}/api/v1/auth/login`, { 
+        email, 
+        password
+      });
+      
       const token = res.data.access_token || res.data.token;
       if (token) {
         localStorage.setItem('token', token);
@@ -107,8 +114,10 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           <div className="mb-10 text-center lg:text-left">
             <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Welcome Back</h2>
-            <p className="text-slate-500 font-medium">Enter your credentials to access the admin hub.</p>
+            <p className="text-slate-500 font-medium">Enter your credentials to access the hub.</p>
           </div>
+
+          {error && <div className="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg">{error}</div>}
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-1.5">

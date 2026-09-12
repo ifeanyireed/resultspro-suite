@@ -137,8 +137,10 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
+		Email      string `json:"email"`
+		Password   string `json:"password"`
+		TenantID   string `json:"tenant_id,omitempty"`
+		TenantSlug string `json:"tenant_slug,omitempty"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		utils.JSONError(w, http.StatusBadRequest, "Invalid request payload")
@@ -188,17 +190,39 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Fetch user roles for RBAC
+	// Resolve TenantID if TenantSlug is provided
+	if input.TenantID == "" && input.TenantSlug != "" {
+		err := db.DB.QueryRow("SELECT id FROM tenants WHERE slug = ?", input.TenantSlug).Scan(&input.TenantID)
+		if err != nil {
+			utils.JSONError(w, http.StatusNotFound, "Tenant not found")
+			return
+		}
+	}
+
+	// Fetch user roles for RBAC and validate tenant access if requested
 	var roles []string
-	rows, err := db.DB.Query("SELECT role FROM user_tenant_roles WHERE user_id = ? AND status = 'active'", user.ID)
+	hasTenantAccess := false
+	rows, err := db.DB.Query("SELECT role, tenant_id FROM user_tenant_roles WHERE user_id = ? AND status = 'active'", user.ID)
 	if err == nil {
 		defer rows.Close()
 		for rows.Next() {
 			var role string
-			if err := rows.Scan(&role); err == nil {
+			var tID sql.NullString
+			if err := rows.Scan(&role, &tID); err == nil {
 				roles = append(roles, role)
+				if tID.Valid && tID.String == input.TenantID {
+					hasTenantAccess = true
+				}
+				if role == "platform-admin" || role == "superadmin" {
+					hasTenantAccess = true
+				}
 			}
 		}
+	}
+
+	if input.TenantID != "" && !hasTenantAccess {
+		utils.JSONError(w, http.StatusForbidden, "You do not have access to this academy")
+		return
 	}
 
 	// Issue JWT tokens
