@@ -187,7 +187,7 @@ export default function CoursesProTenantManager() {
                           </>
                         )}
                         <a
-                          href={`https://schoolhub.resultspro.ng/school/${school.slug}`}
+                          href={`https://${school.slug}.resultspro.ng`}
                           target="_blank"
                           rel="noreferrer"
                           className="inline-flex items-center px-3 py-1 bg-slate-100 text-slate-600 rounded-full font-medium text-[11px] hover:bg-blue-600 hover:text-white transition-all shadow-sm group-hover:shadow-md"
