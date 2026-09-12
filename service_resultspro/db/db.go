@@ -1,13 +1,13 @@
 package db
 
 import (
-	"github.com/gin-gonic/gin"
-
 	"database/sql"
 	"log"
 	"time"
 
-	"gorm.io/driver/mysql"
+	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"service_resultspro.resultspro.ng/config"
@@ -21,9 +21,9 @@ var (
 func InitDB() {
 	var err error
 
-	DB, err = sql.Open("mysql", config.AppConfig.DatabaseURL)
+	DB, err = sql.Open("postgres", config.AppConfig.DatabaseURL)
 	if err != nil {
-		log.Fatalf("Failed to connect to MySQL database: %v", err)
+		log.Fatalf("Failed to connect to Postgres database: %v", err)
 	}
 
 	DB.SetMaxOpenConns(5)
@@ -31,12 +31,12 @@ func InitDB() {
 	DB.SetConnMaxLifetime(time.Hour)
 
 	if err = DB.Ping(); err != nil {
-		log.Printf("Note: MySQL ping timeout: %v", err)
+		log.Printf("Note: Postgres ping timeout: %v", err)
 	} else {
 		log.Println("Connected to ResultsPRO database with GORM successfully")
 	}
 
-	GormDB, err = gorm.Open(mysql.New(mysql.Config{
+	GormDB, err = gorm.Open(postgres.New(postgres.Config{
 		Conn: DB,
 	}), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Warn),

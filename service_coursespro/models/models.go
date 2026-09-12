@@ -67,7 +67,7 @@ type JourneyModule struct {
 	HasQuiz             bool      `gorm:"default:true" json:"has_quiz"`
 	HasChallenge        bool      `gorm:"default:true" json:"has_challenge"`
 	VideoURL            string    `gorm:"size:512" json:"video_url"`
-	ContentMarkdown     string    `gorm:"type:longtext" json:"content_markdown"`
+	ContentMarkdown     string    `gorm:"type:text" json:"content_markdown"`
 	AISummary           string    `gorm:"type:text" json:"ai_summary"`
 	ReflectionPrompts   string    `gorm:"type:text" json:"reflection_prompts"` // JSON array
 	OrderIndex          int       `gorm:"default:0" json:"order_index"`
@@ -142,7 +142,7 @@ type PublicPortfolio struct {
 	Username           string    `gorm:"size:64;uniqueIndex;not null" json:"username"`
 	Headline           string    `gorm:"size:255" json:"headline"`
 	Bio                string    `gorm:"type:text" json:"bio"`
-	CaseStudiesJSON    string    `gorm:"type:longtext" json:"case_studies_json"`
+	CaseStudiesJSON    string    `gorm:"type:text" json:"case_studies_json"`
 	MentorEndorsement  string    `gorm:"type:text" json:"mentor_endorsement"`
 	IsAvailableForHire bool      `gorm:"default:true" json:"is_available_for_hire"`
 	IsPublished        bool      `gorm:"default:true" json:"is_published"`

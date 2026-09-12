@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"exams-resultspro-backend/internal/models"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -18,14 +18,14 @@ var DB *gorm.DB
 func ConnectDB() {
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
-		dsn = "u721451974_resultspro:*Reedb4b4@tcp(srv2113.hstgr.io:3306)/u721451974_resultspro_db?charset=utf8mb4&parseTime=True&loc=Local"
+		dsn = "postgres://postgres:postgres@localhost:5432/resultspro?sslmode=disable"
 	}
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Warn),
 	})
 	if err != nil {
-		log.Printf("GORM MySQL connect warning: %v", err)
+		log.Printf("GORM Postgres connect warning: %v", err)
 		return
 	}
 

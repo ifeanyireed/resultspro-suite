@@ -410,7 +410,7 @@ func HandleDebugTable(w http.ResponseWriter, r *http.Request) {
 		Type  string `json:"type"`
 	}
 	var columns []ColumnInfo
-	db.GormDB.Raw("SHOW COLUMNS FROM blog_comments").Scan(&columns)
+	db.GormDB.Raw("SELECT column_name as field, data_type as type FROM information_schema.columns WHERE table_name = 'blog_comments'").Scan(&columns)
 	utils.JSONResponse(w, 200, columns)
 }
 
@@ -473,9 +473,7 @@ func HandleDebugTable2(w http.ResponseWriter, r *http.Request) {
 		Table       string `gorm:"column:Table"`
 		CreateTable string `gorm:"column:Create Table"`
 	}
-	if err := db.GormDB.Raw("SHOW CREATE TABLE blog_comments").Scan(&result).Error; err != nil {
-		utils.JSONError(w, 500, err.Error())
-		return
-	}
+	result.Table = "blog_comments"
+	result.CreateTable = "SHOW CREATE TABLE not supported natively in PostgreSQL via simple query."
 	utils.JSONResponse(w, 200, result)
 }

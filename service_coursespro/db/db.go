@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"service_coursespro/models"
@@ -18,11 +18,11 @@ var DB *gorm.DB
 func InitDB() {
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
-		dsn = "u721451974_resultspro:*Reedb4b4@tcp(srv2113.hstgr.io:3306)/u721451974_resultspro_db?charset=utf8mb4&parseTime=True&loc=Local"
+		dsn = "postgres://postgres:postgres@localhost:5432/resultspro?sslmode=disable"
 	}
 
 	var err error
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Warn),
 	})
 	if err != nil {

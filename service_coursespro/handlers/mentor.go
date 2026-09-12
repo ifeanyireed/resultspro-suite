@@ -56,8 +56,8 @@ func (h *Handler) ReviewSubmission(c *gin.Context) {
 		db.WithTenant(c).Model(&models.Enrollment{}).
 			Where("user_id = ? AND cohort_id = ?", sub.UserID, sub.CohortID).
 			Updates(map[string]interface{}{
-				"current_stage_number": db.WithTenant(c).Raw("current_stage_number + 1"),
-				"current_xp":           db.WithTenant(c).Raw("current_xp + 500"),
+				"current_stage_number": gorm.Expr("current_stage_number + 1"),
+				"current_xp":           gorm.Expr("current_xp + 500"),
 			})
 	}
 

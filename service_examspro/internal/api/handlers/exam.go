@@ -23,9 +23,7 @@ type ExamHandler struct{}
 func (h *ExamHandler) GetExams(c *gin.Context) {
 	battleReadyOnly := c.Query("battleReady") == "true"
 
-	var dbName string
-	database.DB.Raw("PRAGMA database_list").Row().Scan(new(int), new(string), &dbName)
-	log.Printf("GetExams using database file: %s", dbName)
+
 
 	db := database.DB.Preload("Subjects").Where("is_active = ?", 1)
 	if battleReadyOnly {
@@ -237,7 +235,7 @@ func (h *ExamHandler) GetSubjectsByExam(c *gin.Context) {
 			database.DB.Raw(`
 				SELECT COUNT(*) FROM (
 					SELECT user_id, COUNT(*) as score 
-					FROM user_answers 
+					FROM nat_exams_user_answers 
 					JOIN nat_exams_questions ON nat_exams_questions.id = nat_exams_user_answers.question_id 
 					JOIN nat_exams_topics ON nat_exams_topics.id = nat_exams_questions.topic_id 
 					JOIN nat_exams_subjects ON nat_exams_subjects.id = nat_exams_topics.subject_id 

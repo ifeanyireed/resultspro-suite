@@ -3,6 +3,27 @@
   "private": true,
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "dependencies": {
-    "mysql2": "^3.24.4"
-  }
+    "@neon/config": "^1.4.2",
+    "mysql2": "^3.24.4",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
+  },
+  "version": "1.0.0",
+  "description": "The **ResultsPRO Suite** is an enterprise-grade educational technology ecosystem serving primary, secondary, and tertiary institutions across Nigeria and Africa. It unifies student identity, academic records, CBT examinations, classroom learning, private tutoring, and institutional school branding under a distributed Go microservice architecture.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ifeanyireed/resultspro-suite.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ifeanyireed/resultspro-suite/issues"
+  },
+  "homepage": "https://github.com/ifeanyireed/resultspro-suite#readme"
 }

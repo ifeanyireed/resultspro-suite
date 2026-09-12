@@ -85,3 +85,4 @@ scratch/
 examspro_seed.sql
 tmp_build
 users.md
+.neon

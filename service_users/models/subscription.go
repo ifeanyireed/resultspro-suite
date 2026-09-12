@@ -108,7 +108,7 @@ type DiscountLink struct {
 	MaxUses            int       `json:"max_uses"`
 	Uses               int       `json:"uses"`
 	ExpiresAt          *time.Time `json:"expires_at"`
-	PreAssignedEmails  string    `json:"pre_assigned_emails" gorm:"type:longtext"`
+	PreAssignedEmails  string    `json:"pre_assigned_emails" gorm:"type:text"`
 	ValidityDays       int       `json:"validity_days"`
 	IsActive           bool      `json:"is_active"`
 	CreatedAt          time.Time `json:"created_at"`

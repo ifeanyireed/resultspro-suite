@@ -23,7 +23,7 @@ type BlogPost struct {
 	Title       string     `json:"title"`
 	Slug        string     `json:"slug" gorm:"uniqueIndex"`
 	Excerpt     string     `json:"excerpt"`
-	Content     string     `json:"content" gorm:"type:longtext"`
+	Content     string     `json:"content" gorm:"type:text"`
 	CoverImage  *string    `json:"cover_image"`
 	AuthorID    string     `json:"author_id" gorm:"type:varchar(191)"`
 	Author      *User      `json:"author" gorm:"foreignKey:AuthorID"`

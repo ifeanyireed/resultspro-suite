@@ -5,7 +5,8 @@ import (
 	"log"
 	"time"
 
-	"gorm.io/driver/mysql"
+	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -18,7 +19,7 @@ var (
 func InitDB(dataSourceName string) {
 	var err error
 
-	DB, err = sql.Open("mysql", dataSourceName)
+	DB, err = sql.Open("postgres", dataSourceName)
 	if err != nil {
 		log.Fatalf("Failed to open database: %v", err)
 	}
@@ -30,12 +31,12 @@ func InitDB(dataSourceName string) {
 	DB.SetConnMaxLifetime(time.Hour)
 
 	if err = DB.Ping(); err != nil {
-		log.Printf("Note: MySQL ping timeout: %v", err)
+		log.Printf("Note: Postgres ping timeout: %v", err)
 	} else {
-		log.Println("Microservice connected to MySQL successfully")
+		log.Println("Microservice connected to Postgres successfully")
 	}
 
-	GormDB, err = gorm.Open(mysql.New(mysql.Config{
+	GormDB, err = gorm.Open(postgres.New(postgres.Config{
 		Conn: DB,
 	}), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Warn),

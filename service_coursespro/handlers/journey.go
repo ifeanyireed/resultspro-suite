@@ -75,7 +75,7 @@ func (h *Handler) UpdateModuleProgress(c *gin.Context) {
 	if input.Completed {
 		db.WithTenant(c).Model(&models.Enrollment{}).
 			Where("user_id = ?", userID.(string)).
-			Update("current_xp", db.WithTenant(c).Raw("current_xp + ?", 100))
+			Update("current_xp", gorm.Expr("current_xp + ?", 100))
 	}
 
 	c.JSON(http.StatusOK, gin.H{"progress": progress})
