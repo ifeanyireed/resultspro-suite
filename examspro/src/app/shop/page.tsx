@@ -18,6 +18,7 @@ interface CoinPack {
   discount?: string | null;
   bonus?: string | null;
   description?: string | null;
+  access_level?: string;
 }
 
 const colorMap: Record<string, { bg: string, text: string, border: string, iconBg: string }> = {
@@ -63,30 +64,64 @@ export default function CoinShopPage() {
 
   const fetchCoinPacks = async () => {
     try {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
       const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'https://resultspro-service-examspro.onrender.com';
-      const res = await fetch(`${EXAMS_API}/api/payment/packs`);
-      const packsRaw = await res.json();
       
-      if (Array.isArray(packsRaw)) {
-        // Adapt the models so it fits the UI's expected schema
-        const mappedPacks = packsRaw.map((p: any) => ({
+      const [plansRes, packsRes] = await Promise.all([
+        fetch(`${USERS_API}/api/v1/billing/plans`).catch(() => null),
+        fetch(`${EXAMS_API}/api/payment/packs`).catch(() => null)
+      ]);
+
+      let combined: CoinPack[] = [];
+
+      // 1. Process Subscription Plans (ICAN, PREMIUM, etc.)
+      if (plansRes && plansRes.ok) {
+        const data = await plansRes.json();
+        let plansRaw = data.plans || data || [];
+        if (!Array.isArray(plansRaw)) {
+          if (plansRaw && Array.isArray(plansRaw.packs)) plansRaw = plansRaw.packs;
+          else if (plansRaw && Array.isArray(plansRaw.data)) plansRaw = plansRaw.data;
+          else plansRaw = [];
+        }
+        const mappedPlans = plansRaw.map((p: any) => ({
           id: p.id,
           name: p.name,
-          coins: p.coins,
-          price: p.price || 0,
-          type: p.type || 'COIN',
-          popular: p.popular,
-          color: p.color || 'blue',
-          discount: p.discount,
-          bonus: p.bonus,
-          description: p.description
+          coins: 0,
+          price: p.monthly_price || p.price || 0,
+          type: p.category === 'ICAN' ? 'ICAN' : (p.category === 'COIN' ? 'COIN' : p.category),
+          popular: p.highlight,
+          color: 'blue',
+          access_level: p.access_level,
+          description: null
         }));
-        setAllPacks(mappedPacks);
-      } else {
-        setAllPacks([]);
+        // Filter out any COIN plans from USERS_API just in case they exist, as EXAMS_API is the source of truth for coins
+        combined = [...combined, ...mappedPlans.filter((p: any) => p.type !== 'COIN')];
       }
+
+      // 2. Process Coin Packs from EXAMS_API
+      if (packsRes && packsRes.ok) {
+        const packsRaw = await packsRes.json();
+        if (Array.isArray(packsRaw)) {
+          const mappedPacks = packsRaw.map((p: any) => ({
+            id: p.id,
+            name: p.name,
+            coins: p.coins,
+            price: p.price || 0,
+            type: p.type || 'COIN',
+            popular: p.popular,
+            color: p.color || 'blue',
+            discount: p.discount,
+            bonus: p.bonus,
+            description: p.description
+          }));
+          combined = [...combined, ...mappedPacks];
+        }
+      }
+
+      setAllPacks(combined);
     } catch (err) {
-      console.error('Failed to fetch coin packs:', err);
+      console.error('Failed to fetch store packs:', err);
+      setAllPacks([]);
     } finally {
       setLoadingPacks(false);
     }
