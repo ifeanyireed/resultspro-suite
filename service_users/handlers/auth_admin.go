@@ -35,8 +35,8 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var user models.User
-	err := db.DB.QueryRow("SELECT id, email, password_hash, full_name, avatar_url, account_status, has_ican, coin_balance, two_factor_enabled FROM users WHERE email = ?", input.Email).
-		Scan(&user.ID, &user.Email, &user.PasswordHash, &user.FullName, &user.AvatarURL, &user.AccountStatus, &user.HasIcan, &user.CoinBalance, &user.TwoFactorEnabled)
+	err := db.DB.QueryRow("SELECT id, email, password_hash, full_name, avatar_url, account_status, has_ican, coin_balance, mfa_enabled FROM users WHERE email = ?", input.Email).
+		Scan(&user.ID, &user.Email, &user.PasswordHash, &user.FullName, &user.AvatarURL, &user.AccountStatus, &user.HasIcan, &user.CoinBalance, &user.MFAEnabled)
 
 	if err == sql.ErrNoRows {
 		utils.JSONError(w, http.StatusUnauthorized, "Invalid credentials")
@@ -45,8 +45,13 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
 		return
 	}
+	
+	if user.PasswordHash == nil {
+		utils.JSONError(w, http.StatusUnauthorized, "Invalid credentials")
+		return
+	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(input.Password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(*user.PasswordHash), []byte(input.Password)); err != nil {
 		utils.JSONError(w, http.StatusUnauthorized, "Invalid credentials")
 		return
 	}
@@ -80,7 +85,7 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check 2FA
-	if user.TwoFactorEnabled {
+	if user.MFAEnabled {
 		// Handled via separate endpoints normally, but if required we just return a 2fa_required payload.
 		utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
 			"mfa_required": true,
@@ -102,7 +107,7 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	refreshToken, err := utils.GenerateRefreshToken(user.ID)
+	refreshToken, err := utils.GenerateRefreshToken()
 	if err != nil {
 		log.Printf("Failed to generate refresh token: %v", err)
 	}
