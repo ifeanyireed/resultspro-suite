@@ -305,7 +305,7 @@ func (h *AdminHandler) GetSettings(c *gin.Context) {
 func (h *AdminHandler) GetPublicSettings(c *gin.Context) {
 	var settings []models.SystemSetting
 	// Only fetch settings that are safe for public consumption (e.g., feature flags)
-	database.DB.Where("setting_group = ?", "Features").Find(&settings)
+	database.DB.Where("setting_group IN (?, ?)", "Features", "Economy").Find(&settings)
 	
 	publicSettings := make(map[string]string)
 	for _, s := range settings {

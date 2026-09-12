@@ -182,7 +182,7 @@ func (h *QuizHandler) SubmitAnswer(c *gin.Context) {
 
 		now := time.Now()
 		today := now.Truncate(24 * time.Hour)
-		
+
 		// 1. Calculate Streak
 		if user.LastActiveAt == nil {
 			user.StreakCurrent = 1
@@ -200,7 +200,7 @@ func (h *QuizHandler) SubmitAnswer(c *gin.Context) {
 		}
 
 		// 2. Grant Streak Bonus (15 coins every 7 days)
-		if isNewStreakDay && user.StreakCurrent > 0 && user.StreakCurrent % 7 == 0 {
+		if isNewStreakDay && user.StreakCurrent > 0 && user.StreakCurrent%7 == 0 {
 			streakBonus = 15
 			utils.SendNotification(user.ID, "7-Day Streak!", fmt.Sprintf("You earned 15 bonus coins for maintaining a %d-day study streak. Keep it up!", user.StreakCurrent), models.NotificationTypeReward, models.NotificationRouteBoth)
 		}
@@ -212,12 +212,20 @@ func (h *QuizHandler) SubmitAnswer(c *gin.Context) {
 			} else {
 				// Default MCQ reward
 				coinsEarned = question.CoinReward
-				if coinsEarned == 0 { coinsEarned = 1 }
+				if coinsEarned == 0 {
+					var mcqRewardSetting models.SystemSetting
+					if tx.Where("id = ?", "base_mcq_reward").First(&mcqRewardSetting).Error == nil {
+						fmt.Sscanf(mcqRewardSetting.Value, "%d", &coinsEarned)
+					}
+					if coinsEarned == 0 {
+						coinsEarned = 1
+					} // final fallback
+				}
 			}
 		}
 
 		totalToCredit := coinsEarned + streakBonus
-		
+
 		// Update User
 		updateData := map[string]interface{}{
 			"last_active_at": &now,
@@ -286,7 +294,7 @@ func (h *QuizHandler) SubmitAnswer(c *gin.Context) {
 				// Fetch Settings
 				var coinRewardSetting models.SystemSetting
 				rewardCoins := 50
-				if tx.Where("id = ?", "referral_coin_reward").First(&coinRewardSetting).Error == nil {
+				if tx.Where("id = ?", "referral_bonus").First(&coinRewardSetting).Error == nil {
 					fmt.Sscanf(coinRewardSetting.Value, "%d", &rewardCoins)
 				}
 
@@ -342,8 +350,8 @@ func (h *QuizHandler) GetHint(c *gin.Context) {
 	userID := userIDVal.(string)
 
 	var input struct {
-		QuestionID    string   `json:"questionId" binding:"required"`
-		ExcludedIDs   []string `json:"excludedIds"`
+		QuestionID  string   `json:"questionId" binding:"required"`
+		ExcludedIDs []string `json:"excludedIds"`
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {

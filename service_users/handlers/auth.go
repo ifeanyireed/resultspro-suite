@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -52,7 +53,7 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 
 	userID := uuid.New().String()
 	now := time.Now()
-	
+
 	// Generate a unique referral code for this new user
 	newReferralCode := "REF-" + strings.ToUpper(userID[:6])
 
@@ -74,8 +75,16 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	query := `INSERT INTO users (id, email, password_hash, auth_provider, full_name, phone, sex, date_of_birth, address, account_status, mfa_enabled, referral_code, referred_by, created_at, updated_at) 
-	          VALUES (?, ?, ?, 'local', ?, ?, ?, ?, ?, 'unverified', 0, ?, ?, ?, ?)`
+	// Fetch signup bonus from system_settings
+	signupBonus := 50
+	var val string
+	settingErr := db.DB.QueryRow("SELECT value FROM system_settings WHERE id = 'signup_reward'").Scan(&val)
+	if settingErr == nil {
+		fmt.Sscanf(val, "%d", &signupBonus)
+	}
+
+	query := `INSERT INTO users (id, email, password_hash, auth_provider, full_name, phone, sex, date_of_birth, address, account_status, mfa_enabled, referral_code, referred_by, coin_balance, created_at, updated_at) 
+	          VALUES (?, ?, ?, 'local', ?, ?, ?, ?, ?, 'unverified', 0, ?, ?, ?, ?, ?)`
 
 	_, err = db.DB.Exec(query,
 		userID,
@@ -88,6 +97,7 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		sql.NullString{String: input.Address, Valid: input.Address != ""},
 		newReferralCode,
 		referredBy,
+		signupBonus,
 		now.UTC().Format("2006-01-02 15:04:05"),
 		now.UTC().Format("2006-01-02 15:04:05"),
 	)
@@ -149,8 +159,6 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	email := strings.ToLower(strings.TrimSpace(input.Email))
 
-
-
 	var user models.User
 	err := db.DB.QueryRow("SELECT id, email, password_hash, full_name, avatar_url, account_status, mfa_enabled FROM users WHERE email = ?", email).
 		Scan(&user.ID, &user.Email, &user.PasswordHash, &user.FullName, &user.AvatarURL, &user.AccountStatus, &user.MFAEnabled)
@@ -184,11 +192,11 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 				utils.SendVerificationEmail(user.Email, otp)
 			}()
 		}
-		
+
 		utils.JSONResponse(w, http.StatusForbidden, map[string]interface{}{
-			"error": "unverified",
+			"error":   "unverified",
 			"message": "Please verify your email address. A new code has been sent.",
-			"email": user.Email,
+			"email":   user.Email,
 		})
 		return
 	}
@@ -258,13 +266,19 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	// Issue JWT tokens
 	customClaims := map[string]interface{}{
-		"has_ican": user.HasIcan,
+		"has_ican":     user.HasIcan,
 		"coin_balance": user.CoinBalance,
 	}
-	if user.IcanPlan != nil { customClaims["ican_plan"] = *user.IcanPlan }
-	if user.IcanTarget != nil { customClaims["ican_target"] = *user.IcanTarget }
-	if user.IcanExpiresAt != nil { customClaims["ican_expires_at"] = user.IcanExpiresAt.Format("2006-01-02T15:04:05Z") }
-	
+	if user.IcanPlan != nil {
+		customClaims["ican_plan"] = *user.IcanPlan
+	}
+	if user.IcanTarget != nil {
+		customClaims["ican_target"] = *user.IcanTarget
+	}
+	if user.IcanExpiresAt != nil {
+		customClaims["ican_expires_at"] = user.IcanExpiresAt.Format("2006-01-02T15:04:05Z")
+	}
+
 	accessToken, err := utils.GenerateAccessToken(user.ID, roles, customClaims)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to generate access token")
@@ -295,7 +309,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		"user": map[string]interface{}{
 			"id":             user.ID,
 			"email":          user.Email,
-			"name":      user.FullName,
+			"name":           user.FullName,
 			"avatar_url":     user.AvatarURL,
 			"account_status": user.AccountStatus,
 		},
@@ -355,14 +369,20 @@ func HandleTokenRefresh(w http.ResponseWriter, r *http.Request) {
 
 	var u models.User
 	db.DB.QueryRow("SELECT coin_balance, has_ican, ican_expires_at, ican_plan, ican_target FROM users WHERE id = ?", userID).Scan(&u.CoinBalance, &u.HasIcan, &u.IcanExpiresAt, &u.IcanPlan, &u.IcanTarget)
-	
+
 	customClaims := map[string]interface{}{
-		"has_ican": u.HasIcan,
+		"has_ican":     u.HasIcan,
 		"coin_balance": u.CoinBalance,
 	}
-	if u.IcanPlan != nil { customClaims["ican_plan"] = *u.IcanPlan }
-	if u.IcanTarget != nil { customClaims["ican_target"] = *u.IcanTarget }
-	if u.IcanExpiresAt != nil { customClaims["ican_expires_at"] = u.IcanExpiresAt.Format("2006-01-02T15:04:05Z") }
+	if u.IcanPlan != nil {
+		customClaims["ican_plan"] = *u.IcanPlan
+	}
+	if u.IcanTarget != nil {
+		customClaims["ican_target"] = *u.IcanTarget
+	}
+	if u.IcanExpiresAt != nil {
+		customClaims["ican_expires_at"] = u.IcanExpiresAt.Format("2006-01-02T15:04:05Z")
+	}
 
 	accessToken, err := utils.GenerateAccessToken(userID, roles, customClaims)
 	if err != nil {
@@ -526,7 +546,7 @@ func HandleIntrospect(w http.ResponseWriter, r *http.Request) {
 		// Check membership
 		var role string
 		err = db.DB.QueryRow("SELECT role FROM user_tenant_roles WHERE user_id = ? AND tenant_id = ? AND status = 'active'", userID, tenantID).Scan(&role)
-		
+
 		// If Super Admin, they have universal access
 		var isSuperAdmin bool
 		db.DB.QueryRow("SELECT 1 FROM user_tenant_roles WHERE user_id = ? AND role = 'super-admin' AND status = 'active' LIMIT 1", userID).Scan(&isSuperAdmin)
@@ -595,13 +615,13 @@ func HandleResendVerification(w http.ResponseWriter, r *http.Request) {
 	// Generate and store new OTP
 	otp := utils.GenerateOTP()
 	expiresAt := time.Now().Add(time.Hour * 24)
-	
+
 	// Delete any old email_verify tokens for this user
 	_, _ = db.DB.Exec("DELETE FROM verification_tokens WHERE user_id = ? AND type = 'email_verify'", user.ID)
-	
+
 	_, err = db.DB.Exec("INSERT INTO verification_tokens (id, user_id, token_hash, type, expires_at) VALUES (?, ?, ?, 'email_verify', ?)",
 		uuid.New().String(), user.ID, otp, expiresAt.UTC().Format("2006-01-02 15:04:05"))
-		
+
 	if err != nil {
 		log.Printf("Failed to create verification token: %v", err)
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to generate token")
