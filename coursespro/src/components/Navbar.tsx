@@ -11,9 +11,10 @@ import { IconBell as Bell } from '@tabler/icons-react';
 
 interface NavbarProps {
   hideInstructorLink?: boolean;
+  isPlatform?: boolean;
 }
 
-export default function Navbar({ hideInstructorLink = false }: NavbarProps = {}) {
+export default function Navbar({ hideInstructorLink = false, isPlatform = false }: NavbarProps = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -67,7 +68,11 @@ export default function Navbar({ hideInstructorLink = false }: NavbarProps = {})
     }
   };
 
-  const navItems = [
+  const navItems = isPlatform ? [
+    { label: 'Features', href: '/#features', enabled: true },
+    { label: 'Pricing', href: 'https://925lms.com/pricing', enabled: true }, // Or redirect to a platform pricing if it exists
+    { label: 'Dashboard', href: '/dashboard', enabled: isAuthenticated },
+  ].filter(i => i.enabled) : [
     { label: 'Cohorts', href: '/cohorts', enabled: true },
     { label: 'For Enterprise', href: '/enterprise', enabled: true },
     { label: 'Pricing', href: '/pricing', enabled: true },

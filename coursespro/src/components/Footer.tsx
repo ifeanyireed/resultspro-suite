@@ -2,41 +2,73 @@
 
 import Link from 'next/link';
 
-const getFooterSections = (hideInstructorLink: boolean) => [
-  {
-    title: 'Platform',
-    links: [
-      { label: 'Browse Cohorts',            href: '/cohorts' },
-      { label: 'Enterprise Training',       href: '/enterprise' },
-      { label: 'Pricing & Plans',           href: '/pricing' },
-      { label: 'Student Workspace',         href: '/dashboard' },
-    ],
-  },
-  {
-    title: 'Company',
-    links: [
-      { label: 'About CoursesPRO',          href: '/about' },
-      ...(hideInstructorLink ? [] : [{ label: 'Become an Instructor', href: '/apply' }]),
-      { label: 'Our Blog',                  href: '/blog' },
-      { label: 'Careers',                   href: '/careers' },
-    ],
-  },
-  {
-    title: 'Support',
-    links: [
-      { label: 'Help Center',               href: '/support' },
-      { label: 'Terms of Service',          href: '/terms' },
-      { label: 'Privacy Policy',            href: '/privacy' },
-    ],
-  },
-];
+const getFooterSections = (hideInstructorLink: boolean, isPlatform: boolean) => {
+  if (isPlatform) {
+    return [
+      {
+        title: 'Platform',
+        links: [
+          { label: 'Features',                  href: '/#features' },
+          { label: 'Pricing & Plans',           href: 'https://925lms.com/pricing' },
+          { label: 'Pro Access',                href: '/#pro-access' },
+          { label: 'Dashboard',                 href: '/dashboard' },
+        ],
+      },
+      {
+        title: 'Company',
+        links: [
+          { label: 'About Us',                  href: '/about' },
+          { label: 'Careers',                   href: '/careers' },
+        ],
+      },
+      {
+        title: 'Support',
+        links: [
+          { label: 'Help Center',               href: '/support' },
+          { label: 'Terms of Service',          href: '/terms' },
+          { label: 'Privacy Policy',            href: '/privacy' },
+        ],
+      },
+    ];
+  }
+
+  return [
+    {
+      title: 'Platform',
+      links: [
+        { label: 'Browse Cohorts',            href: '/cohorts' },
+        { label: 'Enterprise Training',       href: '/enterprise' },
+        { label: 'Pricing & Plans',           href: '/pricing' },
+        { label: 'Student Workspace',         href: '/dashboard' },
+      ],
+    },
+    {
+      title: 'Company',
+      links: [
+        { label: 'About Us',                  href: '/about' },
+        ...(hideInstructorLink ? [] : [{ label: 'Become an Instructor', href: '/apply' }]),
+        { label: 'Our Blog',                  href: '/blog' },
+        { label: 'Careers',                   href: '/careers' },
+      ],
+    },
+    {
+      title: 'Support',
+      links: [
+        { label: 'Help Center',               href: '/support' },
+        { label: 'Terms of Service',          href: '/terms' },
+        { label: 'Privacy Policy',            href: '/privacy' },
+      ],
+    },
+  ];
+};
 
 interface FooterProps {
   hideInstructorLink?: boolean;
+  isPlatform?: boolean;
 }
 
-export default function Footer({ hideInstructorLink = false }: FooterProps = {}) {
-  const footerSections = getFooterSections(hideInstructorLink);
+export default function Footer({ hideInstructorLink = false, isPlatform = false }: FooterProps = {}) {
+  const footerSections = getFooterSections(hideInstructorLink, isPlatform);
   return (
     <footer id="contact" role="contentinfo" style={{ background: 'var(--color-nets-navy-dark)' }}>
       {/* Top accent */}

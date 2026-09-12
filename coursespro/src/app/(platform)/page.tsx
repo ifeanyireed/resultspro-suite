@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function PlatformLandingPage() {
   return (
     <main>
-      <Navbar hideInstructorLink={true} />
+      <Navbar hideInstructorLink={true} isPlatform={true} />
       
       {/* Platform Hero using shared Hero component */}
       <Hero 
@@ -185,7 +185,7 @@ export default function PlatformLandingPage() {
         </div>
       </section>
       
-      <Footer hideInstructorLink={true} />
+      <Footer hideInstructorLink={true} isPlatform={true} />
     </main>
   );
 }
