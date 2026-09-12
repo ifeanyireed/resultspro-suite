@@ -40,7 +40,14 @@ export default function SharedLoginPage({
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get("content-type");
+      let data;
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        data = await response.json();
+      } else {
+        const textData = await response.text();
+        throw new Error(`Server returned unexpected response: ${textData || response.statusText}`);
+      }
 
       if (!response.ok) {
         throw new Error(data.error || data.message || 'Login failed');
