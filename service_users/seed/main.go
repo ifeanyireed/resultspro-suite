@@ -111,8 +111,8 @@ func main() {
 	// 9. Syllabus Weeks & Topics
 	seed(db, "INSERT INTO syllabus_weeks (id, subject_id, week_number, term) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "week-1", "subject-1", 1, 1)
 	seed(db, "INSERT INTO syllabus_weeks (id, subject_id, week_number, term) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "week-2", "subject-1", 2, 1)
-	seed(db, "INSERT INTO topics (id, syllabus_week_id, name, description, "order") VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "topic-1", "week-1", "Quadratic Equations", "Solving quadratics by factorisation and formula", 1)
-	seed(db, "INSERT INTO topics (id, syllabus_week_id, name, description, "order") VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "topic-2", "week-2", "Simultaneous Equations", "Linear and non-linear simultaneous equations", 1)
+	seed(db, "INSERT INTO topics (id, syllabus_week_id, name, description, \"order\") VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "topic-1", "week-1", "Quadratic Equations", "Solving quadratics by factorisation and formula", 1)
+	seed(db, "INSERT INTO topics (id, syllabus_week_id, name, description, \"order\") VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "topic-2", "week-2", "Simultaneous Equations", "Linear and non-linear simultaneous equations", 1)
 
 	// 10. Enrollments & Assignments
 	seed(db, "INSERT INTO enrollments (id, student_id, section_id, session_id, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING",

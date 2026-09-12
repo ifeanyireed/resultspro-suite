@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"github.com/google/uuid"
 	"service_coursespro/db"
 	"service_coursespro/models"

@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	
 	"service_users.resultspro.ng/models"
@@ -26,14 +26,14 @@ type SeedPlan struct {
 	AccessLevel string
 }
 
-func main() {
+func main_seed_plans() {
 	godotenv.Load("../.env")
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
 		dsn = "root:root@tcp(127.0.0.1:8889)/resultspro_users?charset=utf8mb4&parseTime=True&loc=Local"
 	}
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
