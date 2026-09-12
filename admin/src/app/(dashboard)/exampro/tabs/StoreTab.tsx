@@ -89,7 +89,7 @@ export default function StoreTab() {
   
   const handleSaveSettings = async () => {
     if (Object.keys(pendingSettings).length === 0) {
-      toast.info('No changes to save');
+      toast('No changes to save', { icon: 'ℹ️' });
       return;
     }
     setSavingSettings(true);
