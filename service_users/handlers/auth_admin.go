@@ -72,7 +72,7 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 			var role string
 			if err := rows.Scan(&role); err == nil {
 				roles = append(roles, role)
-				if role == "superadmin" || role == "super-admin" || role == "platform-admin" {
+				if role == "superadmin" || role == "super-admin" || role == "platform-admin" || role == "agent" || role == "support" {
 					isSuperAdmin = true
 				}
 			}
