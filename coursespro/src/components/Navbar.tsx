@@ -111,8 +111,8 @@ export default function Navbar() {
             
             {/* Always show a red primary action button at the end of nav links */}
             {mounted && !isAuthenticated ? (
-              <Link href="https://www.resultspro.ng" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
-                Sign Up Free
+              <Link href="mailto:hello@resultspro.ng" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
+                Talk to Us
               </Link>
             ) : mounted && isAuthenticated ? (
               <Link href="/pricing" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
@@ -230,8 +230,8 @@ export default function Navbar() {
                 style={{ marginTop: '2.5rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}
               >
                 {!isAuthenticated ? (
-                  <Link href="/signup" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
-                    Sign Up Free
+                  <Link href="mailto:hello@resultspro.ng" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
+                    Talk to Us
                   </Link>
                 ) : (
                   <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
