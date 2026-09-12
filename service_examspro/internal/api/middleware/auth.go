@@ -92,7 +92,7 @@ func Authenticate() gin.HandlerFunc {
 		// Map roles (if present)
 		if rolesInterface, ok := claims["roles"].([]interface{}); ok {
 			for _, r := range rolesInterface {
-				if rStr, ok := r.(string); ok && rStr == "ADMIN" {
+				if rStr, ok := r.(string); ok && (rStr == "ADMIN" || rStr == "super-admin" || rStr == "tenant-admin") {
 					user.IsAdmin = true
 					user.Role = models.RoleAdmin
 				}
