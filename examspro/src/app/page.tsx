@@ -68,7 +68,7 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <Link href="/economy" className="btn btn-navy">Learn More</Link>
+              <Link href="/shop" className="btn btn-navy">Learn More</Link>
             </div>
             
             <div className="relative">
