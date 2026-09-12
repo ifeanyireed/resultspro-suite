@@ -26,8 +26,8 @@ func InitDB(dataSourceName string) {
 	// Optimize connection pooling for shared hosting limits
 	// Hostinger max_connections_per_hour is very strict (e.g., 500)
 	DB.SetMaxOpenConns(5)
-	DB.SetMaxIdleConns(2)
-	DB.SetConnMaxLifetime(30 * time.Minute)
+	DB.SetMaxIdleConns(5)
+	DB.SetConnMaxLifetime(time.Hour)
 
 	if err = DB.Ping(); err != nil {
 		log.Printf("Note: MySQL ping timeout: %v", err)

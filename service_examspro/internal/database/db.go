@@ -5,6 +5,7 @@ import (
 
 	"log"
 	"os"
+	"time"
 
 	"exams-resultspro-backend/internal/models"
 	"gorm.io/driver/mysql"
@@ -26,6 +27,13 @@ func ConnectDB() {
 	if err != nil {
 		log.Printf("GORM MySQL connect warning: %v", err)
 		return
+	}
+
+	sqlDB, err := db.DB()
+	if err == nil {
+		sqlDB.SetMaxOpenConns(5)
+		sqlDB.SetMaxIdleConns(5)
+		sqlDB.SetConnMaxLifetime(time.Hour)
 	}
 
 	// Auto-migrate models

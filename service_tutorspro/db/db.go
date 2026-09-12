@@ -5,6 +5,7 @@ import (
 
 	"log"
 	"os"
+	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -27,6 +28,13 @@ func InitDB() {
 	if err != nil {
 		log.Printf("GORM open warning: %v", err)
 		return
+	}
+
+	sqlDB, err := DB.DB()
+	if err == nil {
+		sqlDB.SetMaxOpenConns(5)
+		sqlDB.SetMaxIdleConns(5)
+		sqlDB.SetConnMaxLifetime(time.Hour)
 	}
 
 	// Auto-migrate TutorsPRO tables
