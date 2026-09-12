@@ -54,6 +54,9 @@ func main() {
 	mux.HandleFunc("/auth/login", handlers.HandleLogin)
 	mux.HandleFunc("/api/v1/auth/login", handlers.HandleLogin)
 
+	mux.HandleFunc("/auth/admin-login", handlers.HandleAdminLogin)
+	mux.HandleFunc("/api/v1/auth/admin-login", handlers.HandleAdminLogin)
+
 	mux.HandleFunc("/auth/google", handlers.HandleGoogleLogin)
 	mux.HandleFunc("/callback", handlers.HandleGoogleCallback)
 	mux.HandleFunc("/api/v1/auth/google", handlers.HandleGoogleLogin)

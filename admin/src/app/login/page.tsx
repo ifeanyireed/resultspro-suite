@@ -8,7 +8,7 @@ export default function LoginPage() {
       appName="Edu Suite"
       appDescription="The Engine Powering Modern Education."
       redirectPath="/overview"
-      loginEndpoint={`${usersApi}/api/v1/auth/login`}
+      loginEndpoint={`${usersApi}/api/v1/auth/admin-login`}
     />
   );
 }
