@@ -33,11 +33,13 @@ export default function MentorReviews() {
   const [feedback, setFeedback] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
 
+  const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || '';
+
   const fetchSubmissions = async () => {
     setLoading(true);
     try {
       // Mock user_id header since auth isn't fully wired yet
-      const res = await fetch('https://resultspro-service-coursespro.onrender.com/mentor/submissions', {
+      const res = await fetch(`${COURSES_API}/mentor/submissions`, {
         headers: {
           'x-user-id': 'mentor-user-1',
           'x-tenant-id': 'tenant-1'
@@ -63,7 +65,7 @@ export default function MentorReviews() {
     setSubmitting(selectedSub.id);
     
     try {
-      const res = await fetch(`https://resultspro-service-coursespro.onrender.com/mentor/submissions/${selectedSub.id}/review`, {
+      const res = await fetch(`${COURSES_API}/mentor/submissions/${selectedSub.id}/review`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

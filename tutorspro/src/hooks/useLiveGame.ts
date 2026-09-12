@@ -14,7 +14,7 @@ const getWsUrl = () => {
     return `${protocol}//${window.location.host}/ws`;
   }
   
-  return process.env.NEXT_PUBLIC_WS_URL || `${protocol}//resultspro-service-tutorspro.onrender.com/ws`;
+  return process.env.NEXT_PUBLIC_WS_URL || '';
 };
 
 const WS_URL = getWsUrl();
