@@ -83,6 +83,7 @@ export default function ReferralTab() {
 
   const isArray = Array.isArray(referrals);
   const convertedCount = isArray ? referrals.filter(r => r.status === 'converted').length : 0;
+  const activeCount = isArray ? referrals.filter(r => r.status === 'active' || r.status === 'converted').length : 0; // if converted, they are active too
   const totalEarned = isArray ? referrals.reduce((acc, curr) => acc + (curr.coinsAwarded || 0), 0) : 0;
   const totalFiatEarned = isArray ? referrals.reduce((acc, curr) => acc + (curr.fiatAwarded || 0), 0) : 0;
   const availableBalance = Math.max(0, totalFiatEarned - withdrawn);
@@ -175,11 +176,16 @@ export default function ReferralTab() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-slate-100">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-8 border-t border-slate-100">
           <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center justify-center text-center">
             <IconUsers className="w-8 h-8 text-[#146ef5] mb-2 opacity-80" />
             <div className="text-2xl font-black text-slate-900">{isArray ? referrals.length : 0}</div>
             <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Invites</div>
+          </div>
+          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center justify-center text-center">
+            <IconUsers className="w-8 h-8 text-amber-500 mb-2 opacity-80" />
+            <div className="text-2xl font-black text-slate-900">{activeCount}</div>
+            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Active</div>
           </div>
           <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center justify-center text-center">
             <IconCircleCheck className="w-8 h-8 text-[#146ef5] mb-2 opacity-80" />
@@ -226,6 +232,7 @@ export default function ReferralTab() {
                     <td className="px-6 py-4">
                       <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                         ref.status === 'converted' ? 'bg-emerald-100 text-emerald-700' : 
+                        ref.status === 'active' ? 'bg-blue-100 text-blue-700' :
                         'bg-amber-100 text-amber-700'
                       }`}>
                         {ref.status}

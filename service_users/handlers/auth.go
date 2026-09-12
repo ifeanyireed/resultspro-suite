@@ -232,9 +232,17 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Platform login (no specific tenant) -> require tenant-admin
+	// Global login (no specific tenant) -> require tenant-admin OR superadmin OR platform-admin
 	if input.TenantID == "" && input.TenantSlug == "" {
-		if len(adminTenants) == 0 {
+		isSuper := false
+		for _, r := range roles {
+			if r == "superadmin" || r == "platform-admin" {
+				isSuper = true
+				break
+			}
+		}
+		
+		if len(adminTenants) == 0 && !isSuper {
 			utils.JSONError(w, http.StatusForbidden, "Only academy creators can log in here.")
 			return
 		}

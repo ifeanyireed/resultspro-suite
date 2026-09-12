@@ -1289,6 +1289,9 @@ func (h *AdminHandler) GetReferralStats(c *gin.Context) {
 	var pendingReferrals int64
 	database.DB.Model(&models.Referral{}).Where("status = ?", "pending").Count(&pendingReferrals)
 
+	var activeReferrals int64
+	database.DB.Model(&models.Referral{}).Where("status = ?", "active").Count(&activeReferrals)
+
 	var totalCoinsAwarded int64
 	database.DB.Model(&models.Referral{}).Select("COALESCE(SUM(coins_awarded), 0)").Row().Scan(&totalCoinsAwarded)
 
@@ -1381,6 +1384,7 @@ func (h *AdminHandler) GetReferralStats(c *gin.Context) {
 			"total":         totalReferrals,
 			"converted":     convertedReferrals,
 			"pending":       pendingReferrals,
+			"active":        activeReferrals,
 			"coinsAwarded":  totalCoinsAwarded,
 		},
 		"topReferrers":    formattedTop,
