@@ -357,6 +357,13 @@ func main() {
 	mux.HandleFunc("POST /api/v1/billing/plans", handlers.HandleCreatePlan)
 	mux.HandleFunc("PUT /api/v1/billing/plans/{id}", handlers.HandleUpdatePlan)
 	mux.HandleFunc("DELETE /api/v1/billing/plans/{id}", handlers.HandleDeletePlan)
+
+	// Discount Links
+	mux.HandleFunc("GET /api/v1/billing/discount-links", handlers.HandleGetDiscountLinks)
+	mux.HandleFunc("POST /api/v1/billing/discount-links", handlers.HandleCreateDiscountLink)
+	mux.HandleFunc("PUT /api/v1/billing/discount-links/{id}/toggle", handlers.HandleToggleDiscountLink)
+	mux.HandleFunc("DELETE /api/v1/billing/discount-links/{id}", handlers.HandleDeleteDiscountLink)
+	mux.HandleFunc("POST /api/v1/billing/discount-links/redeem", handlers.HandleRedeemDiscountLink)
 	mux.HandleFunc("/api/v1/billing/invoices/tenant/", handlers.HandleGetTenantInvoices)
 	mux.HandleFunc("/api/v1/billing/webhook", handlers.HandleProcessWebhook)
 
