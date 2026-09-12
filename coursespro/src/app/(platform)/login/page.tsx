@@ -43,7 +43,14 @@ export default function LoginPage() {
             window.location.href = `https://${slug}.resultspro.ng/dashboard`;
           }
         } else {
-          router.push('/dashboard');
+          // If they have no admin_tenants but login succeeded on the platform, 
+          // they must be a superadmin/platform-admin. Redirect them to the global admin app.
+          const isLocal = window.location.hostname.includes('localhost');
+          if (isLocal) {
+            window.location.href = `http://localhost:3005`;
+          } else {
+            window.location.href = `https://admin.resultspro.ng`;
+          }
         }
       }
     } catch (err: any) {
