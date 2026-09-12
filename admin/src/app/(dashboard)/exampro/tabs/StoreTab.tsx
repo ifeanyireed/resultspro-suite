@@ -233,7 +233,7 @@ export default function StoreTab() {
                   { id: 'signup_reward', label: 'Sign-up Reward', desc: 'Coins granted to new users upon registration.' },
                   { id: 'daily_login_reward', label: 'Daily Login Reward', desc: 'Coins granted every day the user logs in.' },
                 ].map(setting => {
-                  const val = settings.find(s => s.id === setting.id)?.value || '0';
+                  const val = settings.find(s => s.id === setting.id)?.value || '';
                   return (
                     <div key={setting.id} className="flex justify-between items-center pb-4 border-b border-slate-100 last:border-0 last:pb-0">
                       <div>
@@ -274,7 +274,7 @@ export default function StoreTab() {
                   <div className="flex items-center gap-2">
                     <input 
                       type="number" 
-                      value={pendingSettings['referral_bonus'] !== undefined ? pendingSettings['referral_bonus'] : (settings.find(s => s.id === 'referral_bonus')?.value || '150')}
+                      value={pendingSettings['referral_bonus'] !== undefined ? pendingSettings['referral_bonus'] : (settings.find(s => s.id === 'referral_bonus')?.value || '')}
                       onChange={(e) => setPendingSettings(prev => ({...prev, 'referral_bonus': e.target.value}))}
                       
                       className="w-24 px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 text-right" 
@@ -291,7 +291,7 @@ export default function StoreTab() {
                   <div className="flex items-center gap-2">
                     <input 
                       type="number" 
-                      value={pendingSettings['referral_discount_percentage'] !== undefined ? pendingSettings['referral_discount_percentage'] : (settings.find(s => s.id === 'referral_discount_percentage')?.value || '10')}
+                      value={pendingSettings['referral_discount_percentage'] !== undefined ? pendingSettings['referral_discount_percentage'] : (settings.find(s => s.id === 'referral_discount_percentage')?.value || '')}
                       onChange={(e) => setPendingSettings(prev => ({...prev, 'referral_discount_percentage': e.target.value}))}
                       
                       className="w-24 px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 text-right" 
@@ -307,7 +307,7 @@ export default function StoreTab() {
                   </div>
                   <div>
                     <select
-                      value={pendingSettings['referral_enabled'] !== undefined ? pendingSettings['referral_enabled'] : (settings.find(s => s.id === 'referral_enabled')?.value || 'true')}
+                      value={pendingSettings['referral_enabled'] !== undefined ? pendingSettings['referral_enabled'] : (settings.find(s => s.id === 'referral_enabled')?.value || '')}
                       onChange={(e) => setPendingSettings(prev => ({...prev, 'referral_enabled': e.target.value}))}
                       className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 font-bold"
                     >
