@@ -9,7 +9,11 @@ import { usePathname } from 'next/navigation';
 // import { getUnreadCount } from '@/lib/notifications.api';
 import { IconBell as Bell } from '@tabler/icons-react';
 
-export default function Navbar() {
+interface NavbarProps {
+  hideInstructorLink?: boolean;
+}
+
+export default function Navbar({ hideInstructorLink = false }: NavbarProps = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -67,7 +71,7 @@ export default function Navbar() {
     { label: 'Cohorts', href: '/cohorts', enabled: true },
     { label: 'For Enterprise', href: '/enterprise', enabled: true },
     { label: 'Pricing', href: '/pricing', enabled: true },
-    { label: 'Become an Instructor', href: '/apply', enabled: true },
+    { label: 'Become an Instructor', href: '/apply', enabled: !hideInstructorLink },
     { label: 'Dashboard', href: '/dashboard', enabled: isAuthenticated },
   ].filter(i => i.enabled);
 

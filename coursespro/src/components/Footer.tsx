@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-const footerSections = [
+const getFooterSections = (hideInstructorLink: boolean) => [
   {
     title: 'Platform',
     links: [
@@ -16,7 +16,7 @@ const footerSections = [
     title: 'Company',
     links: [
       { label: 'About CoursesPRO',          href: '/about' },
-      { label: 'Become an Instructor',      href: '/apply' },
+      ...(hideInstructorLink ? [] : [{ label: 'Become an Instructor', href: '/apply' }]),
       { label: 'Our Blog',                  href: '/blog' },
       { label: 'Careers',                   href: '/careers' },
     ],
@@ -31,7 +31,12 @@ const footerSections = [
   },
 ];
 
-export default function Footer() {
+interface FooterProps {
+  hideInstructorLink?: boolean;
+}
+
+export default function Footer({ hideInstructorLink = false }: FooterProps = {}) {
+  const footerSections = getFooterSections(hideInstructorLink);
   return (
     <footer id="contact" role="contentinfo" style={{ background: 'var(--color-nets-navy-dark)' }}>
       {/* Top accent */}
