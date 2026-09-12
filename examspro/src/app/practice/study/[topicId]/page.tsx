@@ -3,8 +3,9 @@ import { fetchStaticRoutes } from "@/lib/static-routes";
 
 export async function generateStaticParams() {
   const routes = await fetchStaticRoutes();
-  return routes.topics.map(topicId => ({
-    topicId: topicId.toString()
+  if (!routes || !routes.topics) return [];
+  return routes.topics.filter(Boolean).map(topicId => ({
+    topicId: String(topicId)
   }));
 }
 

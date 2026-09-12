@@ -7,7 +7,8 @@ import Footer from "@/components/Footer";
 export async function generateStaticParams() {
   try {
     const routes = await fetchStaticRoutes();
-    return routes.exams.map(examId => ({ examId }));
+    if (!routes || !routes.exams) return [];
+    return routes.exams.filter(Boolean).map(examId => ({ examId: String(examId) }));
   } catch (error) {
     console.error("Error fetching static routes for syllabus:", error);
     return [];

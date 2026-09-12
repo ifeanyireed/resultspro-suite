@@ -5,20 +5,24 @@ export async function generateStaticParams() {
   const routes = await fetchStaticRoutes();
   const params: { examId: string; subjectId: string }[] = [];
   
+  if (!routes || !routes.subjects) return params;
+
   routes.subjects.forEach(s => {
     // 1. Map by slug (preferred)
-    if (s.subjectSlug) {
+    if (s.examSlug && s.subjectSlug) {
       params.push({
-        examId: s.examSlug,
-        subjectId: s.subjectSlug
+        examId: String(s.examSlug),
+        subjectId: String(s.subjectSlug)
       });
     }
     
     // 2. Map by ID (used by some links)
-    params.push({
-      examId: s.examSlug,
-      subjectId: s.subjectId.toString()
-    });
+    if (s.examSlug && s.subjectId) {
+      params.push({
+        examId: String(s.examSlug),
+        subjectId: String(s.subjectId)
+      });
+    }
   });
   
   return params;

@@ -74,12 +74,13 @@ export default function UsersTab() {
 
   
   const handleVerify = async (userId: string) => {
-    if (!window.confirm("Are you sure you want to manually verify this user's email?")) return;
+
     try {
-      await fetch(`${EXAMS_API}/api/admin/users-access/${userId}/verify`, {
+      const res = await fetch(`${EXAMS_API}/api/admin/users-access/${userId}/verify`, {
         method: 'PUT',
         headers: getAuthHeader()
       });
+      if (!res.ok) throw new Error("API request failed with status: " + res.status);
       toast.success("User verified successfully!");
       loadData();
     } catch (e) {

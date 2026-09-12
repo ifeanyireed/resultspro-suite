@@ -3,7 +3,8 @@ import { fetchStaticRoutes } from "@/lib/static-routes";
 
 export async function generateStaticParams() {
   const routes = await fetchStaticRoutes();
-  return routes.exams.map(examId => ({ examId }));
+  if (!routes || !routes.exams) return [];
+  return routes.exams.filter(Boolean).map(examId => ({ examId: String(examId) }));
 }
 
 export default function Page() { 
