@@ -585,7 +585,7 @@ export async function updateExamproReportStatus(id: string, status: string, admi
 
 // ExamsPRO Admin Referral Settings
 export async function fetchExamproSettings(): Promise<any[]> {
-  const res = await fetch(`${EXAMS_API}/api/admin/settings`, { headers: getAuthHeader() });
+  const res = await fetch(`${EXAMS_API}/api/admin/settings?_t=${Date.now()}`, { headers: { ...getAuthHeader(), 'Cache-Control': 'no-cache' }, cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch settings');
   return res.json();
 }
@@ -618,7 +618,7 @@ export async function updateExamproPayoutStatus(id: string, status: string): Pro
 
 // ExamsPRO Store Management
 export async function fetchExamproStorePacks(): Promise<any[]> {
-  const res = await fetch(`${EXAMS_API}/api/admin/coin-packs`, { headers: getAuthHeader() });
+  const res = await fetch(`${EXAMS_API}/api/admin/coin-packs?_t=${Date.now()}`, { headers: { ...getAuthHeader(), 'Cache-Control': 'no-cache' }, cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch store packs');
   return res.json();
 }

@@ -43,11 +43,8 @@ export default function StoreTab() {
         fetchExamproSettings()
       ]);
       setPacks(Array.isArray(packData) ? packData : []);
-      const sData = Array.isArray(settingsData) ? settingsData : [];
-      setSettings(sData);
-      const pSettings: Record<string, string> = {};
-      sData.forEach(s => pSettings[s.id] = s.value);
-      setPendingSettings(pSettings);
+      setSettings(Array.isArray(settingsData) ? settingsData : []);
+      setPendingSettings({});
     } catch (e) {
       toast.error('Failed to load store items');
     } finally {
@@ -91,6 +88,10 @@ export default function StoreTab() {
 
   
   const handleSaveSettings = async () => {
+    if (Object.keys(pendingSettings).length === 0) {
+      toast.info('No changes to save');
+      return;
+    }
     setSavingSettings(true);
     try {
       for (const [id, value] of Object.entries(pendingSettings)) {
@@ -243,7 +244,7 @@ export default function StoreTab() {
                         <input 
                           type="number" 
                           value={pendingSettings[setting.id] !== undefined ? pendingSettings[setting.id] : val}
-                          onChange={(e) => setPendingSettings({...pendingSettings, [setting.id]: e.target.value})}
+                          onChange={(e) => setPendingSettings(prev => ({...prev, [setting.id]: e.target.value}))}
                           
                           className="w-24 px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 text-right" 
                         />
@@ -274,7 +275,7 @@ export default function StoreTab() {
                     <input 
                       type="number" 
                       value={pendingSettings['referral_bonus'] !== undefined ? pendingSettings['referral_bonus'] : (settings.find(s => s.id === 'referral_bonus')?.value || '150')}
-                      onChange={(e) => setPendingSettings({...pendingSettings, 'referral_bonus': e.target.value})}
+                      onChange={(e) => setPendingSettings(prev => ({...prev, 'referral_bonus': e.target.value}))}
                       
                       className="w-24 px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 text-right" 
                     />
@@ -291,7 +292,7 @@ export default function StoreTab() {
                     <input 
                       type="number" 
                       value={pendingSettings['referral_discount_percentage'] !== undefined ? pendingSettings['referral_discount_percentage'] : (settings.find(s => s.id === 'referral_discount_percentage')?.value || '10')}
-                      onChange={(e) => setPendingSettings({...pendingSettings, 'referral_discount_percentage': e.target.value})}
+                      onChange={(e) => setPendingSettings(prev => ({...prev, 'referral_discount_percentage': e.target.value}))}
                       
                       className="w-24 px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 text-right" 
                     />
@@ -307,7 +308,7 @@ export default function StoreTab() {
                   <div>
                     <select
                       value={pendingSettings['referral_enabled'] !== undefined ? pendingSettings['referral_enabled'] : (settings.find(s => s.id === 'referral_enabled')?.value || 'true')}
-                      onChange={(e) => setPendingSettings({...pendingSettings, 'referral_enabled': e.target.value})}
+                      onChange={(e) => setPendingSettings(prev => ({...prev, 'referral_enabled': e.target.value}))}
                       className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 font-bold"
                     >
                       <option value="true">Enabled</option>
