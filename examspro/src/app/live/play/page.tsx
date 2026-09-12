@@ -7,6 +7,8 @@ import { useLiveGame } from '@/hooks/useLiveGame';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { audioPlayer } from '@/lib/audio';
+
 function LiveGamePlayContent() {
   const searchParams = useSearchParams();
   const roomId = searchParams.get("roomId");
@@ -27,9 +29,20 @@ function LiveGamePlayContent() {
   const [hasAnswered, setHasAnswered] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
 
+  useEffect(() => {
+    audioPlayer.preload([
+      'joined_game.mp3',
+      '47s_remaining.mp3',
+      'correct_answer.mp3',
+      'wrong_answer.mp3'
+    ]);
+    const unlock = () => audioPlayer.unlock();
+    document.addEventListener('click', unlock, { once: true });
+    return () => document.removeEventListener('click', unlock);
+  }, []);
+
   const playSound = (soundName: string) => {
-    const audio = new Audio(`/sounds/${soundName}`);
-    audio.play().catch(err => console.log("Sound play error:", err));
+    audioPlayer.play(soundName);
   };
 
   // Reset for new question

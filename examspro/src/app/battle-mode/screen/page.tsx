@@ -6,6 +6,7 @@ import { IconClock as Timer, IconCoins as Coins, IconSword as Sword, IconBolt as
 import { useBattle } from '@/hooks/useBattle';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Button } from '@/components/ui/button';
+import { audioPlayer } from '@/lib/audio';
 import Link from 'next/link';
 import api from '@/lib/api';
 import { useSearchParams } from 'next/navigation';
@@ -56,10 +57,14 @@ function BattleScreenContent() {
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
 
   const playSound = (soundName: string) => {
-    if (roomData?.soundActivated === false) return;
-    const audio = new Audio(`/sounds/${soundName}`);
-    audio.play().catch(err => console.error("Error playing sound:", err));
+    audioPlayer.play(soundName);
   };
+
+  useEffect(() => {
+    const unlock = () => audioPlayer.unlock();
+    document.addEventListener('click', unlock, { once: true });
+    return () => document.removeEventListener('click', unlock);
+  }, []);
 
   useEffect(() => {
     if (battleId) {

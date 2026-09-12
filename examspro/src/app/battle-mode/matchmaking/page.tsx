@@ -8,6 +8,7 @@ import { useBattle } from '@/hooks/useBattle';
 import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
 import api from '@/lib/api';
+import { audioPlayer } from '@/lib/audio';
 
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
@@ -29,8 +30,7 @@ function MatchmakingContent() {
 
   useEffect(() => {
     if (participants.length > 0 && roomDetails?.soundActivated !== false) {
-      const audio = new Audio('/sounds/joined_game.mp3');
-      audio.play().catch(() => {});
+      audioPlayer.play('joined_game.mp3');
     }
   }, [participants.length, roomDetails?.soundActivated]);
 

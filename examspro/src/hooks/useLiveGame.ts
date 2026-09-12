@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import api from '@/lib/api';
+import { audioPlayer } from '@/lib/audio';
 
 const getWsUrl = () => {
   if (typeof window === 'undefined') return process.env.NEXT_PUBLIC_WS_URL || 'wss://resultspro-service-examspro.vercel.app/ws';
@@ -103,8 +104,7 @@ export const useLiveGame = (roomId: string) => {
       console.log('[WS] Event Received:', ev, data);
 
       const playSound = (soundName: string) => {
-        const audio = new Audio(`/sounds/${soundName}`);
-        audio.play().catch(err => console.log("Sound play error:", err));
+        audioPlayer.play(soundName);
       };
 
       switch (ev) {
