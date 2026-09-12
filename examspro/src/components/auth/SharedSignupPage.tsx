@@ -187,14 +187,16 @@ export default function SharedSignupPage({
             </form>
           </div>
         ) : (
-        <>
-          {/* Mobile Logo overlay */}
-        <div className="absolute top-8 left-8 lg:hidden flex items-center space-x-2">
-           <Image src={logoSrc} alt={brandTitle} width={48} height={48} className="bg-slate-900 rounded-lg p-1" />
-           <span className="font-bold text-slate-900">{brandTitle}</span>
-        </div>
-
-        <div className="w-full max-w-md py-12">
+        <div className="w-full max-w-md py-12 lg:py-0">
+          
+          {/* Mobile Logo standalone */}
+          <div className="lg:hidden flex items-center space-x-3 mb-10 justify-center">
+            <Image src={logoSrc} alt={brandTitle} width={56} height={56} className="bg-slate-900 rounded-xl p-1.5 shadow-md" />
+            <div className="text-left">
+              <h1 className="font-bold text-slate-900 text-2xl tracking-tight">{brandTitle}</h1>
+              <p className="text-blue-600 font-bold text-[10px] uppercase tracking-widest">{brandSubtitle}</p>
+            </div>
+          </div>
           <div className="mb-8 text-center lg:text-left">
             <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Create an Account</h2>
             <p className="text-slate-500 font-medium">Join {brandTitle} and start learning today.</p>
@@ -309,7 +311,6 @@ export default function SharedSignupPage({
             </p>
           </div>
         </div>
-        </>
         )}
       </div>
     </div>
