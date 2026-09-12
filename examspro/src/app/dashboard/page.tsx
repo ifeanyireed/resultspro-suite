@@ -21,7 +21,7 @@ interface DashboardData {
     globalRank?: number;
     walletBalance?: number;
   };
-  subjects: Array<{ id: number, name: string, progress: number, color: string, questions: number }>;
+  subjects: Array<{ id: number, name: string, progress: number, color: string, questions: number, examSlug?: string, slug?: string }>;
   exams: Array<{ id: number, slug: string, name: string, readiness: number, category: string }>;
   leaderboard: Array<{ name: string, score: number, rank: number, img: string }>;
   recentActivity: Array<{ title: string, type: string, status?: string, timestamp: string, reward?: number, amount?: number, desc?: string }>;
