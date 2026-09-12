@@ -22,7 +22,33 @@ const slideInRight = {
   visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const, delay: 0.4 } }
 };
 
-const Hero = () => {
+interface HeroProps {
+  tenantName?: string;
+  overline?: string;
+  titleLine1?: string;
+  titleLine2?: string;
+  titleLine3?: string;
+  description?: string;
+  ctaPrimaryText?: string;
+  ctaPrimaryLink?: string;
+  ctaSecondaryText?: string;
+  ctaSecondaryLink?: string;
+  features?: string[];
+}
+
+const Hero = ({ 
+  tenantName = "CoursesPRO",
+  overline,
+  titleLine1 = "Master New",
+  titleLine2 = "Skills",
+  titleLine3 = "with Expert Cohorts.",
+  description = "Join live, interactive cohorts and learn high-income skills from industry professionals.",
+  ctaPrimaryText = "Browse Cohorts",
+  ctaPrimaryLink = "/cohorts",
+  ctaSecondaryText = "Learn More",
+  ctaSecondaryLink = "/about",
+  features = ["Industry Experts", "Live Cohorts", "Project-based Learning"]
+}: HeroProps) => {
   return (
     <section
       id="hero"
@@ -84,7 +110,7 @@ const Hero = () => {
           {/* Overline */}
           <motion.div variants={staggerItem} style={{ marginBottom: '1.5rem' }}>
             <span className="overline-dark">
-              Cohort-Based Skills Training
+              {overline || `Welcome to ${tenantName}`}
             </span>
           </motion.div>
 
@@ -97,11 +123,11 @@ const Hero = () => {
             letterSpacing: '-0.02em',
             whiteSpace: 'nowrap'
           }}>
-            Master New
+            {titleLine1}
             <br />
-            <em style={{ fontStyle: 'normal', fontWeight: 700, color: '#fff' }}>Skills</em>
+            <em style={{ fontStyle: 'normal', fontWeight: 700, color: '#fff' }}>{titleLine2}</em>
             <br />
-            <span style={{ color: 'rgba(255,255,255,0.6)' }}>with Expert Cohorts.</span>
+            <span style={{ color: 'rgba(255,255,255,0.6)' }}>{titleLine3}</span>
           </motion.h1>
 
           {/* Body */}
@@ -112,33 +138,27 @@ const Hero = () => {
             color: 'rgba(255,255,255,0.7)',
             lineHeight: '1.5'
           }}>
-            Join live, interactive cohorts and learn high-income skills from industry professionals.
+            {description}
           </motion.p>
 
           {/* CTAs */}
           <motion.div variants={staggerItem} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem', alignItems: 'center' }}>
-            <Link href="/cohorts" className="btn btn-red btn-lg">
-              Browse Cohorts
+            <Link href={ctaPrimaryLink} className="btn btn-red btn-lg">
+              {ctaPrimaryText}
             </Link>
-            <Link href="/about" className="btn btn-outline-white btn-lg">
-              Learn More
+            <Link href={ctaSecondaryLink} className="btn btn-outline-white btn-lg">
+              {ctaSecondaryText}
             </Link>
           </motion.div>
 
           {/* Trust badges & checkmark features */}
           <motion.div variants={staggerItem} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
-              <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>Industry Experts</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
-              <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>Live Cohorts</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
-              <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>Project-based Learning</span>
-            </div>
+            {features.map((feat, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
+                <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
+                <span>{feat}</span>
+              </div>
+            ))}
           </motion.div>
         </motion.div>
 
