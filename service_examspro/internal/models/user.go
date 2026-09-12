@@ -24,7 +24,7 @@ type User struct {
 	Password           string         `json:"-"`
 	GoogleID           *string        `gorm:"uniqueIndex" json:"googleId"`
 	MicrosoftID        *string        `gorm:"uniqueIndex" json:"microsoftId"`
-	AccountStatus      string         `gorm:"default:'unverified'" json:"accountStatus"`
+	AccountStatus      string         `gorm:"column:account_status;default:'unverified'" json:"accountStatus"`
 	CoinBalance        int            `gorm:"default:0" json:"coinBalance"`
 	ReferralCode       string         `gorm:"uniqueIndex" json:"referralCode"`
 	ReferredBy         *string        `json:"referredBy"`

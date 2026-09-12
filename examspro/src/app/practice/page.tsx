@@ -73,11 +73,11 @@ export default function PracticePage() {
     }))
     .filter(cat => cat.exams && cat.exams.length > 0)
     .sort((a, b) => {
-      // Prioritize Nigerian Exams first, Professional Exams next, International Exams last
+      // Prioritize Professional Exams first, Nigerian Exams next, International Exams last
       const getPriority = (name: string) => {
         const lowerName = name.toLowerCase();
-        if (lowerName.includes('nigerian')) return 1;
-        if (lowerName.includes('professional')) return 2;
+        if (lowerName.includes('professional')) return 1;
+        if (lowerName.includes('nigerian')) return 2;
         if (lowerName.includes('post utme') || lowerName.includes('post-utme')) return 3;
         if (lowerName.includes('international')) return 5;
         return 4; // Everything else
@@ -470,7 +470,7 @@ export default function PracticePage() {
               </div>
 
               {/* ACTION CALL: Sign in to practice */}
-              <div className="p-6 bg-navy/80 backdrop-blur-md border-t border-white/10">
+              <div className="p-6 bg-white/90 backdrop-blur-md border-t border-gray-200">
                 <Link 
                   href={`/login?redirect=/practice/${mobilePreviewExamId}`}
                   className="w-full h-14 rounded-2xl bg-blue text-white font-bold flex items-center justify-center gap-2 hover:bg-blue/90 transition-all active:scale-95 text-center"
