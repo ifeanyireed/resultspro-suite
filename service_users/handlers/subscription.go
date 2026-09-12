@@ -245,8 +245,15 @@ func HandleCheckSubscriptionLimits(w http.ResponseWriter, r *http.Request) {
 
 // HandleGetPlans returns all available subscription plans with pricing and features
 func HandleGetPlans(w http.ResponseWriter, r *http.Request) {
+	appModule := r.URL.Query().Get("app_module")
+	
+	query := db.GormDB.Where("is_active = ?", true)
+	if appModule != "" {
+		query = query.Where("app_module = ?", appModule)
+	}
+
 	var plans []models.Plan
-	if err := db.GormDB.Where("is_active = ?", true).Order("monthly_price asc").Find(&plans).Error; err != nil {
+	if err := query.Order("monthly_price asc").Find(&plans).Error; err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"success": false,

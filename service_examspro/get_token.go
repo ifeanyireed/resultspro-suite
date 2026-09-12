@@ -11,7 +11,7 @@ func main() {
 	claims := jwt.MapClaims{
 		"sub":      "bfb51c68-ccb0-401f-b58f-27fd41c6a856",
 		"email":    "superadmin@resultspro.ng",
-		"role":     "SUPER_ADMIN", // Wait, is it ADMIN or SUPER_ADMIN?
+		"roles":    []string{"ADMIN"}, 
 		"exp":      time.Now().Add(time.Hour * 24).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

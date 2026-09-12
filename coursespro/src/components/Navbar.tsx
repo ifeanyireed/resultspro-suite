@@ -70,7 +70,7 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false 
 
   const navItems = isPlatform ? [
     { label: 'Features', href: '/#features', enabled: true },
-    { label: 'Pricing', href: 'https://925lms.com/pricing', enabled: true }, // Or redirect to a platform pricing if it exists
+    { label: 'Pricing', href: '/pricing', enabled: true },
     { label: 'Dashboard', href: '/dashboard', enabled: isAuthenticated },
   ].filter(i => i.enabled) : [
     { label: 'Cohorts', href: '/cohorts', enabled: true },

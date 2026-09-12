@@ -9,7 +9,7 @@ const getFooterSections = (hideInstructorLink: boolean, isPlatform: boolean) => 
         title: 'Platform',
         links: [
           { label: 'Features',                  href: '/#features' },
-          { label: 'Pricing & Plans',           href: 'https://925lms.com/pricing' },
+          { label: 'Pricing & Plans',           href: '/pricing' },
           { label: 'Pro Access',                href: '/#pro-access' },
           { label: 'Dashboard',                 href: '/dashboard' },
         ],
