@@ -485,7 +485,7 @@ CREATE TABLE IF NOT EXISTS blog_posts (
     title VARCHAR(191) NOT NULL,
     slug VARCHAR(191) UNIQUE NOT NULL,
     excerpt TEXT,
-    content LONGTEXT,
+    content TEXT,
     cover_image TEXT,
     author_id VARCHAR(191) NOT NULL,
     category_id VARCHAR(191),
