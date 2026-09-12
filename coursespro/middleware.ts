@@ -6,7 +6,9 @@ export function middleware(req: NextRequest) {
   const hostname = req.headers.get('host') || '';
 
   // Define the root platform domains (including localhost for dev)
-  const isPlatform = hostname === 'coursespro.resultspro.ng' || hostname.includes('localhost:3006');
+  const isPlatform = hostname === 'coursespro.resultspro.ng' || 
+                     hostname === 'localhost:3006' || 
+                     hostname === 'coursespro.localhost:3006';
 
   // Skip api, next internal, and static files
   if (url.pathname.startsWith('/api') || url.pathname.startsWith('/_next') || url.pathname.includes('.')) {
