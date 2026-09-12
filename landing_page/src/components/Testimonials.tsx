@@ -7,19 +7,19 @@ const testimonials = [
     quote: "ResultsPRO has completely transformed how we manage our academic data. What used to take weeks now takes minutes.",
     author: "Dr. Adebayo",
     role: "School Administrator",
-    avatar: "/photo09.jpeg"
+    avatar: "https://res.cloudinary.com/qsdwzejd/image/upload/v1789250557/landing_page/photo09.jpg"
   },
   {
     quote: "The ExamsPRO platform made preparing for my finals so much more engaging. I felt ready and confident.",
     author: "Chidi E.",
     role: "Student",
-    avatar: "/photo12.jpeg"
+    avatar: "https://res.cloudinary.com/qsdwzejd/image/upload/v1789250561/landing_page/photo12.jpg"
   },
   {
     quote: "As a teacher, the insights I get from ResultsPRO help me identify exactly where my students need more support.",
     author: "Mrs. Okonjo",
     role: "Lead Teacher",
-    avatar: "/photo11.jpeg"
+    avatar: "https://res.cloudinary.com/qsdwzejd/image/upload/v1789250560/landing_page/photo11.jpg"
   }
 ];
 

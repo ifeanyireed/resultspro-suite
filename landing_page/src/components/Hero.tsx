@@ -39,7 +39,7 @@ const Hero = () => {
     >
       <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <img
-          src="/photo01.jpeg"
+          src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250538/landing_page/photo01.jpg"
           alt=""
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
           loading="eager"

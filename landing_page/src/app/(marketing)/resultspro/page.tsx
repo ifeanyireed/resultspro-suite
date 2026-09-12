@@ -100,7 +100,7 @@ export default function ResultsProPage() {
             </div>
             <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
               <img 
-                src="/photo07.jpeg" 
+                src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250551/landing_page/photo07.jpg" 
                 alt="Parents viewing ResultsPRO app" 
                 className="absolute inset-0 w-full h-full object-cover"
               />

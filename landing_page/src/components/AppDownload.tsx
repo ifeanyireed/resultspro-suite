@@ -60,7 +60,7 @@ export default function AppDownload() {
              <ScrollReveal animation="slide-left" delay={500} className={styles.phoneWrapper}>
                 <div className={styles.phoneFrame}>
                    <Image 
-                      src="/photo12.jpeg" 
+                      src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250561/landing_page/photo12.jpg" 
                       alt="App Interface" 
                       fill 
                       style={{ objectFit: 'cover' }}

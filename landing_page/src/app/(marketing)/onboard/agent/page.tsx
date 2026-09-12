@@ -411,7 +411,7 @@ export default function AgentOnboarding() {
                             <div 
                               className="w-full h-full rounded-3xl flex items-center justify-center overflow-hidden"
                               style={{
-                                backgroundImage: 'url(/abstract-blue-5.jpg)',
+                                backgroundImage: 'url(https://res.cloudinary.com/qsdwzejd/image/upload/v1789250467/landing_page/abstract-blue-5.jpg)',
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
                               }}
@@ -471,7 +471,7 @@ export default function AgentOnboarding() {
                             <div 
                               className="w-full h-full rounded-full flex items-center justify-center overflow-hidden"
                               style={{
-                                backgroundImage: 'url(/abstract-blue-1.jpg)',
+                                backgroundImage: 'url(https://res.cloudinary.com/qsdwzejd/image/upload/v1789250462/landing_page/abstract-blue-1.jpg)',
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
                               }}

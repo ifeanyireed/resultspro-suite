@@ -107,7 +107,7 @@ export default function SchoolHubPage() {
             </div>
             <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
               <img 
-                src="/photo12.jpeg" 
+                src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250561/landing_page/photo12.jpg" 
                 alt="School Administrator using SchoolHub" 
                 className="absolute inset-0 w-full h-full object-cover"
               />

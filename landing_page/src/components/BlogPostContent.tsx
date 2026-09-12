@@ -151,7 +151,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
       {/* Featured Image Hero */}
       <div className="w-full h-[55vh] relative">
         <img 
-          src={post.cover_image || "/photo13.jpeg"} 
+          src={post.cover_image || "https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg"} 
           alt={post.title} 
           className="w-full h-full object-cover"
         />
@@ -176,7 +176,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
-                    <img src="/photo04.jpeg" className="w-full h-full object-cover" alt={typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")} />
+                    <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250545/landing_page/photo04.jpg" className="w-full h-full object-cover" alt={typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")} />
                   </div>
                   <div>
                     <p className="text-sm fw-600 text-navy mb-0.5">by: {typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")}</p>
@@ -216,7 +216,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
               {/* Card 3: Author Bio */}
               <div className="bg-white shadow-xl w-full p-8 md:p-12 mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start text-center md:text-left">
                 <div className="w-24 h-24 rounded-full bg-gray-200 shrink-0 overflow-hidden">
-                  <img src="/photo04.jpeg" className="w-full h-full object-cover" alt={typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")} />
+                  <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250545/landing_page/photo04.jpg" className="w-full h-full object-cover" alt={typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")} />
                 </div>
                 <div>
                   <h3 className="text-xl fw-700 text-navy mb-2">{typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")} - Author</h3>
@@ -247,7 +247,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                       <div key={comment.id} className="flex flex-col gap-6">
                         <div className="flex gap-4">
                           <div className="w-12 h-12 rounded-full bg-gray-200 shrink-0 overflow-hidden">
-                            <img src="/photo13.jpeg" className="w-full h-full object-cover" />
+                            <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg" className="w-full h-full object-cover" />
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center justify-between mb-1">
@@ -271,7 +271,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                             {(post.comments || []).filter((r: any) => r.parent_id === comment.id).map((reply: any) => (
                               <div key={reply.id} className="flex gap-4">
                                 <div className="w-10 h-10 rounded-full bg-gray-200 shrink-0 overflow-hidden">
-                                  <img src="/photo13.jpeg" className="w-full h-full object-cover" />
+                                  <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg" className="w-full h-full object-cover" />
                                 </div>
                                 <div className="flex-1">
                                   <div className="flex items-center justify-between mb-1">
@@ -341,7 +341,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                   {/* Dummy Related Post 1 */}
                   <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-nets-border flex flex-col">
                     <div className="h-32 bg-gray-200">
-                      <img src="/photo04.jpeg" className="w-full h-full object-cover" />
+                      <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250545/landing_page/photo04.jpg" className="w-full h-full object-cover" />
                     </div>
                     <div className="p-5 flex-1 flex flex-col">
                       <span className="text-[10px] fw-700 text-muted uppercase tracking-widest mb-2">Education</span>
@@ -355,7 +355,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                   {/* Dummy Related Post 2 */}
                   <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-nets-border flex flex-col">
                     <div className="h-32 bg-gray-200">
-                      <img src="/photo13.jpeg" className="w-full h-full object-cover" />
+                      <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg" className="w-full h-full object-cover" />
                     </div>
                     <div className="p-5 flex-1 flex flex-col">
                       <span className="text-[10px] fw-700 text-muted uppercase tracking-widest mb-2">Product</span>
@@ -369,7 +369,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                   {/* Dummy Related Post 3 */}
                   <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-nets-border flex flex-col">
                     <div className="h-32 bg-gray-200">
-                      <img src="/photo08.jpeg" className="w-full h-full object-cover" />
+                      <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250555/landing_page/photo08.jpg" className="w-full h-full object-cover" />
                     </div>
                     <div className="p-5 flex-1 flex flex-col">
                       <span className="text-[10px] fw-700 text-muted uppercase tracking-widest mb-2">Marketing</span>

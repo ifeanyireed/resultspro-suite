@@ -79,7 +79,7 @@ export default function SubscribePage() {
       <HeroEditorial 
         title="Stay Connected"
         subtitle="Join our community of forward-thinking educators and administrators. Get the latest insights delivered to your inbox."
-        image="/photo03.jpeg"
+        image="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250543/landing_page/photo03.jpg"
         ctaText="Subscribe Now"
         ctaLink="#subscribe-form"
         tagline="Official Newsletter"
@@ -155,7 +155,7 @@ export default function SubscribePage() {
             <ScrollReveal animation="slide-left" className="hide-tablet" delay={300}>
               <div style={{ position: 'relative', height: '600px', width: '100%', overflow: 'hidden', boxShadow: '0 30px 60px rgba(0,0,0,0.05)' }}>
                 <Image 
-                  src="/photo07.jpeg" 
+                  src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250551/landing_page/photo07.jpg" 
                   alt="Education Technology" 
                   fill 
                   style={{ objectFit: 'cover' }} 

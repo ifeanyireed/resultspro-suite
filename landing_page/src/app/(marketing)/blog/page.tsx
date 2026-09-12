@@ -67,7 +67,7 @@ export default async function BlogPage() {
                   <article key={post.id} className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-nets-border">
                     <div className="relative h-48 overflow-hidden bg-nets-light">
                       <img 
-                        src={post.cover_image || '/photo13.jpeg'} 
+                        src={post.cover_image || 'https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg'} 
                         alt={post.title} 
                         className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                       />

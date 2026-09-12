@@ -74,7 +74,7 @@ export default function Home() {
             </div>
             
             <div className="relative">
-              <img src="/photo13.jpeg" alt="School management" className="rounded-sm shadow-card-lg w-full h-[600px] object-cover" />
+              <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg" alt="School management" className="rounded-sm shadow-card-lg w-full h-[600px] object-cover" />
             </div>
           </div>
         </div>

@@ -101,7 +101,7 @@ export default function ClassroomProPage() {
             </div>
             <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
               <img 
-                src="/photo04.jpeg" 
+                src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250545/landing_page/photo04.jpg" 
                 alt="Teacher using ClassroomPRO" 
                 className="absolute inset-0 w-full h-full object-cover"
               />

@@ -47,7 +47,7 @@ export default function UnsubscribePage() {
       <PhotoHero 
         title="We're Sorry to See You Go"
         subtitle="Please confirm your email address to unsubscribe from our newsletter."
-        image="/photo04.jpeg"
+        image="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250545/landing_page/photo04.jpg"
         tagline="Manage Subscription"
       />
 

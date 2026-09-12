@@ -100,7 +100,7 @@ export default function CoursesProPage() {
             </div>
             <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
               <img 
-                src="/photo11.jpeg" 
+                src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250560/landing_page/photo11.jpg" 
                 alt="Student learning on CoursesPRO" 
                 className="absolute inset-0 w-full h-full object-cover"
               />

@@ -101,7 +101,7 @@ export default function ExamsProPage() {
             </div>
             <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
               <img 
-                src="/photo03.jpeg" 
+                src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250543/landing_page/photo03.jpg" 
                 alt="Students using ExamsPRO" 
                 className="absolute inset-0 w-full h-full object-cover"
               />

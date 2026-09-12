@@ -100,7 +100,7 @@ export default function TutorsProPage() {
             </div>
             <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
               <img 
-                src="/photo09.jpeg" 
+                src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250557/landing_page/photo09.jpg" 
                 alt="Tutor working with student" 
                 className="absolute inset-0 w-full h-full object-cover"
               />
