@@ -3,12 +3,13 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(req: NextRequest) {
   const url = req.nextUrl;
-  const hostname = req.headers.get('host') || '';
+  // Extract hostname safely from NextUrl, which handles proxies and strips port automatically
+  const hostname = url.hostname || '';
 
-  // Define the root platform domains (including localhost for dev)
+  // Define the root platform domains (we check domain without port)
   const isPlatform = hostname === 'coursespro.resultspro.ng' || 
-                     hostname === 'localhost:3006' || 
-                     hostname === 'coursespro.localhost:3006';
+                     hostname === 'localhost' || 
+                     hostname === 'coursespro.localhost';
 
   // Skip api, next internal, and static files
   if (url.pathname.startsWith('/api') || url.pathname.startsWith('/_next') || url.pathname.includes('.')) {
