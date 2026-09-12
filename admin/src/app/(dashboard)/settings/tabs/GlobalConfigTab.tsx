@@ -51,7 +51,7 @@ export default function GlobalConfigTab() {
             <label className="block text-slate-500 font-semibold mb-1">Users & Identity Service (Go)</label>
             <input
               type="text"
-              defaultValue="https://resultsproserviceusers.vercel.app"
+              defaultValue="https://resultspro-service-users.onrender.com"
               className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-slate-800"
             />
           </div>

@@ -2042,10 +2042,10 @@ func (h *AdminHandler) GetUsersAccess(c *gin.Context) {
 func (h *AdminHandler) UpdateUserAccess(c *gin.Context) {
 	userID := c.Param("id")
 	var input struct {
-		HasIcan       bool       `json:"has_ican"`
-		IcanPlan      *string    `json:"ican_plan"`
-		IcanTargets   *string    `json:"ican_targets"`
-		IcanExpiresAt *time.Time `json:"ican_expires_at"`
+		IsPremium        bool       `json:"is_premium"`
+		PremiumExpiresAt *time.Time `json:"premium_expires_at"`
+		CoinBalance      int        `json:"coin_balance"`
+		ActivePlanID     *string    `json:"active_plan_id"`
 	}
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
@@ -2053,10 +2053,10 @@ func (h *AdminHandler) UpdateUserAccess(c *gin.Context) {
 	}
 
 	if err := database.DB.Model(&models.User{}).Where("id = ?", userID).Updates(map[string]interface{}{
-		"has_ican":        input.HasIcan,
-		"ican_plan":       input.IcanPlan,
-		"ican_targets":    input.IcanTargets,
-		"ican_expires_at": input.IcanExpiresAt,
+		"is_premium":         input.IsPremium,
+		"premium_expires_at": input.PremiumExpiresAt,
+		"coin_balance":       input.CoinBalance,
+		"active_plan_id":     input.ActivePlanID,
 	}).Error; err != nil {
 		c.JSON(500, gin.H{"error": "Failed to update access"})
 		return
@@ -2065,7 +2065,26 @@ func (h *AdminHandler) UpdateUserAccess(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "Access updated successfully"})
 }
 
-// Payout Management
+func (h *AdminHandler) DeleteUser(c *gin.Context) {
+	userID := c.Param("id")
+	if err := database.DB.Where("id = ?", userID).Delete(&models.User{}).Error; err != nil {
+		c.JSON(500, gin.H{"error": "Failed to delete user"})
+		return
+	}
+	c.JSON(200, gin.H{"message": "User deleted successfully"})
+}
+
+func (h *AdminHandler) VerifyUser(c *gin.Context) {
+	userID := c.Param("id")
+	if err := database.DB.Model(&models.User{}).Where("id = ?", userID).Updates(map[string]interface{}{
+		"otp_code": nil,
+		"otp_expires_at": nil,
+	}).Error; err != nil {
+		c.JSON(500, gin.H{"error": "Failed to verify user"})
+		return
+	}
+	c.JSON(200, gin.H{"message": "User verified successfully"})
+}
 func (h *AdminHandler) GetPayouts(c *gin.Context) {
 	var withdrawals []models.Withdrawal
 	if err := database.DB.Preload("User").Order("created_at desc").Find(&withdrawals).Error; err != nil {

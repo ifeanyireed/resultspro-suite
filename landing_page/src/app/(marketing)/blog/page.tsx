@@ -10,7 +10,7 @@ export const metadata = {
 
 async function getBlogPosts() {
   try {
-    const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultsproserviceusers.vercel.app';
+    const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
     const [postsRes, catRes] = await Promise.all([
       fetch(`${USERS_API}/api/v1/cms/blog/posts`, { next: { revalidate: 60 } }),
       fetch(`${USERS_API}/api/v1/cms/blog/categories`, { next: { revalidate: 60 } })

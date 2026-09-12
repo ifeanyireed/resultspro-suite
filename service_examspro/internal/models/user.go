@@ -32,6 +32,7 @@ type User struct {
 	LastActiveAt       *time.Time     `json:"lastActiveAt"`
 	IsPremium          bool           `gorm:"default:false" json:"isPremium"`
 	PremiumExpiresAt   *time.Time     `json:"premiumExpiresAt"`
+	ActivePlanID       *string        `json:"activePlanId"`
 	HasIcan            bool           `gorm:"default:false" json:"hasIcan"`
 	IcanExpiresAt      *time.Time     `json:"icanExpiresAt"`
 	IcanPlan           *string        `json:"icanPlan"`

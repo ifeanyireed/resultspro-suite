@@ -18,7 +18,7 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultsproserviceusers.vercel.app';
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
       const res = await axios.post(`${USERS_API}/api/v1/auth/login`, { email, password });
       const token = res.data.access_token || res.data.token;
       if (token) {
