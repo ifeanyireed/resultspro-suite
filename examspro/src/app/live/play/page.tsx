@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from 'react';
-import { IconClock as Timer, IconUsers as Users, IconTrophy as Trophy, IconCircleCheck as CheckCircle2, IconBolt as Zap, IconStar as Star, IconChevronRight as ChevronRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconClock as Timer, IconUsers as Users, IconTrophy as Trophy, IconCircleCheck as CheckCircle2, IconBolt as Zap, IconStar as Star, IconChevronRight as ChevronRight, IconLoader2 as Loader2, IconVolume as Volume, IconVolumeOff as VolumeOff } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useLiveGame } from '@/hooks/useLiveGame';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -28,6 +28,11 @@ function LiveGamePlayContent() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [hasAnswered, setHasAnswered] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [isMuted, setIsMuted] = useState(audioPlayer.isMuted);
+
+  const handleToggleMute = () => {
+    setIsMuted(audioPlayer.toggleMute());
+  };
 
   useEffect(() => {
     audioPlayer.preload([
@@ -168,6 +173,12 @@ function LiveGamePlayContent() {
             <Trophy className="w-4 h-4 text-amber" />
             <span className="text-xs font-bold uppercase">Leaderboard</span>
           </Button>
+          <button 
+            onClick={handleToggleMute}
+            className="p-2 rounded-2xl border border-white/[0.1] bg-white/5 hover:bg-white/10 transition-colors"
+          >
+            {isMuted ? <VolumeOff className="w-5 h-5 text-gray-400" /> : <Volume className="w-5 h-5 text-white" />}
+          </button>
         </div>
       </div>
 

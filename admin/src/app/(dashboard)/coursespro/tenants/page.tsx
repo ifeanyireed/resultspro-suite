@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Badge } from '@/components/Badge';
 import { Building2, Search, Filter, ExternalLink, Plus, X } from 'lucide-react';
-import { fetchSchools, verifySchool, createTenant } from '@/lib/api';
+import { fetchSchools, verifySchool, createTenant, updateTenant } from '@/lib/api';
 import { School } from '@/lib/types';
 
 export default function CoursesProTenantManager() {
@@ -14,6 +14,11 @@ export default function CoursesProTenantManager() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [creating, setCreating] = useState(false);
+  
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [updating, setUpdating] = useState(false);
+  const [editTenantData, setEditTenantData] = useState<any>(null);
+
   const [newTenantData, setNewTenantData] = useState({
     name: '',
     slug: '',
@@ -50,6 +55,20 @@ export default function CoursesProTenantManager() {
       load();
     } else {
       alert("Failed to create tenant");
+    }
+  };
+
+  const handleUpdateTenant = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editTenantData || !editTenantData.id) return;
+    setUpdating(true);
+    const ok = await updateTenant(editTenantData.id, editTenantData);
+    setUpdating(false);
+    if (ok) {
+      setIsEditModalOpen(false);
+      load();
+    } else {
+      alert("Failed to update tenant");
     }
   };
 
@@ -186,11 +205,26 @@ export default function CoursesProTenantManager() {
                             </button>
                           </>
                         )}
+                        <button
+                          onClick={() => {
+                            setEditTenantData({
+                              id: school.id,
+                              name: school.name,
+                              slug: school.slug,
+                              contact_email: school.contact_email || '',
+                              primary_color: school.primary_color || '#2563eb'
+                            });
+                            setIsEditModalOpen(true);
+                          }}
+                          className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full font-medium text-[11px] hover:bg-blue-600 hover:text-white transition-all shadow-sm hover:shadow-blue-500/30"
+                        >
+                          Edit
+                        </button>
                         <a
                           href={`https://${school.slug}.resultspro.ng`}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center px-3 py-1 bg-slate-100 text-slate-600 rounded-full font-medium text-[11px] hover:bg-blue-600 hover:text-white transition-all shadow-sm group-hover:shadow-md"
+                          className="inline-flex items-center px-3 py-1 bg-slate-100 text-slate-600 rounded-full font-medium text-[11px] hover:bg-slate-200 transition-all shadow-sm"
                         >
                           Portal <ExternalLink className="w-3 h-3 ml-1 opacity-70" />
                         </a>
@@ -297,6 +331,90 @@ export default function CoursesProTenantManager() {
                   className="flex-1 px-4 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs hover:bg-blue-700 transition-colors shadow-sm disabled:opacity-50"
                 >
                   {creating ? 'Creating...' : 'Provision Tenant'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* Edit Tenant Modal */}
+      {isEditModalOpen && editTenantData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-blue-600" />
+                Edit Tenant
+              </h3>
+              <button onClick={() => setIsEditModalOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={handleUpdateTenant} className="p-6 space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tenant Name</label>
+                <input 
+                  type="text" required
+                  value={editTenantData.name}
+                  onChange={e => setEditTenantData({...editTenantData, name: e.target.value})}
+                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Subdomain (Slug)</label>
+                <div className="relative">
+                  <input 
+                    type="text" required
+                    value={editTenantData.slug}
+                    onChange={e => setEditTenantData({...editTenantData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')})}
+                    className="w-full pl-4 pr-28 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                  />
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <span className="text-[10px] text-slate-400 font-medium">.resultspro.ng</span>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Admin Contact Email</label>
+                <input 
+                  type="email" required
+                  value={editTenantData.contact_email}
+                  onChange={e => setEditTenantData({...editTenantData, contact_email: e.target.value})}
+                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Primary Theme Color</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="color" 
+                    value={editTenantData.primary_color}
+                    onChange={e => setEditTenantData({...editTenantData, primary_color: e.target.value})}
+                    className="w-10 h-10 rounded-lg cursor-pointer bg-slate-50 border border-slate-200 p-1"
+                  />
+                  <input 
+                    type="text" 
+                    value={editTenantData.primary_color}
+                    onChange={e => setEditTenantData({...editTenantData, primary_color: e.target.value})}
+                    className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-4 flex gap-3">
+                <button 
+                  type="button" 
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit"
+                  disabled={updating}
+                  className="flex-1 px-4 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs hover:bg-blue-700 transition-colors shadow-sm disabled:opacity-50"
+                >
+                  {updating ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
             </form>

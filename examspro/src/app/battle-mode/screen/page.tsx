@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { IconClock as Timer, IconCoins as Coins, IconSword as Sword, IconBolt as Zap, IconTarget as Target, IconCircleCheck as CheckCircle2, IconAlertCircle as AlertCircle, IconTrophy as Trophy, IconLoader2 as Loader2, IconFlag as Flag } from '@tabler/icons-react';
+import { IconClock as Timer, IconCoins as Coins, IconSword as Sword, IconBolt as Zap, IconTarget as Target, IconCircleCheck as CheckCircle2, IconAlertCircle as AlertCircle, IconTrophy as Trophy, IconLoader2 as Loader2, IconFlag as Flag, IconVolume as Volume, IconVolumeOff as VolumeOff } from '@tabler/icons-react';
 import { useBattle } from '@/hooks/useBattle';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Button } from '@/components/ui/button';
@@ -55,6 +55,11 @@ function BattleScreenContent() {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportReason, setReportReason] = useState("");
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
+  const [isMuted, setIsMuted] = useState(audioPlayer.isMuted);
+
+  const handleToggleMute = () => {
+    setIsMuted(audioPlayer.toggleMute());
+  };
 
   const playSound = (soundName: string) => {
     audioPlayer.play(soundName);
@@ -351,6 +356,13 @@ function BattleScreenContent() {
 
         {/* Player 2 (Opponent) */}
         <div className="flex items-center gap-4 flex-1 justify-end">
+          <button 
+            onClick={handleToggleMute}
+            className="p-2 rounded-2xl border border-white/[0.1] bg-white/5 hover:bg-white/10 transition-colors mr-2 hidden md:block"
+            title="Toggle Sound"
+          >
+            {isMuted ? <VolumeOff className="w-4 h-4 text-gray-400" /> : <Volume className="w-4 h-4 text-white" />}
+          </button>
           <div className="text-right">
             <div className="text-[10px] text-gray-500 mb-1 font-bold">{roomData?.isBot ? botScore : opponentScore} pts</div>
             <div className="w-24 h-1.5 bg-white/5 rounded-full mb-1 overflow-hidden ml-auto">

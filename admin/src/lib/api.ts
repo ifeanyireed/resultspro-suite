@@ -687,3 +687,16 @@ export async function deleteExamproPlan(id: string): Promise<any> {
   if (!res.ok) throw new Error('Failed to delete exampro plan');
   return res.json();
 }
+
+export async function updateTenant(tenantId: string, payload: any): Promise<boolean> {
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/tenants/update/${tenantId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+      body: JSON.stringify(payload),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}

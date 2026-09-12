@@ -201,6 +201,8 @@ func main() {
 			switch action {
 			case "hierarchy":
 				handlers.HandleGetTenantHierarchy(w, r)
+			case "update":
+				handlers.HandleUpdateTenant(w, r)
 			case "branding":
 				if r.Method == http.MethodGet {
 					handlers.HandleGetTenantBranding(w, r)

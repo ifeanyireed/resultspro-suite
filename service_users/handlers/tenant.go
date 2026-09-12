@@ -699,3 +699,52 @@ func HandleResolveTenant(w http.ResponseWriter, r *http.Request) {
 		"tenant": t,
 	})
 }
+
+// HandleUpdateTenant updates basic tenant details
+func HandleUpdateTenant(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPatch && r.Method != http.MethodPut {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	parts := strings.Split(r.URL.Path, "/")
+	tenantID := ""
+	for i, part := range parts {
+		if part == "update" && i+1 < len(parts) {
+			tenantID = parts[i+1]
+			break
+		}
+	}
+
+	if tenantID == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Tenant ID required")
+		return
+	}
+
+	var input map[string]interface{}
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+
+	// Remove fields we don't want to blindly update
+	delete(input, "id")
+	delete(input, "created_at")
+	
+	if len(input) == 0 {
+		utils.JSONError(w, http.StatusBadRequest, "No fields to update")
+		return
+	}
+
+	// Update using Gorm for dynamic map updates
+	if err := db.GormDB.Model(&models.Tenant{}).Where("id = ?", tenantID).Updates(input).Error; err != nil {
+		log.Printf("Error updating tenant %s: %v", tenantID, err)
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to update tenant")
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"success": true,
+		"message": "Tenant updated successfully",
+	})
+}
