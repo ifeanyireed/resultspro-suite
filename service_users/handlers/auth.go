@@ -84,7 +84,7 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query := `INSERT INTO users (id, email, password_hash, auth_provider, full_name, phone, sex, date_of_birth, address, account_status, mfa_enabled, referral_code, referred_by, coin_balance, created_at, updated_at) 
-	          VALUES (?, ?, ?, 'local', ?, ?, ?, ?, ?, 'unverified', 0, ?, ?, ?, ?, ?)`
+	          VALUES (?, ?, ?, 'local', ?, ?, ?, ?, ?, 'unverified', false, ?, ?, ?, ?, ?)`
 
 	_, err = db.DB.Exec(query,
 		userID,
@@ -410,7 +410,7 @@ func HandleLogout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := db.DB.Exec("UPDATE refresh_tokens SET revoked = 1 WHERE token_hash = ?", input.RefreshToken)
+	_, err := db.DB.Exec("UPDATE refresh_tokens SET revoked = true WHERE token_hash = ?", input.RefreshToken)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to revoke token")
 		return
@@ -432,7 +432,7 @@ func HandleLogoutAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = db.DB.Exec("UPDATE refresh_tokens SET revoked = 1 WHERE user_id = ?", userID)
+	_, err = db.DB.Exec("UPDATE refresh_tokens SET revoked = true WHERE user_id = ?", userID)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to revoke sessions")
 		return

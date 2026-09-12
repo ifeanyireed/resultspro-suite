@@ -3,10 +3,13 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(req: NextRequest) {
   const url = req.nextUrl;
-  // Extract hostname safely from NextUrl, which handles proxies and strips port automatically
-  const hostname = url.hostname || '';
-
-  // Define the root platform domains (we check domain without port)
+  
+  // Always use the Host header as the definitive source of truth for the domain.
+  // req.nextUrl.hostname can sometimes default to 'localhost' if running behind certain local proxies or Docker networks.
+  const hostHeader = req.headers.get('host') || '';
+  const hostname = hostHeader.split(':')[0]; // Strip the port
+  
+  // Define the root platform domains
   const isPlatform = hostname === 'coursespro.resultspro.ng' || 
                      hostname === 'localhost' || 
                      hostname === 'coursespro.localhost';

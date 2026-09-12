@@ -84,7 +84,7 @@ func HandleMFAVerify(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = db.DB.Exec("UPDATE users SET mfa_enabled = 1 WHERE id = ?", userID)
+	_, err = db.DB.Exec("UPDATE users SET mfa_enabled = true WHERE id = ?", userID)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
 		return
@@ -125,7 +125,7 @@ func HandleMFADisable(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = db.DB.Exec("UPDATE users SET mfa_enabled = 0, mfa_secret = NULL WHERE id = ?", userID)
+	_, err = db.DB.Exec("UPDATE users SET mfa_enabled = false, mfa_secret = NULL WHERE id = ?", userID)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
 		return

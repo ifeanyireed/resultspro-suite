@@ -37,15 +37,15 @@ func (h *AdminHandler) GetUsers(c *gin.Context) {
 	}
 	
 	if plan == "Pro" {
-		tx = tx.Where("is_premium = ?", 1)
+		tx = tx.Where("is_premium = ?", true)
 	} else if plan == "Free" {
-		tx = tx.Where("is_premium = ?", 0)
+		tx = tx.Where("is_premium = ?", false)
 	}
 
 	if status == "Suspended" {
-		tx = tx.Where("is_banned = ?", 1)
+		tx = tx.Where("is_banned = ?", true)
 	} else if status == "Active" {
-		tx = tx.Where("is_banned = ?", 0)
+		tx = tx.Where("is_banned = ?", false)
 	}
 
 	var users []models.User

@@ -58,7 +58,7 @@ func HandleVerifyEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = tx.Exec("UPDATE verification_tokens SET used = 1 WHERE token_hash = ?", input.Token)
+	_, err = tx.Exec("UPDATE verification_tokens SET used = true WHERE token_hash = ?", input.Token)
 	if err != nil {
 		tx.Rollback()
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to update verification status")
@@ -171,7 +171,7 @@ func HandleResetPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = tx.Exec("UPDATE verification_tokens SET used = 1 WHERE token_hash = ?", input.Token)
+	_, err = tx.Exec("UPDATE verification_tokens SET used = true WHERE token_hash = ?", input.Token)
 	if err != nil {
 		tx.Rollback()
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to mark token as used")
@@ -179,7 +179,7 @@ func HandleResetPassword(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Revoke existing sessions
-	tx.Exec("UPDATE refresh_tokens SET revoked = 1 WHERE user_id = ?", userID)
+	tx.Exec("UPDATE refresh_tokens SET revoked = true WHERE user_id = ?", userID)
 
 	tx.Commit()
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Password reset successfully. You can now log in with your new password."})

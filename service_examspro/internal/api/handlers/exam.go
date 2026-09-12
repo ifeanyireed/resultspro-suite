@@ -25,7 +25,7 @@ func (h *ExamHandler) GetExams(c *gin.Context) {
 
 
 
-	db := database.DB.Preload("Subjects").Where("is_active = ?", 1)
+	db := database.DB.Preload("Subjects").Where("is_active = ?", true)
 	if battleReadyOnly {
 		db = db.Where("is_battle_ready = ?", true)
 	}
