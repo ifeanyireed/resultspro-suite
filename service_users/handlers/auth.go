@@ -174,6 +174,25 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if user.AccountStatus == "unverified" {
+		otp := utils.GenerateOTP()
+		expiresAt := time.Now().Add(time.Hour * 24)
+		_, err = db.DB.Exec("INSERT INTO verification_tokens (id, user_id, token_hash, type, expires_at) VALUES (?, ?, ?, 'email_verify', ?)",
+			uuid.New().String(), user.ID, otp, expiresAt.UTC().Format("2006-01-02 15:04:05"))
+		if err == nil {
+			go func() {
+				utils.SendVerificationEmail(user.Email, otp)
+			}()
+		}
+		
+		utils.JSONResponse(w, http.StatusForbidden, map[string]interface{}{
+			"error": "unverified",
+			"message": "Please verify your email address. A new code has been sent.",
+			"email": user.Email,
+		})
+		return
+	}
+
 	if user.AccountStatus == "suspended" {
 		utils.JSONError(w, http.StatusForbidden, "Account is suspended. Please contact support.")
 		return

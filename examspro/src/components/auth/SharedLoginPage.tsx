@@ -36,6 +36,10 @@ export default function SharedLoginPage({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
+  const [showOTP, setShowOTP] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [verificationLoading, setVerificationLoading] = useState(false);
+  
   const setAuth = useAuthStore((state) => state.setAuth);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -50,7 +54,12 @@ export default function SharedLoginPage({
         router.push(redirectPath);
       }
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Login failed");
+      if (err.response?.status === 403 && err.response?.data?.error === "unverified") {
+        setShowOTP(true);
+        toast.success("A new verification code has been sent to your email.");
+      } else {
+        toast.error(err.response?.data?.error || err.response?.data?.message || "Login failed");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -119,6 +128,53 @@ export default function SharedLoginPage({
 
       {/* Right Panel - Login Form */}
       <div className="w-full lg:w-[45%] bg-white flex items-center justify-center p-8 sm:p-16 relative overflow-y-auto">
+        {showOTP ? (
+          <div className="w-full max-w-md mx-auto">
+            <div className="text-center mb-10">
+              <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Mail className="w-8 h-8" />
+              </div>
+              <h2 className="text-3xl font-bold text-slate-900 mb-2 tracking-tight">Verify Your Email</h2>
+              <p className="text-slate-500 text-sm">
+                We've sent a 6-digit verification code to <span className="font-semibold text-slate-700">{email}</span>.
+              </p>
+            </div>
+            
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              setVerificationLoading(true);
+              try {
+                await api.post('/account/verify-email', { token: otp });
+                toast.success("Email verified successfully! Logging you in...");
+                // Automatically log them in now
+                handleLogin(new Event('submit') as any);
+              } catch (err: any) {
+                toast.error(err.response?.data?.error || "Invalid OTP");
+                setVerificationLoading(false);
+              }
+            }} className="space-y-6">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">Verification Code</label>
+                <input 
+                  type="text" 
+                  value={otp} 
+                  onChange={(e) => setOtp(e.target.value)} 
+                  required 
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-center text-2xl tracking-[0.5em] px-4 py-4 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white transition-all outline-none" 
+                  placeholder="------" 
+                  maxLength={6}
+                />
+              </div>
+              <button 
+                type="submit" 
+                disabled={verificationLoading || otp.length < 6}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-colors flex justify-center items-center group disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/25"
+              >
+                {verificationLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <span>Verify Account</span>}
+              </button>
+            </form>
+          </div>
+        ) : (
         <div className="w-full max-w-md py-12 lg:py-0">
           
           {/* Mobile Logo standalone */}
@@ -216,6 +272,7 @@ export default function SharedLoginPage({
             </p>
           </div>
         </div>
+        )}
       </div>
     </div>
   );
