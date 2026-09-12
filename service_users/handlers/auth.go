@@ -202,13 +202,22 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	// Fetch user roles for RBAC and validate tenant access if requested
 	var roles []string
 	hasTenantAccess := false
-	rows, err := db.DB.Query("SELECT role, tenant_id FROM user_tenant_roles WHERE user_id = ? AND status = 'active'", user.ID)
+	var adminTenants []string
+
+	query := `
+		SELECT ur.role, ur.tenant_id, t.slug 
+		FROM user_tenant_roles ur 
+		LEFT JOIN tenants t ON ur.tenant_id = t.id 
+		WHERE ur.user_id = ? AND ur.status = 'active'
+	`
+	rows, err := db.DB.Query(query, user.ID)
 	if err == nil {
 		defer rows.Close()
 		for rows.Next() {
 			var role string
 			var tID sql.NullString
-			if err := rows.Scan(&role, &tID); err == nil {
+			var tSlug sql.NullString
+			if err := rows.Scan(&role, &tID, &tSlug); err == nil {
 				roles = append(roles, role)
 				if tID.Valid && tID.String == input.TenantID {
 					hasTenantAccess = true
@@ -216,11 +225,20 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 				if role == "platform-admin" || role == "superadmin" {
 					hasTenantAccess = true
 				}
+				if role == "tenant-admin" && tSlug.Valid {
+					adminTenants = append(adminTenants, tSlug.String)
+				}
 			}
 		}
 	}
 
-	if input.TenantID != "" && !hasTenantAccess {
+	// Platform login (no specific tenant) -> require tenant-admin
+	if input.TenantID == "" && input.TenantSlug == "" {
+		if len(adminTenants) == 0 {
+			utils.JSONError(w, http.StatusForbidden, "Only academy creators can log in here.")
+			return
+		}
+	} else if input.TenantID != "" && !hasTenantAccess {
 		utils.JSONError(w, http.StatusForbidden, "You do not have access to this academy")
 		return
 	}
@@ -260,6 +278,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
 		"access_token":  accessToken,
 		"refresh_token": refreshToken,
+		"admin_tenants": adminTenants,
 		"user": map[string]interface{}{
 			"id":             user.ID,
 			"email":          user.Email,

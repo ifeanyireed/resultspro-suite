@@ -31,12 +31,24 @@ export default function LoginPage() {
       if (token) {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(res.data.user));
-        router.push('/dashboard');
+        
+        // Redirect to their academy dashboard
+        const adminTenants = res.data.admin_tenants;
+        if (adminTenants && adminTenants.length > 0) {
+          const slug = adminTenants[0];
+          const isLocal = window.location.hostname.includes('localhost');
+          if (isLocal) {
+            window.location.href = `http://${slug}.localhost:3006/dashboard`;
+          } else {
+            window.location.href = `https://${slug}.resultspro.ng/dashboard`;
+          }
+        } else {
+          router.push('/dashboard');
+        }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Login failed", err);
-      // Fallback for demo purposes if backend is unavailable
-      setTimeout(() => router.push('/dashboard'), 500);
+      setError(err.response?.data?.error || err.message || 'Login failed');
     } finally {
       setIsLoading(false);
     }
