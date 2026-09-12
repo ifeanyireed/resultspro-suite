@@ -166,7 +166,10 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center flex flex-col gap-4">
+            <p className="text-sm font-medium text-slate-600">
+              Don't have an account? <Link href="/signup" className="text-blue-600 hover:underline">Sign up</Link>
+            </p>
             <p className="text-xs text-slate-400 font-medium">
               Protected by reCAPTCHA and subject to the CoursesPRO{' '}
               <a href="https://www.resultspro.ng/privacy" className="text-slate-600 hover:underline">Privacy Policy</a> and{' '}

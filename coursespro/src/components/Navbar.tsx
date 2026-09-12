@@ -124,9 +124,14 @@ export default function Navbar() {
           {/* Desktop actions (Auth/Profile) */}
           <div style={{ alignItems: 'center', gap: '1.25rem' }} className="nav-desktop-actions">
             {mounted && !isAuthenticated ? (
-              <Link href="/login" className="btn btn-red btn-sm" style={{ textDecoration: 'none' }}>
-                Log In
-              </Link>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <Link href="/login" className="nav-link" style={{ fontWeight: 600 }}>
+                  Log In
+                </Link>
+                <Link href="/signup" className="btn btn-red btn-sm" style={{ textDecoration: 'none' }}>
+                  Sign Up
+                </Link>
+              </div>
             ) : mounted && isAuthenticated ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
                 <Link href="/dashboard" className="btn btn-red btn-sm" style={{ textDecoration: 'none' }}>
@@ -225,7 +230,7 @@ export default function Navbar() {
                 style={{ marginTop: '2.5rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}
               >
                 {!isAuthenticated ? (
-                  <Link href="https://www.resultspro.ng" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
+                  <Link href="/signup" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
                     Sign Up Free
                   </Link>
                 ) : (
