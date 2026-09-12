@@ -730,6 +730,11 @@ func HandleUpdateTenant(w http.ResponseWriter, r *http.Request) {
 	// Remove fields we don't want to blindly update
 	delete(input, "id")
 	delete(input, "created_at")
+	delete(input, "updated_at")
+
+	if val, ok := input["subscription_expires_at"]; ok && val == "" {
+		delete(input, "subscription_expires_at")
+	}
 	
 	if len(input) == 0 {
 		utils.JSONError(w, http.StatusBadRequest, "No fields to update")
@@ -739,7 +744,7 @@ func HandleUpdateTenant(w http.ResponseWriter, r *http.Request) {
 	// Update using Gorm for dynamic map updates
 	if err := db.GormDB.Model(&models.Tenant{}).Where("id = ?", tenantID).Updates(input).Error; err != nil {
 		log.Printf("Error updating tenant %s: %v", tenantID, err)
-		utils.JSONError(w, http.StatusInternalServerError, "Failed to update tenant")
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to update tenant: "+err.Error())
 		return
 	}
 
