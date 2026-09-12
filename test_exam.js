@@ -1,4 +1,4 @@
-const USERS_API = "https://resultspro-service-users.onrender.com";
+const USERS_API = "https://resultsproserviceusers.vercel.app";
 const EXAMS_API = "https://resultspro-service-examspro.onrender.com";
 async function run() {
   const loginRes = await fetch(`${USERS_API}/api/v1/auth/login`, {

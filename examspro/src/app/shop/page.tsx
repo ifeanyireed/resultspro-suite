@@ -64,7 +64,7 @@ export default function CoinShopPage() {
 
   const fetchCoinPacks = async () => {
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultsproserviceusers.vercel.app';
       const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'https://resultspro-service-examspro.onrender.com';
       
       const [plansRes, packsRes] = await Promise.all([
@@ -138,7 +138,7 @@ export default function CoinShopPage() {
     }
     setLoadingPack(packId);
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultsproserviceusers.vercel.app';
       const token = localStorage.getItem('token');
       const res = await fetch(`${USERS_API}/api/v1/billing/initialize`, {
         method: 'POST',

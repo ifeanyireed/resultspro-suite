@@ -1,6 +1,6 @@
 import { User, School, SubscriptionPlan, Invoice, PayoutRequest, ScratchCardBatch, BlogPost, SuiteStats } from './types';
 
-const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultsproserviceusers.vercel.app';
 const RESULTS_API = process.env.NEXT_PUBLIC_RESULTS_API || 'https://resultspro-service-resultspro.onrender.com';
 const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'https://resultspro-service-examspro.onrender.com';
 const CLASSROOM_API = process.env.NEXT_PUBLIC_CLASSROOM_API || 'https://resultspro-service-classroompro.onrender.com';

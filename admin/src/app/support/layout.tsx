@@ -167,11 +167,11 @@ export default function SupportLayout({
                   {user?.avatar_url ? (
                     <img src={user.avatar_url} alt="Staff Avatar" className="w-full h-full object-cover" />
                   ) : (
-                    user?.full_name ? user.full_name.charAt(0).toUpperCase() : 'S'
+                    user?.name ? user.name.charAt(0).toUpperCase() : 'S'
                   )}
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-sm font-bold text-gray-900 leading-tight">{user?.full_name || "Error: Name not found"}</p>
+                  <p className="text-sm font-bold text-gray-900 leading-tight">{user?.name || "Error: Name not found"}</p>
                   <p className="text-xs text-gray-500">{user?.email || "Error: Email not found"}</p>
                 </div>
               </div>

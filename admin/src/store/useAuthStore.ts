@@ -5,7 +5,7 @@ import { Role } from '@/lib/roles';
 interface User {
   id: string;
   email: string;
-  full_name: string;
+  name: string;
   role: Role;
   school_id?: string;
   class_id?: string;
@@ -39,7 +39,7 @@ export const useAuthStore = create<AuthState>((set) => {
   let user: any = {
     id: "mock-bypass-123",
     email: "mock@student.com",
-    full_name: "Bypass User",
+    name: "Bypass User",
     role: "student",
     account_status: "active",
     created_at: new Date().toISOString(),

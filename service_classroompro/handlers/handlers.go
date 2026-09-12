@@ -22,7 +22,7 @@ func NewHandler() *Handler {
 func (h *Handler) ProxyAuth(c *gin.Context) {
 	usersURL := os.Getenv("USERS_SERVICE_URL")
 	if usersURL == "" {
-		usersURL = "https://resultspro-service-users.onrender.com"
+		usersURL = "https://resultsproserviceusers.vercel.app"
 	}
 
 	targetURL := usersURL + c.Request.URL.Path

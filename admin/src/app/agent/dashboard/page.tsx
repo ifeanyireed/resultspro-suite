@@ -21,7 +21,7 @@ export default function AgentDashboard() {
     const token = localStorage.getItem('resultspro_admin_token');
     if (!token) return;
 
-    fetch(`${process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com'}/api/v1/agent/dashboard`, {
+    fetch(`${process.env.NEXT_PUBLIC_USERS_API || 'https://resultsproserviceusers.vercel.app'}/api/v1/agent/dashboard`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

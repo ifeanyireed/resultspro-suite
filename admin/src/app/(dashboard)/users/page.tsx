@@ -32,7 +32,7 @@ export default function UsersPage() {
   };
 
   const filtered = users.filter((u) => {
-    const matchSearch = u.full_name?.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase());
+    const matchSearch = u.name?.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase());
     const matchStatus = filterStatus === 'ALL' || u.account_status === filterStatus;
     return matchSearch && matchStatus;
   });
@@ -91,10 +91,10 @@ export default function UsersPage() {
                   <tr key={user.id} className="hover:bg-blue-50/30 transition-colors group">
                     <td className="px-6 py-4 flex items-center space-x-3">
                       <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs overflow-hidden shadow-sm border border-slate-200">
-                        <img src={`/avatars/character${(user.id.charCodeAt(0) % 20) + 1}.jpg`} alt={user.full_name || 'User'} className="w-full h-full object-cover" />
+                        <img src={`/avatars/character${(user.id.charCodeAt(0) % 20) + 1}.jpg`} alt={user.name || 'User'} className="w-full h-full object-cover" />
                       </div>
                       <div>
-                        <p className="font-medium text-slate-800 text-xs">{user.full_name || 'Anonymous'}</p>
+                        <p className="font-medium text-slate-800 text-xs">{user.name || 'Anonymous'}</p>
                         <p className="text-[10px] text-slate-400 font-normal">id: {user.id.slice(0, 8)}...</p>
                       </div>
                     </td>

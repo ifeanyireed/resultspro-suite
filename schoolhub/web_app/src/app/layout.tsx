@@ -18,7 +18,7 @@ const dmSans = DM_Sans({
 async function getTenant(host: string) {
   const searchDomain = host.includes('localhost') ? 'reedbreed.resultspro.ng' : host;
   try {
-    const res = await fetch(`https://resultspro-service-users.onrender.com/api/public/tenant/resolve?domain=${searchDomain}`, { 
+    const res = await fetch(`https://resultsproserviceusers.vercel.app/api/public/tenant/resolve?domain=${searchDomain}`, { 
       next: { revalidate: 60 }
     });
     if (!res.ok) return null;
