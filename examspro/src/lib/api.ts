@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
 const getApiUrl = () => {
-  return process.env.NEXT_PUBLIC_API_URL || '';
+  return process.env.NEXT_PUBLIC_API_URL || 'https://resultspro-service-users.onrender.com/api';
 };
 
 const API_URL = getApiUrl();
@@ -55,4 +55,4 @@ api.interceptors.response.use(
 
 export default api;
 
-export const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+export const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';

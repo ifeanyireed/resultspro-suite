@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
 const getApiUrl = () => {
-  if (typeof window === 'undefined') return process.env.NEXT_PUBLIC_API_URL || '';
+  if (typeof window === 'undefined') return process.env.NEXT_PUBLIC_API_URL || 'https://resultspro-service-users.onrender.com/api';
   
   // If we are in the browser and not on localhost, use the relative path /api
   // which will be proxied by Nginx to the Go backend
@@ -10,7 +10,7 @@ const getApiUrl = () => {
     return '/api';
   }
   
-  return process.env.NEXT_PUBLIC_API_URL || '';
+  return process.env.NEXT_PUBLIC_API_URL || 'https://resultspro-service-users.onrender.com/api';
 };
 
 const API_URL = getApiUrl();

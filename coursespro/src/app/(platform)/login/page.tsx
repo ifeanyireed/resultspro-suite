@@ -20,7 +20,7 @@ export default function LoginPage() {
     setIsLoading(true);
     setError('');
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
       
       const res = await axios.post(`${USERS_API}/api/v1/auth/login`, { 
         email, 

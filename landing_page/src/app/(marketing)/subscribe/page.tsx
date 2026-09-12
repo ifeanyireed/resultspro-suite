@@ -43,7 +43,7 @@ export default function SubscribePage() {
     setStatus('loading');
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_RESULTS_API || ''}/api/subscribe`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_RESULTS_API || 'https://resultspro-service-resultspro.onrender.com'}/api/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

@@ -28,7 +28,7 @@ export default function AgentsListTab() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('resultspro_admin_token');
-      const res = await fetch(`${process.env.NEXT_PUBLIC_USERS_API || ''}/api/v1/admin/agents`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com'}/api/v1/admin/agents`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

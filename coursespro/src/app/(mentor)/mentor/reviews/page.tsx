@@ -33,7 +33,7 @@ export default function MentorReviews() {
   const [feedback, setFeedback] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
 
-  const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || '';
+  const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
 
   const fetchSubmissions = async () => {
     setLoading(true);

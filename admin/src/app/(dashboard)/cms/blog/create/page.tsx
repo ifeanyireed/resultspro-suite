@@ -24,7 +24,7 @@ function CreateBlogPostContent() {
 
   useEffect(() => {
     if (editId) {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
       fetch(`${USERS_API}/api/v1/cms/blog/categories`)
         .then(res => res.json())
         .then(data => {
@@ -101,7 +101,7 @@ function CreateBlogPostContent() {
     }
     
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
       let author_id = "0eef95ef-57e0-4a7d-ae31-c8376fe28fd0";
       try {
         const userStr = localStorage.getItem('user');
