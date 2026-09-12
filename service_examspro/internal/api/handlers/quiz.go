@@ -273,7 +273,52 @@ func (h *QuizHandler) SubmitAnswer(c *gin.Context) {
 			SessionID:        input.SessionID,
 			AnsweredAt:       now,
 		}
-		return tx.Create(&userAnswer).Error
+		if err := tx.Create(&userAnswer).Error; err != nil {
+			return err
+		}
+
+		// Handle Referral Activation (Coins only, after 15+ questions)
+		var referral models.Referral
+		if err := tx.Where("referee_id = ? AND coins_awarded = 0", userID).First(&referral).Error; err == nil {
+			var answerCount int64
+			tx.Model(&models.UserAnswer{}).Where("user_id = ?", userID).Count(&answerCount)
+			if answerCount >= 15 {
+				// Fetch Settings
+				var coinRewardSetting models.SystemSetting
+				rewardCoins := 50
+				if tx.Where("id = ?", "referral_coin_reward").First(&coinRewardSetting).Error == nil {
+					fmt.Sscanf(coinRewardSetting.Value, "%d", &rewardCoins)
+				}
+
+				newStatus := referral.Status
+				if newStatus == "pending" {
+					newStatus = "active"
+				}
+
+				if err := tx.Model(&referral).Updates(map[string]interface{}{
+					"status":        newStatus,
+					"coins_awarded": rewardCoins,
+				}).Error; err == nil {
+					if rewardCoins > 0 {
+						if err := tx.Model(&models.User{}).Where("id = ?", referral.ReferrerID).
+							Update("coin_balance", gorm.Expr("coin_balance + ?", rewardCoins)).Error; err == nil {
+							desc := "Referral Active Bonus"
+							refTx := models.CoinTransaction{
+								ID:          uuid.New().String(),
+								UserID:      referral.ReferrerID,
+								Amount:      rewardCoins,
+								Type:        "REFERRAL_BONUS",
+								Description: &desc,
+								ReferenceID: &referral.ID,
+							}
+							tx.Create(&refTx)
+						}
+					}
+				}
+			}
+		}
+
+		return nil
 	})
 
 	if err != nil {

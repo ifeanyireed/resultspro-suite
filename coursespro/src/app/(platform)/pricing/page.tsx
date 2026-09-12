@@ -19,7 +19,12 @@ export default function PlatformPricingPage() {
           const responseData = await res.json();
           const data = responseData.plans || responseData || [];
           if (Array.isArray(data)) {
-            setPlans(data.map(p => ({
+            // Filter on frontend as a fallback in case backend hasn't updated yet
+            const filteredData = data.filter(p => 
+              p.app_module && p.app_module.toLowerCase() === 'coursespro'
+            );
+            
+            setPlans(filteredData.map(p => ({
               name: p.name,
               monthly_price: p.monthly_price || p.price || 0,
               annual_price: p.annual_price || ((p.monthly_price || p.price || 0) * 11),
