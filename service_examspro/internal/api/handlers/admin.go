@@ -2077,6 +2077,7 @@ func (h *AdminHandler) DeleteUser(c *gin.Context) {
 func (h *AdminHandler) VerifyUser(c *gin.Context) {
 	userID := c.Param("id")
 	if err := database.DB.Model(&models.User{}).Where("id = ?", userID).Updates(map[string]interface{}{
+		"account_status": "active",
 		"otp_code": nil,
 		"otp_expires_at": nil,
 	}).Error; err != nil {

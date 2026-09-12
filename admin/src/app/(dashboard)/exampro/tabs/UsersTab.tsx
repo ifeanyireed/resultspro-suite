@@ -178,7 +178,7 @@ export default function UsersTab() {
                   </td>
 
                   <td className="px-6 py-4">
-                    <Badge status={!u.otpCode ? 'VERIFIED' : 'PENDING'} />
+                    <Badge status={u.accountStatus === 'active' ? 'VERIFIED' : 'PENDING'} />
                   </td>
 
                   <td className="px-6 py-4">
@@ -227,7 +227,7 @@ export default function UsersTab() {
                     ) : (
                       <div className="flex items-center justify-end gap-2">
                         
-                        {u.otpCode && (
+                        {u.accountStatus !== 'active' && (
                           <button onClick={() => handleVerify(u.id)} className="p-1.5 rounded-full hover:bg-emerald-50 text-slate-400 hover:text-emerald-600 transition-colors" title="Manually Verify Email">
                             <Check className="w-4 h-4" />
                           </button>

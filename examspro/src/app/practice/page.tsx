@@ -387,15 +387,15 @@ export default function PracticePage() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-0 right-0 h-[85vh] bg-navy border-t border-white/10 rounded-t-[32px] z-[101] md:hidden flex flex-col overflow-hidden"
+              className="fixed bottom-4 left-4 right-4 h-[80vh] bg-white/80 backdrop-blur-2xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.1)] ring-1 ring-slate-100 rounded-[32px] z-[101] md:hidden flex flex-col overflow-hidden"
             >
               {/* Drag Handle */}
               <div className="flex justify-center p-4">
-                <div className="w-12 h-1.5 rounded-full bg-white/20" />
+                <div className="w-12 h-1.5 rounded-full bg-gray-300" />
               </div>
 
               {/* Mobile Content Header */}
-              <div className="px-6 pb-6 border-b border-white/5 flex items-center justify-between">
+              <div className="px-6 pb-6 border-b border-gray-200 flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold font-display text-navy">
                     {categories.flatMap(c => c.exams).find(e => e.id === mobilePreviewExamId)?.name}
@@ -404,15 +404,15 @@ export default function PracticePage() {
                 </div>
                 <button 
                   onClick={() => setMobilePreviewExamId(null)}
-                  className="p-2 rounded-full bg-slate-200 border border-white/[0.1] border-t-white/[0.15]"
+                  className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"
                 >
-                  <X className="w-5 h-5 text-gray-400" />
+                  <X className="w-5 h-5 text-gray-500" />
                 </button>
               </div>
 
               <div className="flex-1 overflow-hidden flex flex-col">
                 {/* Subject Selector (Horizontal Scroll) */}
-                <div className="flex overflow-x-auto no-scrollbar px-6 py-4 gap-3 border-b border-white/5">
+                <div className="flex overflow-x-auto no-scrollbar px-6 py-4 gap-3 border-b border-gray-200">
                   {hoverDataCache[mobilePreviewExamId!]?.map((sub: any, idx: number) => (
                     <button
                       key={idx}
@@ -420,8 +420,8 @@ export default function PracticePage() {
                       className={`
                         px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all border
                         ${mobileSyllabusSubjectIndex === idx 
-                          ? 'bg-blue/10 text-blue border-green/30' 
-                          : 'bg-slate-200 text-gray-500 border-transparent hover:bg-white/10'}
+                          ? 'bg-blue/10 text-blue border-blue/30' 
+                          : 'bg-white/60 text-gray-500 border-gray-200 hover:bg-white/90'}
                       `}
                     >
                       {sub.name}
@@ -447,12 +447,12 @@ export default function PracticePage() {
                       </div>
                       
                       {hoverDataCache[mobilePreviewExamId!][mobileSyllabusSubjectIndex].topics?.map((topic: any, i: number) => (
-                        <div key={i} className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] flex items-center justify-between gap-4">
+                        <div key={i} className="p-4 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-between gap-4">
                           <div className="flex items-center gap-3">
                             <span className="text-xs text-blue font-mono">{String(i + 1).padStart(2, '0')}</span>
                             <span className="text-sm text-gray-600 font-medium">{topic.name}</span>
                           </div>
-                          <span className="text-[10px] text-gray-500 font-bold bg-slate-200 px-2 py-0.5 rounded-lg border border-white/[0.05] border-t-white/[0.1] leading-none shrink-0">
+                          <span className="text-[10px] text-gray-500 font-bold bg-white px-2 py-0.5 rounded-lg border border-gray-200 leading-none shrink-0">
                             {topic.questions} Qs
                           </span>
                         </div>

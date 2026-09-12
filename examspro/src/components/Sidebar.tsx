@@ -31,82 +31,111 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Brand Header */}
-      <div className="px-8 mb-6">
-        <Image src="/logo.png" alt="ExamsPRO" width={300} height={80} className="w-auto h-20 object-contain" priority />
-      </div>
-
-      {/* Navigation Links */}
-      <div className="flex-1 overflow-y-auto px-6 space-y-6">
-        {sections.map((section, idx) => (
-          <div key={idx}>
-            <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3 uppercase">
-              {section.title}
-            </p>
-            <div className="space-y-1">
-              {section.links.map((link) => {
-                const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
-                const Icon = link.icon;
-                if (link.isAction) {
-                  return (
-                    <button
-                      key={link.label}
-                      onClick={() => {
-                        logout();
-                        window.location.href = '/login';
-                      }}
-                      className="flex items-center px-4 py-2 rounded-xl text-lg font-normal relative transition-colors text-red-600 hover:bg-red-50 w-full text-left"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <Icon className="w-6 h-6" />
-                        <span>{link.label}</span>
-                      </div>
-                    </button>
-                  );
-                }
-
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`flex items-center px-4 py-2 rounded-xl text-lg font-normal relative transition-colors ${
-                      isActive
-                        ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full'
-                        : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <Icon className="w-6 h-6" />
-                      <span>{link.label}</span>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
+      {/* Desktop Sidebar Content */}
+      <div className="hidden md:flex flex-col h-full justify-between overflow-hidden">
+        <div className="flex flex-col overflow-hidden h-full">
+          {/* Brand Header */}
+          <div className="px-8 mb-6 shrink-0">
+            <Image src="/logo.png" alt="ExamsPRO" width={300} height={80} className="w-auto h-20 object-contain" priority />
           </div>
-        ))}
-      </div>
 
-      {/* User Info */}
-      <div className="px-6 mt-8">
-        <div 
-          className="rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
-          style={{ backgroundImage: "url('/abstract-blue-2.jpg')" }}
-        >
-          <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
-          
-          <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
-            {mounted && <Image src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="Student Avatar" width={40} height={40} className="w-full h-full object-cover" />}
-            {!mounted && <Image src="/avatars/character1.jpg" alt="Student Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+          {/* Navigation Links */}
+          <div className="flex-1 overflow-y-auto px-6 space-y-6 pb-6">
+            {sections.map((section, idx) => (
+              <div key={idx}>
+                <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3 uppercase">
+                  {section.title}
+                </p>
+                <div className="space-y-1">
+                  {section.links.map((link) => {
+                    const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
+                    const Icon = link.icon;
+                    if (link.isAction) {
+                      return (
+                        <button
+                          key={link.label}
+                          onClick={() => {
+                            logout();
+                            window.location.href = '/login';
+                          }}
+                          className="flex items-center px-4 py-2 rounded-xl text-lg font-normal relative transition-colors text-red-600 hover:bg-red-50 w-full text-left"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <Icon className="w-6 h-6" />
+                            <span>{link.label}</span>
+                          </div>
+                        </button>
+                      );
+                    }
+
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className={`flex items-center px-4 py-2 rounded-xl text-lg font-normal relative transition-colors ${
+                          isActive
+                            ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full'
+                            : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <Icon className="w-6 h-6" />
+                          <span>{link.label}</span>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
-          <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (user?.name || 'Error: Name not found') : 'Loading...'}</h4>
-          <p className="text-[10px] text-gray-300 mb-6 relative z-10">{mounted ? (user?.email || 'Error: Email not found') : 'Loading...'}</p>
-          
-          <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] transition-colors text-white text-xs font-semibold py-3 rounded-full relative z-10 shadow-md">
-            View Profile
-          </button>
         </div>
+
+        {/* User Info (Hidden on Mobile) */}
+        <div className="px-6 mt-4 mb-6 shrink-0 hidden md:block">
+          <div 
+            className="rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
+            style={{ backgroundImage: "url('/abstract-blue-2.jpg')" }}
+          >
+            <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
+            
+            <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
+              {mounted && <Image src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="Student Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+              {!mounted && <Image src="/avatars/character1.jpg" alt="Student Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+            </div>
+            <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (user?.name || 'Error: Name not found') : 'Loading...'}</h4>
+            <p className="text-[10px] text-gray-300 mb-6 relative z-10">{mounted ? (user?.email || 'Error: Email not found') : 'Loading...'}</p>
+            
+            <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] transition-colors text-white text-xs font-semibold py-3 rounded-full relative z-10 shadow-md">
+              View Profile
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Bottom Navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center h-16 px-4 z-50">
+        {sections.flatMap(s => s.links).filter(l => !l.isAction).map(link => {
+          const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
+          const Icon = link.icon;
+          return (
+            <Link key={link.href} href={link.href} className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${isActive ? 'text-[#146ef5]' : 'text-gray-500 hover:text-gray-900'}`}>
+              <Icon className="w-6 h-6" />
+              <span className="text-[10px] font-medium">{link.label}</span>
+            </Link>
+          );
+        })}
+        <button
+          onClick={() => {
+            logout();
+            window.location.href = '/login';
+          }}
+          className="flex flex-col items-center justify-center w-full h-full space-y-1 text-gray-500 hover:text-red-600"
+        >
+          <IconLogout className="w-6 h-6" />
+          <span className="text-[10px] font-medium">Sign Out</span>
+        </button>
       </div>
     </>
   );
