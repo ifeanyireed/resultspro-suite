@@ -16,8 +16,10 @@ export default function SettingsPage() {
   const router = useRouter();
   const { user, fetchUser } = useAuthStore();
   const [activeTab, setActiveTab] = useState('Account');
+  const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
+    setMounted(true);
     if (!user) {
       router.push('/login');
       return;
@@ -37,7 +39,7 @@ export default function SettingsPage() {
     }
   }, [user?.id, router, fetchUser]);
 
-  if (!user) return null;
+  if (!mounted || !user) return null;
   const tabs = [
     { id: 'Account', label: 'Account Profile', icon: User },
     { id: 'Security', label: 'Security & Login', icon: Shield },
