@@ -56,7 +56,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
     }
     setCommentLoading(true);
     try {
-      const res = await fetch("https://resultspro-service-users.onrender.com/api/v1/cms/blog/comments", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_USERS_API || ''}/api/v1/cms/blog/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -120,7 +120,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
     }
     setSubLoading(true);
     try {
-      const res = await fetch("https://resultspro-service-users.onrender.com/api/v1/cms/blog/subscribe", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_USERS_API || ''}/api/v1/cms/blog/subscribe`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: subEmail })

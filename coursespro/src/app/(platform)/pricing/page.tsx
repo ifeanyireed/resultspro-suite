@@ -13,7 +13,7 @@ export default function PlatformPricingPage() {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+        const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
         const res = await fetch(`${USERS_API}/api/v1/billing/plans?app_module=CoursesPRO`);
         if (res.ok) {
           const responseData = await res.json();

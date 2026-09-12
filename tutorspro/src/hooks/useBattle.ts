@@ -5,7 +5,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import api from '@/lib/api';
 
 const getWsUrl = () => {
-  if (typeof window === 'undefined') return process.env.NEXT_PUBLIC_WS_URL || 'wss://resultspro-service-tutorspro.onrender.com/ws';
+  if (typeof window === 'undefined') return process.env.NEXT_PUBLIC_WS_URL || '';
   
   const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
   

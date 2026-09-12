@@ -1,7 +1,7 @@
 import SharedLoginPage from '@/components/public/SharedLoginPage';
 
 export default function LoginPage() {
-  const usersApi = process.env.NEXT_PUBLIC_USERS_API || "https://resultspro-service-users.onrender.com";
+  const usersApi = process.env.NEXT_PUBLIC_USERS_API || '';
   
   return (
     <SharedLoginPage 

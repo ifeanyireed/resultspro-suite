@@ -26,7 +26,7 @@ const Contact: React.FC = () => {
     setFormStatus('submitting');
     
     try {
-      const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.VITE_API_URL || 'https://resultspro-service-resultspro.onrender.com/api');
+      const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.VITE_API_URL || '');
       await axios.post(`${baseURL}/support/contact`, formData);
       
       setFormStatus('success');

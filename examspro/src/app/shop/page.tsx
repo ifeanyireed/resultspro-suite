@@ -64,8 +64,8 @@ export default function CoinShopPage() {
 
   const fetchCoinPacks = async () => {
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-      const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'https://resultspro-service-examspro.onrender.com';
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+      const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || '';
       
       const [plansRes, packsRes] = await Promise.all([
         fetch(`${USERS_API}/api/v1/billing/plans`).catch(() => null),
@@ -138,7 +138,7 @@ export default function CoinShopPage() {
     }
     setLoadingPack(packId);
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
       const token = localStorage.getItem('token');
       const res = await fetch(`${USERS_API}/api/v1/billing/initialize`, {
         method: 'POST',

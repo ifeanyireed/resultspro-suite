@@ -225,11 +225,9 @@ func HandleVerifyTenant(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 	tenantID := ""
 	for i, part := range parts {
-		if part == "tenant" || part == "tenants" {
-			if i+1 < len(parts) {
-				tenantID = parts[i+1]
-				break
-			}
+		if part == "verify" && i+1 < len(parts) {
+			tenantID = parts[i+1]
+			break
 		}
 	}
 

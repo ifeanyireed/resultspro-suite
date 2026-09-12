@@ -14,7 +14,7 @@ export default function UnsubscribePage() {
     setStatus('loading');
 
     try {
-      const response = await fetch('https://resultspro-service-resultspro.onrender.com/api/unsubscribe', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_RESULTS_API || ''}/api/unsubscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),

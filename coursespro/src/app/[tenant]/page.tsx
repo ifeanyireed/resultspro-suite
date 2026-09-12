@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 async function getTenant(tenantSlug: string) {
-  const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+  const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
   // Check both default_subdomain and custom_domain
   const domain = `${tenantSlug}.resultspro.ng`; // Default subdomain
   

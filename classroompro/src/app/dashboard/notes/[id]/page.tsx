@@ -4,7 +4,7 @@ export const dynamicParams = false;
 
 export async function generateStaticParams() {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://resultspro-service-classroompro.onrender.com/api';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
     const res = await fetch(`${apiUrl}/notes`);
     const notes = await res.json();
     

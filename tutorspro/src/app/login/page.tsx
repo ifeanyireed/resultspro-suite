@@ -28,7 +28,7 @@ function LoginForm() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await api.post(`${ process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com' }/api/v1/auth/login`, formData);
+      const res = await api.post(`${ process.env.NEXT_PUBLIC_USERS_API || '' }/api/v1/auth/login`, formData);
       const user = res.data.user;
       setAuth(user, res.data.access_token || res.data.token);
       toast.success('Welcome back!');
@@ -54,7 +54,7 @@ function LoginForm() {
     onSuccess: async (tokenResponse) => {
       setIsLoading(true);
       try {
-        const res = await api.post(`${ process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com' }/api/v1/auth/google`, { idToken: tokenResponse.access_token });
+        const res = await api.post(`${ process.env.NEXT_PUBLIC_USERS_API || '' }/api/v1/auth/google`, { idToken: tokenResponse.access_token });
         const user = res.data.user;
         setAuth(user, res.data.access_token || res.data.token);
         toast.success('Logged in with Google');
@@ -82,7 +82,7 @@ function LoginForm() {
     setIsLoading(true);
     try {
       const loginResponse = await instance.loginPopup(loginRequest);
-      const res = await api.post(`${ process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com' }/api/v1/auth/microsoft`, { accessToken: loginResponse.accessToken });
+      const res = await api.post(`${ process.env.NEXT_PUBLIC_USERS_API || '' }/api/v1/auth/microsoft`, { accessToken: loginResponse.accessToken });
       const user = res.data.user;
       setAuth(user, res.data.access_token || res.data.token);
       toast.success('Logged in with Microsoft');

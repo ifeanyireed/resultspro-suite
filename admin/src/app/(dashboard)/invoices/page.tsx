@@ -29,7 +29,7 @@ export default function InvoicesPage() {
     validity_days: 30
   });
 
-  const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+  const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
 
   useEffect(() => {
     fetchPlans();

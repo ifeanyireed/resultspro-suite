@@ -1,11 +1,11 @@
 import { User, School, SubscriptionPlan, Invoice, PayoutRequest, ScratchCardBatch, BlogPost, SuiteStats } from './types';
 
-const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-const RESULTS_API = process.env.NEXT_PUBLIC_RESULTS_API || 'https://resultspro-service-resultspro.onrender.com';
-const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'https://resultspro-service-examspro.onrender.com';
-const CLASSROOM_API = process.env.NEXT_PUBLIC_CLASSROOM_API || 'https://resultspro-service-classroompro.onrender.com';
-const TUTORS_API = process.env.NEXT_PUBLIC_TUTORS_API || 'https://resultspro-service-tutorspro.onrender.com';
-const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
+const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+const RESULTS_API = process.env.NEXT_PUBLIC_RESULTS_API || '';
+const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || '';
+const CLASSROOM_API = process.env.NEXT_PUBLIC_CLASSROOM_API || '';
+const TUTORS_API = process.env.NEXT_PUBLIC_TUTORS_API || '';
+const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || '';
 
 function getAuthHeader(): Record<string, string> {
   if (typeof window === 'undefined') return {};
@@ -59,8 +59,8 @@ export async function createTenant(payload: any): Promise<boolean> {
 
 export async function verifySchool(schoolId: string, status: 'VERIFIED' | 'REJECTED', reason?: string): Promise<boolean> {
   try {
-    const res = await fetch(`${USERS_API}/api/v1/schools/${schoolId}/verify`, {
-      method: 'PUT',
+    const res = await fetch(`${USERS_API}/api/v1/tenants/verify/${schoolId}`, {
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
       body: JSON.stringify({ status, reason }),
     });
