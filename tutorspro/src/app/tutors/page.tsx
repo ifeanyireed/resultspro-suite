@@ -33,7 +33,7 @@ export default function TutorsPage() {
     try {
       setLoading(true);
       const res = await api.get("/public/tutors");
-      setTutors(res.data || []);
+      setTutors(res.data.tutors || []);
     } catch (err) {
       console.error("Failed to fetch public tutors:", err);
       setTutors([]);
