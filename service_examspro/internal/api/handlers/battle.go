@@ -915,7 +915,7 @@ func (h *BattleHandler) GetBattleHistory(c *gin.Context) {
 	userID := c.MustGet("userId").(string)
 
 	var history []models.BattleParticipant
-	if err := database.DB.Preload("Battle.Subject").
+	if err := database.DB.Preload("Battle.Subject.Exam").
 		Preload("Battle.Participants.User").
 		Where("user_id = ?", userID).
 		Order("joined_at desc").

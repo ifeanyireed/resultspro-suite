@@ -195,8 +195,15 @@ export default function Dashboard() {
               {Array.isArray(data.subjects) && data.subjects.length > 0 ? data.subjects.map((sub) => (
                 <Link key={sub.id} href={`/practice/${sub.examSlug || 'general'}/${sub.slug || sub.id}`} className="min-w-[240px] p-5 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#146ef5]/30 hover:shadow-sm transition-all cursor-pointer group shrink-0 block">
                   <div className="flex justify-between items-start mb-4">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-sm text-${sub.color}-500`}>
-                      <IconBook className="w-5 h-5" />
+                    <div className="flex gap-2 items-center">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-sm text-${sub.color}-500`}>
+                        <IconBook className="w-5 h-5" />
+                      </div>
+                      {sub.examSlug && (
+                        <span className="px-2 py-0.5 bg-gray-200/60 text-gray-500 text-[9px] font-black rounded uppercase tracking-widest">
+                          {sub.examSlug}
+                        </span>
+                      )}
                     </div>
                     <div className="text-xs text-gray-500 font-medium">{sub.questions} Qs</div>
                   </div>
@@ -265,9 +272,16 @@ export default function Dashboard() {
                           <div className="text-[10px] font-bold text-gray-500 uppercase mb-1">
                             {new Date(entry.joinedAt).toLocaleDateString()}
                           </div>
-                          <h4 className="font-bold text-gray-900 text-sm">
-                            {battle.subject?.name || 'Subject'}
-                          </h4>
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-bold text-gray-900 text-sm">
+                              {battle.subject?.name || 'Subject'}
+                            </h4>
+                            {(battle.subject?.exam?.slug || battle.subject?.Exam?.Slug) && (
+                              <span className="px-1.5 py-0.5 bg-gray-200/60 text-gray-500 text-[9px] font-black rounded uppercase tracking-widest">
+                                {battle.subject.exam?.slug || battle.subject.Exam?.Slug}
+                              </span>
+                            )}
+                          </div>
                         </div>
                         <div className={`text-[10px] font-black uppercase px-2 py-1 rounded-md ${resultColor}`}>
                           {result}
