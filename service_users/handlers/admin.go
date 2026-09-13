@@ -241,7 +241,7 @@ func HandleUpdateUserStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := db.DB.Exec("UPDATE users SET account_status = ? WHERE id = ?", req.Status, userId)
+	_, err := db.DB.Exec("UPDATE users SET account_status = $1 WHERE id = $2", req.Status, userId)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to update user status")
 		return

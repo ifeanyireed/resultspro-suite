@@ -87,7 +87,7 @@ export async function fetchUsers(): Promise<User[]> {
 export async function updateUserStatus(userId: string, status: string): Promise<boolean> {
   try {
     const res = await fetch(`${USERS_API}/api/v1/users/${userId}/status`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
       body: JSON.stringify({ status }),
     });

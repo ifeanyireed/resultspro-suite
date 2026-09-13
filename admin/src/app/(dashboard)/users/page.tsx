@@ -25,10 +25,14 @@ export default function UsersPage() {
 
   const handleToggleStatus = async (user: User) => {
     const nextStatus = user.account_status === 'active' ? 'suspended' : 'active';
-    await updateUserStatus(user.id, nextStatus);
-    setUsers((prev) =>
-      prev.map((u) => (u.id === user.id ? { ...u, account_status: nextStatus as any } : u))
-    );
+    const success = await updateUserStatus(user.id, nextStatus);
+    if (success) {
+      setUsers((prev) =>
+        prev.map((u) => (u.id === user.id ? { ...u, account_status: nextStatus as any } : u))
+      );
+    } else {
+      alert("Failed to update user status");
+    }
   };
 
   const filtered = users.filter((u) => {
