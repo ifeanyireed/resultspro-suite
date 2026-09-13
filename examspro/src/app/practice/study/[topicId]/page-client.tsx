@@ -113,7 +113,7 @@ export default function StudyAssistantPage() {
       const assistantMsg: Message = { role: 'assistant', content: response.data.response };
       setMessages(prev => [...prev, assistantMsg]);
       if (user) {
-        updateUser({ coinBalance: user.coinBalance - 2 });
+        updateUser({ coinBalance: (user.coinBalance || 0) - 2 });
       }
     } catch (err) {
       console.error('Error asking assistant:', err);
