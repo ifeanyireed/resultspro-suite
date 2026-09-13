@@ -67,14 +67,14 @@ export default function SettingsPage() {
                 <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden focus-within:border-[#146ef5] transition-colors">
                   <span className="px-4 py-2.5 bg-gray-50 text-gray-500 text-sm border-r border-gray-200">https://</span>
                   <input type="text" name="slug" value={formData.slug} onChange={handleChange} className="w-full px-4 py-2.5 text-sm focus:outline-none" />
-                  <span className="px-4 py-2.5 bg-gray-50 text-gray-500 text-sm border-l border-gray-200">.coursespro.co</span>
+                  <span className="px-4 py-2.5 bg-gray-50 text-gray-500 text-sm border-l border-gray-200">.resultspro.ng</span>
                 </div>
               </div>
               <div className="pt-4 mt-4 border-t border-gray-100">
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Custom Domain</label>
-                    <p className="text-xs text-gray-500">Use your own domain instead of .coursespro.co</p>
+                    <p className="text-xs text-gray-500">Use your own domain instead of .resultspro.ng</p>
                   </div>
                   <div 
                     className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors ${formData.customDomainEnabled ? 'bg-[#146ef5]' : 'bg-gray-200'}`}
