@@ -17,6 +17,7 @@ export default function CoursesProTenantManager() {
   
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [updating, setUpdating] = useState(false);
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
   const [editTenantData, setEditTenantData] = useState<any>(null);
 
   const [newTenantData, setNewTenantData] = useState({
@@ -55,6 +56,30 @@ export default function CoursesProTenantManager() {
       load();
     } else {
       alert("Failed to create tenant");
+    }
+  };
+
+  const handleUploadLogo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    setIsUploadingLogo(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setEditTenantData({ ...editTenantData, logo_url: data.url });
+      } else {
+        alert(data.error || 'Upload failed');
+      }
+    } catch (err) {
+      alert('Something went wrong during upload');
+    } finally {
+      setIsUploadingLogo(false);
     }
   };
 
@@ -219,6 +244,7 @@ export default function CoursesProTenantManager() {
                               name: school.name,
                               slug: school.slug,
                               contact_email: school.contact_email || '',
+                              logo_url: school.logo_url || '',
                               primary_color: school.primary_color || '#2563eb'
                             });
                             setIsEditModalOpen(true);
@@ -294,6 +320,24 @@ export default function CoursesProTenantManager() {
                   <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                     <span className="text-[10px] text-slate-400 font-medium">.resultspro.ng</span>
                   </div>
+                </div>
+              </div>
+                            <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tenant Logo</label>
+                <div className="flex items-center gap-4">
+                  {editTenantData.logo_url ? (
+                    <img src={editTenantData.logo_url} alt="Logo" className="w-10 h-10 object-contain bg-slate-50 rounded" />
+                  ) : (
+                    <div className="w-10 h-10 bg-slate-100 rounded flex items-center justify-center text-slate-400 text-xs">No Logo</div>
+                  )}
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    onChange={handleUploadLogo}
+                    disabled={isUploadingLogo}
+                    className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                  />
+                  {isUploadingLogo && <span className="text-xs text-blue-500">Uploading...</span>}
                 </div>
               </div>
               <div className="space-y-1.5">

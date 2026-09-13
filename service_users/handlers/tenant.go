@@ -497,7 +497,7 @@ func HandleUpdateTenantBranding(w http.ResponseWriter, r *http.Request) {
 
 // HandleListTenants returns a paginated/filtered list of tenants
 func HandleListTenants(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.DB.Query("SELECT id, type, name, slug, status, verification_status, state, lga, subscription_tier, created_at, contact_email, primary_color FROM tenants ORDER BY created_at DESC LIMIT 200")
+	rows, err := db.DB.Query("SELECT id, type, name, slug, status, verification_status, state, lga, subscription_tier, created_at, contact_email, primary_color, logo_url FROM tenants ORDER BY created_at DESC LIMIT 200")
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
 		return
@@ -517,13 +517,14 @@ func HandleListTenants(w http.ResponseWriter, r *http.Request) {
 		CreatedAt          time.Time `json:"created_at"`
 		ContactEmail       string    `json:"contact_email,omitempty"`
 		PrimaryColor       string    `json:"primary_color,omitempty"`
+		LogoURL            string    `json:"logo_url,omitempty"`
 	}
 
 	tenants := []TenantSummary{}
 	for rows.Next() {
 		var s TenantSummary
-		var state, lga, tier, tenantType, contactEmail, primaryColor sql.NullString
-		if err := rows.Scan(&s.ID, &tenantType, &s.Name, &s.Slug, &s.Status, &s.VerificationStatus, &state, &lga, &tier, &s.CreatedAt, &contactEmail, &primaryColor); err == nil {
+		var state, lga, tier, tenantType, contactEmail, primaryColor, logoUrl sql.NullString
+		if err := rows.Scan(&s.ID, &tenantType, &s.Name, &s.Slug, &s.Status, &s.VerificationStatus, &state, &lga, &tier, &s.CreatedAt, &contactEmail, &primaryColor, &logoUrl); err == nil {
 			if tenantType.Valid {
 				s.Type = tenantType.String
 			}
@@ -541,6 +542,9 @@ func HandleListTenants(w http.ResponseWriter, r *http.Request) {
 			}
 			if primaryColor.Valid {
 				s.PrimaryColor = primaryColor.String
+			}
+			if logoUrl.Valid {
+				s.LogoURL = logoUrl.String
 			}
 			tenants = append(tenants, s)
 		}
