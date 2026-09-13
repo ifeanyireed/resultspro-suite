@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Button } from '@/components/ui/button';
@@ -30,7 +31,7 @@ export default function AccountTab() {
       const formData = new FormData();
       formData.append('avatar', file);
 
-      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+      const token = typeof window !== 'undefined' ? Cookies.get('token') : '';
       const res = await axios.post(`${USERS_API}/api/v1/auth/avatar`, formData, {
         headers: { 
           'Content-Type': 'multipart/form-data',

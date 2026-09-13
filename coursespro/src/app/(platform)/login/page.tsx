@@ -6,10 +6,12 @@ import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { Mail, Lock, ArrowRight, Loader2, Sparkles, Building2, Users, ShieldCheck } from 'lucide-react';
+import { useAuthStore } from '@/store/useAuthStore';
 // import axiosInstance from '@/lib/axiosConfig'; // we can mock the login for now or use this
 
 export default function LoginPage() {
   const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,8 +31,7 @@ export default function LoginPage() {
       
       const token = res.data.access_token || res.data.token;
       if (token) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(res.data.user));
+        setAuth(res.data.user, token);
         
         // Redirect to their academy dashboard
         const adminTenants = res.data.admin_tenants;

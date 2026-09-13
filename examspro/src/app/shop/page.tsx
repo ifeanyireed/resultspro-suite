@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -139,7 +140,7 @@ export default function CoinShopPage() {
     setLoadingPack(packId);
     try {
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       const res = await fetch(`${USERS_API}/api/v1/billing/initialize`, {
         method: 'POST',
         headers: {

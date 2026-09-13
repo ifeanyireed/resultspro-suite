@@ -1,25 +1,29 @@
 import { create } from 'zustand';
 import api from '@/lib/api';
+import Cookies from 'js-cookie';
 
 interface User {
   id: string;
   email: string;
   name: string | null;
   avatarUrl?: string | null;
-  coinBalance: number;
-  eloRating: number;
-  streakCurrent: number;
-  referralCode: string;
-  isPremium: boolean;
-  hasIcan: boolean;
-  isAdmin: boolean;
-  role: 'STUDENT' | 'MODERATOR' | 'ADMIN';
-  emailNotifications: boolean;
-  pushNotifications: boolean;
-  targetExams: string;
-  isPublic: boolean;
-  twoFactorEnabled: boolean;
-  createdAt: string;
+  coinBalance?: number;
+  eloRating?: number;
+  streakCurrent?: number;
+  referralCode?: string;
+  isPremium?: boolean;
+  premiumExpiresAt?: string;
+  hasIcan?: boolean;
+  icanExpiresAt?: string;
+  icanPlanName?: string;
+  isAdmin?: boolean;
+  role?: string;
+  emailNotifications?: boolean;
+  pushNotifications?: boolean;
+  targetExams?: string;
+  isPublic?: boolean;
+  twoFactorEnabled?: boolean;
+  createdAt?: string;
 }
 
 interface AuthState {
@@ -32,39 +36,44 @@ interface AuthState {
   fetchUser: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set) => {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  const storedUser = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
-  const user = storedUser ? JSON.parse(storedUser) : null;
+export const useAuthStore = create<AuthState>((set, get) => {
+  const token = typeof window !== 'undefined' ? Cookies.get('token') || null : null;
   
   return {
-    user,
+    user: null, // Always fetch from DB on reload
     token,
-    isAuthenticated: !!token && !!user,
+    isAuthenticated: !!token,
     setAuth: (user, token) => {
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+      Cookies.set('token', token, { expires: 7 }); // 7 days
       set({ user, token, isAuthenticated: true });
     },
     logout: () => {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      Cookies.remove('token');
       set({ user: null, token: null, isAuthenticated: false });
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
     },
     updateUser: (updatedUser) =>
       set((state) => {
         const newUser = state.user ? { ...state.user, ...updatedUser } : null;
-        if (newUser) localStorage.setItem('user', JSON.stringify(newUser));
         return { user: newUser };
       }),
     fetchUser: async () => {
       try {
-        const res = await api.get('/user/profile');
+        const currentToken = get().token || (typeof window !== 'undefined' ? Cookies.get('token') : null);
+        if (!currentToken) {
+          set({ isAuthenticated: false, user: null });
+          return;
+        }
+        // Force DB sync instead of local store
+        const res = await api.get('/user/profile', {
+          headers: { Authorization: `Bearer ${currentToken}` }
+        });
         const updatedUser = res.data;
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        set({ user: updatedUser });
+        set({ user: updatedUser, isAuthenticated: true });
       } catch (err) {
-        // silently fail to prevent console errors from browser extensions
+        // silently fail, maybe clear auth if 401
       }
     }
   };

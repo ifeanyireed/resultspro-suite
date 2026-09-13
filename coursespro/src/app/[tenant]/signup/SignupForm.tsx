@@ -6,10 +6,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Mail, Lock, ArrowRight, Loader2, Sparkles, Building2, Users, ShieldCheck, User } from 'lucide-react';
+import { useAuthStore } from '@/store/useAuthStore';
 // import axiosInstance from '@/lib/axiosConfig'; // we can mock the login for now or use this
 
 export default function SignupForm({ tenant }: { tenant: any }) {
   const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [showOTP, setShowOTP] = useState(false);

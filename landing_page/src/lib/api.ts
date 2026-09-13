@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
@@ -20,7 +21,7 @@ const api = axios.create({
 // Add a request interceptor to include the auth token
 api.interceptors.request.use(
   (config) => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const token = typeof window !== 'undefined' ? Cookies.get('token') : null;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -46,8 +47,8 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        Cookies.remove('token');
+        // no local user;
         // Optional: window.location.href = '/admin/login'; 
         // Better to let the component handle it or use a store
       }
