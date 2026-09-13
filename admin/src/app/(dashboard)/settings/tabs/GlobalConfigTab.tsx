@@ -51,7 +51,7 @@ export default function GlobalConfigTab() {
             <label className="block text-slate-500 font-semibold mb-1">Users & Identity Service (Go)</label>
             <input
               type="text"
-              defaultValue=`${process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com'}`
+              defaultValue={`${process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com'}`}
               className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-slate-800"
             />
           </div>
@@ -59,7 +59,7 @@ export default function GlobalConfigTab() {
             <label className="block text-slate-500 font-semibold mb-1">ResultPRO Service (Go)</label>
             <input
               type="text"
-              defaultValue=`${process.env.NEXT_PUBLIC_RESULTS_API || 'https://resultspro-service-resultspro.onrender.com'}`
+              defaultValue={`${process.env.NEXT_PUBLIC_RESULTS_API || 'https://resultspro-service-resultspro.onrender.com'}`}
               className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-slate-800"
             />
           </div>
@@ -67,7 +67,7 @@ export default function GlobalConfigTab() {
             <label className="block text-slate-500 font-semibold mb-1">ExamsPRO CBT Service (Go)</label>
             <input
               type="text"
-              defaultValue=`${process.env.NEXT_PUBLIC_RESULTS_API || 'https://resultspro-service-resultspro.onrender.com'}`
+              defaultValue={`${process.env.NEXT_PUBLIC_RESULTS_API || 'https://resultspro-service-resultspro.onrender.com'}`}
               className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-slate-800"
             />
           </div>
@@ -75,7 +75,7 @@ export default function GlobalConfigTab() {
             <label className="block text-slate-500 font-semibold mb-1">ClassroomPRO Service (Go)</label>
             <input
               type="text"
-              defaultValue=`${process.env.NEXT_PUBLIC_RESULTS_API || 'https://resultspro-service-resultspro.onrender.com'}`
+              defaultValue={`${process.env.NEXT_PUBLIC_RESULTS_API || 'https://resultspro-service-resultspro.onrender.com'}`}
               className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-slate-800"
             />
           </div>

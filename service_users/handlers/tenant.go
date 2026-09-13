@@ -38,6 +38,7 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		AgentID           string `json:"agent_id"` // referred_by_agent_id
 		SubscriptionTier  string `json:"subscription_tier"`
 		Type              string `json:"type"`
+		LogoUrl           string `json:"logo_url"`
 		PrimaryColor      string `json:"primary_color"`
 		EnabledModules    string `json:"enabled_modules"`
 		UserID            string `json:"user_id"` // Optional creator ID to automatically assign tenant-admin role
@@ -73,7 +74,7 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 	defaultSubdomain := input.Slug + ".resultspro.ng"
 
 	query := `
-		INSERT INTO tenants (id, type, name, slug, default_subdomain, tenant_code, short_name, motto, contact_email, contact_phone, contact_person_name, full_address, state, lga, primary_color, enabled_modules, status, verification_status, referred_by_agent_id, subscription_tier, created_at, updated_at) 
+		INSERT INTO tenants (id, type, name, slug, default_subdomain, tenant_code, short_name, motto, contact_email, contact_phone, contact_person_name, full_address, state, lga, primary_color, logo_url, enabled_modules, status, verification_status, referred_by_agent_id, subscription_tier, created_at, updated_at) 
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', 'PENDING_VERIFICATION', ?, ?, ?, ?)`
 
 	_, err := db.DB.Exec(query,
@@ -92,6 +93,7 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		sql.NullString{String: input.State, Valid: input.State != ""},
 		sql.NullString{String: input.LGA, Valid: input.LGA != ""},
 		sql.NullString{String: input.PrimaryColor, Valid: input.PrimaryColor != ""},
+		sql.NullString{String: input.LogoUrl, Valid: input.LogoUrl != ""},
 		sql.NullString{String: input.EnabledModules, Valid: input.EnabledModules != ""},
 		sql.NullString{String: input.AgentID, Valid: input.AgentID != ""},
 		tier,
@@ -514,7 +516,7 @@ func HandleUpdateTenantBranding(w http.ResponseWriter, r *http.Request) {
 
 // HandleListTenants returns a paginated/filtered list of tenants
 func HandleListTenants(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.DB.Query("SELECT id, type, name, slug, status, verification_status, state, lga, subscription_tier, created_at, contact_email, primary_color, logo_url FROM tenants ORDER BY created_at DESC LIMIT 200")
+	rows, err := db.DB.Query("SELECT id, type, name, slug, status, verification_status, state, lga, subscription_tier, created_at, contact_email, primary_color, logo_url, contact_phone, contact_person_name, full_address FROM tenants ORDER BY created_at DESC LIMIT 200")
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
 		return

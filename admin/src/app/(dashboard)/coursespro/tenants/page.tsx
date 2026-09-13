@@ -26,7 +26,11 @@ export default function CoursesProTenantManager() {
     contact_email: '',
     primary_color: '#2563eb',
     type: 'COURSESPRO',
-    enabled_modules: ['coursepro'] // Default module
+    enabled_modules: ['coursepro'], // Default module
+    logo_url: '',
+    full_address: '',
+    contact_phone: '',
+    contact_person_name: ''
   });
 
 
@@ -52,24 +56,22 @@ export default function CoursesProTenantManager() {
     setCreating(false);
     if (ok) {
       setIsModalOpen(false);
-      setNewTenantData({ name: '', slug: '', contact_email: '', primary_color: '#2563eb', type: 'COURSESPRO', enabled_modules: ['coursepro'] });
+      setNewTenantData({ name: '', slug: '', contact_email: '', primary_color: '#2563eb', type: 'COURSESPRO', enabled_modules: ['coursepro'], logo_url: '', full_address: '', contact_phone: '', contact_person_name: '' });
       load();
     } else {
       alert("Failed to create tenant");
     }
   };
 
-  const handleUploadLogo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleEditLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
     const file = e.target.files[0];
     setIsUploadingLogo(true);
     try {
       const formData = new FormData();
       formData.append('file', file);
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
-      });
+      const res = await fetch('/api/upload', { method: 'POST', body: formData });
       const data = await res.json();
       if (res.ok && data.url) {
         setEditTenantData({ ...editTenantData, logo_url: data.url });
@@ -82,6 +84,28 @@ export default function CoursesProTenantManager() {
       setIsUploadingLogo(false);
     }
   };
+
+  const handleNewLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    setIsUploadingLogo(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/upload', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setNewTenantData({ ...newTenantData, logo_url: data.url });
+      } else {
+        alert(data.error || 'Upload failed');
+      }
+    } catch (err) {
+      alert('Something went wrong during upload');
+    } finally {
+      setIsUploadingLogo(false);
+    }
+  };
+
 
   const handleUpdateTenant = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -245,6 +269,9 @@ export default function CoursesProTenantManager() {
                               slug: school.slug,
                               contact_email: school.contact_email || '',
                               logo_url: school.logo_url || '',
+                              full_address: school.full_address || '',
+                              contact_phone: school.contact_phone || '',
+                              contact_person_name: school.contact_person_name || '',
                               status: school.status || 'ACTIVE',
                               primary_color: school.primary_color || '#2563eb'
                             });
@@ -334,7 +361,26 @@ export default function CoursesProTenantManager() {
                   <input 
                     type="file" 
                     accept="image/*"
-                    onChange={handleUploadLogo}
+                    onChange={handleEditLogoUpload}
+                    disabled={isUploadingLogo}
+                    className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                  />
+                  {isUploadingLogo && <span className="text-xs text-blue-500">Uploading...</span>}
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tenant Logo</label>
+                <div className="flex items-center gap-4">
+                  {newTenantData.logo_url ? (
+                    <img src={newTenantData.logo_url} alt="Logo" className="w-10 h-10 object-contain bg-slate-50 rounded" />
+                  ) : (
+                    <div className="w-10 h-10 bg-slate-100 rounded flex items-center justify-center text-slate-400 text-xs">No Logo</div>
+                  )}
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    onChange={handleNewLogoUpload}
                     disabled={isUploadingLogo}
                     className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
                   />
@@ -348,6 +394,65 @@ export default function CoursesProTenantManager() {
                   value={newTenantData.contact_email}
                   onChange={e => setNewTenantData({...newTenantData, contact_email: e.target.value})}
                   placeholder="admin@school.com"
+                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Contact Person Name</label>
+                <input 
+                  type="text" 
+                  value={newTenantData.contact_person_name}
+                  onChange={e => setNewTenantData({...newTenantData, contact_person_name: e.target.value})}
+                  placeholder="e.g. John Doe"
+                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Contact Phone</label>
+                <input 
+                  type="tel" 
+                  value={newTenantData.contact_phone}
+                  onChange={e => setNewTenantData({...newTenantData, contact_phone: e.target.value})}
+                  placeholder="+234 800 000 0000"
+                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Full Address</label>
+                <input 
+                  type="text" 
+                  value={newTenantData.full_address}
+                  onChange={e => setNewTenantData({...newTenantData, full_address: e.target.value})}
+                  placeholder="e.g. 123 School Ave"
+                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Contact Person Name</label>
+                <input 
+                  type="text" 
+                  value={editTenantData.contact_person_name}
+                  onChange={e => setEditTenantData({...editTenantData, contact_person_name: e.target.value})}
+                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Contact Phone</label>
+                <input 
+                  type="tel" 
+                  value={editTenantData.contact_phone}
+                  onChange={e => setEditTenantData({...editTenantData, contact_phone: e.target.value})}
+                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Full Address</label>
+                <input 
+                  type="text" 
+                  value={editTenantData.full_address}
+                  onChange={e => setEditTenantData({...editTenantData, full_address: e.target.value})}
                   className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
                 />
               </div>
