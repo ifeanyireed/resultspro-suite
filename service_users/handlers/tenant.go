@@ -667,7 +667,7 @@ func HandleResolveTenant(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var t models.Tenant
-	if err := db.GormDB.Where("default_subdomain = ? OR custom_domain = ?", domain, domain).First(&t).Error; err != nil {
+	if err := db.GormDB.Where("default_subdomain = ? OR custom_domain = ? OR slug = ?", domain, domain, domain).First(&t).Error; err != nil {
 		utils.JSONError(w, http.StatusNotFound, "Tenant not found")
 		return
 	}

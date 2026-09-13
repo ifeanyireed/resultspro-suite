@@ -12,26 +12,30 @@ async function getTenant(tenantSlug: string) {
   
   try {
     const res = await fetch(`${USERS_API}/api/public/tenant/resolve?domain=${domain}`, {
-      next: { revalidate: 60 } // Cache for 60 seconds
+      next: { revalidate: 0 } // Cache disabled for now
     });
+    console.log(`[getTenant] Fetching domain ${domain}. Status: ${res.status}`);
     if (!res.ok) {
       // If it fails, we can optionally try the raw slug as the custom domain
       const customRes = await fetch(`${USERS_API}/api/public/tenant/resolve?domain=${tenantSlug}`, {
-        next: { revalidate: 60 }
+        next: { revalidate: 0 }
       });
+      console.log(`[getTenant] Fetching slug ${tenantSlug}. Status: ${customRes.status}`);
       if (!customRes.ok) return null;
       const data = await customRes.json();
       return data.tenant || null;
     }
     const data = await res.json();
     return data.tenant || null;
-  } catch (e) {
+  } catch (e: any) {
+    console.log(`[getTenant] Exception caught:`, e.message);
     return null;
   }
 }
 
-export default async function TenantHome({ params }: { params: { tenant: string } }) {
-  const tenant = await getTenant(params.tenant);
+export default async function TenantHome({ params }: { params: Promise<{ tenant: string }> }) {
+  const resolvedParams = await params;
+  const tenant = await getTenant(resolvedParams.tenant);
 
   // If the tenant isn't found, you can show a 404 page
   if (!tenant) {
