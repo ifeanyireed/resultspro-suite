@@ -414,7 +414,7 @@ func (h *ExamHandler) GetQuestionsBySubject(c *gin.Context) {
 		query = query.Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id = ?)", id)
 		database.DB.Preload("Exam").First(&subject, id)
 	} else {
-		query = query.Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id IN (SELECT id FROM subjects WHERE slug = ?))", subjectIdStr)
+		query = query.Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id IN (SELECT id FROM nat_exams_subjects WHERE slug = ?))", subjectIdStr)
 		database.DB.Preload("Exam").Where("slug = ?", subjectIdStr).First(&subject)
 	}
 

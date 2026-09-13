@@ -195,7 +195,7 @@ func (h *BattleHandler) CreateBotBattle(c *gin.Context) {
 
 		// Fetch questions
 		var questions []models.Question
-		if err := tx.Where("topic_id IN (SELECT id FROM topics WHERE subject_id = ?) AND type = 'mcq'", input.SubjectID).
+		if err := tx.Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id = ?) AND type = 'mcq'", input.SubjectID).
 			Order("RANDOM()").Limit(10).Find(&questions).Error; err != nil {
 			return err
 		}
@@ -266,7 +266,7 @@ func (h *BattleHandler) initiateBattle(p1, p2 string, subjectID, stake int) (*mo
 
 		// Fetch questions
 		var questions []models.Question
-		if err := tx.Where("topic_id IN (SELECT id FROM topics WHERE subject_id = ?) AND type = 'mcq'", subjectID).
+		if err := tx.Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id = ?) AND type = 'mcq'", subjectID).
 			Order("RANDOM()").Limit(10).Find(&questions).Error; err != nil {
 			return err
 		}
@@ -562,7 +562,7 @@ func (h *BattleHandler) StartBattle(c *gin.Context) {
 		limit := battle.QuestionCount
 		if limit == 0 { limit = 10 }
 		
-		query := database.DB.Where("topic_id IN (SELECT id FROM topics WHERE subject_id = ?) AND type = 'mcq'", battle.SubjectID).
+		query := database.DB.Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id = ?) AND type = 'mcq'", battle.SubjectID).
 			Preload("Options").Preload("Topic").Preload("Topic.Subject").Preload("Topic.Subject.Exam").Limit(limit)
 
 		if battle.RandomizeOrder {
