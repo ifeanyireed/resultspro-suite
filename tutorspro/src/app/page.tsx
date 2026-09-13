@@ -34,7 +34,7 @@ export default function Home() {
       </section>
 
       {/* Why TutorsPRO (Mimicking WhyNETS) */}
-      <section className="section-py bg-white border-y border-nets-border">
+      <section className="section-py bg-white border-y border-gray-200">
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>

@@ -160,13 +160,13 @@ export default function TutorsPage() {
 
                       <div className="flex flex-wrap gap-2 mb-6">
                         {tSubjects.map((sub: string, i: number) => (
-                          <span key={i} className="px-2 py-1 bg-nets-light border border-nets-border text-[10px] fw-600 text-muted rounded-sm">
+                          <span key={i} className="px-2 py-1 bg-nets-light border border-gray-200 text-[10px] fw-600 text-muted rounded-sm">
                             {sub}
                           </span>
                         ))}
                       </div>
                       
-                      <div className="mt-auto pt-4 border-t border-nets-border">
+                      <div className="mt-auto pt-4 border-t border-gray-200">
                         <Link href={`/signup`} className="btn btn-outline-navy w-full text-center block" style={{ padding: '0.75rem', fontSize: '0.875rem' }}>
                           Book Now
                         </Link>

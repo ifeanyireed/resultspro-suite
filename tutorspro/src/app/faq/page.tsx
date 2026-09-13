@@ -79,12 +79,12 @@ export default function FAQPage() {
         </div>
       </section>
 
-      <section className="section-py bg-white border-b border-nets-border">
+      <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets max-w-3xl mx-auto">
           {searchTerm ? (
              <div className="space-y-4">
                {filteredFaqs.map((faq, i) => (
-                 <div key={i} className="rounded-sm bg-light border border-nets-border overflow-hidden">
+                 <div key={i} className="rounded-sm bg-light border border-gray-200 overflow-hidden">
                    <button 
                      onClick={() => setOpenIndex(openIndex === i ? null : i)}
                      className="w-full flex items-center justify-between p-6 text-left hover:bg-white transition-colors"
@@ -93,7 +93,7 @@ export default function FAQPage() {
                      {openIndex === i ? <Minus size={20} style={{ color: 'var(--primary)' }} /> : <Plus size={20} className="text-muted" />}
                    </button>
                    {openIndex === i && (
-                     <div className="px-6 pb-6 text-muted text-sm leading-relaxed border-t border-nets-border pt-4 bg-white">
+                     <div className="px-6 pb-6 text-muted text-sm leading-relaxed border-t border-gray-200 pt-4 bg-white">
                        {faq.a}
                      </div>
                    )}
@@ -110,7 +110,7 @@ export default function FAQPage() {
                   {cat.questions.map((faq: any, i: number) => {
                     const globalIdx = catIdx * 100 + i;
                     return (
-                      <div key={i} className="rounded-sm bg-white border border-nets-border overflow-hidden shadow-sm">
+                      <div key={i} className="rounded-sm bg-white border border-gray-200 overflow-hidden shadow-sm">
                         <button 
                           onClick={() => setOpenIndex(openIndex === globalIdx ? null : globalIdx)}
                           className="w-full flex items-center justify-between p-6 text-left hover:bg-light transition-colors"
@@ -119,7 +119,7 @@ export default function FAQPage() {
                           {openIndex === globalIdx ? <Minus size={20} style={{ color: 'var(--primary)' }} /> : <Plus size={20} className="text-muted" />}
                         </button>
                         {openIndex === globalIdx && (
-                          <div className="px-6 pb-6 text-muted text-sm leading-relaxed border-t border-nets-border pt-4">
+                          <div className="px-6 pb-6 text-muted text-sm leading-relaxed border-t border-gray-200 pt-4">
                             {faq.a}
                           </div>
                         )}

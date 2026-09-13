@@ -34,7 +34,7 @@ export default function PricingPage() {
             cta: "Get Started",
             color: "var(--color-blue)",
             bg: "bg-nets-light",
-            border: "border-nets-border"
+            border: "border-gray-200"
           },
           {
             name: "Premium Bundle",
@@ -53,7 +53,7 @@ export default function PricingPage() {
             featured: true,
             color: "var(--primary)",
             bg: "bg-white",
-            border: "border-nets-border"
+            border: "border-gray-200"
           },
           {
             name: "Exam Mastery",
@@ -71,7 +71,7 @@ export default function PricingPage() {
             cta: "Master Exams",
             color: "var(--color-amber)",
             bg: "bg-nets-light",
-            border: "border-nets-border"
+            border: "border-gray-200"
           }
         ]);
       } finally {
@@ -108,11 +108,11 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <section className="section-py bg-white border-b border-nets-border">
+      <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
              {plans.map((plan, i) => (
-               <article key={i} className={`p-8 rounded-sm bg-white border transition-all hover:shadow-card-lg flex flex-col ${plan.featured ? 'border-nets-red shadow-md scale-[1.02]' : 'border-nets-border shadow-sm'}`} style={{ borderColor: plan.featured ? 'var(--primary)' : '' }}>
+               <article key={i} className={`p-8 rounded-sm bg-white border transition-all hover:shadow-card-lg flex flex-col ${plan.featured ? 'border-nets-red shadow-md scale-[1.02]' : 'border-gray-200 shadow-sm'}`} style={{ borderColor: plan.featured ? 'var(--primary)' : '' }}>
                  {plan.featured && (
                     <div className="mb-6">
                       <span className="text-[10px] fw-700 text-white uppercase tracking-widest px-3 py-1 rounded-sm" style={{ background: 'var(--primary)' }}>
@@ -130,7 +130,7 @@ export default function PricingPage() {
                     <p className="text-muted text-sm mt-4 leading-relaxed">{plan.desc}</p>
                  </div>
 
-                 <div className="flex-1 space-y-4 mb-10 border-t border-nets-border pt-8">
+                 <div className="flex-1 space-y-4 mb-10 border-t border-gray-200 pt-8">
                     {plan.features.map((feature, j) => (
                       <div key={j} className="flex items-center gap-3 text-sm text-navy fw-500">
                          <Check size={16} style={{ color: plan.color }} />
@@ -154,9 +154,9 @@ export default function PricingPage() {
            </div>
 
            {/* Comparison Note */}
-           <div className="mt-16 p-8 rounded-sm bg-light border border-nets-border flex flex-col md:flex-row items-center justify-between gap-8">
+           <div className="mt-16 p-8 rounded-sm bg-light border border-gray-200 flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="flex items-center gap-6">
-                 <div className="w-12 h-12 rounded-sm bg-white border border-nets-border flex items-center justify-center">
+                 <div className="w-12 h-12 rounded-sm bg-white border border-gray-200 flex items-center justify-center">
                     <Shield size={24} style={{ color: 'var(--primary)' }} />
                  </div>
                  <div>

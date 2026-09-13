@@ -49,7 +49,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Story Section */}
-      <section className="section-py bg-white border-b border-nets-border">
+      <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <div className="space-y-8">
@@ -74,7 +74,7 @@ export default function AboutPage() {
             </div>
             
             <div className="relative">
-              <div className="p-8 md:p-12 rounded-sm bg-light border border-nets-border shadow-sm relative overflow-hidden">
+              <div className="p-8 md:p-12 rounded-sm bg-light border border-gray-200 shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-12 opacity-5">
                    <Award size={240} className="text-navy" />
                 </div>
@@ -103,7 +103,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values Section */}
-      <section className="section-py bg-light border-b border-nets-border">
+      <section className="section-py bg-light border-b border-gray-200">
         <div className="container-nets">
           <div className="text-center mb-16 max-w-2xl mx-auto">
             <div className="overline" style={{ marginBottom: '1rem' }}>Core Values</div>
@@ -112,7 +112,7 @@ export default function AboutPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {values.map((value, i) => (
-              <div key={i} className="p-8 rounded-sm bg-white border border-nets-border shadow-sm hover:shadow-card-lg transition-all">
+              <div key={i} className="p-8 rounded-sm bg-white border border-gray-200 shadow-sm hover:shadow-card-lg transition-all">
                 <div className="mb-6">
                   <value.icon size={48} style={{ color: value.color }} />
                 </div>

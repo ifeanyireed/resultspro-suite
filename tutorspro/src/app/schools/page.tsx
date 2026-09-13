@@ -114,12 +114,12 @@ export default function SchoolsPage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="section-py bg-white border-b border-nets-border">
+      <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets text-center">
            <div className="overline" style={{ marginBottom: '1rem' }}>Clear Pricing</div>
            <h2 className="text-d4 fw-400 mb-16 text-navy">School Multi-Tenant <span style={{ fontWeight: 700 }}>Pricing</span></h2>
            
-           <div className="max-w-4xl mx-auto p-12 rounded-sm bg-light border border-nets-border text-left relative overflow-hidden shadow-sm">
+           <div className="max-w-4xl mx-auto p-12 rounded-sm bg-light border border-gray-200 text-left relative overflow-hidden shadow-sm">
               <div className="absolute top-0 right-0 p-12 opacity-5 -rotate-12 translate-x-12 -translate-y-12">
                  <Layout size={240} className="text-navy" />
               </div>

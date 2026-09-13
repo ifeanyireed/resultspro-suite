@@ -55,7 +55,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="section-py bg-white border-b border-nets-border">
+      <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Contact Info */}
@@ -69,7 +69,7 @@ export default function ContactPage() {
 
               <div className="space-y-6">
                  <div className="flex items-center gap-6 group">
-                   <div className="w-12 h-12 rounded-sm bg-light border border-nets-border shadow-sm flex items-center justify-center transition-all group-hover:shadow-md" style={{ color: 'var(--primary)' }}>
+                   <div className="w-12 h-12 rounded-sm bg-light border border-gray-200 shadow-sm flex items-center justify-center transition-all group-hover:shadow-md" style={{ color: 'var(--primary)' }}>
                       <Mail size={24} />
                    </div>
                    <div>
@@ -79,7 +79,7 @@ export default function ContactPage() {
                  </div>
 
                  <div className="flex items-center gap-6 group">
-                   <div className="w-12 h-12 rounded-sm bg-light border border-nets-border shadow-sm flex items-center justify-center text-blue-600 transition-all group-hover:shadow-md">
+                   <div className="w-12 h-12 rounded-sm bg-light border border-gray-200 shadow-sm flex items-center justify-center text-blue-600 transition-all group-hover:shadow-md">
                       <Phone size={24} />
                    </div>
                    <div>
@@ -89,7 +89,7 @@ export default function ContactPage() {
                  </div>
 
                  <div className="flex items-center gap-6 group">
-                   <div className="w-12 h-12 rounded-sm bg-light border border-nets-border shadow-sm flex items-center justify-center text-amber-600 transition-all group-hover:shadow-md">
+                   <div className="w-12 h-12 rounded-sm bg-light border border-gray-200 shadow-sm flex items-center justify-center text-amber-600 transition-all group-hover:shadow-md">
                       <MapPin size={24} />
                    </div>
                    <div>
@@ -101,7 +101,7 @@ export default function ContactPage() {
             </div>
 
             {/* Contact Form */}
-            <div className="p-8 md:p-12 rounded-sm bg-white border border-nets-border shadow-sm">
+            <div className="p-8 md:p-12 rounded-sm bg-white border border-gray-200 shadow-sm">
                <form className="space-y-6">
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                    <div className="space-y-2">
@@ -109,7 +109,7 @@ export default function ContactPage() {
                       <input 
                         type="text" 
                         placeholder="John Doe"
-                        className="w-full bg-light border border-nets-border rounded-sm py-4 px-6 text-navy placeholder:text-muted focus:outline-none"
+                        className="w-full bg-light border border-gray-200 rounded-sm py-4 px-6 text-navy placeholder:text-muted focus:outline-none"
                       />
                    </div>
                    <div className="space-y-2">
@@ -117,14 +117,14 @@ export default function ContactPage() {
                       <input 
                         type="email" 
                         placeholder="john@example.com"
-                        className="w-full bg-light border border-nets-border rounded-sm py-4 px-6 text-navy placeholder:text-muted focus:outline-none"
+                        className="w-full bg-light border border-gray-200 rounded-sm py-4 px-6 text-navy placeholder:text-muted focus:outline-none"
                       />
                    </div>
                  </div>
 
                  <div className="space-y-2">
                     <label className="text-xs fw-600 uppercase tracking-widest text-muted">Subject</label>
-                    <select className="w-full bg-light border border-nets-border rounded-sm py-4 px-6 text-navy focus:outline-none appearance-none">
+                    <select className="w-full bg-light border border-gray-200 rounded-sm py-4 px-6 text-navy focus:outline-none appearance-none">
                        <option>General Inquiry</option>
                        <option>Technical Support</option>
                        <option>Partnership</option>
@@ -137,7 +137,7 @@ export default function ContactPage() {
                     <textarea 
                       rows={5}
                       placeholder="Tell us how we can help..."
-                      className="w-full bg-light border border-nets-border rounded-sm py-4 px-6 text-navy placeholder:text-muted focus:outline-none resize-none"
+                      className="w-full bg-light border border-gray-200 rounded-sm py-4 px-6 text-navy placeholder:text-muted focus:outline-none resize-none"
                     ></textarea>
                  </div>
 
