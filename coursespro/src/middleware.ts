@@ -18,6 +18,11 @@ export function middleware(req: NextRequest) {
   if (url.pathname.startsWith('/api') || url.pathname.startsWith('/_next') || url.pathname.includes('.')) {
     return NextResponse.next();
   }
+  
+  // Skip admin and mentor route groups so they don't get rewritten into [tenant]
+  if (url.pathname.startsWith('/admin') || url.pathname.startsWith('/mentor')) {
+    return NextResponse.next();
+  }
 
   // If it's the main platform, rewrite to the (platform) folder
   if (isPlatform) {
