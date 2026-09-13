@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -711,6 +712,10 @@ func HandleUpdateTenant(w http.ResponseWriter, r *http.Request) {
 
 	if val, ok := input["subscription_expires_at"]; ok && val == "" {
 		delete(input, "subscription_expires_at")
+	}
+
+	if slug, ok := input["slug"].(string); ok {
+		input["default_subdomain"] = fmt.Sprintf("%s.resultspro.ng", slug)
 	}
 	
 	if len(input) == 0 {
