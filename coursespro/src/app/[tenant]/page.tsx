@@ -11,12 +11,12 @@ async function getTenant(tenantSlug: string) {
   const domain = `${tenantSlug}.resultspro.ng`; // Default subdomain
   
   try {
-    const res = await fetch(`${USERS_API}/api/v1/tenants/resolve?domain=${domain}`, {
+    const res = await fetch(`${USERS_API}/api/public/tenant/resolve?domain=${domain}`, {
       next: { revalidate: 60 } // Cache for 60 seconds
     });
     if (!res.ok) {
       // If it fails, we can optionally try the raw slug as the custom domain
-      const customRes = await fetch(`${USERS_API}/api/v1/tenants/resolve?domain=${tenantSlug}`, {
+      const customRes = await fetch(`${USERS_API}/api/public/tenant/resolve?domain=${tenantSlug}`, {
         next: { revalidate: 60 }
       });
       if (!customRes.ok) return null;

@@ -21,31 +21,20 @@ export function middleware(req: NextRequest) {
 
   // If it's the main platform, rewrite to the (platform) folder
   if (isPlatform) {
-    let res: NextResponse;
     if (url.pathname === '/') {
-      res = NextResponse.rewrite(new URL(`/(platform)`, req.url));
-    } else {
-      res = NextResponse.rewrite(new URL(`/(platform)${url.pathname}`, req.url));
+      return NextResponse.rewrite(new URL(`/(platform)`, req.url));
     }
-    res.headers.set('x-debug-hostname', hostname);
-    res.headers.set('x-debug-is-platform', String(isPlatform));
-    return res;
+    return NextResponse.rewrite(new URL(`/(platform)${url.pathname}`, req.url));
   }
 
   // Otherwise, extract the tenant slug and rewrite to the [tenant] folder
   const tenantSlug = hostname.split('.')[0]; 
   
-  let res: NextResponse;
   if (url.pathname === '/') {
-    res = NextResponse.rewrite(new URL(`/${tenantSlug}`, req.url));
-  } else {
-    res = NextResponse.rewrite(new URL(`/${tenantSlug}${url.pathname}`, req.url));
+    return NextResponse.rewrite(new URL(`/${tenantSlug}`, req.url));
   }
-
-  res.headers.set('x-debug-hostname', hostname);
-  res.headers.set('x-debug-is-platform', String(isPlatform));
-  res.headers.set('x-debug-tenant-slug', tenantSlug);
-  return res;
+  
+  return NextResponse.rewrite(new URL(`/${tenantSlug}${url.pathname}`, req.url));
 }
 
 export const config = {
