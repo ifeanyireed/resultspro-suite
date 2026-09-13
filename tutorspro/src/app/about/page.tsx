@@ -10,57 +10,52 @@ export default function AboutPage() {
       title: "Vetted Excellence",
       desc: "Every tutor undergoes a rigorous 5-step vetting process, including background checks and mock teaching sessions.",
       icon: ShieldCheck,
-      color: "text-green",
-      bg: "bg-green-100"
+      color: "var(--primary)",
+      bg: "bg-nets-light"
     },
     {
       title: "Student-First",
       desc: "We prioritize learning outcomes over profit. Our platform is designed to make education accessible and effective.",
       icon: Target,
-      color: "text-blue",
-      bg: "bg-blue-100"
+      color: "var(--color-blue)",
+      bg: "bg-nets-light"
     },
     {
       title: "Collaborative Community",
       desc: "Building a global network where tutors, students, and parents work together for academic success.",
       icon: Users,
-      color: "text-amber",
-      bg: "bg-amber-100"
+      color: "var(--color-amber)",
+      bg: "bg-nets-light"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-light flex flex-col" style={{ background: 'var(--color-nets-light)' }}>
+    <main className="min-h-screen bg-light" style={{ background: 'var(--color-nets-light)' }}>
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 px-6 overflow-hidden bg-navy text-white" style={{ background: 'var(--color-nets-navy-dark)' }}>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-green/10 via-navy to-navy pointer-events-none" />
-        
-        <div className="max-w-[1200px] mx-auto relative z-10">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green/10 border border-green/20 text-[10px] font-black text-green mb-6 uppercase tracking-[0.2em] backdrop-blur-sm">
-              <Zap className="w-3 h-3 fill-current" />
-              Our Mission
-            </div>
-            <h1 className="text-5xl md:text-7xl font-display font-black text-white leading-tight mb-8">
-              Empowering the Next <br />
-              <span className="text-green">Generation of Leaders</span>
+      <section className="bg-navy text-white text-center" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '6rem' }}>
+        <div className="container-nets">
+          <div className="max-w-3xl mx-auto">
+            <div className="overline-dark" style={{ marginBottom: '1.5rem' }}>Our Mission</div>
+            <h1 className="fw-300" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
+              Empowering the Next <br /><span style={{ fontWeight: 700, color: 'var(--primary)' }}>Generation of Leaders.</span>
             </h1>
-            <p className="text-xl text-white/70 leading-relaxed mb-10">
+            <p className="text-body-lg text-white/70">
               TutorsPro is more than just a marketplace. We are a technology-driven education platform dedicated to connecting students with the world&apos;s most talented educators.
             </p>
           </div>
         </div>
       </section>
 
-      <main className="flex-1 bg-light">
-        {/* Our Story Section */}
-        <section className="py-24 px-6">
-          <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      {/* Our Story Section */}
+      <section className="section-py bg-white border-b border-nets-border">
+        <div className="container-nets">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <div className="space-y-8">
-              <h2 className="text-4xl font-display font-black text-navy">How It Works</h2>
-              <div className="space-y-6">
+              <div className="overline" style={{ marginBottom: '1rem' }}>How It Works</div>
+              <h2 className="text-d4 fw-400 text-navy mb-12">The TutorsPro <span style={{ fontWeight: 700 }}>Process</span></h2>
+              <div className="space-y-8">
                 {[
                   { step: "01", title: "Find Your Match", text: "Browse our directory of verified experts based on subject, level, and rating." },
                   { step: "02", title: "Book & Pay", text: "Schedule a session at your convenience with secure automated payments." },
@@ -68,10 +63,10 @@ export default function AboutPage() {
                   { step: "04", title: "Track Progress", text: "Receive detailed performance reports and feedback after every lesson." },
                 ].map((item, i) => (
                   <div key={i} className="flex gap-6 group">
-                    <div className="text-3xl font-display font-black text-gray-200 group-hover:text-green/40 transition-colors">{item.step}</div>
+                    <div className="text-3xl fw-700 text-muted group-hover:text-navy transition-colors">{item.step}</div>
                     <div>
-                      <h3 className="text-xl font-bold text-navy mb-2">{item.title}</h3>
-                      <p className="text-gray-600 text-sm leading-relaxed">{item.text}</p>
+                      <h3 className="text-xl fw-700 text-navy mb-2">{item.title}</h3>
+                      <p className="text-muted text-sm leading-relaxed">{item.text}</p>
                     </div>
                   </div>
                 ))}
@@ -79,13 +74,12 @@ export default function AboutPage() {
             </div>
             
             <div className="relative">
-              <div className="absolute -inset-10 bg-green-100 blur-[100px] rounded-full opacity-30 -z-10" />
-              <div className="p-8 md:p-12 rounded-[48px] bg-white border border-nets-border shadow-sm relative overflow-hidden">
+              <div className="p-8 md:p-12 rounded-sm bg-light border border-nets-border shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-12 opacity-5">
-                   <Award className="w-64 h-64 text-green" />
+                   <Award size={240} className="text-navy" />
                 </div>
-                <h3 className="text-2xl font-display font-black text-navy mb-6">Vetting Standards</h3>
-                <p className="text-gray-600 mb-8 leading-relaxed">
+                <h3 className="text-2xl fw-700 text-navy mb-6">Vetting Standards</h3>
+                <p className="text-muted mb-8 leading-relaxed">
                   We maintain the highest standards in the industry. Less than 5% of applicants are approved to teach on TutorsPro.
                 </p>
                 <ul className="space-y-4">
@@ -96,8 +90,8 @@ export default function AboutPage() {
                     "Professional Pedagogy Assessment",
                     "Continuous Performance Monitoring"
                   ].map((item, i) => (
-                    <li key={i} className="flex items-center gap-3 text-sm text-gray-700">
-                      <CheckCircle2 className="w-4 h-4 text-green" />
+                    <li key={i} className="flex items-center gap-3 text-sm text-navy fw-500">
+                      <CheckCircle2 size={20} style={{ color: 'var(--primary)' }} />
                       {item}
                     </li>
                   ))}
@@ -105,32 +99,32 @@ export default function AboutPage() {
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Values Section */}
-        <section className="py-24 bg-white border-y border-nets-border px-6">
-          <div className="max-w-[1200px] mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-display font-black text-navy mb-4">Core Values</h2>
-              <p className="text-gray-500">The principles that drive every decision we make.</p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {values.map((value, i) => (
-                <div key={i} className="p-8 rounded-[40px] bg-light border border-nets-border shadow-sm hover:shadow-md transition-all">
-                  <div className={`w-14 h-14 rounded-2xl ${value.bg} ${value.color} flex items-center justify-center mb-6`}>
-                    <value.icon className="w-7 h-7" />
-                  </div>
-                  <h3 className="text-2xl font-display font-bold text-navy mb-3">{value.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{value.desc}</p>
-                </div>
-              ))}
-            </div>
+      {/* Values Section */}
+      <section className="section-py bg-light border-b border-nets-border">
+        <div className="container-nets">
+          <div className="text-center mb-16 max-w-2xl mx-auto">
+            <div className="overline" style={{ marginBottom: '1rem' }}>Core Values</div>
+            <h2 className="text-d4 fw-400 text-navy mb-4">The principles that <span style={{ fontWeight: 700 }}>drive us.</span></h2>
           </div>
-        </section>
-      </main>
-
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {values.map((value, i) => (
+              <div key={i} className="p-8 rounded-sm bg-white border border-nets-border shadow-sm hover:shadow-card-lg transition-all">
+                <div className="mb-6">
+                  <value.icon size={48} style={{ color: value.color }} />
+                </div>
+                <h3 className="text-2xl fw-700 text-navy mb-3">{value.title}</h3>
+                <p className="text-muted text-sm leading-relaxed">{value.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      
       <Footer />
-    </div>
+    </main>
   );
 }
