@@ -87,7 +87,7 @@ export default function PlatformSignupPage() {
       <div className="w-full lg:w-[45%] bg-white flex items-center justify-center p-8 sm:p-16 relative">
         {/* Mobile Logo overlay */}
         <div className="lg:hidden flex items-center justify-center mb-10 w-full absolute top-8 left-0 right-0">
-           <Image src={logoSrc || "/logo.png"} alt="Logo" width={64} height={64} className="object-contain" />
+           <Image src={"/logo.png"} alt="Logo" width={64} height={64} className="object-contain" />
         </div>
 
         <div className="w-full max-w-md">

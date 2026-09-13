@@ -79,7 +79,7 @@ export default function ApplyPage() {
       {/* Right Panel - Form */}
       <div className="w-full lg:w-[45%] bg-white flex items-center justify-center p-8 sm:p-16 relative h-screen overflow-y-auto">
         <div className="lg:hidden flex items-center justify-center mb-10 w-full absolute top-8 left-0 right-0">
-           <Image src={logoSrc || "/logo.png"} alt="Logo" width={64} height={64} className="object-contain" />
+           <Image src={"/logo.png"} alt="Logo" width={64} height={64} className="object-contain" />
         </div>
 
         <div className="w-full max-w-md my-auto pt-12 lg:pt-0">
