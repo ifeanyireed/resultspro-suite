@@ -11,13 +11,17 @@ interface Tutor {
   id: string;
   name: string;
   bio: string;
+  headline?: string;
   subjects: string[];
   rating: number;
   reviewCount: number;
+  total_reviews?: number;
   hourlyRate: number;
+  hourly_rate?: number;
   avatar: string;
   location: string;
   isVerified: boolean;
+  is_verified?: boolean;
 }
 
 export default function TutorsPage() {
