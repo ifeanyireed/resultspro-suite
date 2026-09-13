@@ -59,7 +59,7 @@ export default function TournamentPage() {
       <main className="min-h-screen bg-slate-50 flex flex-col">
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center gap-4">
-          <Loader2 className="w-12 h-12 text-amber-500 animate-spin" />
+          <Loader2 className="w-12 h-12 text-primary animate-spin" />
           <p className="text-gray-500 font-bold">Loading Tournament...</p>
         </div>
       </main>
@@ -102,7 +102,7 @@ export default function TournamentPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber/10 border border-amber/20 text-amber-500 text-xs font-black uppercase tracking-widest mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber/10 border border-amber/20 text-primary text-xs font-black uppercase tracking-widest mb-6">
                 <Timer className="w-4 h-4 animate-pulse" />
                 Next Tournament Starts: {format(new Date(tournament.startTime), 'MMM d, h:mm a')}
               </div>
@@ -115,7 +115,7 @@ export default function TournamentPage() {
 
               <div className="flex flex-wrap gap-6 mb-10">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-amber-500 border border-gray-200 ">
+                  <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-primary border border-gray-200 ">
                     <Trophy className="w-6 h-6" />
                   </div>
                   <div>
@@ -124,7 +124,7 @@ export default function TournamentPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-[#146ef5] border border-gray-200 ">
+                  <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-secondary border border-gray-200 ">
                     <Users className="w-6 h-6" />
                   </div>
                   <div>
@@ -135,7 +135,7 @@ export default function TournamentPage() {
               </div>
 
               {isRegistered ? (
-                <div className="inline-flex items-center gap-4 px-8 py-5 rounded-3xl bg-green-500/10 border border-green-500/20 text-green-500 font-black text-lg">
+                <div className="inline-flex items-center gap-4 px-8 py-5 rounded-3xl bg-secondary/10 border border-secondary/20 text-secondary font-black text-lg">
                   <CheckCircle2 className="w-6 h-6" />
                   YOU ARE REGISTERED
                 </div>
@@ -158,7 +158,7 @@ export default function TournamentPage() {
             <div className="hidden lg:block relative">
               <div className="absolute inset-0 bg-amber/20 blur-[120px] rounded-full" />
               <div className="relative p-12 rounded-[60px] bg-slate-100 border border-gray-200  backdrop-blur-xl">
-                 <div className="flex items-center gap-2 text-amber-500 font-black text-sm uppercase tracking-widest mb-8">
+                 <div className="flex items-center gap-2 text-primary font-black text-sm uppercase tracking-widest mb-8">
                    <ShieldCheck className="w-5 h-5" /> Tournament Rules
                  </div>
                  <ul className="space-y-6">
@@ -199,7 +199,7 @@ export default function TournamentPage() {
             </div>
             <div className="p-4 rounded-2xl bg-white border border-gray-200  text-center min-w-[120px]">
               <div className="text-[10px] text-gray-400 font-bold uppercase mb-1">Status</div>
-              <div className="text-xl text-green-500 font-black uppercase">{tournament.status}</div>
+              <div className="text-xl text-secondary font-black uppercase">{tournament.status}</div>
             </div>
           </div>
         </div>
@@ -231,7 +231,7 @@ export default function TournamentPage() {
                         <img src={`/avatars/character${ (String(row.userId).charCodeAt(0) % 20) || 1 }.jpg`} alt="" className="w-full h-full object-cover" />
                       </div>
                       <div>
-                        <div className="font-bold text-gray-900 group-hover:text-amber-500 transition-colors">{row.user?.name}</div>
+                        <div className="font-bold text-gray-900 group-hover:text-primary transition-colors">{row.user?.name}</div>
                         <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Mastery Level 4</div>
                       </div>
                     </div>

@@ -296,7 +296,7 @@ function BattleScreenContent() {
   if (!user || status === 'idle' || status === 'searching' || (status === 'active' && questions.length === 0)) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center">
-        <Loader2 className="w-12 h-12 text-green-500 animate-spin mb-4" />
+        <Loader2 className="w-12 h-12 text-secondary animate-spin mb-4" />
         <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Synchronizing Arena Data...</p>
         <p className="text-gray-400 text-[10px] mt-2">Status: {status} | Questions: {questions.length}</p>
       </div>
@@ -313,15 +313,15 @@ function BattleScreenContent() {
         {/* Player 1 (You) */}
         <div className="flex items-center gap-4 flex-1">
           <div className="relative">
-            <div className="w-12 h-12 rounded-xl bg-[#146ef5]/20 border-2 border-[#146ef5] p-0.5 flex items-center justify-center font-bold text-xl">
+            <div className="w-12 h-12 rounded-xl bg-secondary/20 border-2 border-secondary p-0.5 flex items-center justify-center font-bold text-xl">
               {user.name?.[0] || user.email[0]}
             </div>
-            <div className="absolute -bottom-2 -right-2 px-2 py-0.5 rounded bg-[#146ef5] text-[8px] font-black uppercase border-2 border-white text-white">YOU</div>
+            <div className="absolute -bottom-2 -right-2 px-2 py-0.5 rounded bg-secondary text-[8px] font-black uppercase border-2 border-white text-white">YOU</div>
           </div>
           <div>
             <div className="text-xs font-black text-gray-900">{currentQuestionIdx + 1}/{questions.length || 10}</div>
             <div className="w-24 h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden">
-              <div className="h-full bg-[#146ef5] transition-all duration-500" style={{ width: `${myProgress}%` }} />
+              <div className="h-full bg-secondary transition-all duration-500" style={{ width: `${myProgress}%` }} />
             </div>
             <div className="text-[10px] text-gray-500 mt-1 font-bold">{score} pts</div>
           </div>
@@ -332,7 +332,7 @@ function BattleScreenContent() {
           <div className="flex items-center gap-4 bg-slate-100 px-6 py-2 rounded-2xl border border-gray-200 ">
             <div className="flex flex-col items-center">
               <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Stake</div>
-              <div className="flex items-center gap-1 text-amber-500">
+              <div className="flex items-center gap-1 text-primary">
                 <Coins className="w-3 h-3" />
                 <span className="text-xs font-black">{roomData?.stakePerPlayer || '--'}</span>
               </div>
@@ -340,14 +340,14 @@ function BattleScreenContent() {
             <div className="w-px h-8 bg-slate-200" />
             <div className="flex flex-col items-center">
               <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Room</div>
-              <div className="text-[10px] font-black text-[#146ef5] uppercase">
+              <div className="text-[10px] font-black text-secondary uppercase">
                 #{roomData?.roomCode || (battleId && battleId.length === 6 ? battleId : (battleId ? battleId.split('-')[0] : '----'))}
               </div>
             </div>
             <div className="w-px h-8 bg-slate-200" />
             <div className="flex flex-col items-center">
               <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Time</div>
-              <div className={`text-sm font-mono font-black ${timeLeft < 10 ? 'text-red-500 animate-pulse' : 'text-green-500'}`}>
+              <div className={`text-sm font-mono font-black ${timeLeft < 10 ? 'text-primary animate-pulse' : 'text-secondary'}`}>
                 {timeLeft}s
               </div>
             </div>
@@ -366,14 +366,14 @@ function BattleScreenContent() {
           <div className="text-right">
             <div className="text-[10px] text-gray-500 mb-1 font-bold">{roomData?.isBot ? botScore : opponentScore} pts</div>
             <div className="w-24 h-1.5 bg-slate-100 rounded-full mb-1 overflow-hidden ml-auto">
-              <div className="h-full bg-red-500 transition-all duration-1000" style={{ width: `${roomData?.isBot ? botProgress : opponentProgress}%` }} />
+              <div className="h-full bg-primary transition-all duration-1000" style={{ width: `${roomData?.isBot ? botProgress : opponentProgress}%` }} />
             </div>
           </div>
           <div className="relative">
-            <div className="w-12 h-12 rounded-xl bg-red-500/10 border-2 border-red-500 p-0.5 flex items-center justify-center font-bold text-xl text-red-500">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 border-2 border-primary p-0.5 flex items-center justify-center font-bold text-xl text-primary">
                {roomData?.isBot ? "C" : (opponent?.name?.[0] || opponent?.email?.[0] || '?')}
             </div>
-            <div className="absolute -bottom-2 -left-2 px-2 py-0.5 rounded bg-red-500 text-[8px] font-black uppercase border-2 border-white text-white text-gray-900">{roomData?.isBot ? "BOT" : "RIVAL"}</div>
+            <div className="absolute -bottom-2 -left-2 px-2 py-0.5 rounded bg-primary text-[8px] font-black uppercase border-2 border-white text-white">{roomData?.isBot ? "BOT" : "RIVAL"}</div>
           </div>
         </div>
       </div>
@@ -385,7 +385,7 @@ function BattleScreenContent() {
           <div className="bg-slate-50/80 backdrop-blur-md border border-gray-200 p-3 rounded-2xl flex items-center gap-3">
             <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{roomData?.isBot ? "CPU Progress" : "Opponent Progress"}</div>
              <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                <div className="h-full bg-red-500" style={{ width: `${roomData?.isBot ? botProgress : opponentProgress}%` }} />
+                <div className="h-full bg-primary" style={{ width: `${roomData?.isBot ? botProgress : opponentProgress}%` }} />
               </div>
           </div>
         </div>
@@ -394,11 +394,11 @@ function BattleScreenContent() {
         <div className="flex-1 p-8 md:p-16 flex flex-col max-w-4xl mx-auto w-full">
           {(status === 'finished' || isFinishing) ? (
              <div className="flex-1 flex flex-col items-center justify-center text-center animate-in fade-in zoom-in duration-500">
-                <Trophy className="w-20 h-20 text-amber-500 mb-6" />
+                <Trophy className="w-20 h-20 text-primary mb-6" />
                 <h2 className="text-4xl font-display font-black text-gray-900 mb-2">BATTLE COMPLETE!</h2>
                 <p className="text-gray-500 mb-8">Waiting for final results...</p>
                 <div className="flex flex-col items-center gap-4">
-                  <Loader2 className="w-8 h-8 text-green-500 animate-spin" />
+                  <Loader2 className="w-8 h-8 text-secondary animate-spin" />
                   <Button 
                     onClick={() => router.push(`/battle-mode/result?battleId=${battleId}`)}
                     className="mt-4 bg-slate-100 border border-gray-200 hover:bg-slate-200 text-gray-900 px-8 py-4 rounded-2xl text-xs font-bold uppercase tracking-widest animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-5000"
@@ -412,12 +412,12 @@ function BattleScreenContent() {
                 <div className="mb-12">
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
-                      <Sword className="w-6 h-6 text-red-500" />
+                      <Sword className="w-6 h-6 text-primary" />
                       <h2 className="text-xl font-display font-black italic tracking-tight text-gray-900/50 uppercase">Battle Question {currentQuestionIdx + 1}</h2>
                     </div>
                     <button 
                       onClick={() => setIsReportModalOpen(true)}
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 border border-gray-200  text-[10px] font-bold text-gray-500 hover:text-red-400 hover:bg-red-400/10 hover:border-red-400/20 transition-all"
+                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 border border-gray-200  text-[10px] font-bold text-gray-500 hover:text-primary hover:bg-primary/80/10 hover:border-primary/20 transition-all"
                     >
                       <Flag className="w-3 h-3" /> REPORT
                     </button>
@@ -431,11 +431,11 @@ function BattleScreenContent() {
                     <div className="flex-1">
                       <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">{roomData?.isBot ? "CPU Progress" : "Opponent Progress"}</div>
                       <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-red-500 transition-all duration-1000" style={{ width: `${roomData?.isBot ? botProgress : opponentProgress}%` }} />
+                        <div className="h-full bg-primary transition-all duration-1000" style={{ width: `${roomData?.isBot ? botProgress : opponentProgress}%` }} />
                       </div>
                     </div>
                     {streak > 1 && (
-                       <div className="flex items-center gap-2 text-amber-500 font-black italic text-sm">
+                       <div className="flex items-center gap-2 text-primary font-black italic text-sm">
                         <Zap className="w-4 h-4 fill-current animate-pulse" />
                         STREAK: {streak}
                       </div>
@@ -456,32 +456,32 @@ function BattleScreenContent() {
                         disabled={isAnswered}
                         className={`
                           relative p-6 rounded-3xl border text-left transition-all duration-300 group
-                          ${isSelected && !isAnswered ? 'border-[#146ef5] bg-[#146ef5]/10' : 'border-gray-200  bg-white hover:bg-slate-100 hover:border-gray-300'}
-                          ${isCorrect ? 'border-green bg-green-500/10 shadow-[0_0_20px_rgba(0,200,83,0.2)]' : ''}
-                          ${isWrong ? 'border-red-500 bg-red-500/10' : ''}
+                          ${isSelected && !isAnswered ? 'border-secondary bg-secondary/10' : 'border-gray-200  bg-white hover:bg-slate-100 hover:border-gray-300'}
+                          ${isCorrect ? 'border-secondary bg-secondary/10 shadow-[0_0_20px_rgba(0,200,83,0.2)]' : ''}
+                          ${isWrong ? 'border-primary bg-primary/10' : ''}
                           ${isAnswered && !isCorrect && !isWrong ? 'opacity-40' : 'opacity-100'}
                         `}
                       >
                         <div className="flex items-center gap-4">
                           <div className={`
                             w-12 h-12 rounded-2xl flex items-center justify-center font-black transition-all
-                            ${isSelected && !isAnswered ? 'bg-[#146ef5] text-white' : 'bg-slate-100 text-gray-400 group-hover:bg-slate-200 group-hover:text-gray-900'}
-                            ${isCorrect ? 'bg-green-500 text-white' : ''}
-                            ${isWrong ? 'bg-red-500 text-white' : ''}
+                            ${isSelected && !isAnswered ? 'bg-secondary text-secondary-foreground' : 'bg-slate-100 text-gray-400 group-hover:bg-slate-200 group-hover:text-gray-900'}
+                            ${isCorrect ? 'bg-secondary text-secondary-foreground' : ''}
+                            ${isWrong ? 'bg-primary text-primary-foreground' : ''}
                           `}>
                             {String.fromCharCode(65 + index)}
                           </div>
                           <span className={`flex-1 font-bold ${isSelected || isCorrect ? 'text-gray-900' : 'text-gray-500'}`}>
                             {opt.optionText}
                           </span>
-                          {isCorrect && <CheckCircle2 className="w-6 h-6 text-green-500" />}
-                          {isWrong && <AlertCircle className="w-6 h-6 text-red-500" />}
+                          {isCorrect && <CheckCircle2 className="w-6 h-6 text-secondary" />}
+                          {isWrong && <AlertCircle className="w-6 h-6 text-primary" />}
                         </div>
                       </button>
                     );
                   }) : (
                     <div className="col-span-full py-12 flex justify-center">
-                       <Loader2 className="w-8 h-8 text-[#146ef5] animate-spin" />
+                       <Loader2 className="w-8 h-8 text-secondary animate-spin" />
                     </div>
                   )}
                 </div>
@@ -498,7 +498,7 @@ function BattleScreenContent() {
                     className={`
                       px-12 py-5 rounded-2xl font-black text-lg transition-all
                       ${selectedOption === null ? 'bg-slate-100 text-gray-400 cursor-not-allowed' : 
-                        isAnswered ? 'bg-gray-800 text-gray-500' : 'bg-green-500 text-white hover:scale-105 hover:shadow-xl hover:shadow-green/20'}
+                        isAnswered ? 'bg-gray-800 text-gray-500' : 'bg-secondary text-secondary-foreground hover:scale-105 hover:shadow-xl hover:shadow-secondary/20'}
                     `}
                   >
                     SUBMIT ANSWER
@@ -535,7 +535,7 @@ function BattleScreenContent() {
                 key={reason}
                 className={`
                   flex items-center gap-3 p-4 rounded-2xl border cursor-pointer transition-all
-                  ${reportReason === reason ? 'bg-red-400/10 border-red-400/30 text-red-400' : 'bg-slate-100 border-gray-200  text-gray-500 hover:bg-slate-200'}
+                  ${reportReason === reason ? 'bg-primary/80/10 border-primary/30 text-primary' : 'bg-slate-100 border-gray-200  text-gray-500 hover:bg-slate-200'}
                 `}
               >
                 <input 
@@ -546,8 +546,8 @@ function BattleScreenContent() {
                   onChange={(e) => setReportReason(e.target.value)}
                   className="hidden"
                 />
-                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${reportReason === reason ? 'border-red-400' : 'border-gray-600'}`}>
-                  {reportReason === reason && <div className="w-2 h-2 rounded-full bg-red-400" />}
+                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${reportReason === reason ? 'border-primary' : 'border-gray-600'}`}>
+                  {reportReason === reason && <div className="w-2 h-2 rounded-full bg-primary/80" />}
                 </div>
                 <span className="text-sm font-bold">{reason}</span>
               </label>
@@ -565,7 +565,7 @@ function BattleScreenContent() {
             <button
               type="submit"
               disabled={!reportReason || isSubmittingReport}
-              className="flex-1 py-4 rounded-2xl bg-red-500 text-white font-bold hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-1 py-4 rounded-2xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isSubmittingReport ? <Loader2 className="w-4 h-4 animate-spin" /> : <Flag className="w-4 h-4" />}
               SUBMIT REPORT
@@ -581,7 +581,7 @@ export default function BattleScreenPage() {
   return (
     <Suspense fallback={
       <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center">
-        <Loader2 className="w-12 h-12 text-green-500 animate-spin mb-4" />
+        <Loader2 className="w-12 h-12 text-secondary animate-spin mb-4" />
         <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Loading Arena...</p>
       </main>
     }>
