@@ -83,20 +83,21 @@ export default function TutorsPage() {
       <section className="section-py">
         <div className="container-nets">
            {/* Filters & Search */}
-           <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-6 rounded-sm bg-white border border-nets-border shadow-sm mb-12">
-              <div className="relative flex-1 w-full">
-                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
-                 <input 
-                   type="text" 
-                   placeholder="Search by name or subject..."
-                   className="w-full bg-transparent border-none py-3 pl-12 pr-6 text-navy focus:outline-none placeholder:text-muted"
-                   value={searchTerm}
-                   onChange={(e) => setSearchTerm(e.target.value)}
-                 />
-              </div>
-              <button className="btn btn-outline-navy flex items-center gap-2">
-                 <Filter size={16} /> Filters
-              </button>
+           <div className="flex flex-col md:flex-row gap-4 mb-12">
+             <div className="flex-1 relative">
+               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+               <input 
+                 type="text" 
+                 placeholder="Search by name or subject..."
+                 className="w-full bg-white shadow-sm border border-gray-200 rounded-2xl py-4 pl-12 pr-4 text-navy placeholder:text-gray-400 focus:outline-none focus:border-green-500 transition-colors"
+                 value={searchTerm}
+                 onChange={(e) => setSearchTerm(e.target.value)}
+               />
+             </div>
+             <button className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white shadow-sm border border-gray-200 text-gray-600 hover:text-navy hover:bg-slate-50 transition-colors">
+               <Filter className="w-5 h-5" />
+               <span>Filters</span>
+             </button>
            </div>
 
            {/* Tutor Grid */}
@@ -122,8 +123,8 @@ export default function TutorsPage() {
                  if (!Array.isArray(tSubjects)) tSubjects = [];
 
                  return (
-                 <article key={tutor.id} className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-nets-border">
-                    <div className="relative h-48 overflow-hidden bg-nets-light flex items-center justify-center border-b border-nets-border">
+                 <article key={tutor.id} className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-gray-200">
+                    <div className="relative h-48 overflow-hidden bg-nets-light flex items-center justify-center border-b border-gray-200">
                       <img 
                         src={tAvatar} 
                         alt={tName} 
