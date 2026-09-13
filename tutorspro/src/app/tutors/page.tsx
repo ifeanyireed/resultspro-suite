@@ -91,6 +91,16 @@ export default function TutorsPage() {
              <div className="flex items-center justify-center h-64">
                 <Loader2 className="w-12 h-12 text-green animate-spin" />
              </div>
+           ) : filteredTutors.length === 0 ? (
+             <div className="flex flex-col items-center justify-center h-64 text-center space-y-4">
+                <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center">
+                  <Search className="w-8 h-8 text-gray-500" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">No tutors found</h3>
+                  <p className="text-gray-400 mt-2">Try adjusting your search filters or keywords.</p>
+                </div>
+             </div>
            ) : (
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                {filteredTutors.map((tutor) => (
