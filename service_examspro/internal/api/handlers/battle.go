@@ -215,9 +215,13 @@ func (h *BattleHandler) CreateBotBattle(c *gin.Context) {
 			IsBot:           true,
 			CreatorID:       &userID,
 			StartedAt:       &now,
-			Questions:       questions,
 		}
 		if err := tx.Create(battle).Error; err != nil {
+			return err
+		}
+		
+		// Append to junction table without upserting Questions
+		if err := tx.Model(battle).Association("Questions").Append(questions); err != nil {
 			return err
 		}
 
@@ -281,9 +285,13 @@ func (h *BattleHandler) initiateBattle(p1, p2 string, subjectID, stake int) (*mo
 			MaxParticipants:   2,
 			Status:            "active",
 			StartedAt:         &now,
-			Questions:         questions, // GORM will handle the many-to-many link
 		}
 		if err := tx.Create(battle).Error; err != nil {
+			return err
+		}
+		
+		// Append to junction table without upserting Questions
+		if err := tx.Model(battle).Association("Questions").Append(questions); err != nil {
 			return err
 		}
 
