@@ -20,14 +20,61 @@ func NewHandler() *Handler {
 // Public Tutors Catalog
 func (h *Handler) GetPublicTutors(c *gin.Context) {
 	subject := c.Query("subject")
-	var tutors []models.TutorProfile
 
-	query := db.WithTenant(c).Where("is_verified = ? AND is_available = ?", true, true)
-	if subject != "" {
-		query = query.Where("subjects LIKE ?", "%"+subject+"%")
+	type EnrichedTutor struct {
+		ID          string   `json:"id"`
+		Name        string   `json:"name"`
+		Bio         string   `json:"bio"`
+		Subjects    []string `json:"subjects"`
+		Rating      float64  `json:"rating"`
+		ReviewCount int      `json:"reviewCount"`
+		HourlyRate  float64  `json:"hourlyRate"`
+		Avatar      string   `json:"avatar"`
+		Location    string   `json:"location"`
+		IsVerified  bool     `json:"isVerified"`
 	}
 
-	query.Order("rating DESC").Find(&tutors)
+	var results []struct {
+		ID          string
+		Name        string
+		Bio         string
+		SubjectsRaw string `gorm:"column:subjects"`
+		Rating      float64
+		TotalReviews int `gorm:"column:total_reviews"`
+		HourlyRate  float64 `gorm:"column:hourly_rate"`
+		Avatar      string `gorm:"column:avatar_url"`
+		IsVerified  bool `gorm:"column:is_verified"`
+	}
+
+	query := db.DB.Table("tut_profiles").
+		Select("tut_profiles.id, users.name, tut_profiles.bio, tut_profiles.subjects, tut_profiles.rating, tut_profiles.total_reviews, tut_profiles.hourly_rate, users.avatar_url, tut_profiles.is_verified").
+		Joins("JOIN users ON users.id = tut_profiles.user_id").
+		Where("tut_profiles.is_verified = ? AND tut_profiles.is_available = ?", true, true)
+
+	if subject != "" {
+		query = query.Where("tut_profiles.subjects LIKE ?", "%"+subject+"%")
+	}
+
+	query.Order("tut_profiles.rating DESC").Scan(&results)
+
+	var tutors []EnrichedTutor
+	for _, r := range results {
+		var subjs []string
+		_ = json.Unmarshal([]byte(r.SubjectsRaw), &subjs)
+		tutors = append(tutors, EnrichedTutor{
+			ID:          r.ID,
+			Name:        r.Name,
+			Bio:         r.Bio,
+			Subjects:    subjs,
+			Rating:      r.Rating,
+			ReviewCount: r.TotalReviews,
+			HourlyRate:  r.HourlyRate,
+			Avatar:      r.Avatar,
+			Location:    "Online",
+			IsVerified:  r.IsVerified,
+		})
+	}
+
 	c.JSON(http.StatusOK, gin.H{"tutors": tutors})
 }
 
