@@ -155,7 +155,7 @@ function BattleResultContent() {
         {/* Players Comparison */}
         <div className="flex items-center justify-center gap-4 mb-12">
           <div className="flex flex-col items-center gap-3">
-            <div className={`p-1 rounded-2xl border-2 flex items-center justify-center text-2xl font-bold w-16 h-16 ${isWinner ? 'border-[#146ef5] bg-[#146ef5]/10 text-[#146ef5]' : 'border-gray-200  bg-slate-100'}`}>
+            <div className={`p-1 rounded-2xl border-2 flex items-center justify-center text-2xl font-bold w-16 h-16 border-[#146ef5] bg-[#146ef5]/10 text-[#146ef5]`}>
               {(myStats.user?.name || user?.name || user?.email)?.[0]?.toUpperCase()}
             </div>
             <div className="text-[8px] text-gray-500 font-bold uppercase">Points: {myStats.score || 0}</div>
@@ -167,7 +167,7 @@ function BattleResultContent() {
           </div>
 
           <div className="flex flex-col items-center gap-3">
-             <div className={`p-1 rounded-2xl border-2 flex items-center justify-center text-2xl font-bold w-16 h-16 ${!isWinner && opponentStats ? 'border-primary bg-primary/10 text-primary' : 'border-gray-200  bg-slate-100'}`}>
+             <div className={`p-1 rounded-2xl border-2 flex items-center justify-center text-2xl font-bold w-16 h-16 border-primary bg-primary/10 text-primary`}>
               {(opponentStats?.user?.name || opponentStats?.user?.email || '?')?.[0]?.toUpperCase()}
             </div>
             <div className="text-[8px] text-gray-500 font-bold uppercase">Points: {opponentStats?.score || 0}</div>
