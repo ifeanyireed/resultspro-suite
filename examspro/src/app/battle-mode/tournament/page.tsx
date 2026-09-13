@@ -124,7 +124,7 @@ export default function TournamentPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-secondary border border-gray-200 ">
+                  <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-blue border border-gray-200 ">
                     <Users className="w-6 h-6" />
                   </div>
                   <div>
@@ -135,7 +135,7 @@ export default function TournamentPage() {
               </div>
 
               {isRegistered ? (
-                <div className="inline-flex items-center gap-4 px-8 py-5 rounded-3xl bg-secondary/10 border border-secondary/20 text-secondary font-black text-lg">
+                <div className="inline-flex items-center gap-4 px-8 py-5 rounded-3xl bg-blue/10 border border-blue/20 text-blue font-black text-lg">
                   <CheckCircle2 className="w-6 h-6" />
                   YOU ARE REGISTERED
                 </div>
@@ -199,7 +199,7 @@ export default function TournamentPage() {
             </div>
             <div className="p-4 rounded-2xl bg-white border border-gray-200  text-center min-w-[120px]">
               <div className="text-[10px] text-gray-400 font-bold uppercase mb-1">Status</div>
-              <div className="text-xl text-secondary font-black uppercase">{tournament.status}</div>
+              <div className="text-xl text-blue font-black uppercase">{tournament.status}</div>
             </div>
           </div>
         </div>

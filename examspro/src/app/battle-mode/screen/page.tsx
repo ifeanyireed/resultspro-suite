@@ -296,7 +296,7 @@ function BattleScreenContent() {
   if (!user || status === 'idle' || status === 'searching' || (status === 'active' && questions.length === 0)) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center">
-        <Loader2 className="w-12 h-12 text-secondary animate-spin mb-4" />
+        <Loader2 className="w-12 h-12 text-blue animate-spin mb-4" />
         <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Synchronizing Arena Data...</p>
         <p className="text-gray-400 text-[10px] mt-2">Status: {status} | Questions: {questions.length}</p>
       </div>
@@ -313,15 +313,15 @@ function BattleScreenContent() {
         {/* Player 1 (You) */}
         <div className="flex items-center gap-4 flex-1">
           <div className="relative">
-            <div className="w-12 h-12 rounded-xl bg-secondary/20 border-2 border-secondary p-0.5 flex items-center justify-center font-bold text-xl">
+            <div className="w-12 h-12 rounded-xl bg-blue/20 border-2 border-blue p-0.5 flex items-center justify-center font-bold text-xl">
               {user.name?.[0] || user.email[0]}
             </div>
-            <div className="absolute -bottom-2 -right-2 px-2 py-0.5 rounded bg-secondary text-[8px] font-black uppercase border-2 border-white text-white">YOU</div>
+            <div className="absolute -bottom-2 -right-2 px-2 py-0.5 rounded bg-blue text-[8px] font-black uppercase border-2 border-white text-white">YOU</div>
           </div>
           <div>
             <div className="text-xs font-black text-gray-900">{currentQuestionIdx + 1}/{questions.length || 10}</div>
             <div className="w-24 h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden">
-              <div className="h-full bg-secondary transition-all duration-500" style={{ width: `${myProgress}%` }} />
+              <div className="h-full bg-blue transition-all duration-500" style={{ width: `${myProgress}%` }} />
             </div>
             <div className="text-[10px] text-gray-500 mt-1 font-bold">{score} pts</div>
           </div>
@@ -340,14 +340,14 @@ function BattleScreenContent() {
             <div className="w-px h-8 bg-slate-200" />
             <div className="flex flex-col items-center">
               <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Room</div>
-              <div className="text-[10px] font-black text-secondary uppercase">
+              <div className="text-[10px] font-black text-blue uppercase">
                 #{roomData?.roomCode || (battleId && battleId.length === 6 ? battleId : (battleId ? battleId.split('-')[0] : '----'))}
               </div>
             </div>
             <div className="w-px h-8 bg-slate-200" />
             <div className="flex flex-col items-center">
               <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Time</div>
-              <div className={`text-sm font-mono font-black ${timeLeft < 10 ? 'text-primary animate-pulse' : 'text-secondary'}`}>
+              <div className={`text-sm font-mono font-black ${timeLeft < 10 ? 'text-primary animate-pulse' : 'text-blue'}`}>
                 {timeLeft}s
               </div>
             </div>
@@ -398,7 +398,7 @@ function BattleScreenContent() {
                 <h2 className="text-4xl font-display font-black text-gray-900 mb-2">BATTLE COMPLETE!</h2>
                 <p className="text-gray-500 mb-8">Waiting for final results...</p>
                 <div className="flex flex-col items-center gap-4">
-                  <Loader2 className="w-8 h-8 text-secondary animate-spin" />
+                  <Loader2 className="w-8 h-8 text-blue animate-spin" />
                   <Button 
                     onClick={() => router.push(`/battle-mode/result?battleId=${battleId}`)}
                     className="mt-4 bg-slate-100 border border-gray-200 hover:bg-slate-200 text-gray-900 px-8 py-4 rounded-2xl text-xs font-bold uppercase tracking-widest animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-5000"
@@ -456,8 +456,8 @@ function BattleScreenContent() {
                         disabled={isAnswered}
                         className={`
                           relative p-6 rounded-3xl border text-left transition-all duration-300 group
-                          ${isSelected && !isAnswered ? 'border-secondary bg-secondary/10' : 'border-gray-200  bg-white hover:bg-slate-100 hover:border-gray-300'}
-                          ${isCorrect ? 'border-secondary bg-secondary/10 shadow-[0_0_20px_rgba(0,200,83,0.2)]' : ''}
+                          ${isSelected && !isAnswered ? 'border-blue bg-blue/10' : 'border-gray-200  bg-white hover:bg-slate-100 hover:border-gray-300'}
+                          ${isCorrect ? 'border-blue bg-blue/10 shadow-[0_0_20px_rgba(0,200,83,0.2)]' : ''}
                           ${isWrong ? 'border-primary bg-primary/10' : ''}
                           ${isAnswered && !isCorrect && !isWrong ? 'opacity-40' : 'opacity-100'}
                         `}
@@ -465,8 +465,8 @@ function BattleScreenContent() {
                         <div className="flex items-center gap-4">
                           <div className={`
                             w-12 h-12 rounded-2xl flex items-center justify-center font-black transition-all
-                            ${isSelected && !isAnswered ? 'bg-secondary text-secondary-foreground' : 'bg-slate-100 text-gray-400 group-hover:bg-slate-200 group-hover:text-gray-900'}
-                            ${isCorrect ? 'bg-secondary text-secondary-foreground' : ''}
+                            ${isSelected && !isAnswered ? 'bg-blue text-white' : 'bg-slate-100 text-gray-400 group-hover:bg-slate-200 group-hover:text-gray-900'}
+                            ${isCorrect ? 'bg-blue text-white' : ''}
                             ${isWrong ? 'bg-primary text-primary-foreground' : ''}
                           `}>
                             {String.fromCharCode(65 + index)}
@@ -474,14 +474,14 @@ function BattleScreenContent() {
                           <span className={`flex-1 font-bold ${isSelected || isCorrect ? 'text-gray-900' : 'text-gray-500'}`}>
                             {opt.optionText}
                           </span>
-                          {isCorrect && <CheckCircle2 className="w-6 h-6 text-secondary" />}
+                          {isCorrect && <CheckCircle2 className="w-6 h-6 text-blue" />}
                           {isWrong && <AlertCircle className="w-6 h-6 text-primary" />}
                         </div>
                       </button>
                     );
                   }) : (
                     <div className="col-span-full py-12 flex justify-center">
-                       <Loader2 className="w-8 h-8 text-secondary animate-spin" />
+                       <Loader2 className="w-8 h-8 text-blue animate-spin" />
                     </div>
                   )}
                 </div>
@@ -498,7 +498,7 @@ function BattleScreenContent() {
                     className={`
                       px-12 py-5 rounded-2xl font-black text-lg transition-all
                       ${selectedOption === null ? 'bg-slate-100 text-gray-400 cursor-not-allowed' : 
-                        isAnswered ? 'bg-gray-800 text-gray-500' : 'bg-secondary text-secondary-foreground hover:scale-105 hover:shadow-xl hover:shadow-secondary/20'}
+                        isAnswered ? 'bg-gray-800 text-gray-500' : 'bg-blue text-white hover:scale-105 hover:shadow-xl hover:shadow-blue/20'}
                     `}
                   >
                     SUBMIT ANSWER
@@ -581,7 +581,7 @@ export default function BattleScreenPage() {
   return (
     <Suspense fallback={
       <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center">
-        <Loader2 className="w-12 h-12 text-secondary animate-spin mb-4" />
+        <Loader2 className="w-12 h-12 text-blue animate-spin mb-4" />
         <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Loading Arena...</p>
       </main>
     }>
