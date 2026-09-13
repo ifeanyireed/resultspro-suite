@@ -35,7 +35,7 @@ type Battle struct {
 type BattleQuestion struct {
 	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	BattleID   string `gorm:"primaryKey"`
-	QuestionID int    `gorm:"primaryKey"`
+	QuestionID string `gorm:"primaryKey"`
 }
 
 type BattleParticipant struct {
