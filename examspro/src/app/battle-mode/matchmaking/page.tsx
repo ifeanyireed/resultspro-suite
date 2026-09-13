@@ -105,7 +105,7 @@ function MatchmakingContent() {
     <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 relative overflow-hidden">
       {/* Dynamic Background */}
       <div className="absolute inset-0 z-0">
-        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue/10 rounded-full blur-[120px] transition-all duration-1000 ${(status === 'found' || status === 'ready') ? 'bg-blue/20 scale-125' : ''}`} />
+        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#146ef5]/10 rounded-full blur-[120px] transition-all duration-1000 ${(status === 'found' || status === 'ready') ? 'bg-[#146ef5]/20 scale-125' : ''}`} />
         <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
           <div className="h-full w-full bg-[radial-gradient(#ffffff10_1px,transparent_1px)] [background-size:40px_40px]" />
         </div>
@@ -132,18 +132,18 @@ function MatchmakingContent() {
             
             {battleIdParam && (
               <div className="mt-2 p-2 px-4 rounded-xl bg-slate-100 border border-gray-200  flex flex-col items-center animate-in fade-in slide-in-from-top-2 duration-700">
-                <div className="text-[8px] font-bold text-blue uppercase tracking-[0.2em] mb-1">Room Code</div>
+                <div className="text-[8px] font-bold text-[#146ef5] uppercase tracking-[0.2em] mb-1">Room Code</div>
                 <button 
                   onClick={copyToClipboard}
-                  className="flex items-center gap-2 group hover:text-blue transition-colors"
+                  className="flex items-center gap-2 group hover:text-[#146ef5] transition-colors"
                 >
-                  <span className="text-2xl font-display font-black tracking-[0.2em] text-gray-900 group-hover:text-blue">
+                  <span className="text-2xl font-display font-black tracking-[0.2em] text-gray-900 group-hover:text-[#146ef5]">
                     {roomDetails?.roomCode || battleIdParam.split('-')[0].toUpperCase()}
                   </span>
                   {copied ? (
-                    <Check className="w-3 h-3 text-blue" />
+                    <Check className="w-3 h-3 text-[#146ef5]" />
                   ) : (
-                    <Copy className="w-3 h-3 text-gray-500 group-hover:text-blue" />
+                    <Copy className="w-3 h-3 text-gray-500 group-hover:text-[#146ef5]" />
                   )}
                 </button>
                 <div className="text-[8px] text-gray-500 mt-1 font-medium">Share this 6-digit code with your friend</div>
@@ -156,7 +156,7 @@ function MatchmakingContent() {
               <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Your ELO</div>
               <div className="text-sm font-bold text-gray-900">{mounted ? (user?.eloRating || 1000) : '---'}</div>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-blue">
+            <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-[#146ef5]">
               <Shield className="w-5 h-5" />
             </div>
           </div>
@@ -180,11 +180,11 @@ function MatchmakingContent() {
                   <div className="relative group">
                     {/* Animated Glow for Current User */}
                     {isMe && (
-                      <div className="absolute -inset-4 bg-blue/20 rounded-[48px] blur-2xl animate-pulse" />
+                      <div className="absolute -inset-4 bg-[#146ef5]/20 rounded-[48px] blur-2xl animate-pulse" />
                     )}
                     
                     <div className={`w-28 h-28 md:w-36 md:h-36 rounded-[40px] p-1.5 flex items-center justify-center transition-all duration-700 border-4 relative z-10 overflow-hidden ${
-                      isMe ? 'bg-blue/20 border-blue rotate-3 scale-105 shadow-[0_0_40px_rgba(21,101,192,0.4)]' : 
+                      isMe ? 'bg-[#146ef5]/20 border-[#146ef5] rotate-3 scale-105 shadow-[0_0_40px_rgba(21,101,192,0.4)]' : 
                       'bg-slate-100 border-gray-200  group-hover:border-gray-300 group-hover:bg-slate-200 -rotate-3'
                     }`}>
                       <img 
@@ -196,7 +196,7 @@ function MatchmakingContent() {
 
                     {/* Status Badge */}
                     <div className={`absolute -bottom-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-2xl font-black text-[10px] border-2 border-navy shadow-xl z-20 whitespace-nowrap transition-all ${
-                      isMe ? 'bg-blue text-white scale-110' : 'bg-gray-800 text-gray-500'
+                      isMe ? 'bg-[#146ef5] text-white scale-110' : 'bg-gray-800 text-gray-500'
                     }`}>
                       {isMe ? 'YOU' : 'CONTENDER'}
                     </div>
@@ -214,7 +214,7 @@ function MatchmakingContent() {
                       {p.user?.name || p.user?.email?.split('@')[0] || "Joining..."}
                     </h2>
                     <div className="flex items-center justify-center gap-2">
-                      <div className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${isMe ? 'bg-blue/10 border-blue/30 text-blue' : 'bg-slate-100 border-gray-200  text-gray-400'}`}>
+                      <div className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${isMe ? 'bg-[#146ef5]/10 border-[#146ef5]/30 text-[#146ef5]' : 'bg-slate-100 border-gray-200  text-gray-400'}`}>
                         ELO {p.user?.eloRating || 1000}
                       </div>
                     </div>
@@ -254,13 +254,13 @@ function MatchmakingContent() {
                 <Button
                   onClick={startBattle}
                   disabled={!canStart}
-                  className={`w-full py-8 rounded-2xl font-black text-xl shadow-2xl transition-all ${canStart ? 'bg-blue text-white hover:scale-105 shadow-blue/20' : 'bg-slate-100 text-gray-400 cursor-not-allowed'}`}
+                  className={`w-full py-8 rounded-2xl font-black text-xl shadow-2xl transition-all ${canStart ? 'bg-[#146ef5] text-white hover:scale-105 shadow-[#146ef5]/20' : 'bg-slate-100 text-gray-400 cursor-not-allowed'}`}
                 >
                   {canStart ? 'START MATCH NOW' : 'WAITING FOR PLAYERS'}
                 </Button>
               ) : (
                 <div className="w-full py-6 rounded-2xl bg-slate-100 border border-gray-200  flex flex-col items-center justify-center gap-2">
-                   <div className="flex items-center gap-2 text-blue font-bold text-sm">
+                   <div className="flex items-center gap-2 text-[#146ef5] font-bold text-sm">
                       <Loader2 className="w-4 h-4 animate-spin" />
                       WAITING FOR HOST
                    </div>
@@ -297,7 +297,7 @@ export default function MatchmakingPage() {
   return (
     <Suspense fallback={
       <main className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <Loader2 className="w-12 h-12 text-blue animate-spin" />
+        <Loader2 className="w-12 h-12 text-[#146ef5] animate-spin" />
       </main>
     }>
       <MatchmakingContent />

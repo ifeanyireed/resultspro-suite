@@ -117,7 +117,7 @@ function BattleResultContent() {
   if (loading || !finalResult || !myStats) {
     return (
        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center gap-4">
-        <Loader2 className="w-12 h-12 text-blue animate-spin" />
+        <Loader2 className="w-12 h-12 text-[#146ef5] animate-spin" />
         <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Tallying Final Scores...</p>
       </div>
     );
@@ -132,7 +132,7 @@ function BattleResultContent() {
     <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 relative overflow-hidden">
       {/* Dynamic Background */}
       <div className="absolute inset-0 z-0">
-        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] ${isWinner ? 'bg-blue/10' : 'bg-primary/10'} rounded-full blur-[120px] animate-pulse`} />
+        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] ${isWinner ? 'bg-[#146ef5]/10' : 'bg-primary/10'} rounded-full blur-[120px] animate-pulse`} />
       </div>
 
       <div className="relative z-10 w-full max-w-2xl text-center">
@@ -140,7 +140,7 @@ function BattleResultContent() {
         <div className="mb-12 animate-in zoom-in duration-500">
           <div className={`
             w-24 h-24 rounded-[32px] mx-auto mb-6 flex items-center justify-center transition-all duration-1000
-            ${isWinner ? 'bg-blue text-white rotate-12 shadow-[0_0_50px_rgba(0,200,83,0.5)]' : 'bg-primary text-primary-foreground -rotate-12 shadow-[0_0_50px_rgba(239,68,68,0.5)]'}
+            ${isWinner ? 'bg-[#146ef5] text-white rotate-12 shadow-[0_0_50px_rgba(0,200,83,0.5)]' : 'bg-primary text-primary-foreground -rotate-12 shadow-[0_0_50px_rgba(239,68,68,0.5)]'}
           `}>
             {isWinner ? <Trophy className="w-12 h-12" /> : <XCircle className="w-12 h-12" />}
           </div>
@@ -155,7 +155,7 @@ function BattleResultContent() {
         {/* Players Comparison */}
         <div className="flex items-center justify-center gap-4 mb-12">
           <div className="flex flex-col items-center gap-3">
-            <div className={`p-1 rounded-2xl border-2 flex items-center justify-center text-2xl font-bold w-16 h-16 ${isWinner ? 'border-blue bg-blue/10 text-blue' : 'border-gray-200  bg-slate-100'}`}>
+            <div className={`p-1 rounded-2xl border-2 flex items-center justify-center text-2xl font-bold w-16 h-16 ${isWinner ? 'border-[#146ef5] bg-[#146ef5]/10 text-[#146ef5]' : 'border-gray-200  bg-slate-100'}`}>
               {(myStats.user?.name || user?.name || user?.email)?.[0]?.toUpperCase()}
             </div>
             <div className="text-[8px] text-gray-500 font-bold uppercase">Points: {myStats.score || 0}</div>
@@ -176,7 +176,7 @@ function BattleResultContent() {
 
         {/* Rewards Card */}
         <div className="p-8 rounded-[40px] bg-white border border-gray-200  backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] mb-12 relative overflow-hidden group">
-          <div className="absolute inset-0 bg-blue/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute inset-0 bg-[#146ef5]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="grid grid-cols-2 gap-8 divide-x divide-white/5">
             <div>
               <div className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-3">Result</div>
@@ -187,7 +187,7 @@ function BattleResultContent() {
             </div>
             <div>
               <div className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-3">ELO Rating</div>
-              <div className={`flex items-center justify-center gap-2 text-3xl font-display font-black ${isWinner ? 'text-blue' : 'text-primary'}`}>
+              <div className={`flex items-center justify-center gap-2 text-3xl font-display font-black ${isWinner ? 'text-[#146ef5]' : 'text-primary'}`}>
                 <Zap className="w-6 h-6 fill-current" />
                 {isWinner ? `+${eloChange}` : eloChange}
               </div>
@@ -198,13 +198,13 @@ function BattleResultContent() {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/battle-mode">
-             <Button className="w-full sm:w-auto py-7 px-10 rounded-2xl bg-blue text-white hover:bg-blue/90 font-bold text-lg flex items-center gap-2 group shadow-xl shadow-blue/10">
+             <Button className="w-full sm:w-auto py-7 px-10 rounded-2xl bg-[#146ef5] text-white hover:bg-[#146ef5]/90 font-bold text-lg flex items-center gap-2 group shadow-xl shadow-[#146ef5]/10">
                <RefreshCcw className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
                Play Again
              </Button>
           </Link>
           <Link href="/dashboard">
-            <Button variant="outline" className="w-full sm:w-auto py-7 px-10 rounded-2xl border-gray-200  text-gray-900 hover:bg-slate-100 font-bold text-lg flex items-center gap-2">
+            <Button className="w-full sm:w-auto py-7 px-10 rounded-2xl bg-gray-900 text-white hover:bg-gray-800 font-bold text-lg flex items-center gap-2 shadow-xl">
               <Home className="w-5 h-5" />
               Home
             </Button>
@@ -219,7 +219,7 @@ export default function BattleResultPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center">
-        <Loader2 className="w-12 h-12 text-blue animate-spin mb-4" />
+        <Loader2 className="w-12 h-12 text-[#146ef5] animate-spin mb-4" />
         <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Loading Results...</p>
       </div>
     }>

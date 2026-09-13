@@ -93,7 +93,7 @@ export default function TournamentPage() {
 
       {/* Hero Section */}
       <div className="relative overflow-hidden border-b border-white/5 bg-white">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber/10 via-transparent to-blue/10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-amber/10 via-transparent to-[#146ef5]/10 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24 relative z-10">
           <Link href="/battle-mode" className="inline-flex items-center text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors mb-8 group">
             <ChevronLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
@@ -124,7 +124,7 @@ export default function TournamentPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-blue border border-gray-200 ">
+                  <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-[#146ef5] border border-gray-200 ">
                     <Users className="w-6 h-6" />
                   </div>
                   <div>
@@ -135,7 +135,7 @@ export default function TournamentPage() {
               </div>
 
               {isRegistered ? (
-                <div className="inline-flex items-center gap-4 px-8 py-5 rounded-3xl bg-blue/10 border border-blue/20 text-blue font-black text-lg">
+                <div className="inline-flex items-center gap-4 px-8 py-5 rounded-3xl bg-[#146ef5]/10 border border-[#146ef5]/20 text-[#146ef5] font-black text-lg">
                   <CheckCircle2 className="w-6 h-6" />
                   YOU ARE REGISTERED
                 </div>
@@ -199,7 +199,7 @@ export default function TournamentPage() {
             </div>
             <div className="p-4 rounded-2xl bg-white border border-gray-200  text-center min-w-[120px]">
               <div className="text-[10px] text-gray-400 font-bold uppercase mb-1">Status</div>
-              <div className="text-xl text-blue font-black uppercase">{tournament.status}</div>
+              <div className="text-xl text-[#146ef5] font-black uppercase">{tournament.status}</div>
             </div>
           </div>
         </div>
