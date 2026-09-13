@@ -38,7 +38,26 @@ export default function LoginForm({ tenant }: { tenant: any }) {
       const token = res.data.access_token || res.data.token;
       if (token) {
         setAuth(res.data.user, token);
-        router.push('/dashboard');
+        
+        try {
+          const base64Url = token.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join(''));
+          const payload = JSON.parse(jsonPayload);
+          const roles = payload.roles || [];
+          
+          if (roles.includes('tenant-admin') || roles.includes('superadmin') || roles.includes('platform-admin')) {
+            router.push('/admin');
+          } else if (roles.includes('mentor')) {
+            router.push('/mentor');
+          } else {
+            router.push('/dashboard');
+          }
+        } catch (e) {
+          router.push('/dashboard');
+        }
       }
     } catch (err: any) {
       console.error("Login failed", err);
