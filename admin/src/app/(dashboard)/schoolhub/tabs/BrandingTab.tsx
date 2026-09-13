@@ -34,7 +34,7 @@ export default function BrandingTab() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 max-w-[1400px] mx-auto w-full">
+    <div className="flex flex-col lg:flex-row gap-6 w-full">
       
       {/* Configuration Form */}
       <div className="w-full lg:w-1/2 space-y-6">

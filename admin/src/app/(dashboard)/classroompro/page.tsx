@@ -51,7 +51,7 @@ export default function ClassroomProAdminPage() {
         </div>
       </div>
 
-      <div className="p-8 max-w-[1400px] mx-auto w-full">
+      <div className="p-8 w-full">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'notes' && <NotesTab />}
         {activeTab === 'quizzes' && <QuizzesTab />}

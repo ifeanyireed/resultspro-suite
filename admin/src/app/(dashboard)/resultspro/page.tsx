@@ -51,7 +51,7 @@ export default function ResultProCommandCenter() {
         </div>
       </div>
 
-      <div className="p-8 max-w-[1400px] mx-auto w-full">
+      <div className="p-8 w-full">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'scratch-cards' && <ScratchCardsTab />}
       </div>

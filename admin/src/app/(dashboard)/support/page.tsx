@@ -27,7 +27,7 @@ export default function SupportPage() {
         subtitle="Manage and resolve incoming support tickets from schools and agents"
       />
 
-      <div className="p-8 space-y-6 max-w-[1400px] mx-auto w-full">
+      <div className="p-8 space-y-6 w-full">
         {/* Header Overview */}
         <div className="flex items-center justify-between bg-blue-50/50 p-6 rounded-2xl border border-blue-100/50 shadow-sm">
           <div>

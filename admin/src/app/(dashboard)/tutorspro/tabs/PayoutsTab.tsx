@@ -22,7 +22,7 @@ export default function PayoutsTab() {
   }, []);
 
   return (
-    <div className="space-y-8 max-w-[1400px] mx-auto w-full">
+    <div className="space-y-8 w-full">
       <div className="flex justify-between items-center">
         <div className="relative w-full md:w-96 group">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">

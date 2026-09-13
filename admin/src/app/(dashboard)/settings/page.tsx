@@ -57,7 +57,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <div className="p-8 max-w-[1400px] mx-auto w-full">
+      <div className="p-8 w-full">
         {activeTab === 'global' && <GlobalConfigTab />}
         {activeTab === 'referrals' && <ReferralsTab />}
       </div>

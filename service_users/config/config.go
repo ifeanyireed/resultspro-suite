@@ -22,7 +22,7 @@ var (
 func InitConfig() {
 	Port = os.Getenv("PORT")
 	if Port == "" {
-		Port = "7000"
+		Port = "7005"
 	}
 
 	DatabaseURL = os.Getenv("DATABASE_URL")

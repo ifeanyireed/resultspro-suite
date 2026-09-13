@@ -177,28 +177,28 @@ func main() {
 	mux.HandleFunc("/api/public/tenant/resolve", handlers.HandleResolveTenant)
 
 	// Admin Global Telemetry
-	mux.HandleFunc("/api/v1/admin/stats", handlers.HandleGetSuiteStats)
-	mux.HandleFunc("/api/v1/admin/payouts", handlers.HandleGetAdminPayouts)
-	mux.HandleFunc("/api/v1/admin/plans", handlers.HandleListPlans)
-	mux.HandleFunc("/api/v1/admin/invoices", handlers.HandleListInvoices)
-	mux.HandleFunc("/api/v1/admin/agents", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/v1/admin/stats", middleware.RequireRole("super-admin", "platform-admin")(handlers.HandleGetSuiteStats))
+	mux.HandleFunc("/api/v1/admin/payouts", middleware.RequireRole("super-admin", "platform-admin")(handlers.HandleGetAdminPayouts))
+	mux.HandleFunc("/api/v1/admin/plans", middleware.RequireRole("super-admin", "platform-admin")(handlers.HandleListPlans))
+	mux.HandleFunc("/api/v1/admin/invoices", middleware.RequireRole("super-admin", "platform-admin")(handlers.HandleListInvoices))
+	mux.HandleFunc("/api/v1/admin/agents", middleware.RequireRole("super-admin", "platform-admin")(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			handlers.HandleCreateAgent(w, r)
 		} else {
 			handlers.HandleListAgents(w, r)
 		}
-	})
-	mux.HandleFunc("/api/v1/admin/agents/referrals", handlers.HandleListReferrals)
-	mux.HandleFunc("/api/v1/admin/agents/assignments", handlers.HandleListAssignments)
+	}))
+	mux.HandleFunc("/api/v1/admin/agents/referrals", middleware.RequireRole("super-admin", "platform-admin")(handlers.HandleListReferrals))
+	mux.HandleFunc("/api/v1/admin/agents/assignments", middleware.RequireRole("super-admin", "platform-admin")(handlers.HandleListAssignments))
 
-	mux.HandleFunc("/api/v1/tenants", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/v1/tenants", middleware.RequireRole("super-admin", "platform-admin")(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			handlers.HandleCreateTenant(w, r)
 		} else {
 			handlers.HandleListTenants(w, r)
 		}
-	})
-	mux.HandleFunc("/api/v1/tenants/", func(w http.ResponseWriter, r *http.Request) {
+	}))
+	mux.HandleFunc("/api/v1/tenants/", middleware.RequireRole("super-admin", "platform-admin", "tenant-admin")(func(w http.ResponseWriter, r *http.Request) {
 		parts := strings.Split(r.URL.Path, "/")
 		if len(parts) >= 5 {
 			action := parts[4]
@@ -245,7 +245,7 @@ func main() {
 			return
 		}
 		handlers.HandleGetTenant(w, r)
-	})
+	}))
 
 	// --- 4. Family Relationships & Relation Verification ---
 	mux.HandleFunc("/intelligence/verify-relation", handlers.HandleVerifyRelation)

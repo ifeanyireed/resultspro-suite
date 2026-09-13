@@ -50,7 +50,7 @@ export default function SchoolHubPage() {
         </div>
       </div>
 
-      <div className="p-8 max-w-[1400px] mx-auto w-full">
+      <div className="p-8 w-full">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'tenants' && <TenantsListTab />}
         {activeTab === 'verifications' && <VerificationsTab />}
