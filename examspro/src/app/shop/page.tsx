@@ -1,5 +1,5 @@
-import Cookies from 'js-cookie';
 "use client";
+import Cookies from 'js-cookie';
 
 import { useState, useEffect, useMemo } from 'react';
 import Navbar from '@/components/Navbar';
