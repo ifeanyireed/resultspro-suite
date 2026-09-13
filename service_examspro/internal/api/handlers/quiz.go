@@ -68,7 +68,7 @@ func (h *QuizHandler) GetQuestionsByTopic(c *gin.Context) {
 		query = query.Where("type = ?", qType)
 	}
 
-	if err := query.Order("RAND()").Limit(limit).Find(&questions).Error; err != nil {
+	if err := query.Order("RANDOM()").Limit(limit).Find(&questions).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch questions"})
 		return
 	}

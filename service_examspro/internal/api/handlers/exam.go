@@ -439,7 +439,7 @@ func (h *ExamHandler) GetQuestionsBySubject(c *gin.Context) {
 	}
 
 	var questions []models.Question
-	if err := query.Select("nat_exams_questions.*").Order("RAND()").Limit(limit).Find(&questions).Error; err != nil {
+	if err := query.Select("nat_exams_questions.*").Order("RANDOM()").Limit(limit).Find(&questions).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch questions"})
 		return
 	}

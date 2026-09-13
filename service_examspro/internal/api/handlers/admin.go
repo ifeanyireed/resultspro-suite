@@ -1152,7 +1152,7 @@ func (h *AdminHandler) GetOverview(c *gin.Context) {
 	// 1. Get Recent Answer Activity
 	var answers []ActivityResult
 	database.DB.Table("nat_exams_user_answers").
-		Select("users.name as user, 'Answered Question' as action, nat_exams_user_answers.answered_at as time, CASE WHEN is_correct = 1 THEN 'Correct' ELSE 'Wrong' END as status, 'https://ui-avatars.com/api/?name=' || users.name as img").
+		Select("users.name as user, 'Answered Question' as action, nat_exams_user_answers.answered_at as time, CASE WHEN is_correct = true THEN 'Correct' ELSE 'Wrong' END as status, 'https://ui-avatars.com/api/?name=' || users.name as img").
 		Joins("JOIN users ON nat_exams_user_answers.user_id = users.id").
 		Order("nat_exams_user_answers.answered_at desc").
 		Limit(5).
@@ -1610,7 +1610,7 @@ func (h *AdminHandler) GetAnalyticsStats(c *gin.Context) {
 	}
 	var dailyData []DailyEngagement
 	database.DB.Table("nat_exams_user_answers").
-		Select("DATE(answered_at) as date_str, COUNT(*) as total, SUM(CASE WHEN is_correct = 1 THEN 1 ELSE 0 END) as correct").
+		Select("DATE(answered_at) as date_str, COUNT(*) as total, SUM(CASE WHEN is_correct = true THEN 1 ELSE 0 END) as correct").
 		Where("answered_at >= ?", startOfWeek).
 		Group("DATE(answered_at)").
 		Order("date_str ASC").
