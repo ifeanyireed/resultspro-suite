@@ -234,11 +234,11 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 	// 1. Fetch Subjects the user has actually practiced
 	var practicedSubjectIDs []int
 	database.DB.Model(&models.UserAnswer{}).
-		Joins("JOIN questions ON questions.id = user_answers.question_id").
-		Joins("JOIN topics ON topics.id = questions.topic_id").
-		Where("user_answers.user_id = ?", userID).
-		Distinct("topics.subject_id").
-		Pluck("topics.subject_id", &practicedSubjectIDs)
+		Joins("JOIN nat_exams_questions nq ON nq.id = nat_exams_user_answers.question_id").
+		Joins("JOIN nat_exams_topics nt ON nt.id = nq.topic_id").
+		Where("nat_exams_user_answers.user_id = ?", userID).
+		Distinct("nt.subject_id").
+		Pluck("nt.subject_id", &practicedSubjectIDs)
 
 	var subjectStats []gin.H
 	var practicedExamsMap = make(map[int]bool)
@@ -252,15 +252,15 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 			
 			var totalQuestions int64
 			database.DB.Model(&models.Question{}).
-				Joins("JOIN topics ON topics.id = questions.topic_id").
-				Where("topics.subject_id = ?", sub.ID).
+				Joins("JOIN nat_exams_topics nt ON nt.id = nat_exams_questions.topic_id").
+				Where("nt.subject_id = ?", sub.ID).
 				Count(&totalQuestions)
 
 			var correctAnswers int64
 			database.DB.Model(&models.UserAnswer{}).
-				Joins("JOIN questions ON questions.id = user_answers.question_id").
-				Joins("JOIN topics ON topics.id = questions.topic_id").
-				Where("user_answers.user_id = ? AND topics.subject_id = ? AND user_answers.is_correct = ?", userID, sub.ID, true).
+				Joins("JOIN nat_exams_questions nq ON nq.id = nat_exams_user_answers.question_id").
+				Joins("JOIN nat_exams_topics nt ON nt.id = nq.topic_id").
+				Where("nat_exams_user_answers.user_id = ? AND nt.subject_id = ? AND nat_exams_user_answers.is_correct = ?", userID, sub.ID, true).
 				Count(&correctAnswers)
 
 			progress := 0
@@ -303,18 +303,18 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 			// Calculate Total Questions in Exam
 			var exTotalQuestions int64
 			database.DB.Model(&models.Question{}).
-				Joins("JOIN topics ON topics.id = questions.topic_id").
-				Joins("JOIN subjects ON subjects.id = topics.subject_id").
-				Where("subjects.exam_id = ?", ex.ID).
+				Joins("JOIN nat_exams_topics nt ON nt.id = nat_exams_questions.topic_id").
+				Joins("JOIN nat_exams_subjects ns ON ns.id = nt.subject_id").
+				Where("ns.exam_id = ?", ex.ID).
 				Count(&exTotalQuestions)
 
 			// Calculate Total Correct Answers in Exam
 			var exCorrectAnswers int64
 			database.DB.Model(&models.UserAnswer{}).
-				Joins("JOIN questions ON questions.id = user_answers.question_id").
-				Joins("JOIN topics ON topics.id = questions.topic_id").
-				Joins("JOIN subjects ON subjects.id = topics.subject_id").
-				Where("user_answers.user_id = ? AND subjects.exam_id = ? AND user_answers.is_correct = ?", userID, ex.ID, true).
+				Joins("JOIN nat_exams_questions nq ON nq.id = nat_exams_user_answers.question_id").
+				Joins("JOIN nat_exams_topics nt ON nt.id = nq.topic_id").
+				Joins("JOIN nat_exams_subjects ns ON ns.id = nt.subject_id").
+				Where("nat_exams_user_answers.user_id = ? AND ns.exam_id = ? AND nat_exams_user_answers.is_correct = ?", userID, ex.ID, true).
 				Count(&exCorrectAnswers)
 
 			readiness := 0
