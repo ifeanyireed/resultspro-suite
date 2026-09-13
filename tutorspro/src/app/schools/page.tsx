@@ -64,99 +64,94 @@ export default function SchoolsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-light flex items-center justify-center">
-         <Loader2 className="w-12 h-12 text-purple animate-spin" />
+         <Loader2 className="w-12 h-12 text-navy animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-light flex flex-col" style={{ background: 'var(--color-nets-light)' }}>
+    <main className="min-h-screen bg-light" style={{ background: 'var(--color-nets-light)' }}>
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 px-6 overflow-hidden bg-navy text-white" style={{ background: 'var(--color-nets-navy-dark)' }}>
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[120px] -z-10 translate-x-1/2 -translate-y-1/2" />
-        
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
-          <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] font-black text-purple-400 uppercase tracking-[0.2em] backdrop-blur-sm">
-              <Zap className="w-3 h-3 fill-current" />
-              Enterprise SaaS
+      <section className="bg-navy text-white" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '6rem' }}>
+        <div className="container-nets">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="max-w-3xl">
+              <div className="overline-dark" style={{ marginBottom: '1.5rem' }}>Enterprise SaaS</div>
+              <h1 className="fw-300" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
+                Scale Your School <br />with <span style={{ fontWeight: 700, color: 'var(--primary)' }}>TutorsPro.</span>
+              </h1>
+              <p className="text-body-lg text-white/70 mb-10">
+                Empower your teachers and students with a unified tutoring ecosystem. Manage everything from onboarding to analytics in one secure place.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                 <Link href="/contact" className="btn btn-red" style={{ padding: '1rem 2rem', fontSize: '1rem', background: 'var(--primary)', borderColor: 'var(--primary)' }}>
+                    Book a Demo
+                 </Link>
+                 <Link href="/signup" className="btn btn-outline-white" style={{ padding: '1rem 2rem', fontSize: '1rem' }}>
+                    Start Free Trial
+                 </Link>
+              </div>
             </div>
-            <h1 className="text-5xl md:text-7xl font-display font-black text-white leading-tight">
-              Scale Your School with <br />
-              <span className="text-purple-400">TutorsPro SaaS</span>
-            </h1>
-            <p className="text-xl text-white/70 leading-relaxed">
-              Empower your teachers and students with a unified tutoring ecosystem. Manage everything from onboarding to analytics in one secure place.
-            </p>
-            <div className="flex flex-wrap gap-4 pt-4">
-               <Link href="/contact" className="px-8 py-4 rounded-2xl bg-purple-600 text-white font-black hover:bg-purple-700 transition-all shadow-[0_0_20px_rgba(147,51,234,0.3)]">
-                  BOOK A DEMO
-               </Link>
-               <Link href="/signup" className="px-8 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-black hover:bg-white/10 transition-all">
-                  START FREE TRIAL
-               </Link>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-2 gap-4">
-             {features.map((feature, i) => {
-               const Icon = getIcon(feature.icon);
-               return (
-                 <div key={i} className="p-6 md:p-8 rounded-[32px] bg-white border border-nets-border shadow-sm hover:shadow-md transition-all group">
-                    <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                       <Icon className="w-6 h-6" />
-                    </div>
-                    <h3 className="text-lg font-bold text-navy mb-2">{feature.title}</h3>
-                    <p className="text-xs text-gray-600 leading-relaxed">{feature.desc}</p>
-                 </div>
-               );
-             })}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+               {features.map((feature, i) => {
+                 const Icon = getIcon(feature.icon);
+                 return (
+                   <div key={i} className="p-6 bg-white/5 border border-white/10 rounded-sm hover:bg-white/10 transition-colors">
+                      <div className="mb-4 text-white">
+                         <Icon size={32} />
+                      </div>
+                      <h3 className="text-lg fw-600 text-white mb-2">{feature.title}</h3>
+                      <p className="text-sm text-white/60 leading-relaxed">{feature.desc}</p>
+                   </div>
+                 );
+               })}
+            </div>
           </div>
         </div>
       </section>
 
-      <main className="flex-1 pb-32 bg-light">
-        {/* Pricing Section */}
-        <section className="py-24 px-6 bg-white border-y border-nets-border">
-           <div className="max-w-[1200px] mx-auto text-center">
-              <h2 className="text-3xl md:text-5xl font-display font-black text-navy mb-16">School Multi-Tenant Pricing</h2>
+      {/* Pricing Section */}
+      <section className="section-py bg-white border-b border-nets-border">
+        <div className="container-nets text-center">
+           <div className="overline" style={{ marginBottom: '1rem' }}>Clear Pricing</div>
+           <h2 className="text-d4 fw-400 mb-16 text-navy">School Multi-Tenant <span style={{ fontWeight: 700 }}>Pricing</span></h2>
+           
+           <div className="max-w-4xl mx-auto p-12 rounded-sm bg-light border border-nets-border text-left relative overflow-hidden shadow-sm">
+              <div className="absolute top-0 right-0 p-12 opacity-5 -rotate-12 translate-x-12 -translate-y-12">
+                 <Layout size={240} className="text-navy" />
+              </div>
               
-              <div className="max-w-4xl mx-auto p-12 rounded-[48px] bg-light border border-nets-border shadow-sm text-left relative overflow-hidden">
-                 <div className="absolute top-0 right-0 p-12 opacity-5 -rotate-12 translate-x-12 -translate-y-12">
-                    <Layout className="w-64 h-64 text-purple-600" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
+                 <div>
+                    <h3 className="text-2xl fw-700 text-navy mb-4">{pricing?.name}</h3>
+                    <div className="flex items-baseline gap-2 mb-6">
+                       <span className="text-5xl fw-700 text-navy">{pricing?.price}</span>
+                       <span className="text-muted fw-600">{pricing?.period}</span>
+                    </div>
+                    <p className="text-muted text-sm leading-relaxed mb-8">
+                      {pricing?.desc}
+                    </p>
+                    <Link href="/school/signup" className="btn btn-red" style={{ background: 'var(--primary)', borderColor: 'var(--primary)' }}>
+                       Get Started Now <ArrowRight size={16} className="inline-block ml-2" />
+                    </Link>
                  </div>
-                 
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
-                    <div>
-                       <h3 className="text-2xl font-display font-black text-navy mb-4">{pricing?.name}</h3>
-                       <div className="flex items-baseline gap-2 mb-6">
-                          <span className="text-5xl font-display font-black text-navy">{pricing?.price}</span>
-                          <span className="text-gray-500 font-bold">{pricing?.period}</span>
-                       </div>
-                       <p className="text-gray-600 text-sm leading-relaxed mb-8">
-                         {pricing?.desc}
-                       </p>
-                       <Link href="/school/signup" className="inline-flex items-center gap-2 text-purple-600 font-black uppercase tracking-widest hover:gap-4 transition-all">
-                          Get Started Now <ArrowRight className="w-5 h-5" />
-                       </Link>
-                    </div>
-                    <div className="space-y-4">
-                       {pricing?.features.map((item: string, i: number) => (
-                         <div key={i} className="flex items-center gap-3 text-sm text-gray-700">
-                            <Check className="w-4 h-4 text-purple-600" />
-                            {item}
-                         </div>
-                       ))}
-                    </div>
+                 <div className="space-y-4">
+                    {pricing?.features.map((item: string, i: number) => (
+                      <div key={i} className="flex items-center gap-3 text-sm text-navy fw-500">
+                         <Check size={16} style={{ color: 'var(--primary)' }} />
+                         {item}
+                      </div>
+                    ))}
                  </div>
               </div>
            </div>
-        </section>
-      </main>
+        </div>
+      </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }

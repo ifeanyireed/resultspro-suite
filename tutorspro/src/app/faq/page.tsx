@@ -38,7 +38,7 @@ export default function FAQPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-light flex items-center justify-center">
-         <Loader2 className="w-12 h-12 text-blue-600 animate-spin" />
+         <Loader2 className="w-12 h-12 text-navy animate-spin" />
       </div>
     );
   }
@@ -50,51 +50,50 @@ export default function FAQPage() {
   );
 
   return (
-    <div className="min-h-screen bg-light flex flex-col" style={{ background: 'var(--color-nets-light)' }}>
+    <main className="min-h-screen bg-light" style={{ background: 'var(--color-nets-light)' }}>
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 px-6 text-center bg-navy text-white" style={{ background: 'var(--color-nets-navy-dark)' }}>
-         <div className="max-w-3xl mx-auto space-y-6 relative z-10">
-           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] backdrop-blur-sm">
-              <HelpCircle className="w-3 h-3" />
-              Help Center
-           </div>
-           <h1 className="text-5xl md:text-6xl font-display font-black text-white">
-             Frequently Asked <span className="text-blue-400">Questions</span>
-           </h1>
-           <p className="text-white/70 text-lg">
-             Everything you need to know about the TutorsPro platform.
-           </p>
-           
-           <div className="relative max-w-xl mx-auto pt-8">
-              <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-              <input 
-                type="text" 
-                placeholder="Search for an answer..."
-                className="w-full bg-light border border-nets-border rounded-2xl py-4 pl-14 pr-6 text-navy focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all placeholder:text-gray-400"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-           </div>
-         </div>
+      <section className="bg-navy text-white text-center" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '6rem' }}>
+        <div className="container-nets">
+          <div className="max-w-3xl mx-auto">
+            <div className="overline-dark" style={{ marginBottom: '1.5rem' }}>Help Center</div>
+            <h1 className="fw-300" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
+              Frequently Asked <br /><span style={{ fontWeight: 700, color: 'var(--primary)' }}>Questions.</span>
+            </h1>
+            <p className="text-body-lg text-white/70">
+              Everything you need to know about the TutorsPro platform.
+            </p>
+            
+            <div className="relative max-w-xl mx-auto pt-8">
+               <Search className="absolute left-6 top-[65%] -translate-y-1/2 w-5 h-5 text-navy" />
+               <input 
+                 type="text" 
+                 placeholder="Search for an answer..."
+                 className="w-full bg-white border-none rounded-sm py-4 pl-14 pr-6 text-navy focus:outline-none placeholder:text-muted"
+                 value={searchTerm}
+                 onChange={(e) => setSearchTerm(e.target.value)}
+               />
+            </div>
+          </div>
+        </div>
       </section>
 
-      <main className="flex-1 py-16 bg-light">
-        <div className="max-w-3xl mx-auto px-6 space-y-12">
+      <section className="section-py bg-white border-b border-nets-border">
+        <div className="container-nets max-w-3xl mx-auto">
           {searchTerm ? (
              <div className="space-y-4">
                {filteredFaqs.map((faq, i) => (
-                 <div key={i} className="rounded-2xl bg-white border border-nets-border shadow-sm overflow-hidden">
+                 <div key={i} className="rounded-sm bg-light border border-nets-border overflow-hidden">
                    <button 
                      onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                     className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+                     className="w-full flex items-center justify-between p-6 text-left hover:bg-white transition-colors"
                    >
-                     <span className="font-bold text-navy pr-8">{faq.q}</span>
-                     {openIndex === i ? <Minus className="w-5 h-5 text-blue-600 shrink-0" /> : <Plus className="w-5 h-5 text-gray-400 shrink-0" />}
+                     <span className="fw-600 text-navy pr-8">{faq.q}</span>
+                     {openIndex === i ? <Minus size={20} style={{ color: 'var(--primary)' }} /> : <Plus size={20} className="text-muted" />}
                    </button>
                    {openIndex === i && (
-                     <div className="px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-nets-border pt-4">
+                     <div className="px-6 pb-6 text-muted text-sm leading-relaxed border-t border-nets-border pt-4 bg-white">
                        {faq.a}
                      </div>
                    )}
@@ -103,25 +102,24 @@ export default function FAQPage() {
              </div>
           ) : (
             faqs.map((cat, catIdx) => (
-              <div key={catIdx} className="space-y-6">
-                <h2 className="text-xl font-display font-black text-navy flex items-center gap-3">
-                  <div className="w-2 h-8 bg-blue-600 rounded-full" />
+              <div key={catIdx} className="mb-12">
+                <h2 className="text-2xl fw-700 text-navy mb-6 flex items-center gap-3">
                   {cat.category}
                 </h2>
                 <div className="space-y-4">
                   {cat.questions.map((faq: any, i: number) => {
                     const globalIdx = catIdx * 100 + i;
                     return (
-                      <div key={i} className="rounded-2xl bg-white border border-nets-border shadow-sm overflow-hidden">
+                      <div key={i} className="rounded-sm bg-white border border-nets-border overflow-hidden shadow-sm">
                         <button 
                           onClick={() => setOpenIndex(openIndex === globalIdx ? null : globalIdx)}
-                          className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+                          className="w-full flex items-center justify-between p-6 text-left hover:bg-light transition-colors"
                         >
-                          <span className="font-bold text-navy pr-8">{faq.q}</span>
-                          {openIndex === globalIdx ? <Minus className="w-5 h-5 text-blue-600 shrink-0" /> : <Plus className="w-5 h-5 text-gray-400 shrink-0" />}
+                          <span className="fw-600 text-navy pr-8">{faq.q}</span>
+                          {openIndex === globalIdx ? <Minus size={20} style={{ color: 'var(--primary)' }} /> : <Plus size={20} className="text-muted" />}
                         </button>
                         {openIndex === globalIdx && (
-                          <div className="px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-nets-border pt-4">
+                          <div className="px-6 pb-6 text-muted text-sm leading-relaxed border-t border-nets-border pt-4">
                             {faq.a}
                           </div>
                         )}
@@ -133,9 +131,9 @@ export default function FAQPage() {
             ))
           )}
         </div>
-      </main>
+      </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }
