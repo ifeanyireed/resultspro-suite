@@ -16,7 +16,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "ResultsPro Online Tutors - Empowering Learners Globally",
+  title: "TutorsPro - Empowering Learners Globally",
   description: "Advanced online tutoring platform for students, parents, tutors, and schools. One-to-one teaching, live classes, and progress tracking.",
   icons: {
     icon: "/logo.png",
