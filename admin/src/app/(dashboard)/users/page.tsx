@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Header } from '@/components/Header';
 import { Badge } from '@/components/Badge';
 import { Users, Search, Filter, ShieldAlert, UserCheck, KeyRound } from 'lucide-react';
-import { fetchUsers, updateUserStatus } from '@/lib/api';
+import { fetchUsers, updateUserStatus, deleteUser } from '@/lib/api';
 import { User } from '@/lib/types';
 
 export default function UsersPage() {
@@ -22,6 +22,16 @@ export default function UsersPage() {
     }
     loadUsers();
   }, []);
+
+  const handleDeleteUser = async (user: User) => {
+    if (!confirm(`Are you sure you want to delete ${user.full_name || user.name || 'this user'}?`)) return;
+    const success = await deleteUser(user.id);
+    if (success) {
+      setUsers((prev) => prev.filter((u) => u.id !== user.id));
+    } else {
+      alert("Failed to delete user");
+    }
+  };
 
   const handleToggleStatus = async (user: User) => {
     const nextStatus = user.account_status === 'active' ? 'suspended' : 'active';
@@ -118,6 +128,12 @@ export default function UsersPage() {
                         }`}
                       >
                         {user.account_status === 'active' ? 'Suspend' : 'Activate'}
+                      </button>
+                      <button
+                        onClick={() => handleDeleteUser(user)}
+                        className="px-2.5 py-1 rounded font-semibold text-[11px] transition-colors bg-red-50 text-red-700 border border-red-200 hover:bg-red-100"
+                      >
+                        Delete
                       </button>
                     </td>
                   </tr>

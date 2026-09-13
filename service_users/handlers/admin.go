@@ -583,3 +583,33 @@ func HandleCreateAgent(w http.ResponseWriter, r *http.Request) {
 		"id": userId,
 	})
 }
+
+// HandleDeleteUser deletes a user entirely from the system
+func HandleDeleteUser(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodDelete {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	parts := strings.Split(r.URL.Path, "/")
+	if len(parts) < 4 {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid URL")
+		return
+	}
+	// /api/v1/users/{userId} -> parts = ["", "api", "v1", "users", "{userId}"]
+	// Wait, /api/v1/users/user_id means parts length is 5
+	if len(parts) < 5 {
+		utils.JSONError(w, http.StatusBadRequest, "User ID missing")
+		return
+	}
+	userId := parts[4]
+
+	// Neon Postgres uses $1
+	_, err := db.DB.Exec("DELETE FROM users WHERE id = $1", userId)
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to delete user")
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "User deleted successfully"})
+}

@@ -121,6 +121,10 @@ func main() {
 	mux.HandleFunc("/user/profiles", handlers.HandleGetBulkProfiles)
 	mux.HandleFunc("/api/v1/users", handlers.HandleListAllUsers)
 	mux.HandleFunc("/api/v1/users/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodDelete {
+			handlers.HandleDeleteUser(w, r)
+			return
+		}
 		if strings.HasSuffix(r.URL.Path, "/profile") {
 			handlers.HandleGetProfile(w, r)
 		} else if strings.HasSuffix(r.URL.Path, "/status") {

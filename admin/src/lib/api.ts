@@ -703,3 +703,15 @@ export async function updateTenant(tenantId: string, payload: any): Promise<bool
     return false;
   }
 }
+
+export async function deleteUser(userId: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/users/${userId}`, {
+      method: 'DELETE',
+      headers: getAuthHeader(),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
