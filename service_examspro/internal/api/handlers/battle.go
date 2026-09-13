@@ -237,7 +237,7 @@ func (h *BattleHandler) CreateBotBattle(c *gin.Context) {
 	})
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create bot battle"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create bot battle", "details": err.Error()})
 		return
 	}
 
