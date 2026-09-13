@@ -16,7 +16,7 @@ function getAuthHeader(): Record<string, string> {
 
 export async function fetchSuiteStats(): Promise<SuiteStats> {
   try {
-    const res = await fetch(`${USERS_API}/api/v1/admin/stats`, { headers: getAuthHeader() });
+    const res = await fetch(`${USERS_API}/api/v1/admin/stats`, { headers: getAuthHeader(), cache: 'no-store' });
     return await res.json();
   } catch {
     return {
@@ -36,7 +36,10 @@ export async function fetchSuiteStats(): Promise<SuiteStats> {
 // 2. Schools Management
 export async function fetchSchools(): Promise<School[]> {
   try {
-    const res = await fetch(`${USERS_API}/api/v1/tenants`, { headers: getAuthHeader() });
+    const res = await fetch(`${USERS_API}/api/v1/tenants`, { 
+      headers: getAuthHeader(),
+      cache: 'no-store'
+    });
     const data = await res.json();
     return Array.isArray(data) ? data : (data.tenants || []);
   } catch {
@@ -73,7 +76,7 @@ export async function verifySchool(schoolId: string, status: 'VERIFIED' | 'REJEC
 // 3. User Management
 export async function fetchUsers(): Promise<User[]> {
   try {
-    const res = await fetch(`${USERS_API}/api/v1/users`, { headers: getAuthHeader() });
+    const res = await fetch(`${USERS_API}/api/v1/users`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return Array.isArray(data) ? data : (data.users || []);
   } catch {
@@ -97,7 +100,7 @@ export async function updateUserStatus(userId: string, status: string): Promise<
 // 4. Subscriptions & Billing
 export async function fetchPlans(): Promise<any[]> {
   try {
-    const res = await fetch(`${USERS_API}/api/v1/billing/plans`, { headers: getAuthHeader() });
+    const res = await fetch(`${USERS_API}/api/v1/billing/plans`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return data.plans || data || [];
   } catch {
@@ -108,7 +111,7 @@ export async function fetchPlans(): Promise<any[]> {
 export async function fetchInvoices(schoolId?: string): Promise<Invoice[]> {
   try {
     const url = schoolId ? `${USERS_API}/api/v1/billing/invoices/tenant/${schoolId}` : `${USERS_API}/api/v1/admin/invoices`;
-    const res = await fetch(url, { headers: getAuthHeader() });
+    const res = await fetch(url, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return data.invoices || (Array.isArray(data) ? data : []);
   } catch {
@@ -119,7 +122,7 @@ export async function fetchInvoices(schoolId?: string): Promise<Invoice[]> {
 // 5. Agents & Payouts
 export async function fetchPayoutRequests(): Promise<PayoutRequest[]> {
   try {
-    const res = await fetch(`${USERS_API}/api/v1/admin/payouts`, { headers: getAuthHeader() });
+    const res = await fetch(`${USERS_API}/api/v1/admin/payouts`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return Array.isArray(data) ? data : [];
   } catch {
@@ -169,7 +172,7 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
 
 export async function fetchExamproOverview() {
   try {
-    const res = await fetch(`${EXAMS_API}/api/admin/overview`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/admin/overview`, { headers: getAuthHeader(), cache: 'no-store' });
     return await res.json();
   } catch {
     return null;
@@ -178,7 +181,7 @@ export async function fetchExamproOverview() {
 
 export async function fetchExamproExams() {
   try {
-    const res = await fetch(`${EXAMS_API}/api/admin/exams`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/admin/exams`, { headers: getAuthHeader(), cache: 'no-store' });
     return await res.json();
   } catch {
     return [];
@@ -198,7 +201,7 @@ export async function fetchExamproQuestions(params?: { page?: number; limit?: nu
       if (params.topicId) qs.append('topicId', params.topicId.toString());
       url += qs.toString();
     }
-    const res = await fetch(url, { headers: getAuthHeader() });
+    const res = await fetch(url, { headers: getAuthHeader(), cache: 'no-store' });
     return await res.json();
   } catch {
     return { questions: [], total: 0, page: 1, limit: 20 };
@@ -207,7 +210,7 @@ export async function fetchExamproQuestions(params?: { page?: number; limit?: nu
 
 export async function fetchExamproBattles() {
   try {
-    const res = await fetch(`${EXAMS_API}/api/admin/battles/monitor-stats`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/admin/battles/monitor-stats`, { headers: getAuthHeader(), cache: 'no-store' });
     return await res.json();
   } catch {
     return null;
@@ -216,7 +219,7 @@ export async function fetchExamproBattles() {
 
 export async function fetchExamproUsers() {
   try {
-    const res = await fetch(`${EXAMS_API}/api/admin/users-access`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/admin/users-access`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return Array.isArray(data) ? data : (data.users || []);
   } catch {
@@ -226,7 +229,7 @@ export async function fetchExamproUsers() {
 
 export async function fetchExamproFinancials() {
   try {
-    const res = await fetch(`${EXAMS_API}/api/admin/finances/stats`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/admin/finances/stats`, { headers: getAuthHeader(), cache: 'no-store' });
     return await res.json();
   } catch {
     return null;
@@ -236,7 +239,7 @@ export async function fetchExamproFinancials() {
 // --- CLASSROOMPRO API ---
 export async function fetchClassroomNotes() {
   try {
-    const res = await fetch(`${CLASSROOM_API}/api/notes`, { headers: getAuthHeader() });
+    const res = await fetch(`${CLASSROOM_API}/api/notes`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return Array.isArray(data.notes) ? data.notes : [];
   } catch {
@@ -246,7 +249,7 @@ export async function fetchClassroomNotes() {
 
 export async function fetchClassroomQuizzes() {
   try {
-    const res = await fetch(`${CLASSROOM_API}/api/quizzes`, { headers: getAuthHeader() });
+    const res = await fetch(`${CLASSROOM_API}/api/quizzes`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return Array.isArray(data.quizzes) ? data.quizzes : [];
   } catch {
@@ -256,7 +259,7 @@ export async function fetchClassroomQuizzes() {
 
 export async function fetchClassroomFlashcards() {
   try {
-    const res = await fetch(`${CLASSROOM_API}/api/flashcards`, { headers: getAuthHeader() });
+    const res = await fetch(`${CLASSROOM_API}/api/flashcards`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return Array.isArray(data.flashcards) ? data.flashcards : [];
   } catch {
@@ -267,7 +270,7 @@ export async function fetchClassroomFlashcards() {
 // --- TUTORSPRO API ---
 export async function fetchTutorsproTutors() {
   try {
-    const res = await fetch(`${TUTORS_API}/api/admin/tutors`, { headers: getAuthHeader() });
+    const res = await fetch(`${TUTORS_API}/api/admin/tutors`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return Array.isArray(data.tutors) ? data.tutors : [];
   } catch {
@@ -277,7 +280,7 @@ export async function fetchTutorsproTutors() {
 
 export async function fetchTutorsproBookings() {
   try {
-    const res = await fetch(`${TUTORS_API}/api/admin/bookings`, { headers: getAuthHeader() });
+    const res = await fetch(`${TUTORS_API}/api/admin/bookings`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return Array.isArray(data.bookings) ? data.bookings : [];
   } catch {
@@ -287,7 +290,7 @@ export async function fetchTutorsproBookings() {
 
 export async function fetchTutorsproPayouts() {
   try {
-    const res = await fetch(`${TUTORS_API}/api/admin/payouts`, { headers: getAuthHeader() });
+    const res = await fetch(`${TUTORS_API}/api/admin/payouts`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return Array.isArray(data.payouts) ? data.payouts : [];
   } catch {
@@ -298,7 +301,7 @@ export async function fetchTutorsproPayouts() {
 // --- COURSESPRO API ---
 export async function fetchCoursesproCohorts() {
   try {
-    const res = await fetch(`${COURSES_API}/api/admin/cohorts`, { headers: getAuthHeader() });
+    const res = await fetch(`${COURSES_API}/api/admin/cohorts`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return Array.isArray(data.cohorts) ? data.cohorts : [];
   } catch {
@@ -308,7 +311,7 @@ export async function fetchCoursesproCohorts() {
 
 export async function fetchCoursesproEnrollments() {
   try {
-    const res = await fetch(`${COURSES_API}/api/admin/enrollments`, { headers: getAuthHeader() });
+    const res = await fetch(`${COURSES_API}/api/admin/enrollments`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return Array.isArray(data.enrollments) ? data.enrollments : [];
   } catch {
@@ -320,7 +323,7 @@ export async function fetchCoursesproEnrollments() {
 // 5. Agents
 export async function fetchAgents() {
   try {
-    const res = await fetch(`${USERS_API}/api/v1/admin/agents`, { headers: getAuthHeader() });
+    const res = await fetch(`${USERS_API}/api/v1/admin/agents`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return data.agents || [];
   } catch {
@@ -330,7 +333,7 @@ export async function fetchAgents() {
 
 export async function fetchAgentReferrals() {
   try {
-    const res = await fetch(`${USERS_API}/api/v1/admin/agents/referrals`, { headers: getAuthHeader() });
+    const res = await fetch(`${USERS_API}/api/v1/admin/agents/referrals`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return data.referrals || [];
   } catch {
@@ -340,7 +343,7 @@ export async function fetchAgentReferrals() {
 
 export async function fetchAgentAssignments() {
   try {
-    const res = await fetch(`${USERS_API}/api/v1/admin/agents/assignments`, { headers: getAuthHeader() });
+    const res = await fetch(`${USERS_API}/api/v1/admin/agents/assignments`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return data.assignments || [];
   } catch {
@@ -350,7 +353,7 @@ export async function fetchAgentAssignments() {
 
 export async function fetchAgentPayouts() {
   try {
-    const res = await fetch(`${USERS_API}/api/v1/admin/payouts`, { headers: getAuthHeader() });
+    const res = await fetch(`${USERS_API}/api/v1/admin/payouts`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return data.payouts || [];
   } catch {
@@ -457,7 +460,7 @@ export async function deleteExamproQuestion(id: string) {
 
 export async function fetchExamproTopics(subjectId: number | string) {
   try {
-    const res = await fetch(`${EXAMS_API}/api/exams/subjects/${subjectId}/topics`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/exams/subjects/${subjectId}/topics`, { headers: getAuthHeader(), cache: 'no-store' });
     const data = await res.json();
     return Array.isArray(data) ? data : (data.topics || []);
   } catch {
@@ -476,7 +479,7 @@ export async function fetchExamproLiveRooms(params?: { page?: number; limit?: nu
       if (params.status) qs.append('status', params.status);
       url += qs.toString();
     }
-    const res = await fetch(url, { headers: getAuthHeader() });
+    const res = await fetch(url, { headers: getAuthHeader(), cache: 'no-store' });
     return await res.json();
   } catch {
     return { rooms: [], total: 0, page: 1, limit: 20 };
@@ -503,7 +506,7 @@ export async function fetchExamproBattleMatches(params?: { page?: number; limit?
       if (params.status) qs.append('status', params.status);
       url += qs.toString();
     }
-    const res = await fetch(url, { headers: getAuthHeader() });
+    const res = await fetch(url, { headers: getAuthHeader(), cache: 'no-store' });
     return await res.json();
   } catch {
     return { battles: [], total: 0, page: 1, limit: 20 };
@@ -521,7 +524,7 @@ export async function deleteExamproBattleMatch(id: string) {
 
 export async function fetchExamproTournaments() {
   try {
-    const res = await fetch(`${EXAMS_API}/api/admin/tournaments`, { headers: getAuthHeader() });
+    const res = await fetch(`${EXAMS_API}/api/admin/tournaments`, { headers: getAuthHeader(), cache: 'no-store' });
     return await res.json();
   } catch {
     return [];
@@ -566,7 +569,7 @@ export async function fetchExamproReports(params?: { type?: string; status?: str
       if (params.status) qs.append('status', params.status);
       url += qs.toString();
     }
-    const res = await fetch(url, { headers: getAuthHeader() });
+    const res = await fetch(url, { headers: getAuthHeader(), cache: 'no-store' });
     return await res.json();
   } catch {
     return [];
@@ -601,7 +604,7 @@ export async function updateExamproSetting(id: string, value: string): Promise<a
 }
 
 export async function fetchExamproPayouts(): Promise<any[]> {
-  const res = await fetch(`${EXAMS_API}/api/admin/payouts`, { headers: getAuthHeader() });
+  const res = await fetch(`${EXAMS_API}/api/admin/payouts`, { headers: getAuthHeader(), cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch payouts');
   return res.json();
 }
@@ -654,7 +657,7 @@ export async function deleteExamproStorePack(id: string): Promise<any> {
 
 // ExamsPRO Plan Management (Legacy / Local module plans)
 export async function fetchExamproPlans(): Promise<any[]> {
-  const res = await fetch(`${EXAMS_API}/api/admin/plans`, { headers: getAuthHeader() });
+  const res = await fetch(`${EXAMS_API}/api/admin/plans`, { headers: getAuthHeader(), cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch exampro plans');
   return res.json();
 }
