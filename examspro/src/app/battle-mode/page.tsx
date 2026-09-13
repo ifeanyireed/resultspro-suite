@@ -607,7 +607,7 @@ export default function BattleLobbyPage() {
 
       {/* Create Battle Modal */}
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-        <DialogContent className="bg-white border-slate-200 text-navy rounded-[32px] max-w-sm max-h-[90vh] overflow-hidden flex flex-col p-0 shadow-2xl">
+        <DialogContent className="bg-white border-slate-200 text-navy rounded-[32px] max-w-sm max-h-[75vh] overflow-hidden flex flex-col p-0 shadow-2xl">
           <DialogHeader className="p-8 pb-0">
             <DialogTitle className="text-2xl font-display font-black flex items-center gap-2">
               <Plus className="w-6 h-6 text-red-600" />
@@ -622,7 +622,7 @@ export default function BattleLobbyPage() {
             <div className="space-y-2">
               <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Select Exam</Label>
               <Select value={selectedExam} onValueChange={(v) => { setSelectedExam(v); fetchSubjects(v, 'create', true); }}>
-                <SelectTrigger className="bg-slate-50 border border-slate-200 h-12 rounded-xl focus:ring-red-600/50 text-navy">
+                <SelectTrigger className="bg-slate-50 border border-slate-200 h-12 rounded-xl focus:border-red-600 focus:ring-1 focus:ring-red-600 text-navy">
                   <SelectValue placeholder="Choose an exam" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-slate-200 text-navy">
@@ -636,7 +636,7 @@ export default function BattleLobbyPage() {
             <div className="space-y-2">
               <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Select Subject</Label>
               <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-                <SelectTrigger className="bg-slate-50 border border-slate-200 h-12 rounded-xl focus:ring-red-600/50 text-navy">
+                <SelectTrigger className="bg-slate-50 border border-slate-200 h-12 rounded-xl focus:border-red-600 focus:ring-1 focus:ring-red-600 text-navy">
                   <SelectValue placeholder="Choose a subject" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-slate-200 text-navy">
@@ -657,7 +657,7 @@ export default function BattleLobbyPage() {
                     type="number"
                     value={stake}
                     onChange={(e) => setStake(parseInt(e.target.value))}
-                    className="bg-slate-50 border border-slate-200 h-12 rounded-xl pl-12 focus-visible:ring-red-600/50 text-navy"
+                    className="bg-slate-50 border border-slate-200 h-12 rounded-xl pl-12 focus-visible:border-red-600 focus-visible:ring-1 focus-visible:ring-red-600 text-navy"
                     min={10}
                   />
                 </div>
@@ -772,7 +772,7 @@ export default function BattleLobbyPage() {
                 placeholder="Enter ID (e.g. 5A3B1)"
                 value={joinCode}
                 onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                className="bg-slate-50 border border-slate-200 h-12 rounded-xl focus-visible:ring-red-600/50 text-center font-display font-bold tracking-widest uppercase text-navy"
+                className="bg-slate-50 border border-slate-200 h-12 rounded-xl focus-visible:border-red-600 focus-visible:ring-1 focus-visible:ring-red-600 text-center font-display font-bold tracking-widest uppercase text-navy"
               />
             </div>
           </div>
