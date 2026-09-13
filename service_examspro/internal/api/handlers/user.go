@@ -121,10 +121,10 @@ func (h *UserHandler) GetReferrals(c *gin.Context) {
 
 func (h *UserHandler) GetLeaderboard(c *gin.Context) {
 	leaderboardType := c.DefaultQuery("type", "elo")
-	
+
 	var users []models.User
 	var order string
-	
+
 	switch leaderboardType {
 	case "coins":
 		order = "coin_balance desc"
@@ -173,7 +173,6 @@ func (h *UserHandler) GetRank(c *gin.Context) {
 	if err := database.DB.Where("is_banned = ? AND elo_rating > ?", false, user.EloRating).Order("elo_rating asc").First(&nextUser).Error; err == nil {
 		gap = nextUser.EloRating - user.EloRating
 	}
-
 
 	c.JSON(http.StatusOK, gin.H{
 		"rank":        myRank,
@@ -249,7 +248,7 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 
 		for _, sub := range subjects {
 			practicedExamsMap[sub.ExamID] = true
-			
+
 			var totalQuestions int64
 			database.DB.Model(&models.Question{}).
 				Joins("JOIN nat_exams_topics nt ON nt.id = nat_exams_questions.topic_id").
@@ -266,14 +265,16 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 			progress := 0
 			if totalQuestions > 0 {
 				progress = int((float64(correctAnswers) / float64(totalQuestions)) * 100)
+				if progress == 0 && correctAnswers > 0 {
+					progress = 1
+				}
 			}
 
-			
 			var examSlug string
 			if sub.Exam != nil {
 				examSlug = sub.Exam.Slug
 			}
-			
+
 			subjectStats = append(subjectStats, gin.H{
 				"id":        sub.ID,
 				"slug":      sub.Slug,
@@ -320,6 +321,9 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 			readiness := 0
 			if exTotalQuestions > 0 {
 				readiness = int((float64(exCorrectAnswers) / float64(exTotalQuestions)) * 100)
+				if readiness == 0 && exCorrectAnswers > 0 {
+					readiness = 1
+				}
 			}
 
 			examStats = append(examStats, gin.H{
@@ -329,7 +333,7 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 				"readiness": readiness,
 				"category":  ex.Category,
 			})
-			
+
 			// Set target to the most recent/relevant exam
 			target = ex.Name
 			if ex.ExamDate != nil {
@@ -372,7 +376,7 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 		if ans.IsCorrect {
 			status = "Correct"
 		}
-		
+
 		title := "Practice Session"
 		if ans.Question != nil && ans.Question.Topic != nil && ans.Question.Topic.Subject != nil {
 			title = fmt.Sprintf("Practiced %s", ans.Question.Topic.Subject.Name)
@@ -399,7 +403,7 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 		if tx.Type == "PLAN_PURCHASE" {
 			activityType = "plan"
 		}
-		
+
 		title := tx.Type
 		if tx.Description != nil && *tx.Description != "" {
 			title = *tx.Description
@@ -424,7 +428,6 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 	if len(recentActivity) > 8 {
 		recentActivity = recentActivity[:8]
 	}
-
 
 	overallReadiness := 0
 	if len(examStats) > 0 {
@@ -462,7 +465,6 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 	})
 }
 
-
 func (h *UserHandler) GetAnalytics(c *gin.Context) {
 	userID, exists := c.Get("userId")
 	if !exists {
@@ -485,14 +487,13 @@ func (h *UserHandler) GetAnalytics(c *gin.Context) {
 
 	accuracy := "0%"
 	if totalSolved > 0 {
-		accuracy = fmt.Sprintf("%d%%", int((float64(correctSolved) / float64(totalSolved)) * 100))
+		accuracy = fmt.Sprintf("%d%%", int((float64(correctSolved)/float64(totalSolved))*100))
 	}
 
 	// Rank calculation
 	var rank int64
 	database.DB.Model(&models.User{}).Where("is_banned = ? AND elo_rating > ?", false, user.EloRating).Count(&rank)
 	myRank := fmt.Sprintf("#%d", rank+1)
-
 
 	c.JSON(http.StatusOK, gin.H{
 		"stats": gin.H{
@@ -504,4 +505,3 @@ func (h *UserHandler) GetAnalytics(c *gin.Context) {
 		},
 	})
 }
-
