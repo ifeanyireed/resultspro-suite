@@ -105,6 +105,7 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+
 	if input.UserID != "" {
 		roleID := uuid.New().String()
 		roleQuery := `INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status, created_at, updated_at) VALUES (?, ?, ?, 'tenant-admin', 'active', ?, ?)`
@@ -112,6 +113,22 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		if roleErr != nil {
 			log.Printf("Error assigning tenant-admin role to user %s for tenant %s: %v", input.UserID, tenantID, roleErr)
 		}
+	} else if input.ContactEmail != "" {
+		// Auto-create or fetch user for ContactEmail and assign tenant-admin
+		var existingUserID string
+		err := db.DB.QueryRow("SELECT id FROM users WHERE email = ?", input.ContactEmail).Scan(&existingUserID)
+		
+		if err != nil {
+			// User does not exist, create them
+			existingUserID = uuid.New().String()
+			hashedPass, _ := utils.HashPassword("Password123!")
+			db.DB.Exec("INSERT INTO users (id, email, password_hash, auth_provider, account_status, created_at, updated_at) VALUES (?, ?, ?, 'local', 'verified', ?, ?)", 
+				existingUserID, input.ContactEmail, hashedPass, now, now)
+		}
+		
+		roleID := uuid.New().String()
+		db.DB.Exec("INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status, created_at, updated_at) VALUES (?, ?, ?, 'tenant-admin', 'active', ?, ?)", 
+			roleID, existingUserID, tenantID, now, now)
 	}
 
 	utils.JSONResponse(w, http.StatusCreated, map[string]interface{}{
@@ -733,6 +750,32 @@ func HandleUpdateTenant(w http.ResponseWriter, r *http.Request) {
 	if len(input) == 0 {
 		utils.JSONError(w, http.StatusBadRequest, "No fields to update")
 		return
+	}
+
+
+	// Auto-create/assign tenant-admin if contact_email is updated
+	if emailRaw, ok := input["contact_email"]; ok {
+		if emailStr, ok := emailRaw.(string); ok && emailStr != "" {
+			var existingUserID string
+			err := db.DB.QueryRow("SELECT id FROM users WHERE email = ?", emailStr).Scan(&existingUserID)
+			
+			now := time.Now().UTC().Format("2006-01-02 15:04:05")
+			if err != nil {
+				existingUserID = uuid.New().String()
+				hashedPass, _ := utils.HashPassword("Password123!")
+				db.DB.Exec("INSERT INTO users (id, email, password_hash, auth_provider, account_status, created_at, updated_at) VALUES (?, ?, ?, 'local', 'verified', ?, ?)", 
+					existingUserID, emailStr, hashedPass, now, now)
+			}
+			
+			// Check if role exists
+			var count int
+			db.DB.QueryRow("SELECT COUNT(*) FROM user_tenant_roles WHERE user_id = ? AND tenant_id = ? AND role = 'tenant-admin'", existingUserID, tenantID).Scan(&count)
+			if count == 0 {
+				roleID := uuid.New().String()
+				db.DB.Exec("INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status, created_at, updated_at) VALUES (?, ?, ?, 'tenant-admin', 'active', ?, ?)", 
+					roleID, existingUserID, tenantID, now, now)
+			}
+		}
 	}
 
 	// Update using Gorm for dynamic map updates
