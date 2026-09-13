@@ -24,6 +24,7 @@ export interface School {
   primary_color?: string;
   contact_email?: string;
   contact_phone?: string;
+  contact_person_name?: string;
   full_address?: string;
   state?: string;
   lga?: string;
