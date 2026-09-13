@@ -280,7 +280,7 @@ func HandleGetUserDetail(w http.ResponseWriter, r *http.Request) {
 
 	err := db.DB.QueryRow(`
 		SELECT id, email, password_hash, google_id, microsoft_id, auth_provider, full_name, avatar_url, phone, sex, date_of_birth, address, account_status, mfa_enabled, mfa_secret, created_at, updated_at
-		FROM users WHERE id = ?`, userID).Scan(
+		FROM users WHERE id = $1`, userID).Scan(
 		&u.ID, &u.Email, &passwordHash, &googleID, &microsoftID, &u.AuthProvider, &fullName, &avatarURL, &phone, &sex, &dob, &address, &u.AccountStatus, &u.MFAEnabled, &mfaSecret, &u.CreatedAt, &u.UpdatedAt)
 
 	if err == sql.ErrNoRows {
