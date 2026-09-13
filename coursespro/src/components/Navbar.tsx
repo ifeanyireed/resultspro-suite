@@ -12,9 +12,11 @@ import { IconBell as Bell } from '@tabler/icons-react';
 interface NavbarProps {
   hideInstructorLink?: boolean;
   isPlatform?: boolean;
+  tenantName?: string;
+  tenantLogo?: string;
 }
 
-export default function Navbar({ hideInstructorLink = false, isPlatform = false }: NavbarProps = {}) {
+export default function Navbar({ hideInstructorLink = false, isPlatform = false, tenantName, tenantLogo }: NavbarProps = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -100,8 +102,8 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false 
 
           {/* Logo */}
           <Link href="/" aria-label="ExamsPRO" style={{ display: 'flex', alignItems: 'center', flexShrink: 0, transition: 'opacity 0.2s ease' }} onMouseEnter={e => e.currentTarget.style.opacity = '0.8'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
-            <img src="/logo.png" alt="CoursesPRO Logo" style={{ height: '56px', width: 'auto', objectFit: 'contain' }} />
-            <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: 'white', letterSpacing: '-0.05em' }}>CoursesPRO</span>
+            <img src={tenantLogo || "/logo.png"} alt={tenantName || "CoursesPRO Logo"} style={{ height: '56px', width: 'auto', objectFit: 'contain' }} />
+            <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: 'white', letterSpacing: '-0.05em' }}>{tenantName || 'CoursesPRO'}</span>
           </Link>
 
           {/* Desktop nav */}
@@ -199,8 +201,8 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false 
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexShrink: 0 }}>
                 <Link href="/" onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-                  <img src="/logo.png" alt="CoursesPRO Logo" style={{ height: '56px', width: 'auto', objectFit: 'contain' }} />
-                  <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: 'white', letterSpacing: '-0.05em' }}>CoursesPRO</span>
+                  <img src={tenantLogo || "/logo.png"} alt={tenantName || "CoursesPRO Logo"} style={{ height: '56px', width: 'auto', objectFit: 'contain' }} />
+                  <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: 'white', letterSpacing: '-0.05em' }}>{tenantName || 'CoursesPRO'}</span>
                 </Link>
                 <button onClick={() => setMobileOpen(false)} aria-label="Close menu"
                   style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', fontSize: '1.5rem', padding: '0.5rem', cursor: 'pointer' }}>✕</button>

@@ -4,34 +4,7 @@ import Footer from '@/components/Footer';
 import { IconBook, IconBrain, IconTrophy, IconUserPlus } from '@tabler/icons-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-
-async function getTenant(tenantSlug: string) {
-  const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-  // Check both default_subdomain and custom_domain
-  const domain = `${tenantSlug}.resultspro.ng`; // Default subdomain
-  
-  try {
-    const res = await fetch(`${USERS_API}/api/public/tenant/resolve?domain=${domain}`, {
-      next: { revalidate: 0 } // Cache disabled for now
-    });
-    console.log(`[getTenant] Fetching domain ${domain}. Status: ${res.status}`);
-    if (!res.ok) {
-      // If it fails, we can optionally try the raw slug as the custom domain
-      const customRes = await fetch(`${USERS_API}/api/public/tenant/resolve?domain=${tenantSlug}`, {
-        next: { revalidate: 0 }
-      });
-      console.log(`[getTenant] Fetching slug ${tenantSlug}. Status: ${customRes.status}`);
-      if (!customRes.ok) return null;
-      const data = await customRes.json();
-      return data.tenant || null;
-    }
-    const data = await res.json();
-    return data.tenant || null;
-  } catch (e: any) {
-    console.log(`[getTenant] Exception caught:`, e.message);
-    return null;
-  }
-}
+import { getTenant } from '@/lib/tenant';
 
 export default async function TenantHome({ params }: { params: Promise<{ tenant: string }> }) {
   const resolvedParams = await params;
@@ -44,7 +17,7 @@ export default async function TenantHome({ params }: { params: Promise<{ tenant:
 
   return (
     <main>
-      <Navbar />
+      <Navbar tenantName={tenant.name} tenantLogo={tenant.logo_url} />
       <Hero tenantName={tenant.name} />
 
       {/* Services Grid (Mimicking NETS ServicesGrid) */}
