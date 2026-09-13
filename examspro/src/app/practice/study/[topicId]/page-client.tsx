@@ -80,7 +80,7 @@ export default function StudyAssistantPage() {
       setTopic(response.data.topic);
       setIsDeducted(true);
       if (user && !response.data.alreadyUnlocked) {
-        updateUser({ coinBalance: user.coinBalance - 5 });
+        updateUser({ coinBalance: (user.coinBalance || 0) - 5 });
       }
     } catch (err: any) {
       console.error('Error starting study session:', err);
