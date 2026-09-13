@@ -3,15 +3,26 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { IconClock as Timer, IconCoins as Coins, IconChevronRight as ChevronRight, IconX as X, IconAlertCircle as AlertCircle, IconCircleCheck as CheckCircle2, IconBrain as Brain, IconLoader2 as Loader2, IconCheck as Check, IconBolt as Zap, IconSword as Sword } from '@tabler/icons-react';
+import { IconClock as Timer, IconCoins as Coins, IconChevronRight as ChevronRight, IconX as X, IconAlertCircle as AlertCircle, IconCircleCheck as CheckCircle2, IconBrain as Brain, IconLoader2 as Loader2, IconCheck as Check, IconBolt as Zap, IconSword as Sword, IconVolume, IconVolumeOff } from '@tabler/icons-react';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import 'katex/dist/katex.min.css';
 // @ts-ignore
 import { InlineMath } from 'react-katex';
 import api from '@/lib/api';
+import { audioPlayer } from '@/lib/audio';
 
 function QuizContent() {
+  const [isMuted, setIsMuted] = useState(audioPlayer.isMuted);
+
+  const handleToggleMute = () => {
+    setIsMuted(audioPlayer.toggleMute());
+  };
+
+  useEffect(() => {
+    audioPlayer.preload(['correct_answer.mp3', 'wrong_answer.mp3']);
+  }, []);
+
   const searchParams = useSearchParams();
   
   const renderTextWithMath = (text: string) => {
@@ -142,6 +153,7 @@ function QuizContent() {
   }, [timeLeft, isAnswered, loading, questions.length]);
 
   const handleSelect = (id: string) => {
+    audioPlayer.unlock();
     if (!isAnswered) setSelectedOption(id);
   };
 
@@ -169,8 +181,10 @@ function QuizContent() {
       
       if (quizMode === 'study') {
         if (data.isCorrect) {
+          audioPlayer.play('correct_answer.mp3');
           toast.success(`Correct! +${data.coinsEarned} Coins`);
         } else {
+          audioPlayer.play('wrong_answer.mp3');
           toast.error(`Incorrect!`);
         }
       } else {
@@ -582,6 +596,12 @@ function QuizContent() {
           </div>        </div>
 
         <div className="flex items-center gap-6">
+          <button 
+            onClick={handleToggleMute}
+            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-white text-gray-500 hover:text-[#146ef5] transition-colors"
+          >
+            {isMuted ? <IconVolumeOff className="w-5 h-5" /> : <IconVolume className="w-5 h-5" />}
+          </button>
           <button 
             onClick={() => {
               if (questions[currentIndex] && confirm("Report this question for an error or issue?")) {
