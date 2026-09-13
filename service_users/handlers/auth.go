@@ -32,6 +32,8 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		DateOfBirth  string `json:"date_of_birth"`
 		Address      string `json:"address"`
 		ReferralCode string `json:"referral_code"` // Added referral_code
+		TenantSlug   string `json:"tenant_slug"`
+		TenantID     string `json:"tenant_id"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -106,6 +108,23 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Signup DB Error: %v", err)
 		utils.JSONError(w, http.StatusConflict, "User already exists or database error")
 		return
+	}
+
+
+	// Assign tenant role if requested
+	if input.TenantSlug != "" || input.TenantID != "" {
+		tenantID := input.TenantID
+		if tenantID == "" && input.TenantSlug != "" {
+			db.DB.QueryRow("SELECT id FROM tenants WHERE slug = ?", input.TenantSlug).Scan(&tenantID)
+		}
+		
+		if tenantID != "" {
+			_, err = db.DB.Exec("INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status, created_at, updated_at) VALUES (?, ?, ?, 'student', 'active', ?, ?)",
+				uuid.New().String(), userID, tenantID, now.UTC().Format("2006-01-02 15:04:05"), now.UTC().Format("2006-01-02 15:04:05"))
+			if err != nil {
+				log.Printf("Failed to assign tenant role: %v", err)
+			}
+		}
 	}
 
 	// Create a record in referrals table if a referrer exists

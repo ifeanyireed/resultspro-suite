@@ -31,7 +31,6 @@ export default function SignupForm({ tenant }: { tenant: any }) {
         email,
         password,
         first_name: name.split(' ')[0] || '',
-        last_name: name.split(' ').slice(1).join(' ') || '',
         tenant_slug: tenant?.slug
       });
       // Signup success -> requires verification
