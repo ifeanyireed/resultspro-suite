@@ -80,8 +80,8 @@ export default function Navbar() {
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
           height: '72px',
           display: 'flex', alignItems: 'center',
-          background: scrolled ? 'var(--color-nets-navy-dark)' : 'transparent',
-          boxShadow: scrolled ? '0 1px 0 rgba(255,255,255,0.06)' : 'none',
+          background: 'var(--color-nets-navy-dark)',
+          boxShadow: '0 1px 0 rgba(255,255,255,0.06)',
           transition: 'background 0.3s ease, box-shadow 0.3s ease',
         }}
       >
