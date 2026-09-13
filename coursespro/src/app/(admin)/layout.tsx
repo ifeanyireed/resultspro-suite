@@ -44,7 +44,8 @@ export default function AppLayout({
     const fetchTenant = async () => {
       try {
         const host = window.location.hostname;
-        const res = await api.get(`/api/public/tenant/resolve?domain=${host}`);
+        const slug = host.split('.')[0];
+        const res = await api.get(`/api/public/tenant/resolve?domain=${slug}`);
         if (res.data && res.data.tenant && res.data.tenant.name) {
           setTenantName(res.data.tenant.name.toUpperCase());
         }
