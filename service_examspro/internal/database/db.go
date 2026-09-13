@@ -36,41 +36,46 @@ func ConnectDB() {
 		sqlDB.SetConnMaxLifetime(time.Hour)
 	}
 
-	// Auto-migrate models
-	err = db.AutoMigrate(
-		&models.User{},
-		&models.SubscriptionPlan{},
-		&models.CoinTransaction{},
-		&models.Referral{},
-		&models.Exam{},
-		&models.Subject{},
-		&models.Topic{},
-		&models.Question{},
-		&models.QuestionOption{},
-		&models.UserAnswer{},
-		&models.Battle{},
-		&models.BattleParticipant{},
-		&models.BattleQuestion{},
-		&models.StudySession{},
-		&models.ChatMessage{},
-		&models.Report{},
-		&models.CoinPack{},
-		&models.Purchase{},
-		&models.Withdrawal{},
-		&models.LiveGameRoom{},
-		&models.LiveGameParticipant{},
-		&models.LiveRoomChatMessage{},
-		&models.SystemSetting{},
-		&models.Tournament{},
-		&models.TournamentParticipant{},
-		&models.Notification{},
-		&models.NotificationLog{},
-		&models.NotificationCampaign{},
-		&models.PopupNotification{},
-	)
-	if err != nil {
-		log.Fatal("Failed to migrate database:", err)
-	}
+	// Auto-migrate models in background to avoid blocking server startup on Render
+	go func() {
+		log.Println("Starting AutoMigrate in background...")
+		err := db.AutoMigrate(
+			&models.User{},
+			&models.SubscriptionPlan{},
+			&models.CoinTransaction{},
+			&models.Referral{},
+			&models.Exam{},
+			&models.Subject{},
+			&models.Topic{},
+			&models.Question{},
+			&models.QuestionOption{},
+			&models.UserAnswer{},
+			&models.Battle{},
+			&models.BattleParticipant{},
+			&models.BattleQuestion{},
+			&models.StudySession{},
+			&models.ChatMessage{},
+			&models.Report{},
+			&models.CoinPack{},
+			&models.Purchase{},
+			&models.Withdrawal{},
+			&models.LiveGameRoom{},
+			&models.LiveGameParticipant{},
+			&models.LiveRoomChatMessage{},
+			&models.SystemSetting{},
+			&models.Tournament{},
+			&models.TournamentParticipant{},
+			&models.Notification{},
+			&models.NotificationLog{},
+			&models.NotificationCampaign{},
+			&models.PopupNotification{},
+		)
+		if err != nil {
+			log.Printf("Failed to auto-migrate database: %v", err)
+		} else {
+			log.Println("Database AutoMigrate completed successfully.")
+		}
+	}()
 
 	DB = db
 	log.Println("Database connected successfully")
@@ -109,7 +114,7 @@ func SeedSystemSettings(db *gorm.DB) {
 		{ID: "public_leaderboard", Value: "true", Type: "boolean", SettingGroup: "Features", Label: "Public Leaderboard", Desc: "Allow users to see global rankings"},
 		{ID: "global_announcement", Value: `["Welcome to ResultsPRO!", "Ace Your Exams with AI-powered prep.", "Master your subjects through gamified practice.", "Free to use as long as you keep answering correctly."]`, Type: "string", SettingGroup: "Features", Label: "Hero Text Messages", Desc: "JSON list of messages displayed in the hero section animation"},
 		{ID: "announcement_interval", Value: "5", Type: "number", SettingGroup: "Features", Label: "Hero Animation Interval (s)", Desc: "Time in seconds between message changes in the hero section"},
-		
+
 		{ID: "rate_limit", Value: "1000", Type: "number", SettingGroup: "Security", Label: "Rate Limiting", Desc: "Max requests per minute per IP"},
 		{ID: "token_expiry", Value: "24", Type: "number", SettingGroup: "Security", Label: "Token Expiry (Hours)", Desc: "Duration before user session expires"},
 		{ID: "api_secret_key", Value: "resultspro_secret_key_2026", Type: "string", SettingGroup: "Security", Label: "API Secret Key", Desc: "Global secret key for internal service authentication"},
@@ -117,7 +122,7 @@ func SeedSystemSettings(db *gorm.DB) {
 		{ID: "mistral_api_key", Value: "", Type: "string", SettingGroup: "Security", Label: "Mistral API Key", Desc: "Mistral AI API Key (Overrides .env if set)"},
 		{ID: "mistral_model", Value: "mistral-small-latest", Type: "string", SettingGroup: "Security", Label: "Mistral Model", Desc: "Mistral model to use (e.g., mistral-small-latest, pixtral-12b-2409)"},
 		{ID: "ai_provider", Value: "gemini", Type: "string", SettingGroup: "Security", Label: "Active AI Provider", Desc: "Choose the active AI provider: 'gemini' or 'mistral'"},
-		
+
 		{ID: "battle_cleanup_timeout", Value: "10", Type: "number", SettingGroup: "Features", Label: "Battle Cleanup (Mins)", Desc: "Unused/waiting battle rooms will be dropped after this many minutes"},
 	}
 
@@ -129,7 +134,6 @@ func SeedSystemSettings(db *gorm.DB) {
 	}
 	log.Println("System settings synchronized successfully")
 }
-
 
 // WithTenant safely scopes the GORM DB instance to the current request's Tenant ID
 func WithTenant(c *gin.Context) *gorm.DB {
