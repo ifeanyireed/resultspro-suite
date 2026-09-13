@@ -38,7 +38,7 @@ export default function AppLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [tenantName, setTenantName] = React.useState('ADMIN OS');
+  const [tenantName, setTenantName] = React.useState('ADMIN');
 
   React.useEffect(() => {
     const fetchTenant = async () => {
@@ -51,7 +51,7 @@ export default function AppLayout({
       } catch (err) {
         const slug = window.location.hostname.split('.')[0];
         if (slug && slug !== 'localhost' && slug !== 'coursespro') {
-          setTenantName(slug.toUpperCase() + ' OS');
+          setTenantName(slug.toUpperCase());
         }
       }
     };
