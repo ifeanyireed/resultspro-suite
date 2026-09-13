@@ -4,24 +4,41 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Mail, Lock, ArrowRight, Loader2, Sparkles, Building2, Users, ShieldCheck } from 'lucide-react';
+import axios from 'axios';
+import { Mail, Lock, ArrowRight, Loader2, Sparkles, Building2, Users, ShieldCheck, User } from 'lucide-react';
 // import axiosInstance from '@/lib/axiosConfig'; // we can mock the login for now or use this
 
 export default function SignupForm({ tenant }: { tenant: any }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [showOTP, setShowOTP] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [verificationLoading, setVerificationLoading] = useState(false);
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Mock login delay
-    setTimeout(() => {
+    setError('');
+    try {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      await axios.post(`${USERS_API}/api/v1/auth/register`, {
+        email,
+        password,
+        first_name: name.split(' ')[0] || '',
+        last_name: name.split(' ').slice(1).join(' ') || '',
+        tenant_slug: tenant?.slug
+      });
+      // Signup success -> requires verification
+      setShowOTP(true);
+    } catch (err: any) {
+      setError(err.response?.data?.error || err.response?.data?.message || err.message || 'Signup failed');
+    } finally {
       setIsLoading(false);
-      router.push('/dashboard');
-    }, 1500);
+    }
   };
 
   return (

@@ -245,6 +245,7 @@ export default function CoursesProTenantManager() {
                               slug: school.slug,
                               contact_email: school.contact_email || '',
                               logo_url: school.logo_url || '',
+                              status: school.status || 'ACTIVE',
                               primary_color: school.primary_color || '#2563eb'
                             });
                             setIsEditModalOpen(true);
@@ -402,6 +403,19 @@ export default function CoursesProTenantManager() {
               </button>
             </div>
             <form onSubmit={handleUpdateTenant} className="p-6 space-y-4">
+                            <div className="space-y-1.5 flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl mt-4">
+                <div>
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Account Status</label>
+                  <span className="text-xs font-medium text-slate-700">{editTenantData.status === 'ACTIVE' ? 'Active' : 'Suspended'}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setEditTenantData({ ...editTenantData, status: editTenantData.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE' })}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${editTenantData.status === 'ACTIVE' ? 'bg-rose-50 text-rose-600 hover:bg-rose-500 hover:text-white' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-500 hover:text-white'}`}
+                >
+                  {editTenantData.status === 'ACTIVE' ? 'Suspend Account' : 'Activate Account'}
+                </button>
+              </div>
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tenant Name</label>
                 <input 

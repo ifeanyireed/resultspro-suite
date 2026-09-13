@@ -28,7 +28,6 @@ func main() {
 
 	fmt.Println("Seeding tutors...")
 
-	// 1. Create a few users that will become tutors
 	users := []struct {
 		ID       string
 		Email    string
@@ -44,8 +43,8 @@ func main() {
 
 	for _, u := range users {
 		_, err := db.Exec(`
-			INSERT INTO users (id, email, password_hash, auth_provider, name, status, avatar_url, created_at, updated_at)
-			VALUES ($1, $2, $3, 'local', $4, 'active', $5, $6, $7)
+			INSERT INTO users (id, email, password_hash, auth_provider, name, full_name, account_status, avatar_url, role, created_at, updated_at)
+			VALUES ($1, $2, $3, 'local', $4, $4, 'active', $5, 'TUTOR', $6, $7)
 			ON CONFLICT (email) DO NOTHING
 		`, u.ID, u.Email, u.Pass, u.Name, u.Avatar, time.Now(), time.Now())
 		if err != nil {
@@ -53,7 +52,6 @@ func main() {
 		}
 	}
 
-	// Wait, we need to fetch their IDs in case they were already inserted
 	var tutor1ID, tutor2ID, tutor3ID, tutor4ID string
 	db.QueryRow("SELECT id FROM users WHERE email = 'tutor1@example.com'").Scan(&tutor1ID)
 	db.QueryRow("SELECT id FROM users WHERE email = 'tutor2@example.com'").Scan(&tutor2ID)

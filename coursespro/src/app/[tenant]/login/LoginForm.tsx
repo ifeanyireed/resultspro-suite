@@ -15,6 +15,9 @@ export default function LoginForm({ tenant }: { tenant: any }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [showOTP, setShowOTP] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [verificationLoading, setVerificationLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +41,12 @@ export default function LoginForm({ tenant }: { tenant: any }) {
       }
     } catch (err: any) {
       console.error("Login failed", err);
-      setError(err.response?.data?.error || err.message || 'Login failed');
+      if (err.response?.status === 403 && err.response?.data?.error === "unverified") {
+        setShowOTP(true);
+        setError('');
+      } else {
+        setError(err.response?.data?.error || err.response?.data?.message || err.message || 'Login failed');
+      }
     } finally {
       setIsLoading(false);
     }
