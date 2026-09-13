@@ -42,10 +42,24 @@ export default function TutorsPage() {
     }
   };
 
-  const filteredTutors = tutors.filter(tutor => 
-    tutor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    tutor.subjects.some(s => s.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const filteredTutors = tutors.filter(tutor => {
+    const tutorName = tutor.name || "Anonymous Tutor";
+    let tutorSubjects = tutor.subjects || [];
+    
+    // Fallback: If the backend hasn't updated yet and returns a JSON string instead of an array
+    if (typeof tutorSubjects === 'string') {
+      try {
+        tutorSubjects = JSON.parse(tutorSubjects);
+      } catch (e) {
+        tutorSubjects = [];
+      }
+    }
+
+    return (
+      tutorName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (Array.isArray(tutorSubjects) && tutorSubjects.some(s => typeof s === 'string' && s.toLowerCase().includes(searchTerm.toLowerCase())))
+    );
+  });
 
   return (
     <main className="min-h-screen bg-light" style={{ background: 'var(--color-nets-light)' }}>
@@ -94,15 +108,28 @@ export default function TutorsPage() {
              <div className="text-center text-muted py-12">No tutors found. Try adjusting your search keywords.</div>
            ) : (
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-               {filteredTutors.map((tutor) => (
+               {filteredTutors.map((tutor) => {
+                 const tName = tutor.name || "Anonymous Tutor";
+                 const tAvatar = tutor.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(tName)}&background=0D1B2A&color=fff`;
+                 const tRate = tutor.hourlyRate || tutor.hourly_rate || 0;
+                 const tLocation = tutor.location || "Online";
+                 const tReviews = tutor.reviewCount || tutor.total_reviews || 0;
+                 
+                 let tSubjects = tutor.subjects || [];
+                 if (typeof tSubjects === 'string') {
+                   try { tSubjects = JSON.parse(tSubjects); } catch (e) { tSubjects = []; }
+                 }
+                 if (!Array.isArray(tSubjects)) tSubjects = [];
+
+                 return (
                  <article key={tutor.id} className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-nets-border">
                     <div className="relative h-48 overflow-hidden bg-nets-light flex items-center justify-center border-b border-nets-border">
                       <img 
-                        src={tutor.avatar} 
-                        alt={tutor.name} 
+                        src={tAvatar} 
+                        alt={tName} 
                         className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                       />
-                      {tutor.isVerified && (
+                      {(tutor.isVerified || tutor.is_verified) && (
                         <div className="absolute top-4 left-4">
                           <span className="bg-white/90 backdrop-blur-sm text-navy text-xs fw-600 px-3 py-1 rounded-sm flex items-center gap-1">
                             <Star size={12} className="text-amber fill-current" /> Verified
@@ -110,28 +137,28 @@ export default function TutorsPage() {
                         </div>
                       )}
                       <div className="absolute top-4 right-4 bg-navy/90 text-white text-xs fw-600 px-3 py-1 rounded-sm shadow-sm backdrop-blur-sm">
-                        ₦{tutor.hourlyRate.toLocaleString()} <span className="text-white/70 fw-400">/hr</span>
+                        ₦{tRate.toLocaleString()} <span className="text-white/70 fw-400">/hr</span>
                       </div>
                     </div>
                     
                     <div className="p-6 flex flex-col flex-1">
                       <div className="flex items-center justify-between text-xs text-muted mb-3">
                         <span className="flex items-center gap-1">
-                          <MapPin size={14} /> {tutor.location}
+                          <MapPin size={14} /> {tLocation}
                         </span>
                         <span className="flex items-center gap-1">
-                          <Star size={14} className="text-amber fill-current" /> {tutor.rating} ({tutor.reviewCount})
+                          <Star size={14} className="text-amber fill-current" /> {tutor.rating} ({tReviews})
                         </span>
                       </div>
                       <h2 className="text-xl fw-600 mb-3 text-navy leading-tight">
-                        {tutor.name}
+                        {tName}
                       </h2>
                       <p className="text-sm text-muted mb-6 flex-1 line-clamp-3">
-                        {tutor.bio}
+                        {tutor.bio || tutor.headline}
                       </p>
 
                       <div className="flex flex-wrap gap-2 mb-6">
-                        {tutor.subjects.map((sub, i) => (
+                        {tSubjects.map((sub: string, i: number) => (
                           <span key={i} className="px-2 py-1 bg-nets-light border border-nets-border text-[10px] fw-600 text-muted rounded-sm">
                             {sub}
                           </span>
@@ -145,7 +172,8 @@ export default function TutorsPage() {
                       </div>
                     </div>
                  </article>
-               ))}
+                 );
+               })}
              </div>
            )}
         </div>
