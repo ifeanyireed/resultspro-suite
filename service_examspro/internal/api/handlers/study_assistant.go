@@ -21,11 +21,12 @@ type WeakTopic struct {
 	ID       int     `json:"id"`
 	Name     string  `json:"name"`
 	Accuracy float64 `json:"accuracy"`
+	Exam     string  `json:"exam"`
 }
 
 func (h *StudyAssistantHandler) getWeakTopics(userID string) ([]WeakTopic, error) {
 	var answers []models.UserAnswer
-	if err := database.DB.Preload("Question.Topic").Where("user_id = ?", userID).Find(&answers).Error; err != nil {
+	if err := database.DB.Preload("Question.Topic.Subject.Exam").Where("user_id = ?", userID).Find(&answers).Error; err != nil {
 		return nil, err
 	}
 
@@ -35,6 +36,7 @@ func (h *StudyAssistantHandler) getWeakTopics(userID string) ([]WeakTopic, error
 
 	stats := make(map[int]struct {
 		name    string
+		exam    string
 		correct int
 		total   int
 	})
@@ -46,6 +48,9 @@ func (h *StudyAssistantHandler) getWeakTopics(userID string) ([]WeakTopic, error
 		tid := a.Question.TopicID
 		s := stats[tid]
 		s.name = a.Question.Topic.Name
+		if a.Question.Topic.Subject != nil && a.Question.Topic.Subject.Exam != nil {
+			s.exam = a.Question.Topic.Subject.Exam.Name
+		}
 		s.total++
 		if a.IsCorrect {
 			s.correct++
@@ -61,6 +66,7 @@ func (h *StudyAssistantHandler) getWeakTopics(userID string) ([]WeakTopic, error
 				ID:       id,
 				Name:     s.name,
 				Accuracy: accuracy,
+				Exam:     s.exam,
 			})
 		}
 	}

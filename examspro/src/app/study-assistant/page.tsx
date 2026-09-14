@@ -121,10 +121,17 @@ export default function StudyAssistantPage() {
                 dashboardData.weakTopics.map((topic: any) => (
                   <button 
                     key={topic.id}
-                    onClick={() => handleSend(`Can you teach me about ${topic.name}?`, topic.id)}
+                    onClick={() => handleSend(`Can you teach me about ${topic.name}? ${topic.exam ? `(Context: ${topic.exam} Exam)` : ''}`, topic.id)}
                     className="w-full text-left p-3 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 shadow-sm transition-all group"
                   >
-                    <div className="text-xs font-bold text-[#0f172a] mb-1 group-hover:text-red-600 transition-colors">{topic.name}</div>
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="text-xs font-bold text-[#0f172a] group-hover:text-red-600 transition-colors line-clamp-1">{topic.name}</div>
+                      {topic.exam && (
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 whitespace-nowrap ml-2">
+                          {topic.exam}
+                        </span>
+                      )}
+                    </div>
                     <div className="text-[10px] text-gray-500 font-medium">Accuracy: {Math.round(topic.accuracy)}%</div>
                   </button>
                 ))
@@ -140,7 +147,7 @@ export default function StudyAssistantPage() {
           <section className="flex-1 bg-white rounded-[32px] border border-slate-200 shadow-sm p-6 flex flex-col overflow-hidden">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
-                <History className="w-3 h-3" />
+                <History className="w-3 h-3" strokeWidth={3} />
                 Recent Chats
               </h3>
               <button onClick={startNewSession} className="text-[10px] font-bold text-red-600 hover:underline">New Chat</button>
