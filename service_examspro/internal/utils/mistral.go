@@ -64,8 +64,18 @@ func (m *MistralProvider) callMistral(ctx context.Context, messages []mistralMes
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return "", fmt.Errorf("mistral api error: %s - %s", resp.Status, string(body))
+		switch resp.StatusCode {
+		case http.StatusForbidden, http.StatusUnauthorized:
+			return "", fmt.Errorf("Invalid Mistral API Key. Please update it in the Admin Dashboard.")
+		case http.StatusNotFound:
+			return "", fmt.Errorf("Selected Mistral Model is unavailable. Please select a valid model in the Admin Dashboard.")
+		case http.StatusTooManyRequests:
+			return "", fmt.Errorf("Mistral rate limit exceeded. Please check your API quota.")
+		case http.StatusServiceUnavailable, http.StatusBadGateway, http.StatusGatewayTimeout:
+			return "", fmt.Errorf("Mistral is currently experiencing high demand. Please try again in a few moments.")
+		default:
+			return "", fmt.Errorf("Mistral AI Service is temporarily unavailable (Error %d).", resp.StatusCode)
+		}
 	}
 
 	bodyBytes, _ := io.ReadAll(resp.Body)

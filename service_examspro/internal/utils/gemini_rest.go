@@ -56,7 +56,18 @@ func (g *GeminiProvider) callGeminiREST(ctx context.Context, apiKey, modelName, 
 	
 	bodyBytes, _ := io.ReadAll(resp.Body)
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("gemini api error: %s - %s", resp.Status, string(bodyBytes))
+		switch resp.StatusCode {
+		case http.StatusForbidden, http.StatusUnauthorized:
+			return "", fmt.Errorf("Invalid Gemini API Key. Please update it in the Admin Dashboard.")
+		case http.StatusNotFound:
+			return "", fmt.Errorf("Selected Gemini Model is unavailable or discontinued. Please select a valid model in the Admin Dashboard.")
+		case http.StatusTooManyRequests:
+			return "", fmt.Errorf("Gemini rate limit exceeded. Please check your API quota.")
+		case http.StatusServiceUnavailable, http.StatusBadGateway, http.StatusGatewayTimeout:
+			return "", fmt.Errorf("Gemini is currently experiencing high demand. Please try again in a few moments.")
+		default:
+			return "", fmt.Errorf("Gemini AI Service is temporarily unavailable (Error %d).", resp.StatusCode)
+		}
 	}
 	
 	var gResp struct {
