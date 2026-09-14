@@ -199,9 +199,12 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 	}
 
 	var leaderboard []models.User
-	database.DB.Select("id, full_name, avatar_url, email, elo_rating").
-		Where("is_banned = ?", false).
-		Order("elo_rating desc").
+	database.DB.Table("users").
+		Select("users.id, users.full_name, users.avatar_url, users.email, users.elo_rating").
+		Joins("JOIN user_apps ua ON ua.user_id = users.id").
+		Where("users.is_banned = ?", false).
+		Where("ua.app_id = ?", "examspro-app-id").
+		Order("users.elo_rating desc").
 		Limit(5).
 		Find(&leaderboard)
 
@@ -228,7 +231,10 @@ func (h *UserHandler) GetDashboard(c *gin.Context) {
 
 	// Dynamic Database Logic
 	var higherRanked int64
-	database.DB.Model(&models.User{}).Where("elo_rating > ? AND is_banned = ?", user.EloRating, false).Count(&higherRanked)
+	database.DB.Table("users").
+		Joins("JOIN user_apps ua ON ua.user_id = users.id").
+		Where("users.elo_rating > ? AND users.is_banned = ? AND ua.app_id = ?", user.EloRating, false, "examspro-app-id").
+		Count(&higherRanked)
 	globalRank := higherRanked + 1
 
 	var target string = "General Exam"
