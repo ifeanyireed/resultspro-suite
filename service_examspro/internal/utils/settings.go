@@ -2,6 +2,7 @@ package utils
 
 import (
 	"os"
+	"strings"
 
 	"exams-resultspro-backend/internal/database"
 	"exams-resultspro-backend/internal/models"
@@ -12,13 +13,13 @@ import (
 // If not found, it falls back to the database.
 func GetSettingWithFallback(settingID, envKey string) string {
 	if envVal := os.Getenv(envKey); envVal != "" {
-		return envVal
+		return strings.Trim(envVal, `"'`)
 	}
 
 	var setting models.SystemSetting
 	err := database.DB.Where("id = ?", settingID).First(&setting).Error
 	if err == nil && setting.Value != "" {
-		return setting.Value
+		return strings.Trim(setting.Value, `"'`)
 	}
 
 	return ""
