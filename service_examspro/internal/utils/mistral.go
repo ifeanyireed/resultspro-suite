@@ -28,7 +28,7 @@ type mistralResponse struct {
 }
 
 func (m *MistralProvider) callMistral(ctx context.Context, messages []mistralMessage) (string, error) {
-	apiKey := GetSettingWithFallback("mistral_api_key", "MISTRAL_API_KEY")
+	apiKey := GetRandomAPIKey(GetSettingWithFallback("mistral_api_key", "MISTRAL_API_KEY"))
 	if apiKey == "" {
 		return "", fmt.Errorf("MISTRAL_API_KEY is not set")
 	}

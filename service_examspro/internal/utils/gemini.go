@@ -12,7 +12,7 @@ import (
 type GeminiProvider struct{}
 
 func (g *GeminiProvider) GenerateTutorResponse(ctx context.Context, query string, history []map[string]string, weakTopics []string, syllabusContext string) (string, error) {
-	apiKey := GetSettingWithFallback("gemini_api_key", "GEMINI_API_KEY")
+	apiKey := GetRandomAPIKey(GetSettingWithFallback("gemini_api_key", "GEMINI_API_KEY"))
 	if apiKey == "" {
 		return "", fmt.Errorf("GEMINI_API_KEY is not set")
 	}
@@ -81,7 +81,7 @@ func (g *GeminiProvider) GenerateTutorResponse(ctx context.Context, query string
 }
 
 func (g *GeminiProvider) ValidateTheoryAnswer(ctx context.Context, questionBody string, referenceAnswer *string, userAnswer string) (bool, string, error) {
-	apiKey := GetSettingWithFallback("gemini_api_key", "GEMINI_API_KEY")
+	apiKey := GetRandomAPIKey(GetSettingWithFallback("gemini_api_key", "GEMINI_API_KEY"))
 	if apiKey == "" {
 		return false, "", fmt.Errorf("GEMINI_API_KEY is not set")
 	}
@@ -153,7 +153,7 @@ func (g *GeminiProvider) ValidateTheoryAnswer(ctx context.Context, questionBody 
 }
 
 func (g *GeminiProvider) GenerateExplanation(ctx context.Context, question string, options []string, correctOption string) (string, error) {
-	apiKey := GetSettingWithFallback("gemini_api_key", "GEMINI_API_KEY")
+	apiKey := GetRandomAPIKey(GetSettingWithFallback("gemini_api_key", "GEMINI_API_KEY"))
 	if apiKey == "" {
 		return "", fmt.Errorf("GEMINI_API_KEY is not set")
 	}
@@ -198,7 +198,7 @@ func (g *GeminiProvider) GenerateExplanation(ctx context.Context, question strin
 }
 
 func (g *GeminiProvider) GenerateTopicLessonNote(ctx context.Context, topicName string, syllabusContent *string, examName string) (string, error) {
-	apiKey := GetSettingWithFallback("gemini_api_key", "GEMINI_API_KEY")
+	apiKey := GetRandomAPIKey(GetSettingWithFallback("gemini_api_key", "GEMINI_API_KEY"))
 	if apiKey == "" {
 		return "", fmt.Errorf("GEMINI_API_KEY is not set")
 	}

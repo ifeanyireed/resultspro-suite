@@ -12,7 +12,7 @@ export default function StoreTab() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
-  const [activeView, setActiveView] = useState<'COIN' | 'ACTIVITY' | 'REFERRAL'>('COIN');
+  const [activeView, setActiveView] = useState<'COIN' | 'ACTIVITY' | 'REFERRAL' | 'AI'>('COIN');
   const [settings, setSettings] = useState<any[]>([]);
   const [pendingSettings, setPendingSettings] = useState<Record<string, string>>({});
   const [savingSettings, setSavingSettings] = useState(false);
@@ -204,6 +204,7 @@ export default function StoreTab() {
             <button onClick={() => setActiveView('COIN')} className={`px-4 py-1.5 text-xs font-bold rounded-md ${activeView === 'COIN' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}>Coin Packs</button>
             <button onClick={() => setActiveView('ACTIVITY')} className={`px-4 py-1.5 text-xs font-bold rounded-md ${activeView === 'ACTIVITY' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}>Activity Deductions</button>
             <button onClick={() => setActiveView('REFERRAL')} className={`px-4 py-1.5 text-xs font-bold rounded-md ${activeView === 'REFERRAL' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}>Referral Settings</button>
+            <button onClick={() => setActiveView('AI')} className={`px-4 py-1.5 text-xs font-bold rounded-md ${activeView === 'AI' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}>AI Configuration</button>
           </div>
           {activeView === 'COIN' && (
             <button onClick={() => handleOpenModal(null, 'COIN')} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-full text-xs font-bold hover:bg-indigo-700 transition-colors shadow-sm">
@@ -318,6 +319,62 @@ export default function StoreTab() {
                     </select>
                   </div>
                 </div>
+                <div className="mt-8 flex justify-end">
+                  <button onClick={handleSaveSettings} disabled={savingSettings} className="px-6 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 disabled:opacity-50">
+                    {savingSettings ? 'Saving...' : 'Save Settings'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          {activeView === 'AI' && (
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 max-w-2xl">
+              <h3 className="font-bold text-slate-800 mb-6">AI Configuration</h3>
+              <div className="space-y-6">
+                
+                <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+                  <div>
+                    <p className="font-semibold text-slate-800">AI Provider</p>
+                    <p className="text-xs text-slate-500 mt-1">Choose the active AI provider for the study assistant.</p>
+                  </div>
+                  <div>
+                    <select
+                      value={pendingSettings['ai_provider'] !== undefined ? pendingSettings['ai_provider'] : (settings.find(s => s.id === 'ai_provider')?.value || '')}
+                      onChange={(e) => setPendingSettings(prev => ({...prev, 'ai_provider': e.target.value}))}
+                      className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 font-bold"
+                    >
+                      <option value="gemini">Gemini</option>
+                      <option value="mistral">Mistral</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex flex-col pb-4 border-b border-slate-100 gap-2">
+                  <div>
+                    <p className="font-semibold text-slate-800">Gemini API Keys</p>
+                    <p className="text-xs text-slate-500 mt-1">Comma-separated list of Gemini API keys. The system will load balance/fallback across them.</p>
+                  </div>
+                  <textarea 
+                    value={pendingSettings['gemini_api_key'] !== undefined ? pendingSettings['gemini_api_key'] : (settings.find(s => s.id === 'gemini_api_key')?.value || '')}
+                    onChange={(e) => setPendingSettings(prev => ({...prev, 'gemini_api_key': e.target.value}))}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 min-h-[80px]"
+                    placeholder="AIzaSy... , AIzaSy..."
+                  />
+                </div>
+
+                <div className="flex flex-col pb-4 border-b border-slate-100 gap-2">
+                  <div>
+                    <p className="font-semibold text-slate-800">Mistral API Keys</p>
+                    <p className="text-xs text-slate-500 mt-1">Comma-separated list of Mistral API keys.</p>
+                  </div>
+                  <textarea 
+                    value={pendingSettings['mistral_api_key'] !== undefined ? pendingSettings['mistral_api_key'] : (settings.find(s => s.id === 'mistral_api_key')?.value || '')}
+                    onChange={(e) => setPendingSettings(prev => ({...prev, 'mistral_api_key': e.target.value}))}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 min-h-[80px]"
+                    placeholder="mistral-..."
+                  />
+                </div>
+
                 <div className="mt-8 flex justify-end">
                   <button onClick={handleSaveSettings} disabled={savingSettings} className="px-6 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 disabled:opacity-50">
                     {savingSettings ? 'Saving...' : 'Save Settings'}
