@@ -67,7 +67,7 @@ export default function IcanLandingPage() {
               <div className="rounded-2xl border border-slate-200 shadow-2xl bg-white overflow-hidden transform rotate-1 hover:rotate-0 transition-transform duration-500">
                 {/* Mockup Top Bar */}
                 <div className="bg-slate-100 border-b border-slate-200 px-4 py-3 flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-rose-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-emerald-300"></div>
                   <div className="w-3 h-3 rounded-full bg-amber-400"></div>
                   <div className="w-3 h-3 rounded-full bg-emerald-400"></div>
                 </div>
@@ -78,12 +78,12 @@ export default function IcanLandingPage() {
                     <div className="h-6 w-32 bg-slate-200 rounded-md"></div>
                     <div className="p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
                       <div className="flex justify-between items-center mb-4">
-                        <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600 font-bold">FA</div>
+                        <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-red-600 font-bold">FA</div>
                         <span className="text-xs font-bold text-slate-400 uppercase">342 Qs</span>
                       </div>
                       <div className="h-4 w-3/4 bg-slate-200 rounded mb-2"></div>
                       <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden mt-4">
-                        <div className="bg-indigo-500 w-[60%] h-full rounded-full"></div>
+                        <div className="bg-red-600 w-[60%] h-full rounded-full"></div>
                       </div>
                       <p className="text-[10px] text-slate-400 mt-2 font-bold uppercase">60% Prepared</p>
                     </div>
@@ -127,17 +127,17 @@ export default function IcanLandingPage() {
       </section>
 
       {/* 2. The Agitation */}
-      <section className="py-24 bg-slate-900 text-white">
+      <section className="py-24 bg-gradient-to-br from-amber-400 to-orange-500 text-white">
         <div className="container mx-auto px-4 md:px-8 max-w-4xl text-center">
           <ScrollReveal>
             <h2 className="text-4xl md:text-5xl font-black mb-8 leading-tight">
               You study.<br/>You practise.<br/>You revise.<br/>
-              <span className="text-blue-400">But do you actually know where you are weak?</span>
+              <span className="text-orange-950">But do you actually know where you are weak?</span>
             </h2>
             <p className="text-xl text-slate-300 font-medium leading-relaxed mb-12">
               Thousands of questions do not automatically mean better preparation. If your practice isn't learning from you, you're preparing with hope, not data. Don't wait for the examination result to find out.
             </p>
-            <div className="w-24 h-1 bg-blue-600 mx-auto rounded-full"></div>
+            <div className="w-24 h-1 bg-orange-950/20 mx-auto rounded-full"></div>
           </ScrollReveal>
         </div>
       </section>
@@ -188,10 +188,10 @@ export default function IcanLandingPage() {
           <div className="flex flex-col md:flex-row items-center gap-12 mb-32">
             <div className="w-full md:w-1/2">
               <ScrollReveal>
-                <div className="aspect-square md:aspect-[4/3] rounded-3xl bg-indigo-900 p-8 shadow-2xl relative overflow-hidden">
-                  <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-indigo-500 via-transparent to-transparent"></div>
+                <div className="aspect-square md:aspect-[4/3] rounded-3xl bg-gradient-to-br from-red-500 to-red-700 p-8 shadow-2xl relative overflow-hidden">
+                  <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-red-400 via-transparent to-transparent"></div>
                   <div className="h-full flex flex-col gap-4">
-                    <div className="self-end max-w-[80%] bg-indigo-600 text-white p-4 rounded-2xl rounded-tr-sm text-sm border border-indigo-500 shadow-lg">
+                    <div className="self-end max-w-[80%] bg-red-800 text-white p-4 rounded-2xl rounded-tr-sm text-sm border border-red-600 shadow-lg">
                       I don't understand why the fixed overhead volume variance is adverse here.
                     </div>
                     <div className="self-start max-w-[90%] bg-white text-slate-800 p-4 rounded-2xl rounded-tl-sm text-sm shadow-xl relative">
@@ -205,7 +205,7 @@ export default function IcanLandingPage() {
             </div>
             <div className="w-full md:w-1/2">
               <ScrollReveal delay={0.2}>
-                <div className="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mb-6">
+                <div className="w-16 h-16 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mb-6">
                   <BrainCircuit className="w-8 h-8" />
                 </div>
                 <h3 className="text-3xl font-black text-slate-900 mb-4">"What if your practice could learn from you?"</h3>
@@ -225,24 +225,24 @@ export default function IcanLandingPage() {
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="w-full md:w-1/2 order-2 md:order-1">
               <ScrollReveal>
-                <div className="w-16 h-16 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mb-6">
+                <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-6">
                   <Timer className="w-8 h-8" />
                 </div>
                 <h3 className="text-3xl font-black text-slate-900 mb-4">"The clock is moving. Is your preparation?"</h3>
                 <p className="text-lg text-slate-600 font-medium mb-6">
                   Every study session matters. Battle against the clock, face off against the Computer Bot, or challenge other ICAN candidates in real-time Live Battles to harden your exam speed.
                 </p>
-                <a href="https://exams.resultspro.ng/signup" className="inline-flex px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-all shadow-lg items-center gap-2">
+                <a href="https://exams.resultspro.ng/signup" className="inline-flex px-6 py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl transition-all shadow-lg items-center gap-2">
                   Experience Live Battles <ArrowRight className="w-4 h-4" />
                 </a>
               </ScrollReveal>
             </div>
             <div className="w-full md:w-1/2 order-1 md:order-2">
               <ScrollReveal delay={0.2}>
-                <div className="aspect-video md:aspect-[4/3] rounded-3xl bg-rose-500 p-8 shadow-2xl flex flex-col justify-center relative overflow-hidden">
-                  <div className="absolute inset-0 bg-rose-600" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
+                <div className="aspect-video md:aspect-[4/3] rounded-3xl bg-gradient-to-br from-emerald-400 to-emerald-600 p-8 shadow-2xl flex flex-col justify-center relative overflow-hidden">
+                  <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
                   
-                  <div className="bg-white rounded-2xl shadow-2xl p-6 relative z-10 flex items-center justify-between border-4 border-rose-100">
+                  <div className="bg-white rounded-2xl shadow-2xl p-6 relative z-10 flex items-center justify-between border-4 border-emerald-100">
                      <div className="text-center">
                         <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-2xl mx-auto mb-2 border-4 border-white shadow-md">YOU</div>
                         <div className="text-3xl font-black text-slate-800">450</div>
@@ -303,7 +303,7 @@ export default function IcanLandingPage() {
                       <span className="font-bold text-emerald-600">+₦3,000</span>
                     </div>
                   </div>
-                  <button className="w-full py-4 bg-slate-900 text-white font-black rounded-xl flex items-center justify-center gap-2">
+                  <button className="w-full py-4 bg-emerald-700 text-white font-black rounded-xl flex items-center justify-center gap-2">
                     Withdraw to Bank <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -375,7 +375,7 @@ export default function IcanLandingPage() {
       </section>
 
       {/* 6. Final CTA */}
-      <section className="py-24 bg-slate-900 text-white text-center">
+      <section className="py-24 bg-gradient-to-br from-blue-700 to-indigo-900 text-white text-center">
         <div className="container mx-auto px-4 max-w-3xl">
           <ScrollReveal>
             <h2 className="text-4xl md:text-5xl font-black mb-6">STUDY SMARTER. PRACTISE WITH PURPOSE.</h2>
