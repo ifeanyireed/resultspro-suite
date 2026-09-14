@@ -161,7 +161,10 @@ func (h *UserHandler) GetRank(c *gin.Context) {
 	}
 
 	var rank int64
-	err := database.DB.Model(&models.User{}).Where("is_banned = ? AND elo_rating > ?", false, user.EloRating).Count(&rank).Error
+	err := database.DB.Model(&models.User{}).
+		Joins("JOIN user_apps ON user_apps.user_id = users.id").
+		Where("users.is_banned = ? AND user_apps.app_id = ? AND users.elo_rating > ?", false, "examspro-app-id", user.EloRating).
+		Count(&rank).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to calculate rank"})
 		return
@@ -171,7 +174,7 @@ func (h *UserHandler) GetRank(c *gin.Context) {
 
 	var nextUser models.User
 	gap := 0
-	if err := database.DB.Where("is_banned = ? AND elo_rating > ?", false, user.EloRating).Order("elo_rating asc").First(&nextUser).Error; err == nil {
+	if err := database.DB.Joins("JOIN user_apps ON user_apps.user_id = users.id").Where("users.is_banned = ? AND user_apps.app_id = ? AND users.elo_rating > ?", false, "examspro-app-id", user.EloRating).Order("users.elo_rating asc").First(&nextUser).Error; err == nil {
 		gap = nextUser.EloRating - user.EloRating
 	}
 

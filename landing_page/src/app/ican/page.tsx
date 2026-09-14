@@ -315,30 +315,60 @@ export default function IcanLandingPage() {
 
       {/* 5. Pricing */}
       <section className="py-24 bg-white relative">
-        <div className="container mx-auto px-4 max-w-3xl text-center">
+        <div className="container mx-auto px-4 max-w-6xl text-center">
           <ScrollReveal>
             <h2 className="text-4xl md:text-5xl font-black mb-6 text-slate-900">YOUR ICAN STUDY PARTNER IS ON YOUR PHONE.</h2>
             <p className="text-lg text-slate-600 mb-12">Get everything you need to crush your next ICAN diet in one powerful platform.</p>
             
-            <div className="bg-white border-2 border-blue-600 rounded-3xl p-8 shadow-2xl relative">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white font-black text-xs uppercase tracking-widest px-4 py-1.5 rounded-full">Most Popular</div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               
-              <h3 className="text-2xl font-black text-slate-900 mb-2">FULL DIET ACCESS</h3>
-              <div className="flex justify-center items-end gap-1 mb-8">
-                <span className="text-5xl font-black text-slate-900">₦10,000</span>
-                <span className="text-slate-500 font-bold mb-1">/month</span>
+              {/* Single Paper */}
+              <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-lg relative flex flex-col">
+                <h3 className="text-xl font-black text-slate-900 mb-2">SINGLE PAPER</h3>
+                <div className="flex items-end gap-1 mb-8">
+                  <span className="text-4xl font-black text-slate-900">₦3,500</span>
+                  <span className="text-slate-500 font-bold mb-1">/month</span>
+                </div>
+                <ul className="space-y-4 text-left mb-8 flex-1">
+                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">1 Subject Access</span></li>
+                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">Performance Diagnostics</span></li>
+                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">Referral Program</span></li>
+                </ul>
+                <a href="https://exams.resultspro.ng/signup" className="block w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-black rounded-xl transition-colors text-sm">Get Started</a>
               </div>
-              
-              <ul className="space-y-4 text-left max-w-md mx-auto mb-8">
-                <li className="flex items-start gap-3"><CheckCircle2 className="w-6 h-6 text-blue-600 shrink-0" /> <span className="text-slate-700 font-medium">Unlimited CBT Practice across all your registered papers</span></li>
-                <li className="flex items-start gap-3"><CheckCircle2 className="w-6 h-6 text-blue-600 shrink-0" /> <span className="text-slate-700 font-medium">AI-powered Performance Diagnostics</span></li>
-                <li className="flex items-start gap-3"><CheckCircle2 className="w-6 h-6 text-blue-600 shrink-0" /> <span className="text-slate-700 font-medium">Study Assistant for instant complex calculation explanations</span></li>
-                <li className="flex items-start gap-3"><CheckCircle2 className="w-6 h-6 text-blue-600 shrink-0" /> <span className="text-slate-700 font-medium">Full access to 30% Referral Commission Affiliate Program</span></li>
-              </ul>
-              
-              <a href="https://exams.resultspro.ng/signup" className="block w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl transition-colors text-lg">
-                Start Preparing Now
-              </a>
+
+              {/* Full Diet Access (Most Popular) */}
+              <div className="bg-white border-2 border-blue-600 rounded-3xl p-8 shadow-2xl relative flex flex-col transform md:-translate-y-4">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white font-black text-[10px] uppercase tracking-widest px-4 py-1.5 rounded-full">Most Popular</div>
+                <h3 className="text-2xl font-black text-blue-600 mb-2 text-center">FULL DIET ACCESS</h3>
+                <div className="flex justify-center items-end gap-1 mb-8">
+                  <span className="text-5xl font-black text-slate-900">₦10,000</span>
+                  <span className="text-slate-500 font-bold mb-1">/month</span>
+                </div>
+                <ul className="space-y-4 text-left mb-8 flex-1">
+                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" /> <span className="text-slate-700 text-sm font-bold">All Diet Papers Access</span></li>
+                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" /> <span className="text-slate-700 text-sm font-bold">AI Performance Diagnostics</span></li>
+                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" /> <span className="text-slate-700 text-sm font-bold">AI Study Assistant Explanations</span></li>
+                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" /> <span className="text-slate-700 text-sm font-bold">Live Battle Modes</span></li>
+                </ul>
+                <a href="https://exams.resultspro.ng/signup" className="block w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl transition-colors text-base text-center">Start Preparing Now</a>
+              </div>
+
+              {/* Complete Level */}
+              <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-lg relative flex flex-col">
+                <h3 className="text-xl font-black text-slate-900 mb-2">COMPLETE LEVEL</h3>
+                <div className="flex items-end gap-1 mb-8">
+                  <span className="text-4xl font-black text-slate-900">₦8,500</span>
+                  <span className="text-slate-500 font-bold mb-1">/month</span>
+                </div>
+                <ul className="space-y-4 text-left mb-8 flex-1">
+                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">All Subjects in a Level</span></li>
+                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">Performance Diagnostics</span></li>
+                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">AI Explanations</span></li>
+                </ul>
+                <a href="https://exams.resultspro.ng/signup" className="block w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-black rounded-xl transition-colors text-sm">Get Started</a>
+              </div>
+
             </div>
           </ScrollReveal>
         </div>
