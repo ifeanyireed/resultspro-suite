@@ -106,9 +106,9 @@ export default function LeaderboardPage() {
                 
                 {/* Header Row */}
                 <div style={{ display: 'grid', gridTemplateColumns: '60px 250px 120px', padding: '1.5rem 2rem', borderBottom: '1px solid var(--color-nets-border)' }}>
-                  <div className="overline" style={{ color: 'var(--color-nets-text-2)' }}>Rank</div>
-                  <div className="overline" style={{ color: 'var(--color-nets-text-2)' }}>Student</div>
-                  <div className="overline" style={{ color: 'var(--color-nets-text-2)', textAlign: 'left' }}>Score</div>
+                  <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-nets-text-2)' }}>Rank</div>
+                  <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-nets-text-2)' }}>Student</div>
+                  <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--color-nets-text-2)', textAlign: 'left' }}>Score</div>
                 </div>
 
                 {/* List */}
