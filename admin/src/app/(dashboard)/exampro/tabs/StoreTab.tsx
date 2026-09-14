@@ -364,6 +364,20 @@ export default function StoreTab() {
 
                 <div className="flex flex-col pb-4 border-b border-slate-100 gap-2">
                   <div>
+                    <p className="font-semibold text-slate-800">Gemini Model</p>
+                    <p className="text-xs text-slate-500 mt-1">Which model version to use (e.g., gemini-2.5-flash).</p>
+                  </div>
+                  <input
+                    type="text"
+                    value={pendingSettings['gemini_model'] !== undefined ? pendingSettings['gemini_model'] : (settings.find(s => s.id === 'gemini_model')?.value || 'gemini-2.5-flash')}
+                    onChange={(e) => setPendingSettings(prev => ({...prev, 'gemini_model': e.target.value}))}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500"
+                    placeholder="gemini-2.5-flash"
+                  />
+                </div>
+
+                <div className="flex flex-col pb-4 border-b border-slate-100 gap-2">
+                  <div>
                     <p className="font-semibold text-slate-800">Mistral API Keys</p>
                     <p className="text-xs text-slate-500 mt-1">Comma-separated list of Mistral API keys.</p>
                   </div>
@@ -372,6 +386,20 @@ export default function StoreTab() {
                     onChange={(e) => setPendingSettings(prev => ({...prev, 'mistral_api_key': e.target.value}))}
                     className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 min-h-[80px]"
                     placeholder="mistral-..."
+                  />
+                </div>
+
+                <div className="flex flex-col pb-4 border-b border-slate-100 gap-2">
+                  <div>
+                    <p className="font-semibold text-slate-800">Mistral Model</p>
+                    <p className="text-xs text-slate-500 mt-1">Which model version to use (e.g., mistral-small-latest).</p>
+                  </div>
+                  <input
+                    type="text"
+                    value={pendingSettings['mistral_model'] !== undefined ? pendingSettings['mistral_model'] : (settings.find(s => s.id === 'mistral_model')?.value || 'mistral-small-latest')}
+                    onChange={(e) => setPendingSettings(prev => ({...prev, 'mistral_model': e.target.value}))}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500"
+                    placeholder="mistral-small-latest"
                   />
                 </div>
 
