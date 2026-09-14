@@ -23,6 +23,7 @@ export interface SharedLoginPageProps {
 
 export default function SharedLoginPage({
   appName = "Edu Suite",
+  appId,
   appDescription = "The Engine Powering Modern Education.",
   brandTitle = "ResultsPRO",
   brandSubtitle = "EDU SUITE",
