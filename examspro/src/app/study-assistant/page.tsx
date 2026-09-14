@@ -145,18 +145,18 @@ export default function StudyAssistantPage() {
               </h3>
               <button onClick={startNewSession} className="text-[10px] font-bold text-red-600 hover:underline">New Chat</button>
             </div>
-            <div className="flex-1 overflow-y-auto space-y-2 no-scrollbar">
+            <div className="flex-1 overflow-y-auto no-scrollbar">
               {dashboardData?.recentSessions?.map((session: any) => (
                 <button 
                   key={session.id}
                   onClick={() => loadSession(session.id)}
-                  className={`w-full text-left p-3 rounded-xl border transition-all truncate text-[10px] font-bold ${currentSessionId === session.id ? 'bg-red-600/10 border-red-600/30 text-red-600' : 'bg-white border-slate-200 border-transparent shadow-sm text-gray-600 hover:bg-white'}`}
+                  className={`w-full text-left p-4 border-b border-slate-100 transition-all truncate text-xs font-medium ${currentSessionId === session.id ? 'bg-slate-50 text-[#0f172a]' : 'bg-transparent text-slate-500 hover:bg-slate-50 hover:text-slate-700'}`}
                 >
                   {session.title || 'Untitled Session'}
                 </button>
               ))}
               {dashboardData?.recentSessions?.length === 0 && (
-                <p className="text-[10px] text-gray-600 italic text-center py-10">No chat history yet.</p>
+                <p className="text-xs text-slate-400 italic text-center py-10">No chat history yet.</p>
               )}
             </div>
           </section>
