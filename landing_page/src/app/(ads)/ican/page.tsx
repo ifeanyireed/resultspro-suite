@@ -1,6 +1,4 @@
 import React from 'react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import Link from 'next/link';
 import { 
@@ -12,7 +10,10 @@ import {
   IconWallet as Wallet, 
   IconShare as Share2,
   IconChartBar as ChartBar,
-  IconShieldCheck as ShieldCheck
+  IconShieldCheck as ShieldCheck,
+  IconBook,
+  IconPencil,
+  IconRefresh
 } from '@tabler/icons-react';
 import Image from 'next/image';
 
@@ -24,7 +25,6 @@ export const metadata = {
 export default function IcanLandingPage() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans selection:bg-blue-200 selection:text-blue-900 overflow-x-hidden">
-      <Navbar />
       
       {/* 1. Hero Section */}
       <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-white">
@@ -55,7 +55,7 @@ export default function IcanLandingPage() {
                   Start Smarter Practice Now <ArrowRight className="w-5 h-5" />
                 </a>
                 <a href="#referral" className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-xl transition-all border border-slate-200 flex items-center justify-center gap-2 hover:-translate-y-0.5">
-                  Get Paid to Pass <Wallet className="w-5 h-5 text-emerald-500" />
+                  Get Paid to Tell Others <Wallet className="w-5 h-5 text-emerald-500" />
                 </a>
               </div>
             </ScrollReveal>
@@ -88,17 +88,42 @@ export default function IcanLandingPage() {
       </section>
 
       {/* 2. The Agitation */}
-      <section className="py-24 bg-gradient-to-br from-amber-400 to-orange-500 text-white">
-        <div className="container mx-auto px-4 md:px-8 max-w-4xl text-center">
+      <section className="py-24 bg-gradient-to-br from-amber-400 to-orange-500 text-white overflow-hidden relative">
+        <div className="absolute top-0 right-0 -translate-y-1/3 translate-x-1/3 w-[600px] h-[600px] bg-amber-300/30 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-[600px] h-[600px] bg-orange-600/30 rounded-full blur-3xl"></div>
+        <div className="container mx-auto px-4 md:px-8 max-w-5xl text-center relative z-10">
           <ScrollReveal>
-            <h2 className="text-4xl md:text-5xl font-black mb-8 leading-tight">
-              You study.<br/>You practise.<br/>You revise.<br/>
-              <span className="text-orange-950">But do you actually know where you are weak?</span>
-            </h2>
-            <p className="text-xl text-slate-300 font-medium leading-relaxed mb-12">
-              Thousands of questions do not automatically mean better preparation. If your practice isn't learning from you, you're preparing with hope, not data. Don't wait for the examination result to find out.
-            </p>
-            <div className="w-24 h-1 bg-orange-950/20 mx-auto rounded-full"></div>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-16">
+              <div className="bg-white rounded-3xl p-8 w-full md:w-1/3 border border-orange-200 shadow-2xl transform hover:-translate-y-1 transition-transform">
+                <div className="w-16 h-16 bg-orange-200/60 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <IconBook className="w-8 h-8 text-orange-950" />
+                </div>
+                <h3 className="text-2xl font-black text-orange-950">You study.</h3>
+              </div>
+              <ArrowRight className="w-8 h-8 text-orange-950/40 rotate-90 md:rotate-0 shrink-0" />
+              <div className="bg-white rounded-3xl p-8 w-full md:w-1/3 border border-orange-200 shadow-2xl transform hover:-translate-y-1 transition-transform">
+                <div className="w-16 h-16 bg-orange-200/60 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <IconPencil className="w-8 h-8 text-orange-950" />
+                </div>
+                <h3 className="text-2xl font-black text-orange-950">You practise.</h3>
+              </div>
+              <ArrowRight className="w-8 h-8 text-orange-950/40 rotate-90 md:rotate-0 shrink-0" />
+              <div className="bg-white rounded-3xl p-8 w-full md:w-1/3 border border-orange-200 shadow-2xl transform hover:-translate-y-1 transition-transform">
+                <div className="w-16 h-16 bg-orange-200/60 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <IconRefresh className="w-8 h-8 text-orange-950" />
+                </div>
+                <h3 className="text-2xl font-black text-orange-950">You revise.</h3>
+              </div>
+            </div>
+            
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-3xl md:text-5xl font-black mb-8 leading-tight text-white bg-orange-950/20 inline-block px-6 py-4 md:px-8 md:py-5 rounded-3xl backdrop-blur-sm border border-white/10 shadow-2xl">
+                But do you actually know where you are weak?
+              </h2>
+              <p className="text-xl md:text-2xl text-amber-50 font-medium leading-relaxed">
+                Thousands of questions don't guarantee success. Stop preparing with hope, and start preparing with data.
+              </p>
+            </div>
           </ScrollReveal>
         </div>
       </section>
@@ -116,7 +141,7 @@ export default function IcanLandingPage() {
                 </div>
                 <h3 className="text-3xl font-black text-slate-900 mb-4">"What are your weakest ICAN topics?"</h3>
                 <p className="text-lg text-slate-600 font-medium mb-6">
-                  Assess your preparation instantly. Our diagnostic engine tracks your performance across every single syllabus topic and subject, showing you exactly where to focus your effort.
+                  Our diagnostic engine instantly tracks your performance across every syllabus topic, showing you exactly where to focus.
                 </p>
                 <ul className="space-y-3">
                   <li className="flex items-center gap-3 text-slate-700 font-bold"><CheckCircle2 className="text-emerald-500 w-5 h-5" /> Topic-level accuracy tracking</li>
@@ -171,7 +196,7 @@ export default function IcanLandingPage() {
                 </div>
                 <h3 className="text-3xl font-black text-slate-900 mb-4">"What if your practice could learn from you?"</h3>
                 <p className="text-lg text-slate-600 font-medium mb-6">
-                  Your answers reveal patterns. Your performance tells a story. ExamsPRO's AI Study Assistant is available on every question to explain complex accounting principles exactly when you get stuck.
+                  Our AI Study Assistant is available on every question to explain complex principles the moment you get stuck.
                 </p>
                 <ul className="space-y-3">
                   <li className="flex items-center gap-3 text-slate-700 font-bold"><CheckCircle2 className="text-emerald-500 w-5 h-5" /> Ask follow-up questions</li>
@@ -191,7 +216,7 @@ export default function IcanLandingPage() {
                 </div>
                 <h3 className="text-3xl font-black text-slate-900 mb-4">"The clock is moving. Is your preparation?"</h3>
                 <p className="text-lg text-slate-600 font-medium mb-6">
-                  Every study session matters. Battle against the clock, face off against the Computer Bot, or challenge other ICAN candidates in real-time Live Battles to harden your exam speed.
+                  Battle the clock, face the Computer Bot, or challenge other candidates in real-time to harden your exam speed.
                 </p>
                 <a href="https://exams.resultspro.ng/signup" className="inline-flex px-6 py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl transition-all shadow-lg items-center gap-2">
                   Experience Live Battles <ArrowRight className="w-4 h-4" />
@@ -200,21 +225,21 @@ export default function IcanLandingPage() {
             </div>
             <div className="w-full md:w-1/2 order-1 md:order-2">
               <ScrollReveal delay={0.2}>
-                <div className="aspect-video md:aspect-[4/3] rounded-3xl bg-gradient-to-br from-emerald-400 to-emerald-600 p-8 shadow-2xl flex flex-col justify-center relative overflow-hidden">
+                <div className="aspect-video md:aspect-[4/3] rounded-3xl bg-gradient-to-br from-emerald-400 to-emerald-600 p-4 md:p-8 shadow-2xl flex flex-col justify-center relative overflow-hidden">
                   <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
                   
-                  <div className="bg-white rounded-2xl shadow-2xl p-6 relative z-10 flex items-center justify-between border-4 border-emerald-100">
+                  <div className="bg-white rounded-2xl shadow-2xl p-4 md:p-6 relative z-10 flex items-center justify-between border-4 border-emerald-100">
                      <div className="text-center">
-                        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-2xl mx-auto mb-2 border-4 border-white shadow-md">YOU</div>
-                        <div className="text-3xl font-black text-slate-800">450</div>
+                        <div className="w-12 h-12 md:w-16 md:h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-lg md:text-2xl mx-auto mb-1 md:mb-2 border-[3px] md:border-4 border-white shadow-md">YOU</div>
+                        <div className="text-xl md:text-3xl font-black text-slate-800">450</div>
                      </div>
-                     <div className="text-rose-500 font-black italic text-xl px-4">VS</div>
+                     <div className="text-rose-500 font-black italic text-lg md:text-xl px-2 md:px-4 shrink-0">VS</div>
                      <div className="text-center">
-                        <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-2xl mx-auto mb-2 border-4 border-white shadow-md">BOT</div>
-                        <div className="text-3xl font-black text-slate-400">320</div>
+                        <div className="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-lg md:text-2xl mx-auto mb-1 md:mb-2 border-[3px] md:border-4 border-white shadow-md">BOT</div>
+                        <div className="text-xl md:text-3xl font-black text-slate-400">320</div>
                      </div>
                   </div>
-                  <div className="w-full bg-rose-400 h-2 mt-8 rounded-full relative z-10 overflow-hidden">
+                  <div className="w-full bg-rose-400 h-1.5 md:h-2 mt-6 md:mt-8 rounded-full relative z-10 overflow-hidden">
                      <div className="h-full bg-white w-[80%]"></div>
                   </div>
                 </div>
@@ -265,14 +290,14 @@ export default function IcanLandingPage() {
                   <Wallet className="w-4 h-4" /> ExamsPRO Affiliate Program
                 </div>
                 <h2 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
-                  GET PAID TO PASS. <br/><span className="text-emerald-200">(Yes, we are serious).</span>
+                  GET PAID TO TELL OTHERS. <br/><span className="text-emerald-200">(Yes, we are serious).</span>
                 </h2>
                 <p className="text-xl text-emerald-50 font-medium leading-relaxed mb-8">
-                  We're so confident ExamsPRO will change how you study that we're paying you to bring your ICAN study group. Share your link and earn a massive <strong className="bg-emerald-900/40 px-2 py-1 rounded">30% commission</strong> every time a friend buys a plan.
+                  Share your link and earn a massive <strong className="bg-emerald-900/40 px-2 py-1 rounded">30% commission</strong> every time a friend buys a plan.
                 </p>
                 <div className="bg-emerald-700/50 border border-emerald-500 rounded-2xl p-6 mb-8 backdrop-blur-sm">
                   <h4 className="font-bold text-xl mb-4 flex items-center gap-2"><ShieldCheck className="w-6 h-6 text-emerald-300" /> The Catch? There isn't one.</h4>
-                  <p className="text-emerald-100">The money drops directly into your ExamsPRO wallet the second they pay. Withdraw 100% of it directly to your local bank account. No minimums. No gimmicks.</p>
+                  <p className="text-emerald-100">Money drops directly into your wallet. Withdraw to your bank anytime. No minimums.</p>
                 </div>
                 <a href="https://exams.resultspro.ng/login" className="inline-flex px-8 py-4 bg-white text-emerald-700 hover:bg-emerald-50 font-black rounded-xl transition-all shadow-xl items-center gap-3">
                   Start Earning Now <ArrowRight className="w-5 h-5" />
@@ -308,57 +333,63 @@ export default function IcanLandingPage() {
       <section className="py-24 bg-white relative">
         <div className="container mx-auto px-4 max-w-6xl text-center">
           <ScrollReveal>
-            <h2 className="text-4xl md:text-5xl font-black mb-6 text-slate-900">YOUR ICAN STUDY PARTNER IS ON YOUR PHONE.</h2>
+            <h2 className="text-4xl md:text-5xl font-black mb-6 text-slate-900">YOUR ICAN STUDY PARTNER IS NOW ON YOUR PHONE.</h2>
             <p className="text-lg text-slate-600 mb-12">Get everything you need to crush your next ICAN diet in one powerful platform.</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               
               {/* Single Paper */}
-              <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-lg relative flex flex-col">
-                <h3 className="text-xl font-black text-slate-900 mb-2">SINGLE PAPER</h3>
-                <div className="flex items-end gap-1 mb-8">
-                  <span className="text-4xl font-black text-slate-900">₦3,500</span>
-                  <span className="text-slate-500 font-bold mb-1">/diet (6 months)</span>
+              <ScrollReveal delay={0.1} animation="slide-right" className="h-full">
+                <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-lg relative flex flex-col h-full">
+                  <h3 className="text-xl font-black text-slate-900 mb-2">SINGLE PAPER</h3>
+                  <div className="flex items-end gap-1 mb-8">
+                    <span className="text-4xl font-black text-slate-900">₦3,500</span>
+                    <span className="text-slate-500 font-bold text-xs md:text-sm mb-1">/diet (6 months)</span>
+                  </div>
+                  <ul className="space-y-4 text-left mb-8 flex-1">
+                    <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">1 Subject Access</span></li>
+                    <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">Performance Diagnostics</span></li>
+                    <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">Referral Program</span></li>
+                  </ul>
+                  <a href="https://exams.resultspro.ng/signup" className="block w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-black rounded-xl transition-colors text-sm">Get Started</a>
                 </div>
-                <ul className="space-y-4 text-left mb-8 flex-1">
-                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">1 Subject Access</span></li>
-                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">Performance Diagnostics</span></li>
-                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">Referral Program</span></li>
-                </ul>
-                <a href="https://exams.resultspro.ng/signup" className="block w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-black rounded-xl transition-colors text-sm">Get Started</a>
-              </div>
+              </ScrollReveal>
 
               {/* Full Diet Access (Most Popular) */}
-              <div className="bg-white border-2 border-blue-600 rounded-3xl p-8 shadow-2xl relative flex flex-col transform md:-translate-y-4">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white font-black text-[10px] uppercase tracking-widest px-4 py-1.5 rounded-full">Most Popular</div>
-                <h3 className="text-2xl font-black text-blue-600 mb-2 text-center">FULL DIET ACCESS</h3>
-                <div className="flex justify-center items-end gap-1 mb-8">
-                  <span className="text-5xl font-black text-slate-900">₦10,000</span>
-                  <span className="text-slate-500 font-bold mb-1">/diet (6 months)</span>
+              <ScrollReveal delay={0.2} animation="zoom-in" className="h-full">
+                <div className="bg-white border-2 border-blue-600 rounded-3xl p-8 shadow-2xl relative flex flex-col transform md:-translate-y-4 h-full">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white font-black text-[10px] uppercase tracking-widest px-4 py-1.5 rounded-full">Most Popular</div>
+                  <h3 className="text-2xl font-black text-blue-600 mb-2 text-center">FULL DIET ACCESS</h3>
+                  <div className="flex justify-center items-end gap-1 mb-8">
+                    <span className="text-5xl font-black text-slate-900">₦10,000</span>
+                    <span className="text-slate-500 font-bold text-xs md:text-sm mb-1">/diet (6 months)</span>
+                  </div>
+                  <ul className="space-y-4 text-left mb-8 flex-1">
+                    <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" /> <span className="text-slate-700 text-sm font-bold">All Diet Papers Access</span></li>
+                    <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" /> <span className="text-slate-700 text-sm font-bold">AI Performance Diagnostics</span></li>
+                    <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" /> <span className="text-slate-700 text-sm font-bold">AI Study Assistant Explanations</span></li>
+                    <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" /> <span className="text-slate-700 text-sm font-bold">Live Battle Modes</span></li>
+                  </ul>
+                  <a href="https://exams.resultspro.ng/signup" className="block w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl transition-colors text-base text-center">Start Preparing Now</a>
                 </div>
-                <ul className="space-y-4 text-left mb-8 flex-1">
-                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" /> <span className="text-slate-700 text-sm font-bold">All Diet Papers Access</span></li>
-                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" /> <span className="text-slate-700 text-sm font-bold">AI Performance Diagnostics</span></li>
-                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" /> <span className="text-slate-700 text-sm font-bold">AI Study Assistant Explanations</span></li>
-                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" /> <span className="text-slate-700 text-sm font-bold">Live Battle Modes</span></li>
-                </ul>
-                <a href="https://exams.resultspro.ng/signup" className="block w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl transition-colors text-base text-center">Start Preparing Now</a>
-              </div>
+              </ScrollReveal>
 
               {/* Complete Level */}
-              <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-lg relative flex flex-col">
-                <h3 className="text-xl font-black text-slate-900 mb-2">COMPLETE LEVEL</h3>
-                <div className="flex items-end gap-1 mb-8">
-                  <span className="text-4xl font-black text-slate-900">₦8,500</span>
-                  <span className="text-slate-500 font-bold mb-1">/diet (6 months)</span>
+              <ScrollReveal delay={0.3} animation="slide-left" className="h-full">
+                <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-lg relative flex flex-col h-full">
+                  <h3 className="text-xl font-black text-slate-900 mb-2">COMPLETE LEVEL</h3>
+                  <div className="flex items-end gap-1 mb-8">
+                    <span className="text-4xl font-black text-slate-900">₦8,500</span>
+                    <span className="text-slate-500 font-bold text-xs md:text-sm mb-1">/diet (6 months)</span>
+                  </div>
+                  <ul className="space-y-4 text-left mb-8 flex-1">
+                    <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">All Subjects in a Level</span></li>
+                    <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">Performance Diagnostics</span></li>
+                    <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">AI Explanations</span></li>
+                  </ul>
+                  <a href="https://exams.resultspro.ng/signup" className="block w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-black rounded-xl transition-colors text-sm">Get Started</a>
                 </div>
-                <ul className="space-y-4 text-left mb-8 flex-1">
-                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">All Subjects in a Level</span></li>
-                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">Performance Diagnostics</span></li>
-                  <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">AI Explanations</span></li>
-                </ul>
-                <a href="https://exams.resultspro.ng/signup" className="block w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-black rounded-xl transition-colors text-sm">Get Started</a>
-              </div>
+              </ScrollReveal>
 
             </div>
           </ScrollReveal>
@@ -377,8 +408,6 @@ export default function IcanLandingPage() {
           </ScrollReveal>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

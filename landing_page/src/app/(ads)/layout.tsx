@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, DM_Sans, Inter } from "next/font/google";
 import "../globals.css";
+import "../nets.css";
 
 const inter = Inter({
   subsets: ["latin"],
