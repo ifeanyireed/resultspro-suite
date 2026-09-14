@@ -34,7 +34,7 @@ export default function ScrollReveal({
       transition: {
         duration: duration,
         delay: delay,
-        ease: [0.21, 0.47, 0.32, 0.98], // Custom ease-out cubic
+        ease: [0.21, 0.47, 0.32, 0.98] as const, // Custom ease-out cubic
       }
     }
   };
