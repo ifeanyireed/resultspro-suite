@@ -238,13 +238,16 @@ export default function StudyAssistantPage() {
             {messages.map((msg) => (
               <div 
                 key={msg.id}
-                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} duration-300`}
+                className="flex justify-start duration-300 mb-4"
               >
-                <div className={`max-w-[85%] md:max-w-[75%] p-5 rounded-3xl ${msg.role === 'user' ? 'bg-red-600 text-white rounded-tr-none' : 'bg-blue-600 text-white rounded-tl-none shadow-md relative z-10'}`}>
-                  <div className={`markdown-content text-sm ${msg.role === 'user' ? 'text-white' : 'text-white'}`}>
-                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                <div className="max-w-full md:max-w-[85%] py-2">
+                  <div className="flex flex-col">
+                    <span className="text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">{msg.role === 'user' ? 'You' : 'Study Assistant'}</span>
+                    <div className="markdown-content text-sm text-black prose prose-sm max-w-none prose-p:text-black prose-headings:text-black">
+                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    </div>
                   </div>
-                  <div className={`text-[8px] font-bold mt-2 uppercase tracking-widest ${msg.role === 'user' ? 'text-gray-500' : 'text-blue-200'}`}>
+                  <div className="text-[8px] font-bold mt-2 uppercase tracking-widest text-slate-400">
                     {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </div>
                 </div>
