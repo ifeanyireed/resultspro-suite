@@ -121,7 +121,7 @@ export default function StudyAssistantPage() {
                     onClick={() => handleSend(`Can you teach me about ${topic.name}?`, topic.id)}
                     className="w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 shadow-sm transition-all group"
                   >
-                    <div className="text-xs font-bold text-slate-800 mb-1 group-hover:text-red-600 transition-colors">{topic.name}</div>
+                    <div className="text-xs font-bold text-[#0f172a] mb-1 group-hover:text-red-600 transition-colors">{topic.name}</div>
                     <div className="text-[10px] text-gray-500 font-medium">Accuracy: {Math.round(topic.accuracy)}%</div>
                   </button>
                 ))
@@ -168,7 +168,7 @@ export default function StudyAssistantPage() {
                 <div className="w-16 h-16 bg-red-600/10 text-red-600 rounded-2xl flex items-center justify-center mx-auto">
                   <Sparkles className="w-8 h-8" />
                 </div>
-                <h3 className="text-2xl font-bold text-[var(--color-nets-navy-dark)]">Unlock Your AI Tutor</h3>
+                <h3 className="text-2xl font-bold text-[#0f172a]">Unlock Your AI Tutor</h3>
                 <p className="text-gray-600 text-sm">
                   Sign in to chat with our AI Study Assistant, get help with difficult topics, and track your focus areas.
                 </p>
@@ -182,7 +182,7 @@ export default function StudyAssistantPage() {
                   <Button 
                     onClick={() => window.location.href = '/register'}
                     variant="ghost" 
-                    className="w-full text-gray-500 hover:text-[var(--color-nets-navy-dark)]"
+                    className="w-full text-gray-500 hover:text-[#0f172a]"
                   >
                     Create Free Account
                   </Button>
@@ -198,7 +198,7 @@ export default function StudyAssistantPage() {
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-[var(--color-nets-navy-dark)] font-bold leading-none mb-1">Study Assistant</h2>
+                <h2 className="text-[#0f172a] font-bold leading-none mb-1">Study Assistant</h2>
                 <p className="text-[10px] text-red-600 font-bold uppercase tracking-widest">Online • AI Powered</p>
               </div>
             </div>
@@ -216,7 +216,7 @@ export default function StudyAssistantPage() {
                   <MessageSquare className="w-10 h-10" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-[var(--color-nets-navy-dark)] text-xl font-bold">How can I help you today?</h3>
+                  <h3 className="text-[#0f172a] text-xl font-bold">How can I help you today?</h3>
                   <p className="text-gray-500 text-sm max-w-sm">
                     Ask me to explain a concept, create a mini-quiz, or help you with a topic you're struggling with.
                   </p>
@@ -226,7 +226,7 @@ export default function StudyAssistantPage() {
                     <button 
                       key={hint}
                       onClick={() => handleSend(hint)}
-                      className="px-4 py-2 rounded-full border border-slate-200 shadow-sm text-xs font-bold text-gray-600 hover:bg-slate-50 hover:text-[var(--color-nets-navy-dark)] transition-all"
+                      className="px-4 py-2 rounded-full border border-slate-200 shadow-sm text-xs font-bold text-gray-600 hover:bg-slate-50 hover:text-[#0f172a] transition-all"
                     >
                       {hint}
                     </button>
@@ -240,8 +240,8 @@ export default function StudyAssistantPage() {
                 key={msg.id}
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}
               >
-                <div className={`max-w-[85%] md:max-w-[75%] p-5 rounded-3xl ${msg.role === 'user' ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white rounded-tr-none' : 'bg-slate-50 text-slate-800 rounded-tl-none border border-slate-200 shadow-sm'}`}>
-                  <div className={`markdown-content text-sm ${msg.role === 'user' ? 'text-white' : 'text-slate-900'}`}>
+                <div className={`max-w-[85%] md:max-w-[75%] p-5 rounded-3xl ${msg.role === 'user' ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white rounded-tr-none' : 'bg-slate-50 text-[#0f172a] rounded-tl-none border border-slate-200 shadow-sm'}`}>
+                  <div className={`markdown-content text-sm ${msg.role === 'user' ? 'text-white' : 'text-[#0f172a]'}`}>
                     <ReactMarkdown>{msg.content}</ReactMarkdown>
                   </div>
                   <div className={`text-[8px] font-bold mt-2 uppercase tracking-widest ${msg.role === 'user' ? 'text-gray-500' : 'text-gray-600'}`}>
@@ -273,7 +273,7 @@ export default function StudyAssistantPage() {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask your study question..."
                 disabled={isLoading}
-                className="w-full bg-white border border-slate-200 rounded-2xl py-5 pl-6 pr-16 text-[var(--color-nets-navy-dark)] focus:outline-none focus:border-red-600/50 transition-all placeholder:text-gray-600"
+                className="w-full bg-white border border-slate-200 rounded-2xl py-5 pl-6 pr-16 text-[#0f172a] focus:outline-none focus:border-red-600/50 transition-all placeholder:text-gray-600"
               />
               <button 
                 type="submit"

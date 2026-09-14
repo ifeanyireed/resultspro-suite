@@ -245,7 +245,7 @@ export default function StudyAssistantPage() {
                       max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed
                       ${m.role === 'user' 
                         ? 'bg-[#146ef5] text-white rounded-tr-none' 
-                        : 'bg-white text-gray-600 border border-gray-200  rounded-tl-none'}
+                        : 'bg-white text-[#475569] border border-gray-200  rounded-tl-none'}
                     `}>
                       {m.role === 'assistant' ? (
                         <div className="markdown-content">
