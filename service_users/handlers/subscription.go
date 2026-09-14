@@ -455,9 +455,10 @@ func HandleInitializePayment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
-		PackID      string `json:"packId"`
-		CallbackURL string `json:"callbackUrl"`
-		Type        string `json:"type"` // "PLAN" or "COIN"
+		PackID        string `json:"packId"`
+		CallbackURL   string `json:"callbackUrl"`
+		Type          string `json:"type"` // "PLAN" or "COIN"
+		PayWithWallet bool   `json:"payWithWallet"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		utils.JSONError(w, http.StatusBadRequest, "Invalid request payload")
@@ -503,6 +504,39 @@ func HandleInitializePayment(w http.ResponseWriter, r *http.Request) {
 		// Mock coin packs since they aren't fully migrated yet
 		// We'll support coins later, just mock for now or return error
 		utils.JSONError(w, http.StatusBadRequest, "Coin packs initialization currently disabled")
+		return
+	}
+
+	if input.PayWithWallet {
+		var totalFiat int64
+		db.GormDB.Table("referrals").Where("referrer_id = ? AND status = ?", userID, "converted").Select("COALESCE(SUM(fiat_awarded), 0)").Row().Scan(&totalFiat)
+		
+		var withdrawnFiat int64
+		db.GormDB.Table("withdrawals").Where("user_id = ? AND status IN ?", userID, []string{"pending", "approved", "completed"}).Select("COALESCE(SUM(amount_ngn), 0)").Row().Scan(&withdrawnFiat)
+		
+		availableBalance := float64(totalFiat - withdrawnFiat)
+		if availableBalance < amount {
+			utils.JSONError(w, http.StatusPaymentRequired, "Insufficient referral wallet balance")
+			return
+		}
+
+		// Create withdrawal record to deduct from wallet
+		db.GormDB.Exec("INSERT INTO withdrawals (id, user_id, amount_ngn, status, bank_name, account_number, account_name, created_at, updated_at) VALUES (?, ?, ?, 'completed', 'WALLET', 'PAYMENT', 'PLAN PURCHASE', ?, ?)", uuid.New().String(), userID, int(amount), time.Now(), time.Now())
+
+		// Grant access
+		if accessLevel == "PREMIUM" {
+			now := time.Now().AddDate(0, 1, 0)
+			db.GormDB.Exec("UPDATE users SET is_premium = ?, premium_expires_at = ? WHERE id = ?", true, now, userID)
+		} else if accessLevel == "ICAN_SINGLE" || accessLevel == "ICAN_GROUP" || accessLevel == "ICAN_FULL" {
+			now := time.Now().AddDate(0, 1, 0)
+			db.GormDB.Exec("UPDATE users SET has_ican = ?, ican_plan = ?, ican_expires_at = ? WHERE id = ?", true, accessLevel, now, userID)
+		}
+
+		utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+			"success": true,
+			"message": "Purchased successfully using referral wallet!",
+			"paidWithWallet": true,
+		})
 		return
 	}
 

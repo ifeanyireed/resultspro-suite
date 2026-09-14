@@ -225,7 +225,7 @@ func (h *StudyAssistantHandler) Chat(c *gin.Context) {
 
 	// Deduct 2 coins within a transaction
 	err = database.DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Model(&models.User{}).Where("id = ?", userID).Update("coin_balance", gorm.Expr("coin_balance - ?", 2)).Error; err != nil {
+		if err := tx.Model(&models.User{}).Where("id = ?", userID).Update("coin_balance", gorm.Expr("coin_balance - ?", queryCost)).Error; err != nil {
 			return err
 		}
 		// Record transaction
@@ -407,7 +407,7 @@ func (h *StudyAssistantHandler) AskTopicQuestion(c *gin.Context) {
 
 	// Deduct 2 coins within a transaction
 	err = database.DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Model(&models.User{}).Where("id = ?", userID).Update("coin_balance", gorm.Expr("coin_balance - ?", 2)).Error; err != nil {
+		if err := tx.Model(&models.User{}).Where("id = ?", userID).Update("coin_balance", gorm.Expr("coin_balance - ?", queryCost)).Error; err != nil {
 			return err
 		}
 		// Record transaction

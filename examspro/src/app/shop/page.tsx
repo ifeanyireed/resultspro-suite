@@ -55,13 +55,17 @@ export default function CoinShopPage() {
   const { user } = useAuthStore();
   const [isMounted, setIsMounted] = useState(false);
   const [loadingPack, setLoadingPack] = useState<string | null>(null);
+  const [walletBalance, setWalletBalance] = useState<number>(0);
   const [allPacks, setAllPacks] = useState<CoinPack[]>([]);
   const [loadingPacks, setLoadingPacks] = useState(true);
 
   useEffect(() => {
     setIsMounted(true);
     fetchCoinPacks();
-  }, []);
+    if (user) {
+      api.get('/user/dashboard').then(res => setWalletBalance(res.data.user?.walletBalance || 0)).catch(() => {});
+    }
+  }, [user]);
 
   const fetchCoinPacks = async () => {
     try {
@@ -132,11 +136,18 @@ export default function CoinShopPage() {
   const icanPacks = useMemo(() => Array.isArray(allPacks) ? allPacks.filter(p => p.type === 'ICAN') : [], [allPacks]);
   const premiumPack = useMemo(() => Array.isArray(allPacks) ? allPacks.find(p => p.type === 'PREMIUM') : undefined, [allPacks]);
 
-  const handlePurchase = async (packId: string) => {
+  const handlePurchase = async (packId: string, price: number) => {
     if (!user) {
       window.location.href = '/login';
       return;
     }
+    let payWithWallet = false;
+    if (walletBalance >= price) {
+      if (window.confirm(`Your Referral Wallet balance is ₦${walletBalance.toLocaleString()}.\n\nWould you like to pay ₦${price.toLocaleString()} from your wallet instead of using a card?`)) {
+        payWithWallet = true;
+      }
+    }
+    
     setLoadingPack(packId);
     try {
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
@@ -150,12 +161,19 @@ export default function CoinShopPage() {
         body: JSON.stringify({
           packId,
           callbackUrl: window.location.origin + '/shop/verify',
-          type: 'PLAN'
+          type: 'PLAN',
+          payWithWallet
         })
       });
       
-      if (!res.ok) throw new Error('Initialization failed');
       const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Initialization failed');
+      
+      if (data.paidWithWallet) {
+        alert(data.message || 'Purchased successfully!');
+        window.location.reload();
+        return;
+      }
       
       // Redirect to Paystack checkout
       window.location.href = data.authorization_url;
@@ -237,7 +255,7 @@ export default function CoinShopPage() {
                    <Info className="w-3 h-3" stroke={3} /> Includes 7.5% VAT & Fees
                 </div>
                 <Button 
-                  onClick={() => handlePurchase(premiumPack.id)}
+                  onClick={() => handlePurchase(premiumPack.id, calculateFinalTotal(premiumPack.price))}
                   disabled={loadingPack === premiumPack.id}
                   className="mt-2 px-10 py-7 rounded-2xl bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white hover:opacity-90 font-bold text-lg shadow-lg shadow-red-600/20"
                 >
@@ -305,7 +323,7 @@ export default function CoinShopPage() {
                   
                   <div className="mt-auto w-full">
                     <Button 
-                      onClick={() => handlePurchase(pack.id)}
+                      onClick={() => handlePurchase(pack.id, finalPrice)}
                       disabled={loadingPack === pack.id}
                       className={`w-full py-6 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 ${pack.popular ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white hover:opacity-90' : 'bg-white shadow-sm border border-nets-border text-navy hover:bg-white/10'}`}
                     >
@@ -379,7 +397,7 @@ export default function CoinShopPage() {
                     
                     <div className="mt-auto w-full">
                       <Button 
-                        onClick={() => handlePurchase(pack.id)}
+                        onClick={() => handlePurchase(pack.id, finalPrice)}
                         disabled={loadingPack === pack.id}
                         className={`w-full py-6 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 ${pack.popular ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white hover:opacity-90' : 'bg-white shadow-sm border border-nets-border text-navy hover:bg-slate-50'}`}
                       >
