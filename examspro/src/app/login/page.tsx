@@ -7,6 +7,7 @@ export default function LoginPage() {
       brandTitle="ExamsPRO"
       brandSubtitle="RESULTSPRO EDU SUITE"
       appName="ExamsPRO"
+      appId="examspro-app-id"
       appDescription="The Ultimate CBT Practice Platform for Nigerian Students"
       redirectPath="/dashboard"
       loginEndpoint={`${USERS_API}/api/v1/auth/login`}

@@ -134,8 +134,9 @@ func (h *UserHandler) GetLeaderboard(c *gin.Context) {
 		order = "elo_rating desc"
 	}
 
-	if err := database.DB.Select("id, full_name, avatar_url, elo_rating, coin_balance, streak_current").
-		Where("is_banned = ?", false).
+	if err := database.DB.Select("users.id, users.full_name, users.avatar_url, users.elo_rating, users.coin_balance, users.streak_current").
+		Joins("JOIN user_apps ON user_apps.user_id = users.id").
+		Where("users.is_banned = ? AND user_apps.app_id = ?", false, "examspro-app-id").
 		Order(order).
 		Limit(100).
 		Find(&users).Error; err != nil {

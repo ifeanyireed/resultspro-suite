@@ -170,6 +170,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		Password   string `json:"password"`
 		TenantID   string `json:"tenant_id,omitempty"`
 		TenantSlug string `json:"tenant_slug,omitempty"`
+		AppID      string `json:"app_id,omitempty"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		utils.JSONError(w, http.StatusBadRequest, "Invalid request payload")

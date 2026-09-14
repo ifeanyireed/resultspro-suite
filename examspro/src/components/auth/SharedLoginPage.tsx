@@ -12,6 +12,7 @@ import api, { USERS_API } from '@/lib/api';
 
 export interface SharedLoginPageProps {
   appName?: string;
+  appId?: string;
   appDescription?: string;
   brandTitle?: string;
   brandSubtitle?: string;
@@ -69,7 +70,7 @@ export default function SharedLoginPage({
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await api.post(loginEndpoint, { email, password });
+      const res = await api.post(loginEndpoint, { email, password, app_id: appId });
       const token = res.data.token || res.data.access_token;
       if (token) {
         setAuth(res.data.user, token);
