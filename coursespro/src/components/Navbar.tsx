@@ -100,7 +100,7 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
 
           {/* Logo */}
           <Link href="/" aria-label="ExamsPRO" style={{ display: 'flex', alignItems: 'center', flexShrink: 0, transition: 'opacity 0.2s ease' }} onMouseEnter={e => e.currentTarget.style.opacity = '0.8'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
-            <img src={tenantLogo || "/logo.png"} alt={tenantName || "CoursesPRO Logo"} style={{ height: '56px', width: 'auto', objectFit: 'contain' }} />
+            <img src={tenantLogo || "/logo.png"} alt={tenantName || "CoursesPRO Logo"} style={{ height: '56px', width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
             <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: 'white', letterSpacing: '-0.05em' }}>{tenantName || 'CoursesPRO'}</span>
           </Link>
 
@@ -199,7 +199,7 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexShrink: 0 }}>
                 <Link href="/" onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-                  <img src={tenantLogo || "/logo.png"} alt={tenantName || "CoursesPRO Logo"} style={{ height: '56px', width: 'auto', objectFit: 'contain' }} />
+                  <img src={tenantLogo || "/logo.png"} alt={tenantName || "CoursesPRO Logo"} style={{ height: '56px', width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
                   <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: 'white', letterSpacing: '-0.05em' }}>{tenantName || 'CoursesPRO'}</span>
                 </Link>
                 <button onClick={() => setMobileOpen(false)} aria-label="Close menu"

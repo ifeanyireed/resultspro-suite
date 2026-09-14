@@ -104,7 +104,7 @@ export default async function TenantHome({ params }: { params: Promise<{ tenant:
         </div>
       </section>
       
-      <Footer />
+      <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} />
     </main>
   );
 }
