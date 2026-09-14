@@ -749,6 +749,26 @@ func HandleUpdateTenant(w http.ResponseWriter, r *http.Request) {
 		input["default_subdomain"] = fmt.Sprintf("%s.resultspro.ng", slug)
 	}
 	
+	// Handle Admin Password update if provided
+	if passRaw, ok := input["password"]; ok {
+		if passStr, ok := passRaw.(string); ok && passStr != "" {
+			var adminEmail string
+			if emailRaw, ok := input["contact_email"]; ok {
+				adminEmail, _ = emailRaw.(string)
+			} else {
+				db.DB.QueryRow("SELECT contact_email FROM tenants WHERE id = ?", tenantID).Scan(&adminEmail)
+			}
+			
+			if adminEmail != "" {
+				hashedPass, err := utils.HashPassword(passStr)
+				if err == nil {
+					db.DB.Exec("UPDATE users SET password_hash = ?, updated_at = ? WHERE email = ?", hashedPass, time.Now().UTC().Format("2006-01-02 15:04:05"), adminEmail)
+				}
+			}
+		}
+		delete(input, "password")
+	}
+	
 	if len(input) == 0 {
 		utils.JSONError(w, http.StatusBadRequest, "No fields to update")
 		return

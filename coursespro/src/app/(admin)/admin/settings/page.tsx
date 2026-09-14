@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '@/lib/api';
 import { 
   CheckCircleIcon,
   CogIcon,
@@ -10,24 +11,95 @@ import {
 } from '@heroicons/react/24/outline';
 
 export default function SettingsPage() {
+  const [tenantId, setTenantId] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
   const [formData, setFormData] = useState({
-    name: 'Skillup Academy',
-    shortName: 'Skillup',
-    slug: 'skillupacademy',
-    adminEmail: 'platform@resultspro.ng',
+    name: '',
+    shortName: '',
+    slug: '',
+    adminEmail: '',
     password: '',
-    address: '123 Innovation Drive, Tech Hub, Lagos',
-    contactPerson: 'Admin User',
-    phone: '+234 800 000 0000',
+    address: '',
+    contactPerson: '',
+    phone: '',
     plan: 'Pro Tier - Active',
     customDomainEnabled: false,
     customDomain: '',
     primaryColor: '#146ef5',
   });
 
+  useEffect(() => {
+    const fetchTenant = async () => {
+      try {
+        const slug = window.location.hostname.split('.')[0];
+        const res = await api.get(`/api/public/tenant/resolve?domain=${slug}`);
+        if (res.data && res.data.tenant) {
+          const t = res.data.tenant;
+          setTenantId(t.id);
+          setFormData({
+            name: t.name || '',
+            shortName: t.short_name || t.motto || '',
+            slug: t.slug || '',
+            adminEmail: t.contact_email || '',
+            password: '',
+            address: t.full_address || '',
+            contactPerson: t.contact_person_name || '',
+            phone: t.contact_phone || '',
+            plan: t.subscription_tier ? `${t.subscription_tier} - Active` : 'Free - Active',
+            customDomainEnabled: !!t.custom_domain,
+            customDomain: t.custom_domain || '',
+            primaryColor: t.primary_color || '#146ef5',
+          });
+        }
+      } catch (err) {
+        console.error("Failed to load tenant details", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTenant();
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const handleSave = async () => {
+    if (!tenantId) return;
+    setSaving(true);
+    try {
+      const payload: any = {
+        name: formData.name,
+        short_name: formData.shortName,
+        slug: formData.slug,
+        contact_email: formData.adminEmail,
+        full_address: formData.address,
+        contact_person_name: formData.contactPerson,
+        contact_phone: formData.phone,
+        custom_domain: formData.customDomainEnabled ? formData.customDomain : "",
+        primary_color: formData.primaryColor,
+      };
+      
+      if (formData.password) {
+        payload.password = formData.password;
+      }
+      
+      await api.patch(`/api/v1/tenants/update/${tenantId}`, payload);
+      alert('Platform profile updated successfully!');
+      if (formData.password) {
+        setFormData(prev => ({ ...prev, password: '' }));
+      }
+    } catch (err) {
+      console.error("Failed to update tenant", err);
+      alert('Failed to update platform profile.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) return <div className="p-8 text-gray-500">Loading settings...</div>;
 
   return (
     <>
@@ -36,8 +108,12 @@ export default function SettingsPage() {
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Platform & AI Settings</h2>
           <p className="text-sm text-gray-500 mt-1">Super Admin configuration for BuilderOS.</p>
         </div>
-        <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-all">
-          Save Changes
+        <button 
+          onClick={handleSave}
+          disabled={saving}
+          className="bg-[#146ef5] hover:bg-[#105bd1] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-all"
+        >
+          {saving ? 'Saving...' : 'Save Changes'}
         </button>
       </div>
 
