@@ -17,17 +17,10 @@ func (g *GeminiProvider) GenerateTutorResponse(ctx context.Context, query string
 		return "", fmt.Errorf("GEMINI_API_KEY is not set")
 	}
 
-	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
-	if err != nil {
-		return "", err
-	}
-	defer client.Close()
-
 	geminiModel := GetSettingWithFallback("gemini_model", "GEMINI_MODEL")
 	if geminiModel == "" {
 		geminiModel = "gemini-2.5-flash"
 	}
-	model := client.GenerativeModel(geminiModel)
 
 	systemPrompt := fmt.Sprintf(`
       You are "ResultPRO Study Assistant", an expert AI tutor for Nigerian students preparing for JAMB and WAEC.
@@ -45,39 +38,9 @@ func (g *GeminiProvider) GenerateTutorResponse(ctx context.Context, query string
       6. If the user query is irrelevant to education or exams, politely redirect them to study.
     `, weakTopics, syllabusContext)
 
-	// Build history
-	var chatHistory []*genai.Content
-	for _, h := range history {
-		role := "user"
-		if h["role"] != "user" {
-			role = "model"
-		}
-		chatHistory = append(chatHistory, &genai.Content{
-			Role:  role,
-			Parts: []genai.Part{genai.Text(h["content"])},
-		})
-	}
-
-	cs := model.StartChat()
-	cs.History = chatHistory
-
 	fullPrompt := fmt.Sprintf("%s\n\nUser Query: %s", systemPrompt, query)
 
-	resp, err := cs.SendMessage(ctx, genai.Text(fullPrompt))
-	if err != nil {
-		return "", err
-	}
-
-	if len(resp.Candidates) == 0 {
-		return "", fmt.Errorf("no candidates returned")
-	}
-
-	part := resp.Candidates[0].Content.Parts[0]
-	if text, ok := part.(genai.Text); ok {
-		return string(text), nil
-	}
-
-	return "", fmt.Errorf("unexpected response type")
+	return g.callGeminiREST(ctx, apiKey, geminiModel, fullPrompt, history)
 }
 
 func (g *GeminiProvider) ValidateTheoryAnswer(ctx context.Context, questionBody string, referenceAnswer *string, userAnswer string) (bool, string, error) {
