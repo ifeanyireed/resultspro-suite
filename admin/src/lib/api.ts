@@ -657,9 +657,10 @@ export async function deleteExamproStorePack(id: string): Promise<any> {
 
 // ExamsPRO Plan Management (Legacy / Local module plans)
 export async function fetchExamproPlans(): Promise<any[]> {
-  const res = await fetch(`${EXAMS_API}/api/admin/plans`, { headers: getAuthHeader(), cache: 'no-store' });
+  const res = await fetch(`${USERS_API}/api/v1/billing/plans?app_module=ExamsPRO`, { headers: getAuthHeader(), cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch exampro plans');
-  return res.json();
+  const data = await res.json();
+  return data.plans || [];
 }
 
 export async function createExamproPlan(data: any): Promise<any> {
