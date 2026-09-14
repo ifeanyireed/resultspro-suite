@@ -79,7 +79,7 @@ export default function AppLayout({
               <img 
                 src={logoUrl} 
                 alt="Academy Logo" 
-                className="w-auto h-20 object-contain" 
+                className="w-auto h-12 object-contain" 
               />
             </div>
 

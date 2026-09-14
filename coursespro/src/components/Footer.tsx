@@ -82,7 +82,7 @@ export default function Footer({ hideInstructorLink = false, isPlatform = false,
           {/* Brand */}
           <div style={{ gridColumn: 'span 12' }} className="lg:col-span-4">
             <Link href="/" style={{ display: 'inline-block', marginBottom: '1.5rem', transition: 'opacity 0.2s ease' }} onMouseEnter={e => e.currentTarget.style.opacity = '0.8'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
-              <img src={tenantLogo || "/logo.png"} alt={tenantName || "CoursesPRO Logo"} style={{ height: '80px', width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+              <img src={tenantLogo || "/logo.png"} alt={tenantName || "CoursesPRO Logo"} style={{ height: '48px', width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
             </Link>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '2rem' }}>
               The ultimate cohort-based learning operating system. Upskill with live classes, peer-to-peer collaboration, and industry-leading mentors.
