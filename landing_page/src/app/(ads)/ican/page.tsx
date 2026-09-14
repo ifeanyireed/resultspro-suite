@@ -71,55 +71,17 @@ export default function IcanLandingPage() {
                   <div className="w-3 h-3 rounded-full bg-amber-400"></div>
                   <div className="w-3 h-3 rounded-full bg-emerald-400"></div>
                 </div>
-                {/* Mockup Content - Since we can't easily load real images without breaking missing paths, we build a CSS wireframe of the dashboard */}
-                <div className="p-8 bg-slate-50 flex flex-col md:flex-row gap-8 items-start relative h-[400px]">
-                  
-                  <div className="w-full md:w-1/3 space-y-4">
-                    <div className="h-6 w-32 bg-slate-200 rounded-md"></div>
-                    <div className="p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
-                      <div className="flex justify-between items-center mb-4">
-                        <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-red-600 font-bold">FA</div>
-                        <span className="text-xs font-bold text-slate-400 uppercase">342 Qs</span>
-                      </div>
-                      <div className="h-4 w-3/4 bg-slate-200 rounded mb-2"></div>
-                      <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden mt-4">
-                        <div className="bg-red-600 w-[60%] h-full rounded-full"></div>
-                      </div>
-                      <p className="text-[10px] text-slate-400 mt-2 font-bold uppercase">60% Prepared</p>
-                    </div>
-
-                    <div className="p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
-                      <div className="flex justify-between items-center mb-4">
-                        <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-600 font-bold">PM</div>
-                        <span className="text-xs font-bold text-slate-400 uppercase">128 Qs</span>
-                      </div>
-                      <div className="h-4 w-3/4 bg-slate-200 rounded mb-2"></div>
-                      <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden mt-4">
-                        <div className="bg-emerald-500 w-[25%] h-full rounded-full"></div>
-                      </div>
-                      <p className="text-[10px] text-slate-400 mt-2 font-bold uppercase">25% Prepared - Needs Attention</p>
-                    </div>
-                  </div>
-
-                  <div className="w-full md:w-2/3 space-y-4 relative">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl z-0"></div>
-                    <div className="p-6 bg-white border border-blue-200 shadow-xl rounded-2xl relative z-10 shadow-blue-900/5">
-                      <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white"><BrainCircuit className="w-5 h-5" /></div>
-                        <div>
-                          <h3 className="font-bold text-slate-900">AI Performance Insight</h3>
-                          <p className="text-xs text-slate-500">Based on your last 50 questions</p>
-                        </div>
-                      </div>
-                      <p className="text-sm text-slate-700 font-medium mb-4 leading-relaxed">
-                        You are extremely strong in <strong>Cost Accounting</strong> (92% accuracy), but you consistently struggle with <strong>Standard Costing & Variance Analysis</strong> (18% accuracy). 
-                      </p>
-                      <button className="w-full py-3 bg-blue-50 text-blue-700 rounded-xl font-bold text-sm border border-blue-100 flex items-center justify-center gap-2">
-                        Focus Practice on Weaknesses <ArrowRight className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                
+                {/* Real Platform Screenshot */}
+                <Image 
+                  src="/ican_screenshot_1.png" 
+                  alt="ExamsPRO Dashboard" 
+                  width={3784} 
+                  height={1730} 
+                  className="w-full h-auto object-cover border-none"
+                  quality={100}
+                />
+    </div>
               </div>
             </div>
           </ScrollReveal>
@@ -260,6 +222,36 @@ export default function IcanLandingPage() {
               </ScrollReveal>
             </div>
           </div>
+        </div>
+      </section>
+
+      
+      {/* Platform Showcase */}
+      <section className="py-24 bg-white relative">
+        <div className="container mx-auto px-4 md:px-8 max-w-6xl">
+          <ScrollReveal>
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-6">BEAUTIFUL. FAST. SMART.</h2>
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto">Experience a study platform designed specifically to keep you focused and engaged for hours.</p>
+            </div>
+            
+            <div className="rounded-2xl border border-slate-200 shadow-2xl bg-white overflow-hidden transform hover:-translate-y-2 transition-transform duration-500 max-w-5xl mx-auto">
+              {/* Mockup Top Bar */}
+              <div className="bg-slate-100 border-b border-slate-200 px-4 py-3 flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-rose-400"></div>
+                <div className="w-3 h-3 rounded-full bg-amber-400"></div>
+                <div className="w-3 h-3 rounded-full bg-emerald-400"></div>
+              </div>
+              <Image 
+                src="/ican_screenshot_2.png" 
+                alt="ExamsPRO Practice Mode" 
+                width={1888} 
+                height={864} 
+                className="w-full h-auto object-cover"
+                quality={100}
+              />
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
