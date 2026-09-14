@@ -244,7 +244,7 @@ export default function StudyAssistantPage() {
                     <div className={`
                       max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed
                       ${m.role === 'user' 
-                        ? 'bg-[#146ef5] text-white rounded-tr-none' 
+                        ? 'bg-blue-600 text-white rounded-tr-none relative z-10' 
                         : 'bg-white text-[#475569] border border-gray-200  rounded-tl-none'}
                     `}>
                       {m.role === 'assistant' ? (

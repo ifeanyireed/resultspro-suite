@@ -240,7 +240,7 @@ export default function StudyAssistantPage() {
                 key={msg.id}
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}
               >
-                <div className={`max-w-[85%] md:max-w-[75%] p-5 rounded-3xl ${msg.role === 'user' ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white rounded-tr-none' : 'bg-[#146ef5] text-white rounded-tl-none shadow-sm'}`}>
+                <div className={`max-w-[85%] md:max-w-[75%] p-5 rounded-3xl ${msg.role === 'user' ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white rounded-tr-none' : 'bg-blue-600 text-white rounded-tl-none shadow-md relative z-10'}`}>
                   <div className={`markdown-content text-sm ${msg.role === 'user' ? 'text-white' : 'text-white'}`}>
                     <ReactMarkdown>{msg.content}</ReactMarkdown>
                   </div>
