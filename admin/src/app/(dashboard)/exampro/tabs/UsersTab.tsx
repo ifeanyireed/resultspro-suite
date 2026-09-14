@@ -200,8 +200,8 @@ export default function UsersTab() {
                         ))}
                       </select>
                     ) : (
-                      <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${u.activePlanId ? 'bg-indigo-50 text-indigo-600' : 'bg-slate-100 text-slate-500'}`}>
-                        {u.activePlanId ? plans.find(p => p.id === u.activePlanId)?.name || 'PRO' : 'FREE'}
+                      <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${(u.activePlanId || u.hasIcan) ? 'bg-indigo-50 text-indigo-600' : 'bg-slate-100 text-slate-500'}`}>
+                        {u.hasIcan ? (u.icanPlan || 'ICAN') : (u.activePlanId ? plans.find(p => p.id === u.activePlanId)?.name || 'PRO' : 'FREE')}
                       </span>
                     )}
                   </td>
@@ -211,7 +211,7 @@ export default function UsersTab() {
                     {editingId === u.id ? (
                       <input type="date" value={editForm.premium_expires_at} onChange={e => setEditForm({...editForm, premium_expires_at: e.target.value})} className="border border-slate-200 rounded p-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                     ) : (
-                      <span className="text-slate-600 font-medium">{u.premiumExpiresAt ? new Date(u.premiumExpiresAt).toLocaleDateString() : '-'}</span>
+                      <span className="text-slate-600 font-medium">{u.hasIcan && u.icanExpiresAt ? new Date(u.icanExpiresAt).toLocaleDateString() : (u.premiumExpiresAt ? new Date(u.premiumExpiresAt).toLocaleDateString() : '-')}</span>
                     )}
                   </td>
 
