@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import api from '@/lib/api';
 import { 
   MagnifyingGlassIcon,
   EnvelopeIcon,
@@ -37,6 +38,30 @@ export default function AppLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const [tenantName, setTenantName] = React.useState('MENTOR');
+  const [logoUrl, setLogoUrl] = React.useState('/logo.png');
+
+  React.useEffect(() => {
+    const fetchTenant = async () => {
+      try {
+        const host = window.location.hostname;
+        const slug = host.split('.')[0];
+        const res = await api.get(`/api/public/tenant/resolve?domain=${slug}`);
+        if (res.data && res.data.tenant && res.data.tenant.name) {
+          setTenantName(res.data.tenant.name.toUpperCase());
+          if (res.data.tenant.logo_url) {
+            setLogoUrl(res.data.tenant.logo_url);
+          }
+        }
+      } catch (err) {
+        const slug = window.location.hostname.split('.')[0];
+        if (slug && slug !== 'localhost' && slug !== 'coursespro') {
+          setTenantName(slug.toUpperCase());
+        }
+      }
+    };
+    fetchTenant();
+  }, []);
 
   const isActive = (path: string) => {
     if (path === '/mentor') return pathname === '/mentor';
@@ -51,18 +76,16 @@ export default function AppLayout({
           <div>
             {/* Logo */}
             <div className="px-8 mb-6">
-              <Image 
-                src="/logo.png" 
-                alt="ResultsPRO" 
-                width={300} 
-                height={80} 
+              <img 
+                src={logoUrl} 
+                alt="Academy Logo" 
                 className="w-auto h-20 object-contain" 
               />
             </div>
 
                         {/* Menu Sections */}
             <div className="px-6 space-y-1">
-              <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">MENTOR OS</p>
+              <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">{tenantName}</p>
               
               <Link href="/mentor" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/mentor') && pathname === '/mentor' ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
                 <Squares2X2Icon className="w-6 h-6" />

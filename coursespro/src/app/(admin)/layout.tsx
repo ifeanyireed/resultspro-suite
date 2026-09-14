@@ -39,6 +39,7 @@ export default function AppLayout({
 }) {
   const pathname = usePathname();
   const [tenantName, setTenantName] = React.useState('ADMIN');
+  const [logoUrl, setLogoUrl] = React.useState('/logo.png');
 
   React.useEffect(() => {
     const fetchTenant = async () => {
@@ -48,6 +49,9 @@ export default function AppLayout({
         const res = await api.get(`/api/public/tenant/resolve?domain=${slug}`);
         if (res.data && res.data.tenant && res.data.tenant.name) {
           setTenantName(res.data.tenant.name.toUpperCase());
+          if (res.data.tenant.logo_url) {
+            setLogoUrl(res.data.tenant.logo_url);
+          }
         }
       } catch (err) {
         const slug = window.location.hostname.split('.')[0];
@@ -72,11 +76,9 @@ export default function AppLayout({
           <div>
             {/* Logo */}
             <div className="px-8 mb-6">
-              <Image 
-                src="/logo.png" 
-                alt="ResultsPRO" 
-                width={300} 
-                height={80} 
+              <img 
+                src={logoUrl} 
+                alt="Academy Logo" 
                 className="w-auto h-20 object-contain" 
               />
             </div>
