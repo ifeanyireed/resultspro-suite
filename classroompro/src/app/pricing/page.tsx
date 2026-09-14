@@ -90,7 +90,7 @@ export default function PricingPage() {
       <Navbar />
 
       <main className="flex-1 pt-32 pb-20 px-4">
-        <div className="max-w-[1400px] mx-auto">
+        <div className="">
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-6xl font-bold font-display text-white mb-6">

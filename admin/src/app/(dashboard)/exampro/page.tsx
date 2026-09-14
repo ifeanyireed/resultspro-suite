@@ -38,7 +38,7 @@ export default function ExamsProCommandCenter() {
         subtitle="Master administration panel for computer-based testing and live battles"
       />
 
-      <div className="px-4 md:px-8 pt-4 w-full max-w-[1400px] mx-auto">
+      <div className="px-4 md:px-8 pt-4 w-full ">
         <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto no-scrollbar pb-px">
           {tabs.map(tab => {
             const Icon = tab.icon;
