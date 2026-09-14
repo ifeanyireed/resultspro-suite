@@ -171,7 +171,14 @@ func HandleListAllUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rows, err := db.DB.Query("SELECT id, full_name, email, phone, account_status, created_at FROM users ORDER BY created_at DESC")
+	rows, err := db.DB.Query(`
+		SELECT u.id, u.full_name, u.email, u.phone, u.account_status, u.created_at,
+		       STRING_AGG(ua.app_id, ',') AS apps
+		FROM users u
+		LEFT JOIN user_apps ua ON ua.user_id = u.id
+		GROUP BY u.id
+		ORDER BY u.created_at DESC
+	`)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
 		return
@@ -181,8 +188,8 @@ func HandleListAllUsers(w http.ResponseWriter, r *http.Request) {
 	var users []map[string]interface{}
 	for rows.Next() {
 		var id, email, accountStatus string
-		var fullName, phone, createdAt *string
-		if err := rows.Scan(&id, &fullName, &email, &phone, &accountStatus, &createdAt); err != nil {
+		var fullName, phone, createdAt, appsStr *string
+		if err := rows.Scan(&id, &fullName, &email, &phone, &accountStatus, &createdAt, &appsStr); err != nil {
 			continue
 		}
 
@@ -193,6 +200,7 @@ func HandleListAllUsers(w http.ResponseWriter, r *http.Request) {
 			"phone":          "",
 			"account_status": accountStatus,
 			"created_at":     "",
+			"apps":         []string{},
 		}
 
 		if fullName != nil {
@@ -203,6 +211,9 @@ func HandleListAllUsers(w http.ResponseWriter, r *http.Request) {
 		}
 		if createdAt != nil {
 			user["created_at"] = *createdAt
+		}
+		if appsStr != nil && *appsStr != "" {
+			user["apps"] = strings.Split(*appsStr, ",")
 		}
 
 		users = append(users, user)

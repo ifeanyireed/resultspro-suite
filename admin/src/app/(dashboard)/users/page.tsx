@@ -96,6 +96,7 @@ export default function UsersPage() {
                   <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Email</th>
                   <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Phone</th>
                   <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Status</th>
+                  <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Apps</th>
                   <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Created Date</th>
                   <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest text-right">Actions</th>
                 </tr>
@@ -116,6 +117,17 @@ export default function UsersPage() {
                     <td className="px-6 py-4 text-xs text-slate-500 font-normal">{user.phone || '—'}</td>
                     <td className="px-6 py-4">
                       <Badge status={user.account_status} />
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-wrap gap-1 max-w-[150px]">
+                        {((user as any).apps || []).length > 0 ? ((user as any).apps || []).map((app: string) => (
+                          <span key={app} className="px-1.5 py-0.5 bg-blue-50 text-blue-600 border border-blue-100 rounded text-[9px] font-bold uppercase tracking-wider">
+                            {app.replace('-app-id', '')}
+                          </span>
+                        )) : (
+                          <span className="text-xs text-slate-400 italic">None</span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500 font-normal">{user.created_at}</td>
                     <td className="px-6 py-4 text-right space-x-2">
