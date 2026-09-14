@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, DM_Sans, Inter } from "next/font/google";
 import "../globals.css";
-import Footer from "@/components/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -37,8 +36,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${spaceGrotesk.variable} ${dmSans.variable} font-primary`}>
                 {children}
-        <Footer />
-      </body>
+        </body>
     </html>
   );
 }
