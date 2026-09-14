@@ -17,7 +17,7 @@ export default async function TenantHome({ params }: { params: Promise<{ tenant:
 
   return (
     <main>
-      <Navbar tenantName={tenant.name} tenantLogo={tenant.logo_url} />
+      <Navbar tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
       <Hero tenantName={tenant.name} />
 
       {/* Services Grid (Mimicking NETS ServicesGrid) */}
@@ -104,7 +104,7 @@ export default async function TenantHome({ params }: { params: Promise<{ tenant:
         </div>
       </section>
       
-      <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} />
+      <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
     </main>
   );
 }

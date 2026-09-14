@@ -15,6 +15,8 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const darkFileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingDarkLogo, setUploadingDarkLogo] = useState(false);
   const [uploadingLogo, setUploadingLogo] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -31,6 +33,8 @@ export default function SettingsPage() {
     customDomain: '',
     primaryColor: '#146ef5',
     logoUrl: '',
+    darkLogoUrl: '',
+    flattenLogo: true,
   });
 
   useEffect(() => {
@@ -55,6 +59,8 @@ export default function SettingsPage() {
             customDomain: t.custom_domain || '',
             primaryColor: t.primary_color || '#146ef5',
             logoUrl: t.logo_url || '',
+            darkLogoUrl: t.dark_logo_url || '',
+            flattenLogo: t.flatten_logo !== false,
           });
         }
       } catch (err) {
@@ -65,6 +71,28 @@ export default function SettingsPage() {
     };
     fetchTenant();
   }, []);
+
+  const handleDarkLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingDarkLogo(true);
+    try {
+      const data = new FormData();
+      data.append('file', file);
+      data.append('folder', 'uploads/logos');
+      const res = await api.post('/api/v1/upload', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      if (res.data && res.data.url) {
+        setFormData(prev => ({ ...prev, darkLogoUrl: res.data.url }));
+      }
+    } catch (err) {
+      console.error("Upload failed", err);
+      alert("Failed to upload dark logo.");
+    } finally {
+      setUploadingDarkLogo(false);
+    }
+  };
 
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -107,6 +135,8 @@ export default function SettingsPage() {
         custom_domain: formData.customDomainEnabled ? formData.customDomain : "",
         primary_color: formData.primaryColor,
         logo_url: formData.logoUrl,
+        dark_logo_url: formData.darkLogoUrl,
+        flatten_logo: formData.flattenLogo,
       };
       
       if (formData.password) {
@@ -197,8 +227,8 @@ export default function SettingsPage() {
                   />
                 )}
               </div>
-              <div className="pt-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Platform Logo</label>
+                            <div className="pt-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Platform Logo (Primary)</label>
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden">
                     {formData.logoUrl ? (
@@ -213,8 +243,43 @@ export default function SettingsPage() {
                     disabled={uploadingLogo}
                     className="text-sm font-medium text-[#146ef5] hover:text-[#105bd1] transition-colors disabled:opacity-50"
                   >
-                    {uploadingLogo ? 'Uploading...' : 'Upload new logo'}
+                    {uploadingLogo ? 'Uploading...' : 'Upload primary logo'}
                   </button>
+                </div>
+              </div>
+              
+              <div className="pt-4 mt-2 border-t border-gray-100">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Dark Background Logo (Optional)</label>
+                <p className="text-xs text-gray-500 mb-3">Upload a white/bright version of your logo for dark backgrounds.</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-xl border border-gray-200 bg-[#001f3f] flex items-center justify-center overflow-hidden">
+                    {formData.darkLogoUrl ? (
+                      <img src={formData.darkLogoUrl} alt="Dark Logo" className="w-full h-full object-contain" />
+                    ) : (
+                      <PhotoIcon className="w-6 h-6 text-gray-400 opacity-50" />
+                    )}
+                  </div>
+                  <input type="file" ref={darkFileInputRef} className="hidden" accept="image/*" onChange={handleDarkLogoUpload} />
+                  <button 
+                    onClick={() => darkFileInputRef.current?.click()}
+                    disabled={uploadingDarkLogo}
+                    className="text-sm font-medium text-[#146ef5] hover:text-[#105bd1] transition-colors disabled:opacity-50"
+                  >
+                    {uploadingDarkLogo ? 'Uploading...' : 'Upload dark logo'}
+                  </button>
+                </div>
+                
+                <div className="flex items-center justify-between mt-5">
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">Flatten to white</p>
+                    <p className="text-xs text-gray-500">Automatically make primary logo solid white on dark backgrounds if no dark logo is provided.</p>
+                  </div>
+                  <div 
+                    className={`w-10 h-5 rounded-full relative cursor-pointer transition-colors ${formData.flattenLogo ? 'bg-[#146ef5]' : 'bg-gray-200'}`}
+                    onClick={() => setFormData({...formData, flattenLogo: !formData.flattenLogo})}
+                  >
+                    <div className={`w-3.5 h-3.5 bg-white rounded-full absolute top-0.5 transition-transform ${formData.flattenLogo ? 'right-1' : 'left-1 shadow-sm'}`}></div>
+                  </div>
                 </div>
               </div>
               <div className="pt-2">

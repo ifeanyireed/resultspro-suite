@@ -65,12 +65,19 @@ const getFooterSections = (hideInstructorLink: boolean, isPlatform: boolean) => 
 interface FooterProps {
   tenantName?: string;
   tenantLogo?: string;
+  darkLogoUrl?: string;
+  flattenLogo?: boolean;
   hideInstructorLink?: boolean;
   isPlatform?: boolean;
 }
 
-export default function Footer({ hideInstructorLink = false, isPlatform = false, tenantName, tenantLogo }: FooterProps = {}) {
+export default function Footer({ hideInstructorLink = false, isPlatform = false, tenantName, tenantLogo, darkLogoUrl, flattenLogo }: FooterProps = {}) {
   const footerSections = getFooterSections(hideInstructorLink, isPlatform);
+
+  const activeLogo = darkLogoUrl || tenantLogo || "/logo.png";
+  const shouldFlatten = !darkLogoUrl && flattenLogo !== false;
+  const logoFilter = shouldFlatten ? 'brightness(0) invert(1)' : 'none';
+  
   return (
     <footer id="contact" role="contentinfo" style={{ background: 'var(--color-nets-navy-dark)' }}>
       {/* Top accent */}
@@ -82,7 +89,7 @@ export default function Footer({ hideInstructorLink = false, isPlatform = false,
           {/* Brand */}
           <div style={{ gridColumn: 'span 12' }} className="lg:col-span-4">
             <Link href="/" style={{ display: 'inline-block', marginBottom: '1.5rem', transition: 'opacity 0.2s ease' }} onMouseEnter={e => e.currentTarget.style.opacity = '0.8'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
-              <img src={tenantLogo || "/logo.png"} alt={tenantName || "CoursesPRO Logo"} style={{ height: '48px', width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+              <img src={activeLogo} alt={tenantName || "CoursesPRO Logo"} style={{ height: '48px', width: 'auto', objectFit: 'contain', filter: logoFilter }} />
             </Link>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '2rem' }}>
               The ultimate cohort-based learning operating system. Upskill with live classes, peer-to-peer collaboration, and industry-leading mentors.

@@ -13,6 +13,8 @@ type Tenant struct {
 	ShortName             string     `json:"short_name,omitempty"`
 	Motto                 string     `json:"motto,omitempty"`
 	LogoURL               string     `json:"logo_url,omitempty"`
+	DarkLogoURL           string     `json:"dark_logo_url,omitempty"`
+	FlattenLogo           *bool      `json:"flatten_logo,omitempty"`
 	LogoEmoji             string     `json:"logo_emoji,omitempty"`
 	PrimaryColor          string     `json:"primary_color,omitempty"`
 	SecondaryColor        string     `json:"secondary_color,omitempty"`
