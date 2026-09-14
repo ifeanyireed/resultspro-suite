@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ tenant: s
       default: tenant.name,
     },
     description: tenant.motto || `Welcome to ${tenant.name}`,
-    icons: tenant.logo_url ? [{ url: tenant.logo_url }] : [],
+        icons: (tenant.dark_logo_url || tenant.logo_url) ? [{ url: tenant.dark_logo_url || tenant.logo_url }] : [],
   };
 }
 

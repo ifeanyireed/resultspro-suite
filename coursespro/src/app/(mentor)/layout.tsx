@@ -50,6 +50,18 @@ export default function AppLayout({
         const res = await api.get(`/api/public/tenant/resolve?domain=${slug}`);
         if (res.data && res.data.tenant && res.data.tenant.name) {
           setTenantName(res.data.tenant.name.toUpperCase());
+          
+          // Dynamically set favicon to dark logo (or fallback)
+          const faviconUrl = res.data.tenant.dark_logo_url || res.data.tenant.logo_url;
+          if (faviconUrl) {
+            let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+            if (!link) {
+              link = document.createElement('link');
+              link.rel = 'icon';
+              document.head.appendChild(link);
+            }
+            link.href = faviconUrl;
+          }
           if (res.data.tenant.logo_url) {
             setLogoUrl(res.data.tenant.logo_url);
           }
