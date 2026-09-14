@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import TenantLogo from '@/components/TenantLogo';
 import { usePathname } from 'next/navigation';
 import api from '@/lib/api';
 import { 
@@ -76,10 +77,12 @@ export default function AppLayout({
           <div>
             {/* Logo */}
             <div className="px-8 mb-6">
-              <img 
-                src={logoUrl} 
-                alt="Academy Logo" 
-                className="w-auto h-12 object-contain" 
+              <TenantLogo 
+                theme="light"
+                height={48}
+                logoUrl={logoUrl}
+                tenantName={tenantName}
+                className="w-auto h-12 object-contain"
               />
             </div>
 

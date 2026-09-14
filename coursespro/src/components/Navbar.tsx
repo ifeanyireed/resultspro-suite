@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import TenantLogo from './TenantLogo';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 // import api from '@/lib/api';
@@ -23,10 +24,6 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
-  const activeLogo = darkLogoUrl || tenantLogo || "/logo.png";
-  const shouldFlatten = !darkLogoUrl && flattenLogo !== false;
-  const logoFilter = shouldFlatten ? 'brightness(0) invert(1)' : 'none';
-  
   
   const { isAuthenticated, user, logout } = useAuthStore();
   const [mounted, setMounted] = useState(false);
@@ -107,7 +104,7 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
 
           {/* Logo */}
           <Link href="/" aria-label="ExamsPRO" style={{ display: 'flex', alignItems: 'center', flexShrink: 0, transition: 'opacity 0.2s ease' }} onMouseEnter={e => e.currentTarget.style.opacity = '0.8'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
-            <img src={activeLogo} alt={tenantName || "CoursesPRO Logo"} style={{ height: '40px', width: 'auto', objectFit: 'contain', filter: logoFilter }} />
+            <TenantLogo theme="dark" height={40} logoUrl={tenantLogo} darkLogoUrl={darkLogoUrl} flattenLogo={flattenLogo} tenantName={tenantName} />
             <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: 'white', letterSpacing: '-0.05em' }}>{tenantName || 'CoursesPRO'}</span>
           </Link>
 
@@ -206,7 +203,7 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexShrink: 0 }}>
                 <Link href="/" onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-                  <img src={activeLogo} alt={tenantName || "CoursesPRO Logo"} style={{ height: '40px', width: 'auto', objectFit: 'contain', filter: logoFilter }} />
+                  <TenantLogo theme="dark" height={40} logoUrl={tenantLogo} darkLogoUrl={darkLogoUrl} flattenLogo={flattenLogo} tenantName={tenantName} />
                   <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: 'white', letterSpacing: '-0.05em' }}>{tenantName || 'CoursesPRO'}</span>
                 </Link>
                 <button onClick={() => setMobileOpen(false)} aria-label="Close menu"
