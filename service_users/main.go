@@ -96,6 +96,7 @@ func main() {
 	mux.HandleFunc("/api/v1/auth/update-profile", handlers.HandleUpdateProfile)
 	mux.HandleFunc("/auth/avatar", handlers.HandleUploadAvatar)
 	mux.HandleFunc("/api/v1/auth/avatar", handlers.HandleUploadAvatar)
+	mux.HandleFunc("/api/v1/upload", handlers.HandleUploadFile)
 
 	mux.HandleFunc("/auth/change-password", handlers.HandleChangePassword)
 	mux.HandleFunc("/api/v1/auth/change-password", handlers.HandleChangePassword)

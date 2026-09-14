@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import api from '@/lib/api';
 import { 
   CheckCircleIcon,
@@ -14,6 +14,8 @@ export default function SettingsPage() {
   const [tenantId, setTenantId] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -28,6 +30,7 @@ export default function SettingsPage() {
     customDomainEnabled: false,
     customDomain: '',
     primaryColor: '#146ef5',
+    logoUrl: '',
   });
 
   useEffect(() => {
@@ -51,6 +54,7 @@ export default function SettingsPage() {
             customDomainEnabled: !!t.custom_domain,
             customDomain: t.custom_domain || '',
             primaryColor: t.primary_color || '#146ef5',
+            logoUrl: t.logo_url || '',
           });
         }
       } catch (err) {
@@ -61,6 +65,28 @@ export default function SettingsPage() {
     };
     fetchTenant();
   }, []);
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingLogo(true);
+    try {
+      const data = new FormData();
+      data.append('file', file);
+      data.append('folder', 'uploads/logos');
+      const res = await api.post('/api/v1/upload', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      if (res.data && res.data.url) {
+        setFormData(prev => ({ ...prev, logoUrl: res.data.url }));
+      }
+    } catch (err) {
+      console.error("Upload failed", err);
+      alert("Failed to upload logo.");
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -80,6 +106,7 @@ export default function SettingsPage() {
         contact_phone: formData.phone,
         custom_domain: formData.customDomainEnabled ? formData.customDomain : "",
         primary_color: formData.primaryColor,
+        logo_url: formData.logoUrl,
       };
       
       if (formData.password) {
@@ -174,10 +201,19 @@ export default function SettingsPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">Platform Logo</label>
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden">
-                    <PhotoIcon className="w-6 h-6 text-gray-400" />
+                    {formData.logoUrl ? (
+                      <img src={formData.logoUrl} alt="Logo" className="w-full h-full object-contain" />
+                    ) : (
+                      <PhotoIcon className="w-6 h-6 text-gray-400" />
+                    )}
                   </div>
-                  <button className="text-sm font-medium text-[#146ef5] hover:text-[#105bd1] transition-colors">
-                    Upload new logo
+                  <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleLogoUpload} />
+                  <button 
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingLogo}
+                    className="text-sm font-medium text-[#146ef5] hover:text-[#105bd1] transition-colors disabled:opacity-50"
+                  >
+                    {uploadingLogo ? 'Uploading...' : 'Upload new logo'}
                   </button>
                 </div>
               </div>
