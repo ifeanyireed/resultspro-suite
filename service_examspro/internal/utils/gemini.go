@@ -144,7 +144,7 @@ func (g *GeminiProvider) ValidateTheoryAnswer(ctx context.Context, questionBody 
 		cleanJSON := ExtractJSON(string(text))
 		
 		if err := json.Unmarshal([]byte(cleanJSON), &result); err != nil {
-			return false, "", fmt.Errorf("failed to parse AI response: %v", err)
+			return false, "", fmt.Errorf("failed to parse AI response: %v, raw text: %s", err, string(text))
 		}
 		return result.IsCorrect, result.Feedback, nil
 	}

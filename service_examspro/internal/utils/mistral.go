@@ -68,9 +68,11 @@ func (m *MistralProvider) callMistral(ctx context.Context, messages []mistralMes
 		return "", fmt.Errorf("mistral api error: %s - %s", resp.Status, string(body))
 	}
 
+	bodyBytes, _ := io.ReadAll(resp.Body)
+	
 	var mResp mistralResponse
-	if err := json.NewDecoder(resp.Body).Decode(&mResp); err != nil {
-		return "", err
+	if err := json.Unmarshal(bodyBytes, &mResp); err != nil {
+		return "", fmt.Errorf("JSON decode error: %v, raw response: %s", err, string(bodyBytes))
 	}
 
 	if len(mResp.Choices) == 0 {
@@ -159,7 +161,7 @@ func (m *MistralProvider) ValidateTheoryAnswer(ctx context.Context, questionBody
 	cleanJSON := ExtractJSON(resp)
 
 	if err := json.Unmarshal([]byte(cleanJSON), &result); err != nil {
-		return false, "", fmt.Errorf("failed to parse AI response: %v", err)
+		return false, "", fmt.Errorf("failed to parse AI response: %v, raw text: %s", err, resp)
 	}
 
 	return result.IsCorrect, result.Feedback, nil
