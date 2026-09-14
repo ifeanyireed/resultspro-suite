@@ -198,7 +198,7 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
             const rawAnnual = plan.annual_price !== undefined ? plan.annual_price : rawMonthly * 11;
             const currency = plan.currency || '₦';
             const displayPrice = isAnnual ? `${currency}${rawAnnual.toLocaleString()}` : `${currency}${rawMonthly.toLocaleString()}`;
-            const displayPeriod = plan.period === 'forever' ? 'forever' : (isAnnual ? 'per year' : 'per month');
+            const displayPeriod = plan.period === 'forever' ? 'forever' : (plan.period === 'per diet' ? 'per diet (6 months)' : (isAnnual ? 'per year' : 'per month'));
             
             return (
             <ScrollReveal key={plan.name} animation="fade-up" delay={i * 100} className={styles.revealWrapper}>

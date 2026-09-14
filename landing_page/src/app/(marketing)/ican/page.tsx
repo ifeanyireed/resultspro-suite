@@ -327,7 +327,7 @@ export default function IcanLandingPage() {
                 <h3 className="text-xl font-black text-slate-900 mb-2">SINGLE PAPER</h3>
                 <div className="flex items-end gap-1 mb-8">
                   <span className="text-4xl font-black text-slate-900">₦3,500</span>
-                  <span className="text-slate-500 font-bold mb-1">/month</span>
+                  <span className="text-slate-500 font-bold mb-1">/diet (6 months)</span>
                 </div>
                 <ul className="space-y-4 text-left mb-8 flex-1">
                   <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">1 Subject Access</span></li>
@@ -343,7 +343,7 @@ export default function IcanLandingPage() {
                 <h3 className="text-2xl font-black text-blue-600 mb-2 text-center">FULL DIET ACCESS</h3>
                 <div className="flex justify-center items-end gap-1 mb-8">
                   <span className="text-5xl font-black text-slate-900">₦10,000</span>
-                  <span className="text-slate-500 font-bold mb-1">/month</span>
+                  <span className="text-slate-500 font-bold mb-1">/diet (6 months)</span>
                 </div>
                 <ul className="space-y-4 text-left mb-8 flex-1">
                   <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" /> <span className="text-slate-700 text-sm font-bold">All Diet Papers Access</span></li>
@@ -359,7 +359,7 @@ export default function IcanLandingPage() {
                 <h3 className="text-xl font-black text-slate-900 mb-2">COMPLETE LEVEL</h3>
                 <div className="flex items-end gap-1 mb-8">
                   <span className="text-4xl font-black text-slate-900">₦8,500</span>
-                  <span className="text-slate-500 font-bold mb-1">/month</span>
+                  <span className="text-slate-500 font-bold mb-1">/diet (6 months)</span>
                 </div>
                 <ul className="space-y-4 text-left mb-8 flex-1">
                   <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-slate-400 shrink-0" /> <span className="text-slate-600 text-sm font-medium">All Subjects in a Level</span></li>
