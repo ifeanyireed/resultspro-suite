@@ -129,12 +129,12 @@ export default function LeaderboardPage() {
                           padding: '1.5rem 2rem', 
                           alignItems: 'center',
                           borderBottom: index !== leaderboard.length - 1 ? '1px solid rgba(0,0,0,0.05)' : 'none',
-                          background: isTop3 ? 'rgba(0,0,0,0.02)' : 'transparent',
+                          background: user.id === currentUser?.id ? 'rgba(220,38,38,0.05)' : (isTop3 ? 'rgba(0,0,0,0.02)' : 'transparent'),
                           transition: 'background 0.2s',
                           position: 'relative'
                         }}
                         onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.04)')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = isTop3 ? 'rgba(0,0,0,0.02)' : 'transparent')}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = user.id === currentUser?.id ? 'rgba(220,38,38,0.05)' : (isTop3 ? 'rgba(0,0,0,0.02)' : 'transparent'))}
                       >
                         {isTop3 && (
                           <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '3px', background: 'var(--color-nets-red)' }} />
@@ -144,7 +144,7 @@ export default function LeaderboardPage() {
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                           <img src={user.avatarUrl || user.avatar_url || user.img || `/avatars/character${ (String(user.id).charCodeAt(0) % 20) || 1 }.jpg`} alt="" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} />
-                          <div style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--color-nets-navy-dark)' }}>{user.name || 'Anonymous'}</div>
+                          <div style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--color-nets-navy-dark)' }}>{user.id === currentUser?.id ? 'You' : (user.name || 'Anonymous')}</div>
                         </div>
                         <div style={{ textAlign: 'left' }}>
                           <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-nets-navy-dark)' }}>{getScoreValue(user).toLocaleString()}</div>
@@ -156,35 +156,12 @@ export default function LeaderboardPage() {
                 </div>
 
                 {/* My Rank Footer */}
-                <div style={{ padding: '2rem', borderTop: '1px solid rgba(0,0,0,0.1)', background: 'var(--color-nets-light)' }}>
-                  {currentUser && myRank ? (
-                    <div style={{ display: 'grid', gridTemplateColumns: '60px 250px 120px', alignItems: 'center' }}>
-                      <div style={{ fontSize: '1.125rem', fontWeight: 900, color: 'var(--color-nets-navy-dark)', fontFamily: 'var(--font-display)' }}>
-                        #{myRank.rank}
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <img src={`/avatars/character${ (String(currentUser.id).charCodeAt(0) % 20) || 1 }.jpg`} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
-                        <div>
-                          <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-nets-navy-dark)' }}>You</div>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--color-nets-text-2)' }}>{myRank.nextRankGap > 0 ? `Next Rank in ${myRank.nextRankGap} pts` : 'Top Ranked!'}</div>
-                        </div>
-                      </div>
-                      <div style={{ textAlign: 'left' }}>
-                        <div style={{ fontSize: '1.125rem', fontWeight: 900, color: 'var(--color-nets-navy-dark)', fontFamily: 'var(--font-display)' }}>
-                          {(activeTab === 'Global' ? (myRank.user?.eloRating ?? currentUser?.eloRating ?? 0) : 
-                            activeTab === 'Wealth' ? (myRank.user?.coinBalance ?? currentUser?.coinBalance ?? 0) : 
-                            activeTab === 'Streaks' ? (myRank.user?.streakCurrent ?? currentUser?.streakCurrent ?? 0) : 0).toLocaleString()}
-                        </div>
-                        <div style={{ fontSize: '0.625rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-nets-red)' }}>{getScoreLabel()}</div>
-                      </div>
-                    </div>
-                  ) : !currentUser && (
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div style={{ color: 'var(--color-nets-text-2)', fontSize: '0.875rem' }}>Sign in to see your global rank and compete.</div>
-                      <button onClick={() => window.location.href = '/login'} className="btn btn-red">Login to Play</button>
-                    </div>
-                  )}
-                </div>
+                {!currentUser && (
+                  <div style={{ padding: '2rem', borderTop: '1px solid rgba(0,0,0,0.1)', background: 'var(--color-nets-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ color: 'var(--color-nets-text-2)', fontSize: '0.875rem' }}>Sign in to see your global rank and compete.</div>
+                    <button onClick={() => window.location.href = '/login'} className="btn btn-red">Login to Play</button>
+                  </div>
+                )}
               </div>
             )}
           </div>
