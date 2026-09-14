@@ -8,13 +8,18 @@ import (
 )
 
 // GetSettingWithFallback retrieves a setting from the database.
-// If the setting is empty or not found, it falls back to an environment variable.
+// GetSettingWithFallback checks the environment variable first (for easy .env overrides).
+// If not found, it falls back to the database.
 func GetSettingWithFallback(settingID, envKey string) string {
+	if envVal := os.Getenv(envKey); envVal != "" {
+		return envVal
+	}
+
 	var setting models.SystemSetting
 	err := database.DB.Where("id = ?", settingID).First(&setting).Error
 	if err == nil && setting.Value != "" {
 		return setting.Value
 	}
 
-	return os.Getenv(envKey)
+	return ""
 }
