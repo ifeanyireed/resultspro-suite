@@ -285,7 +285,7 @@ export default function StudyAssistantPage() {
             </form>
             <div className="flex items-center justify-center gap-4 mt-4">
                <p className="text-[8px] text-gray-600 uppercase tracking-[0.2em] font-bold">
-                 Each query costs 2 Coins • AI can make mistakes
+                 Each query costs {dashboardData?.queryCost || 2} Coins • AI can make mistakes
                </p>
             </div>
           </div>

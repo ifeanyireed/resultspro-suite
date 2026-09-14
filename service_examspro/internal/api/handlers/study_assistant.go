@@ -97,7 +97,13 @@ func (h *StudyAssistantHandler) GetDashboard(c *gin.Context) {
 		return
 	}
 
+	queryCost := 2
+	if costStr := utils.GetSettingWithFallback("ai_query_cost", "AI_QUERY_COST"); costStr != "" {
+		if c, err := strconv.Atoi(costStr); err == nil { queryCost = c }
+	}
+
 	c.JSON(http.StatusOK, gin.H{
+		"queryCost":      queryCost,
 		"weakTopics":     weakTopics,
 		"recentSessions": recentSessions,
 	})
@@ -187,8 +193,12 @@ func (h *StudyAssistantHandler) Chat(c *gin.Context) {
 		return
 	}
 
-	if user.CoinBalance < 2 {
-		c.JSON(http.StatusForbidden, gin.H{"error": "Insufficient coins. Each AI question costs 2 coins."})
+	queryCost := 2
+	if costStr := utils.GetSettingWithFallback("ai_query_cost", "AI_QUERY_COST"); costStr != "" {
+		if c, err := strconv.Atoi(costStr); err == nil { queryCost = c }
+	}
+	if user.CoinBalance < queryCost {
+		c.JSON(http.StatusForbidden, gin.H{"error": fmt.Sprintf("Insufficient coins. Each AI question costs %d coins.", queryCost)})
 		return
 	}
 
@@ -216,7 +226,7 @@ func (h *StudyAssistantHandler) Chat(c *gin.Context) {
 		return tx.Create(&models.CoinTransaction{
 			ID:          uuid.New().String(),
 			UserID:      userID,
-			Amount:      -2,
+			Amount:      -queryCost,
 			Type:        "AI_CHAT",
 			Description: utils.StringPtr("Asked AI Tutor a question"),
 		}).Error
@@ -283,13 +293,17 @@ func (h *StudyAssistantHandler) GetTopicStudyAssistant(c *gin.Context) {
 			return
 		}
 
-		if user.CoinBalance < 5 {
-			c.JSON(http.StatusForbidden, gin.H{"error": "Insufficient coins. You need 5 coins to open this Study Assistant."})
+		openCost := 5
+		if costStr := utils.GetSettingWithFallback("ai_session_cost", "AI_SESSION_COST"); costStr != "" {
+			if c, err := strconv.Atoi(costStr); err == nil { openCost = c }
+		}
+		if user.CoinBalance < openCost {
+			c.JSON(http.StatusForbidden, gin.H{"error": fmt.Sprintf("Insufficient coins. You need %d coins to open this Study Assistant.", openCost)})
 			return
 		}
 
 		// Deduct 5 coins
-		if err := database.DB.Model(&models.User{}).Where("id = ?", userID).Update("coin_balance", gorm.Expr("coin_balance - ?", 5)).Error; err != nil {
+		if err := database.DB.Model(&models.User{}).Where("id = ?", userID).Update("coin_balance", gorm.Expr("coin_balance - ?", openCost)).Error; err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to deduct coins"})
 			return
 		}
@@ -298,7 +312,7 @@ func (h *StudyAssistantHandler) GetTopicStudyAssistant(c *gin.Context) {
 		database.DB.Create(&models.CoinTransaction{
 			ID:          uuid.New().String(),
 			UserID:      userID,
-			Amount:      -5,
+			Amount:      -openCost,
 			Type:        "STUDY_ASSISTANT",
 			Description: utils.StringPtr("Started Study Session for " + topic.Name),
 		})
@@ -346,8 +360,12 @@ func (h *StudyAssistantHandler) AskTopicQuestion(c *gin.Context) {
 		return
 	}
 
-	if user.CoinBalance < 2 {
-		c.JSON(http.StatusForbidden, gin.H{"error": "Insufficient coins. Each question costs 2 coins."})
+	queryCost := 2
+	if costStr := utils.GetSettingWithFallback("ai_query_cost", "AI_QUERY_COST"); costStr != "" {
+		if c, err := strconv.Atoi(costStr); err == nil { queryCost = c }
+	}
+	if user.CoinBalance < queryCost {
+		c.JSON(http.StatusForbidden, gin.H{"error": fmt.Sprintf("Insufficient coins. Each question costs %d coins.", queryCost)})
 		return
 	}
 
@@ -390,7 +408,7 @@ func (h *StudyAssistantHandler) AskTopicQuestion(c *gin.Context) {
 		return tx.Create(&models.CoinTransaction{
 			ID:          uuid.New().String(),
 			UserID:      userID,
-			Amount:      -2,
+			Amount:      -queryCost,
 			Type:        "AI_QUERY",
 			Description: utils.StringPtr("Asked AI Tutor about " + topic.Name),
 		}).Error

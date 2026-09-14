@@ -229,6 +229,8 @@ export default function StoreTab() {
               <div className="space-y-6">
                 {[
                   { id: 'quiz_retake_fee', label: 'Quiz Retake Fee', desc: 'Coins deducted when a user retakes a quiz.' },
+                  { id: 'ai_query_cost', label: 'AI Query Cost', desc: 'Coins deducted for each question asked to the AI.' },
+                  { id: 'ai_session_cost', label: 'AI Study Assistant Unlock', desc: 'Coins deducted to open the study assistant for a topic.' },
                   { id: 'hint_cost', label: 'Hint Cost', desc: 'Coins deducted when a user buys a hint during a test.' },
                   { id: 'signup_reward', label: 'Sign-up Reward', desc: 'Coins granted to new users upon registration.' },
                   { id: 'daily_login_reward', label: 'Daily Login Reward', desc: 'Coins granted every day the user logs in.' },
