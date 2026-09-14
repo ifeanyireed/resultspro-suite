@@ -66,7 +66,7 @@ export default function StudyAssistantPage() {
       const res = await api.post('/study-assistant/chat', {
         message: userMsg.content,
         sessionId: currentSessionId,
-        topicId
+        topicId: topicId?.toString()
       });
 
       setMessages(prev => [...prev, res.data.message]);
@@ -121,7 +121,7 @@ export default function StudyAssistantPage() {
                     onClick={() => handleSend(`Can you teach me about ${topic.name}?`, topic.id)}
                     className="w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 shadow-sm transition-all group"
                   >
-                    <div className="text-xs font-bold text-[var(--color-nets-navy-dark)] mb-1 group-hover:text-red-600 transition-colors">{topic.name}</div>
+                    <div className="text-xs font-bold text-slate-800 mb-1 group-hover:text-red-600 transition-colors">{topic.name}</div>
                     <div className="text-[10px] text-gray-500 font-medium">Accuracy: {Math.round(topic.accuracy)}%</div>
                   </button>
                 ))
@@ -240,7 +240,7 @@ export default function StudyAssistantPage() {
                 key={msg.id}
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}
               >
-                <div className={`max-w-[85%] md:max-w-[75%] p-5 rounded-3xl ${msg.role === 'user' ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white rounded-tr-none' : 'bg-slate-50 text-[var(--color-nets-navy-dark)] rounded-tl-none border border-slate-200 shadow-sm'}`}>
+                <div className={`max-w-[85%] md:max-w-[75%] p-5 rounded-3xl ${msg.role === 'user' ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white rounded-tr-none' : 'bg-slate-50 text-slate-800 rounded-tl-none border border-slate-200 shadow-sm'}`}>
                   <div className="markdown-content text-sm">
                     <ReactMarkdown>{msg.content}</ReactMarkdown>
                   </div>
