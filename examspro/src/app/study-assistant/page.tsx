@@ -8,6 +8,9 @@ import { useAuthStore } from '@/store/useAuthStore';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 
 interface Message {
   id: string;
@@ -244,7 +247,7 @@ export default function StudyAssistantPage() {
                   <div className="flex flex-col">
                     <span className="text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">{msg.role === 'user' ? 'You' : 'Study Assistant'}</span>
                     <div className="markdown-content text-sm text-black prose prose-sm max-w-none prose-p:text-black prose-headings:text-black">
-                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                      <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{msg.content}</ReactMarkdown>
                     </div>
                   </div>
                   <div className="text-[8px] font-bold mt-2 uppercase tracking-widest text-slate-400">

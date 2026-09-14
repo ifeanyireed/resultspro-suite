@@ -7,6 +7,9 @@ import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 import api from '@/lib/api';
 import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 import { toast } from 'react-hot-toast';
 
 interface Message {
@@ -204,7 +207,7 @@ export default function StudyAssistantPage() {
                 
                 <div className="markdown-content text-lg">
                   {topic?.aiLessonNotes ? (
-                    <ReactMarkdown>{topic.aiLessonNotes}</ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{topic.aiLessonNotes}</ReactMarkdown>
                   ) : (
                     <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
                       <Loader2 className="w-10 h-10 text-[#146ef5] animate-spin" />
@@ -249,7 +252,7 @@ export default function StudyAssistantPage() {
                     `}>
                       {m.role === 'assistant' ? (
                         <div className="markdown-content">
-                          <ReactMarkdown>{m.content}</ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{m.content}</ReactMarkdown>
                         </div>
                       ) : (
                         m.content
