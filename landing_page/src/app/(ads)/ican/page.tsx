@@ -81,7 +81,6 @@ export default function IcanLandingPage() {
                   className="w-full h-auto object-cover border-none"
                   quality={100}
                 />
-    </div>
               </div>
             </div>
           </ScrollReveal>
