@@ -106,3 +106,14 @@ h1, h2, h3, h4, h5, h6 {
   @apply bg-black/40 p-4 rounded-xl my-4 overflow-x-auto;
 }
 
+
+/* Force markdown text colors based on parent container */
+.markdown-content {
+  color: inherit !important;
+}
+.markdown-content p {
+  color: inherit !important;
+}
+.markdown-content span {
+  color: inherit !important;
+}

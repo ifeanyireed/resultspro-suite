@@ -241,7 +241,7 @@ export default function StudyAssistantPage() {
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}
               >
                 <div className={`max-w-[85%] md:max-w-[75%] p-5 rounded-3xl ${msg.role === 'user' ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white rounded-tr-none' : 'bg-slate-50 text-slate-800 rounded-tl-none border border-slate-200 shadow-sm'}`}>
-                  <div className="markdown-content text-sm">
+                  <div className={`markdown-content text-sm ${msg.role === 'user' ? 'text-white' : 'text-slate-900'}`}>
                     <ReactMarkdown>{msg.content}</ReactMarkdown>
                   </div>
                   <div className={`text-[8px] font-bold mt-2 uppercase tracking-widest ${msg.role === 'user' ? 'text-gray-500' : 'text-gray-600'}`}>
