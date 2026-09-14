@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -193,7 +194,8 @@ func (h *StudyAssistantHandler) Chat(c *gin.Context) {
 
 	aiResponse, err := utils.GenerateTutorResponse(context.Background(), input.Message, history, weakTopicNames, syllabusContext)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get AI response"})
+		log.Printf("AI Error: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get AI response: " + err.Error()})
 		return
 	}
 
@@ -374,7 +376,8 @@ func (h *StudyAssistantHandler) AskTopicQuestion(c *gin.Context) {
 
 	aiResponse, err := utils.GenerateTutorResponse(context.Background(), input.Message, nil, nil, syllabusContext)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "AI response failed"})
+		log.Printf("AI Error: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "AI response failed: " + err.Error()})
 		return
 	}
 
