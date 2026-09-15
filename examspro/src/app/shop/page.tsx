@@ -269,77 +269,6 @@ export default function CoinShopPage() {
             </div>
           </div>
         )}
-
-        {/* Coin Packs Grid */}
-        {loadingPacks ? (
-          <div className="flex flex-col items-center justify-center py-24 gap-4">
-            <Loader2 className="w-12 h-12 text-red-600 animate-spin" />
-            <p className="text-gray-600 font-bold">Loading Coin Packs...</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {coinPacks.map((pack, i) => {
-              const finalPrice = calculateFinalTotal(pack.price);
-              const colorConfig = colorMap[pack.color] || colorMap.blue;
-              
-              return (
-                <div 
-                  key={i} 
-                  className={`
-                    group relative p-8 rounded-[40px] border transition-all flex flex-col items-center text-center
-                    ${pack.popular ? 'bg-white shadow-sm border border-gray-200 border-red-600/30 scale-105 shadow-2xl shadow-red-600/5' : 'bg-white shadow-sm border border-gray-200 hover:border-blue-500'}
-                  `}
-                >
-                  {pack.popular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-blue text-white text-[10px] font-black uppercase tracking-widest">
-                      MOST POPULAR
-                    </div>
-                  )}
-                  
-                  {pack.discount && (
-                    <div className="absolute top-6 right-6 px-2 py-1 rounded bg-red-500 text-white text-[8px] font-black italic">
-                      {pack.discount}
-                    </div>
-                  )}
-
-                  <div className={`w-20 h-20 rounded-3xl ${colorConfig.iconBg} flex items-center justify-center ${colorConfig.text} mb-8 group-hover:scale-110 transition-transform`}>
-                    <Coins className="w-10 h-10" />
-                  </div>
-
-                  <h3 className="text-xl font-bold text-navy mb-1">{pack.name}</h3>
-                  <div className="text-4xl font-display font-black text-navy mb-2">
-                    {pack.coins.toLocaleString()} <span className="text-sm text-gray-500 uppercase tracking-tighter">Coins</span>
-                  </div>
-                  
-                  {pack.bonus && <div className="text-xs font-bold text-blue mb-4">{pack.bonus}</div>}
-                  {pack.description && <p className="text-xs text-gray-600 mb-6 px-4">{pack.description}</p>}
-
-                  <div className="flex flex-col items-center gap-1.5 mb-8">
-                    <div className="flex items-center gap-1 text-[10px] text-gray-500 font-medium">
-                      <Info className="w-3 h-3" stroke={3} />
-                      <span>₦{pack.price.toLocaleString()} + VAT & Fees</span>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-auto w-full">
-                    <Button 
-                      onClick={() => handlePurchase(pack.id, finalPrice)}
-                      disabled={loadingPack === pack.id}
-                      className={`w-full py-6 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 ${pack.popular ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white hover:opacity-90' : 'bg-white shadow-sm border border-gray-200 text-navy hover:bg-white/10'}`}
-                    >
-                      {loadingPack === pack.id ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : (
-                        `Buy ₦${finalPrice.toLocaleString()}`
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
         
         {/* ICAN Packs Grid */}
         {!loadingPacks && icanPacks.length > 0 && (
@@ -413,6 +342,77 @@ export default function CoinShopPage() {
               })}
             </div>
           </>
+        )}
+
+
+        {/* Coin Packs Grid */}
+        {loadingPacks ? (
+          <div className="flex flex-col items-center justify-center py-24 gap-4">
+            <Loader2 className="w-12 h-12 text-red-600 animate-spin" />
+            <p className="text-gray-600 font-bold">Loading Coin Packs...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            {coinPacks.map((pack, i) => {
+              const finalPrice = calculateFinalTotal(pack.price);
+              const colorConfig = colorMap[pack.color] || colorMap.blue;
+              
+              return (
+                <div 
+                  key={i} 
+                  className={`
+                    group relative p-8 rounded-[40px] border transition-all flex flex-col items-center text-center
+                    ${pack.popular ? 'bg-white shadow-sm border border-gray-200 border-red-600/30 scale-105 shadow-2xl shadow-red-600/5' : 'bg-white shadow-sm border border-gray-200 hover:border-blue-500'}
+                  `}
+                >
+                  {pack.popular && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-blue text-white text-[10px] font-black uppercase tracking-widest">
+                      MOST POPULAR
+                    </div>
+                  )}
+                  
+                  {pack.discount && (
+                    <div className="absolute top-6 right-6 px-2 py-1 rounded bg-red-500 text-white text-[8px] font-black italic">
+                      {pack.discount}
+                    </div>
+                  )}
+
+                  <div className={`w-20 h-20 rounded-3xl ${colorConfig.iconBg} flex items-center justify-center ${colorConfig.text} mb-8 group-hover:scale-110 transition-transform`}>
+                    <Coins className="w-10 h-10" />
+                  </div>
+
+                  <h3 className="text-xl font-bold text-navy mb-1">{pack.name}</h3>
+                  <div className="text-4xl font-display font-black text-navy mb-2">
+                    {pack.coins.toLocaleString()} <span className="text-sm text-gray-500 uppercase tracking-tighter">Coins</span>
+                  </div>
+                  
+                  {pack.bonus && <div className="text-xs font-bold text-blue mb-4">{pack.bonus}</div>}
+                  {pack.description && <p className="text-xs text-gray-600 mb-6 px-4">{pack.description}</p>}
+
+                  <div className="flex flex-col items-center gap-1.5 mb-8">
+                    <div className="flex items-center gap-1 text-[10px] text-gray-500 font-medium">
+                      <Info className="w-3 h-3" stroke={3} />
+                      <span>₦{pack.price.toLocaleString()} + VAT & Fees</span>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-auto w-full">
+                    <Button 
+                      onClick={() => handlePurchase(pack.id, finalPrice)}
+                      disabled={loadingPack === pack.id}
+                      className={`w-full py-6 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 ${pack.popular ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white hover:opacity-90' : 'bg-white shadow-sm border border-gray-200 text-navy hover:bg-white/10'}`}
+                    >
+                      {loadingPack === pack.id ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        `Buy ₦${finalPrice.toLocaleString()}`
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         )}
 
         {/* Security / Info */}
