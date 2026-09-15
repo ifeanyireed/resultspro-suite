@@ -105,9 +105,10 @@ function QuizContent() {
       const res = await api.get(endpoint);
       setQuestions(res.data || []);
       setQuizStep('active');
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to fetch questions:", err);
-      setError("Failed to load questions. Please try again later.");
+      const msg = err.response?.data?.error || "Failed to load questions. Please try again later.";
+      setError(msg);
       setQuizStep('mode');
     } finally {
       setLoading(false);

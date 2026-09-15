@@ -33,7 +33,8 @@ export default function TopicListPage() {
   const router = useRouter();
   const examId = params.examId as string;
   const subjectId = params.subjectId as string;
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
 
   const [topics, setTopics] = useState<Topic[]>([]);
   const [years, setYears] = useState<YearStat[]>([]);
@@ -92,13 +93,22 @@ export default function TopicListPage() {
   }, [subjectId, viewMode, fetchTopics, fetchYears]);
 
   const handleStartPractice = useCallback(
-    (e: React.MouseEvent, topicId: number) => {
+    (e: React.MouseEvent, topicId: number, year?: number) => {
+      if (examId === 'ican' && user && !user.hasIcan) {
+        e.preventDefault();
+        setShowPremiumModal(true);
+        return;
+      }
       if (!isAuthenticated) {
         e.preventDefault();
-        router.push(`/login?redirect=/quiz?topicId=${topicId}`);
+        if (topicId) {
+          router.push(`/login?redirect=/quiz?topicId=${topicId}`);
+        } else if (year) {
+          router.push(`/login?redirect=/quiz?subjectId=${subjectId}&year=${year}`);
+        }
       }
     },
-    [isAuthenticated, router]
+    [isAuthenticated, router, examId, user, subjectId]
   );
 
   const filteredTopics = topics?.filter(topic =>
@@ -409,6 +419,34 @@ export default function TopicListPage() {
           </>
         )}
       </div>
+
+      {showPremiumModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-4">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center border border-slate-200">
+            <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Lock className="w-10 h-10" />
+            </div>
+            <h2 className="text-2xl font-black font-display text-slate-900 mb-3">Premium Access Required</h2>
+            <p className="text-gray-500 mb-8">
+              You need an active ICAN Study Pack subscription to access these questions.
+            </p>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setShowPremiumModal(false)}
+                className="flex-1 py-4 rounded-xl font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 transition-colors"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => router.push('/shop')}
+                className="flex-1 py-4 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                Go to Shop
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
