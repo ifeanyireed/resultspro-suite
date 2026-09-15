@@ -406,7 +406,7 @@ func (h *ExamHandler) GetQuestionsBySubject(c *gin.Context) {
 		Where("status = ?", "published")
 
 	if qType != "" {
-		query = query.Where("type = ?", qType)
+		query = query.Where("LOWER(type) = ?", strings.ToLower(qType))
 	}
 
 	var subject models.Subject

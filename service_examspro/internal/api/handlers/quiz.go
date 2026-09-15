@@ -66,7 +66,7 @@ func (h *QuizHandler) GetQuestionsByTopic(c *gin.Context) {
 	}
 
 	if qType != "" {
-		query = query.Where("type = ?", qType)
+		query = query.Where("LOWER(type) = ?", strings.ToLower(qType))
 	}
 
 	if err := query.Order("RANDOM()").Limit(limit).Find(&questions).Error; err != nil {
