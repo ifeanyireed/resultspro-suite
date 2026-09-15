@@ -293,7 +293,7 @@ export default function IcanLandingPage() {
                   GET PAID TO TELL OTHERS. <br/><span className="text-emerald-200">(Yes, we are serious).</span>
                 </h2>
                 <p className="text-xl text-emerald-50 font-medium leading-relaxed mb-8">
-                  Share your link and earn a massive <strong className="bg-emerald-900/40 px-2 py-1 rounded">30% commission</strong> every time a friend buys a plan.
+                  Share your link and earn a massive <strong className="bg-emerald-900/40 px-2 py-1 rounded">20% commission</strong> every time a friend buys a plan.
                 </p>
                 <div className="bg-emerald-700/50 border border-emerald-500 rounded-2xl p-6 mb-8 backdrop-blur-sm">
                   <h4 className="font-bold text-xl mb-4 flex items-center gap-2"><ShieldCheck className="w-6 h-6 text-emerald-300" /> The Catch? There isn't one.</h4>
