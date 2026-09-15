@@ -259,7 +259,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                             <span className="text-[10px] text-muted uppercase tracking-wider block mb-3">
                               {new Date(comment.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                             </span>
-                            <p className="text-sm text-navy/80 leading-relaxed m-0 bg-nets-light p-4 rounded-tr-xl rounded-br-xl rounded-bl-xl border border-nets-border whitespace-pre-wrap">
+                            <p className="text-sm text-navy/80 leading-relaxed m-0 bg-nets-light p-4 rounded-tr-xl rounded-br-xl rounded-bl-xl border border-gray-200 whitespace-pre-wrap">
                               {renderCommentContent(comment.content)}
                             </p>
                           </div>
@@ -283,7 +283,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                                   <span className="text-[10px] text-muted uppercase tracking-wider block mb-3">
                                     {new Date(reply.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                                   </span>
-                                  <p className="text-sm text-navy/80 leading-relaxed m-0 bg-nets-light p-4 rounded-tr-xl rounded-br-xl rounded-bl-xl border border-nets-border whitespace-pre-wrap">
+                                  <p className="text-sm text-navy/80 leading-relaxed m-0 bg-nets-light p-4 rounded-tr-xl rounded-br-xl rounded-bl-xl border border-gray-200 whitespace-pre-wrap">
                                     {renderCommentContent(reply.content)}
                                   </p>
                                 </div>
@@ -295,7 +295,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                     ))}
                   </div>
                 ) : (
-                  <div className="bg-nets-light border border-nets-border rounded-xl p-8 text-center text-muted text-sm">
+                  <div className="bg-nets-light border border-gray-200 rounded-xl p-8 text-center text-muted text-sm">
                     No comments yet. Be the first to share your thoughts!
                   </div>
                 )}
@@ -305,17 +305,17 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
               <div className="bg-white shadow-xl w-full p-8 md:p-12 mb-8">
                 <h3 className="text-2xl fw-700 text-navy mb-8">Leave your Comments</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <input type="text" value={commentFirstName} onChange={e => setCommentFirstName(e.target.value)} placeholder="First Name" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500" />
-                  <input type="text" value={commentLastName} onChange={e => setCommentLastName(e.target.value)} placeholder="Last Name" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500" />
+                  <input type="text" value={commentFirstName} onChange={e => setCommentFirstName(e.target.value)} placeholder="First Name" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-gray-200 text-sm focus:outline-none focus:border-blue-500" />
+                  <input type="text" value={commentLastName} onChange={e => setCommentLastName(e.target.value)} placeholder="Last Name" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-gray-200 text-sm focus:outline-none focus:border-blue-500" />
                 </div>
-                <input type="email" value={commentEmail} onChange={e => setCommentEmail(e.target.value)} placeholder="Email Address" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-4" />
+                <input type="email" value={commentEmail} onChange={e => setCommentEmail(e.target.value)} placeholder="Email Address" className="w-full px-4 py-3 rounded-lg bg-nets-light border border-gray-200 text-sm focus:outline-none focus:border-blue-500 mb-4" />
                 {replyingTo && (
                   <div className="flex justify-between items-center bg-blue-50 text-blue-800 text-xs px-3 py-2 rounded-t-lg border border-b-0 border-blue-100">
                     <span className="font-semibold">Replying to comment...</span>
                     <button onClick={() => { setReplyingTo(null); setCommentContent(''); }} className="hover:text-blue-900 font-bold">&times; Cancel</button>
                   </div>
                 )}
-                <textarea ref={textareaRef} value={commentContent} onChange={e => setCommentContent(e.target.value)} placeholder="Your Comment" rows={5} className={`w-full px-4 py-3 bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 mb-6 ${replyingTo ? 'rounded-b-lg border-t-0' : 'rounded-lg'}`}></textarea>
+                <textarea ref={textareaRef} value={commentContent} onChange={e => setCommentContent(e.target.value)} placeholder="Your Comment" rows={5} className={`w-full px-4 py-3 bg-nets-light border border-gray-200 text-sm focus:outline-none focus:border-blue-500 mb-6 ${replyingTo ? 'rounded-b-lg border-t-0' : 'rounded-lg'}`}></textarea>
                 <button onClick={handleCommentSubmit} disabled={commentLoading} className="btn" style={{ backgroundColor: "var(--color-nets-red)", color: "white", padding: "0.75rem 2rem", opacity: commentLoading ? 0.7 : 1 }}>
                   {commentLoading ? "Submitting..." : "Submit your Comment"}
                 </button>
@@ -327,7 +327,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                   Get the latest educational insights, product updates, and thought leadership delivered straight to your inbox.
                 </p>
                 <div className="flex w-full max-w-md mx-auto relative">
-                  <input type="email" value={subEmail} onChange={e => setSubEmail(e.target.value)} placeholder="Enter email address..." className="w-full px-5 py-3 rounded-full bg-nets-light border border-nets-border text-sm focus:outline-none focus:border-blue-500 pr-32" />
+                  <input type="email" value={subEmail} onChange={e => setSubEmail(e.target.value)} placeholder="Enter email address..." className="w-full px-5 py-3 rounded-full bg-nets-light border border-gray-200 text-sm focus:outline-none focus:border-blue-500 pr-32" />
                   <button onClick={handleSubscribeSubmit} disabled={subLoading} className="absolute right-1 top-1 bottom-1 px-6 rounded-full text-white text-xs fw-700 transition-colors" style={{ backgroundColor: "var(--color-nets-red)", opacity: subLoading ? 0.7 : 1 }}>
                     {subLoading ? "..." : "Subscribe"}
                   </button>
@@ -339,7 +339,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                 <h3 className="text-2xl fw-700 text-navy mb-6 text-center">Related Posts</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* Dummy Related Post 1 */}
-                  <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-nets-border flex flex-col">
+                  <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200 flex flex-col">
                     <div className="h-32 bg-gray-200">
                       <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250545/landing_page/photo04.jpg" className="w-full h-full object-cover" />
                     </div>
@@ -353,7 +353,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                   </div>
                   
                   {/* Dummy Related Post 2 */}
-                  <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-nets-border flex flex-col">
+                  <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200 flex flex-col">
                     <div className="h-32 bg-gray-200">
                       <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg" className="w-full h-full object-cover" />
                     </div>
@@ -367,7 +367,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                   </div>
                   
                   {/* Dummy Related Post 3 */}
-                  <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-nets-border flex flex-col">
+                  <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200 flex flex-col">
                     <div className="h-32 bg-gray-200">
                       <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250555/landing_page/photo08.jpg" className="w-full h-full object-cover" />
                     </div>

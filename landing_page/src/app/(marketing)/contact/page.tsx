@@ -50,7 +50,7 @@ export default function ContactPage() {
             
             {/* Contact Information Cards */}
             <div className="lg:col-span-1 space-y-6">
-              <div className="bg-white p-8 rounded-2xl shadow-sm border border-nets-border">
+              <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
                 <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-6">
                   <IconMail size={24} />
                 </div>
@@ -62,7 +62,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <div className="bg-white p-8 rounded-2xl shadow-sm border border-nets-border">
+              <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
                 <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-6">
                   <IconPhoneCall size={24} />
                 </div>
@@ -71,7 +71,7 @@ export default function ContactPage() {
                 <a href="tel:+2348000000000" className="block text-navy fw-500 hover:text-emerald-600 transition-colors">+234 (0) 800 000 0000</a>
               </div>
 
-              <div className="bg-white p-8 rounded-2xl shadow-sm border border-nets-border">
+              <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
                 <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center mb-6">
                   <IconMapPin size={24} />
                 </div>
@@ -85,7 +85,7 @@ export default function ContactPage() {
             </div>
 
             {/* Contact Form */}
-            <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-nets-border p-8 sm:p-12">
+            <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 p-8 sm:p-12">
               <h2 className="text-3xl fw-600 text-navy mb-2">Send us a message</h2>
               <p className="text-muted mb-8">Fill out the form below and we'll get back to you within 24 hours.</p>
               
@@ -97,7 +97,7 @@ export default function ContactPage() {
                       type="text" 
                       required
                       placeholder="Jane"
-                      className="w-full px-4 py-3 rounded-xl border border-nets-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                     />
                   </div>
                   <div className="space-y-2">
@@ -106,7 +106,7 @@ export default function ContactPage() {
                       type="text" 
                       required
                       placeholder="Doe"
-                      className="w-full px-4 py-3 rounded-xl border border-nets-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                     />
                   </div>
                 </div>
@@ -117,14 +117,14 @@ export default function ContactPage() {
                     type="email" 
                     required
                     placeholder="jane@school.edu.ng"
-                    className="w-full px-4 py-3 rounded-xl border border-nets-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <label className="text-sm fw-500 text-navy">Subject / Area of Interest</label>
                   <select 
-                    className="w-full px-4 py-3 rounded-xl border border-nets-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   >
                     <option>SchoolHub Deployment</option>
                     <option>ExamsPRO Partnership</option>
@@ -139,7 +139,7 @@ export default function ContactPage() {
                     required
                     rows={5}
                     placeholder="Tell us how we can help..."
-                    className="w-full px-4 py-3 rounded-xl border border-nets-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none"
                   ></textarea>
                 </div>
 

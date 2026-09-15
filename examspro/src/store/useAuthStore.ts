@@ -31,6 +31,7 @@ interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
   setAuth: (user: User, token: string) => void;
+  clearAuth: () => void;
   logout: () => void;
   updateUser: (user: Partial<User>) => void;
   fetchUser: () => Promise<void>;
@@ -47,9 +48,12 @@ export const useAuthStore = create<AuthState>((set, get) => {
       Cookies.set('token', token, { expires: 7 }); // 7 days
       set({ user, token, isAuthenticated: true });
     },
-    logout: () => {
+    clearAuth: () => {
       Cookies.remove('token');
       set({ user: null, token: null, isAuthenticated: false });
+    },
+    logout: () => {
+      get().clearAuth();
       if (typeof window !== 'undefined') {
         window.location.href = '/login';
       }
@@ -72,8 +76,10 @@ export const useAuthStore = create<AuthState>((set, get) => {
         });
         const updatedUser = res.data;
         set({ user: updatedUser, isAuthenticated: true });
-      } catch (err) {
-        // silently fail, maybe clear auth if 401
+      } catch (err: any) {
+        if (err.response?.status === 401) {
+          get().clearAuth();
+        }
       }
     }
   };

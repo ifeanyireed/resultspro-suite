@@ -89,7 +89,7 @@ export default function LiveGameLobby() {
             <input 
               type="text" 
               placeholder="Search rooms or subjects..."
-              className="w-full bg-white border border-nets-border shadow-sm rounded-2xl py-4 pl-12 pr-4 text-navy placeholder:text-gray-400 focus:outline-none focus:border-blue/50 transition-colors"
+              className="w-full bg-white border border-gray-200 shadow-sm rounded-2xl py-4 pl-12 pr-4 text-navy placeholder:text-gray-400 focus:outline-none focus:border-blue/50 transition-colors"
             />
           </div>
         </div>
@@ -101,7 +101,7 @@ export default function LiveGameLobby() {
             className={`px-6 py-3 rounded-2xl border font-bold text-sm whitespace-nowrap transition-all ${
               selectedExam === 'all' 
               ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue/20' 
-              : 'bg-white border-nets-border shadow-sm text-gray-600 hover:bg-slate-50'
+              : 'bg-white border-gray-200 shadow-sm text-gray-600 hover:bg-slate-50'
             }`}
           >
             All Exams
@@ -113,7 +113,7 @@ export default function LiveGameLobby() {
               className={`px-6 py-3 rounded-2xl border font-bold text-sm whitespace-nowrap transition-all ${
                 selectedExam === exam.id.toString() 
                 ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue/20' 
-                : 'bg-white border-nets-border shadow-sm text-gray-600 hover:bg-slate-50'
+                : 'bg-white border-gray-200 shadow-sm text-gray-600 hover:bg-slate-50'
               }`}
             >
               {exam.name}
@@ -168,7 +168,7 @@ export default function LiveGameLobby() {
                 <div key={i} className="h-64 rounded-[32px] bg-slate-200 animate-pulse" />
               ))
             ) : filteredRooms.length === 0 ? (
-              <div className="col-span-full py-20 text-center bg-white shadow-sm rounded-[32px] border border-dashed border-nets-border">
+              <div className="col-span-full py-20 text-center bg-white shadow-sm rounded-[32px] border border-dashed border-gray-200">
                 <p className="text-gray-500">No live rooms available for this exam. Check back soon!</p>
               </div>
             ) : (
@@ -229,7 +229,7 @@ export default function LiveGameLobby() {
         </div>
 
         {/* Footer CTA */}
-        <div className="mt-20 p-12 rounded-[40px] bg-white shadow-sm border border-nets-border text-center flex flex-col items-center gap-6">
+        <div className="mt-20 p-12 rounded-[40px] bg-white shadow-sm border border-gray-200 text-center flex flex-col items-center gap-6">
           <Eye className="w-12 h-12 text-blue opacity-50" />
           <h2 className="text-2xl md:text-4xl font-display font-bold text-navy">Prefer to watch first?</h2>
           <p className="text-gray-500 max-w-lg mb-4 text-lg">Spectate active live games for free to learn from top players before jumping in.</p>

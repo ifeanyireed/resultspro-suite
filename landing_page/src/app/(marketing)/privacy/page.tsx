@@ -13,7 +13,7 @@ export default function PrivacyPolicy() {
         </div>
       </section>
 
-      <section className="section-py bg-white border-b border-nets-border">
+      <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets max-w-3xl">
           <div className="prose prose-lg text-slate-600">
             <p className="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-8">Last updated: {new Date().toLocaleDateString()}</p>

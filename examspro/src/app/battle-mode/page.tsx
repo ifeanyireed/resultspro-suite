@@ -591,7 +591,7 @@ export default function BattleLobbyPage() {
                   </div>
                 </div>
               )) : (
-                <div className="text-center py-12 bg-white rounded-3xl border border-nets-border border-dashed">
+                <div className="text-center py-12 bg-white rounded-3xl border border-gray-200 border-dashed">
                   <p className="text-gray-500 text-sm font-medium italic">No active battles found. Start one!</p>
                 </div>
               )}

@@ -203,7 +203,7 @@ export default function CoinShopPage() {
           </div>
           
           {isMounted && user && (
-            <div className="p-8 rounded-[40px] bg-white shadow-sm border border-nets-border backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] flex items-center gap-6 relative overflow-hidden group">
+            <div className="p-8 rounded-[40px] bg-white shadow-sm border border-gray-200 backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] flex items-center gap-6 relative overflow-hidden group">
               <div className="absolute inset-0 bg-red-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="w-16 h-16 rounded-2xl bg-red-600/10 flex items-center justify-center text-red-600 relative z-10">
                 <Coins className="w-8 h-8" />
@@ -212,7 +212,7 @@ export default function CoinShopPage() {
                 <div className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-1">Your Balance</div>
                 <div className="text-4xl font-display font-black text-navy">{isMounted ? (user?.coinBalance?.toLocaleString() || 0) : 0}</div>
               </div>
-              <button className="p-3 rounded-xl bg-white shadow-sm border border-nets-border text-gray-600 hover:text-navy transition-colors relative z-10">
+              <button className="p-3 rounded-xl bg-white shadow-sm border border-gray-200 text-gray-600 hover:text-navy transition-colors relative z-10">
                 <History className="w-6 h-6" />
               </button>
             </div>
@@ -287,7 +287,7 @@ export default function CoinShopPage() {
                   key={i} 
                   className={`
                     group relative p-8 rounded-[40px] border transition-all flex flex-col items-center text-center
-                    ${pack.popular ? 'bg-white shadow-sm border border-nets-border border-red-600/30 scale-105 shadow-2xl shadow-red-600/5' : 'bg-white shadow-sm border border-nets-border hover:border-blue-500'}
+                    ${pack.popular ? 'bg-white shadow-sm border border-gray-200 border-red-600/30 scale-105 shadow-2xl shadow-red-600/5' : 'bg-white shadow-sm border border-gray-200 hover:border-blue-500'}
                   `}
                 >
                   {pack.popular && (
@@ -325,7 +325,7 @@ export default function CoinShopPage() {
                     <Button 
                       onClick={() => handlePurchase(pack.id, finalPrice)}
                       disabled={loadingPack === pack.id}
-                      className={`w-full py-6 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 ${pack.popular ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white hover:opacity-90' : 'bg-white shadow-sm border border-nets-border text-navy hover:bg-white/10'}`}
+                      className={`w-full py-6 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 ${pack.popular ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white hover:opacity-90' : 'bg-white shadow-sm border border-gray-200 text-navy hover:bg-white/10'}`}
                     >
                       {loadingPack === pack.id ? (
                         <Loader2 className="w-5 h-5 animate-spin" />
@@ -358,7 +358,7 @@ export default function CoinShopPage() {
                     key={i} 
                     className={`
                       group relative p-8 rounded-[40px] border transition-all flex flex-col items-center text-center
-                      ${pack.popular ? 'bg-white shadow-sm border border-nets-border border-red-600/30 scale-105 shadow-2xl shadow-red-600/5' : 'bg-white shadow-sm border border-nets-border hover:border-blue-500'}
+                      ${pack.popular ? 'bg-white shadow-sm border border-gray-200 border-red-600/30 scale-105 shadow-2xl shadow-red-600/5' : 'bg-white shadow-sm border border-gray-200 hover:border-blue-500'}
                     `}
                   >
                     {pack.popular && (
@@ -399,7 +399,7 @@ export default function CoinShopPage() {
                       <Button 
                         onClick={() => handlePurchase(pack.id, finalPrice)}
                         disabled={loadingPack === pack.id}
-                        className={`w-full py-6 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 ${pack.popular ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white hover:opacity-90' : 'bg-white shadow-sm border border-nets-border text-navy hover:bg-slate-50'}`}
+                        className={`w-full py-6 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 ${pack.popular ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-500 to-red-800 text-white hover:opacity-90' : 'bg-white shadow-sm border border-gray-200 text-navy hover:bg-slate-50'}`}
                       >
                         {loadingPack === pack.id ? (
                           <Loader2 className="w-5 h-5 animate-spin" />
@@ -416,7 +416,7 @@ export default function CoinShopPage() {
         )}
 
         {/* Security / Info */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-12 rounded-[40px] bg-white shadow-sm border border-nets-border">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-12 rounded-[40px] bg-white shadow-sm border border-gray-200">
           <div className="flex flex-col items-center text-center gap-4">
             <div className="w-12 h-12 rounded-full bg-blue/10 flex items-center justify-center text-blue">
               <ShieldCheck className="w-6 h-6" />

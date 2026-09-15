@@ -64,7 +64,7 @@ export default async function BlogPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {posts.map((post: any) => {
                 return (
-                  <article key={post.id} className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-nets-border">
+                  <article key={post.id} className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-gray-200">
                     <div className="relative h-48 overflow-hidden bg-nets-light">
                       <img 
                         src={post.cover_image 
@@ -96,7 +96,7 @@ export default async function BlogPage() {
                         {post.excerpt}
                       </p>
                       
-                      <div className="mt-auto pt-4 border-t border-nets-border">
+                      <div className="mt-auto pt-4 border-t border-gray-200">
                         <Link href={`/blog/${post.slug}`} className="flex items-center gap-2 text-sm fw-600 text-red hover:opacity-80 transition-opacity" style={{ color: 'var(--color-nets-red)' }}>
                           Read Article <IconArrowRight size={16} />
                         </Link>

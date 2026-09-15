@@ -90,7 +90,7 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
         aria-labelledby="login-prompt-title"
         className="fixed inset-0 z-[101] flex items-center justify-center p-4 pointer-events-none"
       >
-        <div className="pointer-events-auto relative w-full max-w-md rounded-[32px] overflow-hidden border border-nets-border shadow-[0_20px_60px_rgba(0,0,0,0.15)] bg-white
+        <div className="pointer-events-auto relative w-full max-w-md rounded-[32px] overflow-hidden border border-gray-200 shadow-[0_20px_60px_rgba(0,0,0,0.15)] bg-white
           animate-in zoom-in-95 fade-in slide-in-from-bottom-4 duration-300">
 
           {/* Gradient background */}

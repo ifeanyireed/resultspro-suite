@@ -36,10 +36,10 @@ export default function SupportPage() {
       </section>
 
       {/* Support Categories */}
-      <section className="section-py bg-white border-b border-nets-border">
+      <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Link href="/contact" className="p-8 rounded-2xl border border-nets-border hover:border-blue-500 hover:shadow-card-lg transition-all group block">
+            <Link href="/contact" className="p-8 rounded-2xl border border-gray-200 hover:border-blue-500 hover:shadow-card-lg transition-all group block">
               <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-6">
                 <IconMessageCircle size={24} />
               </div>
@@ -50,7 +50,7 @@ export default function SupportPage() {
               <p className="text-muted">Open a ticket or reach out to our customer success team directly.</p>
             </Link>
 
-            <div className="p-8 rounded-2xl border border-nets-border hover:border-blue-500 hover:shadow-card-lg transition-all group cursor-not-allowed opacity-80 relative overflow-hidden">
+            <div className="p-8 rounded-2xl border border-gray-200 hover:border-blue-500 hover:shadow-card-lg transition-all group cursor-not-allowed opacity-80 relative overflow-hidden">
               <div className="absolute top-4 right-4 bg-slate-100 text-slate-500 text-xs px-2 py-1 rounded fw-600">Coming Soon</div>
               <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-6">
                 <IconBook size={24} />

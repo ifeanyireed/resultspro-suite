@@ -72,7 +72,7 @@ export default function PuzzleProPage() {
       </section>
 
       {/* Value Prop */}
-      <section className="section-py bg-white border-b border-nets-border">
+      <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div>
@@ -117,7 +117,7 @@ export default function PuzzleProPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {FEATURES.map((feat, i) => (
-              <div key={i} className="bg-white p-8 rounded-xl shadow-sm border border-nets-border hover:shadow-card-lg transition-all">
+              <div key={i} className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 hover:shadow-card-lg transition-all">
                 <div className="w-12 h-12 bg-orange-50 rounded-lg flex items-center justify-center mb-6 text-orange-600">
                   <feat.icon size={24} />
                 </div>

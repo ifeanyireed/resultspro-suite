@@ -187,10 +187,10 @@ export default function PracticePage() {
                 placeholder="Search for an exam (e.g. JAMB, WAEC, SAT)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white shadow-sm border border-nets-border rounded-2xl py-4 pl-12 pr-4 text-navy placeholder:text-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full bg-white shadow-sm border border-gray-200 rounded-2xl py-4 pl-12 pr-4 text-navy placeholder:text-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
-            <button className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white shadow-sm border border-nets-border text-gray-600 hover:text-navy hover:bg-slate-50 transition-colors">
+            <button className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white shadow-sm border border-gray-200 text-gray-600 hover:text-navy hover:bg-slate-50 transition-colors">
               <Filter className="w-5 h-5" />
               <span>Filters</span>
             </button>
@@ -293,7 +293,7 @@ export default function PracticePage() {
                               <div className="relative p-0 rounded-3xl bg-white/40 border border-white/60 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] flex overflow-hidden ring-1 ring-slate-100 h-max min-w-[580px] w-max max-w-[800px]">
                                 
                                 {/* Left Pane - Subjects */}
-                                <div className="w-[240px] border-r border-nets-border p-4 bg-white/90 shrink-0">
+                                <div className="w-[240px] border-r border-gray-200 p-4 bg-white/90 shrink-0">
                                 <h4 className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 px-2">
                                   Subjects
                                   {hoverLoading && <Loader2 className="w-3 h-3 animate-spin inline-ml-2 float-right" />}

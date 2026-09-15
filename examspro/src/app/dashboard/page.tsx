@@ -31,20 +31,26 @@ export default function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [battleHistory, setBattleHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user, fetchUser } = useAuthStore();
+  const { user, isAuthenticated, fetchUser } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
+    let mounted = true;
+
+    if (!isAuthenticated) {
       router.push('/login');
       return;
     }
 
     const fetchDashboard = async () => {
       try {
+        if (!user) {
+          await fetchUser();
+        }
+        
         // Fetch dashboard data
         const dashRes = await api.get('/user/dashboard');
-        setData(dashRes.data);
+        if (mounted) setData(dashRes.data);
 
         // Fetch history safely
         try {
@@ -55,23 +61,25 @@ export default function Dashboard() {
             else if (histData && Array.isArray(histData.data)) histData = histData.data;
             else histData = [];
           }
-          setBattleHistory(histData);
+          if (mounted) setBattleHistory(histData);
         } catch (hErr) {
           console.warn('Failed to fetch history, ignoring:', hErr);
-          setBattleHistory([]);
+          if (mounted) setBattleHistory([]);
         }
 
-        // Fetch user context
-        await fetchUser();
       } catch (error: any) {
         console.error('Failed to fetch dashboard data:', error);
-        
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
+    
     fetchDashboard();
-  }, [user]);
+
+    return () => {
+      mounted = false;
+    };
+  }, [isAuthenticated, router]); // Run once on mount or when auth state changes
 
   if (loading) {
     return (

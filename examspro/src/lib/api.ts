@@ -45,9 +45,9 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
         Cookies.remove('token');
-        // no local user;
-        // Optional: window.location.href = '/admin/login'; 
-        // Better to let the component handle it or use a store
+        import('@/store/useAuthStore').then((module) => {
+          module.useAuthStore.getState().clearAuth();
+        });
       }
     }
     return Promise.reject(error);

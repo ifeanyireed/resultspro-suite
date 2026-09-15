@@ -11,7 +11,7 @@ export function ModernDashboardLayout({ sidebarContent, headerContent, children 
     <div className="dashboard-page h-screen w-screen bg-light font-sans text-gray-900 flex overflow-hidden">
       
       {/* Sidebar (Desktop) / Bottom Nav container (Mobile) */}
-      <aside className="z-50 md:z-10 md:w-[280px] md:bg-white md:border-r md:border-nets-border md:flex md:flex-col md:justify-between py-0 md:py-4 shrink-0 md:h-full overflow-visible md:overflow-hidden md:relative">
+      <aside className="z-50 md:z-10 md:w-[280px] md:bg-white md:border-r md:border-gray-200 md:flex md:flex-col md:justify-between py-0 md:py-4 shrink-0 md:h-full overflow-visible md:overflow-hidden md:relative">
         {sidebarContent}
       </aside>
 

@@ -28,13 +28,13 @@ export default function CareersPage() {
       </section>
 
       {/* Open Roles */}
-      <section className="section-py bg-white border-b border-nets-border">
+      <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl fw-600 text-navy mb-8">Open Positions</h2>
             
             <div className="space-y-4">
-              <div className="p-6 rounded-2xl border border-nets-border flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-blue-500 hover:shadow-md transition-all">
+              <div className="p-6 rounded-2xl border border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-blue-500 hover:shadow-md transition-all">
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center shrink-0">
                     <IconCode size={20} />
@@ -49,7 +49,7 @@ export default function CareersPage() {
                 </Link>
               </div>
 
-              <div className="p-6 rounded-2xl border border-nets-border flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-blue-500 hover:shadow-md transition-all">
+              <div className="p-6 rounded-2xl border border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-blue-500 hover:shadow-md transition-all">
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center shrink-0">
                     <IconHeadset size={20} />
@@ -65,7 +65,7 @@ export default function CareersPage() {
               </div>
             </div>
 
-            <div className="mt-12 p-8 bg-slate-50 rounded-2xl border border-nets-border text-center">
+            <div className="mt-12 p-8 bg-slate-50 rounded-2xl border border-gray-200 text-center">
               <h3 className="text-xl fw-600 text-navy mb-2">Don't see a fit?</h3>
               <p className="text-muted mb-6">We're always looking for exceptional talent. Send your resume and tell us how you can contribute.</p>
               <Link href="mailto:careers@resultspro.ng" className="text-blue-600 fw-600 hover:underline">

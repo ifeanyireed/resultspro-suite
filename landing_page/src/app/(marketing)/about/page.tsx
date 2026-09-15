@@ -28,7 +28,7 @@ export default function AboutPage() {
       </section>
 
       {/* Core Values */}
-      <section className="section-py bg-white border-b border-nets-border">
+      <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl fw-600 text-navy mb-4">Our Core Values</h2>
@@ -36,21 +36,21 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-2xl bg-slate-50 border border-nets-border">
+            <div className="p-8 rounded-2xl bg-slate-50 border border-gray-200">
               <div className="w-12 h-12 bg-red-50 text-red-600 rounded-xl flex items-center justify-center mb-6">
                 <IconTarget size={24} />
               </div>
               <h3 className="text-xl fw-600 text-navy mb-3">Impact First</h3>
               <p className="text-muted leading-relaxed">We measure our success by the tangible improvements in student outcomes and school efficiency.</p>
             </div>
-            <div className="p-8 rounded-2xl bg-slate-50 border border-nets-border">
+            <div className="p-8 rounded-2xl bg-slate-50 border border-gray-200">
               <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-6">
                 <IconGlobe size={24} />
               </div>
               <h3 className="text-xl fw-600 text-navy mb-3">Radical Accessibility</h3>
               <p className="text-muted leading-relaxed">High-quality educational tools shouldn't require gigabit internet. We build for the realities of African infrastructure.</p>
             </div>
-            <div className="p-8 rounded-2xl bg-slate-50 border border-nets-border">
+            <div className="p-8 rounded-2xl bg-slate-50 border border-gray-200">
               <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center mb-6">
                 <IconHeart size={24} />
               </div>
