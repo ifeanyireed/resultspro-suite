@@ -780,7 +780,11 @@ func (h *AdminHandler) GetQuestions(c *gin.Context) {
 		query = query.Where("year = ?", year)
 	}
 	if qType != "" && qType != "all" {
-		query = query.Where("LOWER(type) = ?", strings.ToLower(qType))
+		if strings.ToLower(qType) == "mcq" {
+			query = query.Where("LOWER(type) IN ('mcq', 'mcqs')")
+		} else {
+			query = query.Where("LOWER(type) = ?", strings.ToLower(qType))
+		}
 	}
 
 	var total int64

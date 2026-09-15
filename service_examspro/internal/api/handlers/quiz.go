@@ -66,7 +66,11 @@ func (h *QuizHandler) GetQuestionsByTopic(c *gin.Context) {
 	}
 
 	if qType != "" {
-		query = query.Where("LOWER(type) = ?", strings.ToLower(qType))
+		if strings.ToLower(qType) == "mcq" {
+			query = query.Where("LOWER(type) IN ('mcq', 'mcqs')")
+		} else {
+			query = query.Where("LOWER(type) = ?", strings.ToLower(qType))
+		}
 	}
 
 	if err := query.Order("RANDOM()").Limit(limit).Find(&questions).Error; err != nil {
@@ -112,7 +116,11 @@ func (h *QuizHandler) GetAvailableQuestionTypes(c *gin.Context) {
 
 	for _, c := range counts {
 		if c.Count > 0 {
-			result[strings.ToLower(c.Type)] = true
+			normalizedType := strings.ToLower(c.Type)
+			if normalizedType == "mcqs" {
+				normalizedType = "mcq"
+			}
+			result[normalizedType] = true
 		}
 	}
 
