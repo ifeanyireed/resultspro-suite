@@ -145,18 +145,23 @@ func (h *QuizHandler) SubmitAnswer(c *gin.Context) {
 	}
 
 	var question models.Question
-	if err := database.DB.Preload("Options").Where("id = ?", input.QuestionID).First(&question).Error; err != nil {
+	if err := database.DB.Preload("Options").Preload("Topic.Subject.Exam").Where("id = ?", input.QuestionID).First(&question).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Question not found"})
 		return
+	}
+
+	examName := ""
+	if question.Topic != nil && question.Topic.Subject != nil && question.Topic.Subject.Exam != nil {
+		examName = question.Topic.Subject.Exam.Name
 	}
 
 	var isCorrect bool
 	var feedback string
 	var correctOptionId *string
 
-	if question.Type == "theory" {
+	if question.Type == "theory" || question.Type == "Theory" {
 		var err error
-		isCorrect, feedback, err = utils.ValidateTheoryAnswer(c.Request.Context(), question.BodyText, question.ExplanationStandard, input.TextAnswer)
+		isCorrect, feedback, err = utils.ValidateTheoryAnswer(c.Request.Context(), question.BodyText, question.ExplanationStandard, input.TextAnswer, examName)
 		if err != nil {
 			log.Printf("AI Validation Error: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "AI Validation failed: " + err.Error()})

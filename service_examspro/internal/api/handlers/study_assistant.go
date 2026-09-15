@@ -176,11 +176,15 @@ func (h *StudyAssistantHandler) Chat(c *gin.Context) {
 	}
 
 	syllabusContext := ""
+	examName := ""
 	if session.TopicID != nil {
 		var topic models.Topic
-		database.DB.Where("id = ?", *session.TopicID).First(&topic)
+		database.DB.Preload("Subject.Exam").Where("id = ?", *session.TopicID).First(&topic)
 		if topic.SyllabusContent != nil {
 			syllabusContext = *topic.SyllabusContent
+		}
+		if topic.Subject != nil && topic.Subject.Exam != nil {
+			examName = topic.Subject.Exam.Name
 		}
 	}
 
@@ -208,7 +212,7 @@ func (h *StudyAssistantHandler) Chat(c *gin.Context) {
 		return
 	}
 
-	aiResponse, err := utils.GenerateTutorResponse(context.Background(), input.Message, history, weakTopicNames, syllabusContext)
+	aiResponse, err := utils.GenerateTutorResponse(context.Background(), input.Message, history, weakTopicNames, syllabusContext, examName)
 	if err != nil {
 		log.Printf("AI Error: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get AI response: " + err.Error()})
@@ -384,7 +388,7 @@ func (h *StudyAssistantHandler) AskTopicQuestion(c *gin.Context) {
 	}
 
 	var topic models.Topic
-	if err := database.DB.Where("id = ?", topicIdStr).First(&topic).Error; err != nil {
+	if err := database.DB.Preload("Subject.Exam").Where("id = ?", topicIdStr).First(&topic).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Topic not found"})
 		return
 	}
@@ -398,7 +402,12 @@ func (h *StudyAssistantHandler) AskTopicQuestion(c *gin.Context) {
 		syllabusContext += "\nLESSON NOTES: " + *topic.AiLessonNotes
 	}
 
-	aiResponse, err := utils.GenerateTutorResponse(context.Background(), input.Message, nil, nil, syllabusContext)
+	examName := ""
+	if topic.Subject != nil && topic.Subject.Exam != nil {
+		examName = topic.Subject.Exam.Name
+	}
+
+	aiResponse, err := utils.GenerateTutorResponse(context.Background(), input.Message, nil, nil, syllabusContext, examName)
 	if err != nil {
 		log.Printf("AI Error: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "AI response failed: " + err.Error()})

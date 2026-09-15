@@ -6,9 +6,9 @@ import (
 )
 
 type AIProvider interface {
-	GenerateTutorResponse(ctx context.Context, query string, history []map[string]string, weakTopics []string, syllabusContext string) (string, error)
-	ValidateTheoryAnswer(ctx context.Context, questionBody string, referenceAnswer *string, userAnswer string) (bool, string, error)
-	GenerateExplanation(ctx context.Context, question string, options []string, correctOption string) (string, error)
+	GenerateTutorResponse(ctx context.Context, query string, history []map[string]string, weakTopics []string, syllabusContext string, examName string) (string, error)
+	ValidateTheoryAnswer(ctx context.Context, questionBody string, referenceAnswer *string, userAnswer string, examName string) (bool, string, error)
+	GenerateExplanation(ctx context.Context, question string, options []string, correctOption string, examName string) (string, error)
 	GenerateTopicLessonNote(ctx context.Context, topicName string, syllabusContent *string, examName string) (string, error)
 }
 
@@ -20,16 +20,16 @@ func GetAIProvider() AIProvider {
 	return &GeminiProvider{}
 }
 
-func GenerateTutorResponse(ctx context.Context, query string, history []map[string]string, weakTopics []string, syllabusContext string) (string, error) {
-	return GetAIProvider().GenerateTutorResponse(ctx, query, history, weakTopics, syllabusContext)
+func GenerateTutorResponse(ctx context.Context, query string, history []map[string]string, weakTopics []string, syllabusContext string, examName string) (string, error) {
+	return GetAIProvider().GenerateTutorResponse(ctx, query, history, weakTopics, syllabusContext, examName)
 }
 
-func ValidateTheoryAnswer(ctx context.Context, questionBody string, referenceAnswer *string, userAnswer string) (bool, string, error) {
-	return GetAIProvider().ValidateTheoryAnswer(ctx, questionBody, referenceAnswer, userAnswer)
+func ValidateTheoryAnswer(ctx context.Context, questionBody string, referenceAnswer *string, userAnswer string, examName string) (bool, string, error) {
+	return GetAIProvider().ValidateTheoryAnswer(ctx, questionBody, referenceAnswer, userAnswer, examName)
 }
 
-func GenerateExplanation(ctx context.Context, question string, options []string, correctOption string) (string, error) {
-	return GetAIProvider().GenerateExplanation(ctx, question, options, correctOption)
+func GenerateExplanation(ctx context.Context, question string, options []string, correctOption string, examName string) (string, error) {
+	return GetAIProvider().GenerateExplanation(ctx, question, options, correctOption, examName)
 }
 
 func GenerateTopicLessonNote(ctx context.Context, topicName string, syllabusContent *string, examName string) (string, error) {

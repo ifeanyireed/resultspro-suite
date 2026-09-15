@@ -994,9 +994,14 @@ func (h *AdminHandler) BulkDeleteQuestions(c *gin.Context) {
 func (h *AdminHandler) GenerateAIExplanation(c *gin.Context) {
 	id := c.Param("questionId")
 	var q models.Question
-	if err := database.DB.Preload("Options").First(&q, "id = ?", id).Error; err != nil {
+	if err := database.DB.Preload("Options").Preload("Topic.Subject.Exam").First(&q, "id = ?", id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Question not found"})
 		return
+	}
+
+	examName := ""
+	if q.Topic != nil && q.Topic.Subject != nil && q.Topic.Subject.Exam != nil {
+		examName = q.Topic.Subject.Exam.Name
 	}
 
 	var opts []string
@@ -1008,7 +1013,7 @@ func (h *AdminHandler) GenerateAIExplanation(c *gin.Context) {
 		}
 	}
 
-	explanation, err := utils.GenerateExplanation(context.Background(), q.BodyText, opts, correct)
+	explanation, err := utils.GenerateExplanation(context.Background(), q.BodyText, opts, correct, examName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

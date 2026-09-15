@@ -92,9 +92,14 @@ func (m *MistralProvider) callMistral(ctx context.Context, messages []mistralMes
 	return mResp.Choices[0].Message.Content, nil
 }
 
-func (m *MistralProvider) GenerateTutorResponse(ctx context.Context, query string, history []map[string]string, weakTopics []string, syllabusContext string) (string, error) {
+func (m *MistralProvider) GenerateTutorResponse(ctx context.Context, query string, history []map[string]string, weakTopics []string, syllabusContext string, examName string) (string, error) {
+	examContext := examName
+	if examContext == "" {
+		examContext = "Nigerian examinations"
+	}
+
 	systemPrompt := fmt.Sprintf(`
-      You are "ResultPRO Study Assistant", an expert AI tutor for Nigerian students preparing for JAMB and WAEC.
+      You are "ResultPRO Study Assistant", an expert AI tutor for students preparing for %s.
       
       CONTEXT:
       - Student's Weak Topics: %v
@@ -102,12 +107,12 @@ func (m *MistralProvider) GenerateTutorResponse(ctx context.Context, query strin
       
       GUIDELINES:
       1. Be concise, encouraging, and highly academic but accessible.
-      2. Focus strictly on the Nigerian Secondary School syllabus (WAEC/JAMB). 
-      3. Use local context (e.g., mention Naira instead of Dollars if giving math examples).
+      2. Focus strictly on the relevant syllabus for %s. 
+      3. Use local context (e.g., mention Naira instead of Dollars if giving math examples) where applicable.
       4. If the student asks about a weak topic, give them extra attention and a mini-quiz question to test them.
       5. Format using Markdown.
       6. If the user query is irrelevant to education or exams, politely redirect them to study.
-    `, weakTopics, syllabusContext)
+    `, examContext, weakTopics, syllabusContext, examContext)
 
 	messages := []mistralMessage{
 		{Role: "system", Content: systemPrompt},
@@ -126,14 +131,19 @@ func (m *MistralProvider) GenerateTutorResponse(ctx context.Context, query strin
 	return m.callMistral(ctx, messages)
 }
 
-func (m *MistralProvider) ValidateTheoryAnswer(ctx context.Context, questionBody string, referenceAnswer *string, userAnswer string) (bool, string, error) {
+func (m *MistralProvider) ValidateTheoryAnswer(ctx context.Context, questionBody string, referenceAnswer *string, userAnswer string, examName string) (bool, string, error) {
 	ref := "No specific reference answer provided. Use your general knowledge."
 	if referenceAnswer != nil {
 		ref = *referenceAnswer
 	}
 
+	examContext := examName
+	if examContext == "" {
+		examContext = "Nigerian"
+	}
+
 	prompt := fmt.Sprintf(`
-      You are an expert JAMB/WAEC examiner. 
+      You are an expert %s examiner. 
       Evaluate the student's answer based on the question and the reference model answer.
       
       QUESTION: %s
@@ -152,7 +162,7 @@ func (m *MistralProvider) ValidateTheoryAnswer(ctx context.Context, questionBody
       }
       
       Respond ONLY with the JSON.
-    `, questionBody, ref, userAnswer)
+    `, examContext, questionBody, ref, userAnswer)
 
 	messages := []mistralMessage{
 		{Role: "user", Content: prompt},
@@ -177,16 +187,21 @@ func (m *MistralProvider) ValidateTheoryAnswer(ctx context.Context, questionBody
 	return result.IsCorrect, result.Feedback, nil
 }
 
-func (m *MistralProvider) GenerateExplanation(ctx context.Context, question string, options []string, correctOption string) (string, error) {
+func (m *MistralProvider) GenerateExplanation(ctx context.Context, question string, options []string, correctOption string, examName string) (string, error) {
+	examContext := examName
+	if examContext == "" {
+		examContext = "Nigerian"
+	}
+
 	prompt := fmt.Sprintf(`
-      As an expert JAMB and WAEC tutor, provide a clear, concise step-by-step explanation for this question.
+      As an expert %s tutor, provide a clear, concise step-by-step explanation for this question.
       Question: %s
       Options: %v
       Correct Answer: %s
       
-      The explanation should be friendly and easy for a Nigerian high school student to understand. 
+      The explanation should be friendly, highly accurate, and easy for a student preparing for %s to understand. 
       Use Markdown formatting. Keep it under 150 words.
-    `, question, options, correctOption)
+    `, examContext, question, options, correctOption, examContext)
 
 	messages := []mistralMessage{
 		{Role: "user", Content: prompt},
@@ -212,7 +227,7 @@ func (m *MistralProvider) GenerateTopicLessonNote(ctx context.Context, topicName
       STRUCTURE:
       1. Introduction: Hook the student and explain why this topic is important for the %s exam.
       2. Key Concepts: Break down the main points into clear, bulleted sub-sections.
-      3. Practical Examples: Provide real-life examples relevant to the context of this exam (e.g. professional/corporate examples for ICAN, relatable everyday examples for WAEC/JAMB).
+      3. Practical Examples: Provide real-life examples strictly relevant to the %s exam.
       4. Summary: A quick wrap-up of what they should remember.
       5. "ResultPRO Tip": A short exam strategy related to this topic.
       
@@ -222,7 +237,7 @@ func (m *MistralProvider) GenerateTopicLessonNote(ctx context.Context, topicName
       - Keep it academic, accurate, and highly structured.
       - If the exam is ICAN or a professional certification, ensure the tone, vocabulary, and depth of complexity reflect advanced professional standards.
       - Length: Approximately 400-800 words.
-    `, examName, topicName, syllabus, examName)
+    `, examName, topicName, syllabus, examName, examName)
 
 	messages := []mistralMessage{
 		{Role: "user", Content: prompt},
