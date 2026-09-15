@@ -194,10 +194,10 @@ export default function CoinShopPage() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
           <div className={`text-center ${(isMounted && user) ? 'md:text-left' : 'md:text-center w-full'}`}>
             <h1 className="text-4xl md:text-6xl font-display font-black text-navy mb-4">
-              COIN <span className="text-red-600">SHOP</span>
+              <span className="text-red-600">SHOP</span>
             </h1>
             <p className="text-gray-600 max-w-md mx-auto md:mx-0">
-              Fuel your study journey. Get coins for AI deep-dives, 
+              Fuel your study journey. Get access plans, coins for AI deep-dives, 
               battle stakes, and premium content.
             </p>
           </div>
@@ -349,10 +349,15 @@ export default function CoinShopPage() {
         {loadingPacks ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
             <Loader2 className="w-12 h-12 text-red-600 animate-spin" />
-            <p className="text-gray-600 font-bold">Loading Coin Packs...</p>
+            <p className="text-gray-600 font-bold">Loading Shop...</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          <>
+            <div className="flex items-center gap-4 mb-8 mt-12">
+              <h2 className="text-2xl font-display font-black text-navy uppercase">Coin <span className="text-red-600">Packs</span></h2>
+              <div className="h-px bg-slate-200 flex-1" />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {coinPacks.map((pack, i) => {
               const finalPrice = calculateFinalTotal(pack.price);
               const colorConfig = colorMap[pack.color] || colorMap.blue;
@@ -413,6 +418,7 @@ export default function CoinShopPage() {
               );
             })}
           </div>
+          </>
         )}
 
         {/* Security / Info */}
