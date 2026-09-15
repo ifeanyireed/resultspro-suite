@@ -2041,7 +2041,7 @@ func (h *AdminHandler) DeleteBattle(c *gin.Context) {
 
 func (h *AdminHandler) GetUsersAccess(c *gin.Context) {
 	var users []models.User
-	if err := database.DB.Order("created_at desc").Limit(500).Find(&users).Error; err != nil {
+	if err := database.DB.Joins("JOIN user_apps ON user_apps.user_id = users.id").Where("user_apps.app_id = ?", "examspro-app-id").Order("users.created_at desc").Limit(500).Find(&users).Error; err != nil {
 		c.JSON(500, gin.H{"error": "Failed to fetch users"})
 		return
 	}

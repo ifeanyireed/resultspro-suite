@@ -34,6 +34,7 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		ReferralCode string `json:"referral_code"` // Added referral_code
 		TenantSlug   string `json:"tenant_slug"`
 		TenantID     string `json:"tenant_id"`
+		AppModule    string `json:"app_module"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -110,6 +111,18 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Insert into user_apps if an app_module is provided
+	if input.AppModule != "" {
+		appID := input.AppModule
+		if appID == "examspro" {
+			appID = "examspro-app-id"
+		}
+		_, err = db.DB.Exec("INSERT INTO user_apps (id, user_id, app_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+			uuid.New().String(), userID, appID, now.UTC().Format("2006-01-02 15:04:05"), now.UTC().Format("2006-01-02 15:04:05"))
+		if err != nil {
+			log.Printf("Failed to assign app module: %v", err)
+		}
+	}
 
 	// Assign tenant role if requested
 	if input.TenantSlug != "" || input.TenantID != "" {
@@ -294,6 +307,17 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	if input.TenantID != "" && !hasTenantAccess {
 		utils.JSONError(w, http.StatusForbidden, "You do not have access to this academy")
 		return
+	}
+
+	// Register the user to this app if AppID is provided
+	if input.AppID != "" {
+		var exists bool
+		err := db.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM user_apps WHERE user_id = ? AND app_id = ?)", user.ID, input.AppID).Scan(&exists)
+		if err == nil && !exists {
+			now := time.Now().UTC().Format("2006-01-02 15:04:05")
+			_, _ = db.DB.Exec("INSERT INTO user_apps (id, user_id, app_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+				uuid.New().String(), user.ID, input.AppID, now, now)
+		}
 	}
 
 	// Issue JWT tokens

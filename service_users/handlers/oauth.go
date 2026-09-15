@@ -35,7 +35,8 @@ func HandleGoogleTokenLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
-		IdToken string `json:"idToken"`
+		IdToken   string `json:"idToken"`
+		AppModule string `json:"app_module"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		utils.JSONError(w, http.StatusBadRequest, "Invalid request body")
@@ -61,7 +62,7 @@ func HandleGoogleTokenLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	processOAuthUser(w, r, googleUser.ID, "", googleUser.Email, googleUser.Name, googleUser.Picture, "google")
+	processOAuthUser(w, r, googleUser.ID, "", googleUser.Email, googleUser.Name, googleUser.Picture, "google", input.AppModule)
 }
 
 func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
@@ -97,7 +98,7 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	processOAuthUser(w, r, googleUser.ID, "", googleUser.Email, googleUser.Name, googleUser.Picture, "google")
+	processOAuthUser(w, r, googleUser.ID, "", googleUser.Email, googleUser.Name, googleUser.Picture, "google", "")
 }
 
 func HandleMicrosoftLogin(w http.ResponseWriter, r *http.Request) {
@@ -139,10 +140,10 @@ func HandleMicrosoftCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	processOAuthUser(w, r, "", microsoftUser.ID, microsoftUser.UserPrincipalName, microsoftUser.DisplayName, "", "microsoft")
+	processOAuthUser(w, r, "", microsoftUser.ID, microsoftUser.UserPrincipalName, microsoftUser.DisplayName, "", "microsoft", "")
 }
 
-func processOAuthUser(w http.ResponseWriter, r *http.Request, googleID, microsoftID, email, name, avatar, provider string) {
+func processOAuthUser(w http.ResponseWriter, r *http.Request, googleID, microsoftID, email, name, avatar, provider, appModule string) {
 	email = strings.ToLower(strings.TrimSpace(email))
 	var user models.User
 	query := "SELECT id, email, google_id, microsoft_id, auth_provider, full_name, avatar_url, account_status FROM users WHERE email = ?"
@@ -191,6 +192,15 @@ func processOAuthUser(w http.ResponseWriter, r *http.Request, googleID, microsof
 			utils.JSONError(w, http.StatusInternalServerError, "Failed to create user account")
 			return
 		}
+		
+		if appModule != "" {
+			appID := appModule
+			if appID == "examspro" {
+				appID = "examspro-app-id"
+			}
+			_, _ = db.DB.Exec("INSERT INTO user_apps (id, user_id, app_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+				uuid.New().String(), user.ID, appID, now, now)
+		}
 	} else if err != nil {
 		log.Printf("OAuth database lookup error: %v", err)
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
@@ -225,6 +235,19 @@ func processOAuthUser(w http.ResponseWriter, r *http.Request, googleID, microsof
 				log.Printf("Failed to update OAuth user: %v", err)
 				utils.JSONError(w, http.StatusInternalServerError, "Failed to sync account")
 				return
+			}
+		}
+
+		if appModule != "" {
+			appID := appModule
+			if appID == "examspro" {
+				appID = "examspro-app-id"
+			}
+			var exists bool
+			err := db.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM user_apps WHERE user_id = ? AND app_id = ?)", user.ID, appID).Scan(&exists)
+			if err == nil && !exists {
+				_, _ = db.DB.Exec("INSERT INTO user_apps (id, user_id, app_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+					uuid.New().String(), user.ID, appID, now, now)
 			}
 		}
 	}

@@ -80,7 +80,7 @@ export default function SharedSignupPage({
     onSuccess: async (tokenResponse) => {
       setIsLoading(true);
       try {
-        const res = await api.post(`${USERS_API}/api/v1/auth/google`, { idToken: tokenResponse.access_token });
+        const res = await api.post(`${USERS_API}/api/v1/auth/google`, { idToken: tokenResponse.access_token, app_module: 'examspro' });
         const user = res.data.user;
         setAuth(user, res.data.token || res.data.access_token);
         toast.success('Logged in with Google! 🎉');
@@ -101,7 +101,7 @@ export default function SharedSignupPage({
     e.preventDefault();
     setIsLoading(true);
     try {
-      const payload: any = { full_name: name, email, phone, password };
+      const payload: any = { full_name: name, email, phone, password, app_module: 'examspro' };
       if (refCode) payload.referral_code = refCode;
       
       const res = await api.post(signupEndpoint, payload);
