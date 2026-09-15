@@ -198,8 +198,11 @@ func processOAuthUser(w http.ResponseWriter, r *http.Request, googleID, microsof
 			if appID == "examspro" {
 				appID = "examspro-app-id"
 			}
-			_, _ = db.DB.Exec("INSERT INTO user_apps (id, user_id, app_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-				uuid.New().String(), user.ID, appID, now, now)
+			_, err := db.DB.Exec("INSERT INTO user_apps (user_id, app_id, last_login_at) VALUES (?, ?, ?)",
+				user.ID, appID, now)
+			if err != nil {
+				log.Printf("Failed to insert user_apps in oauth creation: %v", err)
+			}
 		}
 	} else if err != nil {
 		log.Printf("OAuth database lookup error: %v", err)
@@ -246,8 +249,11 @@ func processOAuthUser(w http.ResponseWriter, r *http.Request, googleID, microsof
 			var exists bool
 			err := db.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM user_apps WHERE user_id = ? AND app_id = ?)", user.ID, appID).Scan(&exists)
 			if err == nil && !exists {
-				_, _ = db.DB.Exec("INSERT INTO user_apps (id, user_id, app_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-					uuid.New().String(), user.ID, appID, now, now)
+				_, err := db.DB.Exec("INSERT INTO user_apps (user_id, app_id, last_login_at) VALUES (?, ?, ?)",
+					user.ID, appID, now)
+				if err != nil {
+					log.Printf("Failed to insert user_apps in oauth login: %v", err)
+				}
 			}
 		}
 	}

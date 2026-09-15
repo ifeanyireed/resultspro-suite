@@ -24,8 +24,6 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
-  const hasGoogleClientId = !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
   // Sync with 'show' prop
   useEffect(() => {
@@ -56,7 +54,7 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
     onSuccess: async (tokenResponse) => {
       setIsLoading(true);
       try {
-        const res = await api.post(`${USERS_API}/api/v1/auth/google`, { idToken: tokenResponse.access_token });
+        const res = await api.post(`${USERS_API}/api/v1/auth/google`, { idToken: tokenResponse.access_token, app_module: 'examspro' });
         const user = res.data.user;
         setAuth(user, res.data.token || res.data.access_token);
         toast.success('Logged in with Google! 🎉');
@@ -150,35 +148,31 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
             </div>
 
             {/* Google Login CTA */}
-            {hasGoogleClientId && (
-              <button
-                id="login-prompt-google-btn"
-                onClick={() => loginWithGoogle()}
-                disabled={isLoading}
-                className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-white border border-slate-200 text-navy font-bold text-sm hover:bg-slate-50 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed shadow-sm mb-3"
-              >
-                {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <Chrome className="w-5 h-5 text-[#4285F4]" />
-                )}
-                {isLoading ? 'Signing in...' : 'Continue with Google'}
-              </button>
-            )}
+            <button
+              id="login-prompt-google-btn"
+              onClick={() => loginWithGoogle()}
+              disabled={isLoading}
+              className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-white border border-slate-200 text-navy font-bold text-sm hover:bg-slate-50 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed shadow-sm mb-3"
+            >
+              {isLoading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <Chrome className="w-5 h-5 text-[#4285F4]" />
+              )}
+              {isLoading ? 'Signing in...' : 'Continue with Google'}
+            </button>
 
             {/* Divider */}
-            {hasGoogleClientId && (
-              <div className="relative my-4">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-slate-200" />
-                </div>
-                <div className="relative flex justify-center">
-                  <span className="px-3 bg-white text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                    or
-                  </span>
-                </div>
+            <div className="relative my-4">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-200" />
               </div>
-            )}
+              <div className="relative flex justify-center">
+                <span className="px-3 bg-white text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                  or
+                </span>
+              </div>
+            </div>
 
             {/* Email login link */}
             <Link

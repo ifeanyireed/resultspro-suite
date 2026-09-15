@@ -72,7 +72,7 @@ export default function SharedLoginPage({
     onSuccess: async (tokenResponse) => {
       setIsLoading(true);
       try {
-        const res = await api.post(`${USERS_API}/api/v1/auth/google`, { idToken: tokenResponse.access_token });
+        const res = await api.post(`${USERS_API}/api/v1/auth/google`, { idToken: tokenResponse.access_token, app_module: 'examspro' });
         const user = res.data.user;
         setAuth(user, res.data.token || res.data.access_token);
         toast.success('Logged in with Google! 🎉');

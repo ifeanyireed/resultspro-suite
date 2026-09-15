@@ -117,8 +117,8 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		if appID == "examspro" {
 			appID = "examspro-app-id"
 		}
-		_, err = db.DB.Exec("INSERT INTO user_apps (id, user_id, app_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-			uuid.New().String(), userID, appID, now.UTC().Format("2006-01-02 15:04:05"), now.UTC().Format("2006-01-02 15:04:05"))
+		_, err = db.DB.Exec("INSERT INTO user_apps (user_id, app_id, last_login_at) VALUES (?, ?, ?)",
+			userID, appID, now.UTC().Format("2006-01-02 15:04:05"))
 		if err != nil {
 			log.Printf("Failed to assign app module: %v", err)
 		}
@@ -315,8 +315,11 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		err := db.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM user_apps WHERE user_id = ? AND app_id = ?)", user.ID, input.AppID).Scan(&exists)
 		if err == nil && !exists {
 			now := time.Now().UTC().Format("2006-01-02 15:04:05")
-			_, _ = db.DB.Exec("INSERT INTO user_apps (id, user_id, app_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-				uuid.New().String(), user.ID, input.AppID, now, now)
+			_, err := db.DB.Exec("INSERT INTO user_apps (user_id, app_id, last_login_at) VALUES (?, ?, ?)",
+				user.ID, input.AppID, now)
+			if err != nil {
+				log.Printf("Failed to insert user_apps in login: %v", err)
+			}
 		}
 	}
 
