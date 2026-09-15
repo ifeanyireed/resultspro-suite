@@ -1,0 +1,209 @@
+package handlers
+
+import (
+	"database/sql"
+	"encoding/json"
+	"net/http"
+	"strings"
+	"time"
+
+	"github.com/google/uuid"
+	"service_users.resultspro.ng/db"
+	"service_users.resultspro.ng/middleware"
+	"service_users.resultspro.ng/utils"
+)
+
+func HandleCreateTicket(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	userIDVal := r.Context().Value(middleware.UserContextKey)
+	if userIDVal == nil {
+		utils.JSONError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+	userID := userIDVal.(string)
+
+	var input struct {
+		Subject  string `json:"subject"`
+		Category string `json:"category"`
+		Message  string `json:"message"`
+		Priority string `json:"priority"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if input.Priority == "" {
+		input.Priority = "normal"
+	}
+
+	// Auto-assign
+	var assignedTo sql.NullString
+	var staffID string
+	err := db.GormDB.Raw("SELECT user_id FROM support_staff_status WHERE is_active = true ORDER BY RANDOM() LIMIT 1").Row().Scan(&staffID)
+	if err == nil && staffID != "" {
+		assignedTo = sql.NullString{String: staffID, Valid: true}
+	}
+
+	ticketID := uuid.New().String()
+	now := time.Now().UTC()
+
+	err = db.GormDB.Exec("INSERT INTO support_tickets (id, user_id, assigned_to, subject, category, message, status, priority, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, 'open', ?, ?, ?)",
+		ticketID, userID, assignedTo, input.Subject, input.Category, input.Message, input.Priority, now, now).Error
+
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to create ticket")
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusCreated, map[string]interface{}{
+		"message": "Ticket created successfully",
+		"ticket_id": ticketID,
+		"assigned_to": assignedTo.String,
+	})
+}
+
+func HandleGetUserTickets(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	userIDVal := r.Context().Value(middleware.UserContextKey)
+	if userIDVal == nil {
+		utils.JSONError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+	userID := userIDVal.(string)
+
+	type Ticket struct {
+		ID         string    `json:"id"`
+		Subject    string    `json:"subject"`
+		Category   string    `json:"category"`
+		Message    string    `json:"message"`
+		Status     string    `json:"status"`
+		Priority   string    `json:"priority"`
+		CreatedAt  time.Time `json:"created_at"`
+	}
+
+	var tickets []Ticket
+	db.GormDB.Raw("SELECT id, subject, category, message, status, priority, created_at FROM support_tickets WHERE user_id = ? ORDER BY created_at DESC", userID).Scan(&tickets)
+
+	utils.JSONResponse(w, http.StatusOK, tickets)
+}
+
+func HandleGetAdminTickets(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	type Ticket struct {
+		ID           string    `json:"id"`
+		UserID       string    `json:"user_id"`
+		UserFullName string    `json:"user_full_name"`
+		AssignedTo   string    `json:"assigned_to"`
+		Subject      string    `json:"subject"`
+		Category     string    `json:"category"`
+		Message      string    `json:"message"`
+		Status       string    `json:"status"`
+		Priority     string    `json:"priority"`
+		CreatedAt    time.Time `json:"created_at"`
+	}
+
+	var tickets []Ticket
+	db.GormDB.Raw(`
+		SELECT t.id, t.user_id, u.full_name as user_full_name, t.assigned_to, t.subject, t.category, t.message, t.status, t.priority, t.created_at 
+		FROM support_tickets t 
+		LEFT JOIN users u ON t.user_id = u.id 
+		ORDER BY t.created_at DESC
+	`).Scan(&tickets)
+
+	utils.JSONResponse(w, http.StatusOK, tickets)
+}
+
+func HandleUpdateTicketStatus(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPut {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	ticketID := strings.TrimPrefix(r.URL.Path, "/api/v1/support/tickets/")
+	ticketID = strings.TrimSuffix(ticketID, "/status")
+
+	var input struct {
+		Status string `json:"status"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err := db.GormDB.Exec("UPDATE support_tickets SET status = ?, updated_at = ? WHERE id = ?", input.Status, time.Now().UTC(), ticketID).Error
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to update ticket")
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{"message": "Ticket updated"})
+}
+
+func HandleSetStaffStatus(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	userIDVal := r.Context().Value(middleware.UserContextKey)
+	if userIDVal == nil {
+		utils.JSONError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+	userID := userIDVal.(string)
+
+	var input struct {
+		IsActive bool `json:"is_active"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	var existsInDB bool
+	db.GormDB.Raw("SELECT EXISTS(SELECT 1 FROM support_staff_status WHERE user_id = ?)", userID).Scan(&existsInDB)
+
+	if existsInDB {
+		db.GormDB.Exec("UPDATE support_staff_status SET is_active = ?, updated_at = ? WHERE user_id = ?", input.IsActive, time.Now().UTC(), userID)
+	} else {
+		db.GormDB.Exec("INSERT INTO support_staff_status (user_id, is_active, updated_at) VALUES (?, ?, ?)", userID, input.IsActive, time.Now().UTC())
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{"message": "Status updated"})
+}
+
+func HandleGetStaffStatus(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	userIDVal := r.Context().Value(middleware.UserContextKey)
+	if userIDVal == nil {
+		utils.JSONError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+	userID := userIDVal.(string)
+
+	var isActive bool
+	err := db.GormDB.Raw("SELECT is_active FROM support_staff_status WHERE user_id = ?", userID).Row().Scan(&isActive)
+	if err != nil {
+		isActive = false
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{"is_active": isActive})
+}

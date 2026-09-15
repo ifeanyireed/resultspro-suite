@@ -25,9 +25,11 @@ export default function SupportDashboard() {
     fetchStaffStatus();
   }, []);
 
+  const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+
   const fetchTickets = async () => {
     try {
-      const res = await api.get('/support/admin/tickets');
+      const res = await api.get('/api/v1/support/admin/tickets', { baseURL: USERS_API });
       setTickets(res.data || []);
     } catch (err) {
       console.error(err);
@@ -38,7 +40,7 @@ export default function SupportDashboard() {
 
   const fetchStaffStatus = async () => {
     try {
-      const res = await api.get('/support/staff/status');
+      const res = await api.get('/api/v1/support/staff/status', { baseURL: USERS_API });
       setStaffActive(res.data?.is_active || false);
     } catch (err) {
       console.error(err);
@@ -47,7 +49,7 @@ export default function SupportDashboard() {
 
   const toggleStaffStatus = async (status: boolean) => {
     try {
-      await api.post('/support/staff/status', { is_active: status });
+      await api.post('/api/v1/support/staff/status', { is_active: status }, { baseURL: USERS_API });
       setStaffActive(status);
     } catch (err) {
       console.error(err);

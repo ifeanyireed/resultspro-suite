@@ -21,9 +21,11 @@ export default function DashboardSupport() {
     fetchTickets();
   }, []);
 
+  const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+
   const fetchTickets = async () => {
     try {
-      const res = await api.get('/support/tickets');
+      const res = await api.get('/api/v1/support/tickets', { baseURL: USERS_API });
       setTickets(res.data || []);
     } catch (err) {
       console.error(err);
@@ -36,12 +38,12 @@ export default function DashboardSupport() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await api.post('/support/tickets', {
+      await api.post('/api/v1/support/tickets', {
         subject,
         category,
         message,
         priority
-      });
+      }, { baseURL: USERS_API });
       setSubject('');
       setMessage('');
       fetchTickets();

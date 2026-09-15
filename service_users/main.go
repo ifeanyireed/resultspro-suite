@@ -441,6 +441,29 @@ func main() {
 		}
 	})
 
+	// Support Routes
+	mux.HandleFunc("/api/v1/support/tickets", middleware.RequireAuth(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost {
+			handlers.HandleCreateTicket(w, r)
+		} else if r.Method == http.MethodGet {
+			handlers.HandleGetUserTickets(w, r)
+		} else {
+			utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		}
+	}))
+	mux.HandleFunc("/api/v1/support/admin/tickets", middleware.RequireAuth(handlers.HandleGetAdminTickets))
+	mux.HandleFunc("/api/v1/support/tickets/", middleware.RequireAuth(handlers.HandleUpdateTicketStatus))
+	mux.HandleFunc("/api/v1/support/staff/status", middleware.RequireAuth(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			handlers.HandleGetStaffStatus(w, r)
+		} else if r.Method == http.MethodPost {
+			handlers.HandleSetStaffStatus(w, r)
+		} else {
+			utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		}
+	}))
+
+
 	// Wrap entire handler tree with CORS middleware
 	handler := middleware.EnableCORS(mux)
 
