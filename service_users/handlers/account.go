@@ -51,14 +51,14 @@ func HandleVerifyEmail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
-	_, err = tx.Exec("UPDATE users SET account_status = 'active', updated_at = ? WHERE id = ?", now, userID)
+	_, err = tx.Exec(db.Rebind("UPDATE users SET account_status = 'active', updated_at = ? WHERE id = ?"), now, userID)
 	if err != nil {
 		tx.Rollback()
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to activate user")
 		return
 	}
 
-	_, err = tx.Exec("UPDATE verification_tokens SET used = true WHERE token_hash = ?", input.Token)
+	_, err = tx.Exec(db.Rebind("UPDATE verification_tokens SET used = true WHERE token_hash = ?"), input.Token)
 	if err != nil {
 		tx.Rollback()
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to update verification status")
@@ -164,14 +164,14 @@ func HandleResetPassword(w http.ResponseWriter, r *http.Request) {
 	}
 
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
-	_, err = tx.Exec("UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?", hashedPassword, now, userID)
+	_, err = tx.Exec(db.Rebind("UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?"), hashedPassword, now, userID)
 	if err != nil {
 		tx.Rollback()
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to update password")
 		return
 	}
 
-	_, err = tx.Exec("UPDATE verification_tokens SET used = true WHERE token_hash = ?", input.Token)
+	_, err = tx.Exec(db.Rebind("UPDATE verification_tokens SET used = true WHERE token_hash = ?"), input.Token)
 	if err != nil {
 		tx.Rollback()
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to mark token as used")
@@ -179,7 +179,7 @@ func HandleResetPassword(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Revoke existing sessions
-	tx.Exec("UPDATE refresh_tokens SET revoked = true WHERE user_id = ?", userID)
+	tx.Exec(db.Rebind("UPDATE refresh_tokens SET revoked = true WHERE user_id = ?"), userID)
 
 	tx.Commit()
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Password reset successfully. You can now log in with your new password."})
