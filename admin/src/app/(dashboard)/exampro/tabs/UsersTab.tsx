@@ -54,7 +54,7 @@ export default function UsersTab() {
 
   const handleSave = async (userId: string) => {
     try {
-      await fetch(`${EXAMS_API}/api/admin/users-access/${userId}`, {
+      const res = await fetch(`${EXAMS_API}/api/admin/users-access/${userId}`, {
         method: 'PUT',
         headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -64,6 +64,7 @@ export default function UsersTab() {
           active_plan_id: editForm.active_plan_id || null
         })
       });
+      if (!res.ok) throw new Error("Failed to update user access");
       toast.success("Access updated successfully!");
       setEditingId(null);
       loadData();
