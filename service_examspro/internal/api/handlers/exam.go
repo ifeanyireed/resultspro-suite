@@ -307,7 +307,7 @@ func (h *ExamHandler) GetTopicsBySubject(c *gin.Context) {
 	var topicAggs []TopicAgg
 	database.DB.Model(&models.Question{}).
 		Select("topic_id, count(*) as total, sum(case when difficulty='hard' then 1 else 0 end) as hard_count, sum(case when difficulty='medium' then 1 else 0 end) as medium_count, sum(coin_reward) as total_reward").
-		Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id = ?)", subject.ID).
+		Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id = ?) AND status = ?", subject.ID, "published").
 		Group("topic_id").Scan(&topicAggs)
 
 	topicAggMap := make(map[int]TopicAgg)
