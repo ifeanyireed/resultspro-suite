@@ -26,6 +26,7 @@ func main() {
 	examHandler := &handlers.ExamHandler{}
 	quizHandler := &handlers.QuizHandler{}
 	battleHandler := handlers.NewBattleHandler()
+	supportHandler := handlers.NewSupportHandler()
 	liveHandler := &handlers.LiveGameHandler{}
 	adminHandler := &handlers.AdminHandler{}
 	paymentHandler := &handlers.PaymentHandler{}
@@ -104,6 +105,17 @@ func main() {
 				userGroup.GET("/rank", userHandler.GetRank)
 				userGroup.GET("/dashboard", userHandler.GetDashboard)
 				userGroup.GET("/analytics", userHandler.GetAnalytics)
+			}
+
+			// Support
+			supportGroup := authenticated.Group("/support")
+			{
+				supportGroup.POST("/tickets", supportHandler.CreateTicket)
+				supportGroup.GET("/tickets", supportHandler.GetUserTickets)
+				supportGroup.GET("/admin/tickets", middleware.IsModerator(), supportHandler.GetAdminTickets)
+				supportGroup.PUT("/tickets/:ticketId/status", middleware.IsModerator(), supportHandler.UpdateTicketStatus)
+				supportGroup.GET("/staff/status", middleware.IsModerator(), supportHandler.GetStaffStatus)
+				supportGroup.POST("/staff/status", middleware.IsModerator(), supportHandler.SetStaffStatus)
 			}
 
 			// Exams

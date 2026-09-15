@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { IconHome, IconBook, IconBolt, IconSword, IconBrain, IconTrophy, IconUserPlus, IconNews, IconShoppingBag, IconSettings, IconHelp, IconLogout } from '@tabler/icons-react';
+import { IconHome, IconLifebuoy, IconBook, IconBolt, IconSword, IconBrain, IconTrophy, IconUserPlus, IconNews, IconShoppingBag, IconSettings, IconHelp, IconLogout } from '@tabler/icons-react';
 import { useAuthStore } from '@/store/useAuthStore';
 
 export function Sidebar() {
@@ -18,6 +18,7 @@ export function Sidebar() {
       title: 'LEARNING',
       links: [
         { label: 'Dashboard', href: '/dashboard', icon: IconHome },
+  { label: 'Support', href: '/dashboard/support', icon: IconLifebuoy },
       ],
     },
     {
