@@ -19,9 +19,49 @@ import (
 )
 
 func HandleGoogleLogin(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		HandleGoogleTokenLogin(w, r)
+		return
+	}
 	state := generateStateOauthCookie(w)
 	url := config.GoogleOAuthConfig.AuthCodeURL(state)
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+}
+
+func HandleGoogleTokenLogin(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var input struct {
+		IdToken string `json:"idToken"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+
+	response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + input.IdToken)
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to get user info from Google")
+		return
+	}
+	defer response.Body.Close()
+
+	var googleUser struct {
+		ID      string `json:"id"`
+		Email   string `json:"email"`
+		Name    string `json:"name"`
+		Picture string `json:"picture"`
+	}
+
+	if err := json.NewDecoder(response.Body).Decode(&googleUser); err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to parse Google user info")
+		return
+	}
+
+	processOAuthUser(w, r, googleUser.ID, "", googleUser.Email, googleUser.Name, googleUser.Picture, "google")
 }
 
 func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
