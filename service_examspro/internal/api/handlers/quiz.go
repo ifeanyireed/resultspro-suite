@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"exams-resultspro-backend/internal/database"
@@ -93,7 +94,7 @@ func (h *QuizHandler) GetAvailableQuestionTypes(c *gin.Context) {
 	if topicId != "" {
 		query = query.Where("topic_id = ?", topicId)
 	} else if subjectId != "" {
-		query = query.Where("subject_id = ?", subjectId)
+		query = query.Where("topic_id IN (SELECT id FROM nat_exams_topics WHERE subject_id = ?)", subjectId)
 		if year != "" {
 			query = query.Where("year = ?", year)
 		}
@@ -111,7 +112,7 @@ func (h *QuizHandler) GetAvailableQuestionTypes(c *gin.Context) {
 
 	for _, c := range counts {
 		if c.Count > 0 {
-			result[c.Type] = true
+			result[strings.ToLower(c.Type)] = true
 		}
 	}
 
