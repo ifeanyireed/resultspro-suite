@@ -11,9 +11,14 @@ export default function BillingTab() {
   let planDesc = 'You are currently on the basic free plan. Upgrade to unlock unlimited AI tutorials.';
   let planValidity = '';
   
-  if (user?.hasIcan) {
-    planName = user.icanPlanName || 'ICAN Plan';
-    planDesc = 'You are currently on the ICAN plan. You have access to ICAN exam resources.';
+  if (user?.hasIcan || user?.icanPlanName) {
+    let pName = user.icanPlanName || 'ICAN Plan';
+    if (pName === 'ICAN_FULL' || pName === 'Full Diet Access' || pName === 'Full Diet') pName = 'Full Diet Access';
+    else if (pName === 'ICAN_GROUP' || pName === 'Complete Level') pName = 'Complete Level Access';
+    else if (pName === 'ICAN_SINGLE' || pName === 'Single Paper') pName = 'Single Paper Access';
+    
+    planName = pName;
+    planDesc = `You are currently on the ${pName}. You have access to ICAN exam resources.`;
     if (user.icanExpiresAt) {
       planValidity = `Valid until: ${new Date(user.icanExpiresAt).toLocaleDateString()}`;
     }
