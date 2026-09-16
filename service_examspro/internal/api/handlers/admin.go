@@ -2061,12 +2061,33 @@ func (h *AdminHandler) UpdateUserAccess(c *gin.Context) {
 		return
 	}
 
-	if err := database.DB.Model(&models.User{}).Where("id = ?", userID).Updates(map[string]interface{}{
+	updates := map[string]interface{}{
 		"is_premium":         input.IsPremium,
 		"premium_expires_at": input.PremiumExpiresAt,
 		"coin_balance":       input.CoinBalance,
 		"active_plan_id":     input.ActivePlanID,
-	}).Error; err != nil {
+	}
+
+	if input.ActivePlanID != nil && *input.ActivePlanID != "" {
+		var plan models.SubscriptionPlan
+		if err := database.DB.Where("id = ?", *input.ActivePlanID).First(&plan).Error; err == nil {
+			if plan.Category == "ICAN" || strings.HasPrefix(plan.AccessLevel, "ICAN") {
+				updates["has_ican"] = true
+				updates["ican_plan"] = plan.AccessLevel
+				updates["ican_expires_at"] = input.PremiumExpiresAt
+			} else {
+				updates["has_ican"] = false
+				updates["ican_plan"] = nil
+				updates["ican_expires_at"] = nil
+			}
+		}
+	} else {
+		updates["has_ican"] = false
+		updates["ican_plan"] = nil
+		updates["ican_expires_at"] = nil
+	}
+
+	if err := database.DB.Model(&models.User{}).Where("id = ?", userID).Updates(updates).Error; err != nil {
 		c.JSON(500, gin.H{"error": "Failed to update access"})
 		return
 	}
