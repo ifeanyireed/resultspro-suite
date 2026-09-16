@@ -2,7 +2,14 @@ import BlogPostContent from '@/components/BlogPostContent';
 import { notFound } from 'next/navigation';
 
 export const revalidate = 60;
-export const dynamicParams = true;
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  const posts = await getBlogPosts();
+  return posts.map((p: any) => ({
+    slug: p.slug,
+  }));
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
