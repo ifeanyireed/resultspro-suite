@@ -15,6 +15,47 @@ export default function SupportChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [message, setMessage] = useState('');
   const [activeSession, setActiveSession] = useState<string | null>(null);
+  const [sessionsData, setSessionsData] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchSessions();
+  }, []);
+
+  const fetchSessions = async () => {
+    try {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+      const res = await fetch(`${USERS_API}/api/v1/support/chat/sessions`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('resultspro_admin_token')}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        // Sort by timestamp descending
+        data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+        setSessionsData(data);
+      }
+    } catch (err) {}
+  };
+
+  const fetchHistory = async (sessionId: string) => {
+    try {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+      const res = await fetch(`${USERS_API}/api/v1/support/chat/history?session_id=${sessionId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setMessages(prev => {
+          // Merge history with current messages for this session
+          const existingIds = new Set(prev.map(m => m.id));
+          const newMsgs = data.filter(m => !existingIds.has(m.id));
+          return [...prev, ...newMsgs].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+        });
+      }
+    } catch (err) {}
+  };
+
+  const handleSessionClick = (sessionId: string) => {
+    setActiveSession(sessionId);
+    fetchHistory(sessionId);
+  };
   const ws = useRef<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -67,8 +108,8 @@ export default function SupportChatPage() {
   // Group active session messages for the main view
   const displayMessages = messages.filter(m => m.session_id === activeSession);
   
-  // Get unique sessions
-  const sessions = Array.from(new Set(messages.map(m => m.session_id).filter(Boolean)));
+  // Unique sessions from real-time + history
+  const activeSessionIds = Array.from(new Set([...sessionsData.map(s => s.session_id), ...messages.map(m => m.session_id).filter(Boolean)]));
 
   return (
     <div className="flex h-[calc(100vh-120px)] bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
@@ -82,7 +123,7 @@ export default function SupportChatPage() {
           {sessions.length === 0 ? (
             <p className="text-sm text-gray-400 p-4 text-center">No active chats</p>
           ) : (
-            sessions.map(sessionId => {
+            activeSessionIds.map(sessionId => {
               const sessionMsgs = messages.filter(m => m.session_id === sessionId);
               const lastMsg = sessionMsgs[sessionMsgs.length - 1];
               const isActive = activeSession === sessionId;
@@ -90,7 +131,7 @@ export default function SupportChatPage() {
               return (
                 <div 
                   key={sessionId} 
-                  onClick={() => setActiveSession(sessionId)}
+                  onClick={() => handleSessionClick(sessionId)}
                   className={`p-4 border-b border-gray-100 cursor-pointer transition-colors ${isActive ? 'bg-[#146ef5]/10 border-l-4 border-l-[#146ef5]' : 'hover:bg-gray-50 border-l-4 border-l-transparent'}`}
                 >
                   <div className="flex justify-between items-start mb-1">

@@ -20,6 +20,25 @@ export default function FloatingChat() {
 
   const toggleChat = () => setIsOpen(!isOpen);
 
+  
+  useEffect(() => {
+    const fetchHistory = async (sid) => {
+      try {
+        const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+        const res = await fetch(`${USERS_API}/api/v1/support/chat/history?session_id=${sid}`);
+        if (res.ok) {
+          const data = await res.json();
+          setMessages(data);
+        }
+      } catch (err) {}
+    };
+
+    let sid = localStorage.getItem('support_chat_session');
+    if (sid) {
+      fetchHistory(sid);
+    }
+  }, []);
+
   useEffect(() => {
     if (isOpen && !ws.current) {
       

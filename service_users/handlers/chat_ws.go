@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+	"service_users.resultspro.ng/db"
 )
 
 var upgrader = websocket.Upgrader{
@@ -213,6 +214,12 @@ func readPump(client *Client) {
 				chatMsg.Sender = "Guest"
 			}
 		}
+
+		// Save to DB
+		db.GormDB.Exec(
+			"INSERT INTO support_live_chats (id, session_id, sender, message, created_at) VALUES (?, ?, ?, ?, ?)",
+			chatMsg.ID, chatMsg.SessionID, chatMsg.Sender, chatMsg.Text, chatMsg.Timestamp,
+		)
 
 		payload, _ := json.Marshal(chatMsg)
 		Hub.broadcast <- payload

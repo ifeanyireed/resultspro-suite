@@ -454,6 +454,8 @@ func main() {
 	mux.HandleFunc("/api/v1/support/admin/tickets", middleware.RequireAuth(handlers.HandleGetAdminTickets))
 	mux.HandleFunc("/api/v1/support/tickets/", middleware.RequireAuth(handlers.HandleTicketSubroutes))
 	mux.HandleFunc("/api/v1/support/ws", handlers.HandleChatWebSocket)
+	mux.HandleFunc("/api/v1/support/chat/history", handlers.GetChatHistory)
+	mux.HandleFunc("/api/v1/support/chat/sessions", middleware.RequireAuth(handlers.GetChatSessions))
 	mux.HandleFunc("/api/v1/support/staff/status", middleware.RequireAuth(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			handlers.HandleGetStaffStatus(w, r)
