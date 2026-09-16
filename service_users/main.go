@@ -452,7 +452,8 @@ func main() {
 		}
 	}))
 	mux.HandleFunc("/api/v1/support/admin/tickets", middleware.RequireAuth(handlers.HandleGetAdminTickets))
-	mux.HandleFunc("/api/v1/support/tickets/", middleware.RequireAuth(handlers.HandleUpdateTicketStatus))
+	mux.HandleFunc("/api/v1/support/tickets/", middleware.RequireAuth(handlers.HandleTicketSubroutes))
+
 	mux.HandleFunc("/api/v1/support/staff/status", middleware.RequireAuth(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			handlers.HandleGetStaffStatus(w, r)

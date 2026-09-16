@@ -207,3 +207,100 @@ func HandleGetStaffStatus(w http.ResponseWriter, r *http.Request) {
 
 	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{"is_active": isActive})
 }
+
+func HandleTicketMessages(w http.ResponseWriter, r *http.Request) {
+	// Extract ticket ID from /api/v1/support/tickets/{id}/messages
+	parts := strings.Split(r.URL.Path, "/")
+	if len(parts) < 6 {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid URL")
+		return
+	}
+	ticketID := parts[5]
+
+	userIDVal := r.Context().Value(middleware.UserContextKey)
+	if userIDVal == nil {
+		utils.JSONError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+	userID := userIDVal.(string)
+
+	if r.Method == http.MethodGet {
+		type Message struct {
+			ID         string    `json:"id"`
+			TicketID   string    `json:"ticket_id"`
+			SenderID   string    `json:"sender_id"`
+			SenderName string    `json:"sender_name"`
+			SenderType string    `json:"sender_type"`
+			Message    string    `json:"message"`
+			CreatedAt  time.Time `json:"created_at"`
+		}
+
+		var messages []Message
+		db.GormDB.Raw(`
+			SELECT m.id, m.ticket_id, m.sender_id, COALESCE(u.full_name, 'Staff') as sender_name, m.sender_type, m.message, m.created_at
+			FROM support_ticket_messages m
+			LEFT JOIN users u ON m.sender_id = u.id
+			WHERE m.ticket_id = ?
+			ORDER BY m.created_at ASC
+		`, ticketID).Scan(&messages)
+
+		utils.JSONResponse(w, http.StatusOK, messages)
+		return
+	}
+
+	if r.Method == http.MethodPost {
+		var input struct {
+			Message    string `json:"message"`
+			SenderType string `json:"sender_type"` // 'user' or 'staff'
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			utils.JSONError(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		if input.SenderType == "" {
+			input.SenderType = "user"
+		}
+
+		msgID := uuid.New().String()
+		now := time.Now().UTC()
+
+		err := db.GormDB.Exec("INSERT INTO support_ticket_messages (id, ticket_id, sender_id, sender_type, message, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+			msgID, ticketID, userID, input.SenderType, input.Message, now).Error
+
+		if err != nil {
+			utils.JSONError(w, http.StatusInternalServerError, "Failed to add message")
+			return
+		}
+		
+		// Update ticket's updated_at timestamp
+		db.GormDB.Exec("UPDATE support_tickets SET updated_at = ? WHERE id = ?", now, ticketID)
+
+		utils.JSONResponse(w, http.StatusCreated, map[string]interface{}{
+			"message": "Reply added successfully",
+			"id": msgID,
+		})
+		return
+	}
+
+	utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+}
+
+func HandleTicketSubroutes(w http.ResponseWriter, r *http.Request) {
+	// URLs like:
+	// /api/v1/support/tickets/{id}/status
+	// /api/v1/support/tickets/{id}/messages
+	parts := strings.Split(r.URL.Path, "/")
+	if len(parts) >= 7 {
+		action := parts[6]
+		if action == "status" {
+			HandleUpdateTicketStatus(w, r)
+			return
+		}
+		if action == "messages" {
+			HandleTicketMessages(w, r)
+			return
+		}
+	}
+	utils.JSONError(w, http.StatusNotFound, "Not found")
+}

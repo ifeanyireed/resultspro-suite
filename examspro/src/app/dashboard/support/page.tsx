@@ -5,6 +5,8 @@ import { useAuthStore } from '@/store/useAuthStore';
 import api from '@/lib/api';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+
 
 export default function DashboardSupport() {
   const { user } = useAuthStore();
@@ -125,25 +127,27 @@ export default function DashboardSupport() {
         ) : (
           <div className="space-y-4">
             {tickets.map((t: any) => (
-              <div key={t.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-100 rounded-2xl gap-4 hover:border-blue-200 transition-colors">
-                <div>
-                  <div className="flex items-center gap-3 mb-1">
-                    <h3 className="font-bold text-gray-900">{t.subject}</h3>
-                    <span className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded-md ${
-                      t.status === 'open' ? 'bg-yellow-100 text-yellow-700' :
-                      t.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
-                      t.status === 'resolved' ? 'bg-green-100 text-green-700' :
-                      'bg-gray-100 text-gray-700'
-                    }`}>
-                      {t.status}
-                    </span>
+              <Link key={t.id} href={`/dashboard/support/${t.id}`} className="block">
+                <div className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-100 rounded-2xl gap-4 hover:border-blue-200 hover:shadow-sm transition-all bg-white">
+                  <div>
+                    <div className="flex items-center gap-3 mb-1">
+                      <h3 className="font-bold text-gray-900 group-hover:text-blue-600">{t.subject}</h3>
+                      <span className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded-md ${
+                        t.status === 'open' ? 'bg-yellow-100 text-yellow-700' :
+                        t.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
+                        t.status === 'resolved' ? 'bg-green-100 text-green-700' :
+                        'bg-gray-100 text-gray-700'
+                      }`}>
+                        {t.status}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-500 line-clamp-1">{t.message}</p>
                   </div>
-                  <p className="text-sm text-gray-500 line-clamp-1">{t.message}</p>
+                  <div className="text-sm text-gray-400 shrink-0 font-medium">
+                    {new Date(t.created_at).toLocaleDateString()}
+                  </div>
                 </div>
-                <div className="text-sm text-gray-400 shrink-0">
-                  {new Date(t.created_at).toLocaleDateString()}
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
