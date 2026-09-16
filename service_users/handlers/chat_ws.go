@@ -20,9 +20,11 @@ var upgrader = websocket.Upgrader{
 }
 
 type Client struct {
-	ID   string
-	Conn *websocket.Conn
-	Send chan []byte
+	ID        string
+	SessionID string // The guest's unique ID
+	Role      string // "guest" or "staff"
+	Conn      *websocket.Conn
+	Send      chan []byte
 }
 
 type ChatHub struct {
@@ -59,13 +61,30 @@ func (h *ChatHub) Run() {
 			}
 			h.mutex.Unlock()
 		case message := <-h.broadcast:
+			var chatMsg ChatMessage
+			if err := json.Unmarshal(message, &chatMsg); err != nil {
+				continue // Skip invalid messages
+			}
+
 			h.mutex.Lock()
 			for client := range h.clients {
-				select {
-				case client.Send <- message:
-				default:
-					close(client.Send)
-					delete(h.clients, client)
+				// Routing logic
+				shouldSend := false
+				if client.Role == "staff" {
+					// Staff see everything
+					shouldSend = true
+				} else if client.SessionID == chatMsg.SessionID {
+					// Guests only see messages for their session
+					shouldSend = true
+				}
+
+				if shouldSend {
+					select {
+					case client.Send <- message:
+					default:
+						close(client.Send)
+						delete(h.clients, client)
+					}
 				}
 			}
 			h.mutex.Unlock()
@@ -75,7 +94,8 @@ func (h *ChatHub) Run() {
 
 type ChatMessage struct {
 	ID        string    `json:"id"`
-	Sender    string    `json:"sender"`
+	SessionID string    `json:"session_id"` // Used to route replies
+	Sender    string    `json:"sender"`     // e.g. "Guest" or "Support"
 	Text      string    `json:"text"`
 	Timestamp time.Time `json:"timestamp"`
 }
@@ -87,10 +107,22 @@ func HandleChatWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	role := r.URL.Query().Get("role")
+	sessionID := r.URL.Query().Get("session_id")
+
+	if role == "" {
+		role = "guest"
+	}
+	if sessionID == "" && role == "guest" {
+		sessionID = uuid.New().String()
+	}
+
 	client := &Client{
-		ID:   uuid.New().String(),
-		Conn: conn,
-		Send: make(chan []byte, 256),
+		ID:        uuid.New().String(),
+		SessionID: sessionID,
+		Role:      role,
+		Conn:      conn,
+		Send:      make(chan []byte, 256),
 	}
 
 	Hub.register <- client
@@ -118,7 +150,8 @@ func readPump(client *Client) {
 		if err := json.Unmarshal(message, &chatMsg); err != nil {
 			chatMsg = ChatMessage{
 				ID:        uuid.New().String(),
-				Sender:    "Guest",
+				SessionID: client.SessionID,
+				Sender:    "Unknown",
 				Text:      string(message),
 				Timestamp: time.Now(),
 			}
@@ -127,6 +160,11 @@ func readPump(client *Client) {
 				chatMsg.ID = uuid.New().String()
 			}
 			chatMsg.Timestamp = time.Now()
+			// Enforce session ID if guest (prevent spoofing)
+			if client.Role == "guest" {
+				chatMsg.SessionID = client.SessionID
+				chatMsg.Sender = "Guest"
+			}
 		}
 
 		payload, _ := json.Marshal(chatMsg)

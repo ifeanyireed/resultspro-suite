@@ -21,12 +21,21 @@ export default function FloatingChat() {
 
   useEffect(() => {
     if (isOpen && !ws.current) {
+      
       // Connect to the WebSocket
+      let sessionId = localStorage.getItem('support_chat_session');
+      if (!sessionId) {
+        sessionId = crypto.randomUUID();
+        localStorage.setItem('support_chat_session', sessionId);
+      }
+      
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const wsUrl = process.env.NEXT_PUBLIC_USERS_API 
+      let wsUrl = process.env.NEXT_PUBLIC_USERS_API 
         ? process.env.NEXT_PUBLIC_USERS_API.replace(/^http/, 'ws') + '/api/v1/support/ws'
         : `${protocol}//localhost:7005/api/v1/support/ws`;
       
+      wsUrl += `?role=guest&session_id=${sessionId}`;
+
       ws.current = new WebSocket(wsUrl);
 
       ws.current.onopen = () => {
