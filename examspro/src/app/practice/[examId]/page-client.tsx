@@ -127,7 +127,7 @@ export default function SubjectSelectionPage() {
                   </span>
                 </div>
                 <h1 className="text-4xl md:text-6xl font-display font-bold text-navy uppercase tracking-tight">
-                  {examName} Subjects
+                  {examName} PAPERS
                 </h1>
 
                 {/* Guest nudge */}
@@ -146,7 +146,7 @@ export default function SubjectSelectionPage() {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                 <input
                   type="text"
-                  placeholder="Search subjects..."
+                  placeholder="Search papers..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-white border border-gray-200  rounded-2xl py-4 pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-blue/50 transition-colors"
