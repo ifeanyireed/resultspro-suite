@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	"os"
 	"strings"
@@ -445,7 +446,25 @@ func HandleDeletePlan(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Plan deleted successfully"})
 }
+func calculateFinalTotal(targetPriceNgn float64) float64 {
+	vat := targetPriceNgn * 0.075
+	basePlusVat := targetPriceNgn + vat
 
+	percentageFee := 0.015
+	flatFee := 0.0
+	if basePlusVat >= 2500 {
+		flatFee = 100.0
+	}
+	
+	total := (basePlusVat + flatFee) / (1 - percentageFee)
+	
+	totalFee := total - basePlusVat
+	if totalFee > 2000 {
+		return basePlusVat + 2000
+	}
+	
+	return math.Ceil(total)
+}
 
 // HandleInitializePayment initializes a transaction with Paystack for a Plan or Coin Pack
 func HandleInitializePayment(w http.ResponseWriter, r *http.Request) {
@@ -500,12 +519,20 @@ func HandleInitializePayment(w http.ResponseWriter, r *http.Request) {
 		amount = plan.MonthlyPrice
 		accessLevel = plan.AccessLevel
 		input.Type = "PLAN"
+	} else if input.Type == "COIN" {
+		var price int
+		if err := db.GormDB.Table("coin_packs").Where("id = ?", input.PackID).Select("price").Row().Scan(&price); err != nil {
+			utils.JSONError(w, http.StatusNotFound, "Coin pack not found")
+			return
+		}
+		amount = float64(price)
+		accessLevel = ""
 	} else {
-		// Mock coin packs since they aren't fully migrated yet
-		// We'll support coins later, just mock for now or return error
-		utils.JSONError(w, http.StatusBadRequest, "Coin packs initialization currently disabled")
+		utils.JSONError(w, http.StatusBadRequest, "Invalid pack type")
 		return
 	}
+
+	finalAmount := calculateFinalTotal(amount)
 
 	if input.PayWithWallet {
 		var totalFiat int64
@@ -515,13 +542,13 @@ func HandleInitializePayment(w http.ResponseWriter, r *http.Request) {
 		db.GormDB.Table("withdrawals").Where("user_id = ? AND status IN ?", userID, []string{"pending", "approved", "completed"}).Select("COALESCE(SUM(amount_ngn), 0)").Row().Scan(&withdrawnFiat)
 		
 		availableBalance := float64(totalFiat - withdrawnFiat)
-		if availableBalance < amount {
+		if availableBalance < finalAmount {
 			utils.JSONError(w, http.StatusPaymentRequired, "Insufficient referral wallet balance")
 			return
 		}
 
 		// Create withdrawal record to deduct from wallet
-		db.GormDB.Exec("INSERT INTO withdrawals (id, user_id, amount_ngn, status, bank_name, account_number, account_name, created_at, updated_at) VALUES (?, ?, ?, 'completed', 'WALLET', 'PAYMENT', 'PLAN PURCHASE', ?, ?)", uuid.New().String(), userID, int(amount), time.Now(), time.Now())
+		db.GormDB.Exec("INSERT INTO withdrawals (id, user_id, amount_ngn, status, bank_name, account_number, account_name, created_at, updated_at) VALUES (?, ?, ?, 'completed', 'WALLET', 'PAYMENT', 'PLAN PURCHASE', ?, ?)", uuid.New().String(), userID, int(finalAmount), time.Now(), time.Now())
 
 		// Grant access
 		if accessLevel == "PREMIUM" {
@@ -549,7 +576,7 @@ func HandleInitializePayment(w http.ResponseWriter, r *http.Request) {
 	// Construct Paystack Payload
 	payload := map[string]interface{}{
 		"email":        userEmail,
-		"amount":       int(amount * 100), // convert to kobo
+		"amount":       int(finalAmount * 100), // convert to kobo
 		"callback_url": input.CallbackURL,
 		"metadata": map[string]interface{}{
 			"pack_id": input.PackID,

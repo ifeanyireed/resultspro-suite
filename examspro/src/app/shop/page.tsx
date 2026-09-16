@@ -158,9 +158,7 @@ export default function CoinShopPage() {
       const pack = allPacks.find(p => p.id === packId);
       const isCoin = pack?.type === 'COIN';
 
-      const apiUrl = isCoin ? `${EXAMS_API}/api/payment/initialize` : `${USERS_API}/api/v1/billing/initialize`;
-
-      const res = await fetch(apiUrl, {
+      const res = await fetch(`${USERS_API}/api/v1/billing/initialize`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
