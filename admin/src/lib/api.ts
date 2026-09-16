@@ -1,4 +1,19 @@
 import { User, School, SubscriptionPlan, Invoice, PayoutRequest, ScratchCardBatch, BlogPost, SuiteStats } from './types';
+import axios from 'axios';
+
+const api = axios.create();
+
+api.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('resultspro_admin_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return config;
+});
+
+export default api;
 
 const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
 const RESULTS_API = process.env.NEXT_PUBLIC_RESULTS_API || '';
