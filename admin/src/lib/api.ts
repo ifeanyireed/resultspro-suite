@@ -721,3 +721,15 @@ export async function deleteUser(userId: string): Promise<boolean> {
     return false;
   }
 }
+
+export async function fetchSupportTickets(): Promise<any[]> {
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/support/admin/tickets`, { headers: getAuthHeader(), cache: 'no-store' });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data || [];
+  } catch (err) {
+    console.error("Error fetching tickets:", err);
+    return [];
+  }
+}

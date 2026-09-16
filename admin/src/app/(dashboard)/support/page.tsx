@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { Badge } from '@/components/Badge';
+import { fetchSupportTickets } from '@/lib/api';
 import { AlertCircle, Clock, CheckCircle2, XCircle, Search, Filter, Eye, MessageCircle } from 'lucide-react';
 
 export default function SupportPage() {
@@ -10,14 +11,21 @@ export default function SupportPage() {
   const [tickets, setTickets] = useState<any[]>([]);
 
   useEffect(() => {
-    // Mock Data
-    setStats({
-      open: 12, pending: 5, inProgress: 8, resolved: 45, closed: 120, averageResolutionTimeHours: 4.5
-    });
-    setTickets([
-      { id: '1', ticketNumber: 'TKT-001', title: 'Cannot generate scratch cards', description: 'System says batch limit reached but I only generated 100.', category: 'TECHNICAL', priority: 'HIGH', status: 'OPEN', school: { name: 'Greenwood High' }, createdByUser: { firstName: 'Admin', lastName: 'User' } },
-      { id: '2', title: 'Billing issue for Term 2', description: 'My card was charged twice for the same subscription plan.', category: 'BILLING', priority: 'CRITICAL', status: 'IN_PROGRESS', school: { name: 'Kings College' }, createdByUser: { firstName: 'Bursar', lastName: 'Kings' } },
-    ]);
+    async function loadTickets() {
+      const data = await fetchSupportTickets();
+      setTickets(data);
+      
+      const open = data.filter((t: any) => t.status?.toLowerCase() === 'open').length;
+      const pending = data.filter((t: any) => t.status?.toLowerCase() === 'pending').length;
+      const inProgress = data.filter((t: any) => t.status?.toLowerCase() === 'in_progress').length;
+      const resolved = data.filter((t: any) => t.status?.toLowerCase() === 'resolved').length;
+      const closed = data.filter((t: any) => t.status?.toLowerCase() === 'closed').length;
+      
+      setStats({
+        open, pending, inProgress, resolved, closed, averageResolutionTimeHours: 0
+      });
+    }
+    loadTickets();
   }, []);
 
   return (
@@ -101,6 +109,7 @@ export default function SupportPage() {
                 <tr>
                   <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Subject</th>
                   <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">School</th>
+                  <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">App</th>
                   <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Priority</th>
                   <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Status</th>
                   <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest text-right">Actions</th>
@@ -110,12 +119,15 @@ export default function SupportPage() {
                 {tickets.map((ticket) => (
                   <tr key={ticket.id} className="hover:bg-blue-50/30 transition-colors group cursor-pointer">
                     <td className="px-6 py-4">
-                      <p className="font-bold text-slate-800 text-xs mb-0.5">{ticket.title}</p>
-                      <p className="text-[10px] text-slate-500 truncate max-w-[250px]">{ticket.description}</p>
+                      <p className="font-bold text-slate-800 text-xs mb-0.5">{ticket.subject || 'No Subject'}</p>
+                      <p className="text-[10px] text-slate-500 truncate max-w-[250px]">{ticket.message || 'No message'}</p>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="font-medium text-slate-700 text-xs">{ticket.school?.name}</p>
-                      <p className="text-[10px] text-slate-400">{ticket.createdByUser?.firstName} {ticket.createdByUser?.lastName}</p>
+                      <p className="font-medium text-slate-700 text-xs">{ticket.category}</p>
+                      <p className="text-[10px] text-slate-400">{ticket.user_full_name}</p>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="px-2 py-1 bg-slate-100 text-slate-600 rounded-md text-[10px] font-bold tracking-wider">{ticket.app_module || 'Unknown'}</span>
                     </td>
                     <td className="px-6 py-4">
                       <Badge status={ticket.priority} />

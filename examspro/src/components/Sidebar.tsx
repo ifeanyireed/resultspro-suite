@@ -18,7 +18,7 @@ export function Sidebar() {
       title: 'LEARNING',
       links: [
         { label: 'Dashboard', href: '/dashboard', icon: IconHome },
-  { label: 'Support', href: '/dashboard/support', icon: IconLifebuoy },
+  { label: 'Support', href: '/helpdesk', icon: IconLifebuoy },
       ],
     },
     {

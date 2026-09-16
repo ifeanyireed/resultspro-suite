@@ -27,10 +27,11 @@ func HandleCreateTicket(w http.ResponseWriter, r *http.Request) {
 	userID := userIDVal.(string)
 
 	var input struct {
-		Subject  string `json:"subject"`
-		Category string `json:"category"`
-		Message  string `json:"message"`
-		Priority string `json:"priority"`
+		Subject   string `json:"subject"`
+		Category  string `json:"category"`
+		Message   string `json:"message"`
+		Priority  string `json:"priority"`
+		AppModule string `json:"app_module"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -53,8 +54,8 @@ func HandleCreateTicket(w http.ResponseWriter, r *http.Request) {
 	ticketID := uuid.New().String()
 	now := time.Now().UTC()
 
-	err = db.GormDB.Exec("INSERT INTO support_tickets (id, user_id, assigned_to, subject, category, message, status, priority, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, 'open', ?, ?, ?)",
-		ticketID, userID, assignedTo, input.Subject, input.Category, input.Message, input.Priority, now, now).Error
+	err = db.GormDB.Exec("INSERT INTO support_tickets (id, user_id, assigned_to, subject, category, message, status, priority, app_module, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, 'open', ?, ?, ?, ?)",
+		ticketID, userID, assignedTo, input.Subject, input.Category, input.Message, input.Priority, input.AppModule, now, now).Error
 
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to create ticket")
@@ -88,11 +89,12 @@ func HandleGetUserTickets(w http.ResponseWriter, r *http.Request) {
 		Message    string    `json:"message"`
 		Status     string    `json:"status"`
 		Priority   string    `json:"priority"`
+		AppModule  string    `json:"app_module"`
 		CreatedAt  time.Time `json:"created_at"`
 	}
 
 	var tickets []Ticket
-	db.GormDB.Raw("SELECT id, subject, category, message, status, priority, created_at FROM support_tickets WHERE user_id = ? ORDER BY created_at DESC", userID).Scan(&tickets)
+	db.GormDB.Raw("SELECT id, subject, category, message, status, priority, app_module, created_at FROM support_tickets WHERE user_id = ? ORDER BY created_at DESC", userID).Scan(&tickets)
 
 	utils.JSONResponse(w, http.StatusOK, tickets)
 }
@@ -113,12 +115,13 @@ func HandleGetAdminTickets(w http.ResponseWriter, r *http.Request) {
 		Message      string    `json:"message"`
 		Status       string    `json:"status"`
 		Priority     string    `json:"priority"`
+		AppModule    string    `json:"app_module"`
 		CreatedAt    time.Time `json:"created_at"`
 	}
 
 	var tickets []Ticket
 	db.GormDB.Raw(`
-		SELECT t.id, t.user_id, u.full_name as user_full_name, t.assigned_to, t.subject, t.category, t.message, t.status, t.priority, t.created_at 
+		SELECT t.id, t.user_id, u.full_name as user_full_name, t.assigned_to, t.subject, t.category, t.message, t.status, t.priority, t.app_module, t.created_at 
 		FROM support_tickets t 
 		LEFT JOIN users u ON t.user_id = u.id 
 		ORDER BY t.created_at DESC

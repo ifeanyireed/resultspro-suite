@@ -1,0 +1,66 @@
+'use client';
+
+import { Sidebar } from '@/components/Sidebar';
+import { ModernDashboardLayout } from '@/components/layout/ModernDashboardLayout';
+import { IconSearch as Search, IconBell as Bell } from '@tabler/icons-react';
+import Link from 'next/link';
+import { useAuthStore } from '@/store/useAuthStore';
+
+import { useEffect, useState } from 'react';
+
+function GlobalTopNav() {
+  const { user } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  
+  return (
+    <>
+      <div className="relative w-96">
+        <Search className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
+        <input 
+          type="text" 
+          placeholder="Search exams, subjects, past questions..." 
+          className="w-full bg-white border border-white focus:border-gray-200 outline-none rounded-xl py-3 pl-12 pr-12 text-sm text-gray-700 shadow-sm transition-colors placeholder:text-gray-400"
+        />
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-gray-100 rounded px-1.5 py-0.5 border border-gray-200">
+          <span className="text-[10px] font-medium text-gray-500">⌘</span>
+          <span className="text-[10px] font-medium text-gray-500">K</span>
+        </div>
+      </div>
+      <div className="flex items-center gap-4">
+        <Link href="/notifications" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-500 shadow-sm hover:text-gray-900 transition-colors relative">
+          <Bell className="w-5 h-5" />
+          <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+        </Link>
+        <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6 cursor-pointer hover:bg-slate-50 p-1 pr-3 rounded-full transition-colors">
+          <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm bg-gray-100 shrink-0">
+            {mounted ? (
+              <img src={user?.avatarUrl || "/avatars/character1.jpg"} alt="User Avatar" className="w-full h-full object-cover" />
+            ) : (
+              <img src="/avatars/character1.jpg" alt="User Avatar" className="w-full h-full object-cover" />
+            )}
+          </div>
+          <div className="hidden md:block text-left">
+            <p className="text-sm font-bold text-gray-900 leading-tight">{mounted ? (user?.name || "Error: Name not found") : "Loading..."}</p>
+            <p className="text-[10px] text-gray-500 tracking-wide">{mounted ? (user?.email || "Error: Email not found") : "Loading..."}</p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <ModernDashboardLayout 
+      sidebarContent={<Sidebar />}
+      headerContent={<GlobalTopNav />}
+    >
+      {children}
+    </ModernDashboardLayout>
+  );
+}

@@ -66,7 +66,7 @@ export default function UserTicketDetailPage({ params }: { params: { id: string 
       {/* Header */}
       <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 shrink-0">
         <div className="flex items-center gap-4">
-          <Link href="/dashboard/support" className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors">
+          <Link href="/helpdesk" className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors">
             <ArrowLeftIcon className="w-5 h-5" />
           </Link>
           <div>

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import api from '@/lib/api';
-import { Loader2 } from 'lucide-react';
+import { IconLoader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
@@ -16,7 +16,8 @@ export default function DashboardSupport() {
   const [subject, setSubject] = useState('');
   const [category, setCategory] = useState('technical');
   const [message, setMessage] = useState('');
-  const [priority, setPriority] = useState('normal');
+  const [priority,
+        app_module: "ExamsPRO", setPriority] = useState('normal');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -44,7 +45,8 @@ export default function DashboardSupport() {
         subject,
         category,
         message,
-        priority
+        priority,
+        app_module: "ExamsPRO"
       }, { baseURL: USERS_API });
       setSubject('');
       setMessage('');
@@ -108,7 +110,7 @@ export default function DashboardSupport() {
           </div>
           <div className="flex justify-end">
             <Button type="submit" disabled={submitting} className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold">
-              {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Submit Ticket'}
+              {submitting ? <IconLoader2 className="w-5 h-5 animate-spin" /> : 'Submit Ticket'}
             </Button>
           </div>
         </form>
@@ -118,7 +120,7 @@ export default function DashboardSupport() {
         <h2 className="text-xl font-bold text-navy mb-6">Your Tickets</h2>
         {loading ? (
           <div className="flex justify-center py-8">
-            <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+            <IconLoader2 className="w-8 h-8 text-blue-600 animate-spin" />
           </div>
         ) : tickets.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
@@ -127,7 +129,7 @@ export default function DashboardSupport() {
         ) : (
           <div className="space-y-4">
             {tickets.map((t: any) => (
-              <Link key={t.id} href={`/dashboard/support/${t.id}`} className="block">
+              <Link key={t.id} href={`/helpdesk/${t.id}`} className="block">
                 <div className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-100 rounded-2xl gap-4 hover:border-blue-200 hover:shadow-sm transition-all bg-white">
                   <div>
                     <div className="flex items-center gap-3 mb-1">
