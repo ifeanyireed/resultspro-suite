@@ -2069,11 +2069,19 @@ func (h *AdminHandler) UpdateUserAccess(c *gin.Context) {
 	}
 
 	if input.ActivePlanID != nil && *input.ActivePlanID != "" {
-		var plan models.SubscriptionPlan
-		if err := database.DB.Where("id = ?", *input.ActivePlanID).First(&plan).Error; err == nil {
+		var plan struct {
+			Name        string
+			Category    string
+			AccessLevel string
+		}
+		if err := database.DB.Table("plans").Where("id = ?", *input.ActivePlanID).First(&plan).Error; err == nil {
 			if plan.Category == "ICAN" || strings.HasPrefix(plan.AccessLevel, "ICAN") {
 				updates["has_ican"] = true
-				updates["ican_plan"] = plan.AccessLevel
+				if plan.AccessLevel != "" {
+					updates["ican_plan"] = plan.AccessLevel
+				} else {
+					updates["ican_plan"] = plan.Name
+				}
 				updates["ican_expires_at"] = input.PremiumExpiresAt
 			} else {
 				updates["has_ican"] = false
