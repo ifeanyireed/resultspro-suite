@@ -3,9 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeftIcon, PaperAirplaneIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import api from '@/lib/api';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function TicketDetailPage({ params }: { params: { id: string } }) {
+export default function TicketDetailPage() {
+  const params = useParams();
+  const ticketId = params?.id as string;
+  
   const [messages, setMessages] = useState<any[]>([]);
   const [ticket, setTicket] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -14,7 +18,6 @@ export default function TicketDetailPage({ params }: { params: { id: string } })
   const [updating, setUpdating] = useState(false);
 
   const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
-  const ticketId = params.id;
 
   useEffect(() => {
     fetchThread();
