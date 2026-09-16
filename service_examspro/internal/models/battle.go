@@ -7,7 +7,7 @@ import (
 )
 
 type Battle struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
+	TenantID *string `gorm:"size:64;index" json:"tenant_id"`
 	ID              string              `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	RoomCode        string              `gorm:"uniqueIndex;size:6" json:"roomCode"`
 	SubjectID       int                 `gorm:"index" json:"subjectId"`
@@ -33,13 +33,13 @@ type Battle struct {
 }
 
 type BattleQuestion struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
+	TenantID *string `gorm:"size:64;index" json:"tenant_id"`
 	BattleID   string `gorm:"primaryKey"`
 	QuestionID string `gorm:"primaryKey"`
 }
 
 type BattleParticipant struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
+	TenantID *string `gorm:"size:64;index" json:"tenant_id"`
 	ID         string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	BattleID   string         `gorm:"index" json:"battleId"`
 	Battle     *Battle        `json:"battle,omitempty"`
@@ -55,7 +55,7 @@ type BattleParticipant struct {
 }
 
 type Tournament struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
+	TenantID *string `gorm:"size:64;index" json:"tenant_id"`
 	ID              string                   `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	Title           string                   `json:"title"`
 	Description     string                   `json:"description"`
@@ -73,7 +73,7 @@ type Tournament struct {
 }
 
 type TournamentParticipant struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
+	TenantID *string `gorm:"size:64;index" json:"tenant_id"`
 	ID           string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
 	TournamentID string         `gorm:"index" json:"tournamentId"`
 	UserID       string         `gorm:"index" json:"userId"`
