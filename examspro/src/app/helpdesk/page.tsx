@@ -16,8 +16,7 @@ export default function DashboardSupport() {
   const [subject, setSubject] = useState('');
   const [category, setCategory] = useState('technical');
   const [message, setMessage] = useState('');
-  const [priority,
-        app_module: "ExamsPRO", setPriority] = useState('normal');
+  const [priority, setPriority] = useState('normal');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
