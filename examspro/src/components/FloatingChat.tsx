@@ -14,6 +14,7 @@ export default function FloatingChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [isStaffOnline, setIsStaffOnline] = useState(false);
   const ws = useRef<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -45,7 +46,12 @@ export default function FloatingChat() {
       ws.current.onmessage = (event) => {
         try {
           const newMsg = JSON.parse(event.data);
-          setMessages(prev => [...prev, newMsg]);
+          if (newMsg.type === "status") {
+            setIsStaffOnline(newMsg.staff_online);
+          } else {
+            setMessages(prev => [...prev, newMsg]);
+          }
+
         } catch (e) {
           console.error("Invalid WS message", e);
         }
@@ -99,7 +105,17 @@ export default function FloatingChat() {
           <div className="bg-[#146ef5] text-white p-4 flex justify-between items-center">
             <div>
               <h3 className="font-bold text-lg">ResultsPRO Support</h3>
-              <p className="text-blue-100 text-xs">We typically reply in a few minutes.</p>
+              {isStaffOnline ? (
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <p className="text-blue-50 text-xs font-medium">Support is Online</p>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <div className="w-2 h-2 bg-gray-400/50 rounded-full"></div>
+                  <p className="text-blue-100 text-xs">We typically reply in a few minutes.</p>
+                </div>
+              )}
             </div>
             <button 
               onClick={toggleChat}

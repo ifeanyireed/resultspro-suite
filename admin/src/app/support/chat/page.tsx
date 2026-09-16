@@ -31,6 +31,7 @@ export default function SupportChatPage() {
     ws.current.onmessage = (event) => {
       try {
         const newMsg = JSON.parse(event.data);
+        if (newMsg.type === "status") return; // Ignore status broadcasts in admin UI
         setMessages(prev => [...prev, newMsg]);
         if (newMsg.sender === "Guest" && !activeSession) {
           setActiveSession(newMsg.session_id);

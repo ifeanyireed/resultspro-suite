@@ -33,6 +33,7 @@ type ChatHub struct {
 	register   chan *Client
 	unregister chan *Client
 	mutex      sync.Mutex
+	staffCount int
 }
 
 var Hub = ChatHub{
@@ -46,35 +47,82 @@ func init() {
 	go Hub.Run()
 }
 
+type SystemMessage struct {
+	Type        string `json:"type"`         // "status" or "message"
+	StaffOnline bool   `json:"staff_online"` // true if staff > 0
+}
+
+func (h *ChatHub) broadcastStaffStatus(online bool) {
+	msg := SystemMessage{
+		Type:        "status",
+		StaffOnline: online,
+	}
+	payload, _ := json.Marshal(msg)
+	for client := range h.clients {
+		if client.Role == "guest" {
+			select {
+			case client.Send <- payload:
+			default:
+				close(client.Send)
+				delete(h.clients, client)
+			}
+		}
+	}
+}
+
+func (h *ChatHub) sendStaffStatusTo(client *Client, online bool) {
+	msg := SystemMessage{
+		Type:        "status",
+		StaffOnline: online,
+	}
+	payload, _ := json.Marshal(msg)
+	select {
+	case client.Send <- payload:
+	default:
+	}
+}
+
 func (h *ChatHub) Run() {
 	for {
 		select {
 		case client := <-h.register:
 			h.mutex.Lock()
 			h.clients[client] = true
+			if client.Role == "staff" {
+				h.staffCount++
+				if h.staffCount == 1 {
+					h.broadcastStaffStatus(true)
+				}
+			} else {
+				h.sendStaffStatusTo(client, h.staffCount > 0)
+			}
 			h.mutex.Unlock()
 		case client := <-h.unregister:
 			h.mutex.Lock()
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client)
 				close(client.Send)
+				if client.Role == "staff" {
+					h.staffCount--
+					if h.staffCount == 0 {
+						h.broadcastStaffStatus(false)
+					}
+				}
 			}
 			h.mutex.Unlock()
 		case message := <-h.broadcast:
+			// Just pass through to correct clients
 			var chatMsg ChatMessage
 			if err := json.Unmarshal(message, &chatMsg); err != nil {
-				continue // Skip invalid messages
+				continue
 			}
 
 			h.mutex.Lock()
 			for client := range h.clients {
-				// Routing logic
 				shouldSend := false
 				if client.Role == "staff" {
-					// Staff see everything
 					shouldSend = true
 				} else if client.SessionID == chatMsg.SessionID {
-					// Guests only see messages for their session
 					shouldSend = true
 				}
 
@@ -93,9 +141,10 @@ func (h *ChatHub) Run() {
 }
 
 type ChatMessage struct {
+	Type      string    `json:"type"` // "message"
 	ID        string    `json:"id"`
-	SessionID string    `json:"session_id"` // Used to route replies
-	Sender    string    `json:"sender"`     // e.g. "Guest" or "Support"
+	SessionID string    `json:"session_id"`
+	Sender    string    `json:"sender"`
 	Text      string    `json:"text"`
 	Timestamp time.Time `json:"timestamp"`
 }
@@ -140,15 +189,13 @@ func readPump(client *Client) {
 	for {
 		_, message, err := client.Conn.ReadMessage()
 		if err != nil {
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				log.Printf("error: %v", err)
-			}
 			break
 		}
 
 		var chatMsg ChatMessage
 		if err := json.Unmarshal(message, &chatMsg); err != nil {
 			chatMsg = ChatMessage{
+				Type:      "message",
 				ID:        uuid.New().String(),
 				SessionID: client.SessionID,
 				Sender:    "Unknown",
@@ -156,11 +203,11 @@ func readPump(client *Client) {
 				Timestamp: time.Now(),
 			}
 		} else {
+			chatMsg.Type = "message"
 			if chatMsg.ID == "" {
 				chatMsg.ID = uuid.New().String()
 			}
 			chatMsg.Timestamp = time.Now()
-			// Enforce session ID if guest (prevent spoofing)
 			if client.Role == "guest" {
 				chatMsg.SessionID = client.SessionID
 				chatMsg.Sender = "Guest"
