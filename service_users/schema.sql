@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS user_tenant_roles (
     id VARCHAR(191) PRIMARY KEY,
     user_id VARCHAR(191) NOT NULL,
     tenant_id VARCHAR(191) NOT NULL,
-    role VARCHAR(191) NOT NULL, -- student, teacher, parent, tenant-admin, super-admin, agent, platform-admin
+    role VARCHAR(191) NOT NULL, -- student, teacher, parent, tenant-admin, super-admin, agent, platform-admin, support
     status VARCHAR(191) DEFAULT 'active', -- active, suspended, graduated, transferred
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),

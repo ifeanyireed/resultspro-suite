@@ -40,7 +40,7 @@ type UserTenantRole struct {
 	ID        string    `json:"id"`
 	UserID    string    `json:"user_id"`
 	TenantID  string    `json:"tenant_id"`
-	Role      string    `json:"role"` // student, teacher, parent, tenant-admin, super-admin, agent, platform-admin
+	Role      string    `json:"role"` // student, teacher, parent, tenant-admin, super-admin, agent, platform-admin, support
 	Status    string    `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`

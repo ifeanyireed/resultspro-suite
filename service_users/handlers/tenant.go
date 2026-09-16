@@ -582,7 +582,7 @@ func HandleAssignTenantRole(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		UserID   string `json:"user_id"`
 		TenantID string `json:"tenant_id"`
-		Role     string `json:"role"` // student, teacher, parent, tenant-admin, super-admin, agent
+		Role     string `json:"role"` // student, teacher, parent, tenant-admin, super-admin, agent, support
 		Status   string `json:"status"`
 	}
 

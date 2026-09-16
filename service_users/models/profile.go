@@ -23,7 +23,7 @@ type RoleDetail struct {
 	TenantSlug            string     `json:"tenant_slug"`
 	SubscriptionTier      string     `json:"subscription_tier,omitempty"`
 	SubscriptionExpiresAt *time.Time `json:"subscription_expires_at,omitempty"`
-	Role                  string     `json:"role"` // student, teacher, parent, tenant-admin, super-admin, agent
+	Role                  string     `json:"role"` // student, teacher, parent, tenant-admin, super-admin, agent, platform-admin, support
 	Status                string     `json:"status"`
 }
 

@@ -65,7 +65,7 @@ export default function DashboardLayout({
       const roles = payload.roles || [];
       
       // If the user has ONLY the agent role, redirect them to the agent dashboard
-      const isOnlyAgent = roles.includes('agent') && !roles.includes('super-admin') && !roles.includes('platform-admin');
+      const isOnlyAgent = roles.includes('agent') && !roles.includes('super-admin') && !roles.includes('platform-admin') && !roles.includes('support');
       if (isOnlyAgent) {
         router.push('/agent/dashboard');
       } else {

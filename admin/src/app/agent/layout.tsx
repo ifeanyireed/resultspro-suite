@@ -49,7 +49,7 @@ export default function AgentLayout({
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       const roles = payload.roles || [];
-      if (!roles.includes('agent') && !roles.includes('super-admin') && !roles.includes('platform-admin')) {
+      if (!roles.includes('agent') && !roles.includes('super-admin') && !roles.includes('platform-admin') && !roles.includes('support')) {
         router.push('/unauthorized');
       } else {
         setIsAuthorized(true);
