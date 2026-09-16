@@ -517,3 +517,33 @@ CREATE TABLE IF NOT EXISTS blog_comments (
     FOREIGN KEY (post_id) REFERENCES blog_posts(id) ON DELETE CASCADE,
     FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 40. Support Tickets
+CREATE TABLE IF NOT EXISTS support_tickets (
+    id VARCHAR(191) PRIMARY KEY,
+    user_id VARCHAR(191) NOT NULL,
+    assigned_to VARCHAR(191),
+    subject VARCHAR(255) NOT NULL,
+    category VARCHAR(191) NOT NULL,
+    message TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'open', -- open, in_progress, resolved, closed
+    priority VARCHAR(50) DEFAULT 'low', -- low, medium, high, urgent
+    app_module VARCHAR(191),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS support_ticket_messages (
+    id VARCHAR(191) PRIMARY KEY,
+    ticket_id VARCHAR(191) NOT NULL,
+    sender_id VARCHAR(191) NOT NULL,
+    sender_type VARCHAR(50) NOT NULL, -- user, support_staff, system
+    message TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS support_staff_status (
+    user_id VARCHAR(191) PRIMARY KEY,
+    is_active BOOLEAN DEFAULT false,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);

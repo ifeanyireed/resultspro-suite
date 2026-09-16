@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { 
   PlusIcon,
   ArrowUpRightIcon,
@@ -126,34 +127,36 @@ export default function SupportDashboard() {
             ) : (
               <div className="space-y-4">
                 {tickets.map(t => (
-                  <div key={t.id} className="flex items-start justify-between p-4 border border-gray-100 rounded-xl hover:bg-gray-50">
-                    <div className="flex items-start gap-4">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-sm ${
-                        t.status === 'open' ? 'bg-yellow-50 text-yellow-600' : 
-                        t.status === 'resolved' ? 'bg-green-50 text-green-600' : 
-                        'bg-blue-50 text-blue-600'
-                      }`}>
-                        <TicketIcon className="w-5 h-5" />
+                  <Link href={`/support/tickets/${t.id}`} key={t.id} className="block">
+                    <div className="flex items-start justify-between p-4 border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+                      <div className="flex items-start gap-4">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-sm ${
+                          t.status === 'open' ? 'bg-yellow-50 text-yellow-600' : 
+                          t.status === 'resolved' ? 'bg-green-50 text-green-600' : 
+                          'bg-blue-50 text-blue-600'
+                        }`}>
+                          <TicketIcon className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="text-base font-medium text-gray-900">{t.subject}</h4>
+                          <p className="text-sm text-gray-500 mb-1">{t.user_full_name || 'Unknown User'} • <span className="font-medium text-gray-700 capitalize">{t.category}</span></p>
+                          <p className="text-sm text-gray-600 line-clamp-2 bg-gray-50 p-2 rounded-md">{t.message}</p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="text-base font-medium text-gray-900">{t.subject}</h4>
-                        <p className="text-sm text-gray-500 mb-1">{t.user_full_name || 'Unknown User'} • <span className="font-medium text-gray-700 capitalize">{t.category}</span></p>
-                        <p className="text-sm text-gray-600 line-clamp-2 bg-gray-50 p-2 rounded-md">{t.message}</p>
+                      <div className="flex flex-col items-end gap-2 shrink-0">
+                        <span className={`px-2 py-1 text-[10px] font-bold uppercase rounded-md ${
+                          t.status === 'open' ? 'bg-yellow-100 text-yellow-700' :
+                          t.status === 'resolved' ? 'bg-green-100 text-green-700' :
+                          'bg-blue-100 text-blue-700'
+                        }`}>
+                          {t.status}
+                        </span>
+                        {t.assigned_to && (
+                          <span className="text-xs text-gray-500">Assigned</span>
+                        )}
                       </div>
                     </div>
-                    <div className="flex flex-col items-end gap-2 shrink-0">
-                      <span className={`px-2 py-1 text-[10px] font-bold uppercase rounded-md ${
-                        t.status === 'open' ? 'bg-yellow-100 text-yellow-700' :
-                        t.status === 'resolved' ? 'bg-green-100 text-green-700' :
-                        'bg-blue-100 text-blue-700'
-                      }`}>
-                        {t.status}
-                      </span>
-                      {t.assigned_to && (
-                        <span className="text-xs text-gray-500">Assigned</span>
-                      )}
-                    </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
