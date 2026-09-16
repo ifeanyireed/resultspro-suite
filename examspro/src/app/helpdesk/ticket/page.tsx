@@ -1,11 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { ArrowLeftIcon, PaperAirplaneIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { IconArrowLeft as ArrowLeftIcon, IconSend as PaperAirplaneIcon, IconUser as UserCircleIcon } from '@tabler/icons-react';
 import api from '@/lib/api';
 import Link from 'next/link';
 
-export default function UserTicketDetailPage({ params }: { params: { id: string } }) {
+function TicketContent() {
+  const searchParams = useSearchParams();
+  const ticketId = searchParams.get('id');
+
   const [messages, setMessages] = useState<any[]>([]);
   const [ticket, setTicket] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -13,15 +17,17 @@ export default function UserTicketDetailPage({ params }: { params: { id: string 
   const [sending, setSending] = useState(false);
 
   const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
-  const ticketId = params.id;
 
   useEffect(() => {
+    if (!ticketId) {
+      setLoading(false);
+      return;
+    }
     fetchThread();
   }, [ticketId]);
 
   const fetchThread = async () => {
     try {
-      // Fetch user tickets to find current one
       const tRes = await api.get('/api/v1/support/tickets', { baseURL: USERS_API });
       const current = (tRes.data || []).find((t: any) => t.id === ticketId);
       setTicket(current);
@@ -37,7 +43,7 @@ export default function UserTicketDetailPage({ params }: { params: { id: string 
 
   const handleSendReply = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!reply.trim()) return;
+    if (!reply.trim() || !ticketId) return;
     setSending(true);
     try {
       await api.post(`/api/v1/support/tickets/${ticketId}/messages`, {
@@ -85,7 +91,6 @@ export default function UserTicketDetailPage({ params }: { params: { id: string 
 
       {/* Messages */}
       <div className="flex-1 p-6 overflow-y-auto flex flex-col gap-6 bg-gray-50/30">
-        {/* Original Ticket Message */}
         <div className="flex gap-4 max-w-3xl self-end flex-row-reverse">
           <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 mt-1">
             <UserCircleIcon className="w-6 h-6" />
@@ -101,7 +106,6 @@ export default function UserTicketDetailPage({ params }: { params: { id: string 
           </div>
         </div>
 
-        {/* Thread Messages */}
         {messages.map(m => {
           const isUser = m.sender_type === 'user';
           return (
@@ -162,5 +166,13 @@ export default function UserTicketDetailPage({ params }: { params: { id: string 
         </div>
       )}
     </div>
+  );
+}
+
+export default function UserTicketDetailPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-gray-500">Loading thread...</div>}>
+      <TicketContent />
+    </Suspense>
   );
 }

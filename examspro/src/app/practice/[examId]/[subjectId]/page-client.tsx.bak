@@ -94,7 +94,7 @@ export default function TopicListPage() {
 
   const handleStartPractice = useCallback(
     (e: React.MouseEvent, topicId: number, year?: number) => {
-      if (examId === 'ican' && user && !user.hasIcan && (!user.icanPlanName || user.icanPlanName === "")) {
+      if (examId === 'ican' && user && !user.hasIcan && (!user.icanPlan || user.icanPlan === "")) {
         e.preventDefault();
         setShowPremiumModal(true);
         return;

@@ -211,8 +211,6 @@ func (h *ExamHandler) GetSubjectsByExam(c *gin.Context) {
 			McqCount:  mcqCount,
 			TheoryCount: theoryCount,
 			Completed: completed,
-				IsLocked:  exists && utils.IsSubjectLocked(&user, exam.Name, fmt.Sprintf("%d", subject.ID)),
-
 			Color:     subject.Color,
 			Reward:    10,
 			Topics:    subjectTopics,

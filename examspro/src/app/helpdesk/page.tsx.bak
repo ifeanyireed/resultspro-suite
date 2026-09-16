@@ -128,7 +128,7 @@ export default function DashboardSupport() {
         ) : (
           <div className="space-y-4">
             {tickets.map((t: any) => (
-              <Link key={t.id} href={`/helpdesk/ticket?id=${t.id}`} className="block">
+              <Link key={t.id} href={`/helpdesk/${t.id}`} className="block">
                 <div className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-100 rounded-2xl gap-4 hover:border-blue-200 hover:shadow-sm transition-all bg-white">
                   <div>
                     <div className="flex items-center gap-3 mb-1">

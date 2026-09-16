@@ -16,8 +16,6 @@ interface Subject {
   name: string;
   questions: number;
   completed: number;
-  isLocked?: boolean;
-
   color: string;
   reward: number;
 }
