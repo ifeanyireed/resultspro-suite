@@ -128,21 +128,31 @@ export default function FloatingChat() {
 
           {/* Input Area */}
           <div className="p-3 bg-white border-t border-gray-100">
-            <form onSubmit={handleSend} className="relative">
+            <div className="relative">
               <input 
                 type="text" 
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSend(e as any);
+                  }
+                }}
                 placeholder="Type your message..." 
                 className="w-full bg-gray-50 border border-gray-200 text-sm rounded-full py-2.5 pl-4 pr-12 focus:outline-none focus:border-[#146ef5] focus:ring-1 focus:ring-[#146ef5]"
               />
               <button 
-                type="submit"
-                className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 bg-[#146ef5] hover:bg-[#105bd1] text-white rounded-full flex items-center justify-center transition-colors"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSend(e as any);
+                }}
+                className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 bg-[#146ef5] hover:bg-[#105bd1] text-white rounded-full flex items-center justify-center transition-colors z-10 cursor-pointer"
               >
-                <IconSend className="w-4 h-4" />
+                <IconSend className="w-4 h-4 pointer-events-none" />
               </button>
-            </form>
+            </div>
           </div>
         </div>
       )}
