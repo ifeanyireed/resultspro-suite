@@ -63,7 +63,24 @@ export default function SharedLoginPage({
         localStorage.setItem('user', JSON.stringify(data.user));
       }
 
-      router.push(redirectPath);
+      let targetPath = redirectPath;
+
+      if (data.access_token) {
+        try {
+          const payload = JSON.parse(atob(data.access_token.split('.')[1]));
+          const roles = payload.roles || [];
+          
+          if (roles.includes('agent') && !roles.includes('super-admin') && !roles.includes('platform-admin')) {
+            targetPath = '/agent/dashboard';
+          } else if (roles.includes('support') && !roles.includes('super-admin') && !roles.includes('platform-admin')) {
+            targetPath = '/support/dashboard';
+          }
+        } catch (e) {
+          console.error("Failed to parse token payload", e);
+        }
+      }
+
+      router.push(targetPath);
     } catch (error: any) {
       alert(error.message);
     } finally {

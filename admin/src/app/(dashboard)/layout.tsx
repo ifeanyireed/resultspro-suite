@@ -66,8 +66,12 @@ export default function DashboardLayout({
       
       // If the user has ONLY the agent role, redirect them to the agent dashboard
       const isOnlyAgent = roles.includes('agent') && !roles.includes('super-admin') && !roles.includes('platform-admin') && !roles.includes('support');
+      const isOnlySupport = roles.includes('support') && !roles.includes('super-admin') && !roles.includes('platform-admin');
+      
       if (isOnlyAgent) {
         router.push('/agent/dashboard');
+      } else if (isOnlySupport) {
+        router.push('/support/dashboard');
       } else {
         setIsAuthorized(true);
         const userStr = localStorage.getItem('user');
