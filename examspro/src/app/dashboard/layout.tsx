@@ -50,6 +50,8 @@ function GlobalTopNav() {
   );
 }
 
+import FloatingChat from '@/components/FloatingChat';
+
 export default function DashboardLayout({
   children,
 }: {
@@ -61,6 +63,7 @@ export default function DashboardLayout({
       headerContent={<GlobalTopNav />}
     >
       {children}
+      <FloatingChat />
     </ModernDashboardLayout>
   );
 }
