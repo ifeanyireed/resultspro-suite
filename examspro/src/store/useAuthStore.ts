@@ -15,7 +15,7 @@ interface User {
   premiumExpiresAt?: string;
   hasIcan?: boolean;
   icanExpiresAt?: string;
-  icanPlanName?: string;
+  icanPlan?: string;
   isAdmin?: boolean;
   role?: string;
   emailNotifications?: boolean;
