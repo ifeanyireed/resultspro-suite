@@ -151,8 +151,16 @@ export default function CoinShopPage() {
     setLoadingPack(packId);
     try {
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+      const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || '';
       const token = Cookies.get('token');
-      const res = await fetch(`${USERS_API}/api/v1/billing/initialize`, {
+
+      // Determine if pack is COIN or PLAN
+      const pack = allPacks.find(p => p.id === packId);
+      const isCoin = pack?.type === 'COIN';
+
+      const apiUrl = isCoin ? `${EXAMS_API}/api/payment/initialize` : `${USERS_API}/api/v1/billing/initialize`;
+
+      const res = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -161,7 +169,7 @@ export default function CoinShopPage() {
         body: JSON.stringify({
           packId,
           callbackUrl: window.location.origin + '/shop/verify',
-          type: 'PLAN',
+          type: isCoin ? 'COIN' : 'PLAN',
           payWithWallet
         })
       });
