@@ -120,12 +120,18 @@ export default function SupportChatPage() {
           <h3 className="font-bold text-gray-900">Active Chats</h3>
         </div>
         <div className="flex-1 overflow-y-auto">
-          {sessions.length === 0 ? (
+          {activeSessionIds.length === 0 ? (
             <p className="text-sm text-gray-400 p-4 text-center">No active chats</p>
           ) : (
             activeSessionIds.map(sessionId => {
               const sessionMsgs = messages.filter(m => m.session_id === sessionId);
-              const lastMsg = sessionMsgs[sessionMsgs.length - 1];
+              let lastMsg = sessionMsgs[sessionMsgs.length - 1];
+              
+              // Fallback to sessionsData if not yet loaded in messages
+              if (!lastMsg) {
+                lastMsg = sessionsData.find(s => s.session_id === sessionId);
+              }
+              
               const isActive = activeSession === sessionId;
               
               return (
@@ -137,10 +143,10 @@ export default function SupportChatPage() {
                   <div className="flex justify-between items-start mb-1">
                     <span className="font-semibold text-sm text-gray-900">Visitor {sessionId.substring(0, 4)}</span>
                     <span className="text-xs text-gray-400">
-                      {new Date(lastMsg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {lastMsg ? new Date(lastMsg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500 truncate">{lastMsg.text}</p>
+                  <p className="text-sm text-gray-500 truncate">{lastMsg ? lastMsg.text : '...'}</p>
                 </div>
               );
             })
