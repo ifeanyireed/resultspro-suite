@@ -1,20 +1,73 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { IconMessageCircle2, IconX, IconSend } from '@tabler/icons-react';
+
+interface ChatMessage {
+  id: string;
+  sender: string;
+  text: string;
+  timestamp: string;
+}
 
 export default function FloatingChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const ws = useRef<WebSocket | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const toggleChat = () => setIsOpen(!isOpen);
 
+  useEffect(() => {
+    if (isOpen && !ws.current) {
+      // Connect to the WebSocket
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl = process.env.NEXT_PUBLIC_USERS_API 
+        ? process.env.NEXT_PUBLIC_USERS_API.replace(/^http/, 'ws') + '/api/v1/support/ws'
+        : `${protocol}//localhost:7005/api/v1/support/ws`;
+      
+      ws.current = new WebSocket(wsUrl);
+
+      ws.current.onopen = () => {
+        console.log('Connected to support chat');
+      };
+
+      ws.current.onmessage = (event) => {
+        try {
+          const newMsg = JSON.parse(event.data);
+          setMessages(prev => [...prev, newMsg]);
+        } catch (e) {
+          console.error("Invalid WS message", e);
+        }
+      };
+
+      ws.current.onclose = () => {
+        console.log('Disconnected from support chat');
+        ws.current = null;
+      };
+    }
+
+    return () => {
+      // Optional: close connection when closed
+      // if (ws.current) ws.current.close();
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim()) return;
+    if (!message.trim() || !ws.current) return;
     
-    // In a real app, this would send the message to the backend via WebSocket or API
-    alert("Live chat is currently offline. Please leave a message and we'll get back to you!");
+    const msgObj = {
+      sender: "Guest",
+      text: message,
+    };
+    
+    ws.current.send(JSON.stringify(msgObj));
     setMessage('');
   };
 
@@ -39,14 +92,28 @@ export default function FloatingChat() {
 
           {/* Messages Area */}
           <div className="flex-1 p-4 bg-gray-50 min-h-[300px] flex flex-col gap-3 overflow-y-auto">
-            <div className="flex items-start gap-2">
-              <div className="w-8 h-8 rounded-full bg-[#146ef5] text-white flex items-center justify-center shrink-0 text-sm font-bold">
-                RP
+            {messages.length === 0 && (
+              <div className="flex items-start gap-2">
+                <div className="w-8 h-8 rounded-full bg-[#146ef5] text-white flex items-center justify-center shrink-0 text-sm font-bold">
+                  RP
+                </div>
+                <div className="bg-white border border-gray-200 p-3 rounded-2xl rounded-tl-none text-sm text-gray-800 shadow-sm">
+                  Hi there! 👋 How can we help you today?
+                </div>
               </div>
-              <div className="bg-white border border-gray-200 p-3 rounded-2xl rounded-tl-none text-sm text-gray-800 shadow-sm">
-                Hi there! 👋 How can we help you today?
+            )}
+            
+            {messages.map((msg, i) => (
+              <div key={i} className={`flex items-start gap-2 ${msg.sender === 'Guest' ? 'flex-row-reverse' : ''}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-sm font-bold text-white ${msg.sender === 'Guest' ? 'bg-gray-800' : 'bg-[#146ef5]'}`}>
+                  {msg.sender === 'Guest' ? 'G' : 'RP'}
+                </div>
+                <div className={`bg-white border border-gray-200 p-3 rounded-2xl text-sm shadow-sm ${msg.sender === 'Guest' ? 'rounded-tr-none text-gray-900 bg-gray-50' : 'rounded-tl-none text-gray-800'}`}>
+                  {msg.text}
+                </div>
               </div>
-            </div>
+            ))}
+            <div ref={messagesEndRef} />
           </div>
 
           {/* Input Area */}

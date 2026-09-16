@@ -1,0 +1,114 @@
+"use client";
+
+import React, { useState, useEffect, useRef } from 'react';
+import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
+
+interface ChatMessage {
+  id: string;
+  sender: string;
+  text: string;
+  timestamp: string;
+}
+
+export default function SupportChatPage() {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [message, setMessage] = useState('');
+  const ws = useRef<WebSocket | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = process.env.NEXT_PUBLIC_USERS_API 
+      ? process.env.NEXT_PUBLIC_USERS_API.replace(/^http/, 'ws') + '/api/v1/support/ws'
+      : `${protocol}//localhost:7005/api/v1/support/ws`;
+    
+    ws.current = new WebSocket(wsUrl);
+
+    ws.current.onopen = () => console.log('Connected to global support chat');
+
+    ws.current.onmessage = (event) => {
+      try {
+        const newMsg = JSON.parse(event.data);
+        setMessages(prev => [...prev, newMsg]);
+      } catch (e) {
+        console.error("Invalid WS message", e);
+      }
+    };
+
+    return () => {
+      if (ws.current) ws.current.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSend = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!message.trim() || !ws.current) return;
+    
+    const msgObj = {
+      sender: "Support",
+      text: message,
+    };
+    
+    ws.current.send(JSON.stringify(msgObj));
+    setMessage('');
+  };
+
+  return (
+    <div className="flex flex-col h-[calc(100vh-120px)] bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
+      <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+        <div>
+          <h2 className="text-xl font-bold text-gray-900">Live Global Chat</h2>
+          <p className="text-sm text-gray-500">Monitor incoming messages from the landing page</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
+          <span className="text-sm font-medium text-gray-600">Connected</span>
+        </div>
+      </div>
+      
+      <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
+        {messages.length === 0 && (
+          <div className="flex h-full items-center justify-center text-gray-400">
+            Waiting for incoming messages...
+          </div>
+        )}
+        
+        {messages.map((msg, i) => (
+          <div key={i} className={`flex flex-col ${msg.sender === 'Support' ? 'items-end' : 'items-start'}`}>
+            <span className="text-[10px] uppercase font-bold text-gray-400 mb-1 ml-1">{msg.sender}</span>
+            <div className={`px-4 py-2.5 rounded-2xl max-w-[75%] shadow-sm ${
+              msg.sender === 'Support' 
+                ? 'bg-[#146ef5] text-white rounded-tr-none' 
+                : 'bg-white border border-gray-200 text-gray-900 rounded-tl-none'
+            }`}>
+              {msg.text}
+            </div>
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+
+      <div className="p-4 bg-white border-t border-gray-100">
+        <form onSubmit={handleSend} className="relative">
+          <input 
+            type="text" 
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type your reply..." 
+            className="w-full bg-gray-50 border border-gray-200 text-sm rounded-full py-3.5 pl-6 pr-12 focus:outline-none focus:border-[#146ef5] focus:ring-1 focus:ring-[#146ef5]"
+          />
+          <button 
+            type="submit"
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#146ef5] hover:bg-[#105bd1] text-white rounded-full flex items-center justify-center transition-colors"
+          >
+            <PaperAirplaneIcon className="w-5 h-5" />
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
