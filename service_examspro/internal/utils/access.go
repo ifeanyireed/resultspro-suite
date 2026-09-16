@@ -11,7 +11,7 @@ func CheckIcanAccess(user *models.User, examName string, subjectID string) error
 	if strings.ToLower(examName) != "ican" {
 		return nil
 	}
-	if !user.HasIcan {
+	if !user.HasIcan && (user.IcanPlan == nil || *user.IcanPlan == "") {
 		return fmt.Errorf("You do not have an active ICAN plan.")
 	}
 	if user.IcanPlan == nil {
@@ -61,4 +61,53 @@ func CheckIcanAccess(user *models.User, examName string, subjectID string) error
 		return fmt.Errorf("Your ICAN plan (%s) is already linked to its maximum of %d paper(s). Upgrade your plan for access to more papers.", plan, maxPapers)
 	}
 	return nil
+}
+
+func IsSubjectLocked(user *models.User, examName string, subjectID string) bool {
+	if strings.ToLower(examName) != "ican" {
+		return false
+	}
+	if !user.HasIcan && (user.IcanPlan == nil || *user.IcanPlan == "") {
+		return true // They don't have a plan at all
+	}
+	if user.IcanPlan == nil {
+		return false
+	}
+	plan := *user.IcanPlan
+
+	if plan == "ICAN_FULL" {
+		return false
+	}
+
+	if plan == "Single Paper" || plan == "Complete Level" || plan == "ICAN_SINGLE" || plan == "ICAN_GROUP" {
+		maxPapers := 1
+		if plan == "Complete Level" || plan == "ICAN_GROUP" {
+			maxPapers = 5
+		}
+
+		var targets []string
+		if user.IcanTargets != nil && *user.IcanTargets != "" {
+			for _, t := range strings.Split(*user.IcanTargets, ",") {
+				if trimmed := strings.TrimSpace(t); trimmed != "" {
+					targets = append(targets, trimmed)
+				}
+			}
+		}
+
+		// Check if they already have access to this paper
+		for _, t := range targets {
+			if t == subjectID {
+				return false
+			}
+		}
+
+		// They don't have access. Are they maxed out?
+		if len(targets) >= maxPapers {
+			return true // Maxed out, so it's locked
+		}
+		
+		return false // Not maxed out, so it's technically unlocked (can be claimed)
+	}
+
+	return false
 }

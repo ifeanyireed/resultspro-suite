@@ -128,6 +128,8 @@ func (h *ExamHandler) GetSubjectsByExam(c *gin.Context) {
 		McqCount  int           `json:"mcqCount"`
 		TheoryCount int         `json:"theoryCount"`
 		Completed int           `json:"completed"`
+		IsLocked  bool          `json:"isLocked"`
+
 		Color     string        `json:"color"`
 		Reward    int           `json:"reward"`
 		Topics    []SimpleTopic `json:"topics"`
