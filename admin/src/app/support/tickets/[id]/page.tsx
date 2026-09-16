@@ -7,8 +7,8 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
 export default function TicketDetailPage() {
-  const params = useParams();
-  const ticketId = params?.id as string;
+  const routeParams = useParams();
+  const ticketId = routeParams?.id as string;
   
   const [messages, setMessages] = useState<any[]>([]);
   const [ticket, setTicket] = useState<any>(null);
