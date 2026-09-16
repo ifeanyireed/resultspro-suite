@@ -60,15 +60,25 @@ export default function FloatingChat() {
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim() || !ws.current) return;
+    if (!message.trim()) return;
+    
+    if (!ws.current || ws.current.readyState !== WebSocket.OPEN) {
+      alert("Live chat is disconnected. Please ensure you have a stable connection and the server is running.");
+      return;
+    }
     
     const msgObj = {
       sender: "Guest",
       text: message,
     };
     
-    ws.current.send(JSON.stringify(msgObj));
-    setMessage('');
+    try {
+      ws.current.send(JSON.stringify(msgObj));
+      setMessage('');
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send message.");
+    }
   };
 
   return (
