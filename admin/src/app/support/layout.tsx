@@ -28,13 +28,28 @@ export default function SupportLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
+  const [openTickets, setOpenTickets] = useState<number>(0);
 
   useEffect(() => {
     const userStr = localStorage.getItem('user');
     if (userStr) {
       setUser(JSON.parse(userStr));
     }
+    fetchOpenTickets();
   }, []);
+  
+  const fetchOpenTickets = async () => {
+    try {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+      const res = await fetch(`${USERS_API}/api/v1/support/admin/tickets`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('resultspro_admin_token')}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setOpenTickets(data.filter((t: any) => t.status === 'open').length);
+      }
+    } catch (err) {}
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('resultspro_admin_token');
@@ -79,7 +94,9 @@ export default function SupportLayout({
                   <TicketIcon className="w-6 h-6" />
                   All Tickets
                 </div>
-                <span className="bg-[#146ef5] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">5</span>
+                {openTickets > 0 && (
+                  <span className="bg-[#146ef5] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{openTickets}</span>
+                )}
               </Link>
 
               <Link href="/support/chat" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/support/chat') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
