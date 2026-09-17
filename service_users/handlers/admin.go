@@ -615,8 +615,8 @@ func HandleDeleteUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	userId := parts[4]
-
-	if err := db.GormDB.Where("id = ?", userId).Delete(&models.User{}).Error; err != nil {
+	
+	if err := db.GormDB.Exec("UPDATE users SET deleted_at = NOW() WHERE id = ?", userId).Error; err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to delete user")
 		return
 	}
