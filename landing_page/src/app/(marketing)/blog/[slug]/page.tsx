@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 async function getBlogPosts() {
   try {
     const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+    if (!USERS_API) return [];
     const res = await fetch(`${USERS_API}/api/v1/cms/blog/posts`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     const posts = await res.json();
