@@ -5,8 +5,10 @@
   "dependencies": {
     "@neon/config": "^1.4.2",
     "glob": "^13.0.6",
+    "mammoth": "^1.12.3",
     "mysql2": "^3.24.4",
     "tsx": "^4.23.13",
+    "turndown": "^7.2.4",
     "typescript": "^7.0.2"
   },
   "version": "1.0.0",

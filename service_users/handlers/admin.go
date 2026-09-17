@@ -11,6 +11,7 @@ import (
 	"github.com/google/uuid"
 
 	"service_users.resultspro.ng/db"
+	"service_users.resultspro.ng/models"
 	"service_users.resultspro.ng/utils"
 )
 
@@ -615,9 +616,7 @@ func HandleDeleteUser(w http.ResponseWriter, r *http.Request) {
 	}
 	userId := parts[4]
 
-	// Neon Postgres uses $1
-	_, err := db.DB.Exec("DELETE FROM users WHERE id = $1", userId)
-	if err != nil {
+	if err := db.GormDB.Where("id = ?", userId).Delete(&models.User{}).Error; err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to delete user")
 		return
 	}

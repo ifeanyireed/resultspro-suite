@@ -12,6 +12,12 @@ export default function UsersPage() {
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, filterStatus]);
 
   useEffect(() => {
     async function loadUsers() {
@@ -50,6 +56,9 @@ export default function UsersPage() {
     const matchStatus = filterStatus === 'ALL' || u.account_status === filterStatus;
     return matchSearch && matchStatus;
   });
+
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const paginatedUsers = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="w-full">
@@ -102,7 +111,7 @@ export default function UsersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
-                {filtered.map((user) => (
+                {paginatedUsers.map((user) => (
                   <tr key={user.id} className="hover:bg-blue-50/30 transition-colors group">
                     <td className="px-6 py-4 flex items-center space-x-3">
                       <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs overflow-hidden shadow-sm border border-slate-200">
@@ -153,6 +162,34 @@ export default function UsersPage() {
               </tbody>
             </table>
           </div>
+          
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="px-6 py-4 flex items-center justify-between border-t border-slate-100 bg-slate-50/50">
+              <span className="text-xs text-slate-500 font-medium">
+                Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filtered.length)} of {filtered.length} users
+              </span>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1.5 text-xs font-medium bg-white border border-slate-200 rounded text-slate-600 hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                <span className="text-xs text-slate-600 font-medium px-2">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button 
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1.5 text-xs font-medium bg-white border border-slate-200 rounded text-slate-600 hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

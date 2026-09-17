@@ -456,6 +456,16 @@ func main() {
 	mux.HandleFunc("/api/v1/support/ws", handlers.HandleChatWebSocket)
 	mux.HandleFunc("/api/v1/support/chat/history", handlers.GetChatHistory)
 	mux.HandleFunc("/api/v1/support/chat/sessions", middleware.RequireAuth(handlers.GetChatSessions))
+	
+	// KB Endpoints
+	mux.HandleFunc("GET /api/v1/support/kb/categories", handlers.GetKBCategories)
+	mux.HandleFunc("POST /api/v1/support/kb/categories", middleware.RequireAuth(handlers.CreateKBCategory))
+	mux.HandleFunc("GET /api/v1/support/kb/articles", handlers.GetKBArticles)
+	mux.HandleFunc("POST /api/v1/support/kb/articles", middleware.RequireAuth(handlers.CreateKBArticle))
+	mux.HandleFunc("GET /api/v1/support/kb/articles/{id}", handlers.GetKBArticle)
+	mux.HandleFunc("PUT /api/v1/support/kb/articles/{id}", middleware.RequireAuth(handlers.UpdateKBArticle))
+	mux.HandleFunc("DELETE /api/v1/support/kb/articles/{id}", middleware.RequireAuth(handlers.DeleteKBArticle))
+
 	mux.HandleFunc("/api/v1/support/staff/status", middleware.RequireAuth(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			handlers.HandleGetStaffStatus(w, r)
