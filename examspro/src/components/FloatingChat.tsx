@@ -22,7 +22,7 @@ export default function FloatingChat() {
 
   
   useEffect(() => {
-    const fetchHistory = async (sid) => {
+    const fetchHistory = async (sid: string) => {
       try {
         const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
         const res = await fetch(`${USERS_API}/api/v1/support/chat/history?session_id=${sid}`);
