@@ -11,7 +11,6 @@ import (
 	"github.com/google/uuid"
 
 	"service_users.resultspro.ng/db"
-	"service_users.resultspro.ng/models"
 	"service_users.resultspro.ng/utils"
 )
 
