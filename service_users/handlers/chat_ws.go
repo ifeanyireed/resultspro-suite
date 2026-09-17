@@ -223,6 +223,17 @@ func readPump(client *Client) {
 
 		payload, _ := json.Marshal(chatMsg)
 		Hub.broadcast <- payload
+
+		// Trigger AI if staff is offline
+		if client.Role == "guest" {
+			Hub.mutex.Lock()
+			staffOnline := Hub.staffCount > 0
+			Hub.mutex.Unlock()
+
+			if !staffOnline {
+				go HandleAIResponse(client.SessionID, chatMsg.Text)
+			}
+		}
 	}
 }
 
