@@ -28,9 +28,9 @@ export default function SupportChatPage() {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('resultspro_admin_token')}` }
       });
       if (res.ok) {
-        const data = await res.json();
+        const data: any[] = await res.json();
         // Sort by timestamp descending
-        data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+        data.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
         setSessionsData(data);
       }
     } catch (err) {}
@@ -41,11 +41,11 @@ export default function SupportChatPage() {
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
       const res = await fetch(`${USERS_API}/api/v1/support/chat/history?session_id=${sessionId}`);
       if (res.ok) {
-        const data = await res.json();
+        const data: ChatMessage[] = await res.json();
         setMessages(prev => {
           // Merge history with current messages for this session
           const existingIds = new Set(prev.map(m => m.id));
-          const newMsgs = data.filter(m => !existingIds.has(m.id));
+          const newMsgs = data.filter((m: ChatMessage) => !existingIds.has(m.id));
           return [...prev, ...newMsgs].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
         });
       }
