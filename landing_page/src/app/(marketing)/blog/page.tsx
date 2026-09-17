@@ -10,8 +10,9 @@ export const metadata = {
 
 async function getBlogPosts() {
   try {
-    const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
-    if (!USERS_API) return [];
+    const rawApi = process.env.NEXT_PUBLIC_USERS_API || '';
+    const USERS_API = rawApi.trim().replace(/^["']|["']$/g, '');
+    if (!USERS_API || !USERS_API.startsWith('http')) return [];
     
     const [postsRes, catRes] = await Promise.all([
       fetch(`${USERS_API}/api/v1/cms/blog/posts`, { next: { revalidate: 60 } }),
