@@ -41,8 +41,10 @@ export default function DashboardLayout({
     router.push("/login");
   };
   const [role, setRole] = useState(Role.STUDENT);
+  const [mounted, setMounted] = React.useState(false);
 
   useEffect(() => {
+    setMounted(true);
     if (user) setRole(user.role as Role);
   }, [user]);
 
@@ -139,26 +141,24 @@ export default function DashboardLayout({
             </div>
           </div>
 
-          {/* Bottom App Promo */}
+          {/* User Info */}
           <div className="px-6 mt-8">
             <div 
               className="rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
               style={{ backgroundImage: "url('/abstract-blue-2.jpg')" }}
             >
-              {/* Lighter overlay for text readability */}
               <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
               <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
               
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mb-4 relative z-10 backdrop-blur-sm">
-                <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center">
-                  <div className="w-1.5 h-1.5 bg-[#146ef5] rounded-full"></div>
-                </div>
+              <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
+                {mounted && <Image src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+                {!mounted && <Image src="/avatars/character1.jpg" alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
               </div>
-              <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">Download our<br/>Mobile App</h4>
-              <p className="text-[10px] text-gray-300 mb-6 relative z-10">Get easy in another way</p>
+              <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (user?.name || 'Loading...') : 'Loading...'}</h4>
+              <p className="text-[10px] text-gray-300 mb-6 relative z-10">{mounted ? (user?.email || 'Loading...') : 'Loading...'}</p>
               
               <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] transition-colors text-white text-xs font-semibold py-3 rounded-full relative z-10 shadow-md">
-                Download
+                View Profile
               </button>
             </div>
           </div>

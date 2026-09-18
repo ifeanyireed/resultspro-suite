@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import axios from 'axios';
 import { useRouter, useParams } from 'next/navigation';
-import { Mail, Lock, ArrowRight, Loader2, Sparkles, Building2, Users, ShieldCheck } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Loader2, Sparkles, Building2, Users, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 // import axiosInstance from '@/lib/axiosConfig'; // we can mock the login for now or use this
 
@@ -16,6 +16,7 @@ export default function LoginForm({ tenant }: { tenant: any }) {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [showOTP, setShowOTP] = useState(false);
   const [otp, setOtp] = useState('');
@@ -86,7 +87,7 @@ export default function LoginForm({ tenant }: { tenant: any }) {
             <Image src={tenant?.logo_url || "/logo.png"} alt={tenant?.name || "Tenant"} width={64} height={64} className="object-contain" priority />
             <div>
               <h1 className="font-bold text-white text-3xl tracking-tight">{tenant?.name || "Tenant"}</h1>
-              <p className="text-blue-400 font-semibold text-xs uppercase tracking-widest">EDU SUITE</p>
+              <p className="text-blue-400 font-semibold text-xs uppercase tracking-widest">LEARNING MANAGEMENT SYSTEM</p>
             </div>
           </div>
 
@@ -178,13 +179,25 @@ export default function LoginForm({ tenant }: { tenant: any }) {
                   <Lock className="h-5 w-5 text-slate-400" />
                 </div>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                  className="block w-full pl-11 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                   placeholder="••••••••"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
             </div>
 

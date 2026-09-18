@@ -39,7 +39,7 @@ func HandleGetProfile(w http.ResponseWriter, r *http.Request) {
 
 	// 1. Fetch User Identity details
 	var fullName, email, avatar, phone, status sql.NullString
-	err := db.DB.QueryRow("SELECT full_name, email, avatar_url, phone, account_status FROM users WHERE id = ?", userId).
+	err := db.DB.QueryRow("SELECT full_name, email, avatar_url, phone, account_status FROM users WHERE id = ? AND deleted_at IS NULL", userId).
 		Scan(&fullName, &email, &avatar, &phone, &status)
 	if err == nil {
 		if fullName.Valid {
@@ -280,7 +280,7 @@ func HandleGetUserDetail(w http.ResponseWriter, r *http.Request) {
 
 	err := db.DB.QueryRow(`
 		SELECT id, email, password_hash, google_id, microsoft_id, auth_provider, full_name, avatar_url, phone, sex, date_of_birth, address, account_status, mfa_enabled, mfa_secret, created_at, updated_at
-		FROM users WHERE id = $1`, userID).Scan(
+		FROM users WHERE id = $1 AND deleted_at IS NULL`, userID).Scan(
 		&u.ID, &u.Email, &passwordHash, &googleID, &microsoftID, &u.AuthProvider, &fullName, &avatarURL, &phone, &sex, &dob, &address, &u.AccountStatus, &u.MFAEnabled, &mfaSecret, &u.CreatedAt, &u.UpdatedAt)
 
 	if err == sql.ErrNoRows {

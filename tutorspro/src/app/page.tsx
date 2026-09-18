@@ -66,7 +66,7 @@ export default function Home() {
             </div>
             
             <div className="relative">
-              <img src="/images/Students3.jpeg" alt="Students learning" className="rounded-sm shadow-card-lg" />
+              <img src="/images/Students1.jpeg" alt="Students learning" className="rounded-sm shadow-card-lg" />
             </div>
           </div>
         </div>

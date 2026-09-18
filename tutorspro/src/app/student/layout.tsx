@@ -24,12 +24,22 @@ import {
   Squares2X2Icon as Squares2X2Solid,
 } from '@heroicons/react/24/solid';
 
+import { useAuthStore } from '@/store/useAuthStore';
+import Image from 'next/image';
+
 export default function StudentLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const logout = useAuthStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user);
+  const [mounted, setMounted] = React.useState(false);
+  
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isActive = (path: string) => {
     if (path === '/student/dashboard') {
@@ -85,11 +95,33 @@ export default function StudentLayout({
                   <QuestionMarkCircleIcon className="w-6 h-6" />
                   Help
                 </Link>
-                <Link href="#" className="flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
+                <button onClick={() => logout()} className="w-full text-left flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
                   <ArrowRightOnRectangleIcon className="w-6 h-6" />
                   Logout
-                </Link>
+                </button>
               </div>
+            </div>
+          </div>
+
+          {/* User Info */}
+          <div className="px-6 mt-8">
+            <div 
+              className="rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
+              style={{ backgroundImage: "url('/abstract-blue-2.jpg')" }}
+            >
+              <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
+              
+              <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
+                {mounted && <Image src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+                {!mounted && <Image src="/avatars/character1.jpg" alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+              </div>
+              <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (user?.name || 'Loading...') : 'Loading...'}</h4>
+              <p className="text-[10px] text-gray-300 mb-6 relative z-10">{mounted ? (user?.email || 'Loading...') : 'Loading...'}</p>
+              
+              <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] transition-colors text-white text-xs font-semibold py-3 rounded-full relative z-10 shadow-md">
+                View Profile
+              </button>
             </div>
           </div>
         </>

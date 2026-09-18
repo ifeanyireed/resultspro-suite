@@ -35,7 +35,7 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var user models.User
-	err := db.DB.QueryRow("SELECT id, email, password_hash, full_name, avatar_url, account_status, has_ican, coin_balance, mfa_enabled FROM users WHERE email = ?", input.Email).
+	err := db.DB.QueryRow("SELECT id, email, password_hash, full_name, avatar_url, account_status, has_ican, coin_balance, mfa_enabled FROM users WHERE email = ? AND deleted_at IS NULL", input.Email).
 		Scan(&user.ID, &user.Email, &user.PasswordHash, &user.FullName, &user.AvatarURL, &user.AccountStatus, &user.HasIcan, &user.CoinBalance, &user.MFAEnabled)
 
 	if err == sql.ErrNoRows {

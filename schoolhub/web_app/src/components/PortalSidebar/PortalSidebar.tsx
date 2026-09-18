@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useTenant } from '../TenantProvider';
+import { useAuthStore } from '@/store/useAuthStore';
 import { 
   Squares2X2Icon,
   HomeModernIcon,
@@ -99,6 +100,13 @@ const devRoles = [
 export default function PortalSidebar() {
   const pathname = usePathname();
   const { tenant, hasModule } = useTenant();
+  const logout = useAuthStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user);
+  const [mounted, setMounted] = React.useState(false);
+  
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const getActiveMenu = () => {
     if (pathname.startsWith('/teacher')) return teacherMenu;
@@ -177,33 +185,31 @@ export default function PortalSidebar() {
             <QuestionMarkCircleIcon className="w-6 h-6" />
             Help
           </Link>
-          <Link href="/login" className="flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
+          <button onClick={() => logout()} className="w-full text-left flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
             <ArrowRightOnRectangleIcon className="w-6 h-6" />
             Logout
-          </Link>
+          </button>
         </div>
       </div>
 
-      {/* Bottom App Promo */}
+      {/* User Info */}
       <div className="px-6 mt-8">
         <div 
           className="rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
           style={{ backgroundImage: "url('/skies.jpeg')" }}
         >
-          {/* Lighter overlay for text readability */}
           <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
           
-          <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mb-4 relative z-10 backdrop-blur-sm">
-            <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center">
-              <div className="w-1.5 h-1.5 bg-[#146ef5] rounded-full"></div>
-            </div>
+          <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
+            {mounted && <Image src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+            {!mounted && <Image src="/avatars/character1.jpg" alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
           </div>
-          <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">Download our<br/>Mobile App</h4>
-          <p className="text-[10px] text-gray-300 mb-6 relative z-10">Get easy in another way</p>
+          <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (user?.name || 'Loading...') : 'Loading...'}</h4>
+          <p className="text-[10px] text-gray-300 mb-6 relative z-10">{mounted ? (user?.email || 'Loading...') : 'Loading...'}</p>
           
           <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] transition-colors text-white text-xs font-semibold py-3 rounded-full relative z-10 shadow-md">
-            Download
+            View Profile
           </button>
         </div>
       </div>

@@ -195,7 +195,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 	var isGlobalAdmin bool
 	var globalRole sql.NullString
-	err := db.DB.QueryRow("SELECT id, email, password_hash, full_name, avatar_url, account_status, COALESCE(mfa_enabled, false), COALESCE(is_admin, false), role FROM users WHERE email = ?", email).
+	err := db.DB.QueryRow("SELECT id, email, password_hash, full_name, avatar_url, account_status, COALESCE(mfa_enabled, false), COALESCE(is_admin, false), role FROM users WHERE email = ? AND deleted_at IS NULL", email).
 		Scan(&user.ID, &user.Email, &user.PasswordHash, &user.FullName, &user.AvatarURL, &user.AccountStatus, &user.MFAEnabled, &isGlobalAdmin, &globalRole)
 
 	if err == sql.ErrNoRows {

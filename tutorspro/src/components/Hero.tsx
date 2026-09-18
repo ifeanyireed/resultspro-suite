@@ -40,7 +40,7 @@ const Hero = () => {
       {/* ── Full-bleed background photo ── */}
       <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <img
-          src="/images/Students3.jpeg"
+          src="/images/Students1.jpeg"
           alt=""
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
           loading="eager"

@@ -631,7 +631,7 @@ func HandleGetTenantRoles(w http.ResponseWriter, r *http.Request) {
 		SELECT r.id, r.user_id, u.email, u.full_name, r.role, r.status, r.created_at
 		FROM user_tenant_roles r
 		JOIN users u ON r.user_id = u.id
-		WHERE r.tenant_id = ?`
+		WHERE r.tenant_id = ? AND u.deleted_at IS NULL`
 
 	args := []interface{}{tenantID}
 	if roleFilter != "" {

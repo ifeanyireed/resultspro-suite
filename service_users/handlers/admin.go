@@ -42,7 +42,7 @@ func HandleGetSuiteStats(w http.ResponseWriter, r *http.Request) {
 		SalesAnalytics       []DailySales `json:"salesAnalytics"`
 	}
 
-	db.DB.QueryRow("SELECT COUNT(*) FROM users").Scan(&stats.TotalUsers)
+	db.DB.QueryRow("SELECT COUNT(*) FROM users WHERE deleted_at IS NULL").Scan(&stats.TotalUsers)
 	db.DB.QueryRow("SELECT COUNT(*) FROM tenants").Scan(&stats.TotalSchools)
 	db.DB.QueryRow("SELECT COUNT(*) FROM tenants WHERE verification_status = 'VERIFIED'").Scan(&stats.VerifiedSchools)
 	db.DB.QueryRow("SELECT COUNT(*) FROM tenants WHERE verification_status = 'PENDING_VERIFICATION'").Scan(&stats.PendingVerifications)
@@ -176,6 +176,7 @@ func HandleListAllUsers(w http.ResponseWriter, r *http.Request) {
 		       STRING_AGG(ua.app_id, ',') AS apps
 		FROM users u
 		LEFT JOIN user_apps ua ON ua.user_id = u.id
+		WHERE u.deleted_at IS NULL
 		GROUP BY u.id
 		ORDER BY u.created_at DESC
 	`)
@@ -385,6 +386,7 @@ func HandleListAgents(w http.ResponseWriter, r *http.Request) {
 		       COALESCE((SELECT SUM(amount) FROM agent_earnings WHERE agent_id = u.id), 0) as total_earnings
 		FROM users u
 		INNER JOIN user_subscriptions s ON u.id = s.user_id AND s.type = 'AGENT'
+		WHERE u.deleted_at IS NULL
 		ORDER BY u.created_at DESC
 	`
 
