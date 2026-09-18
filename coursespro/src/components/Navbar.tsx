@@ -75,13 +75,11 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
   const navItems = isPlatform ? [
     { label: 'Features', href: '/#features', enabled: true },
     { label: 'Pricing', href: '/pricing', enabled: true },
-    { label: 'Dashboard', href: '/dashboard', enabled: isAuthenticated },
   ].filter(i => i.enabled) : [
     { label: 'Cohorts', href: '/cohorts', enabled: true },
     { label: 'For Enterprise', href: '/enterprise', enabled: true },
     { label: 'Pricing', href: '/pricing', enabled: true },
     { label: 'Become an Instructor', href: '/apply', enabled: !hideInstructorLink },
-    { label: 'Dashboard', href: '/dashboard', enabled: isAuthenticated },
   ].filter(i => i.enabled);
 
   const isActive = (href: string) => pathname.startsWith(href) && href !== '/';
@@ -127,10 +125,6 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
               <Link href="mailto:hello@resultspro.ng" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
                 Talk to Us
               </Link>
-            ) : mounted && isAuthenticated ? (
-              <Link href="/pricing" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
-                Shop
-              </Link>
             ) : null}
           </nav>
 
@@ -147,7 +141,7 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
               </div>
             ) : mounted && isAuthenticated ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                <Link href="/dashboard" className="btn btn-red btn-sm" style={{ textDecoration: 'none' }}>
+                <Link href={getDashboardUrl()} className="btn btn-red btn-sm" style={{ textDecoration: 'none' }}>
                   My Account
                 </Link>
                 <Link href="/notifications" style={{ position: 'relative', color: 'rgba(255,255,255,0.6)', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = 'white'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}>
@@ -158,7 +152,7 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
                     </span>
                   )}
                 </Link>
-                <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
+                <Link href={getDashboardUrl()} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', lineHeight: 1.2 }}>
                   </div>
                   <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold', color: 'white' }}>
@@ -247,8 +241,8 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
                     Talk to Us
                   </Link>
                 ) : (
-                  <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
-                    Go to Dashboard
+                  <Link href={getDashboardUrl()} onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
+                    My Account
                   </Link>
                 )}
 

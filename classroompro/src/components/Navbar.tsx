@@ -61,12 +61,13 @@ export default function Navbar() {
     }
   };
 
+    const getDashboardUrl = () => '/dashboard';
+
   const navItems = [
     { label: 'Features', href: '/#features', enabled: true },
     { label: 'For Schools', href: 'https://www.resultspro.ng', enabled: true },
     { label: 'Pricing', href: '/pricing', enabled: true },
     { label: 'Contact', href: '/contact', enabled: true },
-    { label: 'Dashboard', href: '/dashboard', enabled: isAuthenticated },
   ].filter(i => i.enabled);
 
   const isActive = (href: string) => pathname.startsWith(href) && href !== '/';
@@ -140,7 +141,7 @@ export default function Navbar() {
                     </span>
                   )}
                 </Link>
-                <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
+                <Link href={getDashboardUrl()} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
                   <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold', color: 'white' }}>
                     {user?.full_name?.charAt(0) || user?.email?.charAt(0) || 'U'}
                   </div>
@@ -227,8 +228,8 @@ export default function Navbar() {
                     Sign Up Free
                   </Link>
                 ) : (
-                  <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
-                    Go to Dashboard
+                  <Link href={getDashboardUrl()} onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
+                    My Account
                   </Link>
                 )}
 

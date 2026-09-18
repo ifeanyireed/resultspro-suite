@@ -63,13 +63,14 @@ export default function Navbar() {
     }
   };
 
+    const getDashboardUrl = () => '/dashboard';
+
   const navItems = [
     { label: 'Practice', href: '/practice', enabled: true },
     { label: 'Live Games', href: '/live', enabled: featureFlags['live_games_enabled'] !== 'false' },
     { label: 'Battle Mode', href: '/battle-mode', enabled: featureFlags['battle_mode_enabled'] !== 'false' },
     { label: 'Leaderboard', href: '/leaderboard', enabled: true },
     { label: 'AI Tutor', href: '/study-assistant', enabled: isAuthenticated },
-    { label: 'Shop', href: '/shop', enabled: isAuthenticated },
     { label: 'Admin', href: '/admin/dashboard', enabled: isAuthenticated && (user?.role === 'ADMIN' || user?.role === 'MODERATOR') },
   ].filter(i => i.enabled);
 
@@ -140,7 +141,7 @@ export default function Navbar() {
               </Link>
             ) : mounted && isAuthenticated ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                <Link href="/dashboard" className="btn btn-red btn-sm" style={{ textDecoration: 'none' }}>
+                <Link href={getDashboardUrl()} className="btn btn-red btn-sm" style={{ textDecoration: 'none' }}>
                   My Account
                 </Link>
                 <Link href="/notifications" style={{ position: 'relative', color: isLanding ? 'rgba(255,255,255,0.6)' : '#64748b', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = isLanding ? 'white' : '#1e3a8a'} onMouseLeave={e => e.currentTarget.style.color = isLanding ? 'rgba(255,255,255,0.6)' : '#64748b'}>
@@ -151,7 +152,7 @@ export default function Navbar() {
                     </span>
                   )}
                 </Link>
-                <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
+                <Link href={getDashboardUrl()} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', lineHeight: 1.2 }}>
                     <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: isLanding ? 'white' : '#1e3a8a' }}>{user?.coinBalance}</span>
                     <span style={{ fontSize: '0.625rem', fontWeight: 700, color: isLanding ? 'rgba(255,255,255,0.5)' : '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Coins</span>
@@ -247,8 +248,8 @@ export default function Navbar() {
                     </Link>
                   </div>
                 ) : (
-                  <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
-                    Go to Dashboard
+                  <Link href={getDashboardUrl()} onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
+                    My Account
                   </Link>
                 )}
 

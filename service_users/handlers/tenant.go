@@ -537,13 +537,16 @@ func HandleListTenants(w http.ResponseWriter, r *http.Request) {
 		ContactEmail       string    `json:"contact_email,omitempty"`
 		PrimaryColor       string    `json:"primary_color,omitempty"`
 		LogoURL            string    `json:"logo_url,omitempty"`
+		ContactPhone       string    `json:"contact_phone,omitempty"`
+		ContactPersonName  string    `json:"contact_person_name,omitempty"`
+		FullAddress        string    `json:"full_address,omitempty"`
 	}
 
 	tenants := []TenantSummary{}
 	for rows.Next() {
 		var s TenantSummary
-		var state, lga, tier, tenantType, contactEmail, primaryColor, logoUrl sql.NullString
-		if err := rows.Scan(&s.ID, &tenantType, &s.Name, &s.Slug, &s.Status, &s.VerificationStatus, &state, &lga, &tier, &s.CreatedAt, &contactEmail, &primaryColor, &logoUrl); err == nil {
+		var state, lga, tier, tenantType, contactEmail, primaryColor, logoUrl, contactPhone, contactPersonName, fullAddress sql.NullString
+		if err := rows.Scan(&s.ID, &tenantType, &s.Name, &s.Slug, &s.Status, &s.VerificationStatus, &state, &lga, &tier, &s.CreatedAt, &contactEmail, &primaryColor, &logoUrl, &contactPhone, &contactPersonName, &fullAddress); err == nil {
 			if tenantType.Valid {
 				s.Type = tenantType.String
 			}
@@ -565,8 +568,20 @@ func HandleListTenants(w http.ResponseWriter, r *http.Request) {
 			if logoUrl.Valid {
 				s.LogoURL = logoUrl.String
 			}
+			if contactPhone.Valid {
+				s.ContactPhone = contactPhone.String
+			}
+			if contactPersonName.Valid {
+				s.ContactPersonName = contactPersonName.String
+			}
+			if fullAddress.Valid {
+				s.FullAddress = fullAddress.String
+			}
 			tenants = append(tenants, s)
-		}
+		} else {
+            // Log error so we don't silently fail in the future
+            log.Printf("Scan error in GetTenants: %v", err)
+        }
 	}
 
 	utils.JSONResponse(w, http.StatusOK, tenants)
