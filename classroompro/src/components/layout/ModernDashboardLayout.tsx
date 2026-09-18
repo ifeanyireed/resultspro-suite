@@ -10,7 +10,7 @@ export function ModernDashboardLayout({ sidebarContent, headerContent, children 
   return (
     <div className="dashboard-page min-h-screen bg-[#f9fafc] font-sans text-gray-900 flex">
       {/* Sidebar - Sticky */}
-      <aside className="w-[280px] bg-white border-r border-gray-100 flex flex-col justify-between py-4 shrink-0 h-screen sticky top-0 overflow-hidden">
+      <aside className="w-[280px] bg-white border-r border-gray-100 flex flex-col justify-between py-4 shrink-0 h-screen sticky top-0 overflow-y-auto custom-scrollbar">
         {sidebarContent}
       </aside>
 
