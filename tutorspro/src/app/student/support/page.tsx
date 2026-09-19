@@ -7,7 +7,7 @@ import { IconLoader2 } from '@tabler/icons-react';
 import { RoleGate } from '@/components/RoleGate';
 import Link from 'next/link';
 
-export default function ParentSupport() {
+export default function StudentSupport() {
   const { user } = useAuthStore();
   const [tickets, setTickets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,7 +63,7 @@ export default function ParentSupport() {
   };
 
   return (
-    <RoleGate allowedRoles={["PARENT", "SUPERADMIN"]}>
+    <RoleGate allowedRoles={['STUDENT', 'SUPERADMIN']}>
       <main className="min-h-screen bg-gray-50 pb-24">
         <div className="max-w-4xl mx-auto px-4 md:px-8 pt-12 space-y-8">
           <div>
