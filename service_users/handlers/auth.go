@@ -592,7 +592,8 @@ func HandleIntrospect(w http.ResponseWriter, r *http.Request) {
 	var tenantID string
 	if input.Domain != "" {
 		// Resolve Tenant
-		err = db.DB.QueryRow("SELECT id FROM tenants WHERE default_subdomain = ? OR custom_domain = ?", input.Domain, input.Domain).Scan(&tenantID)
+		slug := strings.Split(input.Domain, ".")[0]
+		err = db.DB.QueryRow("SELECT id FROM tenants WHERE slug = ? OR default_subdomain = ? OR custom_domain = ?", slug, input.Domain, input.Domain).Scan(&tenantID)
 		if err != nil {
 			utils.JSONResponse(w, http.StatusOK, models.IntrospectionResponse{
 				Active: false,
