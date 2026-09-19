@@ -109,7 +109,19 @@ export default function SharedSignupPage({
       if (token) {
         setAuth(res.data.user, token);
         toast.success("Account created successfully!");
-        router.push(redirectPath);
+        
+        let targetPath = redirectPath;
+        try {
+          const payloadJwt = JSON.parse(atob(token.split('.')[1]));
+          const roles = payloadJwt.roles || res.data.user?.roles || [];
+          if (roles.includes("TUTOR") || roles.includes("tutor")) targetPath = "/tutor";
+          else if (roles.includes("STUDENT") || roles.includes("student")) targetPath = "/student";
+          else if (roles.includes("PARENT") || roles.includes("parent")) targetPath = "/parent";
+        } catch (e) {
+          console.error("Failed to parse token for redirect", e);
+        }
+
+        router.push(targetPath);
       } else {
         toast.success("Account created! Check your email for OTP.");
         setShowOTP(true);

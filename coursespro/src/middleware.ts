@@ -8,13 +8,8 @@ export function middleware(req: NextRequest) {
   // req.nextUrl.hostname can sometimes default to 'localhost' if running behind certain local proxies or Docker networks.
   const hostHeader = req.headers.get('host') || '';
   const hostname = hostHeader.split(':')[0]; // Strip the port
-  
-  // Determine if this is the main platform domain
-  const isPlatform = 
-    hostname === 'resultspro.ng' ||
-    hostname === 'coursespro.resultspro.ng' ||
-    (hostname.endsWith('.onrender.com') && hostname.split('.').length === 3) ||
-    (hostname.endsWith('.vercel.app') && hostname.split('.').length === 3);
+  const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+  const isPlatform = hostname === platformDomain || hostname === `coursespro.${platformDomain}`;
 
   // Skip api, next internal, and static files
   if (url.pathname.startsWith('/api') || url.pathname.startsWith('/_next') || url.pathname.includes('.')) {

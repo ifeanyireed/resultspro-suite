@@ -39,12 +39,9 @@ export default function LoginPage() {
           const slug = adminTenants[0];
           const protocol = window.location.protocol;
           const host = window.location.host; // includes port
-          // Replace base domain if they are already on a subdomain
-          let baseHost = host;
-          if (host.split('.').length > 2) {
-             baseHost = host.split('.').slice(-2).join('.');
-          }
-          window.location.href = `${protocol}//${slug}.${baseHost}/admin`;
+          const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+          const port = window.location.port ? `:${window.location.port}` : '';
+          window.location.href = `${protocol}//${slug}.${platformDomain}${port}/admin`;
         } else {
           // Superadmin
           router.push('/admin');

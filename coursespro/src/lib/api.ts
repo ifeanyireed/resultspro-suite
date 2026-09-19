@@ -35,8 +35,8 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
-        const host = window.location.hostname;
-        let rootDomain = (host.split('.').length > 2 ? `.${host.split('.').slice(-2).join('.')}` : `.${host}`);
+        const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+        const rootDomain = platformDomain === 'localhost' ? 'localhost' : `.${platformDomain}`;
         Cookies.remove('token', { domain: rootDomain, path: '/' });
         Cookies.remove('token');
       }
@@ -79,8 +79,8 @@ coursesApi.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
-        const host = window.location.hostname;
-        let rootDomain = (host.split('.').length > 2 ? `.${host.split('.').slice(-2).join('.')}` : `.${host}`);
+        const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+        const rootDomain = platformDomain === 'localhost' ? 'localhost' : `.${platformDomain}`;
         Cookies.remove('token', { domain: rootDomain, path: '/' });
         Cookies.remove('token');
       }

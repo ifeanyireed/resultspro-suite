@@ -49,11 +49,16 @@ export default function SharedLoginPage({
         toast.success("Login successful!");
         
         let targetPath = redirectPath;
-        if (res.data.user?.roles) {
-          const roles = res.data.user.roles;
-          if (roles.includes("TUTOR")) targetPath = "/tutor";
-          else if (roles.includes("STUDENT")) targetPath = "/student";
-          else if (roles.includes("PARENT")) targetPath = "/parent";
+        try {
+          // Decode JWT to get roles since it's not always in res.data.user
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          const roles = payload.roles || res.data.user?.roles || [];
+          
+          if (roles.includes("TUTOR") || roles.includes("tutor")) targetPath = "/tutor";
+          else if (roles.includes("STUDENT") || roles.includes("student")) targetPath = "/student";
+          else if (roles.includes("PARENT") || roles.includes("parent")) targetPath = "/parent";
+        } catch (e) {
+          console.error("Failed to parse token for redirect", e);
         }
         
         router.push(targetPath);

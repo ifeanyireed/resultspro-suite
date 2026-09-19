@@ -46,13 +46,8 @@ export const useAuthStore = create<AuthState>((set, get) => {
     setAuth: (user, token) => {
       let rootDomain = '';
       if (typeof window !== 'undefined') {
-        const host = window.location.hostname;
-        const parts = host.split('.');
-        if (parts.length > 2) {
-          rootDomain = `.${parts.slice(-2).join('.')}`;
-        } else {
-          rootDomain = `.${host}`;
-        }
+        const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+        rootDomain = platformDomain === 'localhost' ? 'localhost' : `.${platformDomain}`;
       }
       Cookies.set('token', token, { expires: 7, domain: rootDomain || undefined, path: '/' });
       set({ user, token, isAuthenticated: true });
@@ -60,13 +55,8 @@ export const useAuthStore = create<AuthState>((set, get) => {
     logout: () => {
       let rootDomain = '';
       if (typeof window !== 'undefined') {
-        const host = window.location.hostname;
-        const parts = host.split('.');
-        if (parts.length > 2) {
-          rootDomain = `.${parts.slice(-2).join('.')}`;
-        } else {
-          rootDomain = `.${host}`;
-        }
+        const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+        rootDomain = platformDomain === 'localhost' ? 'localhost' : `.${platformDomain}`;
       }
       Cookies.remove('token', { domain: rootDomain || undefined, path: '/' });
       Cookies.remove('token'); // Fallback for any exact-match cookies

@@ -51,12 +51,9 @@ export default function CreatorOnboardingPage() {
       // Redirect to the new tenant's dashboard after 2 seconds
       setTimeout(() => {
         const protocol = window.location.protocol;
-        const host = window.location.host;
-        let baseHost = host;
-        if (host.split('.').length > 2) {
-           baseHost = host.split('.').slice(-2).join('.');
-        }
-        window.location.href = `${protocol}//${slug}.${baseHost}`;
+        const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+        const port = window.location.port ? `:${window.location.port}` : '';
+        window.location.href = `${protocol}//${slug}.${platformDomain}${port}`;
       }, 2500);
 
     } catch (err: any) {
