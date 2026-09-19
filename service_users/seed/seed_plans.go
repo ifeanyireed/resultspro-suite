@@ -26,7 +26,7 @@ type SeedPlan struct {
 	AccessLevel string
 }
 
-func main_seed_plans() {
+func main() {
 	godotenv.Load("../.env")
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {

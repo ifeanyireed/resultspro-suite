@@ -44,11 +44,40 @@ export const useAuthStore = create<AuthState>((set, get) => {
     token,
     isAuthenticated: !!token,
     setAuth: (user, token) => {
-      Cookies.set('token', token, { expires: 7 }); // 7 days
+      let rootDomain = '';
+      if (typeof window !== 'undefined') {
+        const host = window.location.hostname;
+        if (host.includes('localhost')) {
+          rootDomain = 'localhost';
+        } else {
+          const parts = host.split('.');
+          if (parts.length > 2) {
+            rootDomain = `.${parts.slice(-2).join('.')}`;
+          } else {
+            rootDomain = `.${host}`;
+          }
+        }
+      }
+      Cookies.set('token', token, { expires: 7, domain: rootDomain || undefined, path: '/' });
       set({ user, token, isAuthenticated: true });
     },
     logout: () => {
-      Cookies.remove('token');
+      let rootDomain = '';
+      if (typeof window !== 'undefined') {
+        const host = window.location.hostname;
+        if (host.includes('localhost')) {
+          rootDomain = 'localhost';
+        } else {
+          const parts = host.split('.');
+          if (parts.length > 2) {
+            rootDomain = `.${parts.slice(-2).join('.')}`;
+          } else {
+            rootDomain = `.${host}`;
+          }
+        }
+      }
+      Cookies.remove('token', { domain: rootDomain || undefined, path: '/' });
+      Cookies.remove('token'); // Fallback for any exact-match cookies
       set({ user: null, token: null, isAuthenticated: false });
       if (typeof window !== 'undefined') {
         window.location.href = '/login';
