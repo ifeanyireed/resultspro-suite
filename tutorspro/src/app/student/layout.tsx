@@ -53,10 +53,8 @@ export default function StudentLayout({
       sidebarContent={
         <>
           <div>
-            <div className="px-8 mb-6">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-indigo-400 flex items-center justify-center font-bold text-white text-base shadow-sm">
-                T
-              </div>
+            <div className="px-6 mb-6">
+              <Image src="/logo.png" alt="ResultsPRO Suite Logo" width={200} height={40} className="w-auto h-10 object-contain" priority />
             </div>
 
             <div className="px-6 space-y-1">
