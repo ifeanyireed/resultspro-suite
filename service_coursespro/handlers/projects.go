@@ -28,9 +28,7 @@ func (h *Handler) SubmitProject(c *gin.Context) {
 		return
 	}
 
-	tenantID, _ := c.Get("tenant_id")
 	sub := models.ProjectSubmission{
-		TenantID:     tenantID.(string),
 		ID:           uuid.New().String(),
 		CohortID:     input.CohortID,
 		StageNumber:  input.StageNumber,

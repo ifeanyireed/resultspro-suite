@@ -50,9 +50,7 @@ func (h *Handler) UpdateModuleProgress(c *gin.Context) {
 
 	now := time.Now()
 	if err != nil {
-		tenantID, _ := c.Get("tenant_id")
 		progress = models.ModuleProgress{
-			TenantID:         tenantID.(string),
 			ID:               uuid.New().String(),
 			UserID:           userID.(string),
 			ModuleID:         moduleID,

@@ -38,22 +38,20 @@ func (h *Handler) PresenceHeartbeat(c *gin.Context) {
 
 	now := time.Now()
 	if err != nil {
-		tenantID, _ := c.Get("tenant_id")
 		session = models.PresenceSession{
-			TenantID:      tenantID.(string),
 			ID:            uuid.New().String(),
 			UserID:        userID.(string),
 			RoomName:      input.RoomName,
 			Activity:      input.Activity,
 			IsActive:      true,
-			LastHeartbeat: now,
+			LastHeartbeat: &now,
 		}
 		db.WithTenant(c).Create(&session)
 	} else {
 		session.RoomName = input.RoomName
 		session.Activity = input.Activity
 		session.IsActive = true
-		session.LastHeartbeat = now
+		session.LastHeartbeat = &now
 		db.WithTenant(c).Save(&session)
 	}
 

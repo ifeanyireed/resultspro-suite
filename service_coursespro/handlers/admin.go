@@ -43,6 +43,11 @@ func (h *Handler) AdminCreateCohort(c *gin.Context) {
 		return
 	}
 
+	var leadMentorID *string
+	if input.LeadMentorID != "" {
+		leadMentorID = &input.LeadMentorID
+	}
+
 	cohort := models.Cohort{
 		TenantID:      tenantID.(string),
 		ID:            uuid.New().String(),
@@ -56,7 +61,7 @@ func (h *Handler) AdminCreateCohort(c *gin.Context) {
 		Capacity:      input.Capacity,
 		Price:         input.Price,
 		Currency:      input.Currency,
-		LeadMentorID:  input.LeadMentorID,
+		LeadMentorID:  leadMentorID,
 		Status:        "DRAFT",
 		CreatedAt:     time.Now(),
 		UpdatedAt:     time.Now(),
@@ -113,7 +118,6 @@ func (h *Handler) AdminCreateProgram(c *gin.Context) {
 }
 
 func (h *Handler) AdminCreateStage(c *gin.Context) {
-	tenantID, _ := c.Get("tenant_id")
 	var input struct {
 		ProgramID   string `json:"program_id" binding:"required"`
 		StageNumber int    `json:"stage_number" binding:"required"`
@@ -147,7 +151,6 @@ func (h *Handler) AdminCreateStage(c *gin.Context) {
 }
 
 func (h *Handler) AdminCreateModule(c *gin.Context) {
-	tenantID, _ := c.Get("tenant_id")
 	var input struct {
 		StageID         string `json:"stage_id" binding:"required"`
 		Title           string `json:"title" binding:"required"`
