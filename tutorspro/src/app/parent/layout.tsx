@@ -53,8 +53,8 @@ export default function ParentLayout({
       sidebarContent={
         <>
           <div>
-            <div className="px-6 mb-6">
-              <Image src="/logo.png" alt="ResultsPRO Suite Logo" width={200} height={40} className="w-auto h-10 object-contain" priority />
+            <div className="px-8 mb-6 shrink-0">
+              <Image src="/logo.png" alt="ResultsPRO Suite Logo" width={300} height={80} className="w-auto h-20 object-contain" priority />
             </div>
 
             <div className="px-6 space-y-1">
