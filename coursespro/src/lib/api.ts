@@ -42,8 +42,15 @@ export const coursesApi = axios.create({
 
 coursesApi.interceptors.request.use((config) => {
   const token = typeof window !== 'undefined' ? Cookies.get('token') : null;
+  const domain = typeof window !== 'undefined' ? window.location.hostname : '';
   if (token && config.headers) {
-    config.headers.Authorization = `Bearer ${token}`;
+    if (typeof config.headers.set === 'function') {
+      config.headers.set('Authorization', `Bearer ${token}`);
+      config.headers.set('X-Tenant-Domain', domain);
+    } else {
+      config.headers.Authorization = `Bearer ${token}`;
+      config.headers['X-Tenant-Domain'] = domain;
+    }
   }
   return config;
 });
