@@ -39,7 +39,9 @@ func InitDB() {
 
 	// Auto-migrate CoursesPRO tables
 	_ = DB.AutoMigrate(
+		&models.Program{},
 		&models.Cohort{},
+		&models.CohortMentor{},
 		&models.Enrollment{},
 		&models.JourneyStage{},
 		&models.JourneyModule{},
@@ -52,7 +54,6 @@ func InitDB() {
 
 	log.Println("CoursesPRO connected to MySQL with GORM successfully")
 }
-
 
 // WithTenant safely scopes the GORM DB instance to the current request's Tenant ID
 func WithTenant(c *gin.Context) *gorm.DB {

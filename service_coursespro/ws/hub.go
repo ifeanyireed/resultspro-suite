@@ -105,7 +105,7 @@ func (h *Hub) BroadcastPresence(tenantID string) {
 	}
 
 	message, _ := json.Marshal(map[string]interface{}{
-		"type":    "PRESENCE_UPDATE",
+		"type":         "PRESENCE_UPDATE",
 		"active_users": usersList,
 	})
 

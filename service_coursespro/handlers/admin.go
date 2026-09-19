@@ -12,7 +12,7 @@ import (
 
 func (h *Handler) AdminGetCohorts(c *gin.Context) {
 	var cohorts []models.Cohort
-	db.WithTenant(c).Order("created_at DESC").Find(&cohorts)
+	db.WithTenant(c).Preload("Program").Preload("CohortMentors").Order("created_at DESC").Find(&cohorts)
 	c.JSON(http.StatusOK, gin.H{"cohorts": cohorts})
 }
 
@@ -78,7 +78,7 @@ func (h *Handler) AdminCreateCohort(c *gin.Context) {
 func (h *Handler) AdminGetPrograms(c *gin.Context) {
 	var programs []models.Program
 	db.WithTenant(c).Order("created_at DESC").Find(&programs)
-	
+
 	// Optional: Fetch module and quiz counts per program to match the UI stats
 	// But for now, returning just the programs is fine.
 	c.JSON(http.StatusOK, gin.H{"programs": programs})
@@ -183,4 +183,36 @@ func (h *Handler) AdminCreateModule(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{"module": module})
+}
+
+func (h *Handler) AdminGetCohortStats(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+
+	var totalCohorts int64
+	var distinctPrograms int64
+
+	type CapacityResult struct {
+		TotalEnrolled int64
+		TotalCapacity int64
+	}
+	var capRes CapacityResult
+
+	db.DB.Model(&models.Cohort{}).Where("tenant_id = ? AND status = ?", tenantID, "ACTIVE").Count(&totalCohorts)
+	db.DB.Model(&models.Cohort{}).Where("tenant_id = ? AND status = ?", tenantID, "ACTIVE").Distinct("program_id").Count(&distinctPrograms)
+
+	db.DB.Model(&models.Cohort{}).
+		Select("COALESCE(SUM(enrolled_count), 0) as total_enrolled, COALESCE(SUM(capacity), 0) as total_capacity").
+		Where("tenant_id = ?", tenantID).
+		Scan(&capRes)
+
+	fillRate := 0.0
+	if capRes.TotalCapacity > 0 {
+		fillRate = (float64(capRes.TotalEnrolled) / float64(capRes.TotalCapacity)) * 100.0
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"active_cohorts":  totalCohorts,
+		"active_programs": distinctPrograms,
+		"fill_rate":       fillRate,
+	})
 }

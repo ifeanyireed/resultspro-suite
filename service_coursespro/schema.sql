@@ -55,6 +55,16 @@ CREATE INDEX IF NOT EXISTS idx_cohorts_tenant ON crs_cohorts(tenant_id);
 CREATE INDEX IF NOT EXISTS idx_cohorts_mentor ON crs_cohorts(lead_mentor_id);
 CREATE INDEX IF NOT EXISTS idx_cohorts_program ON crs_cohorts(program_id);
 
+CREATE TABLE IF NOT EXISTS crs_cohort_mentors (
+    cohort_id VARCHAR(64) REFERENCES crs_cohorts(id) ON DELETE CASCADE,
+    user_id VARCHAR(64) NOT NULL,
+    role VARCHAR(32) DEFAULT 'MENTOR',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (cohort_id, user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_cohort_mentors_user ON crs_cohort_mentors(user_id);
+
+
 -- 2. Enrollments
 CREATE TABLE IF NOT EXISTS crs_enrollments (
     id VARCHAR(64) PRIMARY KEY,

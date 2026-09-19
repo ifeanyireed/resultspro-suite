@@ -36,22 +36,33 @@ type Cohort struct {
 	Status        string    `gorm:"size:32;default:'ENROLLING'" json:"status"`
 	CreatedAt     time.Time `json:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at"`
+
+	Program       *Program       `gorm:"foreignKey:ProgramID" json:"program,omitempty"`
+	CohortMentors []CohortMentor `gorm:"foreignKey:CohortID" json:"cohort_mentors,omitempty"`
+}
+
+// CohortMentor
+type CohortMentor struct {
+	CohortID  string    `gorm:"primaryKey;size:64;not null" json:"cohort_id"`
+	UserID    string    `gorm:"primaryKey;size:64;not null" json:"user_id"`
+	Role      string    `gorm:"size:32;default:'MENTOR'" json:"role"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 // Enrollment
 type Enrollment struct {
-	ID                 string    `gorm:"primaryKey;size:64" json:"id"`
-	CohortID           string    `gorm:"size:64;index;not null" json:"cohort_id"`
-	UserID             string    `gorm:"size:64;index;not null" json:"user_id"`
-	PlanType           string    `gorm:"size:32;default:'STANDARD'" json:"plan_type"`
-	PaymentStatus      string    `gorm:"size:32;default:'PAID'" json:"payment_status"`
-	CurrentStageNumber int       `gorm:"default:1" json:"current_stage_number"`
-	CurrentXP          int       `gorm:"default:0" json:"current_xp"`
-	StreakDays         int       `gorm:"default:0" json:"streak_days"`
+	ID                 string     `gorm:"primaryKey;size:64" json:"id"`
+	CohortID           string     `gorm:"size:64;index;not null" json:"cohort_id"`
+	UserID             string     `gorm:"size:64;index;not null" json:"user_id"`
+	PlanType           string     `gorm:"size:32;default:'STANDARD'" json:"plan_type"`
+	PaymentStatus      string     `gorm:"size:32;default:'PAID'" json:"payment_status"`
+	CurrentStageNumber int        `gorm:"default:1" json:"current_stage_number"`
+	CurrentXP          int        `gorm:"default:0" json:"current_xp"`
+	StreakDays         int        `gorm:"default:0" json:"streak_days"`
 	LastActiveDate     *time.Time `json:"last_active_date"`
-	Status             string    `gorm:"size:32;default:'ACTIVE'" json:"status"`
-	EnrolledAt         time.Time `json:"enrolled_at"`
-	UpdatedAt          time.Time `json:"updated_at"`
+	Status             string     `gorm:"size:32;default:'ACTIVE'" json:"status"`
+	EnrolledAt         time.Time  `json:"enrolled_at"`
+	UpdatedAt          time.Time  `json:"updated_at"`
 }
 
 // Journey Stage (Linked to Program)
@@ -192,16 +203,17 @@ type AIJob struct {
 	UpdatedAt  time.Time `json:"updated_at"`
 }
 
-func (Program) TableName() string { return "crs_programs" }
-func (Cohort) TableName() string { return "crs_cohorts" }
-func (Enrollment) TableName() string { return "crs_enrollments" }
-func (JourneyStage) TableName() string { return "crs_journey_stages" }
-func (JourneyModule) TableName() string { return "crs_journey_modules" }
-func (ModuleProgress) TableName() string { return "crs_module_progress" }
+func (Program) TableName() string           { return "crs_programs" }
+func (Cohort) TableName() string            { return "crs_cohorts" }
+func (Enrollment) TableName() string        { return "crs_enrollments" }
+func (JourneyStage) TableName() string      { return "crs_journey_stages" }
+func (JourneyModule) TableName() string     { return "crs_journey_modules" }
+func (ModuleProgress) TableName() string    { return "crs_module_progress" }
 func (ProjectSubmission) TableName() string { return "crs_project_submissions" }
-func (PeerPairing) TableName() string { return "crs_peer_pairings" }
-func (PresenceSession) TableName() string { return "crs_presence_sessions" }
-func (PublicPortfolio) TableName() string { return "crs_public_portfolios" }
-func (Quiz) TableName() string { return "crs_quizzes" }
-func (QuizQuestion) TableName() string { return "crs_quiz_questions" }
-func (AIJob) TableName() string { return "crs_ai_jobs" }
+func (PeerPairing) TableName() string       { return "crs_peer_pairings" }
+func (PresenceSession) TableName() string   { return "crs_presence_sessions" }
+func (PublicPortfolio) TableName() string   { return "crs_public_portfolios" }
+func (Quiz) TableName() string              { return "crs_quizzes" }
+func (QuizQuestion) TableName() string      { return "crs_quiz_questions" }
+func (AIJob) TableName() string             { return "crs_ai_jobs" }
+func (CohortMentor) TableName() string      { return "crs_cohort_mentors" }

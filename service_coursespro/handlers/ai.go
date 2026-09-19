@@ -17,7 +17,7 @@ import (
 // GenerateQuiz uses Gemini to read a module's markdown and generate a JSON quiz
 func (h *Handler) GenerateQuiz(c *gin.Context) {
 	moduleID := c.Param("moduleId")
-	
+
 	var module models.JourneyModule
 	if err := db.WithTenant(c).First(&module, "id = ?", moduleID).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Module not found"})
@@ -45,7 +45,7 @@ func (h *Handler) GenerateQuiz(c *gin.Context) {
 
 	model := client.GenerativeModel("gemini-1.5-flash")
 	model.ResponseMIMEType = "application/json"
-	
+
 	prompt := `
 You are an expert educator. Read the following lesson markdown and generate a 3-question multiple choice quiz.
 Return ONLY a JSON array of objects with the following schema:
@@ -115,7 +115,7 @@ func (h *Handler) GenerateQuizPreview(c *gin.Context) {
 
 	model := client.GenerativeModel("gemini-1.5-flash")
 	model.ResponseMIMEType = "application/json"
-	
+
 	prompt := `
 You are an expert educator. Read the following lesson markdown and generate a 3-question multiple choice quiz.
 Return ONLY a JSON array of objects with the following schema:
