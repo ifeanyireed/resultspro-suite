@@ -1,7 +1,7 @@
 "use client";
 
 import api from '@/lib/api';
-import { IconCamera as Camera, IconUser as User, IconBook as BookOpen, IconBolt as Zap, IconGlobe as Globe, IconDollarSign as DollarSign, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconPlus as Plus, IconTrash2 as Trash2, IconDeviceFloppy as Save, IconCheck as Check, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconCamera as Camera, IconUser as User, IconBook as BookOpen, IconBolt as Zap, IconGlobe as Globe, IconDollarSign as DollarSign, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconPlus as Plus, IconTrash as Trash2, IconDeviceFloppy as Save, IconCheck as Check, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { toast } from 'react-hot-toast';

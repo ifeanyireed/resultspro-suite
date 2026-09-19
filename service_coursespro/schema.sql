@@ -3,6 +3,20 @@
 -- Microservice: service_coursespro
 -- =====================================================================
 
+DROP TABLE IF EXISTS crs_ai_jobs CASCADE;
+DROP TABLE IF EXISTS crs_quiz_questions CASCADE;
+DROP TABLE IF EXISTS crs_quizzes CASCADE;
+DROP TABLE IF EXISTS crs_public_portfolios CASCADE;
+DROP TABLE IF EXISTS crs_presence_sessions CASCADE;
+DROP TABLE IF EXISTS crs_peer_pairings CASCADE;
+DROP TABLE IF EXISTS crs_project_submissions CASCADE;
+DROP TABLE IF EXISTS crs_module_progress CASCADE;
+DROP TABLE IF EXISTS crs_journey_modules CASCADE;
+DROP TABLE IF EXISTS crs_journey_stages CASCADE;
+DROP TABLE IF EXISTS crs_enrollments CASCADE;
+DROP TABLE IF EXISTS crs_cohorts CASCADE;
+DROP TABLE IF EXISTS crs_programs CASCADE;
+
 -- 0. Programs (Curriculum Templates)
 CREATE TABLE IF NOT EXISTS crs_programs (
     id VARCHAR(64) PRIMARY KEY,
