@@ -27,8 +27,8 @@ export default function StudentClasses() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-navy flex items-center justify-center">
-         <Loader2 className="w-12 h-12 text-blue animate-spin" />
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
+         <Loader2 className="w-12 h-12 text-[#146ef5] animate-spin" />
       </main>
     );
   }
@@ -38,100 +38,100 @@ export default function StudentClasses() {
 
   return (
     <RoleGate allowedRoles={['STUDENT', 'TUTOR', 'SCHOOL_ADMIN', 'SUPERADMIN']}>
-      <main className="min-h-screen bg-navy pb-24">
+      <main className="min-h-screen bg-gray-50 pb-24">
                 
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-          <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-12">
-             My <span className="text-blue">Schedule</span>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-8">
+             My Schedule
           </h1>
 
           {/* Weekly Calendar Strip */}
-          <div className="flex justify-between items-center mb-12 p-6 rounded-3xl bg-white/5 border border-white/10 overflow-x-auto gap-4 scrollbar-hide">
+          <div className="flex justify-between items-center mb-8 p-6 rounded-[1.5rem] bg-white border border-gray-100 shadow-sm overflow-x-auto gap-4 scrollbar-hide">
              {weekDays.map((day, i) => (
-               <div key={day} className={`flex flex-col items-center min-w-[60px] p-4 rounded-2xl transition-all ${
-                 i === currentDay ? 'bg-blue text-white' : 'text-gray-500 hover:text-white hover:bg-white/5'
+               <div key={day} className={`flex flex-col items-center min-w-[60px] p-4 rounded-xl transition-all ${
+                 i === currentDay ? 'bg-[#146ef5] text-white shadow-md shadow-[#146ef5]/20' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
                }`}>
                   <span className="text-[10px] uppercase font-bold tracking-widest mb-1">{day}</span>
-                  <span className="text-xl font-display font-bold">{new Date().getDate() + (i - currentDay)}</span>
+                  <span className="text-xl font-bold">{new Date().getDate() + (i - currentDay)}</span>
                   {i === currentDay && <div className="w-1 h-1 rounded-full bg-white mt-2" />}
                </div>
              ))}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
              {/* Classes List */}
-             <div className="lg:col-span-2 space-y-6">
-                <h2 className="text-2xl font-display font-bold text-white mb-6">Upcoming Sessions</h2>
+             <div className="lg:col-span-2 space-y-4">
+                <h2 className="text-xl font-normal text-gray-900 mb-4">Upcoming Sessions</h2>
                 {classes.length > 0 ? classes.map((cls: any) => (
-                  <div key={cls.id} className="p-8 rounded-[32px] bg-white/[0.02] border border-white/10 hover:bg-white/[0.05] transition-all group">
-                     <div className="flex flex-col md:flex-row justify-between gap-8">
-                        <div className="flex gap-6">
-                           <div className="w-16 h-16 rounded-2xl bg-blue/20 flex items-center justify-center text-blue shrink-0">
-                              <BookOpen className="w-8 h-8" />
+                  <div key={cls.id} className="p-6 rounded-[1.5rem] bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all group">
+                     <div className="flex flex-col md:flex-row justify-between gap-6">
+                        <div className="flex gap-4">
+                           <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center text-[#146ef5] shrink-0">
+                              <BookOpen className="w-6 h-6" />
                            </div>
                            <div>
                               <div className="flex items-center gap-3 mb-1">
-                                 <h3 className="text-xl font-bold text-white">{cls.subject}</h3>
-                                 <span className={`px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-widest ${
-                                   cls.status === 'Live' ? 'bg-green/10 text-green animate-pulse' : 'bg-white/5 text-gray-500'
+                                 <h3 className="text-lg font-semibold text-gray-900">{cls.subject}</h3>
+                                 <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-widest ${
+                                   cls.status === 'Live' ? 'bg-emerald-50 text-emerald-600 animate-pulse' : 'bg-gray-100 text-gray-500'
                                  }`}>
                                    {cls.status}
                                  </span>
                               </div>
-                              <div className="text-sm text-gray-400 mb-4">Tutor: {cls.tutor} • {cls.type}</div>
+                              <div className="text-sm text-gray-500 mb-3">Tutor: <span className="font-medium text-gray-700">{cls.tutor}</span> • {cls.type}</div>
                               <div className="flex flex-wrap gap-4 text-xs text-gray-500">
-                                 <div className="flex items-center gap-2">
-                                    <Clock className="w-3 h-3 text-amber" /> {cls.time}
+                                 <div className="flex items-center gap-1.5">
+                                    <Clock className="w-4 h-4 text-amber-500" /> {cls.time}
                                  </div>
-                                 <div className="flex items-center gap-2">
-                                    <Video className="w-3 h-3 text-blue" /> HD Interactive Room
+                                 <div className="flex items-center gap-1.5">
+                                    <Video className="w-4 h-4 text-[#146ef5]" /> HD Interactive Room
                                  </div>
                               </div>
                            </div>
                         </div>
                         <div className="flex items-center">
-                           <button className={`w-full md:w-auto px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
-                             cls.status === 'Live' ? 'bg-green-600 text-white hover:shadow-[0_0_20px_rgba(0,200,83,0.4)]' : 'bg-white/5 text-gray-500 border border-white/10'
+                           <button className={`w-full md:w-auto px-6 py-3 rounded-full text-sm font-semibold flex items-center justify-center gap-2 transition-all ${
+                             cls.status === 'Live' ? 'bg-[#146ef5] text-white hover:bg-[#105bd1] shadow-sm shadow-[#146ef5]/20' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
                            }`}>
-                              <Play className="w-4 h-4 fill-current" />
+                              <Play className="w-4 h-4" />
                               {cls.status === 'Live' ? 'Join Now' : 'Enter Room'}
                            </button>
                         </div>
                      </div>
                   </div>
                 )) : (
-                  <div className="p-16 rounded-[40px] bg-white/5 border border-dashed border-white/10 text-center">
-                     <p className="text-gray-500 font-bold uppercase tracking-widest text-sm">No upcoming sessions found</p>
+                  <div className="p-12 rounded-[1.5rem] bg-white border border-dashed border-gray-200 text-center flex items-center justify-center">
+                     <p className="text-gray-500 font-medium text-sm">No upcoming sessions found</p>
                   </div>
                 )}
              </div>
 
              {/* Quick Actions / Sidebar */}
              <div className="space-y-6">
-                <section className="p-8 rounded-[40px] bg-white/[0.02] border border-white/5">
-                   <h3 className="text-xl font-display font-bold text-white mb-6">Learning Goal</h3>
+                <section className="p-6 rounded-[1.5rem] bg-white border border-gray-100 shadow-sm">
+                   <h3 className="text-xl font-normal text-gray-900 mb-6">Learning Goal</h3>
                    <div className="flex items-end gap-2 mb-2">
-                      <span className="text-4xl font-black text-white">{goals.current} / {goals.total}</span>
+                      <span className="text-4xl font-light tracking-tight text-gray-900">{goals.current} / {goals.total}</span>
                       <span className="text-xs text-gray-500 mb-1 uppercase font-bold tracking-widest">Sessions</span>
                    </div>
-                   <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden mb-6">
-                      <div className="h-full bg-blue rounded-full" style={{ width: `${(goals.current / goals.total) * 100}%` }} />
+                   <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden mb-6">
+                      <div className="h-full bg-[#146ef5] rounded-full" style={{ width: `${(goals.current / goals.total) * 100}%` }} />
                    </div>
                    <p className="text-sm text-gray-500 leading-relaxed mb-6">
-                      You are {goals.total - goals.current} sessions away from your weekly goal. Keep going!
+                      You are <span className="font-medium text-gray-700">{goals.total - goals.current} sessions</span> away from your weekly goal. Keep going!
                    </p>
-                   <button className="w-full py-4 rounded-xl border border-white/10 text-white font-bold text-xs hover:bg-white/5 transition-all">
+                   <button className="w-full py-3 rounded-full border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50 transition-all">
                       Edit Goals
                    </button>
                 </section>
 
-                <section className="p-6 rounded-3xl bg-gradient-to-br from-amber/20 to-transparent border border-white/10">
-                   <h4 className="text-sm font-bold text-white mb-4">Next Up</h4>
-                   <div className="p-4 rounded-2xl bg-navy/50 border border-white/5">
-                      <div className="text-white font-bold text-xs mb-1">
+                <section className="p-6 rounded-[1.5rem] bg-gradient-to-br from-amber-50 to-orange-50/20 border border-orange-100 shadow-sm">
+                   <h4 className="text-sm font-semibold text-gray-900 mb-4">Next Up</h4>
+                   <div className="p-4 rounded-xl bg-white border border-orange-100 shadow-sm">
+                      <div className="text-gray-900 font-semibold text-sm mb-1">
                          {classes.length > 0 ? classes[0].subject : 'No session soon'}
                       </div>
-                      <div className="text-[10px] text-gray-500">
+                      <div className="text-xs text-gray-500">
                          {classes.length > 0 ? `Starts at ${classes[0].time}` : 'Check back later'}
                       </div>
                    </div>
