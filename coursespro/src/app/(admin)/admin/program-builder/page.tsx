@@ -7,6 +7,7 @@ import {
   DocumentDuplicateIcon,
   ArrowUpRightIcon
 } from '@heroicons/react/24/outline';
+import api from '@/lib/api';
 
 export default function ProgramBuilderPage() {
   return (
@@ -90,22 +91,16 @@ export default function ProgramBuilderPage() {
                  const btn = document.getElementById('genBtn') as HTMLButtonElement;
                  btn.innerText = 'Generating...';
                  try {
-                   // Mock endpoint invocation for now, in reality calls our Go /ai/modules/:id/generate-quiz
                    const txt = (document.getElementById('markdownInput') as HTMLTextAreaElement).value;
                    if (!txt) { alert("Paste some markdown first"); btn.innerText = 'Generate with Gemini'; return; }
                    
-                   // Simulate Go API delay
-                   setTimeout(() => {
-                     (document.getElementById('jsonOutput') as HTMLTextAreaElement).value = JSON.stringify([
-                        {
-                          "question": "What is the primary purpose of this lesson?",
-                          "options": ["Option A", "Option B", "Option C", "Option D"],
-                          "correct_index": 1
-                        }
-                     ], null, 2);
-                     btn.innerText = 'Generate with Gemini';
-                   }, 2000);
+                   const res = await api.post('/api/admin/ai/generate-quiz-preview', { content: txt });
+                   (document.getElementById('jsonOutput') as HTMLTextAreaElement).value = JSON.stringify(res.data.quiz, null, 2);
+                   
+                   btn.innerText = 'Generate with Gemini';
                  } catch (e) {
+                   console.error("Failed to generate quiz:", e);
+                   alert("Failed to generate quiz. Make sure the Go backend is running and GEMINI_API_KEY is set.");
                    btn.innerText = 'Generate with Gemini';
                  }
                }}

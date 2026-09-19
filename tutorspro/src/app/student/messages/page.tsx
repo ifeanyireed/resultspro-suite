@@ -1,6 +1,6 @@
 "use client";
 
-import { IconSend as Send, IconPaperclip as Paperclip, IconSearch as Search, IconMoreVertical as MoreVertical, IconPhone as Phone, IconVideo as Video, IconInfoCircle as Info, IconChevronLeft as ChevronLeft, IconChecks as CheckCheck, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconSend as Send, IconPaperclip as Paperclip, IconSearch as Search, IconDotsVertical as MoreVertical, IconPhone as Phone, IconVideo as Video, IconInfoCircle as Info, IconChevronLeft as ChevronLeft, IconChecks as CheckCheck, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';

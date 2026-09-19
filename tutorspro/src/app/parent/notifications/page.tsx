@@ -1,7 +1,7 @@
 "use client";
 
 import api from '@/lib/api';
-import { IconBell as Bell, IconCalendar as Calendar, IconCreditCard as CreditCard, IconMessage as MessageSquare, IconTrophy as Trophy, IconSettings as Settings, IconChevronRight as ChevronRight, IconMoreVertical as MoreVertical, IconCheck as Check, IconLoader2 as Loader2, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
+import { IconBell as Bell, IconCalendar as Calendar, IconCreditCard as CreditCard, IconMessage as MessageSquare, IconTrophy as Trophy, IconSettings as Settings, IconChevronRight as ChevronRight, IconDotsVertical as MoreVertical, IconCheck as Check, IconLoader2 as Loader2, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
