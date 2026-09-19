@@ -15,7 +15,8 @@ export function middleware(req: NextRequest) {
     hostname === 'coursespro.localhost' ||
     hostname === 'resultspro.ng' ||
     hostname === 'coursespro.resultspro.ng' ||
-    (hostname.endsWith('.onrender.com') && hostname.split('.').length === 3);
+    (hostname.endsWith('.onrender.com') && hostname.split('.').length === 3) ||
+    (hostname.endsWith('.vercel.app') && hostname.split('.').length === 3);
 
   // Skip api, next internal, and static files
   if (url.pathname.startsWith('/api') || url.pathname.startsWith('/_next') || url.pathname.includes('.')) {
