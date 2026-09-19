@@ -13,12 +13,16 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = typeof window !== 'undefined' ? Cookies.get('token') : null;
-  if (token && config.headers) {
+  console.log('[usersApi Interceptor] URL:', config.url, 'Token found:', !!token);
+  if (token) {
+    config.headers = config.headers || {};
     if (typeof config.headers.set === 'function') {
       config.headers.set('Authorization', `Bearer ${token}`);
     } else {
       config.headers.Authorization = `Bearer ${token}`;
     }
+  } else {
+    console.warn('[usersApi Interceptor] No token found in cookies!');
   }
   return config;
 });
@@ -50,14 +54,21 @@ coursesApi.interceptors.request.use((config) => {
   const token = cookieToken;
   
   const domain = typeof window !== 'undefined' ? window.location.hostname : '';
-  if (token && config.headers) {
+  console.log('[coursesApi Interceptor] URL:', config.url, 'Token found:', !!token);
+  
+  if (token) {
+    config.headers = config.headers || {};
     if (typeof config.headers.set === 'function') {
       config.headers.set('Authorization', `Bearer ${token}`);
       config.headers.set('X-Tenant-Domain', domain);
+      console.log('[coursesApi Interceptor] Headers set using .set()');
     } else {
       config.headers.Authorization = `Bearer ${token}`;
       config.headers['X-Tenant-Domain'] = domain;
+      console.log('[coursesApi Interceptor] Headers set using assignment');
     }
+  } else {
+    console.warn('[coursesApi Interceptor] No token found in cookies!');
   }
   return config;
 });

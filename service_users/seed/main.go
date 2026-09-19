@@ -75,9 +75,9 @@ func main() {
 	seed(db, "INSERT INTO curriculums (id, name, country) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", "cur-2", "British National Curriculum (Cambridge)", "United Kingdom")
 
 	// 4. Sample Tenant: Greenwood High
-	seed(db, `INSERT INTO tenants (id, name, slug, tenant_code, short_name, motto, logo_url, primary_color, secondary_color, accent_color, contact_email, full_address, status, verification_status, referred_by_agent_id, subscription_tier, settings) 
-	          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 'ACTIVE', 'VERIFIED', $13, 'PRO', $14) ON CONFLICT DO NOTHING`,
-		"tenant-1", "Greenwood High", "greenwood-high", "GHS001", "GHS", "Excellence and Integrity",
+	seed(db, `INSERT INTO tenants (id, name, slug, default_subdomain, tenant_code, short_name, motto, logo_url, primary_color, secondary_color, accent_color, contact_email, full_address, status, verification_status, referred_by_agent_id, subscription_tier, settings) 
+	          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 'ACTIVE', 'VERIFIED', $14, 'PRO', $15) ON CONFLICT DO NOTHING`,
+		"tenant-1", "Greenwood High", "greenwood-high", "greenwood", "GHS001", "GHS", "Excellence and Integrity",
 		"https://auth.resultspro.ng/logos/greenwood.png", "#2563eb", "#1e293b", "#f59e0b",
 		"info@greenwoodhigh.edu.ng", "123 Academic Way, Owerri, Imo State",
 		"999efa7d-e12d-4ed1-9902-d341c6826b99",
@@ -103,16 +103,16 @@ func main() {
 	seed(db, "INSERT INTO sections (id, class_id, name, room_number) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "section-2", "class-1", "10B (Arts)", "Room 102")
 
 	// 8. Subjects
-	seed(db, "INSERT INTO subjects (id, tenant_id, name, code) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "subject-1", "tenant-1", "Mathematics", "MTH101")
-	seed(db, "INSERT INTO subjects (id, tenant_id, name, code) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "subject-2", "tenant-1", "English Language", "ENG101")
-	seed(db, "INSERT INTO subjects (id, tenant_id, name, code) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "subject-3", "tenant-1", "Physics", "PHY101")
-	seed(db, "INSERT INTO subjects (id, tenant_id, name, code) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "subject-4", "tenant-1", "Chemistry", "CHM101")
+	seed(db, "INSERT INTO usr_subjects (id, tenant_id, name, code) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "subject-1", "tenant-1", "Mathematics", "MTH101")
+	seed(db, "INSERT INTO usr_subjects (id, tenant_id, name, code) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "subject-2", "tenant-1", "English Language", "ENG101")
+	seed(db, "INSERT INTO usr_subjects (id, tenant_id, name, code) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "subject-3", "tenant-1", "Physics", "PHY101")
+	seed(db, "INSERT INTO usr_subjects (id, tenant_id, name, code) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "subject-4", "tenant-1", "Chemistry", "CHM101")
 
 	// 9. Syllabus Weeks & Topics
 	seed(db, "INSERT INTO syllabus_weeks (id, subject_id, week_number, term) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "week-1", "subject-1", 1, 1)
 	seed(db, "INSERT INTO syllabus_weeks (id, subject_id, week_number, term) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING", "week-2", "subject-1", 2, 1)
-	seed(db, "INSERT INTO topics (id, syllabus_week_id, name, description, \"order\") VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "topic-1", "week-1", "Quadratic Equations", "Solving quadratics by factorisation and formula", 1)
-	seed(db, "INSERT INTO topics (id, syllabus_week_id, name, description, \"order\") VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "topic-2", "week-2", "Simultaneous Equations", "Linear and non-linear simultaneous equations", 1)
+	seed(db, "INSERT INTO usr_topics (id, syllabus_week_id, name, description, \"order\") VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "topic-1", "week-1", "Quadratic Equations", "Solving quadratics by factorisation and formula", 1)
+	seed(db, "INSERT INTO usr_topics (id, syllabus_week_id, name, description, \"order\") VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "topic-2", "week-2", "Simultaneous Equations", "Linear and non-linear simultaneous equations", 1)
 
 	// 10. Enrollments & Assignments
 	seed(db, "INSERT INTO enrollments (id, student_id, section_id, session_id, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING",
