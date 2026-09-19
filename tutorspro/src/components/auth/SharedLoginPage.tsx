@@ -47,7 +47,16 @@ export default function SharedLoginPage({
       if (token) {
         setAuth(res.data.user, token);
         toast.success("Login successful!");
-        router.push(redirectPath);
+        
+        let targetPath = redirectPath;
+        if (res.data.user?.roles) {
+          const roles = res.data.user.roles;
+          if (roles.includes("TUTOR")) targetPath = "/tutor";
+          else if (roles.includes("STUDENT")) targetPath = "/student";
+          else if (roles.includes("PARENT")) targetPath = "/parent";
+        }
+        
+        router.push(targetPath);
       } else {
         toast.error("No token received from server");
       }

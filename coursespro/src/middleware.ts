@@ -11,8 +11,6 @@ export function middleware(req: NextRequest) {
   
   // Determine if this is the main platform domain
   const isPlatform = 
-    hostname === 'localhost' || 
-    hostname === 'coursespro.localhost' ||
     hostname === 'resultspro.ng' ||
     hostname === 'coursespro.resultspro.ng' ||
     (hostname.endsWith('.onrender.com') && hostname.split('.').length === 3) ||

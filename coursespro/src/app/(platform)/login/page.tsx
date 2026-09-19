@@ -40,12 +40,9 @@ export default function LoginPage() {
           const protocol = window.location.protocol;
           const host = window.location.host; // includes port
           // Replace base domain if they are already on a subdomain
-          const isLocal = host.includes('localhost');
           let baseHost = host;
-          if (!isLocal && host.split('.').length > 2) {
+          if (host.split('.').length > 2) {
              baseHost = host.split('.').slice(-2).join('.');
-          } else if (isLocal && host.split('.').length > 1 && !host.startsWith('localhost:')) {
-             baseHost = host.split('.').slice(1).join('.');
           }
           window.location.href = `${protocol}//${slug}.${baseHost}/admin`;
         } else {
