@@ -14,7 +14,11 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   const token = typeof window !== 'undefined' ? Cookies.get('token') : null;
   if (token && config.headers) {
-    config.headers.Authorization = `Bearer ${token}`;
+    if (typeof config.headers.set === 'function') {
+      config.headers.set('Authorization', `Bearer ${token}`);
+    } else {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
 });
@@ -31,6 +35,7 @@ api.interceptors.response.use(
   }
 );
 
+
 export const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
 
 export const coursesApi = axios.create({
@@ -41,7 +46,9 @@ export const coursesApi = axios.create({
 });
 
 coursesApi.interceptors.request.use((config) => {
-  const token = typeof window !== 'undefined' ? Cookies.get('token') : null;
+  const cookieToken = typeof window !== 'undefined' ? Cookies.get('token') : null;
+  const token = cookieToken;
+  
   const domain = typeof window !== 'undefined' ? window.location.hostname : '';
   if (token && config.headers) {
     if (typeof config.headers.set === 'function') {
