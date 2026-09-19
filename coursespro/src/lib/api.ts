@@ -39,6 +39,7 @@ api.interceptors.response.use(
         const rootDomain = platformDomain === 'localhost' ? 'localhost' : `.${platformDomain}`;
         Cookies.remove('token', { domain: rootDomain, path: '/' });
         Cookies.remove('token');
+        localStorage.removeItem('token');
       }
     }
     return Promise.reject(error);
@@ -56,7 +57,10 @@ export const coursesApi = axios.create({
 });
 
 coursesApi.interceptors.request.use((config) => {
-  const token = typeof window !== 'undefined' ? Cookies.get('token') : null;
+  let token = null;
+  if (typeof window !== 'undefined') {
+    token = Cookies.get('token') || localStorage.getItem('token');
+  }
   const domain = typeof window !== 'undefined' ? window.location.hostname : '';
   
   if (token) {
@@ -83,6 +87,7 @@ coursesApi.interceptors.response.use(
         const rootDomain = platformDomain === 'localhost' ? 'localhost' : `.${platformDomain}`;
         Cookies.remove('token', { domain: rootDomain, path: '/' });
         Cookies.remove('token');
+        localStorage.removeItem('token');
       }
     }
     return Promise.reject(error);
