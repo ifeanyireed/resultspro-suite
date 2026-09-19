@@ -15,6 +15,9 @@ api.interceptors.request.use((config) => {
   let token = null;
   if (typeof window !== 'undefined') {
     token = Cookies.get('token') || localStorage.getItem('token');
+    console.log(`[usersApi] Running on ${window.location.href}`);
+    console.log(`[usersApi] localStorage token: ${localStorage.getItem('token') ? 'EXISTS' : 'NULL'}`);
+    console.log(`[usersApi] cookies token: ${Cookies.get('token') ? 'EXISTS' : 'NULL'}`);
   }
   const domain = typeof window !== 'undefined' ? window.location.hostname : '';
   console.log('[usersApi Interceptor] URL:', config.url, 'Token found:', !!token);
@@ -65,6 +68,9 @@ coursesApi.interceptors.request.use((config) => {
   let token = null;
   if (typeof window !== 'undefined') {
     token = Cookies.get('token') || localStorage.getItem('token');
+    console.log(`[coursesApi] Running on ${window.location.href}`);
+    console.log(`[coursesApi] localStorage token: ${localStorage.getItem('token') ? 'EXISTS' : 'NULL'}`);
+    console.log(`[coursesApi] cookies token: ${Cookies.get('token') ? 'EXISTS' : 'NULL'}`);
   }
   
   const domain = typeof window !== 'undefined' ? window.location.hostname : '';
