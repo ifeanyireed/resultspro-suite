@@ -84,6 +84,14 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
 
   const isActive = (href: string) => pathname.startsWith(href) && href !== '/';
 
+  const getDashboardUrl = () => {
+    if (!user) return '/login';
+    const role = user.role || '';
+    if (user.isAdmin || role.includes('admin') || role === 'superadmin') return '/admin';
+    if (role === 'mentor') return '/mentor';
+    return '/dashboard';
+  };
+
   return (
     <>
       <div aria-hidden style={{ height: '72px', width: '100%', flexShrink: 0, display: 'block' }} />
