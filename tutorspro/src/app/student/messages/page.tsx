@@ -19,8 +19,8 @@ export default function StudentMessages() {
       try {
         const res = await api.get('/student/conversations').catch(() => ({ 
           data: [
-            { id: "c1", name: "Sarah Jenkins", avatarUrl: "/avatars/character1.jpg", lastMsg: "I'll see you in class tomorrow!", time: "10:45 AM", unread: 2, online: true },
-            { id: "c2", name: "Prof. Smith", avatarUrl: "/avatars/character2.jpg", lastMsg: "Your assignment looks great.", time: "Yesterday", unread: 0, online: false }
+            { id: "c1", name: "Sarah Jenkins", lastMsg: "I'll see you in class tomorrow!", time: "10:45 AM", unread: 2, online: true },
+            { id: "c2", name: "Prof. Smith", lastMsg: "Your assignment looks great.", time: "Yesterday", unread: 0, online: false }
           ] 
         }));
         setContacts(res.data || []);
@@ -95,7 +95,7 @@ export default function StudentMessages() {
                 >
                   <div className="relative shrink-0">
                     <img 
-                      src={contact.avatarUrl || "/avatars/character1.jpg"} 
+                      src={contact.avatarUrl || `/avatars/character${(contact.name.length % 20) + 1}.jpg`} 
                       alt={contact.name} 
                       className="w-12 h-12 rounded-full object-cover shadow-sm" 
                     />
@@ -138,7 +138,7 @@ export default function StudentMessages() {
                          <ChevronLeft className="w-6 h-6" />
                        </button>
                        <img 
-                         src={activeContact.avatarUrl || "/avatars/character1.jpg"} 
+                         src={activeContact.avatarUrl || `/avatars/character${(activeContact.name.length % 20) + 1}.jpg`} 
                          alt={activeContact.name} 
                          className="w-11 h-11 rounded-full object-cover shadow-sm" 
                        />

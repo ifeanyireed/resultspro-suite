@@ -7,7 +7,7 @@ import {
   DocumentDuplicateIcon,
   ArrowUpRightIcon
 } from '@heroicons/react/24/outline';
-import api from '@/lib/api';
+import { coursesApi } from '@/lib/api';
 
 export default function ProgramBuilderPage() {
   const [programs, setPrograms] = React.useState<any[]>([]);
@@ -16,7 +16,7 @@ export default function ProgramBuilderPage() {
 
   const fetchPrograms = async () => {
     try {
-      const res = await api.get('/api/admin/programs');
+      const res = await coursesApi.get('/api/admin/programs');
       setPrograms(res.data.programs || []);
     } catch (e) {
       console.error(e);
@@ -35,7 +35,7 @@ export default function ProgramBuilderPage() {
     
     setCreating(true);
     try {
-      await api.post('/api/admin/programs', {
+      await coursesApi.post('/api/admin/programs', {
         title,
         description: "New authored journey",
         duration_weeks: 12,
@@ -113,22 +113,22 @@ export default function ProgramBuilderPage() {
                 <DocumentDuplicateIcon className="w-5 h-5 text-gray-500" />
                 <span className="text-sm font-medium text-gray-900">Drafts</span>
               </div>
-              <span className="text-lg font-bold text-orange-500">8</span>
+              <span className="text-lg font-bold text-gray-900">8</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* AI Quiz Generator Section */}
-      <div className="mt-8 bg-white rounded-[1.5rem] p-8 shadow-sm border border-gray-100 text-gray-900">
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <span className="bg-indigo-50 text-indigo-600 text-xs font-bold px-3 py-1 rounded-full border border-indigo-100">EXPERIMENTAL</span>
-            <h3 className="text-2xl font-bold mt-3 mb-2 flex items-center gap-2">
-              Gemini Quiz Generator
-            </h3>
-            <p className="text-gray-500 text-sm">Paste lesson markdown below to automatically generate a JSON assessment rubric.</p>
-          </div>
+      {/* AI Assistant Block */}
+      <div className="mt-6 bg-white rounded-[1.5rem] p-6 md:p-8 shadow-sm border border-gray-100">
+        <div className="mb-6">
+          <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+            <span className="bg-blue-50 text-[#146ef5] p-1.5 rounded-lg">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </span>
+            Gemini Quiz Generator
+          </h3>
+          <p className="text-sm text-gray-500 mt-1">Paste your lesson markdown below, and Gemini will automatically generate a JSON quiz rubric for the students.</p>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -147,7 +147,7 @@ export default function ProgramBuilderPage() {
                    const txt = (document.getElementById('markdownInput') as HTMLTextAreaElement).value;
                    if (!txt) { alert("Paste some markdown first"); btn.innerText = 'Generate with Gemini'; return; }
                    
-                   const res = await api.post('/api/admin/ai/generate-quiz-preview', { content: txt });
+                   const res = await coursesApi.post('/api/admin/ai/generate-quiz-preview', { content: txt });
                    (document.getElementById('jsonOutput') as HTMLTextAreaElement).value = JSON.stringify(res.data.quiz, null, 2);
                    
                    btn.innerText = 'Generate with Gemini';

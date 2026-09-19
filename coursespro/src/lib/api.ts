@@ -31,4 +31,33 @@ api.interceptors.response.use(
   }
 );
 
+export const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
+
+export const coursesApi = axios.create({
+  baseURL: COURSES_API,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+coursesApi.interceptors.request.use((config) => {
+  const token = typeof window !== 'undefined' ? Cookies.get('token') : null;
+  if (token && config.headers) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+coursesApi.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      if (typeof window !== 'undefined') {
+        Cookies.remove('token');
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default api;
