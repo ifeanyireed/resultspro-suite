@@ -86,3 +86,71 @@ Lesson Content:
 
 	c.JSON(http.StatusOK, gin.H{"quiz": quiz})
 }
+
+type GenerateQuizReq struct {
+	Content string `json:"content" binding:"required"`
+}
+
+// GenerateQuizPreview uses Gemini to generate a quiz directly from a markdown payload
+func (h *Handler) GenerateQuizPreview(c *gin.Context) {
+	var req GenerateQuizReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body, 'content' is required"})
+		return
+	}
+
+	apiKey := os.Getenv("GEMINI_API_KEY")
+	if apiKey == "" {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "GEMINI_API_KEY is not configured"})
+		return
+	}
+
+	ctx := context.Background()
+	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to initialize AI client"})
+		return
+	}
+	defer client.Close()
+
+	model := client.GenerativeModel("gemini-1.5-flash")
+	model.ResponseMIMEType = "application/json"
+	
+	prompt := `
+You are an expert educator. Read the following lesson markdown and generate a 3-question multiple choice quiz.
+Return ONLY a JSON array of objects with the following schema:
+[
+  {
+    "question": "What is...?",
+    "options": ["A", "B", "C", "D"],
+    "correct_index": 0
+  }
+]
+
+Lesson Content:
+` + req.Content
+
+	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "AI generation failed"})
+		return
+	}
+
+	if len(resp.Candidates) == 0 || len(resp.Candidates[0].Content.Parts) == 0 {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "AI returned empty response"})
+		return
+	}
+
+	var rawJSON string
+	if part, ok := resp.Candidates[0].Content.Parts[0].(genai.Text); ok {
+		rawJSON = string(part)
+	}
+
+	var quiz []map[string]interface{}
+	if err := json.Unmarshal([]byte(strings.TrimSpace(rawJSON)), &quiz); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse AI response as JSON", "raw": rawJSON})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"quiz": quiz})
+}

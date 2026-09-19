@@ -75,6 +75,7 @@ func main() {
 
 		// AI Features
 		protected.POST("/ai/modules/:moduleId/generate-quiz", h.GenerateQuiz)
+		protected.POST("/admin/ai/generate-quiz-preview", h.GenerateQuizPreview)
 	}
 
 	port := os.Getenv("PORT")

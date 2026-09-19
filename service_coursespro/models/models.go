@@ -4,11 +4,24 @@ import (
 	"time"
 )
 
-// Course / Cohort Program
-type Cohort struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
+// Program (Curriculum Template)
+type Program struct {
 	ID            string    `gorm:"primaryKey;size:64" json:"id"`
-	Slug          string    `gorm:"uniqueIndex;size:128" json:"slug"`
+	TenantID      string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	Title         string    `gorm:"size:255;not null" json:"title"`
+	Description   string    `gorm:"type:text" json:"description"`
+	DurationWeeks int       `gorm:"default:12" json:"duration_weeks"`
+	BasePrice     float64   `gorm:"type:decimal(10,2);default:0" json:"base_price"`
+	CreatedAt     time.Time `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
+}
+
+// Cohort (Instance of a Program)
+type Cohort struct {
+	ID            string    `gorm:"primaryKey;size:64" json:"id"`
+	TenantID      string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	ProgramID     *string   `gorm:"size:64;index" json:"program_id"`
+	Slug          string    `gorm:"uniqueIndex;size:128;not null" json:"slug"`
 	Title         string    `gorm:"size:255;not null" json:"title"`
 	Subtitle      string    `gorm:"size:255" json:"subtitle"`
 	Description   string    `gorm:"type:text" json:"description"`
@@ -17,17 +30,16 @@ type Cohort struct {
 	EndDate       time.Time `json:"end_date"`
 	Capacity      int       `gorm:"default:50" json:"capacity"`
 	EnrolledCount int       `gorm:"default:0" json:"enrolled_count"`
-	Price         float64   `gorm:"default:0" json:"price"`
+	Price         float64   `gorm:"type:decimal(10,2);default:0" json:"price"`
 	Currency      string    `gorm:"size:10;default:'NGN'" json:"currency"`
-	LeadMentorID  string    `gorm:"size:64;index" json:"lead_mentor_id"`
-	Status        string    `gorm:"size:32;default:'ENROLLING'" json:"status"` // DRAFT, ENROLLING, ACTIVE, COMPLETED
+	LeadMentorID  *string   `gorm:"size:64;index" json:"lead_mentor_id"`
+	Status        string    `gorm:"size:32;default:'ENROLLING'" json:"status"`
 	CreatedAt     time.Time `json:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at"`
 }
 
-// Student Cohort Enrollment
+// Enrollment
 type Enrollment struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID                 string    `gorm:"primaryKey;size:64" json:"id"`
 	CohortID           string    `gorm:"size:64;index;not null" json:"cohort_id"`
 	UserID             string    `gorm:"size:64;index;not null" json:"user_id"`
@@ -36,18 +48,17 @@ type Enrollment struct {
 	CurrentStageNumber int       `gorm:"default:1" json:"current_stage_number"`
 	CurrentXP          int       `gorm:"default:0" json:"current_xp"`
 	StreakDays         int       `gorm:"default:0" json:"streak_days"`
-	LastActiveDate     time.Time `json:"last_active_date"`
-	Status             string    `gorm:"size:32;default:'ACTIVE'" json:"status"` // ACTIVE, SUSPENDED, GRADUATED
+	LastActiveDate     *time.Time `json:"last_active_date"`
+	Status             string    `gorm:"size:32;default:'ACTIVE'" json:"status"`
 	EnrolledAt         time.Time `json:"enrolled_at"`
 	UpdatedAt          time.Time `json:"updated_at"`
 }
 
-// 7-Stage Learning Journey Stage
+// Journey Stage (Linked to Program)
 type JourneyStage struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID          string    `gorm:"primaryKey;size:64" json:"id"`
-	CohortID    string    `gorm:"size:64;index" json:"cohort_id"`
-	StageNumber int       `gorm:"not null" json:"stage_number"` // 1 to 7
+	ProgramID   string    `gorm:"size:64;index;not null" json:"program_id"`
+	StageNumber int       `gorm:"not null" json:"stage_number"`
 	Title       string    `gorm:"size:255;not null" json:"title"`
 	Subtitle    string    `gorm:"size:255" json:"subtitle"`
 	Description string    `gorm:"type:text" json:"description"`
@@ -55,89 +66,84 @@ type JourneyStage struct {
 	CreatedAt   time.Time `json:"created_at"`
 }
 
-// Journey Lesson Module
+// Journey Module
 type JourneyModule struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
-	ID                  string    `gorm:"primaryKey;size:64" json:"id"`
-	StageID             string    `gorm:"size:64;index;not null" json:"stage_id"`
-	Title               string    `gorm:"size:255;not null" json:"title"`
-	DurationText        string    `gorm:"size:64;default:'45 mins'" json:"duration_text"`
-	Description         string    `gorm:"type:text" json:"description"`
-	ReadingsCount       int       `gorm:"default:3" json:"readings_count"`
-	HasQuiz             bool      `gorm:"default:true" json:"has_quiz"`
-	HasChallenge        bool      `gorm:"default:true" json:"has_challenge"`
-	VideoURL            string    `gorm:"size:512" json:"video_url"`
-	ContentMarkdown     string    `gorm:"type:text" json:"content_markdown"`
-	AISummary           string    `gorm:"type:text" json:"ai_summary"`
-	ReflectionPrompts   string    `gorm:"type:text" json:"reflection_prompts"` // JSON array
-	OrderIndex          int       `gorm:"default:0" json:"order_index"`
-	CreatedAt           time.Time `json:"created_at"`
+	ID                string    `gorm:"primaryKey;size:64" json:"id"`
+	StageID           string    `gorm:"size:64;index;not null" json:"stage_id"`
+	Title             string    `gorm:"size:255;not null" json:"title"`
+	DurationText      string    `gorm:"size:64;default:'45 mins'" json:"duration_text"`
+	Description       string    `gorm:"type:text" json:"description"`
+	ReadingsCount     int       `gorm:"default:3" json:"readings_count"`
+	HasQuiz           bool      `gorm:"default:true" json:"has_quiz"`
+	HasChallenge      bool      `gorm:"default:true" json:"has_challenge"`
+	VideoURL          string    `gorm:"size:512" json:"video_url"`
+	ContentMarkdown   string    `gorm:"type:text" json:"content_markdown"`
+	AISummary         string    `gorm:"type:text" json:"ai_summary"`
+	ReflectionPrompts string    `gorm:"type:text" json:"reflection_prompts"`
+	OrderIndex        int       `gorm:"default:0" json:"order_index"`
+	CreatedAt         time.Time `json:"created_at"`
 }
 
-// Module Progress Tracking per Student
+// Module Progress
 type ModuleProgress struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
-	ID               string    `gorm:"primaryKey;size:64" json:"id"`
-	UserID           string    `gorm:"size:64;index;not null" json:"user_id"`
-	ModuleID         string    `gorm:"size:64;index;not null" json:"module_id"`
-	Completed        bool      `gorm:"default:false" json:"completed"`
-	ReflectionAnswer string    `gorm:"type:text" json:"reflection_answer"`
-	QuizScore        int       `gorm:"default:0" json:"quiz_score"`
-	QuizPassed       bool      `gorm:"default:false" json:"quiz_passed"`
+	ID               string     `gorm:"primaryKey;size:64" json:"id"`
+	UserID           string     `gorm:"size:64;index;not null" json:"user_id"`
+	ModuleID         string     `gorm:"size:64;index;not null" json:"module_id"`
+	Completed        bool       `gorm:"default:false" json:"completed"`
+	ReflectionAnswer string     `gorm:"type:text" json:"reflection_answer"`
+	QuizScore        int        `gorm:"default:0" json:"quiz_score"`
+	QuizPassed       bool       `gorm:"default:false" json:"quiz_passed"`
 	CompletedAt      *time.Time `json:"completed_at"`
-	UpdatedAt        time.Time `json:"updated_at"`
+	UpdatedAt        time.Time  `json:"updated_at"`
 }
 
 // Project Submission
 type ProjectSubmission struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
-	ID                  string     `gorm:"primaryKey;size:64" json:"id"`
-	CohortID            string     `gorm:"size:64;index;not null" json:"cohort_id"`
-	StageNumber         int        `gorm:"not null" json:"stage_number"`
-	UserID              string     `gorm:"size:64;index;not null" json:"user_id"`
-	ProjectTitle        string     `gorm:"size:255;not null" json:"project_title"`
-	RepoURL             string     `gorm:"size:512" json:"repo_url"`
-	FigmaURL            string     `gorm:"size:512" json:"figma_url"`
-	LiveDemoURL         string     `gorm:"size:512" json:"live_demo_url"`
-	Notes               string     `gorm:"type:text" json:"notes"`
-	Status              string     `gorm:"size:32;default:'MENTOR_REVIEW'" json:"status"` // BACKLOG, IN_PROGRESS, PEER_REVIEW, MENTOR_REVIEW, REVISION_REQUESTED, APPROVED
-	MentorID            *string    `gorm:"size:64;index" json:"mentor_id"`
-	MentorRating        float64    `gorm:"default:0" json:"mentor_rating"`
-	MentorFeedback      string     `gorm:"type:text" json:"mentor_feedback"`
-	VideoReviewURL      string     `gorm:"size:512" json:"video_review_url"`
-	SubmittedAt         time.Time  `json:"submitted_at"`
-	ReviewedAt          *time.Time `json:"reviewed_at"`
-	UpdatedAt           time.Time  `json:"updated_at"`
+	ID             string     `gorm:"primaryKey;size:64" json:"id"`
+	CohortID       string     `gorm:"size:64;index;not null" json:"cohort_id"`
+	StageNumber    int        `gorm:"not null" json:"stage_number"`
+	UserID         string     `gorm:"size:64;index;not null" json:"user_id"`
+	ProjectTitle   string     `gorm:"size:255;not null" json:"project_title"`
+	RepoURL        string     `gorm:"size:512" json:"repo_url"`
+	FigmaURL       string     `gorm:"size:512" json:"figma_url"`
+	LiveDemoURL    string     `gorm:"size:512" json:"live_demo_url"`
+	Notes          string     `gorm:"type:text" json:"notes"`
+	Status         string     `gorm:"size:32;default:'MENTOR_REVIEW'" json:"status"`
+	MentorID       *string    `gorm:"size:64;index" json:"mentor_id"`
+	MentorRating   float64    `gorm:"default:0" json:"mentor_rating"`
+	MentorFeedback string     `gorm:"type:text" json:"mentor_feedback"`
+	VideoReviewURL string     `gorm:"size:512" json:"video_review_url"`
+	SubmittedAt    time.Time  `json:"submitted_at"`
+	ReviewedAt     *time.Time `json:"reviewed_at"`
+	UpdatedAt      time.Time  `json:"updated_at"`
 }
 
-// Peer Pairing for Joint Collaboration
+// Peer Pairing
 type PeerPairing struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID           string    `gorm:"primaryKey;size:64" json:"id"`
 	CohortID     string    `gorm:"size:64;index;not null" json:"cohort_id"`
 	StudentA_ID  string    `gorm:"size:64;index;not null" json:"student_a_id"`
 	StudentB_ID  string    `gorm:"size:64;index;not null" json:"student_b_id"`
 	SprintNumber int       `gorm:"default:1" json:"sprint_number"`
-	Status       string    `gorm:"size:32;default:'ACTIVE'" json:"status"` // ACTIVE, COMPLETED
+	Status       string    `gorm:"size:32;default:'ACTIVE'" json:"status"`
 	SharedNotes  string    `gorm:"type:text" json:"shared_notes"`
 	CreatedAt    time.Time `json:"created_at"`
 }
 
-// Real-Time Classroom Presence Session
+// Presence Session
 type PresenceSession struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
-	ID            string    `gorm:"primaryKey;size:64" json:"id"`
-	UserID        string    `gorm:"size:64;index;not null" json:"user_id"`
-	RoomName      string    `gorm:"size:128;default:'Sprint Room Alpha'" json:"room_name"`
-	Activity      string    `gorm:"size:64;default:'Coding'" json:"activity"` // Designing, Coding, Reviewing, Studying, In Mentor 1:1
-	IsActive      bool      `gorm:"default:true" json:"is_active"`
-	LastHeartbeat time.Time `json:"last_heartbeat"`
+	ID            string     `gorm:"primaryKey;size:64" json:"id"`
+	UserID        string     `gorm:"size:64;index;not null" json:"user_id"`
+	RoomName      string     `gorm:"size:128;default:'Sprint Room Alpha'" json:"room_name"`
+	Activity      string     `gorm:"size:64;default:'Coding'" json:"activity"`
+	IsActive      bool       `gorm:"default:true" json:"is_active"`
+	LastHeartbeat *time.Time `json:"last_heartbeat"`
 }
 
-// Public Employer Portfolio Case Study
+// Public Portfolio
 type PublicPortfolio struct {
-	TenantID string `gorm:"size:64;index" json:"tenant_id"`
 	ID                 string    `gorm:"primaryKey;size:64" json:"id"`
+	TenantID           string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	UserID             string    `gorm:"size:64;uniqueIndex;not null" json:"user_id"`
 	Username           string    `gorm:"size:64;uniqueIndex;not null" json:"username"`
 	Headline           string    `gorm:"size:255" json:"headline"`
@@ -150,6 +156,43 @@ type PublicPortfolio struct {
 	UpdatedAt          time.Time `json:"updated_at"`
 }
 
+// Quiz
+type Quiz struct {
+	ID            string    `gorm:"primaryKey;size:64" json:"id"`
+	ModuleID      string    `gorm:"size:64;index;not null" json:"module_id"`
+	Title         string    `gorm:"size:255" json:"title"`
+	GeneratedByAI bool      `gorm:"default:false" json:"generated_by_ai"`
+	CreatedAt     time.Time `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
+}
+
+// Quiz Question
+type QuizQuestion struct {
+	ID           string    `gorm:"primaryKey;size:64" json:"id"`
+	QuizID       string    `gorm:"size:64;index;not null" json:"quiz_id"`
+	Question     string    `gorm:"type:text;not null" json:"question"`
+	OptionsJSON  string    `gorm:"type:jsonb;not null" json:"options_json"`
+	CorrectIndex int       `gorm:"not null" json:"correct_index"`
+	Explanation  string    `gorm:"type:text" json:"explanation"`
+	BloomLevel   string    `gorm:"size:64" json:"bloom_level"`
+	OrderIndex   int       `gorm:"default:0" json:"order_index"`
+	CreatedAt    time.Time `json:"created_at"`
+}
+
+// AI Job
+type AIJob struct {
+	ID         string    `gorm:"primaryKey;size:64" json:"id"`
+	TenantID   string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	JobType    string    `gorm:"size:64;not null" json:"job_type"`
+	InputRef   string    `gorm:"size:255" json:"input_ref"`
+	OutputRef  string    `gorm:"size:255" json:"output_ref"`
+	Status     string    `gorm:"size:32;default:'PENDING'" json:"status"`
+	ResultJSON string    `gorm:"type:jsonb" json:"result_json"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
+}
+
+func (Program) TableName() string { return "crs_programs" }
 func (Cohort) TableName() string { return "crs_cohorts" }
 func (Enrollment) TableName() string { return "crs_enrollments" }
 func (JourneyStage) TableName() string { return "crs_journey_stages" }
@@ -159,3 +202,6 @@ func (ProjectSubmission) TableName() string { return "crs_project_submissions" }
 func (PeerPairing) TableName() string { return "crs_peer_pairings" }
 func (PresenceSession) TableName() string { return "crs_presence_sessions" }
 func (PublicPortfolio) TableName() string { return "crs_public_portfolios" }
+func (Quiz) TableName() string { return "crs_quizzes" }
+func (QuizQuestion) TableName() string { return "crs_quiz_questions" }
+func (AIJob) TableName() string { return "crs_ai_jobs" }
