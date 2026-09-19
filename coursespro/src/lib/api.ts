@@ -12,7 +12,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = typeof window !== 'undefined' ? Cookies.get('token') : null;
+  const token = typeof window !== 'undefined' ? (Cookies.get('token') || localStorage.getItem('token')) : null;
   const domain = typeof window !== 'undefined' ? window.location.hostname : '';
   
   if (token) {
@@ -59,7 +59,7 @@ export const coursesApi = axios.create({
 });
 
 coursesApi.interceptors.request.use((config) => {
-  const token = typeof window !== 'undefined' ? Cookies.get('token') : null;
+  const token = typeof window !== 'undefined' ? (Cookies.get('token') || localStorage.getItem('token')) : null;
   const domain = typeof window !== 'undefined' ? window.location.hostname : '';
   
   if (token) {

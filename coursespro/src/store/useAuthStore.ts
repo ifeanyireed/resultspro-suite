@@ -37,7 +37,7 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set, get) => {
-  const token = typeof window !== 'undefined' ? Cookies.get('token') || null : null;
+  const token = typeof window !== 'undefined' ? (Cookies.get('token') || localStorage.getItem('token') || null) : null;
   
   return {
     user: null, // Always fetch from DB on reload
@@ -53,7 +53,12 @@ export const useAuthStore = create<AuthState>((set, get) => {
            rootDomain = `.${platformDomain}`;
         }
       }
-      Cookies.set('token', token, { expires: 7, domain: rootDomain, path: '/' });
+      if (rootDomain) {
+        Cookies.set('token', token, { expires: 7, domain: rootDomain, path: '/' });
+      } else {
+        Cookies.set('token', token, { expires: 7, path: '/' });
+      }
+      if (typeof window !== 'undefined') localStorage.setItem('token', token);
       set({ user, token, isAuthenticated: true });
     },
     logout: () => {
