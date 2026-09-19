@@ -1,7 +1,7 @@
 "use client";
 
 import api from '@/lib/api';
-import { IconStar as Star, IconMessage as MessageSquare, IconFilter as Filter, IconChevronRight as ChevronRight, IconArrowUpRight as ArrowUpRight, IconThumbsUp as ThumbsUp, IconAlertCircle as AlertCircle, IconChartBar as BarChart3, IconSearch as Search, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconStar as Star, IconMessage as MessageSquare, IconFilter as Filter, IconChevronRight as ChevronRight, IconArrowUpRight as ArrowUpRight, IconThumbUp as ThumbsUp, IconAlertCircle as AlertCircle, IconChartBar as BarChart3, IconSearch as Search, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 

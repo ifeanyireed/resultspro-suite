@@ -1,6 +1,6 @@
 "use client";
 
-import { IconPenTool as PenTool, IconSquare as Square, IconCircle as Circle, IconType as Type, IconImage as ImageIcon, IconArrowBackUp as Undo2, IconArrowForwardUp as Redo2, IconTrash as Trash2, IconDownload as Download, IconShare2 as Share2, IconSettings as Settings, IconChevronRight as ChevronRight, IconMaximize2 as Maximize2, IconMousePointer2 as MousePointer2, IconEraser as Eraser } from '@tabler/icons-react';
+import { IconPenTool as PenTool, IconSquare as Square, IconCircle as Circle, IconTypography as Type, IconImage as ImageIcon, IconArrowBackUp as Undo2, IconArrowForwardUp as Redo2, IconTrash as Trash2, IconDownload as Download, IconShare2 as Share2, IconSettings as Settings, IconChevronRight as ChevronRight, IconMaximize2 as Maximize2, IconMousePointer2 as MousePointer2, IconEraser as Eraser } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
 export default function TutorWhiteboard() {
