@@ -1,6 +1,6 @@
 "use client";
 
-import { IconUser as User, IconBell as Bell, IconShield as Shield, IconCreditCard as CreditCard, IconLogout as LogOut, IconSmartphone as Smartphone, IconGlobe as Globe, IconCheck as Check, IconChevronRight as ChevronRight, IconCamera as Camera, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconUser as User, IconBell as Bell, IconShield as Shield, IconCreditCard as CreditCard, IconLogout as LogOut, IconDeviceMobile as Smartphone, IconGlobe as Globe, IconCheck as Check, IconChevronRight as ChevronRight, IconCamera as Camera, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';
