@@ -12,19 +12,25 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const cookieToken = typeof window !== 'undefined' ? Cookies.get('token') : null;
-  const localToken = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  const token = cookieToken || localToken;
+  let token = null;
+  if (typeof window !== 'undefined') {
+    token = Cookies.get('token') || localStorage.getItem('token');
+  }
+  const domain = typeof window !== 'undefined' ? window.location.hostname : '';
   console.log('[usersApi Interceptor] URL:', config.url, 'Token found:', !!token);
   if (token) {
-    config.headers = config.headers || {};
+    if (!config.headers) {
+       config.headers = {} as any;
+    }
     if (typeof config.headers.set === 'function') {
       config.headers.set('Authorization', `Bearer ${token}`);
+      config.headers.set('X-Tenant-Domain', domain);
     } else {
-      config.headers.Authorization = `Bearer ${token}`;
+      (config.headers as any)['Authorization'] = `Bearer ${token}`;
+      (config.headers as any)['X-Tenant-Domain'] = domain;
     }
   } else {
-    console.warn('[usersApi Interceptor] No token found in cookies!');
+    console.warn('[usersApi Interceptor] No token found in cookies or localstorage!');
   }
   return config;
 });
@@ -56,26 +62,28 @@ export const coursesApi = axios.create({
 });
 
 coursesApi.interceptors.request.use((config) => {
-  const cookieToken = typeof window !== 'undefined' ? Cookies.get('token') : null;
-  const localToken = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  const token = cookieToken || localToken;
+  let token = null;
+  if (typeof window !== 'undefined') {
+    token = Cookies.get('token') || localStorage.getItem('token');
+  }
   
   const domain = typeof window !== 'undefined' ? window.location.hostname : '';
   console.log('[coursesApi Interceptor] URL:', config.url, 'Token found:', !!token);
   
   if (token) {
-    config.headers = config.headers || {};
+    // Forcefully inject headers
+    if (!config.headers) {
+       config.headers = {} as any;
+    }
     if (typeof config.headers.set === 'function') {
       config.headers.set('Authorization', `Bearer ${token}`);
       config.headers.set('X-Tenant-Domain', domain);
-      console.log('[coursesApi Interceptor] Headers set using .set()');
     } else {
-      config.headers.Authorization = `Bearer ${token}`;
-      config.headers['X-Tenant-Domain'] = domain;
-      console.log('[coursesApi Interceptor] Headers set using assignment');
+      (config.headers as any)['Authorization'] = `Bearer ${token}`;
+      (config.headers as any)['X-Tenant-Domain'] = domain;
     }
   } else {
-    console.warn('[coursesApi Interceptor] No token found in cookies!');
+    console.error('[coursesApi Interceptor] CRITICAL: No token found in cookies or localStorage!');
   }
   return config;
 });
