@@ -42,11 +42,16 @@ export default function AppLayout({
   const pathname = usePathname();
   const logout = useAuthStore((state) => state.logout);
   const user = useAuthStore((state) => state.user);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [mounted, setMounted] = React.useState(false);
   const [tenantName, setTenantName] = React.useState('LEARNING');
   const [logoUrl, setLogoUrl] = React.useState('/logo.png');
 
   React.useEffect(() => {
+    if (!isAuthenticated) {
+      window.location.href = '/login';
+      return;
+    }
     setMounted(true);
     const fetchTenant = async () => {
       try {
