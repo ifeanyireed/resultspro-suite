@@ -1,6 +1,6 @@
 "use client";
 
-import { IconCalendar as Calendar, IconClock as Clock, IconBook as BookOpen, IconPlay as Play, IconChevronRight as ChevronRight, IconMapPin as MapPin, IconVideo as Video, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconCalendar as Calendar, IconClock as Clock, IconBook as BookOpen, IconPlayerPlay as Play, IconChevronRight as ChevronRight, IconMapPin as MapPin, IconVideo as Video, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { RoleGate } from '@/components/RoleGate';

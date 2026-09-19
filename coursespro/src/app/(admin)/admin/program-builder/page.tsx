@@ -66,33 +66,33 @@ export default function ProgramBuilderPage() {
       </div>
 
       {/* AI Quiz Generator Section */}
-      <div className="mt-8 bg-gradient-to-br from-indigo-900 to-slate-900 rounded-[1.5rem] p-8 shadow-lg border border-indigo-500/30 text-white">
+      <div className="mt-8 bg-white rounded-[1.5rem] p-8 shadow-sm border border-gray-100 text-gray-900">
         <div className="flex justify-between items-start mb-6">
           <div>
-            <span className="bg-indigo-500/20 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full border border-indigo-500/30">EXPERIMENTAL</span>
+            <span className="bg-indigo-50 text-indigo-600 text-xs font-bold px-3 py-1 rounded-full border border-indigo-100">EXPERIMENTAL</span>
             <h3 className="text-2xl font-bold mt-3 mb-2 flex items-center gap-2">
               Gemini Quiz Generator
             </h3>
-            <p className="text-indigo-200 text-sm">Paste lesson markdown below to automatically generate a JSON assessment rubric.</p>
+            <p className="text-gray-500 text-sm">Paste lesson markdown below to automatically generate a JSON assessment rubric.</p>
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
            <div>
              <textarea 
-               className="w-full h-64 bg-black/30 border border-white/10 rounded-xl p-4 text-sm font-mono text-indigo-100 placeholder-indigo-300/50 focus:outline-none focus:border-indigo-400"
+               className="w-full h-64 bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm font-mono text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#146ef5] focus:ring-1 focus:ring-[#146ef5] transition-shadow"
                placeholder="# Lesson Title\n\nContent goes here..."
                id="markdownInput"
              />
              <button 
-               className="mt-4 bg-indigo-500 hover:bg-indigo-400 text-white font-bold py-3 px-6 rounded-xl w-full transition-colors flex items-center justify-center gap-2"
+               className="mt-4 bg-[#146ef5] hover:bg-[#105bd1] shadow-sm shadow-[#146ef5]/20 text-white font-semibold py-3 px-6 rounded-xl w-full transition-colors flex items-center justify-center gap-2"
                onClick={async () => {
                  const btn = document.getElementById('genBtn') as HTMLButtonElement;
                  btn.innerText = 'Generating...';
                  try {
                    // Mock endpoint invocation for now, in reality calls our Go /ai/modules/:id/generate-quiz
                    const txt = (document.getElementById('markdownInput') as HTMLTextAreaElement).value;
-                   if (!txt) { alert("Paste some markdown first"); return; }
+                   if (!txt) { alert("Paste some markdown first"); btn.innerText = 'Generate with Gemini'; return; }
                    
                    // Simulate Go API delay
                    setTimeout(() => {
@@ -117,7 +117,7 @@ export default function ProgramBuilderPage() {
            <div>
              <textarea 
                id="jsonOutput"
-               className="w-full h-full bg-slate-950 border border-white/10 rounded-xl p-4 text-sm font-mono text-green-400 focus:outline-none"
+               className="w-full h-full min-h-[16rem] bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm font-mono text-gray-800 focus:outline-none focus:border-[#146ef5] focus:ring-1 focus:ring-[#146ef5] transition-shadow"
                readOnly
                placeholder="Generated JSON will appear here..."
              />

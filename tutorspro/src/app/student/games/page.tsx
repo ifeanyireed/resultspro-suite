@@ -1,6 +1,6 @@
 "use client";
 
-import { IconGamepad2 as Gamepad2, IconTrophy as Trophy, IconUsers as Users, IconBolt as Zap, IconPlay as Play, IconStar as Star, IconSparkles as Sparkles, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconGamepad2 as Gamepad2, IconTrophy as Trophy, IconUsers as Users, IconBolt as Zap, IconPlayerPlay as Play, IconStar as Star, IconSparkles as Sparkles, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { RoleGate } from '@/components/RoleGate';
