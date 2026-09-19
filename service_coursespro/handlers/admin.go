@@ -70,10 +70,52 @@ func (h *Handler) AdminCreateCohort(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"cohort": cohort})
 }
 
+func (h *Handler) AdminGetPrograms(c *gin.Context) {
+	var programs []models.Program
+	db.WithTenant(c).Order("created_at DESC").Find(&programs)
+	
+	// Optional: Fetch module and quiz counts per program to match the UI stats
+	// But for now, returning just the programs is fine.
+	c.JSON(http.StatusOK, gin.H{"programs": programs})
+}
+
+func (h *Handler) AdminCreateProgram(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	var input struct {
+		Title         string  `json:"title" binding:"required"`
+		Description   string  `json:"description"`
+		DurationWeeks int     `json:"duration_weeks"`
+		BasePrice     float64 `json:"base_price"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	program := models.Program{
+		TenantID:      tenantID.(string),
+		ID:            uuid.New().String(),
+		Title:         input.Title,
+		Description:   input.Description,
+		DurationWeeks: input.DurationWeeks,
+		BasePrice:     input.BasePrice,
+		CreatedAt:     time.Now(),
+		UpdatedAt:     time.Now(),
+	}
+
+	if err := db.WithTenant(c).Create(&program).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create program"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"program": program})
+}
+
 func (h *Handler) AdminCreateStage(c *gin.Context) {
 	tenantID, _ := c.Get("tenant_id")
 	var input struct {
-		CohortID    string `json:"cohort_id" binding:"required"`
+		ProgramID   string `json:"program_id" binding:"required"`
 		StageNumber int    `json:"stage_number" binding:"required"`
 		Title       string `json:"title" binding:"required"`
 		Subtitle    string `json:"subtitle"`
@@ -87,9 +129,8 @@ func (h *Handler) AdminCreateStage(c *gin.Context) {
 	}
 
 	stage := models.JourneyStage{
-		TenantID:    tenantID.(string),
 		ID:          uuid.New().String(),
-		CohortID:    input.CohortID,
+		ProgramID:   input.ProgramID,
 		StageNumber: input.StageNumber,
 		Title:       input.Title,
 		Subtitle:    input.Subtitle,
@@ -123,7 +164,6 @@ func (h *Handler) AdminCreateModule(c *gin.Context) {
 	}
 
 	module := models.JourneyModule{
-		TenantID:        tenantID.(string),
 		ID:              uuid.New().String(),
 		StageID:         input.StageID,
 		Title:           input.Title,

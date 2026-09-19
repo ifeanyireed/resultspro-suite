@@ -10,6 +10,45 @@ import {
 import api from '@/lib/api';
 
 export default function ProgramBuilderPage() {
+  const [programs, setPrograms] = React.useState<any[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [creating, setCreating] = React.useState(false);
+
+  const fetchPrograms = async () => {
+    try {
+      const res = await api.get('/api/admin/programs');
+      setPrograms(res.data.programs || []);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchPrograms();
+  }, []);
+
+  const handleCreateProgram = async () => {
+    const title = prompt("Enter a title for the new Journey (Program):");
+    if (!title) return;
+    
+    setCreating(true);
+    try {
+      await api.post('/api/admin/programs', {
+        title,
+        description: "New authored journey",
+        duration_weeks: 12,
+        base_price: 0
+      });
+      await fetchPrograms();
+    } catch (e) {
+      alert("Failed to create journey");
+    } finally {
+      setCreating(false);
+    }
+  };
+
   return (
     <>
       <div className="flex items-center justify-between mb-6">
@@ -17,31 +56,45 @@ export default function ProgramBuilderPage() {
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Program Builder</h2>
           <p className="text-sm text-gray-500 mt-1">Create journeys, modules, and author content.</p>
         </div>
-        <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
+        <button 
+          disabled={creating}
+          onClick={handleCreateProgram}
+          className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2 disabled:opacity-70"
+        >
           <PlusIcon className="w-4 h-4" />
-          Create Journey
+          {creating ? 'Creating...' : 'Create Journey'}
         </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Existing Journeys */}
         <div className="md:col-span-2 space-y-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex items-center justify-between group hover:-translate-y-1 transition-transform">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center">
-                  <DocumentDuplicateIcon className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900">Fullstack Mastery - Sprint {i}</h3>
-                  <p className="text-sm text-gray-500">12 Modules • 4 Projects • 8 Quizzes</p>
-                </div>
-              </div>
-              <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
-                <ArrowUpRightIcon className="w-5 h-5" />
-              </button>
+          {loading ? (
+            <div className="text-gray-500 p-4">Loading journeys...</div>
+          ) : programs.length === 0 ? (
+            <div className="bg-white rounded-[1.5rem] p-8 text-center shadow-sm border border-gray-100">
+              <DocumentDuplicateIcon className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+              <h3 className="text-gray-900 font-medium">No journeys found</h3>
+              <p className="text-gray-500 text-sm mt-1">Click "Create Journey" to start authoring.</p>
             </div>
-          ))}
+          ) : (
+            programs.map((prog) => (
+              <div key={prog.id} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex items-center justify-between group hover:-translate-y-1 transition-transform cursor-pointer">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center">
+                    <DocumentDuplicateIcon className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900">{prog.title}</h3>
+                    <p className="text-sm text-gray-500">{prog.duration_weeks} Weeks • (Modules coming soon)</p>
+                  </div>
+                </div>
+                <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+                  <ArrowUpRightIcon className="w-5 h-5" />
+                </button>
+              </div>
+            ))
+          )}
         </div>
 
         {/* Quick Stats / Drafts */}
@@ -51,9 +104,9 @@ export default function ProgramBuilderPage() {
             <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 border border-gray-100">
               <div className="flex items-center gap-3">
                 <Bars3BottomLeftIcon className="w-5 h-5 text-gray-500" />
-                <span className="text-sm font-medium text-gray-900">Total Modules</span>
+                <span className="text-sm font-medium text-gray-900">Total Programs</span>
               </div>
-              <span className="text-lg font-bold text-[#146ef5]">142</span>
+              <span className="text-lg font-bold text-[#146ef5]">{programs.length}</span>
             </div>
             <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 border border-gray-100">
               <div className="flex items-center gap-3">

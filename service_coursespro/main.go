@@ -67,6 +67,8 @@ func main() {
 		protected.GET("/peers/roster", h.GetPeers)
 
 		// Admin Endpoints
+		protected.GET("/admin/programs", h.AdminGetPrograms)
+		protected.POST("/admin/programs", h.AdminCreateProgram)
 		protected.GET("/admin/cohorts", h.AdminGetCohorts)
 		protected.POST("/admin/cohorts", h.AdminCreateCohort)
 		protected.POST("/admin/stages", h.AdminCreateStage)
