@@ -19,8 +19,8 @@ export default function StudentMessages() {
       try {
         const res = await api.get('/student/conversations').catch(() => ({ 
           data: [
-            { id: "c1", name: "Sarah Jenkins", lastMsg: "I'll see you in class tomorrow!", time: "10:45 AM", unread: 2, online: true },
-            { id: "c2", name: "Prof. Smith", lastMsg: "Your assignment looks great.", time: "Yesterday", unread: 0, online: false }
+            { id: "c1", name: "Sarah Jenkins", avatarUrl: "https://i.pravatar.cc/150?u=sarah", lastMsg: "I'll see you in class tomorrow!", time: "10:45 AM", unread: 2, online: true },
+            { id: "c2", name: "Prof. Smith", avatarUrl: "https://i.pravatar.cc/150?u=smith", lastMsg: "Your assignment looks great.", time: "Yesterday", unread: 0, online: false }
           ] 
         }));
         setContacts(res.data || []);
@@ -94,9 +94,13 @@ export default function StudentMessages() {
                   }`}
                 >
                   <div className="relative shrink-0">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#146ef5] to-[#0a2e70] flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                      {contact.name[0]}
-                    </div>
+                    {contact.avatarUrl ? (
+                      <img src={contact.avatarUrl} alt={contact.name} className="w-12 h-12 rounded-full object-cover shadow-sm" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#146ef5] to-[#0a2e70] flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                        {contact.name[0]}
+                      </div>
+                    )}
                     {contact.online && (
                       <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-[3px] border-white" />
                     )}
@@ -135,9 +139,13 @@ export default function StudentMessages() {
                        >
                          <ChevronLeft className="w-6 h-6" />
                        </button>
-                       <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#146ef5] to-[#0a2e70] flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                          {activeContact.name[0]}
-                       </div>
+                       {activeContact.avatarUrl ? (
+                         <img src={activeContact.avatarUrl} alt={activeContact.name} className="w-11 h-11 rounded-full object-cover shadow-sm" />
+                       ) : (
+                         <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#146ef5] to-[#0a2e70] flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                            {activeContact.name[0]}
+                         </div>
+                       )}
                        <div>
                           <h2 className="text-base font-bold text-gray-900 leading-none mb-1">{activeContact.name}</h2>
                           <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
