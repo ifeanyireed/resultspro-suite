@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useRouter, useParams } from 'next/navigation';
 import { Mail, Lock, ArrowRight, Loader2, Sparkles, Building2, Users, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
+import TenantLogo from '@/components/TenantLogo';
 // import axiosInstance from '@/lib/axiosConfig'; // we can mock the login for now or use this
 
 export default function LoginForm({ tenant }: { tenant: any }) {
@@ -94,7 +95,7 @@ export default function LoginForm({ tenant }: { tenant: any }) {
         <div className="relative z-10 w-full h-full flex flex-col justify-between p-16">
           {/* Brand Logo */}
           <div className="flex items-center space-x-3">
-            <Image src={tenant?.logo_url || "/logo.png"} alt={tenant?.name || "Tenant"} width={64} height={64} className="object-contain" priority />
+            <TenantLogo theme="dark" height={64} logoUrl={tenant?.logo_url} darkLogoUrl={tenant?.dark_logo_url} flattenLogo={tenant?.flatten_logo} tenantName={tenant?.name} />
             <div>
               <h1 className="font-bold text-white text-3xl tracking-tight">{tenant?.name || "Tenant"}</h1>
               <p className="text-blue-400 font-semibold text-xs uppercase tracking-widest">LEARNING MANAGEMENT SYSTEM</p>
@@ -148,7 +149,7 @@ export default function LoginForm({ tenant }: { tenant: any }) {
       <div className="w-full lg:w-[45%] bg-white flex items-center justify-center p-8 sm:p-16 relative">
         {/* Mobile Logo overlay */}
         <div className="lg:hidden flex items-center justify-center mb-10 w-full absolute top-8 left-0 right-0">
-           <Image src={tenant?.logo_url || "/logo.png"} alt="Logo" width={64} height={64} className="object-contain" />
+           <TenantLogo theme="light" height={64} logoUrl={tenant?.logo_url} darkLogoUrl={tenant?.dark_logo_url} flattenLogo={tenant?.flatten_logo} tenantName={tenant?.name} />
         </div>
 
         <div className="w-full max-w-md">
