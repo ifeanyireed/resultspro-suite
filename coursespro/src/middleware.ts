@@ -24,12 +24,10 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // If it's the main platform, rewrite to the (platform) folder
+  // If it's the main platform, we don't need to rewrite anything because 
+  // Next.js automatically ignores route groups like (platform) in the URL path.
   if (isPlatform) {
-    if (url.pathname === '/') {
-      return NextResponse.rewrite(new URL(`/(platform)`, req.url));
-    }
-    return NextResponse.rewrite(new URL(`/(platform)${url.pathname}`, req.url));
+    return NextResponse.next();
   }
 
   // Otherwise, extract the tenant slug and rewrite to the [tenant] folder
