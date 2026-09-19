@@ -49,11 +49,14 @@ coursesApi.interceptors.request.use((config) => {
   const cookieToken = typeof window !== 'undefined' ? Cookies.get('token') : null;
   const token = cookieToken;
   
+  const domain = typeof window !== 'undefined' ? window.location.hostname : '';
   if (token && config.headers) {
     if (typeof config.headers.set === 'function') {
       config.headers.set('Authorization', `Bearer ${token}`);
+      config.headers.set('X-Tenant-Domain', domain);
     } else {
       config.headers.Authorization = `Bearer ${token}`;
+      config.headers['X-Tenant-Domain'] = domain;
     }
   }
   return config;

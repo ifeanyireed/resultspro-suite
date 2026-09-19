@@ -1,7 +1,7 @@
 "use client";
 
 import api from '@/lib/api';
-import { IconCalendar as CalendarIcon, IconClock as Clock, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconPlus as Plus, IconLock as Lock, IconCircleCheck as CheckCircle2, IconRefreshCcw as RefreshCcw, IconSettings as Settings, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconCalendar as CalendarIcon, IconClock as Clock, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconPlus as Plus, IconLock as Lock, IconCircleCheck as CheckCircle2, IconRefresh as RefreshCcw, IconSettings as Settings, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
