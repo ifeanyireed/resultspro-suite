@@ -118,6 +118,7 @@ func (h *Handler) AdminCreateProgram(c *gin.Context) {
 }
 
 func (h *Handler) AdminCreateStage(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
 	var input struct {
 		ProgramID   string `json:"program_id" binding:"required"`
 		StageNumber int    `json:"stage_number" binding:"required"`
@@ -133,6 +134,7 @@ func (h *Handler) AdminCreateStage(c *gin.Context) {
 	}
 
 	stage := models.JourneyStage{
+		TenantID:    tenantID.(string),
 		ID:          uuid.New().String(),
 		ProgramID:   input.ProgramID,
 		StageNumber: input.StageNumber,
@@ -151,6 +153,7 @@ func (h *Handler) AdminCreateStage(c *gin.Context) {
 }
 
 func (h *Handler) AdminCreateModule(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
 	var input struct {
 		StageID         string `json:"stage_id" binding:"required"`
 		Title           string `json:"title" binding:"required"`
@@ -167,6 +170,7 @@ func (h *Handler) AdminCreateModule(c *gin.Context) {
 	}
 
 	module := models.JourneyModule{
+		TenantID:        tenantID.(string),
 		ID:              uuid.New().String(),
 		StageID:         input.StageID,
 		Title:           input.Title,

@@ -12,6 +12,7 @@ import (
 
 func (h *Handler) SubmitProject(c *gin.Context) {
 	userID, _ := c.Get("user_id")
+	tenantID, _ := c.Get("tenant_id")
 
 	var input struct {
 		CohortID     string `json:"cohort_id" binding:"required"`
@@ -29,6 +30,7 @@ func (h *Handler) SubmitProject(c *gin.Context) {
 	}
 
 	sub := models.ProjectSubmission{
+		TenantID:     tenantID.(string),
 		ID:           uuid.New().String(),
 		CohortID:     input.CohortID,
 		StageNumber:  input.StageNumber,

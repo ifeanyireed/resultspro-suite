@@ -13,8 +13,17 @@ import (
 
 func (h *Handler) GetCohortJourney(c *gin.Context) {
 	cohortID := c.Param("id")
+
+	var cohort models.Cohort
+	if err := db.WithTenant(c).Where("id = ?", cohortID).First(&cohort).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Cohort not found"})
+		return
+	}
+
 	var stages []models.JourneyStage
-	db.WithTenant(c).Where("cohort_id = ?", cohortID).Order("stage_number ASC").Find(&stages)
+	if cohort.ProgramID != nil {
+		db.WithTenant(c).Where("program_id = ?", *cohort.ProgramID).Order("stage_number ASC").Find(&stages)
+	}
 
 	var stageIDs []string
 	for _, s := range stages {
@@ -32,6 +41,7 @@ func (h *Handler) GetCohortJourney(c *gin.Context) {
 func (h *Handler) UpdateModuleProgress(c *gin.Context) {
 	moduleID := c.Param("id")
 	userID, _ := c.Get("user_id")
+	tenantID, _ := c.Get("tenant_id")
 
 	var input struct {
 		Completed        bool   `json:"completed"`
@@ -51,6 +61,7 @@ func (h *Handler) UpdateModuleProgress(c *gin.Context) {
 	now := time.Now()
 	if err != nil {
 		progress = models.ModuleProgress{
+			TenantID:         tenantID.(string),
 			ID:               uuid.New().String(),
 			UserID:           userID.(string),
 			ModuleID:         moduleID,

@@ -58,8 +58,9 @@ func InitDB() {
 // WithTenant safely scopes the GORM DB instance to the current request's Tenant ID
 func WithTenant(c *gin.Context) *gorm.DB {
 	tenantID, exists := c.Get("tenant_id")
-	if exists && tenantID != "" {
-		return DB.Where("tenant_id = ?", tenantID)
+	if exists && tenantID != nil && tenantID.(string) != "" {
+		return DB.Where("tenant_id = ?", tenantID.(string))
 	}
-	return DB
+	// Fallback to prevent data leakage if tenant_id is missing
+	return DB.Where("1 = 0")
 }

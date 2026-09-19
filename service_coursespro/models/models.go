@@ -43,6 +43,7 @@ type Cohort struct {
 
 // CohortMentor
 type CohortMentor struct {
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	CohortID  string    `gorm:"primaryKey;size:64;not null" json:"cohort_id"`
 	UserID    string    `gorm:"primaryKey;size:64;not null" json:"user_id"`
 	Role      string    `gorm:"size:32;default:'MENTOR'" json:"role"`
@@ -51,6 +52,7 @@ type CohortMentor struct {
 
 // Enrollment
 type Enrollment struct {
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID                 string     `gorm:"primaryKey;size:64" json:"id"`
 	CohortID           string     `gorm:"size:64;index;not null" json:"cohort_id"`
 	UserID             string     `gorm:"size:64;index;not null" json:"user_id"`
@@ -67,6 +69,7 @@ type Enrollment struct {
 
 // Journey Stage (Linked to Program)
 type JourneyStage struct {
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID          string    `gorm:"primaryKey;size:64" json:"id"`
 	ProgramID   string    `gorm:"size:64;index;not null" json:"program_id"`
 	StageNumber int       `gorm:"not null" json:"stage_number"`
@@ -79,6 +82,7 @@ type JourneyStage struct {
 
 // Journey Module
 type JourneyModule struct {
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID                string    `gorm:"primaryKey;size:64" json:"id"`
 	StageID           string    `gorm:"size:64;index;not null" json:"stage_id"`
 	Title             string    `gorm:"size:255;not null" json:"title"`
@@ -97,6 +101,7 @@ type JourneyModule struct {
 
 // Module Progress
 type ModuleProgress struct {
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID               string     `gorm:"primaryKey;size:64" json:"id"`
 	UserID           string     `gorm:"size:64;index;not null" json:"user_id"`
 	ModuleID         string     `gorm:"size:64;index;not null" json:"module_id"`
@@ -110,6 +115,7 @@ type ModuleProgress struct {
 
 // Project Submission
 type ProjectSubmission struct {
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID             string     `gorm:"primaryKey;size:64" json:"id"`
 	CohortID       string     `gorm:"size:64;index;not null" json:"cohort_id"`
 	StageNumber    int        `gorm:"not null" json:"stage_number"`
@@ -131,6 +137,7 @@ type ProjectSubmission struct {
 
 // Peer Pairing
 type PeerPairing struct {
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID           string    `gorm:"primaryKey;size:64" json:"id"`
 	CohortID     string    `gorm:"size:64;index;not null" json:"cohort_id"`
 	StudentA_ID  string    `gorm:"size:64;index;not null" json:"student_a_id"`
@@ -143,6 +150,7 @@ type PeerPairing struct {
 
 // Presence Session
 type PresenceSession struct {
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID            string     `gorm:"primaryKey;size:64" json:"id"`
 	UserID        string     `gorm:"size:64;index;not null" json:"user_id"`
 	RoomName      string     `gorm:"size:128;default:'Sprint Room Alpha'" json:"room_name"`
@@ -169,6 +177,7 @@ type PublicPortfolio struct {
 
 // Quiz
 type Quiz struct {
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID            string    `gorm:"primaryKey;size:64" json:"id"`
 	ModuleID      string    `gorm:"size:64;index;not null" json:"module_id"`
 	Title         string    `gorm:"size:255" json:"title"`
@@ -179,6 +188,7 @@ type Quiz struct {
 
 // Quiz Question
 type QuizQuestion struct {
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID           string    `gorm:"primaryKey;size:64" json:"id"`
 	QuizID       string    `gorm:"size:64;index;not null" json:"quiz_id"`
 	Question     string    `gorm:"type:text;not null" json:"question"`

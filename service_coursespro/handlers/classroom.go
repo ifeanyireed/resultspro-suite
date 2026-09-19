@@ -19,6 +19,7 @@ func (h *Handler) GetPresence(c *gin.Context) {
 
 func (h *Handler) PresenceHeartbeat(c *gin.Context) {
 	userID, _ := c.Get("user_id")
+	tenantID, _ := c.Get("tenant_id")
 
 	var input struct {
 		RoomName string `json:"room_name"`
@@ -39,6 +40,7 @@ func (h *Handler) PresenceHeartbeat(c *gin.Context) {
 	now := time.Now()
 	if err != nil {
 		session = models.PresenceSession{
+			TenantID:      tenantID.(string),
 			ID:            uuid.New().String(),
 			UserID:        userID.(string),
 			RoomName:      input.RoomName,
