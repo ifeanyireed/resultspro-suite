@@ -37,7 +37,25 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set, get) => {
-  const token = typeof window !== 'undefined' ? Cookies.get('token') || null : null;
+  let token = null;
+  if (typeof window !== 'undefined') {
+    // 1. Check URL for bridging token first (Solves Chrome localhost strictness)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlToken = urlParams.get('token');
+    
+    // 2. Check cookies & localstorage
+    token = urlToken || Cookies.get('token') || localStorage.getItem('token') || null;
+    
+    // If we intercepted a URL token, save it immediately so api.ts can use it!
+    if (urlToken) {
+        const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+        const rootDomain = platformDomain === 'localhost' ? 'localhost' : `.${platformDomain}`;
+        Cookies.set('token', urlToken, { expires: 7, domain: rootDomain || undefined, path: '/' });
+        localStorage.setItem('token', urlToken);
+        // Scrub URL synchronously to hide token
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
   
   return {
     user: null, // Always fetch from DB on reload
