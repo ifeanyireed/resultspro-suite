@@ -59,7 +59,6 @@ export const useAuthStore = create<AuthState>((set, get) => {
         }
       }
       Cookies.set('token', token, { expires: 7, domain: rootDomain || undefined, path: '/' });
-      if (typeof window !== 'undefined') localStorage.setItem('token', token);
       set({ user, token, isAuthenticated: true });
     },
     logout: () => {
@@ -79,7 +78,6 @@ export const useAuthStore = create<AuthState>((set, get) => {
       }
       Cookies.remove('token', { domain: rootDomain || undefined, path: '/' });
       Cookies.remove('token'); // Fallback for any exact-match cookies
-      if (typeof window !== 'undefined') localStorage.removeItem('token');
       set({ user: null, token: null, isAuthenticated: false });
       if (typeof window !== 'undefined') {
         window.location.href = '/login';
