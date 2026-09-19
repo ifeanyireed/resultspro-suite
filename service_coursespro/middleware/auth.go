@@ -59,8 +59,8 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		req.Header.Set("Content-Type", "application/json")
-		req.Header.Set("X-App-ID", "coursespro-app-id")
-		req.Header.Set("X-App-Secret", "coursespro_secret_101")
+		req.Header.Set("X-App-ID", "resultspro-app-id")
+		req.Header.Set("X-App-Secret", "resultspro_secret_456")
 
 		client := &http.Client{Timeout: 5 * time.Second}
 		resp, err := client.Do(req)
