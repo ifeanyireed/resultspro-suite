@@ -19,13 +19,8 @@ api.interceptors.request.use((config) => {
     if (!config.headers) {
        config.headers = {} as any;
     }
-    if (typeof config.headers.set === 'function') {
-      config.headers.set('Authorization', `Bearer ${token}`);
-      config.headers.set('X-Tenant-Domain', domain);
-    } else {
-      (config.headers as any)['Authorization'] = `Bearer ${token}`;
-      (config.headers as any)['X-Tenant-Domain'] = domain;
-    }
+    (config.headers as any)['Authorization'] = `Bearer ${token}`;
+    (config.headers as any)['X-Tenant-Domain'] = domain;
   }
   return config;
 });
@@ -66,13 +61,8 @@ coursesApi.interceptors.request.use((config) => {
     if (!config.headers) {
        config.headers = {} as any;
     }
-    if (typeof config.headers.set === 'function') {
-      config.headers.set('Authorization', `Bearer ${token}`);
-      config.headers.set('X-Tenant-Domain', domain);
-    } else {
-      (config.headers as any)['Authorization'] = `Bearer ${token}`;
-      (config.headers as any)['X-Tenant-Domain'] = domain;
-    }
+    (config.headers as any)['Authorization'] = `Bearer ${token}`;
+    (config.headers as any)['X-Tenant-Domain'] = domain;
   }
   return config;
 });
