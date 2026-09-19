@@ -37,49 +37,35 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set, get) => {
-  let token = null;
-  if (typeof window !== 'undefined') {
-    // 1. Check URL for bridging token first (Solves Chrome localhost strictness)
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlToken = urlParams.get('token');
-    
-    // 2. Check cookies & localstorage
-    token = urlToken || Cookies.get('token') || localStorage.getItem('token') || null;
-    
-    // If we intercepted a URL token, save it immediately so api.ts can use it!
-    if (urlToken) {
-        const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
-        const rootDomain = platformDomain === 'localhost' ? 'localhost' : `.${platformDomain}`;
-        Cookies.set('token', urlToken, { expires: 7, domain: rootDomain || undefined, path: '/' });
-        localStorage.setItem('token', urlToken);
-        // Scrub URL synchronously to hide token
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  }
+  const token = typeof window !== 'undefined' ? Cookies.get('token') || null : null;
   
   return {
     user: null, // Always fetch from DB on reload
     token,
     isAuthenticated: !!token,
     setAuth: (user, token) => {
-      let rootDomain = '';
+      let rootDomain: string | undefined = undefined;
       if (typeof window !== 'undefined') {
         const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
-        rootDomain = platformDomain === 'localhost' ? 'localhost' : `.${platformDomain}`;
+        // For localhost, we MUST omit the domain parameter so Chrome binds it strictly to the current subdomain.
+        // For production, we use the wildcard domain .platformDomain to share across subdomains.
+        if (platformDomain !== 'localhost') {
+           rootDomain = `.${platformDomain}`;
+        }
       }
-      Cookies.set('token', token, { expires: 7, domain: rootDomain || undefined, path: '/' });
-      if (typeof window !== 'undefined') localStorage.setItem('token', token);
+      Cookies.set('token', token, { expires: 7, domain: rootDomain, path: '/' });
       set({ user, token, isAuthenticated: true });
     },
     logout: () => {
-      let rootDomain = '';
+      let rootDomain: string | undefined = undefined;
       if (typeof window !== 'undefined') {
         const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
-        rootDomain = platformDomain === 'localhost' ? 'localhost' : `.${platformDomain}`;
+        if (platformDomain !== 'localhost') {
+           rootDomain = `.${platformDomain}`;
+        }
       }
-      Cookies.remove('token', { domain: rootDomain || undefined, path: '/' });
+      Cookies.remove('token', { domain: rootDomain, path: '/' });
       Cookies.remove('token'); // Fallback for any exact-match cookies
-      if (typeof window !== 'undefined') localStorage.removeItem('token');
       set({ user: null, token: null, isAuthenticated: false });
       if (typeof window !== 'undefined') {
         window.location.href = '/login';

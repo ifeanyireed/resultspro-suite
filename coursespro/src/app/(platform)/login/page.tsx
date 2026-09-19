@@ -21,34 +21,49 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     setError('');
+    
+    // Nexa NG Verbatim Strategy:
+    // When users try to login on the central platform, we simply redirect them to their specific tenant login page.
+    // We DO NOT make the API call here, to avoid cross-origin cookie loss.
+    // They must explicitly log in on their tenant's subdomain.
     try {
+      // Very basic static routing based on email for seamless redirection.
+      // E.g., admin@skillupacademy.com -> routes to skillupacademy
+      if (email && email.includes('@')) {
+        const domain = email.split('@')[1];
+        const slug = domain.split('.')[0];
+        
+        // Prevent redirecting back to the platform itself or common mail providers
+        if (!['gmail', 'yahoo', 'outlook', 'hotmail', 'resultspro', 'coursespro', 'localhost'].includes(slug)) {
+          const protocol = window.location.protocol;
+          const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+          const port = window.location.port ? `:${window.location.port}` : '';
+          
+          window.location.href = `${protocol}//${slug}.${platformDomain}${port}/login?email=${encodeURIComponent(email)}`;
+          return;
+        }
+      }
+
+      // If they are a platform superadmin (e.g. logging in with a non-tenant email)
+      // we CAN process their login directly here on the platform domain.
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-      
-      const res = await axios.post(`${USERS_API}/api/v1/auth/login`, { 
-        email, 
-        password
-      });
+      const res = await axios.post(`${USERS_API}/api/v1/auth/login`, { email, password });
       
       const token = res.data.access_token || res.data.token;
       if (token) {
         setAuth(res.data.user, token);
         
-        // Redirect to their academy dashboard
+        // If they DO have admin tenants but they didn't trigger the fast email-based redirect
+        // above (e.g. they used gmail.com), redirect them now without setting a cross-domain cookie.
+        // They will have to type their password again.
         const adminTenants = res.data.admin_tenants;
         if (adminTenants && adminTenants.length > 0) {
           const slug = adminTenants[0];
           const protocol = window.location.protocol;
           const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
           const port = window.location.port ? `:${window.location.port}` : '';
-          
-          let targetUrl = `${protocol}//${slug}.${platformDomain}${port}/admin`;
-          // Fix for Chrome's strict localhost cookie blocking: pass token in URL
-          if (platformDomain === 'localhost') {
-            targetUrl += `?token=${token}`;
-          }
-          window.location.href = targetUrl;
+          window.location.href = `${protocol}//${slug}.${platformDomain}${port}/login?email=${encodeURIComponent(email)}`;
         } else {
-          // Superadmin
           router.push('/admin');
         }
       }

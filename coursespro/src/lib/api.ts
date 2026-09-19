@@ -36,10 +36,12 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
         const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
-        const rootDomain = platformDomain === 'localhost' ? 'localhost' : `.${platformDomain}`;
+        let rootDomain: string | undefined = undefined;
+        if (platformDomain !== 'localhost') {
+           rootDomain = `.${platformDomain}`;
+        }
         Cookies.remove('token', { domain: rootDomain, path: '/' });
         Cookies.remove('token');
-        localStorage.removeItem('token');
       }
     }
     return Promise.reject(error);
@@ -57,10 +59,7 @@ export const coursesApi = axios.create({
 });
 
 coursesApi.interceptors.request.use((config) => {
-  let token = null;
-  if (typeof window !== 'undefined') {
-    token = Cookies.get('token') || localStorage.getItem('token');
-  }
+  const token = typeof window !== 'undefined' ? Cookies.get('token') : null;
   const domain = typeof window !== 'undefined' ? window.location.hostname : '';
   
   if (token) {
@@ -84,10 +83,12 @@ coursesApi.interceptors.response.use(
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
         const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
-        const rootDomain = platformDomain === 'localhost' ? 'localhost' : `.${platformDomain}`;
+        let rootDomain: string | undefined = undefined;
+        if (platformDomain !== 'localhost') {
+           rootDomain = `.${platformDomain}`;
+        }
         Cookies.remove('token', { domain: rootDomain, path: '/' });
         Cookies.remove('token');
-        localStorage.removeItem('token');
       }
     }
     return Promise.reject(error);

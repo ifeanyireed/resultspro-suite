@@ -47,17 +47,6 @@ export default function AppLayout({
   const [logoUrl, setLogoUrl] = React.useState('/logo.png');
 
   React.useEffect(() => {
-    // Check for localhost token bridging
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      const tokenFromUrl = urlParams.get('token');
-      if (tokenFromUrl) {
-        useAuthStore.getState().setAuth(useAuthStore.getState().user, tokenFromUrl);
-        // Scrub token from URL
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-    }
-    
     setMounted(true);
     const fetchTenant = async () => {
       try {
