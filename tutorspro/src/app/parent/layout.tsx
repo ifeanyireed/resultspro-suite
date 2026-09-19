@@ -14,7 +14,7 @@ import {
   AcademicCapIcon,
   TrophyIcon,
   Cog6ToothIcon, 
-  QuestionMarkCircleIcon, 
+  LifebuoyIcon, 
   ArrowRightOnRectangleIcon,
   MagnifyingGlassIcon,
   EnvelopeIcon,
@@ -89,9 +89,9 @@ export default function ParentLayout({
                   <Cog6ToothIcon className="w-6 h-6" />
                   Settings
                 </Link>
-                <Link href="/parent/help" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/parent/help') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                  <QuestionMarkCircleIcon className="w-6 h-6" />
-                  Help
+                <Link href="/parent/support" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/parent/support') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
+                  <LifebuoyIcon className="w-6 h-6" />
+                  Support
                 </Link>
                 <button onClick={() => logout()} className="w-full text-left flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
                   <ArrowRightOnRectangleIcon className="w-6 h-6" />
