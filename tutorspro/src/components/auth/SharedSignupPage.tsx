@@ -114,9 +114,9 @@ export default function SharedSignupPage({
         try {
           const payloadJwt = JSON.parse(atob(token.split('.')[1]));
           const roles = payloadJwt.roles || res.data.user?.roles || [];
-          if (roles.includes("TUTOR") || roles.includes("tutor")) targetPath = "/tutor";
-          else if (roles.includes("STUDENT") || roles.includes("student")) targetPath = "/student";
-          else if (roles.includes("PARENT") || roles.includes("parent")) targetPath = "/parent";
+          if (roles.includes("TUTOR") || roles.includes("tutor")) targetPath = "/tutor/dashboard";
+          else if (roles.includes("STUDENT") || roles.includes("student")) targetPath = "/student/dashboard";
+          else if (roles.includes("PARENT") || roles.includes("parent")) targetPath = "/parent/dashboard";
         } catch (e) {
           console.error("Failed to parse token for redirect", e);
         }
