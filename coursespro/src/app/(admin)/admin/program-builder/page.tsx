@@ -18,8 +18,8 @@ export default function ProgramBuilderPage() {
     try {
       const res = await coursesApi.get('/api/admin/programs');
       setPrograms(res.data.programs || []);
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
+      console.error("[fetchPrograms Error Data]:", e.response?.data || e.message);
     } finally {
       setLoading(false);
     }
