@@ -43,10 +43,13 @@ export default function SharedLoginPage({
     setIsLoading(true);
     try {
       const res = await api.post(loginEndpoint, { email, password });
-      if (res.data.token) {
-        setAuth(res.data.user, res.data.token);
+      const token = res.data.token || res.data.access_token;
+      if (token) {
+        setAuth(res.data.user, token);
         toast.success("Login successful!");
         router.push(redirectPath);
+      } else {
+        toast.error("No token received from server");
       }
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Login failed");

@@ -37,21 +37,20 @@ export default function LoginPage() {
         const adminTenants = res.data.admin_tenants;
         if (adminTenants && adminTenants.length > 0) {
           const slug = adminTenants[0];
-          const isLocal = window.location.hostname.includes('localhost');
-          if (isLocal) {
-            window.location.href = `http://${slug}.localhost:3006/dashboard`;
-          } else {
-            window.location.href = `https://${slug}.resultspro.ng/dashboard`;
+          const protocol = window.location.protocol;
+          const host = window.location.host; // includes port
+          // Replace base domain if they are already on a subdomain
+          const isLocal = host.includes('localhost');
+          let baseHost = host;
+          if (!isLocal && host.split('.').length > 2) {
+             baseHost = host.split('.').slice(-2).join('.');
+          } else if (isLocal && host.split('.').length > 1 && !host.startsWith('localhost:')) {
+             baseHost = host.split('.').slice(1).join('.');
           }
+          window.location.href = `${protocol}//${slug}.${baseHost}/admin`;
         } else {
-          // If they have no admin_tenants but login succeeded on the platform, 
-          // they must be a superadmin/platform-admin. Redirect them to the global admin app.
-          const isLocal = window.location.hostname.includes('localhost');
-          if (isLocal) {
-            window.location.href = `http://localhost:3005`;
-          } else {
-            window.location.href = `https://admin.resultspro.ng`;
-          }
+          // Superadmin
+          router.push('/admin');
         }
       }
     } catch (err: any) {

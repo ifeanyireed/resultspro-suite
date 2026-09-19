@@ -50,16 +50,16 @@ export default function CreatorOnboardingPage() {
       
       // Redirect to the new tenant's dashboard after 2 seconds
       setTimeout(() => {
-        // If they created "skillup", redirect to https://skillup.resultspro.ng or local equivalent
-        const host = window.location.host; // e.g. localhost:3006 or coursespro.resultspro.ng
+        const protocol = window.location.protocol;
+        const host = window.location.host;
         const isLocal = host.includes('localhost');
-        if (isLocal) {
-          // Since local testing of subdomains is hard, we just go to root (which middleware routes to platform locally if host is localhost:3006)
-          // Actually, we can just redirect to http://slug.localhost:3006 if they have it setup, or just go to /dashboard
-          window.location.href = `http://${slug}.localhost:3006`;
-        } else {
-          window.location.href = `https://${slug}.resultspro.ng`;
+        let baseHost = host;
+        if (!isLocal && host.split('.').length > 2) {
+           baseHost = host.split('.').slice(-2).join('.');
+        } else if (isLocal && host.split('.').length > 1 && !host.startsWith('localhost:')) {
+           baseHost = host.split('.').slice(1).join('.');
         }
+        window.location.href = `${protocol}//${slug}.${baseHost}`;
       }, 2500);
 
     } catch (err: any) {
