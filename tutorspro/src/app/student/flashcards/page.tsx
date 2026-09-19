@@ -1,6 +1,6 @@
 "use client";
 
-import { IconBolt as Zap, IconRotateCcw as RotateCcw, IconCheck as Check, IconX as X, IconChevronRight as ChevronRight, IconStack2 as Layers, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconBolt as Zap, IconRotate as RotateCcw, IconCheck as Check, IconX as X, IconChevronRight as ChevronRight, IconStack2 as Layers, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { RoleGate } from '@/components/RoleGate';
 import api from '@/lib/api';
