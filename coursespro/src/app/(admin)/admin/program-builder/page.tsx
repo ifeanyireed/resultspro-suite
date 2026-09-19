@@ -8,8 +8,10 @@ import {
   ArrowUpRightIcon
 } from '@heroicons/react/24/outline';
 import { coursesApi } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 
 export default function ProgramBuilderPage() {
+  const router = useRouter();
   const [programs, setPrograms] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [creating, setCreating] = React.useState(false);
@@ -79,7 +81,11 @@ export default function ProgramBuilderPage() {
             </div>
           ) : (
             programs.map((prog) => (
-              <div key={prog.id} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex items-center justify-between group hover:-translate-y-1 transition-transform cursor-pointer">
+              <div 
+                key={prog.id} 
+                onClick={() => router.push(`/admin/program-builder/${prog.id}`)}
+                className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex items-center justify-between group hover:-translate-y-1 transition-transform cursor-pointer"
+              >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center">
                     <DocumentDuplicateIcon className="w-6 h-6" />
