@@ -38,10 +38,15 @@ export default function LoginPage() {
         if (adminTenants && adminTenants.length > 0) {
           const slug = adminTenants[0];
           const protocol = window.location.protocol;
-          const host = window.location.host; // includes port
           const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
           const port = window.location.port ? `:${window.location.port}` : '';
-          window.location.href = `${protocol}//${slug}.${platformDomain}${port}/admin`;
+          
+          let targetUrl = `${protocol}//${slug}.${platformDomain}${port}/admin`;
+          // Fix for Chrome's strict localhost cookie blocking: pass token in URL
+          if (platformDomain === 'localhost') {
+            targetUrl += `?token=${token}`;
+          }
+          window.location.href = targetUrl;
         } else {
           // Superadmin
           router.push('/admin');
