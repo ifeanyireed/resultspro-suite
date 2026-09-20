@@ -259,8 +259,6 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                               </div>
                             );
                           })()}
-                            </div>
-                          )}
 
                         {block.type === 'QUIZ' && (
                           <div className="p-8">
