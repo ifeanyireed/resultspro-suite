@@ -24,7 +24,9 @@ export function getTenantSlug(): string {
   }
 
   // Fall back to env variable for local dev (e.g. running on plain localhost:3001)
-  return process.env.NEXT_PUBLIC_TENANT_SLUG || slug;
+  const finalSlug = process.env.NEXT_PUBLIC_TENANT_SLUG || slug;
+  console.log("Resolved Tenant Slug:", finalSlug);
+  return finalSlug;
 }
 
 const api = axios.create({
@@ -52,10 +54,11 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     // Only clear auth on explicit token/session failures, not on tenant resolution issues
-    const errorMsg = error.response?.data?.error || error.response?.data?.reason || '';
-    const isTenantIssue = typeof errorMsg === 'string' && errorMsg.toLowerCase().includes('tenant');
+    const errorStr = JSON.stringify(error.response?.data || {}).toLowerCase();
+    const isTenantIssue = errorStr.includes('tenant');
     
     if (error.response?.status === 401 && !isTenantIssue) {
+      console.error("api interceptor caught 401 and wiped token. error.response.data:", error.response?.data);
       if (typeof window !== 'undefined') {
         const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
         let rootDomain: string | undefined = undefined;
@@ -99,10 +102,11 @@ coursesApi.interceptors.response.use(
   (response) => response,
   (error) => {
     // Only clear auth on explicit token/session failures, not on tenant resolution issues
-    const errorMsg = error.response?.data?.error || error.response?.data?.reason || '';
-    const isTenantIssue = typeof errorMsg === 'string' && errorMsg.toLowerCase().includes('tenant');
+    const errorStr = JSON.stringify(error.response?.data || {}).toLowerCase();
+    const isTenantIssue = errorStr.includes('tenant');
 
     if (error.response?.status === 401 && !isTenantIssue) {
+      console.error("api interceptor caught 401 and wiped token. error.response.data:", error.response?.data);
       if (typeof window !== 'undefined') {
         const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
         let rootDomain: string | undefined = undefined;

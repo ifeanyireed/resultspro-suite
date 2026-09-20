@@ -20,8 +20,8 @@ export default function PaymentsPage() {
           api.get('/api/v1/admin/payments/summary'),
           api.get('/api/v1/admin/payments/transactions')
         ]);
-        setSummary(sumRes.data);
-        setTransactions(txRes.data);
+        setSummary(sumRes.data || { mrr: 0, active_subs: 0, dunning_risk: 0 });
+        setTransactions(txRes.data?.transactions || (Array.isArray(txRes.data) ? txRes.data : []));
       } catch (err) {
         console.error('Failed to load payments data', err);
       } finally {
