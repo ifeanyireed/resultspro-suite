@@ -23,6 +23,17 @@ const formatEmbedUrl = (url: string, type: string) => {
   return url;
 };
 
+const getDirectMediaUrl = (url: string) => {
+  if (!url) return '';
+  if (url.includes('drive.google.com/file/d/')) {
+    const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (match) {
+      return `https://docs.google.com/uc?export=download&id=${match[1]}`;
+    }
+  }
+  return url;
+};
+
 export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
 
@@ -123,17 +134,17 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                         )}
                         
                         {block.type === 'VIDEO' && (
-                          <div className="bg-black aspect-video flex items-center justify-center text-gray-500 relative overflow-hidden">
+                          <div className="bg-white aspect-video flex items-center justify-center text-gray-500 relative overflow-hidden rounded-xl">
                             {block.url ? (
-                              (block.url.includes('youtube.com') || block.url.includes('youtu.be') || block.url.includes('drive.google.com')) ? (
+                              (block.url.includes('youtube.com') || block.url.includes('youtu.be')) ? (
                                 <iframe 
-                                  src={block.url.includes('drive.google.com') ? formatEmbedUrl(block.url, 'VIDEO') : (block.url.includes('youtube.com/embed') ? block.url : `https://www.youtube.com/embed/${block.url.split('v=')[1]?.split('&')[0] || block.url.split('youtu.be/')[1]?.split('?')[0]}`)} 
+                                  src={block.url.includes('youtube.com/embed') ? block.url : `https://www.youtube.com/embed/${block.url.split('v=')[1]?.split('&')[0] || block.url.split('youtu.be/')[1]?.split('?')[0]}`} 
                                   className="w-full h-full border-0 absolute inset-0"
                                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                   allowFullScreen
                                 />
                               ) : (
-                                <video src={block.url} controls className="w-full h-full object-contain absolute inset-0" />
+                                <video src={getDirectMediaUrl(block.url)} controls className="w-full h-full object-contain absolute inset-0 rounded-xl" />
                               )
                             ) : (
                               <span>No video uploaded</span>
@@ -142,13 +153,9 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                         )}
 
                         {block.type === 'AUDIO' && (
-                          <div className="p-6 bg-gray-50 flex flex-col items-center justify-center gap-4 border-b border-gray-100">
+                          <div className="p-6 bg-white flex flex-col items-center justify-center gap-4">
                             {block.url ? (
-                              block.url.includes('drive.google.com') ? (
-                                <iframe src={formatEmbedUrl(block.url, 'AUDIO')} className="w-full max-w-md h-[120px] border-0 rounded-lg shadow-sm" title="Audio Player" allow="autoplay" />
-                              ) : (
-                                <audio src={block.url} controls className="w-full max-w-md" />
-                              )
+                              <audio src={getDirectMediaUrl(block.url)} controls className="w-full max-w-md" />
                             ) : (
                               <span className="text-sm text-gray-500">No audio uploaded</span>
                             )}
