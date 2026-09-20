@@ -1,0 +1,22 @@
+HTTP/2 404 
+content-type: application/octet-stream
+x-xss-protection: 0
+content-transfer-encoding: binary
+x-content-type-options: nosniff
+expires: Sun, 20 Sep 2026 10:20:03 GMT
+x-request-id: ff9b9c441d60e2698631c03d214206a1
+content-disposition: inline
+x-permitted-cross-domain-policies: none
+x-cld-error: Resource not found - uploads/html/test.html
+referrer-policy: strict-origin-when-cross-origin
+content-length: 0
+date: Sun, 20 Sep 2026 10:19:03 GMT
+cache-control: private, no-transform, max-age=0, no-cache
+access-control-expose-headers: Content-Length,Content-Disposition,Content-Range,Etag,Server-Timing,Vary,X-Cld-Error,X-Robots-Tag
+access-control-allow-origin: *
+accept-ranges: bytes
+timing-allow-origin: *
+server: Cloudinary
+strict-transport-security: max-age=604800
+server-timing: cld-akam;dur=224;cpu=30;start=2026-09-20T10:19:03.268Z;desc=miss,rtt;dur=146,cloudinary;dur=109;start=2026-09-20T10:19:03.323Z,cld-id;desc=ff9b9c441d60e2698631c03d214206a1,cld-error;desc="Resource not found - uploads/html/test.html"
+
