@@ -268,7 +268,8 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                           </div>
                         )}
                       </div>
-                    ))
+                    );
+                    })
                   )}
 
                   {/* Navigation footer */}
