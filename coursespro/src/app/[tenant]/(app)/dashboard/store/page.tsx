@@ -41,9 +41,9 @@ export default function DashboardStorePage() {
 
   const getIconForType = (type: string) => {
     switch (type) {
-      case 'BOOK': return <BookOpenIcon className="w-5 h-5 text-indigo-500" />;
-      case 'DOWNLOADABLE_COURSE': return <ArchiveBoxIcon className="w-5 h-5 text-emerald-500" />;
-      default: return <DocumentIcon className="w-5 h-5 text-gray-500" />;
+      case 'BOOK': return <BookOpenIcon className="w-5 h-5 text-indigo-500" strokeWidth={2} />;
+      case 'DOWNLOADABLE_COURSE': return <ArchiveBoxIcon className="w-5 h-5 text-emerald-500" strokeWidth={2} />;
+      default: return <DocumentIcon className="w-5 h-5 text-gray-500" strokeWidth={2} />;
     }
   };
 

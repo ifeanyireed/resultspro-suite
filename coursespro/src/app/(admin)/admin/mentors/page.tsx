@@ -129,14 +129,14 @@ export default function MentorsPage() {
                       className="ml-auto p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                       title="Edit Mentor"
                     >
-                      <PencilSquareIcon className="w-4 h-4" />
+                      <PencilSquareIcon className="w-5 h-5" strokeWidth={2} />
                     </button>
                     <button 
                       onClick={() => handleDeleteMentor(mentor.user_id)} 
                       className="ml-2 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                       title="Delete Mentor"
                     >
-                      <TrashIcon className="w-4 h-4" />
+                      <TrashIcon className="w-5 h-5" strokeWidth={2} />
                     </button>
                   </div>
                   <p className="text-xs text-gray-500 mt-1 truncate">

@@ -29,9 +29,9 @@ export default async function StorePage({ params }: { params: Promise<{ tenant: 
 
   const getIconForType = (type: string) => {
     switch (type) {
-      case 'BOOK': return <BookOpenIcon className="w-6 h-6 text-indigo-500" />;
-      case 'DOWNLOADABLE_COURSE': return <ArchiveBoxIcon className="w-6 h-6 text-emerald-500" />;
-      default: return <DocumentIcon className="w-6 h-6 text-gray-500" />;
+      case 'BOOK': return <BookOpenIcon className="w-6 h-6 text-indigo-500" strokeWidth={2} />;
+      case 'DOWNLOADABLE_COURSE': return <ArchiveBoxIcon className="w-6 h-6 text-emerald-500" strokeWidth={2} />;
+      default: return <DocumentIcon className="w-6 h-6 text-gray-500" strokeWidth={2} />;
     }
   };
 

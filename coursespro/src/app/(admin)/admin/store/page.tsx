@@ -48,9 +48,9 @@ export default function StoreManagementPage() {
 
   const getIconForType = (type: string) => {
     switch (type) {
-      case 'BOOK': return <BookOpenIcon className="w-5 h-5 text-indigo-500" />;
-      case 'DOWNLOADABLE_COURSE': return <ArchiveBoxIcon className="w-5 h-5 text-emerald-500" />;
-      default: return <DocumentIcon className="w-5 h-5 text-gray-500" />;
+      case 'BOOK': return <BookOpenIcon className="w-5 h-5 text-indigo-500" strokeWidth={2} />;
+      case 'DOWNLOADABLE_COURSE': return <ArchiveBoxIcon className="w-5 h-5 text-emerald-500" strokeWidth={2} />;
+      default: return <DocumentIcon className="w-5 h-5 text-gray-500" strokeWidth={2} />;
     }
   };
 
@@ -127,10 +127,10 @@ export default function StoreManagementPage() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button onClick={() => openEditModal(prod)} className="p-2 text-gray-400 hover:text-[#146ef5] transition-colors rounded-lg hover:bg-blue-50 mr-1">
-                        <PencilSquareIcon className="w-5 h-5" />
+                        <PencilSquareIcon className="w-5 h-5" strokeWidth={2} />
                       </button>
                       <button onClick={() => deleteProduct(prod.id)} className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50">
-                        <TrashIcon className="w-5 h-5" />
+                        <TrashIcon className="w-5 h-5" strokeWidth={2} />
                       </button>
                     </td>
                   </tr>
