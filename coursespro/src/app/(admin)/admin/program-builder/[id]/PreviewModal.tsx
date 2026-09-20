@@ -240,6 +240,21 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                             );
                           })()}
 
+                        
+                        {block.type === 'COMPILER' && (
+                          <div className={`w-full h-[500px] relative ${isMediaWithoutCard ? 'rounded-xl overflow-hidden shadow-sm' : 'bg-white'}`}>
+                            {block.url ? (
+                              <iframe 
+                                src={`https://onecompiler.com/embed/${block.url}?code=${encodeURIComponent(block.content || '')}&hideLanguageSelection=true&hideNew=true&hideTitle=true`}
+                                className="w-full h-full border-0 bg-white" 
+                                title="Code Compiler" 
+                              />
+                            ) : (
+                              <div className="absolute inset-0 flex items-center justify-center text-gray-400 bg-white">No language selected</div>
+                            )}
+                          </div>
+                        )}
+
                         {block.type === 'QUIZ' && (
                           <div className="p-8">
                             <div className="bg-pink-50 border border-pink-100 text-pink-800 rounded-lg p-4 text-center">
