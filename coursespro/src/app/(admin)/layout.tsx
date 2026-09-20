@@ -47,10 +47,16 @@ export default function AppLayout({
   const [tenantName, setTenantName] = React.useState('ADMIN');
   const [logoUrl, setLogoUrl] = React.useState('/logo.png');
 
+  const fetchUser = useAuthStore((state) => state.fetchUser);
+  
   React.useEffect(() => {
     if (!isAuthenticated) {
       window.location.href = '/login';
       return;
+    }
+    
+    if (!user) {
+      fetchUser();
     }
     setMounted(true);
     const fetchTenant = async () => {
@@ -200,11 +206,11 @@ export default function AppLayout({
               </button>
               <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
                 <div className="w-10 h-10 bg-gradient-to-tr from-orange-200 to-orange-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
-                  <img src="/avatars/character7.jpg" alt="Agent Avatar" className="w-full h-full object-cover" />
+                  {mounted && <img src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="Admin Avatar" className="w-full h-full object-cover" />}
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-sm font-bold text-gray-900 leading-tight">Totok Michael</p>
-                  <p className="text-xs text-gray-500">tmichael20@gmail.com</p>
+                  <p className="text-sm font-bold text-gray-900 leading-tight">{mounted ? (user?.name || 'Loading...') : 'Loading...'}</p>
+                  <p className="text-xs text-gray-500">{mounted ? (user?.email || 'Loading...') : 'Loading...'}</p>
                 </div>
               </div>
             </div>
