@@ -144,7 +144,7 @@ export default function StoreManagementPage() {
       <StoreProductModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        onSaved={fetchProducts} 
+        onSaved={() => refetch()} 
         product={selectedProduct} 
       />
     </>
