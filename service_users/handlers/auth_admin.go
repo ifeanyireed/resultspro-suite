@@ -64,19 +64,42 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 	// Fetch user roles
 	var roles []string
 	isSuperAdmin := false
+	tenantRolesMap := make(map[string]map[string]string)
 
-	rows, err := db.DB.Query("SELECT role FROM user_tenant_roles WHERE user_id = ? AND status = 'active'", user.ID)
+	rows, err := db.DB.Query("SELECT ur.role, t.id, t.slug FROM user_tenant_roles ur LEFT JOIN tenants t ON ur.tenant_id = t.id WHERE ur.user_id = ? AND ur.status = 'active'", user.ID)
 	if err == nil {
 		defer rows.Close()
 		for rows.Next() {
 			var role string
-			if err := rows.Scan(&role); err == nil {
+			var tID sql.NullString
+			var tSlug sql.NullString
+			if err := rows.Scan(&role, &tID, &tSlug); err == nil {
 				roles = append(roles, role)
 				if role == "superadmin" || role == "super-admin" || role == "platform-admin" || role == "agent" || role == "support" {
 					isSuperAdmin = true
 				}
+				if tSlug.Valid && tID.Valid {
+					tenantRolesMap[tSlug.String] = map[string]string{
+						"id": tID.String,
+						"role": role,
+					}
+				}
 			}
 		}
+	}
+	
+	var isGlobalAdmin bool
+	var globalRole sql.NullString
+	db.DB.QueryRow("SELECT COALESCE(is_admin, false), role FROM users WHERE id = ?", user.ID).Scan(&isGlobalAdmin, &globalRole)
+	if globalRole.Valid && globalRole.String != "" {
+		roles = append(roles, globalRole.String)
+		if globalRole.String == "superadmin" || globalRole.String == "platform-admin" {
+			isSuperAdmin = true
+		}
+	}
+	if isGlobalAdmin {
+		roles = append(roles, "platform-admin")
+		isSuperAdmin = true
 	}
 
 	if !isSuperAdmin {
@@ -99,6 +122,7 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 	customClaims := map[string]interface{}{
 		"has_ican":     user.HasIcan,
 		"coin_balance": user.CoinBalance,
+		"tenants":      tenantRolesMap,
 	}
 
 	accessToken, err := utils.GenerateAccessToken(user.ID, roles, customClaims)
