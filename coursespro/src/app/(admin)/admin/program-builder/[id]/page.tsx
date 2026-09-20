@@ -20,7 +20,7 @@ import { RichTextEditor } from '@/components/RichTextEditor';
 
 export type ContentItem = {
   id: string;
-  type: 'TEXT' | 'VIDEO' | 'AUDIO' | 'PDF' | 'QUIZ';
+  type: 'TEXT' | 'VIDEO' | 'AUDIO' | 'PDF' | 'QUIZ' | 'HTML';
   content?: string;
   url?: string;
 };
@@ -364,6 +364,21 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                               </div>
                             )}
 
+                            {item.type === 'HTML' && (
+                              <div className="w-full text-left" onClick={e => e.stopPropagation()}>
+                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg> HTML Content</label>
+                                <textarea className="w-full border border-slate-300 rounded-md p-2 text-sm h-32 font-mono text-xs" placeholder="<iframe...>" value={item.content || ''} onChange={e => { const i = parseContents(mod); i[index].content = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)), content_markdown: null, video_url: null })} />
+                              </div>
+                            )}
+
+                            {item.type === 'QUIZ' && (
+                              <div className="w-full text-left" onClick={e => e.stopPropagation()}>
+                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Quiz ID</label>
+                                <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="Paste quiz ID here..." value={item.url || ''} onChange={e => { const i = parseContents(mod); i[index].url = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)), content_markdown: null, video_url: null })} />
+                              </div>
+                            )}
+
+
                             <div className="w-full mt-2 flex items-center justify-center border-t border-slate-100 pt-3">
                                <select 
                                  className="text-xs bg-transparent text-slate-500 hover:text-slate-900 outline-none cursor-pointer"
@@ -372,7 +387,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                    e.stopPropagation();
                                    const items = parseContents(mod);
                                    items[index].type = e.target.value as any;
-                                   if(items[index].type === 'TEXT') items[index].content = '';
+                                   if(items[index].type === 'TEXT' || items[index].type === 'HTML') items[index].content = '';
                                    else items[index].url = '';
                                    setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
                                    handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
@@ -383,6 +398,8 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                  <option value="VIDEO">Video</option>
                                  <option value="AUDIO">Audio</option>
                                  <option value="PDF">PDF Document</option>
+<option value="HTML">HTML Embed</option>
+                                 <option value="QUIZ">Quiz</option>
                                </select>
                             </div>
 
@@ -451,6 +468,34 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                           <svg className="w-4 h-4 text-red-500 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                           Add PDF
                         </button>
+
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            const items = parseContents(mod);
+                            items.push({ id: Math.random().toString(36).substring(7), type: 'HTML', content: '' });
+                            setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
+                            handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                          }}
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                        >
+                          <svg className="w-4 h-4 text-orange-500 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                          Add HTML
+                        </button>
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            const items = parseContents(mod);
+                            items.push({ id: Math.random().toString(36).substring(7), type: 'QUIZ', url: '' });
+                            setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
+                            handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                          }}
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                        >
+                          <svg className="w-4 h-4 text-pink-500 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          Add Quiz
+                        </button>
+
                       </div>
                     </div>
                     </motion.div>
