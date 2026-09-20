@@ -18,6 +18,7 @@ import api, { coursesApi } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RichTextEditor } from '@/components/RichTextEditor';
 import { QuizBuilderModal } from './QuizBuilderModal';
+import { PreviewModal } from './PreviewModal';
 
 
 
@@ -76,6 +77,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
   const [modules, setModules] = React.useState<any[]>([]);
   const [selectedModuleId, setSelectedModuleId] = React.useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = React.useState(false);
 
   const [editingTextLessonId, setEditingTextLessonId] = React.useState<string | null>(null);
   const [uploadingHtmlId, setUploadingHtmlId] = React.useState<string | null>(null);
@@ -205,7 +207,10 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
             <Cog6ToothIcon className="w-4 h-4 stroke-2" />
             Settings
           </button>
-          <button className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center gap-2">
+          <button 
+            onClick={() => setIsPreviewOpen(true)}
+            className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center gap-2 transition-colors"
+          >
             <PlayIcon className="w-4 h-4 stroke-2" />
             Preview
           </button>
