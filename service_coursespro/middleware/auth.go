@@ -6,7 +6,6 @@ import (
 	"os"
 	"strings"
 	
-	"service_coursespro/db"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
