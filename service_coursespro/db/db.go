@@ -50,6 +50,8 @@ func InitDB() {
 		&models.PeerPairing{},
 		&models.PresenceSession{},
 		&models.PublicPortfolio{},
+		&models.Quiz{},
+		&models.QuizQuestion{},
 	)
 
 	log.Println("CoursesPRO connected to MySQL with GORM successfully")

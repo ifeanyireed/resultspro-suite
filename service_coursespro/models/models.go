@@ -21,7 +21,7 @@ type Cohort struct {
 	ID            string    `gorm:"primaryKey;size:64" json:"id"`
 	TenantID      string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ProgramID     *string   `gorm:"size:64;index" json:"program_id"`
-	Slug          string    `gorm:"uniqueIndex;size:128;not null" json:"slug"`
+	Slug          string    `gorm:"unique;size:128;not null" json:"slug"`
 	Title         string    `gorm:"size:255;not null" json:"title"`
 	Subtitle      string    `gorm:"size:255" json:"subtitle"`
 	Description   string    `gorm:"type:text" json:"description"`

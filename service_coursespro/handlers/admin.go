@@ -12,7 +12,9 @@ import (
 
 func (h *Handler) AdminGetCohorts(c *gin.Context) {
 	var cohorts []models.Cohort
-	db.WithTenant(c).Preload("Program").Preload("CohortMentors").Order("created_at DESC").Find(&cohorts)
+	db.WithTenant(c).
+		Select("crs_cohorts.*, (SELECT COUNT(id) FROM crs_enrollments WHERE crs_enrollments.cohort_id = crs_cohorts.id) as enrolled_count").
+		Preload("Program").Preload("CohortMentors").Order("created_at DESC").Find(&cohorts)
 	c.JSON(http.StatusOK, gin.H{"cohorts": cohorts})
 }
 
