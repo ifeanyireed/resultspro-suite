@@ -140,7 +140,9 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                     </div>
                   ) : (
                     contents.map((block: any, i: number) => {
-                      const hasTitleOrBody = !!(block.title || block.content);
+                      const isMediaBlock = ['VIDEO', 'AUDIO', 'PDF', 'PPT', 'HTML'].includes(block.type);
+                      const hasCardBody = isMediaBlock && !!block.content;
+                      const hasTitleOrBody = !!block.title || hasCardBody;
                       const isMediaWithoutCard = ['PDF', 'PPT', 'AUDIO', 'HTML'].includes(block.type) && !hasTitleOrBody;
 
                       return (
@@ -148,7 +150,7 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                           {hasTitleOrBody && (
                             <div className="p-6 border-b border-gray-100 bg-white">
                                {block.title && <h3 className="text-lg font-bold text-gray-900 mb-2">{block.title}</h3>}
-                               {block.content && <p className="text-gray-600 whitespace-pre-wrap text-sm">{block.content}</p>}
+                               {hasCardBody && <p className="text-gray-600 whitespace-pre-wrap text-sm">{block.content}</p>}
                             </div>
                           )}
 
