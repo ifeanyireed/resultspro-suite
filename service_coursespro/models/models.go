@@ -167,8 +167,8 @@ type PresenceSession struct {
 type PublicPortfolio struct {
 	ID                 string    `gorm:"primaryKey;size:64" json:"id"`
 	TenantID           string    `gorm:"size:191;index;not null" json:"tenant_id"`
-	UserID             string    `gorm:"size:64;uniqueIndex;not null" json:"user_id"`
-	Username           string    `gorm:"size:64;uniqueIndex;not null" json:"username"`
+	UserID             string    `gorm:"size:64;unique;not null" json:"user_id"`
+	Username           string    `gorm:"size:64;unique;not null" json:"username"`
 	Headline           string    `gorm:"size:255" json:"headline"`
 	Bio                string    `gorm:"type:text" json:"bio"`
 	CaseStudiesJSON    string    `gorm:"type:text" json:"case_studies_json"`
