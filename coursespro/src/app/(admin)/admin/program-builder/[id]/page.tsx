@@ -612,7 +612,24 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                             {item.type === 'ASSIGNMENT' && (
                               <div className="w-full text-left" onClick={e => e.stopPropagation()}>
                                 <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg> Assignment Instructions</label>
-                                <textarea className="w-full border border-slate-300 rounded-md p-2 text-sm h-32" placeholder="Describe the assignment task here..." value={item.content || ''} onChange={e => { const i = parseContents(mod); i[index].content = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)), content_markdown: null, video_url: null })} />
+                                <textarea className="w-full border border-slate-300 rounded-md p-2 text-sm h-32 mb-3" placeholder="Describe the assignment task here..." value={item.content || ''} onChange={e => { const i = parseContents(mod); i[index].content = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)), content_markdown: null, video_url: null })} />
+                                
+                                <label className="block text-xs font-medium text-slate-700 mb-1">Requested Submission Type</label>
+                                <select 
+                                  className="w-full border border-slate-300 rounded-md p-2 text-sm outline-none focus:border-blue-500"
+                                  value={item.url || 'TEXT'}
+                                  onChange={e => { 
+                                    const i = parseContents(mod); 
+                                    i[index].url = e.target.value; 
+                                    setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); 
+                                  }}
+                                  onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)), content_markdown: null, video_url: null })}
+                                >
+                                  <option value="TEXT">Text Input</option>
+                                  <option value="LINK">Link Attachment</option>
+                                  <option value="FILE">File Upload</option>
+                                  <option value="ANY">Any (File, Link, or Text)</option>
+                                </select>
                               </div>
                             )}
 

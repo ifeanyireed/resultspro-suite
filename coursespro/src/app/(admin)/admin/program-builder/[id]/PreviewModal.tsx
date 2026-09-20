@@ -271,19 +271,28 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                           </div>
                         )}
                         
-                        {block.type === 'ASSIGNMENT' && (
-                          <div className="p-8">
-                            <div className="bg-indigo-50 border border-indigo-100 rounded-lg p-6">
-                              <h3 className="font-semibold text-indigo-900 mb-2">Assignment: {block.content || 'Untitled Assignment'}</h3>
-                              <div className="flex items-center gap-3 mt-4">
-                                <button className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium shadow-sm" disabled>
-                                  Upload Submission
-                                </button>
-                                <span className="text-xs text-indigo-500 italic">Submissions disabled in preview mode</span>
+                        {block.type === 'ASSIGNMENT' && (() => {
+                          const subType = block.url || 'TEXT';
+                          let btnText = 'Submit Assignment';
+                          if (subType === 'TEXT') btnText = 'Write Submission';
+                          else if (subType === 'LINK') btnText = 'Attach Link';
+                          else if (subType === 'FILE') btnText = 'Upload File';
+
+                          return (
+                            <div className="p-8">
+                              <div className="bg-indigo-50 border border-indigo-100 rounded-lg p-6">
+                                <h3 className="font-semibold text-indigo-900 mb-2">Assignment Task</h3>
+                                <p className="text-indigo-800 text-sm mb-4 whitespace-pre-wrap">{block.content || 'No instructions provided.'}</p>
+                                <div className="flex items-center gap-3 mt-4 pt-4 border-t border-indigo-100/50">
+                                  <button className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium shadow-sm" disabled>
+                                    {btnText}
+                                  </button>
+                                  <span className="text-xs text-indigo-500 italic">Submissions disabled in preview mode</span>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        )}
+                          );
+                        })()}
                       </div>
                     );
                     })
