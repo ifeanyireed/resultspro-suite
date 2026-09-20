@@ -19,7 +19,7 @@ import (
 
 // GetPaymentSummary returns MRR, Active Subs, and Dunning Risk
 func (h *Handler) GetPaymentSummary(c *gin.Context) {
-	tenantID, exists := c.Get("tenantID")
+	tenantID, exists := c.Get("tenant_id")
 	if !exists || tenantID == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Tenant not identified"})
 		return
@@ -61,7 +61,7 @@ func (h *Handler) GetPaymentSummary(c *gin.Context) {
 
 // GetTransactions returns recent transactions
 func (h *Handler) GetTransactions(c *gin.Context) {
-	tenantID, exists := c.Get("tenantID")
+	tenantID, exists := c.Get("tenant_id")
 	if !exists || tenantID == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Tenant not identified"})
 		return
