@@ -273,23 +273,23 @@ func (h *Handler) AdminGetCohortStats(c *gin.Context) {
 	var totalCohorts int64
 	var distinctPrograms int64
 
-	type CapacityResult struct {
-		TotalEnrolled int64
-		TotalCapacity int64
-	}
-	var capRes CapacityResult
-
 	db.DB.Model(&models.Cohort{}).Where("tenant_id = ? AND status = ?", tenantID, "ACTIVE").Count(&totalCohorts)
 	db.DB.Model(&models.Cohort{}).Where("tenant_id = ? AND status = ?", tenantID, "ACTIVE").Distinct("program_id").Count(&distinctPrograms)
 
+	var totalEnrolled int64
+	db.DB.Model(&models.Enrollment{}).Where("tenant_id = ?", tenantID).Count(&totalEnrolled)
+
+	var capRes struct {
+		TotalCapacity int64
+	}
 	db.DB.Model(&models.Cohort{}).
-		Select("COALESCE(SUM(enrolled_count), 0) as total_enrolled, COALESCE(SUM(capacity), 0) as total_capacity").
+		Select("COALESCE(SUM(capacity), 0) as total_capacity").
 		Where("tenant_id = ?", tenantID).
 		Scan(&capRes)
 
 	fillRate := 0.0
 	if capRes.TotalCapacity > 0 {
-		fillRate = (float64(capRes.TotalEnrolled) / float64(capRes.TotalCapacity)) * 100.0
+		fillRate = (float64(totalEnrolled) / float64(capRes.TotalCapacity)) * 100.0
 	}
 
 	c.JSON(http.StatusOK, gin.H{
