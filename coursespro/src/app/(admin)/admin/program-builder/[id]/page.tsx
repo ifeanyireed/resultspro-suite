@@ -47,25 +47,28 @@ const parseContents = (mod: any): ContentItem[] => {
   return items;
 };
 
-const getMarkdownSnippet = (md: string) => {
-  if (!md) return { heading: 'Text Lesson', excerpt: 'This module has text content.' };
-  const lines = md.split('\n').map(l => l.trim()).filter(Boolean);
-  let heading = 'Text Lesson';
-  let excerptText = '';
+const getHtmlSnippet = (html: string) => {
+  if (!html) return { heading: 'Text Lesson', excerpt: 'This module has text content.' };
   
-  for (const line of lines) {
-    if (line.startsWith('#')) {
-      if (heading === 'Text Lesson') heading = line.replace(/^#+\s*/, '');
-    } else {
-      if (!excerptText && !line.startsWith('![')) excerptText = line;
-    }
+  // Try to extract the first heading
+  const headingMatch = html.match(/<h[1-6][^>]*>(.*?)<\/h[1-6]>/i);
+  let extractedHeading = '';
+  if (headingMatch && headingMatch[1]) {
+    extractedHeading = headingMatch[1].replace(/<[^>]+>/g, '').trim();
   }
   
-  let excerpt = excerptText.replace(/[#*`_]/g, '').slice(0, 80);
-  if (excerptText.length > 80) excerpt += '...';
+  // Strip all HTML tags
+  const plainText = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  
+  // Use the extracted heading if found, otherwise use up to 80 chars
+  let excerpt = extractedHeading || plainText.slice(0, 80);
+  
+  if (!extractedHeading && plainText.length > 80) {
+    excerpt += '...';
+  }
   if (!excerpt) excerpt = 'This module has text content.';
   
-  return { heading, excerpt };
+  return { heading: 'Text Lesson', excerpt };
 };
 
 export default function BuilderOSPage({ params }: { params: Promise<{ id: string }> }) {
@@ -375,8 +378,8 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                               <>
                                 <DocumentTextIcon className="w-8 h-8 text-blue-500 stroke-1" />
                                 <div className="text-center">
-                                  <h4 className="font-medium text-slate-800 mb-1">{getMarkdownSnippet(item.content || '').heading}</h4>
-                                  <p className="text-sm text-slate-500">{getMarkdownSnippet(item.content || '').excerpt}</p>
+                                  <h4 className="font-medium text-slate-800 mb-1">{getHtmlSnippet(item.content || '').heading}</h4>
+                                  <p className="text-sm text-slate-500">{getHtmlSnippet(item.content || '').excerpt}</p>
                                 </div>
                                 <button 
                                   onClick={(e) => { e.stopPropagation(); setEditingTextLessonId(item.id + '_' + mod.id); setTextLessonDraft(item.content || ''); }}
