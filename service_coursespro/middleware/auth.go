@@ -29,7 +29,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		secret := os.Getenv("JWT_SECRET")
 		if secret == "" {
-			secret = "your-super-secret-jwt-key-change-in-production-min-32-chars"
+			secret = "resultspro-central-secret-key-change-in-production"
 		}
 
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
