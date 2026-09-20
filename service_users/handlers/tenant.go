@@ -71,7 +71,7 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		tenantType = "SCHOOL"
 	}
 
-	defaultSubdomain := input.Slug + ".resultspro.ng"
+	defaultSubdomain := input.Slug + ".ofia.shop"
 
 	query := `
 		INSERT INTO tenants (id, type, name, slug, default_subdomain, tenant_code, short_name, motto, contact_email, contact_phone, contact_person_name, full_address, state, lga, primary_color, logo_url, enabled_modules, status, verification_status, referred_by_agent_id, subscription_tier, created_at, updated_at) 

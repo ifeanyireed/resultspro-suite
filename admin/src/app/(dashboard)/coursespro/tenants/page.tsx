@@ -230,7 +230,7 @@ export default function CoursesProTenantManager() {
                       </div>
                       <div>
                         <p className="font-medium text-slate-800 text-xs">{school.name}</p>
-                        <p className="text-[10px] text-slate-400 font-normal mt-0.5">{school.slug}.resultspro.ng</p>
+                        <p className="text-[10px] text-slate-400 font-normal mt-0.5">{school.slug}.ofia.shop</p>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500 font-normal">{school.contact_email || '—'}</td>
@@ -282,7 +282,7 @@ export default function CoursesProTenantManager() {
                           Edit
                         </button>
                         <a
-                          href={`https://${school.slug}.resultspro.ng`}
+                          href={`https://${school.slug}.ofia.shop`}
                           target="_blank"
                           rel="noreferrer"
                           className="inline-flex items-center px-3 py-1 bg-slate-100 text-slate-600 rounded-full font-medium text-[11px] hover:bg-slate-200 transition-all shadow-sm"
@@ -346,7 +346,7 @@ export default function CoursesProTenantManager() {
                     className="w-full pl-4 pr-28 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
                   />
                   <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <span className="text-[10px] text-slate-400 font-medium">.resultspro.ng</span>
+                    <span className="text-[10px] text-slate-400 font-medium">.ofia.shop</span>
                   </div>
                 </div>
               </div>
@@ -538,12 +538,12 @@ export default function CoursesProTenantManager() {
                     value={editTenantData.slug}
                     onChange={e => {
                       const newSlug = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
-                      setEditTenantData({...editTenantData, slug: newSlug, default_subdomain: `${newSlug}.resultspro.ng`});
+                      setEditTenantData({...editTenantData, slug: newSlug, default_subdomain: `${newSlug}.ofia.shop`});
                     }}
                     className="w-full pl-4 pr-28 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
                   />
                   <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <span className="text-[10px] text-slate-400 font-medium">.resultspro.ng</span>
+                    <span className="text-[10px] text-slate-400 font-medium">.ofia.shop</span>
                   </div>
                 </div>
               </div>
