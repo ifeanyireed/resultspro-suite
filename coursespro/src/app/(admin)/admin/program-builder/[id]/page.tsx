@@ -1,5 +1,7 @@
 'use client';
 
+import { GripVertical, Copy, Trash2 } from 'lucide-react';
+
 import React, { use } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
@@ -232,19 +234,64 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
               <div className="space-y-1">
                 <AnimatePresence>
                   {modules.map(mod => (
-                    <motion.button 
+                    <motion.div 
                       key={mod.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      onClick={() => {
-                        setSelectedModuleId(mod.id);
-                        setIsSidebarOpen(true);
-                      }}
-                      className={`w-full text-left px-3 py-2.5 text-sm rounded-md transition-colors ${selectedModuleId === mod.id ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100'}`}
+                      className={`group flex items-center justify-between w-full px-3 py-2.5 text-sm rounded-md transition-colors ${selectedModuleId === mod.id ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100'}`}
                     >
-                      {mod.title || 'Untitled Module'}
-                    </motion.button>
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <GripVertical className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 cursor-grab shrink-0 transition-opacity" />
+                        <button
+                          className="flex-1 text-left truncate focus:outline-none"
+                          onClick={() => {
+                            setSelectedModuleId(mod.id);
+                            setIsSidebarOpen(true);
+                          }}
+                        >
+                          {mod.title || 'Untitled Module'}
+                        </button>
+                      </div>
+                      
+                      <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-2">
+                        <button 
+                          className="p-1 text-gray-400 hover:text-blue-600 transition-colors" 
+                          title="Duplicate Module"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // duplicate module logic
+                            const newMod = {
+                              ...mod,
+                              id: crypto.randomUUID(),
+                              title: (mod.title || 'Untitled Module') + ' (Copy)'
+                            };
+                            setModules([...modules, newMod]);
+                            handleUpdateModule(newMod.id, newMod);
+                          }}
+                        >
+                          <Copy className="w-4 h-4 stroke-[2.5]" />
+                        </button>
+                        <button 
+                          className="p-1 text-gray-400 hover:text-red-600 transition-colors" 
+                          title="Delete Module"
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            if (confirm("Are you sure you want to delete this module?")) {
+                              setModules(modules.filter(m => m.id !== mod.id));
+                              if (selectedModuleId === mod.id) setSelectedModuleId(null);
+                              try {
+                                await coursesApi.delete(`/api/admin/stages/${mod.id}`);
+                              } catch(err) {
+                                console.error("Failed to delete", err);
+                              }
+                            }
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </motion.div>
                   ))}
                 </AnimatePresence>
               </div>
