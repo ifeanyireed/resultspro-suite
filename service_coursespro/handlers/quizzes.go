@@ -27,7 +27,7 @@ func (h *Handler) AdminGetQuiz(c *gin.Context) {
 
 	var questions []models.QuizQuestion
 	db.WithTenant(c).Where("quiz_id = ?", id).Order("order_index ASC").Find(&questions)
-	
+
 	c.JSON(http.StatusOK, gin.H{"quiz": quiz, "questions": questions})
 }
 

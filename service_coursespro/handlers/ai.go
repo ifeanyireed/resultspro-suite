@@ -1,9 +1,9 @@
 package handlers
 
 import (
-"fmt"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -163,7 +163,6 @@ Return ONLY a JSON array of objects with the following schema:
 
 Lesson Content:
 %%s`, req.NumQuestions, req.QuestionType, schemaDesc, req.Content)
-
 
 	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {

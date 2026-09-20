@@ -141,7 +141,7 @@ func (h *Handler) AdminUpdateCohort(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update cohort"})
 		return
 	}
-	
+
 	var cohort models.Cohort
 	db.WithTenant(c).First(&cohort, "id = ?", id)
 	c.JSON(http.StatusOK, gin.H{"cohort": cohort})

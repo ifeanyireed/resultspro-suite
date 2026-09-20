@@ -57,7 +57,7 @@ func (h *Handler) GetMyBlockSubmissions(c *gin.Context) {
 
 	var submissions []models.BlockSubmission
 	query := db.WithTenant(c).Where("user_id = ?", userID.(string))
-	
+
 	if moduleID != "" {
 		query = query.Where("module_id = ?", moduleID)
 	}
