@@ -294,16 +294,14 @@ export const QuizBuilderModal = ({
                   </div>
                 )}
                 
-                <div className={q.question_type === 'THEORY' ? "" : "mt-4"}>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    {q.question_type === 'THEORY' ? 'Sample Answer / Rubric (Reference)' : 'Reference (Optional)'}
-                  </label>
-                  {q.question_type === 'THEORY' ? (
-                     <textarea className="w-full border border-slate-300 rounded-md p-2 text-sm text-slate-600 h-24" value={q.reference || ''} onChange={e => updateQuestion(qIdx, { reference: e.target.value })} placeholder="Provide the sample answer, rubric, or key points expected from the student..." />
-                  ) : (
-                     <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm text-slate-600" value={q.reference || ''} onChange={e => updateQuestion(qIdx, { reference: e.target.value })} placeholder="e.g. Chapter 3, Page 42" />
-                  )}
-                </div>
+                {q.question_type === 'THEORY' && (
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Sample Answer / Rubric
+                    </label>
+                    <textarea className="w-full border border-slate-300 rounded-md p-2 text-sm text-slate-600 h-24" value={q.reference || ''} onChange={e => updateQuestion(qIdx, { reference: e.target.value })} placeholder="Provide the sample answer, rubric, or key points expected from the student..." />
+                  </div>
+                )}
               </div>
             ))}
             {questions.length === 0 && (
