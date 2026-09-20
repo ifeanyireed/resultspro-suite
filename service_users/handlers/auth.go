@@ -608,16 +608,23 @@ func HandleIntrospect(w http.ResponseWriter, r *http.Request) {
 		err = db.DB.QueryRow("SELECT role FROM user_tenant_roles WHERE user_id = ? AND tenant_id = ? AND status = 'active'", userID, tenantID).Scan(&role)
 
 		// If Super Admin, they have universal access
-		var isSuperAdmin bool
-		db.DB.QueryRow("SELECT 1 FROM user_tenant_roles WHERE user_id = ? AND role = 'super-admin' AND status = 'active' LIMIT 1", userID).Scan(&isSuperAdmin)
+		var isGlobalAdmin bool
+		var globalRole sql.NullString
+		db.DB.QueryRow("SELECT COALESCE(is_admin, false), role FROM users WHERE id = ?", userID).Scan(&isGlobalAdmin, &globalRole)
+		
+		isSuperAdmin := isGlobalAdmin || (globalRole.Valid && (globalRole.String == "superadmin" || globalRole.String == "platform-admin"))
 
 		if err != nil && !isSuperAdmin {
-			utils.JSONResponse(w, http.StatusOK, models.IntrospectionResponse{
-				Active: false,
-				Reason: "user_not_in_tenant",
-				User:   &user,
-			})
-			return
+			var hasSuperRoleInTenant bool
+			db.DB.QueryRow("SELECT 1 FROM user_tenant_roles WHERE user_id = ? AND role = 'super-admin' AND status = 'active' LIMIT 1", userID).Scan(&hasSuperRoleInTenant)
+			if !hasSuperRoleInTenant {
+				utils.JSONResponse(w, http.StatusOK, models.IntrospectionResponse{
+					Active: false,
+					Reason: "user_not_in_tenant",
+					User:   &user,
+				})
+				return
+			}
 		}
 	}
 
