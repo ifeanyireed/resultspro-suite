@@ -69,11 +69,22 @@ func main() {
 		// Admin Endpoints
 		protected.GET("/admin/programs", h.AdminGetPrograms)
 		protected.POST("/admin/programs", h.AdminCreateProgram)
+		protected.PUT("/admin/programs/:id", h.AdminUpdateProgram)
+		protected.DELETE("/admin/programs/:id", h.AdminDeleteProgram)
+		
 		protected.GET("/admin/cohorts/stats", h.AdminGetCohortStats)
 		protected.GET("/admin/cohorts", h.AdminGetCohorts)
 		protected.POST("/admin/cohorts", h.AdminCreateCohort)
+		protected.PUT("/admin/cohorts/:id", h.AdminUpdateCohort)
+		
 		protected.POST("/admin/stages", h.AdminCreateStage)
+		protected.PUT("/admin/stages/:id", h.AdminUpdateStage)
+		protected.DELETE("/admin/stages/:id", h.AdminDeleteStage)
+		
 		protected.POST("/admin/modules", h.AdminCreateModule)
+		protected.PUT("/admin/modules/:id", h.AdminUpdateModule)
+		protected.DELETE("/admin/modules/:id", h.AdminDeleteModule)
+		
 		protected.GET("/admin/enrollments", h.AdminGetEnrollments)
 
 		// AI Features

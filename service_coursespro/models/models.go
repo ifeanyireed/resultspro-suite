@@ -227,3 +227,19 @@ func (Quiz) TableName() string              { return "crs_quizzes" }
 func (QuizQuestion) TableName() string      { return "crs_quiz_questions" }
 func (AIJob) TableName() string             { return "crs_ai_jobs" }
 func (CohortMentor) TableName() string      { return "crs_cohort_mentors" }
+
+// MentorProfile
+type MentorProfile struct {
+	UserID         string    `gorm:"primaryKey;size:64" json:"user_id"`
+	TenantID       string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	FullName       string    `gorm:"size:255" json:"full_name"`
+	AvatarURL      string    `gorm:"size:512" json:"avatar_url"`
+	Specialization string    `gorm:"size:255" json:"specialization"`
+	TotalReviews   int       `gorm:"default:0" json:"total_reviews"`
+	PendingReviews int       `gorm:"default:0" json:"pending_reviews"`
+	AvgRating      float64   `gorm:"default:0.0" json:"avg_rating"`
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
+}
+
+func (MentorProfile) TableName() string { return "crs_mentor_profiles" }

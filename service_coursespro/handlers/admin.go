@@ -75,6 +75,62 @@ func (h *Handler) AdminCreateCohort(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"cohort": cohort})
 }
 
+func (h *Handler) AdminUpdateCohort(c *gin.Context) {
+	id := c.Param("id")
+	var input struct {
+		Slug          string    `json:"slug"`
+		Title         string    `json:"title"`
+		Subtitle      string    `json:"subtitle"`
+		Description   string    `json:"description"`
+		DurationWeeks int       `json:"duration_weeks"`
+		StartDate     time.Time `json:"start_date"`
+		EndDate       time.Time `json:"end_date"`
+		Capacity      int       `json:"capacity"`
+		Price         float64   `json:"price"`
+		Currency      string    `json:"currency"`
+		LeadMentorID  string    `json:"lead_mentor_id"`
+		Status        string    `json:"status"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	updates := map[string]interface{}{
+		"slug":           input.Slug,
+		"title":          input.Title,
+		"subtitle":       input.Subtitle,
+		"description":    input.Description,
+		"duration_weeks": input.DurationWeeks,
+		"start_date":     input.StartDate,
+		"end_date":       input.EndDate,
+		"capacity":       input.Capacity,
+		"price":          input.Price,
+		"currency":       input.Currency,
+		"status":         input.Status,
+		"updated_at":     time.Now(),
+	}
+
+	if input.LeadMentorID != "" {
+		updates["lead_mentor_id"] = input.LeadMentorID
+	} else {
+		updates["lead_mentor_id"] = nil
+	}
+
+	// For partial updates, we might want to omit empty fields, but a typical PUT would send all fields.
+	// Since we mapped empty strings to zero values in struct, we update them as such.
+
+	if err := db.WithTenant(c).Model(&models.Cohort{}).Where("id = ?", id).Updates(updates).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update cohort"})
+		return
+	}
+	
+	var cohort models.Cohort
+	db.WithTenant(c).First(&cohort, "id = ?", id)
+	c.JSON(http.StatusOK, gin.H{"cohort": cohort})
+}
+
 func (h *Handler) AdminGetPrograms(c *gin.Context) {
 	var programs []models.Program
 	db.WithTenant(c).Order("created_at DESC").Find(&programs)
@@ -219,4 +275,120 @@ func (h *Handler) AdminGetCohortStats(c *gin.Context) {
 		"active_programs": distinctPrograms,
 		"fill_rate":       fillRate,
 	})
+}
+
+func (h *Handler) AdminUpdateProgram(c *gin.Context) {
+	id := c.Param("id")
+	var input struct {
+		Title         string  `json:"title"`
+		Description   string  `json:"description"`
+		DurationWeeks int     `json:"duration_weeks"`
+		BasePrice     float64 `json:"base_price"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	updates := map[string]interface{}{
+		"title":          input.Title,
+		"description":    input.Description,
+		"duration_weeks": input.DurationWeeks,
+		"base_price":     input.BasePrice,
+		"updated_at":     time.Now(),
+	}
+
+	if err := db.WithTenant(c).Model(&models.Program{}).Where("id = ?", id).Updates(updates).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update program"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
+}
+
+func (h *Handler) AdminDeleteProgram(c *gin.Context) {
+	id := c.Param("id")
+	if err := db.WithTenant(c).Where("id = ?", id).Delete(&models.Program{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete program"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
+}
+
+func (h *Handler) AdminUpdateStage(c *gin.Context) {
+	id := c.Param("id")
+	var input struct {
+		Title       string `json:"title"`
+		Subtitle    string `json:"subtitle"`
+		Description string `json:"description"`
+		OrderIndex  int    `json:"order_index"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	updates := map[string]interface{}{
+		"title":       input.Title,
+		"subtitle":    input.Subtitle,
+		"description": input.Description,
+		"order_index": input.OrderIndex,
+	}
+
+	if err := db.WithTenant(c).Model(&models.JourneyStage{}).Where("id = ?", id).Updates(updates).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update stage"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
+}
+
+func (h *Handler) AdminDeleteStage(c *gin.Context) {
+	id := c.Param("id")
+	if err := db.WithTenant(c).Where("id = ?", id).Delete(&models.JourneyStage{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete stage"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
+}
+
+func (h *Handler) AdminUpdateModule(c *gin.Context) {
+	id := c.Param("id")
+	var input struct {
+		Title           string `json:"title"`
+		DurationText    string `json:"duration_text"`
+		Description     string `json:"description"`
+		VideoURL        string `json:"video_url"`
+		ContentMarkdown string `json:"content_markdown"`
+		OrderIndex      int    `json:"order_index"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	updates := map[string]interface{}{
+		"title":            input.Title,
+		"duration_text":    input.DurationText,
+		"description":      input.Description,
+		"video_url":        input.VideoURL,
+		"content_markdown": input.ContentMarkdown,
+		"order_index":      input.OrderIndex,
+	}
+
+	if err := db.WithTenant(c).Model(&models.JourneyModule{}).Where("id = ?", id).Updates(updates).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update module"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
+}
+
+func (h *Handler) AdminDeleteModule(c *gin.Context) {
+	id := c.Param("id")
+	if err := db.WithTenant(c).Where("id = ?", id).Delete(&models.JourneyModule{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete module"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
