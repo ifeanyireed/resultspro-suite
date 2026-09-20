@@ -5,8 +5,8 @@ import { USERS_API, COURSES_API, EXAMS_API } from './api';
  * Server-only utility to get the current tenant slug.
  * This reads the custom header injected by our Edge Middleware.
  */
-export function getServerTenantSlug(): string {
-  const headersList = headers();
+export async function getServerTenantSlug(): Promise<string> {
+  const headersList = await headers();
   const slug = headersList.get('x-tenant-slug');
   if (slug) return slug;
   
@@ -17,17 +17,17 @@ export function getServerTenantSlug(): string {
 /**
  * Server-only utility to get the auth token.
  */
-export function getServerAuthToken(): string | null {
-  const cookieStore = cookies();
+export async function getServerAuthToken(): Promise<string | null> {
+  const cookieStore = await cookies();
   return cookieStore.get('token')?.value || null;
 }
 
 /**
  * Creates a standard set of headers for server-side fetches.
  */
-export function getServerAuthHeaders(): HeadersInit {
-  const token = getServerAuthToken();
-  const tenant = getServerTenantSlug();
+export async function getServerAuthHeaders(): Promise<HeadersInit> {
+  const token = await getServerAuthToken();
+  const tenant = await getServerTenantSlug();
   
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -45,10 +45,12 @@ export function getServerAuthHeaders(): HeadersInit {
  * A tiny wrapper around native fetch for Server Components.
  */
 export async function serverFetch(url: string, options: RequestInit = {}) {
+  const authHeaders = await getServerAuthHeaders();
+  
   const fetchOptions: RequestInit = {
     ...options,
     headers: {
-      ...getServerAuthHeaders(),
+      ...authHeaders,
       ...options.headers,
     },
   };
