@@ -5,9 +5,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const formatEmbedUrl = (url: string, type: string) => {
   if (!url) return '';
+  
+  if (url.includes('drive.google.com/file/d/')) {
+    return url.replace(/\/(edit|view).*/, '/preview');
+  }
+  
   if (url.includes('docs.google.com')) {
+    if (url.includes('/presentation/')) {
+       return url.replace(/\/(edit|view).*/, '/embed');
+    }
     return url.replace(/\/(edit|view).*/, '/embed?rm=minimal');
   }
+  
   if (type === 'PPT') {
     return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
   }
@@ -116,9 +125,9 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                         {block.type === 'VIDEO' && (
                           <div className="bg-black aspect-video flex items-center justify-center text-gray-500 relative overflow-hidden">
                             {block.url ? (
-                              block.url.includes('youtube.com') || block.url.includes('youtu.be') ? (
+                              (block.url.includes('youtube.com') || block.url.includes('youtu.be') || block.url.includes('drive.google.com')) ? (
                                 <iframe 
-                                  src={block.url.includes('youtube.com/embed') ? block.url : `https://www.youtube.com/embed/${block.url.split('v=')[1]?.split('&')[0] || block.url.split('youtu.be/')[1]?.split('?')[0]}`} 
+                                  src={block.url.includes('drive.google.com') ? formatEmbedUrl(block.url, 'VIDEO') : (block.url.includes('youtube.com/embed') ? block.url : `https://www.youtube.com/embed/${block.url.split('v=')[1]?.split('&')[0] || block.url.split('youtu.be/')[1]?.split('?')[0]}`)} 
                                   className="w-full h-full border-0 absolute inset-0"
                                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                   allowFullScreen
