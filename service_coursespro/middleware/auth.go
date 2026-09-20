@@ -1,48 +1,54 @@
 package middleware
 
 import (
-	"bytes"
-	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
-
-type IntrospectResponse struct {
-	Active bool `json:"active"`
-	User   struct {
-		ID            string `json:"id"`
-		Email         string `json:"email"`
-		FullName      string `json:"full_name"`
-		AccountStatus string `json:"account_status"`
-	} `json:"user"`
-	TenantID string `json:"tenant_id"`
-	Reason   string `json:"reason"`
-}
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
-		token := ""
+		tokenString := ""
 		if authHeader != "" && strings.HasPrefix(authHeader, "Bearer ") {
-			token = strings.TrimPrefix(authHeader, "Bearer ")
+			tokenString = strings.TrimPrefix(authHeader, "Bearer ")
 		} else {
-			// Fallback for WebSockets
-			token = c.Query("token")
+			tokenString = c.Query("token")
 		}
 
-		if token == "" {
+		if tokenString == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization token missing"})
 			c.Abort()
 			return
 		}
 
-		usersURL := os.Getenv("USERS_SERVICE_URL")
-		if usersURL == "" {
-			usersURL = "https://resultspro-service-users.onrender.com"
+		secret := os.Getenv("JWT_SECRET")
+		if secret == "" {
+			secret = "your-super-secret-jwt-key-change-in-production-min-32-chars"
+		}
+
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			}
+			return []byte(secret), nil
+		})
+
+		if err != nil || !token.Valid {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Session invalid or expired", "reason": "invalid_token"})
+			c.Abort()
+			return
+		}
+
+		claims, ok := token.Claims.(jwt.MapClaims)
+		if !ok {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Session invalid or expired", "reason": "invalid_claims"})
+			c.Abort()
+			return
 		}
 
 		domain := c.GetHeader("X-Tenant-Domain")
@@ -50,40 +56,50 @@ func AuthMiddleware() gin.HandlerFunc {
 			domain = c.Query("domain")
 		}
 
-		payload, _ := json.Marshal(map[string]string{"token": token, "domain": domain})
-		req, err := http.NewRequest("POST", usersURL+"/auth/introspect", bytes.NewBuffer(payload))
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create introspection request"})
-			c.Abort()
-			return
+		// Inject user info into context
+		if sub, ok := claims["sub"].(string); ok {
+			c.Set("user_id", sub)
+		}
+		if email, ok := claims["email"].(string); ok {
+			c.Set("user_email", email)
 		}
 
-		req.Header.Set("Content-Type", "application/json")
-		req.Header.Set("X-App-ID", "resultspro-app-id")
-		req.Header.Set("X-App-Secret", "resultspro_secret_456")
+		// Tenant access validation
+		if domain != "" && domain != "localhost" && domain != "coursespro" {
+			tenantsClaim, ok := claims["tenants"].(map[string]interface{})
+			if !ok {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "Session invalid or expired", "reason": "tenant_not_found"})
+				c.Abort()
+				return
+			}
 
-		client := &http.Client{Timeout: 5 * time.Second}
-		resp, err := client.Do(req)
-		if err != nil || resp.StatusCode != http.StatusOK {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Failed to verify session with identity service"})
-			c.Abort()
-			return
+			tenantData, exists := tenantsClaim[domain].(map[string]interface{})
+			if !exists {
+				// Check for global platform admin fallback
+				roles, _ := claims["roles"].([]interface{})
+				isGlobalAdmin := false
+				for _, r := range roles {
+					if rStr, ok := r.(string); ok && (rStr == "platform-admin" || rStr == "superadmin") {
+						isGlobalAdmin = true
+						break
+					}
+				}
+				
+				if !isGlobalAdmin {
+					c.JSON(http.StatusUnauthorized, gin.H{"error": "Session invalid or expired", "reason": "user_not_in_tenant"})
+					c.Abort()
+					return
+				}
+			} else {
+				if role, ok := tenantData["role"].(string); ok {
+					c.Set("tenant_role", role)
+				}
+				if tenantID, ok := tenantData["id"].(string); ok {
+					c.Set("tenant_id", tenantID)
+				}
+			}
 		}
-		defer resp.Body.Close()
 
-		var result IntrospectResponse
-		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil || !result.Active {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Session invalid or expired", "reason": result.Reason})
-			c.Abort()
-			return
-		}
-
-		c.Set("user_id", result.User.ID)
-		c.Set("user_email", result.User.Email)
-		c.Set("user_name", result.User.FullName)
-		if result.TenantID != "" {
-			c.Set("tenant_id", result.TenantID)
-		}
 		c.Next()
 	}
 }

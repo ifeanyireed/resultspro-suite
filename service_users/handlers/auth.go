@@ -265,6 +265,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	var roles []string
 	hasTenantAccess := false
 	var adminTenants []string
+	tenantRolesMap := make(map[string]map[string]string)
 
 	query := `
 		SELECT ur.role, ur.tenant_id, t.slug 
@@ -327,6 +328,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	customClaims := map[string]interface{}{
 		"has_ican":     user.HasIcan,
 		"coin_balance": user.CoinBalance,
+		"tenants":      tenantRolesMap,
 	}
 	if user.IcanPlan != nil {
 		customClaims["ican_plan"] = *user.IcanPlan
@@ -415,13 +417,22 @@ func HandleTokenRefresh(w http.ResponseWriter, r *http.Request) {
 
 	// Fetch user roles for RBAC
 	var roles []string
-	rows, err := db.DB.Query("SELECT role FROM user_tenant_roles WHERE user_id = ? AND status = 'active'", userID)
+	tenantRolesMap := make(map[string]map[string]string)
+	rows, err := db.DB.Query("SELECT ur.role, t.id, t.slug FROM user_tenant_roles ur LEFT JOIN tenants t ON ur.tenant_id = t.id WHERE ur.user_id = ? AND ur.status = 'active'", userID)
 	if err == nil {
 		defer rows.Close()
 		for rows.Next() {
 			var role string
-			if err := rows.Scan(&role); err == nil {
+			var tID sql.NullString
+			var tSlug sql.NullString
+			if err := rows.Scan(&role, &tID, &tSlug); err == nil {
 				roles = append(roles, role)
+				if tSlug.Valid && tID.Valid {
+					tenantRolesMap[tSlug.String] = map[string]string{
+						"id": tID.String,
+						"role": role,
+					}
+				}
 			}
 		}
 	}
@@ -432,6 +443,7 @@ func HandleTokenRefresh(w http.ResponseWriter, r *http.Request) {
 	customClaims := map[string]interface{}{
 		"has_ican":     u.HasIcan,
 		"coin_balance": u.CoinBalance,
+		"tenants":      tenantRolesMap,
 	}
 	if u.IcanPlan != nil {
 		customClaims["ican_plan"] = *u.IcanPlan

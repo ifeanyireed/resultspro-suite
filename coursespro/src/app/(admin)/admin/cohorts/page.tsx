@@ -8,39 +8,34 @@ import {
   PencilSquareIcon
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
+import { useQuery } from '@tanstack/react-query';
 import { coursesApi } from '@/lib/api';
 import CohortModal from './CohortModal';
 
 export default function CohortsPage() {
-  const [cohorts, setCohorts] = useState<any[]>([]);
-  const [programs, setPrograms] = useState<any[]>([]);
-  const [stats, setStats] = useState({ active_cohorts: 0, active_programs: 0, fill_rate: 0 });
-  const [loading, setLoading] = useState(true);
-  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCohort, setSelectedCohort] = useState<any>(null);
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
+  const { data, isLoading: loading, refetch } = useQuery({
+    queryKey: ['cohorts_dashboard'],
+    queryFn: async () => {
       const [cohortsRes, statsRes, programsRes] = await Promise.all([
         coursesApi.get('/api/admin/cohorts'),
         coursesApi.get('/api/admin/cohorts/stats'),
         coursesApi.get('/api/admin/programs')
       ]);
-      setCohorts(cohortsRes.data.cohorts || []);
-      setStats(statsRes.data || { active_cohorts: 0, active_programs: 0, fill_rate: 0 });
-      setPrograms(programsRes.data.programs || []);
-    } catch (err: any) {
-      console.error(`Failed to fetch data: ${err.message}`);
-    } finally {
-      setLoading(false);
+      return {
+        cohorts: cohortsRes.data.cohorts || [],
+        stats: statsRes.data || { active_cohorts: 0, active_programs: 0, fill_rate: 0 },
+        programs: programsRes.data.programs || []
+      };
     }
-  };
+  });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const cohorts = data?.cohorts || [];
+  const stats = data?.stats || { active_cohorts: 0, active_programs: 0, fill_rate: 0 };
+  const programs = data?.programs || [];
+
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -187,7 +182,7 @@ export default function CohortsPage() {
         onClose={() => setIsModalOpen(false)}
         onSave={() => {
           setIsModalOpen(false);
-          fetchData();
+          refetch();
         }}
         cohort={selectedCohort}
         programs={programs}

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { 
   PlusIcon,
   StarIcon,
@@ -9,29 +10,23 @@ import {
 import { coursesApi } from '@/lib/api';
 
 export default function MentorsPage() {
-  const [mentors, setMentors] = useState<any[]>([]);
-  const [stats, setStats] = useState({ total_mentors: 0, avg_rating: 0, pending_reviews: 0 });
-  const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
+  const { data, isLoading: loading } = useQuery({
+    queryKey: ['mentors_dashboard'],
+    queryFn: async () => {
       const [statsRes, mentorsRes] = await Promise.all([
         coursesApi.get('/api/admin/mentors/stats'),
         coursesApi.get('/api/admin/mentors')
       ]);
-      setStats(statsRes.data || { total_mentors: 0, avg_rating: 0, pending_reviews: 0 });
-      setMentors(mentorsRes.data.mentors || []);
-    } catch (err: any) {
-      console.error(`Failed to fetch mentors data: ${err.message}`);
-    } finally {
-      setLoading(false);
+      return {
+        stats: statsRes.data || { total_mentors: 0, avg_rating: 0, pending_reviews: 0 },
+        mentors: mentorsRes.data.mentors || []
+      };
     }
-  };
+  });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const stats = data?.stats || { total_mentors: 0, avg_rating: 0, pending_reviews: 0 };
+  const mentors = data?.mentors || [];
 
   return (
     <>

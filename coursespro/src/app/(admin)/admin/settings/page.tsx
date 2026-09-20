@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import api, { getTenantSlug } from '@/lib/api';
 import { 
   CheckCircleIcon,
@@ -37,40 +38,42 @@ export default function SettingsPage() {
     flattenLogo: true,
   });
 
+const { data: tenantData, isLoading } = useQuery({
+    queryKey: ['tenant_settings'],
+    queryFn: async () => {
+      const slug = getTenantSlug();
+      const res = await api.get(`/api/public/tenant/resolve?domain=${slug}`);
+      return res.data?.tenant;
+    }
+  });
+
   useEffect(() => {
-    const fetchTenant = async () => {
-      try {
-        const slug = getTenantSlug();
-        const res = await api.get(`/api/public/tenant/resolve?domain=${slug}`);
-        if (res.data && res.data.tenant) {
-          const t = res.data.tenant;
-          setTenantId(t.id);
-          setFormData({
-            name: t.name || '',
-            shortName: t.short_name || t.motto || '',
-            slug: t.slug || '',
-            adminEmail: t.contact_email || '',
-            password: '',
-            address: t.full_address || '',
-            contactPerson: t.contact_person_name || '',
-            phone: t.contact_phone || '',
-            plan: t.subscription_tier ? `${t.subscription_tier} - Active` : 'Free - Active',
-            customDomainEnabled: !!t.custom_domain,
-            customDomain: t.custom_domain || '',
-            primaryColor: t.primary_color || '#146ef5',
-            logoUrl: t.logo_url || '',
-            darkLogoUrl: t.dark_logo_url || '',
-            flattenLogo: t.flatten_logo !== false,
-          });
-        }
-      } catch (err) {
-        console.error("Failed to load tenant details", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTenant();
-  }, []);
+    if (tenantData) {
+      const t = tenantData;
+      setTenantId(t.id);
+      setFormData(prev => ({
+        ...prev,
+        name: t.name || '',
+        shortName: t.short_name || t.motto || '',
+        slug: t.slug || '',
+        adminEmail: t.contact_email || '',
+        password: '',
+        address: t.full_address || '',
+        contactPerson: t.contact_person_name || '',
+        phone: t.contact_phone || '',
+        plan: t.subscription_tier ? `${t.subscription_tier} - Active` : 'Free - Active',
+        customDomainEnabled: !!t.custom_domain,
+        customDomain: t.custom_domain || '',
+        primaryColor: t.primary_color || '#146ef5',
+        logoUrl: t.logo_url || '',
+        darkLogoUrl: t.dark_logo_url || '',
+        flattenLogo: t.flatten_logo !== false,
+      }));
+      setLoading(false);
+    } else if (!isLoading) {
+      setLoading(false);
+    }
+  }, [tenantData, isLoading]);
 
   const handleDarkLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

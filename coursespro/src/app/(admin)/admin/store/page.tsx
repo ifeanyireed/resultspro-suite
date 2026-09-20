@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { 
   PlusIcon,
   PencilSquareIcon,
@@ -13,27 +14,17 @@ import { coursesApi } from '@/lib/api';
 import StoreProductModal from './StoreProductModal';
 
 export default function StoreManagementPage() {
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
+  const { data: products = [], isLoading: loading, refetch } = useQuery({
+    queryKey: ['store_products'],
+    queryFn: async () => {
       const res = await coursesApi.get('/api/admin/store');
-      setProducts(res.data.products || []);
-    } catch (err: any) {
-      console.error(`Failed to fetch store products: ${err.message}`);
-    } finally {
-      setLoading(false);
+      return res.data.products || [];
     }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  });
 
   const openNewModal = () => {
     setSelectedProduct(null);
@@ -49,7 +40,7 @@ export default function StoreManagementPage() {
     if (!confirm("Are you sure you want to delete this product?")) return;
     try {
       await coursesApi.delete(`/api/admin/store/${id}`);
-      fetchProducts();
+      refetch();
     } catch (err: any) {
       alert("Failed to delete product.");
     }

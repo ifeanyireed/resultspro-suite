@@ -1,35 +1,35 @@
-'use client';
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { 
   CreditCardIcon,
   DocumentArrowDownIcon
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
-import api from '@/lib/api';
+import { serverFetch } from '@/lib/server-api';
+import { USERS_API } from '@/lib/api';
 
-export default function PaymentsPage() {
-  const [summary, setSummary] = useState<any>({ mrr: 0, active_subs: 0, dunning_risk: 0 });
-  const [transactions, setTransactions] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [sumRes, txRes] = await Promise.all([
-          api.get('/api/v1/admin/payments/summary'),
-          api.get('/api/v1/admin/payments/transactions')
-        ]);
-        setSummary(sumRes.data || { mrr: 0, active_subs: 0, dunning_risk: 0 });
-        setTransactions(txRes.data?.transactions || (Array.isArray(txRes.data) ? txRes.data : []));
-      } catch (err) {
-        console.error('Failed to load payments data', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+export default async function PaymentsPage() {
+  // Fetch data directly on the server! No more useEffect, no more loading spinners!
+  let summary = { mrr: 0, active_subs: 0, dunning_risk: 0 };
+  let transactions: any[] = [];
+  
+  try {
+    const [sumRes, txRes] = await Promise.all([
+      serverFetch(`${USERS_API}/api/v1/admin/payments/summary`),
+      serverFetch(`${USERS_API}/api/v1/admin/payments/transactions`)
+    ]);
+    
+    if (sumRes.ok) {
+      const sumData = await sumRes.json();
+      summary = sumData || summary;
+    }
+    
+    if (txRes.ok) {
+      const txData = await txRes.json();
+      transactions = txData?.transactions || (Array.isArray(txData) ? txData : []);
+    }
+  } catch (err) {
+    console.error('Failed to load payments data on server:', err);
+  }
 
   return (
     <>
@@ -51,7 +51,7 @@ export default function PaymentsPage() {
           <h3 className="text-xl font-normal text-white z-10">MRR</h3>
           <div className="z-10">
             <h2 className="text-5xl font-medium tracking-tight text-white mb-2">
-              ₦{loading ? '...' : summary.mrr.toLocaleString()}
+              ₦{summary.mrr.toLocaleString()}
             </h2>
             <div className="flex items-center gap-1.5 text-xs text-white/80">
               <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 12%</div>
@@ -64,7 +64,7 @@ export default function PaymentsPage() {
           <h3 className="text-xl font-normal text-gray-900">Active Subs</h3>
           <div>
             <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">
-              {loading ? '...' : summary.active_subs}
+              {summary.active_subs}
             </h2>
             <div className="flex items-center gap-1.5 text-xs text-gray-500">
               <span>Paid learners</span>
@@ -76,7 +76,7 @@ export default function PaymentsPage() {
           <h3 className="text-xl font-normal text-gray-900">Dunning Risk</h3>
           <div>
             <h2 className="text-5xl font-medium tracking-tight text-orange-500 mb-2">
-              {loading ? '...' : summary.dunning_risk}
+              {summary.dunning_risk}
             </h2>
             <div className="flex items-center gap-1.5 text-xs text-gray-500">
               <span>Cards expiring soon</span>
@@ -99,9 +99,7 @@ export default function PaymentsPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {loading ? (
-              <tr><td colSpan={4} className="px-6 py-4 text-center text-gray-500">Loading transactions...</td></tr>
-            ) : transactions.length === 0 ? (
+            {transactions.length === 0 ? (
               <tr><td colSpan={4} className="px-6 py-4 text-center text-gray-500">No recent transactions</td></tr>
             ) : transactions.map((tx) => (
               <tr key={tx.id} className="hover:bg-gray-50 transition-colors">
