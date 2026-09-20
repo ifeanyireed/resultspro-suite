@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { coursesApi } from '@/lib/api';
 import { 
-  CheckCircleIcon, 
+  CheckCircleIcon,
+  DocumentDuplicateIcon, 
   XCircleIcon,
   DocumentTextIcon, 
   CodeBracketIcon, 
@@ -92,7 +93,29 @@ export default function MentorReviews() {
         </button>
       </div>
 
-      {loading ? (
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between aspect-square relative overflow-hidden group">
+          <div className="flex justify-between items-start z-10">
+            <h3 className="text-xl font-normal text-white">Pending Reviews</h3>
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white"><DocumentDuplicateIcon className="w-4 h-4"/></div>
+          </div>
+          <div className="z-10">
+            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">{submissions?.length || 0}</h2>
+          </div>
+        </div>
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Evaluated Today</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400"><CheckCircleIcon className="w-4 h-4" /></div>
+          </div>
+          <div>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">0</h2>
+          </div>
+        </div>
+      </div>
+
+{loading ? (
         <div className="flex justify-center py-20">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#146ef5]"></div>
         </div>
@@ -103,45 +126,73 @@ export default function MentorReviews() {
           <p className="text-gray-500 text-sm max-w-sm mx-auto">Your queue is completely clear! Take a break or check back later for new submissions.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <h3 className="font-semibold text-gray-700 mb-4 px-2">Submissions ({submissions.length})</h3>
-            {submissions.map((sub: any) => (
-              <div 
-                key={sub.id} 
-                onClick={() => setSelectedSub(sub)}
-                className={`bg-white rounded-xl p-5 border cursor-pointer transition-all shadow-sm ${selectedSub?.id === sub.id ? 'border-[#146ef5] ring-1 ring-[#146ef5]' : 'border-gray-100 hover:border-gray-300'}`}
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-semibold text-gray-900">{sub.project_title}</h4>
-                  <span className="text-[10px] font-bold px-2 py-1 bg-amber-100 text-amber-700 rounded text-uppercase tracking-wider">Review Required</span>
-                </div>
-                <div className="text-sm text-gray-500 mb-4 flex items-center gap-2">
-                  <span>Student ID: {sub.user_id.slice(0, 8)}...</span>
-                  <span>•</span>
-                  <span>Stage {sub.stage_number}</span>
-                </div>
-                <div className="flex items-center gap-4 text-sm text-[#146ef5]">
-                  {sub.repo_url && (
-                    <a href={sub.repo_url} target="_blank" rel="noreferrer" className="flex items-center gap-1 hover:underline" onClick={e => e.stopPropagation()}>
-                      <CodeBracketIcon className="w-4 h-4" /> Code
-                    </a>
-                  )}
-                  {sub.live_demo_url && (
-                    <a href={sub.live_demo_url} target="_blank" rel="noreferrer" className="flex items-center gap-1 hover:underline" onClick={e => e.stopPropagation()}>
-                      <LinkIcon className="w-4 h-4" /> Demo
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 bg-white border border-gray-100 rounded-[1.5rem] overflow-hidden shadow-sm h-fit">
+            <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-white">
+              <h3 className="font-semibold text-gray-900">Submissions Queue</h3>
+              <span className="text-xs font-semibold px-2.5 py-1 bg-amber-50 text-amber-700 rounded-full uppercase tracking-wider">{submissions.length} Pending</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm text-gray-500">
+                <thead className="text-xs text-gray-400 uppercase bg-gray-50/50">
+                  <tr>
+                    <th className="px-6 py-4 font-medium">Project</th>
+                    <th className="px-6 py-4 font-medium">Student</th>
+                    <th className="px-6 py-4 font-medium">Stage</th>
+                    <th className="px-6 py-4 font-medium text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {submissions.map((sub: any) => (
+                    <tr 
+                      key={sub.id} 
+                      onClick={() => setSelectedSub(sub)}
+                      className={`cursor-pointer transition-colors ${selectedSub?.id === sub.id ? 'bg-[#f6f9f8]' : 'hover:bg-gray-50'}`}
+                    >
+                      <td className="px-6 py-4">
+                        <div className="font-medium text-gray-900">{sub.project_title}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-[10px] text-gray-400 uppercase tracking-wider font-mono bg-gray-100 px-2 py-1 rounded inline-block">{sub.user_id.slice(0, 8)}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">
+                          Stage {sub.stage_number}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <button className="text-sm font-semibold text-[#146ef5] hover:text-blue-700 transition-colors">
+                          Review
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {selectedSub && (
             <div className="bg-white rounded-[1.5rem] p-6 border border-gray-100 shadow-sm flex flex-col h-fit sticky top-6">
               <div className="mb-6 pb-6 border-b border-gray-100">
-                <h3 className="text-xl font-bold text-gray-900 mb-1">{selectedSub.project_title}</h3>
-                <p className="text-sm text-gray-500">Submitted on {new Date(selectedSub.submitted_at).toLocaleDateString()}</p>
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-1">{selectedSub.project_title}</h3>
+                    <p className="text-sm text-gray-500">Submitted on {new Date(selectedSub.submitted_at).toLocaleDateString()}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    {selectedSub.repo_url && (
+                      <a href={selectedSub.repo_url} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-sm bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors">
+                        <CodeBracketIcon className="w-4 h-4 stroke-2" /> Code
+                      </a>
+                    )}
+                    {selectedSub.live_demo_url && (
+                      <a href={selectedSub.live_demo_url} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-sm bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors">
+                        <LinkIcon className="w-4 h-4 stroke-2" /> Demo
+                      </a>
+                    )}
+                  </div>
+                </div>
                 
                 {selectedSub.notes && (
                   <div className="mt-4 bg-gray-50 rounded-lg p-4 text-sm text-gray-700">
