@@ -144,7 +144,11 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                         {block.type === 'AUDIO' && (
                           <div className="p-6 bg-gray-50 flex flex-col items-center justify-center gap-4 border-b border-gray-100">
                             {block.url ? (
-                              <audio src={block.url} controls className="w-full max-w-md" />
+                              block.url.includes('drive.google.com') ? (
+                                <iframe src={formatEmbedUrl(block.url, 'AUDIO')} className="w-full max-w-md h-[120px] border-0 rounded-lg shadow-sm" title="Audio Player" allow="autoplay" />
+                              ) : (
+                                <audio src={block.url} controls className="w-full max-w-md" />
+                              )
                             ) : (
                               <span className="text-sm text-gray-500">No audio uploaded</span>
                             )}
@@ -154,7 +158,7 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                         {block.type === 'HTML' && (
                           <div className="w-full h-[600px] bg-white relative">
                             {block.url ? (
-                              <iframe src={formatEmbedUrl(block.url, 'HTML')} className="w-full h-full border-0" title="HTML Content" sandbox="allow-scripts allow-same-origin" />
+                              <iframe src={formatEmbedUrl(block.url, 'HTML')} className="w-full h-full border-0" title="HTML Content" allow="fullscreen" />
                             ) : (
                               <div className="absolute inset-0 flex items-center justify-center text-gray-400">No HTML uploaded</div>
                             )}
