@@ -68,6 +68,10 @@ func main() {
 
 		// Admin Endpoints
 		protected.GET("/admin/programs", h.AdminGetPrograms)
+		protected.GET("/admin/quizzes", h.AdminGetQuizzes)
+		protected.GET("/admin/quizzes/:id", h.AdminGetQuiz)
+		protected.POST("/admin/quizzes", h.AdminCreateQuiz)
+
 		protected.GET("/admin/programs/:id/stages", h.AdminGetProgramStages)
 		protected.POST("/admin/programs", h.AdminCreateProgram)
 		protected.PUT("/admin/programs/:id", h.AdminUpdateProgram)

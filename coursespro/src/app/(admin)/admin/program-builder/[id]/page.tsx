@@ -15,6 +15,7 @@ import {
 import api, { coursesApi } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RichTextEditor } from '@/components/RichTextEditor';
+import { QuizBuilderModal } from './QuizBuilderModal';
 
 
 
@@ -76,6 +77,9 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
 
   const [editingTextLessonId, setEditingTextLessonId] = React.useState<string | null>(null);
   const [uploadingHtmlId, setUploadingHtmlId] = React.useState<string | null>(null);
+  const [quizzes, setQuizzes] = React.useState<any[]>([]);
+  const [isQuizModalOpen, setIsQuizModalOpen] = React.useState<string | null>(null);
+  const [moduleTextContext, setModuleTextContext] = React.useState('');
   const [textLessonDraft, setTextLessonDraft] = React.useState<string>('');
 
   React.useEffect(() => {
@@ -83,6 +87,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
       try {
         // Fetch sequentially to prevent hitting rate limits on the auth introspection endpoint
         const progRes = await coursesApi.get(`/api/admin/programs`);
+        try { const quizzesRes = await coursesApi.get(`/api/admin/quizzes`); setQuizzes(quizzesRes.data.quizzes || []); } catch(e){}
         const found = progRes.data.programs?.find((p: any) => p.id === id);
         setProgram(found || { title: "Untitled Journey", id });
         
@@ -424,9 +429,39 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                             )}
 
                             {item.type === 'QUIZ' && (
-                              <div className="w-full text-left" onClick={e => e.stopPropagation()}>
-                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Quiz ID</label>
-                                <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="Paste quiz ID here..." value={item.url || ''} onChange={e => { const i = parseContents(mod); i[index].url = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)), content_markdown: null, video_url: null })} />
+                              <div className="w-full text-left bg-white p-3 border border-slate-200 rounded-md shadow-sm" onClick={e => e.stopPropagation()}>
+                                <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
+                                  <svg className="w-4 h-4 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> 
+                                  Select or Create a Quiz
+                                </label>
+                                <div className="flex items-center gap-2">
+                                  <select 
+                                    className="flex-1 border border-slate-300 rounded-md p-2 text-sm outline-none focus:border-blue-500"
+                                    value={item.url || ''}
+                                    onChange={e => { 
+                                      const i = parseContents(mod); 
+                                      i[index].url = e.target.value; 
+                                      setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); 
+                                      handleUpdateModule(mod.id, { contents_json: JSON.stringify(i) });
+                                    }}
+                                  >
+                                    <option value="">-- Select a previously created quiz --</option>
+                                    {quizzes.map(q => (
+                                      <option key={q.id} value={q.id}>{q.title}</option>
+                                    ))}
+                                  </select>
+                                  <button 
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      const allText = parseContents(mod).filter(i => i.type === 'TEXT').map(i => i.content).join('\n\n');
+                                      setModuleTextContext(allText);
+                                      setIsQuizModalOpen(mod.id + ':' + item.id);
+                                    }}
+                                    className="px-3 py-2 bg-indigo-50 text-indigo-700 border border-indigo-100 hover:bg-indigo-100 rounded-md text-sm font-medium whitespace-nowrap"
+                                  >
+                                    + Create New
+                                  </button>
+                                </div>
                               </div>
                             )}
 
@@ -706,6 +741,35 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
           </div>
         )}
       </AnimatePresence>
+
+      <QuizBuilderModal
+        isOpen={!!isQuizModalOpen}
+        onClose={() => setIsQuizModalOpen(null)}
+        moduleId={isQuizModalOpen ? isQuizModalOpen.split(':')[0] : ''}
+        moduleTextContext={moduleTextContext}
+        onSave={async (newQuizId) => {
+          if (!isQuizModalOpen) return;
+          const [mId, iId] = isQuizModalOpen.split(':');
+          
+          // Refresh quizzes
+          try {
+            const quizzesRes = await coursesApi.get('/api/admin/quizzes');
+            setQuizzes(quizzesRes.data.quizzes || []);
+          } catch(e) {}
+
+          const mod = modules.find(m => m.id === mId);
+          if (mod) {
+            const i = parseContents(mod);
+            const target = i.find(x => x.id === iId);
+            if (target) {
+              target.url = newQuizId;
+              setModules(modules.map(m => m.id === mId ? { ...m, contents_json: JSON.stringify(i) } : m));
+              handleUpdateModule(mId, { contents_json: JSON.stringify(i) });
+            }
+          }
+        }}
+      />
     </div>
   );
 }
+
