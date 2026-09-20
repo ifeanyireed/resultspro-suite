@@ -422,7 +422,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                         </div>
                       )}
 
-                      <div className="flex items-center justify-center gap-3 mt-4 pt-4 border-t border-gray-100">
+                      <div className="flex flex-wrap items-center justify-center gap-3 mt-4 pt-4 border-t border-gray-100">
                         <button 
                           onClick={(e) => { 
                             e.stopPropagation(); 
@@ -433,7 +433,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                             setEditingTextLessonId(items[items.length-1].id + '_' + mod.id);
                             setTextLessonDraft('');
                           }}
-                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap"
                         >
                           <DocumentTextIcon className="w-4 h-4 text-blue-500 stroke-2" />
                           Add Text
@@ -446,7 +446,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                             setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
                             handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
                           }}
-                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap"
                         >
                           <VideoCameraIcon className="w-4 h-4 text-purple-500 stroke-2" />
                           Add Video
@@ -459,7 +459,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                             setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
                             handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
                           }}
-                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap"
                         >
                           <svg className="w-4 h-4 text-green-500 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
                           Add Audio
@@ -472,7 +472,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                             setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
                             handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
                           }}
-                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap"
                         >
                           <svg className="w-4 h-4 text-red-500 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                           Add PDF
@@ -486,7 +486,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                             setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
                             handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
                           }}
-                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap"
                         >
                           <svg className="w-4 h-4 text-orange-500 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
                           Add HTML
@@ -499,7 +499,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                             setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
                             handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
                           }}
-                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap"
                         >
                           <svg className="w-4 h-4 text-pink-500 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                           Add Quiz
@@ -512,7 +512,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                             setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
                             handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
                           }}
-                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap"
                         >
                           <svg className="w-4 h-4 text-indigo-500 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
                           Add Assignment
