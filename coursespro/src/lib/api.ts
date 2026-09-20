@@ -4,6 +4,29 @@ import Cookies from 'js-cookie';
 export const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
 export const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'https://resultspro-service-examspro.onrender.com';
 
+/**
+ * Extracts the tenant slug from the current hostname.
+ * Handles:
+ * - Production subdomains: skillupacademy.resultspro.ng → "skillupacademy"
+ * - Dev subdomains:        skillupacademy.localhost:3001 → "skillupacademy"
+ * - Plain localhost:        falls back to NEXT_PUBLIC_TENANT_SLUG env var
+ */
+export function getTenantSlug(): string {
+  if (typeof window === 'undefined') return '';
+  
+  const hostname = window.location.hostname;
+  const parts = hostname.split('.');
+  const slug = parts[0];
+
+  // If the first part is a real tenant slug (not localhost/coursespro/www), use it
+  if (slug && slug !== 'localhost' && slug !== 'coursespro' && slug !== 'www') {
+    return slug;
+  }
+
+  // Fall back to env variable for local dev (e.g. running on plain localhost:3001)
+  return process.env.NEXT_PUBLIC_TENANT_SLUG || slug;
+}
+
 const api = axios.create({
   baseURL: USERS_API,
   headers: {
@@ -13,7 +36,7 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = typeof window !== 'undefined' ? (Cookies.get('token') || localStorage.getItem('token')) : null;
-  const domain = typeof window !== 'undefined' ? window.location.hostname : '';
+  const domain = getTenantSlug();
   
   if (token) {
     if (!config.headers) {
@@ -28,7 +51,11 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    // Only clear auth on explicit token/session failures, not on tenant resolution issues
+    const errorMsg = error.response?.data?.error || error.response?.data?.reason || '';
+    const isTenantIssue = typeof errorMsg === 'string' && errorMsg.toLowerCase().includes('tenant');
+    
+    if (error.response?.status === 401 && !isTenantIssue) {
       if (typeof window !== 'undefined') {
         const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
         let rootDomain: string | undefined = undefined;
@@ -55,7 +82,7 @@ export const coursesApi = axios.create({
 
 coursesApi.interceptors.request.use((config) => {
   const token = typeof window !== 'undefined' ? (Cookies.get('token') || localStorage.getItem('token')) : null;
-  const domain = typeof window !== 'undefined' ? window.location.hostname : '';
+  const domain = getTenantSlug();
   
   if (token) {
     if (!config.headers) {
@@ -70,7 +97,11 @@ coursesApi.interceptors.request.use((config) => {
 coursesApi.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    // Only clear auth on explicit token/session failures, not on tenant resolution issues
+    const errorMsg = error.response?.data?.error || error.response?.data?.reason || '';
+    const isTenantIssue = typeof errorMsg === 'string' && errorMsg.toLowerCase().includes('tenant');
+
+    if (error.response?.status === 401 && !isTenantIssue) {
       if (typeof window !== 'undefined') {
         const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
         let rootDomain: string | undefined = undefined;

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import TenantLogo from '@/components/TenantLogo';
 import { usePathname } from 'next/navigation';
-import api from '@/lib/api';
+import api, { getTenantSlug } from '@/lib/api';
 import { 
   MagnifyingGlassIcon,
   EnvelopeIcon,
@@ -52,8 +52,7 @@ export default function AppLayout({
     setMounted(true);
     const fetchTenant = async () => {
       try {
-        const host = window.location.hostname;
-        const slug = host.split('.')[0];
+        const slug = getTenantSlug();
         const res = await api.get(`/api/public/tenant/resolve?domain=${slug}`);
         if (res.data && res.data.tenant && res.data.tenant.name) {
           setTenantName(res.data.tenant.name.toUpperCase());
@@ -81,7 +80,7 @@ export default function AppLayout({
           }
         }
       } catch (err) {
-        const slug = window.location.hostname.split('.')[0];
+        const slug = getTenantSlug();
         if (slug && slug !== 'localhost' && slug !== 'coursespro') {
           setTenantName(slug.toUpperCase());
         }
