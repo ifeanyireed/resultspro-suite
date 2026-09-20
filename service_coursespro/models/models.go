@@ -75,9 +75,11 @@ type JourneyStage struct {
 	StageNumber int       `gorm:"not null" json:"stage_number"`
 	Title       string    `gorm:"size:255;not null" json:"title"`
 	Subtitle    string    `gorm:"size:255" json:"subtitle"`
-	Description string    `gorm:"type:text" json:"description"`
-	OrderIndex  int       `gorm:"default:0" json:"order_index"`
-	CreatedAt   time.Time `json:"created_at"`
+	Description     string    `gorm:"type:text" json:"description"`
+	VideoURL        string    `gorm:"size:512" json:"video_url"`
+	ContentMarkdown string    `gorm:"type:text" json:"content_markdown"`
+	OrderIndex      int       `gorm:"default:0" json:"order_index"`
+	CreatedAt       time.Time `json:"created_at"`
 }
 
 // Journey Module

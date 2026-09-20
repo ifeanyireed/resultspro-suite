@@ -13,6 +13,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { coursesApi } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
+import { RichTextEditor } from '@/components/RichTextEditor';
 
 export default function BuilderOSPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
@@ -23,6 +24,9 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
   const [modules, setModules] = React.useState<any[]>([]);
   const [selectedModuleId, setSelectedModuleId] = React.useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+
+  const [editingTextLessonId, setEditingTextLessonId] = React.useState<string | null>(null);
+  const [textLessonDraft, setTextLessonDraft] = React.useState<string>('');
 
   React.useEffect(() => {
     const fetchProgramAndStages = async () => {
@@ -89,8 +93,22 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
   };
 
   const handleAddTextLesson = (moduleId: string) => {
-    setModules(modules.map(m => m.id === moduleId ? { ...m, content_markdown: '' } : m));
-    handleUpdateModule(moduleId, { content_markdown: '' });
+    const mod = modules.find(m => m.id === moduleId);
+    setTextLessonDraft(mod?.content_markdown || '');
+    setEditingTextLessonId(moduleId);
+    
+    // If it doesn't have the field yet, initialize it
+    if (mod?.content_markdown === undefined) {
+      setModules(modules.map(m => m.id === moduleId ? { ...m, content_markdown: '' } : m));
+    }
+  };
+
+  const handleSaveTextLesson = () => {
+    if (editingTextLessonId) {
+      setModules(modules.map(m => m.id === editingTextLessonId ? { ...m, content_markdown: textLessonDraft } : m));
+      handleUpdateModule(editingTextLessonId, { content_markdown: textLessonDraft });
+      setEditingTextLessonId(null);
+    }
   };
 
   const handleAddVideo = (moduleId: string) => {
@@ -101,7 +119,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
   return (
     <div className="flex flex-col h-[calc(100vh-2rem)] bg-gray-50 -mx-8 -mb-8 -mt-2 rounded-t-2xl overflow-hidden border-t border-gray-200 shadow-sm">
       {/* Builder Top Nav */}
-      <div className="h-14 border-b border-gray-200 bg-white flex items-center justify-between px-4 sticky top-0 z-10 shrink-0">
+      <div className="h-14 border-b border-gray-200 bg-white flex items-center justify-between pl-4 pr-10 sticky top-0 z-10 shrink-0">
         <div className="flex items-center gap-4">
           <button 
             onClick={() => router.push('/admin/program-builder')}
@@ -131,7 +149,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
       </div>
 
       {/* Builder Workspace */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden pr-6">
         {/* Left Sidebar (Modules / Outline) */}
         <div className="w-72 border-r border-gray-200 bg-white flex flex-col shrink-0">
           <div className="p-4 border-b border-gray-100 flex items-center justify-between">
@@ -198,19 +216,22 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                       }}
                     >
                       <h3 className="text-lg font-medium text-gray-900 mb-4">{mod.title || 'Untitled Module'}</h3>
-                      
-                      {mod.content_markdown !== undefined ? (
-                        <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
-                          <textarea 
-                            className="w-full p-4 h-64 resize-y outline-none font-mono text-sm text-gray-800"
-                            placeholder="Write your markdown content here..."
-                            value={mod.content_markdown}
-                            onChange={(e) => setModules(modules.map(m => m.id === mod.id ? { ...m, content_markdown: e.target.value } : m))}
-                            onBlur={(e) => handleUpdateModule(mod.id, { content_markdown: e.target.value })}
-                            onClick={(e) => e.stopPropagation()}
-                          />
+                    
+                    {mod.content_markdown !== undefined ? (
+                      <div className="bg-slate-50 border border-slate-200 rounded-lg p-6 flex flex-col items-center justify-center gap-3">
+                        <DocumentTextIcon className="w-8 h-8 text-blue-500 stroke-1" />
+                        <div className="text-center">
+                          <h4 className="font-medium text-slate-800 mb-1">Text Lesson</h4>
+                          <p className="text-sm text-slate-500">This module has text content.</p>
                         </div>
-                      ) : mod.video_url !== undefined ? (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); handleAddTextLesson(mod.id); }}
+                          className="mt-2 px-4 py-2 bg-white border border-slate-200 shadow-sm rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+                        >
+                          Edit Text Lesson
+                        </button>
+                      </div>
+                    ) : mod.video_url !== undefined ? (
                         <div className="border border-gray-200 rounded-lg overflow-hidden bg-white p-4">
                           <label className="block text-xs font-medium text-gray-700 mb-1">Video URL (YouTube, Vimeo, etc.)</label>
                           <input 
@@ -315,6 +336,44 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
           )}
         </AnimatePresence>
       </div>
+
+      {/* Text Lesson Editor Modal */}
+      <AnimatePresence>
+        {editingTextLessonId && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-white rounded-xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden"
+            >
+              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
+                <h3 className="text-lg font-semibold text-slate-900">Edit Text Lesson</h3>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setEditingTextLessonId(null)}
+                    className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 transition-colors"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={handleSaveTextLesson}
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+              <div className="flex-1 overflow-y-auto p-6 bg-slate-50">
+                <RichTextEditor
+                  content={textLessonDraft}
+                  onChange={setTextLessonDraft}
+                />
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
