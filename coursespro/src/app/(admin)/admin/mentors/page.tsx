@@ -1,15 +1,29 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { 
   PlusIcon,
   StarIcon,
-  AcademicCapIcon
+  AcademicCapIcon,
+  TrashIcon
 } from '@heroicons/react/24/outline';
 import { coursesApi } from '@/lib/api';
 
 export default function MentorsPage() {
+
+  
+  const queryClient = useQueryClient();
+
+  const handleDeleteMentor = async (userId: string) => {
+    if (!confirm('Are you sure you want to delete this mentor profile?')) return;
+    try {
+      await coursesApi.delete(`/api/admin/mentors/${userId}`);
+      queryClient.invalidateQueries({ queryKey: ['mentors_dashboard'] });
+    } catch (err: any) {
+      alert('Failed to delete mentor: ' + (err.response?.data?.error || err.message));
+    }
+  };
 
   const { data, isLoading: loading } = useQuery({
     queryKey: ['mentors_dashboard'],
@@ -100,10 +114,19 @@ export default function MentorsPage() {
                     <h4 className="font-medium text-gray-900 truncate pr-2">
                       {mentor.full_name || 'Unknown Mentor'}
                     </h4>
+                    
                     <div className="flex items-center gap-1 text-sm font-semibold text-gray-700 shrink-0">
                       <StarIcon className="w-4 h-4 text-orange-400 fill-orange-400" />
                       {mentor.avg_rating.toFixed(1)}
                     </div>
+                    <button 
+                      onClick={() => handleDeleteMentor(mentor.user_id)} 
+                      className="ml-3 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Delete Mentor"
+                    >
+                      <TrashIcon className="w-4 h-4" />
+                    </button>
+
                   </div>
                   <p className="text-xs text-gray-500 mt-1 truncate">
                     {mentor.cohort_assignments?.length > 0 

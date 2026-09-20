@@ -446,3 +446,13 @@ func (h *Handler) AdminGetProgramStages(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"stages": stages})
 }
+
+
+func (h *Handler) AdminDeleteMentor(c *gin.Context) {
+	userID := c.Param("id")
+	if err := db.WithTenant(c).Where("user_id = ?", userID).Delete(&models.MentorProfile{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete mentor profile"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Mentor profile deleted successfully"})
+}

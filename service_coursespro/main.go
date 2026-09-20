@@ -105,6 +105,7 @@ func main() {
 		protected.GET("/admin/mentors/stats", h.AdminGetMentorsStats)
 		protected.GET("/admin/mentors", h.AdminGetMentors)
 				protected.POST("/admin/mentors/sync", h.SyncMentorProfile)
+		protected.DELETE("/admin/mentors/:id", h.AdminDeleteMentor)
 
 		// Store
 		protected.GET("/admin/store", h.AdminGetStoreProducts)
