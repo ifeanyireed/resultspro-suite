@@ -4,31 +4,41 @@ import React, { useEffect, useState } from 'react';
 import { 
   PlusIcon,
   CalendarIcon,
-  UserGroupIcon
+  UserGroupIcon,
+  PencilSquareIcon
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import { coursesApi } from '@/lib/api';
+import CohortModal from './CohortModal';
 
 export default function CohortsPage() {
   const [cohorts, setCohorts] = useState<any[]>([]);
+  const [programs, setPrograms] = useState<any[]>([]);
   const [stats, setStats] = useState({ active_cohorts: 0, active_programs: 0, fill_rate: 0 });
   const [loading, setLoading] = useState(true);
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCohort, setSelectedCohort] = useState<any>(null);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [cohortsRes, statsRes, programsRes] = await Promise.all([
+        coursesApi.get('/api/admin/cohorts'),
+        coursesApi.get('/api/admin/cohorts/stats'),
+        coursesApi.get('/api/admin/programs')
+      ]);
+      setCohorts(cohortsRes.data.cohorts || []);
+      setStats(statsRes.data || { active_cohorts: 0, active_programs: 0, fill_rate: 0 });
+      setPrograms(programsRes.data.programs || []);
+    } catch (err: any) {
+      console.error('Failed to fetch data:', err.response?.data || err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const [cohortsRes, statsRes] = await Promise.all([
-          coursesApi.get('/api/admin/cohorts'),
-          coursesApi.get('/api/admin/cohorts/stats')
-        ]);
-        setCohorts(cohortsRes.data.cohorts || []);
-        setStats(statsRes.data || { active_cohorts: 0, active_programs: 0, fill_rate: 0 });
-      } catch (err) {
-        console.error('Failed to fetch cohorts', err);
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchData();
   }, []);
 
@@ -41,6 +51,16 @@ export default function CohortsPage() {
     }
   };
 
+  const openNewModal = () => {
+    setSelectedCohort(null);
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (cohort: any) => {
+    setSelectedCohort(cohort);
+    setIsModalOpen(true);
+  };
+
   return (
     <>
       <div className="flex items-center justify-between mb-6">
@@ -48,7 +68,10 @@ export default function CohortsPage() {
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Cohort Configurator</h2>
           <p className="text-sm text-gray-500 mt-1">Schedule, assign mentors, and track cohort capacity.</p>
         </div>
-        <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
+        <button 
+          onClick={openNewModal}
+          className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2"
+        >
           <PlusIcon className="w-4 h-4" />
           New Cohort
         </button>
@@ -98,18 +121,19 @@ export default function CohortsPage() {
               <th className="px-6 py-4">Status</th>
               <th className="px-6 py-4">Mentors</th>
               <th className="px-6 py-4">Students</th>
+              <th className="px-6 py-4 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {loading ? (
               <tr>
-                <td colSpan={4} className="px-6 py-8 text-center text-gray-500 text-sm">
+                <td colSpan={5} className="px-6 py-8 text-center text-gray-500 text-sm">
                   Loading cohorts...
                 </td>
               </tr>
             ) : cohorts.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-6 py-8 text-center text-gray-500 text-sm">
+                <td colSpan={5} className="px-6 py-8 text-center text-gray-500 text-sm">
                   No cohorts found. Create one to get started!
                 </td>
               </tr>
@@ -141,6 +165,15 @@ export default function CohortsPage() {
                         {c.enrolled_count || 0} / {c.capacity || 0}
                       </div>
                     </td>
+                    <td className="px-6 py-4 text-right">
+                      <button 
+                        onClick={() => openEditModal(c)}
+                        className="text-gray-400 hover:text-[#146ef5] transition-colors p-2"
+                        title="Edit Cohort"
+                      >
+                        <PencilSquareIcon className="w-5 h-5" />
+                      </button>
+                    </td>
                   </tr>
                 );
               })
@@ -148,6 +181,17 @@ export default function CohortsPage() {
           </tbody>
         </table>
       </div>
+
+      <CohortModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={() => {
+          setIsModalOpen(false);
+          fetchData();
+        }}
+        cohort={selectedCohort}
+        programs={programs}
+      />
     </>
   );
 }

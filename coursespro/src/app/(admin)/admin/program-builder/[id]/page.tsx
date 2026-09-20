@@ -9,11 +9,60 @@ import {
   PlusIcon,
   Bars3Icon,
   DocumentTextIcon,
-  VideoCameraIcon
+  VideoCameraIcon,
+  DocumentDuplicateIcon
 } from '@heroicons/react/24/outline';
 import { coursesApi } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RichTextEditor } from '@/components/RichTextEditor';
+
+
+
+export type ContentItem = {
+  id: string;
+  type: 'TEXT' | 'VIDEO' | 'AUDIO' | 'PDF' | 'QUIZ';
+  content?: string;
+  url?: string;
+};
+
+const parseContents = (mod: any): ContentItem[] => {
+  let items: ContentItem[] = [];
+  if (mod.contents_json) {
+    try {
+      items = JSON.parse(mod.contents_json);
+    } catch(e) {}
+  }
+  // Migrate legacy
+  if (items.length === 0) {
+    if (mod.content_markdown !== undefined) {
+      items.push({ id: 'legacy-text', type: 'TEXT', content: mod.content_markdown });
+    } else if (mod.video_url !== undefined) {
+      items.push({ id: 'legacy-video', type: 'VIDEO', url: mod.video_url });
+    }
+  }
+  return items;
+};
+
+const getMarkdownSnippet = (md: string) => {
+  if (!md) return { heading: 'Text Lesson', excerpt: 'This module has text content.' };
+  const lines = md.split('\n').map(l => l.trim()).filter(Boolean);
+  let heading = 'Text Lesson';
+  let excerptText = '';
+  
+  for (const line of lines) {
+    if (line.startsWith('#')) {
+      if (heading === 'Text Lesson') heading = line.replace(/^#+\s*/, '');
+    } else {
+      if (!excerptText && !line.startsWith('![')) excerptText = line;
+    }
+  }
+  
+  let excerpt = excerptText.replace(/[#*`_]/g, '').slice(0, 80);
+  if (excerptText.length > 80) excerpt += '...';
+  if (!excerpt) excerpt = 'This module has text content.';
+  
+  return { heading, excerpt };
+};
 
 export default function BuilderOSPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
@@ -45,6 +94,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
               description: s.description || '',
               content_markdown: s.content_markdown,
               video_url: s.video_url,
+              contents_json: s.contents_json,
               type: 'module'
             })));
           }
@@ -105,8 +155,17 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
 
   const handleSaveTextLesson = () => {
     if (editingTextLessonId) {
-      setModules(modules.map(m => m.id === editingTextLessonId ? { ...m, content_markdown: textLessonDraft } : m));
-      handleUpdateModule(editingTextLessonId, { content_markdown: textLessonDraft });
+      const [itemId, modId] = editingTextLessonId.split('_');
+      const mod = modules.find(m => m.id === modId);
+      if (mod) {
+        const items = parseContents(mod);
+        const item = items.find(i => i.id === itemId);
+        if (item) {
+          item.content = textLessonDraft;
+          setModules(modules.map(m => m.id === modId ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
+          handleUpdateModule(modId, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+        }
+      }
       setEditingTextLessonId(null);
     }
   };
@@ -217,55 +276,172 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                     >
                       <h3 className="text-lg font-medium text-gray-900 mb-4">{mod.title || 'Untitled Module'}</h3>
                     
-                    {mod.content_markdown !== undefined ? (
-                      <div className="bg-slate-50 border border-slate-200 rounded-lg p-6 flex flex-col items-center justify-center gap-3">
-                        <DocumentTextIcon className="w-8 h-8 text-blue-500 stroke-1" />
-                        <div className="text-center">
-                          <h4 className="font-medium text-slate-800 mb-1">Text Lesson</h4>
-                          <p className="text-sm text-slate-500">This module has text content.</p>
-                        </div>
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); handleAddTextLesson(mod.id); }}
-                          className="mt-2 px-4 py-2 bg-white border border-slate-200 shadow-sm rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
-                        >
-                          Edit Text Lesson
-                        </button>
-                      </div>
-                    ) : mod.video_url !== undefined ? (
-                        <div className="border border-gray-200 rounded-lg overflow-hidden bg-white p-4">
-                          <label className="block text-xs font-medium text-gray-700 mb-1">Video URL (YouTube, Vimeo, etc.)</label>
-                          <input 
-                            type="text" 
-                            className="w-full border border-gray-300 rounded-md shadow-sm p-2 text-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                            placeholder="https://"
-                            value={mod.video_url}
-                            onChange={(e) => setModules(modules.map(m => m.id === mod.id ? { ...m, video_url: e.target.value } : m))}
-                            onBlur={(e) => handleUpdateModule(mod.id, { video_url: e.target.value })}
-                            onClick={(e) => e.stopPropagation()}
-                          />
-                        </div>
-                      ) : (
-                        <div className="bg-gray-50 border border-gray-100 border-dashed rounded-lg p-8 text-center">
-                          <p className="text-sm text-gray-500 mb-4">No lessons in this module yet.</p>
-                          <div className="flex items-center justify-center gap-3">
-                            <button 
-                              onClick={(e) => { e.stopPropagation(); handleAddTextLesson(mod.id); }}
-                              className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                            >
-                              <DocumentTextIcon className="w-4 h-4 text-blue-500 stroke-2" />
-                              Add Text Lesson
-                            </button>
-                            <button 
-                              onClick={(e) => { e.stopPropagation(); handleAddVideo(mod.id); }}
-                              className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                            >
-                              <VideoCameraIcon className="w-4 h-4 text-purple-500 stroke-2" />
-                              Add Video
-                            </button>
+
+                    
+                    <div className="space-y-4">
+                      {parseContents(mod).map((item, index) => {
+                        return (
+                          <div key={item.id} className="relative group bg-slate-50 border border-slate-200 rounded-lg p-6 flex flex-col items-center justify-center gap-3 hover:border-slate-300 transition-colors">
+                            
+                            <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                               <button 
+                                 onClick={(e) => { 
+                                   e.stopPropagation();
+                                   const items = parseContents(mod);
+                                   const newItems = [...items];
+                                   newItems.splice(index, 0, { ...item, id: Math.random().toString(36).substring(7) });
+                                   setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(newItems), content_markdown: undefined, video_url: undefined } : m));
+                                   handleUpdateModule(mod.id, { contents_json: JSON.stringify(newItems), content_markdown: null, video_url: null });
+                                 }}
+                                 className="p-1.5 text-slate-400 hover:text-slate-700 bg-white shadow-sm rounded border border-slate-200" title="Duplicate"
+                               >
+                                 <DocumentDuplicateIcon className="w-4 h-4" />
+                               </button>
+                               <button 
+                                 onClick={(e) => { 
+                                   e.stopPropagation();
+                                   if(confirm('Delete this content block?')) {
+                                     const items = parseContents(mod);
+                                     items.splice(index, 1);
+                                     setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
+                                     handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                                   }
+                                 }}
+                                 className="p-1.5 text-red-400 hover:text-red-600 bg-white shadow-sm rounded border border-slate-200" title="Delete"
+                               >
+                                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                               </button>
+                            </div>
+
+                            {item.type === 'TEXT' && (
+                              <>
+                                <DocumentTextIcon className="w-8 h-8 text-blue-500 stroke-1" />
+                                <div className="text-center">
+                                  <h4 className="font-medium text-slate-800 mb-1">{getMarkdownSnippet(item.content || '').heading}</h4>
+                                  <p className="text-sm text-slate-500">{getMarkdownSnippet(item.content || '').excerpt}</p>
+                                </div>
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); setEditingTextLessonId(item.id + '_' + mod.id); setTextLessonDraft(item.content || ''); }}
+                                  className="mt-2 px-4 py-2 bg-white border border-slate-200 shadow-sm rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+                                >
+                                  Edit Text Lesson
+                                </button>
+                              </>
+                            )}
+
+                            {item.type === 'VIDEO' && (
+                              <div className="w-full text-left" onClick={e => e.stopPropagation()}>
+                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><VideoCameraIcon className="w-4 h-4 text-purple-500"/> Video URL</label>
+                                <input 
+                                  type="text" 
+                                  className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-blue-500 outline-none"
+                                  placeholder="https://"
+                                  value={item.url || ''}
+                                  onChange={(e) => {
+                                     const items = parseContents(mod);
+                                     items[index].url = e.target.value;
+                                     setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
+                                  }}
+                                  onBlur={(e) => {
+                                     const items = parseContents(mod);
+                                     handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                                  }}
+                                />
+                              </div>
+                            )}
+
+                            {item.type === 'AUDIO' && (
+                              <div className="w-full text-left" onClick={e => e.stopPropagation()}>
+                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg> Audio URL</label>
+                                <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" value={item.url || ''} onChange={e => { const i = parseContents(mod); i[index].url = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)), content_markdown: null, video_url: null })} />
+                              </div>
+                            )}
+
+                            {item.type === 'PDF' && (
+                              <div className="w-full text-left" onClick={e => e.stopPropagation()}>
+                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg> PDF Document URL</label>
+                                <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" value={item.url || ''} onChange={e => { const i = parseContents(mod); i[index].url = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)), content_markdown: null, video_url: null })} />
+                              </div>
+                            )}
+
+                            <div className="w-full mt-2 flex items-center justify-center border-t border-slate-100 pt-3">
+                               <select 
+                                 className="text-xs bg-transparent text-slate-500 hover:text-slate-900 outline-none cursor-pointer"
+                                 value={item.type}
+                                 onChange={(e) => {
+                                   e.stopPropagation();
+                                   const items = parseContents(mod);
+                                   items[index].type = e.target.value as any;
+                                   if(items[index].type === 'TEXT') items[index].content = '';
+                                   else items[index].url = '';
+                                   setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
+                                   handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                                 }}
+                                 onClick={e => e.stopPropagation()}
+                               >
+                                 <option value="TEXT">Text Lesson</option>
+                                 <option value="VIDEO">Video</option>
+                                 <option value="AUDIO">Audio</option>
+                                 <option value="PDF">PDF Document</option>
+                               </select>
+                            </div>
+
                           </div>
+                        );
+                      })}
+
+                      {parseContents(mod).length === 0 && (
+                        <div className="bg-gray-50 border border-gray-100 border-dashed rounded-lg p-8 text-center">
+                          <p className="text-sm text-gray-500 mb-4">No content in this module yet.</p>
                         </div>
                       )}
+
+                      <div className="flex items-center justify-center gap-3 mt-4 pt-4 border-t border-gray-100">
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            const items = parseContents(mod);
+                            items.push({ id: Math.random().toString(36).substring(7), type: 'TEXT', content: '' });
+                            setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
+                            handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                            setEditingTextLessonId(items[items.length-1].id + '_' + mod.id);
+                            setTextLessonDraft('');
+                          }}
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                        >
+                          <DocumentTextIcon className="w-4 h-4 text-blue-500 stroke-2" />
+                          Add Text
+                        </button>
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            const items = parseContents(mod);
+                            items.push({ id: Math.random().toString(36).substring(7), type: 'VIDEO', url: '' });
+                            setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
+                            handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                          }}
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                        >
+                          <VideoCameraIcon className="w-4 h-4 text-purple-500 stroke-2" />
+                          Add Video
+                        </button>
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            const items = parseContents(mod);
+                            items.push({ id: Math.random().toString(36).substring(7), type: 'AUDIO', url: '' });
+                            setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
+                            handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                          }}
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                        >
+                          <svg className="w-4 h-4 text-green-500 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                          Add Audio
+                        </button>
+                      </div>
+                    </div>
                     </motion.div>
+
                   ))}
                 </AnimatePresence>
               </div>

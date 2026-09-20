@@ -78,6 +78,7 @@ type JourneyStage struct {
 	Description     string    `gorm:"type:text" json:"description"`
 	VideoURL        string    `gorm:"size:512" json:"video_url"`
 	ContentMarkdown string    `gorm:"type:text" json:"content_markdown"`
+	ContentsJSON    string    `gorm:"type:text" json:"contents_json"`
 	OrderIndex      int       `gorm:"default:0" json:"order_index"`
 	CreatedAt       time.Time `json:"created_at"`
 }
@@ -95,6 +96,7 @@ type JourneyModule struct {
 	HasChallenge      bool      `gorm:"default:true" json:"has_challenge"`
 	VideoURL          string    `gorm:"size:512" json:"video_url"`
 	ContentMarkdown   string    `gorm:"type:text" json:"content_markdown"`
+	ContentsJSON      string    `gorm:"type:text" json:"contents_json"`
 	AISummary         string    `gorm:"type:text" json:"ai_summary"`
 	ReflectionPrompts string    `gorm:"type:text" json:"reflection_prompts"`
 	OrderIndex        int       `gorm:"default:0" json:"order_index"`

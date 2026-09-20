@@ -36,6 +36,7 @@ func (h *Handler) AdminCreateCohort(c *gin.Context) {
 		Price         float64   `json:"price"`
 		Currency      string    `json:"currency"`
 		LeadMentorID  string    `json:"lead_mentor_id"`
+		ProgramID     string    `json:"program_id"`
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -46,6 +47,11 @@ func (h *Handler) AdminCreateCohort(c *gin.Context) {
 	var leadMentorID *string
 	if input.LeadMentorID != "" {
 		leadMentorID = &input.LeadMentorID
+	}
+
+	var programID *string
+	if input.ProgramID != "" {
+		programID = &input.ProgramID
 	}
 
 	cohort := models.Cohort{
@@ -62,6 +68,7 @@ func (h *Handler) AdminCreateCohort(c *gin.Context) {
 		Price:         input.Price,
 		Currency:      input.Currency,
 		LeadMentorID:  leadMentorID,
+		ProgramID:     programID,
 		Status:        "DRAFT",
 		CreatedAt:     time.Now(),
 		UpdatedAt:     time.Now(),
@@ -89,6 +96,7 @@ func (h *Handler) AdminUpdateCohort(c *gin.Context) {
 		Price         float64   `json:"price"`
 		Currency      string    `json:"currency"`
 		LeadMentorID  string    `json:"lead_mentor_id"`
+		ProgramID     string    `json:"program_id"`
 		Status        string    `json:"status"`
 	}
 
@@ -116,6 +124,12 @@ func (h *Handler) AdminUpdateCohort(c *gin.Context) {
 		updates["lead_mentor_id"] = input.LeadMentorID
 	} else {
 		updates["lead_mentor_id"] = nil
+	}
+
+	if input.ProgramID != "" {
+		updates["program_id"] = input.ProgramID
+	} else {
+		updates["program_id"] = nil
 	}
 
 	// For partial updates, we might want to omit empty fields, but a typical PUT would send all fields.
@@ -221,6 +235,7 @@ func (h *Handler) AdminCreateModule(c *gin.Context) {
 		Description     string `json:"description"`
 		VideoURL        string `json:"video_url"`
 		ContentMarkdown string `json:"content_markdown"`
+		ContentsJSON    string `json:"contents_json"`
 		OrderIndex      int    `json:"order_index"`
 	}
 
@@ -238,6 +253,7 @@ func (h *Handler) AdminCreateModule(c *gin.Context) {
 		Description:     input.Description,
 		VideoURL:        input.VideoURL,
 		ContentMarkdown: input.ContentMarkdown,
+		ContentsJSON:    input.ContentsJSON,
 		OrderIndex:      input.OrderIndex,
 		CreatedAt:       time.Now(),
 	}
@@ -353,6 +369,7 @@ func (h *Handler) AdminUpdateModule(c *gin.Context) {
 		Description     string `json:"description"`
 		VideoURL        string `json:"video_url"`
 		ContentMarkdown string `json:"content_markdown"`
+		ContentsJSON    string `json:"contents_json"`
 		OrderIndex      int    `json:"order_index"`
 	}
 
@@ -367,6 +384,7 @@ func (h *Handler) AdminUpdateModule(c *gin.Context) {
 		"description":      input.Description,
 		"video_url":        input.VideoURL,
 		"content_markdown": input.ContentMarkdown,
+		"contents_json":    input.ContentsJSON,
 		"order_index":      input.OrderIndex,
 	}
 
