@@ -35,7 +35,7 @@ export default function MentorReviews() {
 
   const queryClient = useQueryClient();
 
-  const { data: submissions = [], isLoading: loading } = useQuery({
+  const { data: submissions = [], isLoading: loading, refetch } = useQuery({
     queryKey: ['mentor-submissions'],
     queryFn: async () => {
       const res = await coursesApi.get('/api/mentor/submissions');
@@ -84,7 +84,7 @@ export default function MentorReviews() {
           <p className="text-sm text-gray-500 mt-1">Evaluate and grade builder project submissions.</p>
         </div>
         <button 
-          onClick={fetchSubmissions}
+          onClick={() => refetch()}
           className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
           <ArrowPathIcon className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
