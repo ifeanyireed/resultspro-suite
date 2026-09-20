@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"os"
 	"time"
-	"log"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
