@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
-
+	
+	"service_coursespro/db"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -56,7 +57,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			domain = c.Query("domain")
 		}
 
-		// Inject user info into context
 		if sub, ok := claims["sub"].(string); ok {
 			c.Set("user_id", sub)
 		}
@@ -64,7 +64,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Set("user_email", email)
 		}
 
-		// Tenant access validation
 		if domain != "" && domain != "localhost" && domain != "coursespro" {
 			tenantsClaim, ok := claims["tenants"].(map[string]interface{})
 			if !ok {
@@ -75,7 +74,6 @@ func AuthMiddleware() gin.HandlerFunc {
 
 			tenantData, exists := tenantsClaim[domain].(map[string]interface{})
 			if !exists {
-				// Check for global platform admin fallback
 				roles, _ := claims["roles"].([]interface{})
 				isGlobalAdmin := false
 				for _, r := range roles {
@@ -87,6 +85,18 @@ func AuthMiddleware() gin.HandlerFunc {
 				
 				if !isGlobalAdmin {
 					c.JSON(http.StatusUnauthorized, gin.H{"error": "Session invalid or expired", "reason": "user_not_in_tenant"})
+					c.Abort()
+					return
+				}
+				
+				// Global admins need their tenant resolved manually since it's not in the token
+				type Tenant struct { ID string }
+				var t Tenant
+				if err := db.DB.Table("tenants").Select("id").Where("slug = ?", domain).First(&t).Error; err == nil {
+					c.Set("tenant_id", t.ID)
+					c.Set("tenant_role", "platform-admin")
+				} else {
+					c.JSON(http.StatusUnauthorized, gin.H{"error": "Tenant not found in database", "reason": "tenant_not_found"})
 					c.Abort()
 					return
 				}
