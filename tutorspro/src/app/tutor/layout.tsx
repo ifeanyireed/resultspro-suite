@@ -2,8 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { ModernDashboardLayout } from '@/components/layout/ModernDashboardLayout';
 import { 
   Squares2X2Icon, 
   MapIcon, 
@@ -18,7 +16,17 @@ import {
   ArrowRightOnRectangleIcon,
   MagnifyingGlassIcon,
   EnvelopeIcon,
-  BellIcon
+  BellIcon,
+  CalendarIcon,
+  InboxIcon,
+  BookOpenIcon,
+  PresentationChartBarIcon,
+  CurrencyDollarIcon,
+  BanknotesIcon,
+  StarIcon,
+  DocumentTextIcon,
+  ClipboardDocumentCheckIcon,
+  UserIcon
 } from '@heroicons/react/24/outline';
 import { 
   Squares2X2Icon as Squares2X2Solid,
@@ -60,25 +68,29 @@ export default function TutorLayout({
             <div className="px-6 space-y-1">
               <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">TUTORSPRO (INSTRUCTOR)</p>
               
-              <Link href="/tutor/dashboard" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/tutor/dashboard') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                {isActive('/tutor/dashboard') ? <Squares2X2Solid className="w-6 h-6" /> : <Squares2X2Icon className="w-6 h-6" />}
-                Dashboard
-              </Link>
-              
-              <Link href="/tutor/classes" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/tutor/classes') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <VideoCameraIcon className="w-6 h-6" />
-                Live Classes
-              </Link>
-
-              <Link href="/tutor/progress" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/tutor/progress') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <TrophyIcon className="w-6 h-6" />
-                Progress & Reports
-              </Link>
-              
-              <Link href="/tutor/messages" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/tutor/messages') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <EnvelopeIcon className="w-6 h-6" />
-                Messages
-              </Link>
+                            {([
+                { name: 'Dashboard', href: '/tutor/dashboard', icon: Squares2X2Icon, activeIcon: Squares2X2Solid },
+                { name: 'Calendar & Availability', href: '/tutor/calendar', icon: CalendarIcon },
+                { name: 'Class Requests', href: '/tutor/requests', icon: InboxIcon },
+                { name: 'Lesson Planner', href: '/tutor/planner', icon: BookOpenIcon },
+                { name: 'Live Classroom', href: '/tutor/classroom', icon: VideoCameraIcon },
+                { name: 'Whiteboard', href: '/tutor/whiteboard', icon: PresentationChartBarIcon },
+                { name: 'Resources', href: '/tutor/resources', icon: FolderOpenIcon },
+                { name: 'Student Progress', href: '/tutor/student-progress', icon: TrophyIcon },
+                { name: 'Earnings', href: '/tutor/earnings', icon: CurrencyDollarIcon },
+                { name: 'Payouts', href: '/tutor/payouts', icon: BanknotesIcon },
+                { name: 'Reviews', href: '/tutor/reviews', icon: StarIcon },
+                { name: 'Messages', href: '/tutor/messages', icon: EnvelopeIcon },
+              ]).map((item) => {
+                const active = isActive(item.href);
+                const Icon = active && item.activeIcon ? item.activeIcon : item.icon;
+                return (
+                  <Link key={item.name} href={item.href} className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${active ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
+                    <Icon className="w-6 h-6" />
+                    {item.name}
+                  </Link>
+                );
+              })}
             </div>
 
             <div className="px-6 mt-8 space-y-1">

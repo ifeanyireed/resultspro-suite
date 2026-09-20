@@ -26,23 +26,26 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
   React.useEffect(() => {
     const fetchProgramAndStages = async () => {
       try {
-        const [progRes, stagesRes] = await Promise.all([
-          coursesApi.get(`/api/admin/programs`),
-          coursesApi.get(`/api/admin/programs/${id}/stages`).catch(() => ({ data: { stages: [] } }))
-        ]);
+        // Fetch sequentially to prevent hitting rate limits on the auth introspection endpoint
+        const progRes = await coursesApi.get(`/api/admin/programs`);
         const found = progRes.data.programs?.find((p: any) => p.id === id);
         setProgram(found || { title: "Untitled Journey", id });
         
-        if (stagesRes.data?.stages) {
-          setModules(stagesRes.data.stages.map((s: any) => ({
-            id: s.id,
-            title: s.title,
-            description: s.description || '',
-            type: 'module'
-          })));
+        try {
+          const stagesRes = await coursesApi.get(`/api/admin/programs/${id}/stages`);
+          if (stagesRes.data?.stages) {
+            setModules(stagesRes.data.stages.map((s: any) => ({
+              id: s.id,
+              title: s.title,
+              description: s.description || '',
+              type: 'module'
+            })));
+          }
+        } catch (stageErr) {
+          console.warn("Could not fetch stages, defaulting to empty. Make sure backend is updated.");
         }
       } catch (e) {
-        console.error(e);
+        console.error("Failed to fetch program:", e);
         setProgram({ title: "Untitled Journey", id });
       } finally {
         setLoading(false);

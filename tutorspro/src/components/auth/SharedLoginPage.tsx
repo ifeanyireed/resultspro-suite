@@ -42,7 +42,7 @@ export default function SharedLoginPage({
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await api.post(loginEndpoint, { email, password });
+      const res = await api.post(loginEndpoint, { email, password, app_id: 'tutorspro' });
       const token = res.data.token || res.data.access_token;
       if (token) {
         let targetPath = redirectPath;

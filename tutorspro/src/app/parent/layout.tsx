@@ -2,8 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { ModernDashboardLayout } from '@/components/layout/ModernDashboardLayout';
 import { 
   Squares2X2Icon, 
   MapIcon, 
@@ -18,7 +16,26 @@ import {
   ArrowRightOnRectangleIcon,
   MagnifyingGlassIcon,
   EnvelopeIcon,
-  BellIcon
+  BellIcon,
+  CalendarIcon,
+  InboxIcon,
+  BookOpenIcon,
+  PresentationChartBarIcon,
+  CurrencyDollarIcon,
+  BanknotesIcon,
+  StarIcon,
+  DocumentTextIcon,
+  ClipboardDocumentCheckIcon,
+  UserIcon,
+  WalletIcon,
+  PuzzlePieceIcon,
+  MagnifyingGlassCircleIcon,
+  PlayIcon,
+  Square3Stack3DIcon,
+  ClockIcon,
+  ChartBarIcon,
+  ChatBubbleLeftRightIcon,
+  CreditCardIcon
 } from '@heroicons/react/24/outline';
 import { 
   Squares2X2Icon as Squares2X2Solid,
@@ -60,25 +77,23 @@ export default function ParentLayout({
             <div className="px-6 space-y-1">
               <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">TUTORSPRO (GUARDIAN)</p>
               
-              <Link href="/parent/dashboard" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/parent/dashboard') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                {isActive('/parent/dashboard') ? <Squares2X2Solid className="w-6 h-6" /> : <Squares2X2Icon className="w-6 h-6" />}
-                Dashboard
-              </Link>
-              
-              <Link href="/parent/classes" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/parent/classes') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <VideoCameraIcon className="w-6 h-6" />
-                Live Classes
-              </Link>
-
-              <Link href="/parent/progress" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/parent/progress') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <TrophyIcon className="w-6 h-6" />
-                Progress & Reports
-              </Link>
-              
-              <Link href="/parent/messages" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/parent/messages') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <EnvelopeIcon className="w-6 h-6" />
-                Messages
-              </Link>
+                            {([
+                { name: 'Dashboard', href: '/parent/dashboard', icon: Squares2X2Icon, activeIcon: Squares2X2Solid },
+                { name: 'History & Attendance', href: '/parent/history', icon: ClockIcon },
+                { name: 'Progress Analytics', href: '/parent/progress', icon: ChartBarIcon },
+                { name: 'Tutor Feedback', href: '/parent/feedback', icon: ChatBubbleLeftRightIcon },
+                { name: 'Notifications', href: '/parent/notifications', icon: BellIcon },
+                { name: 'Billing', href: '/parent/billing', icon: CreditCardIcon },
+              ]).map((item) => {
+                const active = isActive(item.href);
+                const Icon = active && item.activeIcon ? item.activeIcon : item.icon;
+                return (
+                  <Link key={item.name} href={item.href} className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${active ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
+                    <Icon className="w-6 h-6" />
+                    {item.name}
+                  </Link>
+                );
+              })}
             </div>
 
             <div className="px-6 mt-8 space-y-1">
