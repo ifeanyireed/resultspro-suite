@@ -598,7 +598,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                   <button 
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      const allText = parseContents(mod).filter(i => i.type === 'TEXT').map(i => i.content).join('\n\n');
+                                      const allText = parseContents(mod).filter((i: any) => i.type === 'TEXT').map((i: any) => i.content).join('\n\n');
                                       setModuleTextContext(allText);
                                       setIsQuizModalOpen(mod.id + ':' + item.id);
                                     }}
@@ -606,6 +606,19 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                   >
                                     + Create New
                                   </button>
+                                  {item.url && (
+                                    <button 
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        const allText = parseContents(mod).filter((i: any) => i.type === 'TEXT').map((i: any) => i.content).join('\n\n');
+                                        setModuleTextContext(allText);
+                                        setIsQuizModalOpen(mod.id + ':' + item.id + ':' + item.url);
+                                      }}
+                                      className="px-3 py-2 bg-blue-50 text-blue-700 border border-blue-100 hover:bg-blue-100 rounded-md text-sm font-medium whitespace-nowrap"
+                                    >
+                                      Edit Quiz
+                                    </button>
+                                  )}
                                 </div>
                               </div>
                             )}
@@ -955,6 +968,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
         onClose={() => setIsQuizModalOpen(null)}
         moduleId={isQuizModalOpen ? isQuizModalOpen.split(':')[0] : ''}
         moduleTextContext={moduleTextContext}
+        existingQuizId={isQuizModalOpen && isQuizModalOpen.split(':').length === 3 ? isQuizModalOpen.split(':')[2] : undefined}
         onSave={async (newQuizId) => {
           if (!isQuizModalOpen) return;
           const [mId, iId] = isQuizModalOpen.split(':');

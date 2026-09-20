@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { XMarkIcon, PlayIcon, DocumentTextIcon, VideoCameraIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
+import { coursesApi } from '@/lib/api';
 
 
 const formatEmbedUrl = (url: string, type: string) => {
@@ -47,6 +48,151 @@ const getDirectMediaUrl = (url: string) => {
 };
 
 
+
+
+
+
+function InteractiveQuizPreview({ quizId }: { quizId: string }) {
+  const [quiz, setQuiz] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState('');
+  const [currentIdx, setCurrentIdx] = React.useState(0);
+  const [selectedAns, setSelectedAns] = React.useState<number | null>(null);
+  const [submitted, setSubmitted] = React.useState(false);
+
+  React.useEffect(() => {
+    async function load() {
+      if (!quizId) {
+        setLoading(false);
+        setError('No Quiz ID provided.');
+        return;
+      }
+      try {
+        setLoading(true);
+        const res = await coursesApi.get(`/api/admin/quizzes/${quizId}`);
+        const found = res.data.quiz || res.data;
+        if (found) {
+          found.questions = res.data.questions || found.questions || [];
+          setQuiz(found);
+        } else {
+          setError('Quiz not found.');
+        }
+      } catch (err) {
+        setError('Failed to load quiz.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [quizId]);
+
+  if (loading) {
+    return <div className="p-8 text-center text-gray-500 bg-white rounded-xl border border-gray-200">Loading interactive quiz...</div>;
+  }
+  if (error || !quiz) {
+    return <div className="p-8 text-center text-red-500 bg-white rounded-xl border border-gray-200">{error || 'Unknown error'}</div>;
+  }
+
+  let rawQuestions = quiz.questions;
+  if ((!rawQuestions || rawQuestions.length === 0) && quiz.questions_json) {
+    try { rawQuestions = typeof quiz.questions_json === 'string' ? JSON.parse(quiz.questions_json) : quiz.questions_json; } catch(e) {}
+  }
+  const questions = (rawQuestions || []).map((q: any) => {
+    if (!q.options && q.options_json) {
+      try { q.options = JSON.parse(q.options_json); } catch(e) { q.options = []; }
+    }
+    return q;
+  });
+  if (questions.length === 0) {
+    return <div className="p-8 text-center text-gray-500 bg-white rounded-xl border border-gray-200">This quiz has no questions.</div>;
+  }
+
+  const currentQ = questions[currentIdx];
+
+  const handleVerify = () => {
+    setSubmitted(true);
+  };
+
+  const handleNext = () => {
+    setSelectedAns(null);
+    setSubmitted(false);
+    setCurrentIdx(idx => Math.min(questions.length - 1, idx + 1));
+  };
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-8 shadow-sm space-y-6">
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-[10px] font-bold uppercase text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
+          Question {currentIdx + 1} of {questions.length}
+        </span>
+        <span className="text-xs font-semibold text-gray-400">{quiz.title}</span>
+      </div>
+      
+      <h4 className="font-bold text-lg text-gray-900 mt-2">
+        {currentQ.question}
+      </h4>
+
+      <div className="space-y-3 mt-4">
+        {currentQ.options?.map((opt: string, idx: number) => {
+          const isSelected = selectedAns === idx;
+          const isCorrect = idx === currentQ.correct_index;
+
+          let borderClasses = 'border-gray-200 hover:border-blue-400 bg-gray-50';
+          if (submitted) {
+            if (isCorrect) {
+              borderClasses = 'border-green-500 bg-green-50 text-green-700';
+            } else if (isSelected && !isCorrect) {
+              borderClasses = 'border-red-500 bg-red-50 text-red-700';
+            }
+          } else if (isSelected) {
+            borderClasses = 'border-blue-500 bg-blue-50 text-blue-700';
+          }
+
+          return (
+            <button
+              key={idx}
+              disabled={submitted}
+              onClick={() => setSelectedAns(idx)}
+              className={`w-full text-left p-4 rounded-xl border text-sm font-medium transition-all ${borderClasses}`}
+            >
+              <div className="flex items-center space-x-3">
+                <span className={`font-mono font-bold ${submitted ? 'opacity-70' : 'text-gray-400'}`}>0{idx + 1}</span>
+                <span>{opt}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {submitted && currentQ.explanation && (
+        <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 text-sm space-y-1 mt-4">
+          <span className="font-bold text-gray-900">Explanation:</span>
+          <p className="text-gray-600">{currentQ.explanation}</p>
+        </div>
+      )}
+
+      <div className="flex justify-end pt-4 mt-2">
+        {!submitted ? (
+          <button
+            disabled={selectedAns === null}
+            onClick={handleVerify}
+            className="bg-[#146ef5] text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-[#105bd1] transition-all disabled:opacity-50"
+          >
+            Verify Answer
+          </button>
+        ) : (
+          <button
+            disabled={currentIdx === questions.length - 1}
+            onClick={handleNext}
+            className="bg-green-600 text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-green-700 transition-all disabled:opacity-50 flex items-center gap-2"
+          >
+            {currentIdx === questions.length - 1 ? 'Quiz Completed' : 'Next Question'}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
 
 
 export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
@@ -258,16 +404,8 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                         )}
 
                         {block.type === 'QUIZ' && (
-                          <div className="p-8">
-                            <div className="bg-pink-50 border border-pink-100 text-pink-800 rounded-lg p-4 text-center">
-                              <h3 className="font-semibold mb-1">Interactive Quiz Block</h3>
-                              <p className="text-sm text-pink-600">
-                                {block.url ? `Linked Quiz ID: ${block.url}` : 'No quiz selected.'}
-                              </p>
-                              <div className="mt-4 text-xs text-pink-500 italic">
-                                In the real app, the Assessment Engine will render the interactive quiz here.
-                              </div>
-                            </div>
+                          <div className="p-6">
+                            <InteractiveQuizPreview quizId={block.url} />
                           </div>
                         )}
                         

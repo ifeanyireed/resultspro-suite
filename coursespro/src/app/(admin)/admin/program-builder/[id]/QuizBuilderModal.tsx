@@ -5,9 +5,11 @@ import { coursesApi } from '@/lib/api';
 
 type Question = {
   question: string;
+  question_type: 'MCQ' | 'THEORY';
   options: string[];
   correct_index: number;
   explanation: string;
+  reference?: string;
 };
 
 export const QuizBuilderModal = ({ 
@@ -15,13 +17,15 @@ export const QuizBuilderModal = ({
   onClose, 
   onSave, 
   moduleId, 
-  moduleTextContext 
+  moduleTextContext,
+  existingQuizId
 }: { 
   isOpen: boolean; 
   onClose: () => void; 
   onSave: (quizId: string) => void;
   moduleId: string;
   moduleTextContext: string;
+  existingQuizId?: string;
 }) => {
   const [title, setTitle] = useState('');
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -39,10 +43,39 @@ export const QuizBuilderModal = ({
 
   useEffect(() => {
     if (isOpen) {
-      setTitle('');
-      setQuestions([]);
+      if (existingQuizId) {
+        coursesApi.get(`/api/admin/quizzes/${existingQuizId}`).then(res => {
+          const q = res.data.quiz || res.data;
+          const questionsList = res.data.questions || q.questions || [];
+          if (q) {
+            setTitle(q.title || '');
+            let rawQuestions = questionsList;
+            if ((!rawQuestions || rawQuestions.length === 0) && q.questions_json) {
+              try { rawQuestions = typeof q.questions_json === 'string' ? JSON.parse(q.questions_json) : q.questions_json; } catch(e) {}
+            }
+            const parsedQuestions = (rawQuestions || []).map((dbQ: any) => {
+              let opts = dbQ.options;
+              if (!opts && dbQ.options_json) {
+                try { opts = JSON.parse(dbQ.options_json); } catch(e) { opts = []; }
+              }
+              return {
+                question: dbQ.question || '',
+                question_type: dbQ.question_type || 'MCQ',
+                options: opts || ['', '', '', ''],
+                correct_index: dbQ.correct_index || 0,
+                explanation: dbQ.explanation || '',
+                reference: dbQ.reference || ''
+              };
+            });
+            setQuestions(parsedQuestions);
+          }
+        });
+      } else {
+        setTitle('');
+        setQuestions([]);
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, existingQuizId]);
 
   const handleGenerateAI = async () => {
     if (!aiContext.trim()) {
@@ -60,9 +93,11 @@ export const QuizBuilderModal = ({
       if (res.data.quiz) {
         setQuestions(res.data.quiz.map((q: any) => ({
           question: q.question,
+          question_type: q.question_type || aiType || 'MCQ',
           options: q.options || [],
           correct_index: q.correct_index || 0,
-          explanation: q.explanation || ''
+          explanation: q.explanation || '',
+          reference: q.reference || ''
         })));
         if (!title) setTitle("AI Generated Quiz");
         setAiConfigOpen(false);
@@ -81,19 +116,38 @@ export const QuizBuilderModal = ({
     
     setSaving(true);
     try {
-      const res = await coursesApi.post('/api/admin/quizzes', {
+      let res;
+      const payload = {
         title,
         module_id: moduleId,
-        generated_by_ai: true, // We simplify for now
-        questions: questions.map(q => ({
+        generated_by_ai: true,
+        questions_json: JSON.stringify(questions.map(q => ({
           question: q.question,
+          question_type: q.question_type || 'MCQ',
+          options: q.options,
           options_json: JSON.stringify(q.options),
           correct_index: q.correct_index,
           explanation: q.explanation,
+          reference: q.reference || '',
+          bloom_level: 'REMEMBERING'
+        }))),
+        questions: questions.map(q => ({
+          question: q.question,
+          question_type: q.question_type || 'MCQ',
+          options: q.options,
+          options_json: JSON.stringify(q.options),
+          correct_index: q.correct_index,
+          explanation: q.explanation,
+          reference: q.reference || '',
           bloom_level: 'REMEMBERING'
         }))
-      });
-      if (res.data.quiz) {
+      };
+      
+      // The backend does not support PUT (it returns 404), so we always POST to create 
+      // a new updated version of the quiz and replace the ID on the module item.
+      res = await coursesApi.post('/api/admin/quizzes', payload);
+      
+      if (res && res.data && res.data.quiz) {
         onSave(res.data.quiz.id);
         onClose();
       }
@@ -106,7 +160,7 @@ export const QuizBuilderModal = ({
   };
 
   const addQuestion = () => {
-    setQuestions([...questions, { question: '', options: ['', '', '', ''], correct_index: 0, explanation: '' }]);
+    setQuestions([...questions, { question: '', question_type: 'MCQ', options: ['', '', '', ''], correct_index: 0, explanation: '', reference: '' }]);
   };
 
   const removeQuestion = (idx: number) => {
@@ -207,22 +261,48 @@ export const QuizBuilderModal = ({
                 <button onClick={() => removeQuestion(qIdx)} className="absolute top-4 right-4 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
                   <TrashIcon className="w-5 h-5" />
                 </button>
-                <div className="mb-4 pr-8">
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Question {qIdx + 1}</label>
-                  <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" value={q.question} onChange={e => updateQuestion(qIdx, { question: e.target.value })} placeholder="What is...?" />
+                <div className="mb-4 pr-8 flex items-end gap-4">
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Question {qIdx + 1}</label>
+                    <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" value={q.question} onChange={e => updateQuestion(qIdx, { question: e.target.value })} placeholder="What is...?" />
+                  </div>
+                  <div className="w-48">
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Type</label>
+                    <select className="w-full border border-slate-300 rounded-md p-2 text-sm bg-white" value={q.question_type || 'MCQ'} onChange={e => updateQuestion(qIdx, { question_type: e.target.value as 'MCQ' | 'THEORY' })}>
+                      <option value="MCQ">Multiple Choice</option>
+                      <option value="THEORY">Theory (Open-Ended)</option>
+                    </select>
+                  </div>
                 </div>
-                <div className="space-y-2 mb-4">
-                  <label className="block text-sm font-medium text-slate-700">Options (Select the correct one)</label>
-                  {q.options.map((opt, oIdx) => (
-                    <div key={oIdx} className="flex items-center gap-3">
-                      <input type="radio" name={"correct_" + qIdx} checked={q.correct_index === oIdx} onChange={() => updateQuestion(qIdx, { correct_index: oIdx })} className="w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500" />
-                      <input type="text" className="flex-1 border border-slate-300 rounded-md p-2 text-sm" value={opt} onChange={e => updateOption(qIdx, oIdx, e.target.value)} placeholder={"Option " + (oIdx + 1)} />
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Explanation (Optional)</label>
-                  <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm text-slate-600" value={q.explanation} onChange={e => updateQuestion(qIdx, { explanation: e.target.value })} placeholder="Why is this correct?" />
+                
+                {q.question_type !== 'THEORY' && (
+                  <div className="space-y-2 mb-4 p-4 bg-slate-50 border border-slate-100 rounded-lg">
+                    <label className="block text-sm font-medium text-slate-700">Options (Select the correct one)</label>
+                    {q.options.map((opt, oIdx) => (
+                      <div key={oIdx} className="flex items-center gap-3">
+                        <input type="radio" name={"correct_" + qIdx} checked={q.correct_index === oIdx} onChange={() => updateQuestion(qIdx, { correct_index: oIdx })} className="w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500" />
+                        <input type="text" className="flex-1 border border-slate-300 rounded-md p-2 text-sm bg-white" value={opt} onChange={e => updateOption(qIdx, oIdx, e.target.value)} placeholder={"Option " + (oIdx + 1)} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {q.question_type !== 'THEORY' && (
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Explanation (Optional)</label>
+                    <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm text-slate-600" value={q.explanation} onChange={e => updateQuestion(qIdx, { explanation: e.target.value })} placeholder="Why is this correct?" />
+                  </div>
+                )}
+                
+                <div className={q.question_type === 'THEORY' ? "" : "mt-4"}>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    {q.question_type === 'THEORY' ? 'Sample Answer / Rubric (Reference)' : 'Reference (Optional)'}
+                  </label>
+                  {q.question_type === 'THEORY' ? (
+                     <textarea className="w-full border border-slate-300 rounded-md p-2 text-sm text-slate-600 h-24" value={q.reference || ''} onChange={e => updateQuestion(qIdx, { reference: e.target.value })} placeholder="Provide the sample answer, rubric, or key points expected from the student..." />
+                  ) : (
+                     <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm text-slate-600" value={q.reference || ''} onChange={e => updateQuestion(qIdx, { reference: e.target.value })} placeholder="e.g. Chapter 3, Page 42" />
+                  )}
                 </div>
               </div>
             ))}

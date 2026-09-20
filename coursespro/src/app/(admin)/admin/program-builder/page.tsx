@@ -9,10 +9,10 @@ function GradientMetricCard({ title, value, subtitle, trend, icon: Icon }: any) 
       <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
       <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
       
-      <div className="flex justify-between items-start z-10">
+      <div className="relative z-10 flex justify-between items-start">
         <h3 className="text-xl font-normal text-white">{title}</h3>
-        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm group-hover:bg-white group-hover:text-[#146ef5] transition-colors">
-          {Icon && <Icon className="w-4 h-4" />}
+        <div className="relative z-20 w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm group-hover:bg-white group-hover:text-blue-600 transition-all duration-300">
+          {Icon && <Icon className="w-4 h-4 relative z-30" />}
         </div>
       </div>
       <div className="z-10 mt-6">
