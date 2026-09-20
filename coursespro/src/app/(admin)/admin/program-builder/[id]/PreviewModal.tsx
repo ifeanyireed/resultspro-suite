@@ -3,6 +3,17 @@ import { XMarkIcon, PlayIcon, DocumentTextIcon, VideoCameraIcon, ArrowLeftIcon, 
 import { motion, AnimatePresence } from 'framer-motion';
 
 
+const formatEmbedUrl = (url: string, type: string) => {
+  if (!url) return '';
+  if (url.includes('docs.google.com')) {
+    return url.replace(/\/(edit|view).*/, '/embed?rm=minimal');
+  }
+  if (type === 'PPT') {
+    return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
+  }
+  return url;
+};
+
 export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
 
@@ -134,7 +145,7 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                         {block.type === 'HTML' && (
                           <div className="w-full h-[600px] bg-white relative">
                             {block.url ? (
-                              <iframe src={block.url} className="w-full h-full border-0" title="HTML Content" sandbox="allow-scripts allow-same-origin" />
+                              <iframe src={formatEmbedUrl(block.url, 'HTML')} className="w-full h-full border-0" title="HTML Content" sandbox="allow-scripts allow-same-origin" />
                             ) : (
                               <div className="absolute inset-0 flex items-center justify-center text-gray-400">No HTML uploaded</div>
                             )}
@@ -145,7 +156,7 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                           <div className="w-full h-[500px] bg-white relative p-4 flex flex-col">
                             {block.url ? (
                               <iframe 
-                                src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(block.url)}`} 
+                                src={formatEmbedUrl(block.url, 'PPT')} 
                                 className="w-full flex-1 border border-gray-200 rounded-lg shadow-inner" 
                                 title="PPT Content"
                               />
@@ -158,7 +169,7 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                         {block.type === 'PDF' && (
                           <div className="w-full h-[600px] bg-white p-4">
                             {block.url ? (
-                              <iframe src={block.url} className="w-full h-full border border-gray-200 rounded-lg" title="PDF Document" />
+                              <iframe src={formatEmbedUrl(block.url, 'PDF')} className="w-full h-full border border-gray-200 rounded-lg" title="PDF Document" />
                             ) : (
                               <div className="flex-1 h-full flex items-center justify-center text-gray-400 border border-gray-200 border-dashed rounded-lg">No PDF uploaded</div>
                             )}
