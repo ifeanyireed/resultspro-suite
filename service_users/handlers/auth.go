@@ -130,7 +130,7 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		if tenantID == "" && input.TenantSlug != "" {
 			db.DB.QueryRow("SELECT id FROM tenants WHERE slug = ?", input.TenantSlug).Scan(&tenantID)
 		}
-		
+
 		if tenantID != "" {
 			_, err = db.DB.Exec("INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status, created_at, updated_at) VALUES (?, ?, ?, 'student', 'active', ?, ?)",
 				uuid.New().String(), userID, tenantID, now.UTC().Format("2006-01-02 15:04:05"), now.UTC().Format("2006-01-02 15:04:05"))
@@ -291,6 +291,12 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 				if role == "tenant-admin" && tSlug.Valid {
 					adminTenants = append(adminTenants, tSlug.String)
 				}
+				if tSlug.Valid && tID.Valid {
+					tenantRolesMap[tSlug.String] = map[string]string{
+						"id":   tID.String,
+						"role": role,
+					}
+				}
 			}
 		}
 	}
@@ -432,7 +438,7 @@ func HandleTokenRefresh(w http.ResponseWriter, r *http.Request) {
 				roles = append(roles, role)
 				if tSlug.Valid && tID.Valid {
 					tenantRolesMap[tSlug.String] = map[string]string{
-						"id": tID.String,
+						"id":   tID.String,
 						"role": role,
 					}
 				}
@@ -633,7 +639,7 @@ func HandleIntrospect(w http.ResponseWriter, r *http.Request) {
 		var isGlobalAdmin bool
 		var globalRole sql.NullString
 		db.DB.QueryRow("SELECT COALESCE(is_admin, false), role FROM users WHERE id = ?", userID).Scan(&isGlobalAdmin, &globalRole)
-		
+
 		isSuperAdmin := isGlobalAdmin || (globalRole.Valid && (globalRole.String == "superadmin" || globalRole.String == "platform-admin"))
 
 		if err != nil && !isSuperAdmin {
