@@ -321,28 +321,17 @@ func (h *Handler) AdminDeleteProgram(c *gin.Context) {
 
 func (h *Handler) AdminUpdateStage(c *gin.Context) {
 	id := c.Param("id")
-	var input struct {
-		Title       string `json:"title"`
-		Subtitle    string `json:"subtitle"`
-		Description string `json:"description"`
-		OrderIndex  int    `json:"order_index"`
-	}
-
+	var input map[string]interface{}
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	updates := map[string]interface{}{
-		"title":       input.Title,
-		"subtitle":    input.Subtitle,
-		"description": input.Description,
-		"order_index": input.OrderIndex,
-	}
-
-	if err := db.WithTenant(c).Model(&models.JourneyStage{}).Where("id = ?", id).Updates(updates).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update stage"})
-		return
+	if len(input) > 0 {
+		if err := db.WithTenant(c).Model(&models.JourneyStage{}).Where("id = ?", id).Updates(input).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update stage"})
+			return
+		}
 	}
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }

@@ -12,6 +12,7 @@ import {
   VideoCameraIcon
 } from '@heroicons/react/24/outline';
 import { coursesApi } from '@/lib/api';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function BuilderOSPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
@@ -38,6 +39,8 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
               id: s.id,
               title: s.title,
               description: s.description || '',
+              content_markdown: s.content_markdown,
+              video_url: s.video_url,
               type: 'module'
             })));
           }
@@ -87,16 +90,18 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
 
   const handleAddTextLesson = (moduleId: string) => {
     setModules(modules.map(m => m.id === moduleId ? { ...m, content_markdown: '' } : m));
+    handleUpdateModule(moduleId, { content_markdown: '' });
   };
 
   const handleAddVideo = (moduleId: string) => {
     setModules(modules.map(m => m.id === moduleId ? { ...m, video_url: '' } : m));
+    handleUpdateModule(moduleId, { video_url: '' });
   };
 
   return (
     <div className="flex flex-col h-[calc(100vh-2rem)] bg-gray-50 -mx-8 -mb-8 -mt-2 rounded-t-2xl overflow-hidden border-t border-gray-200 shadow-sm">
       {/* Builder Top Nav */}
-      <div className="h-14 border-b border-gray-200 bg-white flex items-center justify-between px-4 sticky top-0 z-10">
+      <div className="h-14 border-b border-gray-200 bg-white flex items-center justify-between px-4 sticky top-0 z-10 shrink-0">
         <div className="flex items-center gap-4">
           <button 
             onClick={() => router.push('/admin/program-builder')}
@@ -142,18 +147,23 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
               </div>
             ) : (
               <div className="space-y-1">
-                {modules.map(mod => (
-                  <button 
-                    key={mod.id}
-                    onClick={() => {
-                      setSelectedModuleId(mod.id);
-                      setIsSidebarOpen(true);
-                    }}
-                    className={`w-full text-left px-3 py-2.5 text-sm rounded-md transition-colors ${selectedModuleId === mod.id ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100'}`}
-                  >
-                    {mod.title || 'Untitled Module'}
-                  </button>
-                ))}
+                <AnimatePresence>
+                  {modules.map(mod => (
+                    <motion.button 
+                      key={mod.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      onClick={() => {
+                        setSelectedModuleId(mod.id);
+                        setIsSidebarOpen(true);
+                      }}
+                      className={`w-full text-left px-3 py-2.5 text-sm rounded-md transition-colors ${selectedModuleId === mod.id ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100'}`}
+                    >
+                      {mod.title || 'Untitled Module'}
+                    </motion.button>
+                  ))}
+                </AnimatePresence>
               </div>
             )}
           </div>
@@ -172,78 +182,95 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
               </div>
             ) : (
               <div className="space-y-6">
-                {modules.map(mod => (
-                  <div 
-                    key={mod.id} 
-                    className={`bg-white border rounded-xl p-6 shadow-sm transition-colors cursor-pointer ${selectedModuleId === mod.id ? 'border-blue-500 ring-1 ring-blue-500' : 'border-gray-200'}`} 
-                    onClick={() => { 
-                      setSelectedModuleId(mod.id); 
-                      setIsSidebarOpen(true); 
-                    }}
-                  >
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">{mod.title || 'Untitled Module'}</h3>
-                    
-                    {mod.content_markdown !== undefined ? (
-                      <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
-                        <textarea 
-                          className="w-full p-4 h-64 resize-y outline-none font-mono text-sm text-gray-800"
-                          placeholder="Write your markdown content here..."
-                          value={mod.content_markdown}
-                          onChange={(e) => setModules(modules.map(m => m.id === mod.id ? { ...m, content_markdown: e.target.value } : m))}
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                      </div>
-                    ) : mod.video_url !== undefined ? (
-                      <div className="border border-gray-200 rounded-lg overflow-hidden bg-white p-4">
-                        <label className="block text-xs font-medium text-gray-700 mb-1">Video URL (YouTube, Vimeo, etc.)</label>
-                        <input 
-                          type="text" 
-                          className="w-full border border-gray-300 rounded-md shadow-sm p-2 text-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                          placeholder="https://"
-                          value={mod.video_url}
-                          onChange={(e) => setModules(modules.map(m => m.id === mod.id ? { ...m, video_url: e.target.value } : m))}
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                      </div>
-                    ) : (
-                      <div className="bg-gray-50 border border-gray-100 border-dashed rounded-lg p-8 text-center">
-                        <p className="text-sm text-gray-500 mb-4">No lessons in this module yet.</p>
-                        <div className="flex items-center justify-center gap-3">
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); handleAddTextLesson(mod.id); }}
-                            className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                          >
-                            <DocumentTextIcon className="w-4 h-4 text-blue-500 stroke-2" />
-                            Add Text Lesson
-                          </button>
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); handleAddVideo(mod.id); }}
-                            className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                          >
-                            <VideoCameraIcon className="w-4 h-4 text-purple-500 stroke-2" />
-                            Add Video
-                          </button>
+                <AnimatePresence>
+                  {modules.map(mod => (
+                    <motion.div 
+                      layout
+                      initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                      transition={{ duration: 0.2 }}
+                      key={mod.id} 
+                      className={`bg-white border rounded-xl p-6 shadow-sm transition-colors cursor-pointer ${selectedModuleId === mod.id ? 'border-blue-500 ring-1 ring-blue-500' : 'border-gray-200'}`} 
+                      onClick={() => { 
+                        setSelectedModuleId(mod.id); 
+                        setIsSidebarOpen(true); 
+                      }}
+                    >
+                      <h3 className="text-lg font-medium text-gray-900 mb-4">{mod.title || 'Untitled Module'}</h3>
+                      
+                      {mod.content_markdown !== undefined ? (
+                        <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
+                          <textarea 
+                            className="w-full p-4 h-64 resize-y outline-none font-mono text-sm text-gray-800"
+                            placeholder="Write your markdown content here..."
+                            value={mod.content_markdown}
+                            onChange={(e) => setModules(modules.map(m => m.id === mod.id ? { ...m, content_markdown: e.target.value } : m))}
+                            onBlur={(e) => handleUpdateModule(mod.id, { content_markdown: e.target.value })}
+                            onClick={(e) => e.stopPropagation()}
+                          />
                         </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                      ) : mod.video_url !== undefined ? (
+                        <div className="border border-gray-200 rounded-lg overflow-hidden bg-white p-4">
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Video URL (YouTube, Vimeo, etc.)</label>
+                          <input 
+                            type="text" 
+                            className="w-full border border-gray-300 rounded-md shadow-sm p-2 text-sm focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                            placeholder="https://"
+                            value={mod.video_url}
+                            onChange={(e) => setModules(modules.map(m => m.id === mod.id ? { ...m, video_url: e.target.value } : m))}
+                            onBlur={(e) => handleUpdateModule(mod.id, { video_url: e.target.value })}
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        </div>
+                      ) : (
+                        <div className="bg-gray-50 border border-gray-100 border-dashed rounded-lg p-8 text-center">
+                          <p className="text-sm text-gray-500 mb-4">No lessons in this module yet.</p>
+                          <div className="flex items-center justify-center gap-3">
+                            <button 
+                              onClick={(e) => { e.stopPropagation(); handleAddTextLesson(mod.id); }}
+                              className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                            >
+                              <DocumentTextIcon className="w-4 h-4 text-blue-500 stroke-2" />
+                              Add Text Lesson
+                            </button>
+                            <button 
+                              onClick={(e) => { e.stopPropagation(); handleAddVideo(mod.id); }}
+                              className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                            >
+                              <VideoCameraIcon className="w-4 h-4 text-purple-500 stroke-2" />
+                              Add Video
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
               </div>
             )}
           </div>
         </div>
         
         {/* Right Sidebar (Properties) */}
-        <div className={`border-l border-gray-200 bg-white flex flex-col shrink-0 transition-all duration-300 ease-in-out ${isSidebarOpen ? 'w-80' : 'w-0 border-l-0 overflow-hidden'}`}>
-           <div className="p-4 border-b border-gray-100 flex items-center justify-between whitespace-nowrap min-w-[320px]">
-            <h2 className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Properties</h2>
-            <button onClick={() => setIsSidebarOpen(false)} className="text-gray-400 hover:text-gray-600 focus:outline-none">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-          </div>
-          <div className="flex-1 p-4 overflow-y-auto min-w-[320px]">
-            {selectedModuleId ? (
-              <div className="space-y-4">
+        <AnimatePresence initial={false}>
+          {isSidebarOpen && (
+            <motion.div 
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 320, opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="border-l border-gray-200 bg-white flex flex-col shrink-0 overflow-hidden"
+            >
+               <div className="p-4 border-b border-gray-100 flex items-center justify-between whitespace-nowrap min-w-[320px]">
+                <h2 className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Properties</h2>
+                <button onClick={() => setIsSidebarOpen(false)} className="text-gray-400 hover:text-gray-600 focus:outline-none">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              <div className="flex-1 p-4 overflow-y-auto min-w-[320px]">
+                {selectedModuleId ? (
+                  <div className="space-y-4">
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-1">Module Title</label>
                   <input 
@@ -284,7 +311,9 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
               </div>
             )}
           </div>
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
