@@ -94,6 +94,8 @@ type JourneyModule struct {
 	ReadingsCount     int       `gorm:"default:3" json:"readings_count"`
 	HasQuiz           bool      `gorm:"default:true" json:"has_quiz"`
 	HasChallenge      bool      `gorm:"default:true" json:"has_challenge"`
+	TimeLimitMinutes  int       `gorm:"default:0" json:"time_limit_minutes"`
+	ExpiryDays        int       `gorm:"default:0" json:"expiry_days"`
 	VideoURL          string    `gorm:"size:512" json:"video_url"`
 	ContentMarkdown   string    `gorm:"type:text" json:"content_markdown"`
 	ContentsJSON      string    `gorm:"type:text" json:"contents_json"`
@@ -138,6 +140,28 @@ type ProjectSubmission struct {
 	ReviewedAt     *time.Time `json:"reviewed_at"`
 	UpdatedAt      time.Time  `json:"updated_at"`
 }
+
+
+// Block Submission
+type BlockSubmission struct {
+	ID             string     `gorm:"primaryKey;size:64" json:"id"`
+	TenantID       string     `gorm:"size:191;index;not null" json:"tenant_id"`
+	UserID         string     `gorm:"size:64;index;not null" json:"user_id"`
+	ModuleID       string     `gorm:"size:64;index;not null" json:"module_id"`
+	BlockID        string     `gorm:"size:64;index;not null" json:"block_id"`
+	BlockType      string     `gorm:"size:64;not null" json:"block_type"` // ASSIGNMENT, COMPILER, QUIZ
+	SubmissionType string     `gorm:"size:64" json:"submission_type"` // TEXT, LINK, FILE, CODE
+	GroupID        *string    `gorm:"size:64;index" json:"group_id"` // If this is a group assignment
+	Content        string     `gorm:"type:text" json:"content"` // The actual text, link, file URL, or code
+	Score          int        `gorm:"default:0" json:"score"` // For quizzes
+	Status         string     `gorm:"size:32;default:'PENDING'" json:"status"` // PENDING, REVIEWED
+	MentorID       *string    `gorm:"size:64;index" json:"mentor_id"`
+	MentorFeedback string     `gorm:"type:text" json:"mentor_feedback"`
+	SubmittedAt    time.Time  `json:"submitted_at"`
+	ReviewedAt     *time.Time `json:"reviewed_at"`
+}
+
+func (BlockSubmission) TableName() string { return "crs_block_submissions" }
 
 // Peer Pairing
 type PeerPairing struct {

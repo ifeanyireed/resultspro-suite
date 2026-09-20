@@ -55,10 +55,14 @@ func main() {
 		// Projects & Submissions
 		protected.POST("/projects/submit", h.SubmitProject)
 		protected.GET("/projects/my-submissions", h.GetMySubmissions)
+		protected.POST("/submissions/blocks", h.SubmitBlock)
+		protected.GET("/submissions/blocks", h.GetMyBlockSubmissions)
 
 		// Mentor Console
 		protected.GET("/mentor/submissions", h.GetPendingSubmissions)
 		protected.POST("/mentor/submissions/:id/review", h.ReviewSubmission)
+		protected.GET("/mentor/submissions/blocks", h.GetPendingBlockSubmissions)
+		protected.POST("/mentor/submissions/blocks/:id/review", h.ReviewBlockSubmission)
 
 		// Classroom & Peers
 		protected.GET("/classroom/presence", h.GetPresence)
