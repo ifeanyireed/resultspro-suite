@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"log"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -17,13 +18,23 @@ import (
 	"service_users.resultspro.ng/models"
 )
 
+// resolveTenantID resolves the tenant ID from X-Tenant-Domain header
+func resolveTenantID(r *http.Request) string {
+	domain := r.Header.Get("X-Tenant-Domain")
+	if domain == "" {
+		return ""
+	}
+	var tenantID string
+	err := db.DB.QueryRow("SELECT id FROM tenants WHERE slug = ? OR default_subdomain = ? OR custom_domain = ?", domain, domain, domain).Scan(&tenantID)
+	if err != nil {
+		return ""
+	}
+	return tenantID
+}
+
 // PlatformPaymentSummary returns MRR, Active Subs, etc.
 func HandlePlatformPaymentSummary(w http.ResponseWriter, r *http.Request) {
-	tenantID := r.Header.Get("X-Tenant-ID") // or from auth context
-	if tenantID == "" {
-		tenantID = r.Context().Value("tenant_id").(string)
-	}
-
+	tenantID := resolveTenantID(r)
 	if tenantID == "" {
 		http.Error(w, `{"error":"Tenant not identified"}`, http.StatusUnauthorized)
 		return
@@ -52,15 +63,15 @@ func HandlePlatformPaymentSummary(w http.ResponseWriter, r *http.Request) {
 
 // PlatformTransactions returns recent B2C transactions
 func HandlePlatformTransactions(w http.ResponseWriter, r *http.Request) {
-	tenantID := r.Context().Value("tenant_id")
-	if tenantID == nil || tenantID.(string) == "" {
+	tenantID := resolveTenantID(r)
+	if tenantID == "" {
 		http.Error(w, `{"error":"Tenant not identified"}`, http.StatusUnauthorized)
 		return
 	}
 
 	var transactions []models.UserTransaction
 	if db.GormDB != nil {
-		db.GormDB.Where("tenant_id = ?", tenantID.(string)).
+		db.GormDB.Where("tenant_id = ?", tenantID).
 			Order("created_at desc").
 			Limit(50).
 			Find(&transactions)
