@@ -27,6 +27,15 @@ export const QuizBuilderModal = ({
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loadingAI, setLoadingAI] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [aiConfigOpen, setAiConfigOpen] = useState(false);
+  const [aiContext, setAiContext] = useState(moduleTextContext);
+  const [aiType, setAiType] = useState('MCQ');
+  const [aiNumQuestions, setAiNumQuestions] = useState(3);
+  const [aiNumOptions, setAiNumOptions] = useState(4);
+
+  useEffect(() => {
+    setAiContext(moduleTextContext);
+  }, [moduleTextContext]);
 
   useEffect(() => {
     if (isOpen) {
@@ -36,13 +45,18 @@ export const QuizBuilderModal = ({
   }, [isOpen]);
 
   const handleGenerateAI = async () => {
-    if (!moduleTextContext.trim()) {
-      alert("This module doesn't have any text content to generate a quiz from.");
+    if (!aiContext.trim()) {
+      alert("Please provide some text context for the AI.");
       return;
     }
     setLoadingAI(true);
     try {
-      const res = await coursesApi.post('/api/admin/ai/generate-quiz-preview', { content: moduleTextContext });
+      const res = await coursesApi.post('/api/admin/ai/generate-quiz-preview', { 
+        content: aiContext,
+        question_type: aiType,
+        num_questions: aiNumQuestions,
+        num_options: aiNumOptions
+      });
       if (res.data.quiz) {
         setQuestions(res.data.quiz.map((q: any) => ({
           question: q.question,
@@ -51,6 +65,7 @@ export const QuizBuilderModal = ({
           explanation: q.explanation || ''
         })));
         if (!title) setTitle("AI Generated Quiz");
+        setAiConfigOpen(false);
       }
     } catch (e) {
       console.error(e);
@@ -140,10 +155,44 @@ export const QuizBuilderModal = ({
               <label className="block text-sm font-medium text-slate-700 mb-1">Quiz Title</label>
               <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Intro to Variables Knowledge Check" />
             </div>
+            
+            {aiConfigOpen && (
+              <div className="mt-2 p-4 bg-indigo-50/50 border border-indigo-100 rounded-lg flex flex-col gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-indigo-900 mb-1">Source Text Context</label>
+                  <textarea className="w-full border border-indigo-200 rounded-md p-2 text-sm h-24" value={aiContext} onChange={e => setAiContext(e.target.value)} placeholder="Paste the text you want the AI to read..." />
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-indigo-900 mb-1">Question Type</label>
+                    <select className="w-full border border-indigo-200 rounded-md p-2 text-sm bg-white" value={aiType} onChange={e => setAiType(e.target.value)}>
+                      <option value="MCQ">Multiple Choice</option>
+                      <option value="THEORY">Theory (Open-Ended)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-indigo-900 mb-1">Questions</label>
+                    <input type="number" min="1" max="20" className="w-full border border-indigo-200 rounded-md p-2 text-sm" value={aiNumQuestions} onChange={e => setAiNumQuestions(Number(e.target.value))} />
+                  </div>
+                  {aiType === 'MCQ' && (
+                    <div>
+                      <label className="block text-xs font-semibold text-indigo-900 mb-1">Options per Question</label>
+                      <input type="number" min="2" max="5" className="w-full border border-indigo-200 rounded-md p-2 text-sm" value={aiNumOptions} onChange={e => setAiNumOptions(Number(e.target.value))} />
+                    </div>
+                  )}
+                </div>
+                <div className="flex justify-end mt-2">
+                  <button onClick={handleGenerateAI} disabled={loadingAI} className="px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 rounded-md text-sm font-medium flex items-center gap-2 transition-colors shadow-sm">
+                    <SparklesIcon className="w-4 h-4" />
+                    {loadingAI ? 'Generating...' : 'Generate Now'}
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="flex items-center gap-3">
-              <button onClick={handleGenerateAI} disabled={loadingAI} className="px-4 py-2 bg-indigo-50 text-indigo-700 border border-indigo-100 hover:bg-indigo-100 rounded-md text-sm font-medium flex items-center gap-2 transition-colors">
+              <button onClick={() => setAiConfigOpen(!aiConfigOpen)} disabled={loadingAI} className="px-4 py-2 bg-indigo-50 text-indigo-700 border border-indigo-100 hover:bg-indigo-100 rounded-md text-sm font-medium flex items-center gap-2 transition-colors">
                 <SparklesIcon className="w-4 h-4" />
-                {loadingAI ? 'Generating with Gemini...' : 'Auto-Generate from Module Text'}
+                {loadingAI ? 'Generating with Gemini...' : 'Generate with AI'}
               </button>
               <button onClick={addQuestion} className="px-4 py-2 bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 rounded-md text-sm font-medium flex items-center gap-2 transition-colors">
                 <PlusIcon className="w-4 h-4" />

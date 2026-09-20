@@ -37,6 +37,7 @@ type CreateQuizInput struct {
 	GeneratedByAI bool   `json:"generated_by_ai"`
 	Questions     []struct {
 		Question     string `json:"question"`
+		QuestionType string `json:"question_type"`
 		OptionsJSON  string `json:"options_json"`
 		CorrectIndex int    `json:"correct_index"`
 		Explanation  string `json:"explanation"`
@@ -78,6 +79,7 @@ func (h *Handler) AdminCreateQuiz(c *gin.Context) {
 			ID:           uuid.New().String(),
 			QuizID:       quiz.ID,
 			Question:     q.Question,
+			QuestionType: q.QuestionType,
 			OptionsJSON:  q.OptionsJSON,
 			CorrectIndex: q.CorrectIndex,
 			Explanation:  q.Explanation,

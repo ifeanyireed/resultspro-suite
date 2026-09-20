@@ -1,6 +1,7 @@
 package handlers
 
 import (
+"fmt"
 	"context"
 	"encoding/json"
 	"net/http"
@@ -88,7 +89,10 @@ Lesson Content:
 }
 
 type GenerateQuizReq struct {
-	Content string `json:"content" binding:"required"`
+	Content      string `json:"content" binding:"required"`
+	QuestionType string `json:"question_type"` // "MCQ" or "THEORY"
+	NumQuestions int    `json:"num_questions"`
+	NumOptions   int    `json:"num_options"`
 }
 
 // GenerateQuizPreview uses Gemini to generate a quiz directly from a markdown payload
@@ -116,19 +120,50 @@ func (h *Handler) GenerateQuizPreview(c *gin.Context) {
 	model := client.GenerativeModel("gemini-1.5-flash")
 	model.ResponseMIMEType = "application/json"
 
-	prompt := `
-You are an expert educator. Read the following lesson markdown and generate a 3-question multiple choice quiz.
-Return ONLY a JSON array of objects with the following schema:
-[
+	if req.QuestionType == "" {
+		req.QuestionType = "MCQ"
+	}
+	if req.NumQuestions <= 0 {
+		req.NumQuestions = 3
+	}
+	if req.NumOptions <= 0 {
+		req.NumOptions = 4
+	}
+
+	var schemaDesc string
+	if req.QuestionType == "THEORY" {
+		schemaDesc = `[
+  {
+    "question": "Explain the concept of...",
+    "explanation": "Reference answer goes here..."
+  }
+]`
+	} else {
+		optionsArr := "[]"
+		if req.NumOptions == 2 {
+			optionsArr = `["A", "B"]`
+		} else if req.NumOptions == 3 {
+			optionsArr = `["A", "B", "C"]`
+		} else {
+			optionsArr = `["A", "B", "C", "D"]`
+		}
+		schemaDesc = fmt.Sprintf(`[
   {
     "question": "What is...?",
-    "options": ["A", "B", "C", "D"],
-    "correct_index": 0
+    "options": %s,
+    "correct_index": 0,
+    "explanation": "Optional explanation for why this is correct."
   }
-]
+]`, optionsArr)
+	}
+
+	prompt := fmt.Sprintf(`You are an expert educator. Read the following lesson markdown and generate a %%d-question %%s quiz.
+Return ONLY a JSON array of objects with the following schema:
+%%s
 
 Lesson Content:
-` + req.Content
+%%s`, req.NumQuestions, req.QuestionType, schemaDesc, req.Content)
+
 
 	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {

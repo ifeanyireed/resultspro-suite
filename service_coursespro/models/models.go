@@ -196,6 +196,7 @@ type QuizQuestion struct {
 	ID           string    `gorm:"primaryKey;size:64" json:"id"`
 	QuizID       string    `gorm:"size:64;index;not null" json:"quiz_id"`
 	Question     string    `gorm:"type:text;not null" json:"question"`
+	QuestionType string    `gorm:"size:64;default:'MCQ'" json:"question_type"`
 	OptionsJSON  string    `gorm:"type:jsonb;not null" json:"options_json"`
 	CorrectIndex int       `gorm:"not null" json:"correct_index"`
 	Explanation  string    `gorm:"type:text" json:"explanation"`
