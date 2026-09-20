@@ -10,8 +10,8 @@ const formatEmbedUrl = (url: string, type: string) => {
     if (type === 'PDF') {
       const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
       if (match) {
-        // Use Google Docs viewer with the direct download link to avoid the black Drive preview frame
-        return `https://docs.google.com/viewer?url=${encodeURIComponent(`https://docs.google.com/uc?export=download&id=${match[1]}`)}&embedded=true`;
+        const directUrl = `https://docs.google.com/uc?export=download&id=${match[1]}`;
+        return `/pdf-viewer.html?url=${encodeURIComponent(`/api/pdf-proxy?url=${encodeURIComponent(directUrl)}`)}`;
       }
     }
     return url.replace(/\/(edit|view).*/, '/preview');
@@ -29,8 +29,7 @@ const formatEmbedUrl = (url: string, type: string) => {
   }
   
   if (type === 'PDF' && !url.includes('docs.google.com')) {
-    // Append parameters to hide the native browser's black PDF toolbar
-    return url.includes('#') ? url : url + '#toolbar=0&navpanes=0&scrollbar=0&view=FitH';
+    return `/pdf-viewer.html?url=${encodeURIComponent(`/api/pdf-proxy?url=${encodeURIComponent(url)}`)}`;
   }
   
   return url;
