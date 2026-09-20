@@ -28,6 +28,7 @@ export type ContentItem = {
   title?: string;
   content?: string;
   url?: string;
+  is_group_assignment?: boolean;
 };
 
 const parseContents = (mod: any): ContentItem[] => {
@@ -630,6 +631,21 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                   <option value="FILE">File Upload</option>
                                   <option value="ANY">Any (File, Link, or Text)</option>
                                 </select>
+                                
+                                <label className="flex items-center gap-2 mt-4 text-xs font-medium text-slate-700 cursor-pointer">
+                                  <input 
+                                    type="checkbox" 
+                                    className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                                    checked={item.is_group_assignment || false}
+                                    onChange={e => {
+                                      const i = parseContents(mod); 
+                                      i[index].is_group_assignment = e.target.checked; 
+                                      setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); 
+                                      handleUpdateModule(mod.id, { contents_json: JSON.stringify(i), content_markdown: null, video_url: null });
+                                    }}
+                                  />
+                                  Make this a Group Assignment (Peer-to-Peer Pairing)
+                                </label>
                               </div>
                             )}
 
