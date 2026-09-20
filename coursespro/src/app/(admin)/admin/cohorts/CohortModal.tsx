@@ -81,7 +81,7 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
       }
       onSave();
     } catch (error: any) {
-      console.error('Failed to save cohort:', error.response?.data || error.message);
+      console.error(`Failed to save cohort: ${error.message}`);
       alert('Failed to save cohort');
     } finally {
       setLoading(false);

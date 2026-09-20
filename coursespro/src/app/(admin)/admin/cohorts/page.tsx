@@ -32,7 +32,7 @@ export default function CohortsPage() {
       setStats(statsRes.data || { active_cohorts: 0, active_programs: 0, fill_rate: 0 });
       setPrograms(programsRes.data.programs || []);
     } catch (err: any) {
-      console.error('Failed to fetch data:', err.response?.data || err.message);
+      console.error(`Failed to fetch data: ${err.message}`);
     } finally {
       setLoading(false);
     }
