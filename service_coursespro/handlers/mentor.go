@@ -61,6 +61,17 @@ func (h *Handler) ReviewSubmission(c *gin.Context) {
 				"current_xp":           gorm.Expr("current_xp + 500"),
 			})
 	}
+	
+	// Update mentor stats
+	db.WithTenant(c).Model(&models.MentorProfile{}).Where("user_id = ?", mID).Updates(map[string]interface{}{
+		"total_reviews":   gorm.Expr("total_reviews + 1"),
+		"pending_reviews": gorm.Expr("GREATEST(pending_reviews - 1, 0)"),
+	})
+
+	// Recalculate avg_rating (assuming mentor_rating is stored in ProjectSubmissions)
+	var avg float64
+	db.WithTenant(c).Model(&models.ProjectSubmission{}).Where("mentor_id = ?", mID).Select("COALESCE(AVG(mentor_rating), 0)").Row().Scan(&avg)
+	db.WithTenant(c).Model(&models.MentorProfile{}).Where("user_id = ?", mID).Update("avg_rating", avg)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Submission review recorded successfully"})
 }
