@@ -36,17 +36,25 @@ const getDirectMediaUrl = (url: string) => {
 
 const HtmlFrame = ({ url }: { url: string }) => {
   const [html, setHtml] = React.useState<string | null>(null);
+  const [error, setError] = React.useState(false);
   
   React.useEffect(() => {
     if (url && url.includes('cloudinary.com/raw/')) {
-      fetch(url)
-        .then(res => res.text())
+      fetch(url.trim())
+        .then(res => {
+          if (!res.ok) throw new Error('Network response was not ok');
+          return res.text();
+        })
         .then(text => setHtml(text))
-        .catch(e => setHtml(null));
+        .catch(e => {
+          console.error('HtmlFrame fetch error:', e);
+          setError(true);
+        });
     }
   }, [url]);
 
   if (url && url.includes('cloudinary.com/raw/')) {
+    if (error) return <div className="absolute inset-0 flex items-center justify-center text-red-500 text-sm">Failed to load HTML file. The URL might be invalid or broken.</div>;
     if (html === null) return <div className="absolute inset-0 flex items-center justify-center text-gray-400">Loading HTML content...</div>;
     return <iframe srcDoc={html} className="w-full h-full border-0" title="HTML Content" allow="fullscreen" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" />;
   }
@@ -175,7 +183,12 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                         {block.type === 'AUDIO' && (
                           <div className="p-6 bg-white flex flex-col items-center justify-center gap-4">
                             {block.url ? (
-                              <audio src={getDirectMediaUrl(block.url)} controls className="w-full max-w-md" />
+                              <audio controls className="w-full max-w-md">
+                                <source src={getDirectMediaUrl(block.url)} type="audio/mpeg" />
+                                <source src={getDirectMediaUrl(block.url)} type="audio/wav" />
+                                <source src={getDirectMediaUrl(block.url)} type="audio/ogg" />
+                                Your browser does not support the audio element.
+                              </audio>
                             ) : (
                               <span className="text-sm text-gray-500">No audio uploaded</span>
                             )}
