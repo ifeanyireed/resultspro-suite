@@ -438,6 +438,19 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                           <svg className="w-4 h-4 text-green-500 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
                           Add Audio
                         </button>
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            const items = parseContents(mod);
+                            items.push({ id: Math.random().toString(36).substring(7), type: 'PDF', url: '' });
+                            setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
+                            handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                          }}
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                        >
+                          <svg className="w-4 h-4 text-red-500 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                          Add PDF
+                        </button>
                       </div>
                     </div>
                     </motion.div>
