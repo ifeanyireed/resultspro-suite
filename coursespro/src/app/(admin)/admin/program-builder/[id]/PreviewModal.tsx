@@ -193,15 +193,19 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                             </div>
                           )}
 
-                          {block.type === 'HTML' && (
-                            <div className={`w-full h-[600px] relative ${isMediaWithoutCard ? 'rounded-xl overflow-hidden shadow-sm' : 'bg-white'}`}>
-                              {block.url ? (
-                                <iframe src={block.url} className="w-full h-full border-0 bg-white" title="HTML Content" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" />
-                              ) : (
-                                <div className="absolute inset-0 flex items-center justify-center text-gray-400 bg-white">No HTML uploaded</div>
-                              )}
-                            </div>
-                          )}
+                          {block.type === 'HTML' && (() => {
+                            const isProxyRequired = block.url && (block.url.includes('cloudinary.com') || block.url.includes('drive.google.com') || block.url.includes('docs.google.com'));
+                            const iframeSrc = isProxyRequired ? `/api/html-proxy?url=${encodeURIComponent(getDirectMediaUrl(block.url))}` : block.url;
+                            return (
+                              <div className={`w-full h-[600px] relative ${isMediaWithoutCard ? 'rounded-xl overflow-hidden shadow-sm' : 'bg-white'}`}>
+                                {block.url ? (
+                                  <iframe src={iframeSrc} className="w-full h-full border-0 bg-white" title="HTML Content" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" />
+                                ) : (
+                                  <div className="absolute inset-0 flex items-center justify-center text-gray-400 bg-white">No HTML uploaded</div>
+                                )}
+                              </div>
+                            );
+                          })()}
 
                           {block.type === 'PPT' && (
                             <div className={`w-full h-[500px] relative flex flex-col ${isMediaWithoutCard ? 'py-4' : 'p-4 bg-white'}`}>
