@@ -152,82 +152,93 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                       This module has no content blocks yet.
                     </div>
                   ) : (
-                    contents.map((block: any, i: number) => (
-                      <div key={i} className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                        {block.type === 'TEXT' && (
-                          <div 
-                            className="p-8 prose prose-blue max-w-none text-gray-700"
-                            dangerouslySetInnerHTML={{ __html: block.content || '<i>Empty text block</i>' }}
-                          />
-                        )}
-                        
-                        {block.type === 'VIDEO' && (
-                          <div className="bg-white aspect-video flex items-center justify-center text-gray-500 relative overflow-hidden rounded-xl">
-                            {block.url ? (
-                              (block.url.includes('youtube.com') || block.url.includes('youtu.be')) ? (
+                    contents.map((block: any, i: number) => {
+                      const hasTitleOrBody = !!(block.title || block.content);
+                      const isMediaWithoutCard = ['PDF', 'PPT', 'AUDIO', 'HTML'].includes(block.type) && !hasTitleOrBody;
+
+                      return (
+                        <div key={i} className={isMediaWithoutCard ? "py-6" : "bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"}>
+                          {hasTitleOrBody && (
+                            <div className="p-6 border-b border-gray-100 bg-white">
+                               {block.title && <h3 className="text-lg font-bold text-gray-900 mb-2">{block.title}</h3>}
+                               {block.content && <p className="text-gray-600 whitespace-pre-wrap text-sm">{block.content}</p>}
+                            </div>
+                          )}
+
+                          {block.type === 'TEXT' && (
+                            <div 
+                              className="p-8 prose prose-blue max-w-none text-gray-700 bg-white"
+                              dangerouslySetInnerHTML={{ __html: block.content || '<i>Empty text block</i>' }}
+                            />
+                          )}
+                          
+                          {block.type === 'VIDEO' && (
+                            <div className="bg-white aspect-video flex items-center justify-center text-gray-500 relative overflow-hidden rounded-b-xl">
+                              {block.url ? (
+                                (block.url.includes('youtube.com') || block.url.includes('youtu.be')) ? (
+                                  <iframe 
+                                    src={block.url.includes('youtube.com/embed') ? block.url : `https://www.youtube.com/embed/${block.url.split('v=')[1]?.split('&')[0] || block.url.split('youtu.be/')[1]?.split('?')[0]}`} 
+                                    className="w-full h-full border-0 absolute inset-0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                  />
+                                ) : (
+                                  <video src={getDirectMediaUrl(block.url)} controls className="w-full h-full object-contain absolute inset-0 rounded-b-xl bg-black" />
+                                )
+                              ) : (
+                                <span>No video uploaded</span>
+                              )}
+                            </div>
+                          )}
+
+                          {block.type === 'AUDIO' && (
+                            <div className={`p-6 flex flex-col items-center justify-center gap-4 ${isMediaWithoutCard ? '' : 'bg-white'}`}>
+                              {block.url ? (
+                                <audio controls className="w-full max-w-md">
+                                  <source src={getDirectMediaUrl(block.url)} type="audio/mpeg" />
+                                  <source src={getDirectMediaUrl(block.url)} type="audio/wav" />
+                                  <source src={getDirectMediaUrl(block.url)} type="audio/ogg" />
+                                  Your browser does not support the audio element.
+                                </audio>
+                              ) : (
+                                <span className="text-sm text-gray-500">No audio uploaded</span>
+                              )}
+                            </div>
+                          )}
+
+                          {block.type === 'HTML' && (
+                            <div className={`w-full h-[600px] relative ${isMediaWithoutCard ? 'rounded-xl overflow-hidden shadow-sm' : 'bg-white'}`}>
+                              {block.url ? (
+                                <HtmlFrame url={block.url} />
+                              ) : (
+                                <div className="absolute inset-0 flex items-center justify-center text-gray-400 bg-white">No HTML uploaded</div>
+                              )}
+                            </div>
+                          )}
+
+                          {block.type === 'PPT' && (
+                            <div className={`w-full h-[500px] relative p-4 flex flex-col ${isMediaWithoutCard ? '' : 'bg-white'}`}>
+                              {block.url ? (
                                 <iframe 
-                                  src={block.url.includes('youtube.com/embed') ? block.url : `https://www.youtube.com/embed/${block.url.split('v=')[1]?.split('&')[0] || block.url.split('youtu.be/')[1]?.split('?')[0]}`} 
-                                  className="w-full h-full border-0 absolute inset-0"
-                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                  allowFullScreen
+                                  src={formatEmbedUrl(block.url, 'PPT')} 
+                                  className="w-full flex-1 border border-gray-200 rounded-lg shadow-inner bg-white" 
+                                  title="PPT Content"
                                 />
                               ) : (
-                                <video src={getDirectMediaUrl(block.url)} controls className="w-full h-full object-contain absolute inset-0 rounded-xl" />
-                              )
-                            ) : (
-                              <span>No video uploaded</span>
-                            )}
-                          </div>
-                        )}
+                                <div className="flex-1 flex items-center justify-center text-gray-400 border border-gray-200 border-dashed rounded-lg bg-white">No Presentation uploaded</div>
+                              )}
+                            </div>
+                          )}
 
-                        {block.type === 'AUDIO' && (
-                          <div className="p-6 bg-white flex flex-col items-center justify-center gap-4">
-                            {block.url ? (
-                              <audio controls className="w-full max-w-md">
-                                <source src={getDirectMediaUrl(block.url)} type="audio/mpeg" />
-                                <source src={getDirectMediaUrl(block.url)} type="audio/wav" />
-                                <source src={getDirectMediaUrl(block.url)} type="audio/ogg" />
-                                Your browser does not support the audio element.
-                              </audio>
-                            ) : (
-                              <span className="text-sm text-gray-500">No audio uploaded</span>
-                            )}
-                          </div>
-                        )}
-
-                        {block.type === 'HTML' && (
-                          <div className="w-full h-[600px] bg-white relative">
-                            {block.url ? (
-                              <HtmlFrame url={block.url} />
-                            ) : (
-                              <div className="absolute inset-0 flex items-center justify-center text-gray-400">No HTML uploaded</div>
-                            )}
-                          </div>
-                        )}
-
-                        {block.type === 'PPT' && (
-                          <div className="w-full h-[500px] bg-white relative p-4 flex flex-col">
-                            {block.url ? (
-                              <iframe 
-                                src={formatEmbedUrl(block.url, 'PPT')} 
-                                className="w-full flex-1 border border-gray-200 rounded-lg shadow-inner" 
-                                title="PPT Content"
-                              />
-                            ) : (
-                              <div className="flex-1 flex items-center justify-center text-gray-400 border border-gray-200 border-dashed rounded-lg">No Presentation uploaded</div>
-                            )}
-                          </div>
-                        )}
-
-                        {block.type === 'PDF' && (
-                          <div className="w-full h-[600px] bg-white p-4">
-                            {block.url ? (
-                              <iframe src={formatEmbedUrl(block.url, 'PDF')} className="w-full h-full border border-gray-200 rounded-lg" title="PDF Document" />
-                            ) : (
-                              <div className="flex-1 h-full flex items-center justify-center text-gray-400 border border-gray-200 border-dashed rounded-lg">No PDF uploaded</div>
-                            )}
-                          </div>
-                        )}
+                          {block.type === 'PDF' && (
+                            <div className={`w-full h-[600px] p-4 ${isMediaWithoutCard ? '' : 'bg-white'}`}>
+                              {block.url ? (
+                                <iframe src={formatEmbedUrl(block.url, 'PDF')} className="w-full h-full border border-gray-200 rounded-lg bg-white" title="PDF Document" />
+                              ) : (
+                                <div className="flex-1 h-full flex items-center justify-center text-gray-400 border border-gray-200 border-dashed rounded-lg bg-white">No PDF uploaded</div>
+                              )}
+                            </div>
+                          )}
 
                         {block.type === 'QUIZ' && (
                           <div className="p-8">

@@ -415,6 +415,17 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                               <div className="w-full text-left" onClick={e => e.stopPropagation()}>
                                 <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg> Audio URL</label>
                                 <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" value={item.url || ''} onChange={e => { const i = parseContents(mod); i[index].url = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)), content_markdown: null, video_url: null })} />
+                                <div className="mt-4 space-y-3 border-t border-slate-100 pt-3">
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-500 mb-1">Card Title (Optional)</label>
+                                    <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="Enter title to wrap in a white card..." value={item.title || ''} onChange={e => { const i = parseContents(mod); i[index].title = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} />
+                                  </div>
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-500 mb-1">Card Body (Optional)</label>
+                                    <textarea className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="Enter context to wrap in a white card..." rows={2} value={item.content || ''} onChange={e => { const i = parseContents(mod); i[index].content = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} />
+                                  </div>
+                                </div>
+
                               </div>
                             )}
 
@@ -422,6 +433,17 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                               <div className="w-full text-left" onClick={e => e.stopPropagation()}>
                                 <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg> PDF Document URL</label>
                                 <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" value={item.url || ''} onChange={e => { const i = parseContents(mod); i[index].url = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)), content_markdown: null, video_url: null })} />
+                                <div className="mt-4 space-y-3 border-t border-slate-100 pt-3">
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-500 mb-1">Card Title (Optional)</label>
+                                    <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="Enter title to wrap in a white card..." value={item.title || ''} onChange={e => { const i = parseContents(mod); i[index].title = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} />
+                                  </div>
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-500 mb-1">Card Body (Optional)</label>
+                                    <textarea className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="Enter context to wrap in a white card..." rows={2} value={item.content || ''} onChange={e => { const i = parseContents(mod); i[index].content = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} />
+                                  </div>
+                                </div>
+
                               </div>
                             )}
 
@@ -478,6 +500,17 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                     <label htmlFor={'html-upload-' + item.id} className="cursor-pointer inline-flex items-center justify-center w-full px-4 py-2 border border-dashed border-slate-300 rounded-md text-sm font-medium text-slate-600 hover:border-blue-500 hover:text-blue-500 transition-colors bg-white">
                                       {uploadingHtmlId === item.id ? 'Uploading...' : 'Click to select an HTML file'}
                                     </label>
+                                <div className="mt-4 space-y-3 border-t border-slate-100 pt-3">
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-500 mb-1">Card Title (Optional)</label>
+                                    <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="Enter title to wrap in a white card..." value={item.title || ''} onChange={e => { const i = parseContents(mod); i[index].title = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} />
+                                  </div>
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-500 mb-1">Card Body (Optional)</label>
+                                    <textarea className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="Enter context to wrap in a white card..." rows={2} value={item.content || ''} onChange={e => { const i = parseContents(mod); i[index].content = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} />
+                                  </div>
+                                </div>
+
                                   </div>
                                 )}
                               </div>
@@ -531,6 +564,17 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                               <div className="w-full text-left" onClick={e => e.stopPropagation()}>
                                 <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" /></svg> Presentation URL (Google Slides, etc.)</label>
                                 <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="Paste presentation link here..." value={item.url || ''} onChange={e => { const i = parseContents(mod); i[index].url = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)), content_markdown: null, video_url: null })} />
+                                <div className="mt-4 space-y-3 border-t border-slate-100 pt-3">
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-500 mb-1">Card Title (Optional)</label>
+                                    <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="Enter title to wrap in a white card..." value={item.title || ''} onChange={e => { const i = parseContents(mod); i[index].title = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} />
+                                  </div>
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-500 mb-1">Card Body (Optional)</label>
+                                    <textarea className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="Enter context to wrap in a white card..." rows={2} value={item.content || ''} onChange={e => { const i = parseContents(mod); i[index].content = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} />
+                                  </div>
+                                </div>
+
                               </div>
                             )}
 
