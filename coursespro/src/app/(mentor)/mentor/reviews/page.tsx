@@ -1,5 +1,7 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { coursesApi } from '@/lib/api';
 import { 
   CheckCircleIcon, 
   XCircleIcon,
@@ -24,8 +26,6 @@ interface Submission {
 }
 
 export default function MentorReviews() {
-  const [submissions, setSubmissions] = useState<Submission[]>([]);
-  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState<string | null>(null);
   const [selectedSub, setSelectedSub] = useState<Submission | null>(null);
 
@@ -33,65 +33,47 @@ export default function MentorReviews() {
   const [feedback, setFeedback] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
 
-  const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
+  const queryClient = useQueryClient();
 
-  const fetchSubmissions = async () => {
-    setLoading(true);
-    try {
-      // Mock user_id header since auth isn't fully wired yet
-      const res = await fetch(`${COURSES_API}/mentor/submissions`, {
-        headers: {
-          'x-user-id': 'mentor-user-1',
-          'x-tenant-id': 'tenant-1'
-        }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setSubmissions(data.submissions || []);
-      }
-    } catch (err) {
-      console.error('Failed to fetch submissions', err);
-    } finally {
-      setLoading(false);
+  const { data: submissions = [], isLoading: loading } = useQuery({
+    queryKey: ['mentor-submissions'],
+    queryFn: async () => {
+      const res = await coursesApi.get('/api/mentor/submissions');
+      return res.data.submissions || [];
     }
-  };
+  });
 
-  useEffect(() => {
-    fetchSubmissions();
-  }, []);
-
-  const handleReview = async (status: 'APPROVED' | 'REVISION_REQUESTED') => {
-    if (!selectedSub) return;
-    setSubmitting(selectedSub.id);
-    
-    try {
-      const res = await fetch(`${COURSES_API}/mentor/submissions/${selectedSub.id}/review`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-user-id': 'mentor-user-1',
-          'x-tenant-id': 'tenant-1'
-        },
-        body: JSON.stringify({
-          status,
-          mentor_rating: rating,
-          mentor_feedback: feedback,
-          video_review_url: videoUrl
-        })
+  const reviewMutation = useMutation({
+    mutationFn: async ({ id, status }: { id: string, status: 'APPROVED' | 'REVISION_REQUESTED' }) => {
+      const res = await coursesApi.post(`/api/mentor/submissions/${id}/review`, {
+        status,
+        mentor_rating: rating,
+        mentor_feedback: feedback,
+        video_review_url: videoUrl
       });
-
-      if (res.ok) {
-        setSubmissions(submissions.filter(s => s.id !== selectedSub.id));
-        setSelectedSub(null);
-        setFeedback('');
-        setVideoUrl('');
-        setRating(5);
-      }
-    } catch (err) {
+      return res.data;
+    },
+    onMutate: (variables) => {
+      setSubmitting(variables.id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['mentor-submissions'] });
+      setSelectedSub(null);
+      setFeedback('');
+      setVideoUrl('');
+      setRating(5);
+    },
+    onError: (err) => {
       console.error('Failed to submit review', err);
-    } finally {
+    },
+    onSettled: () => {
       setSubmitting(null);
     }
+  });
+
+  const handleReview = (status: 'APPROVED' | 'REVISION_REQUESTED') => {
+    if (!selectedSub) return;
+    reviewMutation.mutate({ id: selectedSub.id, status });
   };
 
   return (
