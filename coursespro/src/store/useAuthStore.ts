@@ -88,12 +88,13 @@ export const useAuthStore = create<AuthState>((set, get) => {
           set({ isAuthenticated: false, user: null });
           return;
         }
-        // Force DB sync instead of local store
-        const res = await api.get('/user/profile', {
-          headers: { Authorization: `Bearer ${currentToken}` }
-        });
-        const updatedUser = res.data;
-        set({ user: updatedUser, isAuthenticated: true });
+        // Use auth introspect to get the user payload securely from token
+        const res = await api.post('/api/v1/auth/introspect', { token: currentToken });
+        if (res.data && res.data.active) {
+          set({ user: res.data.user, isAuthenticated: true });
+        } else {
+          set({ isAuthenticated: false, user: null });
+        }
       } catch (err) {
         // silently fail, maybe clear auth if 401
       }
