@@ -46,6 +46,8 @@ export default function AppLayout({
   const [mounted, setMounted] = React.useState(false);
   const [tenantName, setTenantName] = React.useState('LEARNING');
   const [logoUrl, setLogoUrl] = React.useState('/logo.png');
+  const [profileName, setProfileName] = React.useState('Loading...');
+  const [profileEmail, setProfileEmail] = React.useState('Loading...');
 
   React.useEffect(() => {
     if (!isAuthenticated) {
@@ -60,6 +62,14 @@ export default function AppLayout({
         const res = await api.get(`/api/public/tenant/resolve?domain=${slug}`);
         if (res.data && res.data.tenant && res.data.tenant.name) {
           setTenantName(res.data.tenant.name.toUpperCase());
+          
+          if (res.data.tenant.contact_person_name) {
+            setProfileName(res.data.tenant.contact_person_name);
+          }
+          if (res.data.tenant.contact_email) {
+            setProfileEmail(res.data.tenant.contact_email);
+          }
+          
           if (res.data.tenant.logo_url) {
             setLogoUrl(res.data.tenant.logo_url);
           }
@@ -205,11 +215,11 @@ export default function AppLayout({
               <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
               
               <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
-                {mounted && <Image src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+                {mounted && <Image src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || profileName || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
                 {!mounted && <Image src="/avatars/character1.jpg" alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
               </div>
-              <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (user?.name || 'Loading...') : 'Loading...'}</h4>
-              <p className="text-[10px] text-gray-300 mb-6 relative z-10">{mounted ? (user?.email || 'Loading...') : 'Loading...'}</p>
+              <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (user?.name || profileName) : 'Loading...'}</h4>
+              <p className="text-[10px] text-gray-300 mb-6 relative z-10">{mounted ? (user?.email || profileEmail) : 'Loading...'}</p>
               
               <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] transition-colors text-white text-xs font-semibold py-3 rounded-full relative z-10 shadow-md">
                 View Profile
@@ -245,11 +255,11 @@ export default function AppLayout({
               </button>
               <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
                 <div className="w-10 h-10 bg-gradient-to-tr from-orange-200 to-orange-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
-                  <img src="/avatars/character7.jpg" alt="Agent Avatar" className="w-full h-full object-cover" />
+                  {mounted && <img src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || profileName || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="User Avatar" className="w-full h-full object-cover" />}
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-sm font-bold text-gray-900 leading-tight">Totok Michael</p>
-                  <p className="text-xs text-gray-500">tmichael20@gmail.com</p>
+                  <p className="text-sm font-bold text-gray-900 leading-tight">{mounted ? (user?.name || profileName) : 'Loading...'}</p>
+                  <p className="text-xs text-gray-500">{mounted ? (user?.email || profileEmail) : 'Loading...'}</p>
                 </div>
               </div>
             </div>

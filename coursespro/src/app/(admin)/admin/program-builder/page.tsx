@@ -69,6 +69,7 @@ import { useRouter } from 'next/navigation';
 export default function ProgramBuilderPage() {
   const router = useRouter();
   const [programs, setPrograms] = React.useState<any[]>([]);
+  const [stats, setStats] = React.useState<any>({ total_modules: 0, total_videos: 0, total_quizzes: 0 });
   const [loading, setLoading] = React.useState(true);
   const [creating, setCreating] = React.useState(false);
 
@@ -76,6 +77,9 @@ export default function ProgramBuilderPage() {
     try {
       const res = await coursesApi.get('/api/admin/programs');
       setPrograms(res.data.programs || []);
+      if (res.data.stats) {
+        setStats(res.data.stats);
+      }
     } catch (e: any) {
       console.error("[fetchPrograms Error Data]:", e.response?.data || e.message);
     } finally {
@@ -135,7 +139,7 @@ export default function ProgramBuilderPage() {
         />
         <WhiteMetricCard
           title="Published Modules"
-          value={45}
+          value={stats.total_modules || 0}
           subtitle="Content blocks delivered"
           trend="+12%"
           trendColor="green"
@@ -143,7 +147,7 @@ export default function ProgramBuilderPage() {
         />
         <WhiteMetricCard
           title="Video Lessons"
-          value={18}
+          value={stats.total_videos || 0}
           subtitle="Interactive media assets"
           trend="+5"
           trendColor="green"
@@ -151,7 +155,7 @@ export default function ProgramBuilderPage() {
         />
         <WhiteMetricCard
           title="Active Quizzes"
-          value={24}
+          value={stats.total_quizzes || 0}
           subtitle="Assessments currently live"
           trend="+2"
           trendColor="green"
@@ -183,7 +187,7 @@ export default function ProgramBuilderPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-gray-900">{prog.title}</h3>
-                    <p className="text-sm text-gray-500">{prog.duration_weeks} Weeks • (Modules coming soon)</p>
+                    <p className="text-sm text-gray-500">{prog.duration_weeks} Weeks • {prog.modules_count || 0} Modules</p>
                   </div>
                 </div>
                 <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">

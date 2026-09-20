@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { XMarkIcon, PlayIcon, DocumentTextIcon, VideoCameraIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
-import ReactMarkdown from 'react-markdown';
+
 
 export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
@@ -96,15 +96,25 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                     contents.map((block: any, i: number) => (
                       <div key={i} className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                         {block.type === 'TEXT' && (
-                          <div className="p-8 prose prose-blue max-w-none text-gray-700">
-                            <ReactMarkdown>{block.content || '*Empty text block*'}</ReactMarkdown>
-                          </div>
+                          <div 
+                            className="p-8 prose prose-blue max-w-none text-gray-700"
+                            dangerouslySetInnerHTML={{ __html: block.content || '<i>Empty text block</i>' }}
+                          />
                         )}
                         
                         {block.type === 'VIDEO' && (
-                          <div className="p-1 bg-black aspect-video flex items-center justify-center text-gray-500">
+                          <div className="bg-black aspect-video flex items-center justify-center text-gray-500 relative overflow-hidden">
                             {block.url ? (
-                              <video src={block.url} controls className="w-full h-full object-contain" />
+                              block.url.includes('youtube.com') || block.url.includes('youtu.be') ? (
+                                <iframe 
+                                  src={block.url.includes('youtube.com/embed') ? block.url : `https://www.youtube.com/embed/${block.url.split('v=')[1]?.split('&')[0] || block.url.split('youtu.be/')[1]?.split('?')[0]}`} 
+                                  className="w-full h-full border-0 absolute inset-0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                />
+                              ) : (
+                                <video src={block.url} controls className="w-full h-full object-contain absolute inset-0" />
+                              )
                             ) : (
                               <span>No video uploaded</span>
                             )}

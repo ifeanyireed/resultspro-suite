@@ -797,6 +797,13 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
         )}
       </AnimatePresence>
 
+      <PreviewModal
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        programTitle={program?.title || 'Untitled Program'}
+        modules={modules}
+      />
+
       <QuizBuilderModal
         isOpen={!!isQuizModalOpen}
         onClose={() => setIsQuizModalOpen(null)}

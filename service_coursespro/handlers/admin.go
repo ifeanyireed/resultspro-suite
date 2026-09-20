@@ -151,9 +151,40 @@ func (h *Handler) AdminGetPrograms(c *gin.Context) {
 	var programs []models.Program
 	db.WithTenant(c).Order("created_at DESC").Find(&programs)
 
-	// Optional: Fetch module and quiz counts per program to match the UI stats
-	// But for now, returning just the programs is fine.
-	c.JSON(http.StatusOK, gin.H{"programs": programs})
+	type ProgramWithStats struct {
+		models.Program
+		ModulesCount int64 `json:"modules_count"`
+	}
+
+	var result []ProgramWithStats
+	for _, p := range programs {
+		var count int64
+		db.WithTenant(c).Model(&models.JourneyStage{}).Where("program_id = ?", p.ID).Count(&count)
+		result = append(result, ProgramWithStats{
+			Program:      p,
+			ModulesCount: count,
+		})
+	}
+
+	var totalModules int64
+	db.WithTenant(c).Model(&models.JourneyStage{}).Count(&totalModules)
+
+	var totalVideos int64
+	db.WithTenant(c).Model(&models.JourneyStage{}).Where("contents_json LIKE ?", "%\"type\":\"VIDEO\"%").Count(&totalVideos)
+
+	var totalQuizzes int64
+	db.WithTenant(c).Model(&models.Quiz{}).Count(&totalQuizzes)
+
+	stats := gin.H{
+		"total_modules": totalModules,
+		"total_videos":  totalVideos,
+		"total_quizzes": totalQuizzes,
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"programs": result,
+		"stats":    stats,
+	})
 }
 
 func (h *Handler) AdminCreateProgram(c *gin.Context) {
