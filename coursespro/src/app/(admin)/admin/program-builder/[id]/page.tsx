@@ -295,7 +295,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                  }}
                                  className="p-1.5 text-slate-400 hover:text-slate-700 bg-white shadow-sm rounded border border-slate-200" title="Duplicate"
                                >
-                                 <DocumentDuplicateIcon className="w-4 h-4" />
+                                 <DocumentDuplicateIcon className="w-4 h-4 stroke-2" />
                                </button>
                                <button 
                                  onClick={(e) => { 
