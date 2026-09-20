@@ -213,7 +213,7 @@ export default function LearnerDashboard() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="relative">
-                    <img src="/avatars/mentor.jpg" alt="Mentor" className="w-10 h-10 rounded-full border-2 border-blue-100" onError={(e) => e.currentTarget.src='/avatars/character10.jpg'} />
+                    <img src="/avatars/mentor.jpg" alt="Mentor" className="w-10 h-10 rounded-full border-2 border-blue-100" onError={(e) => e.currentTarget.src='/avatars/character4.jpg'} />
                     <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5"><div className="w-2.5 h-2.5 bg-emerald-500 rounded-full"></div></div>
                   </div>
                   <div>

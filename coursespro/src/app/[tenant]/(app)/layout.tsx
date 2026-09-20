@@ -221,8 +221,8 @@ export default function AppLayout({
               <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
               
               <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
-                {mounted && <Image src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || profileName || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
-                {!mounted && <Image src="/avatars/character1.jpg" alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+                {mounted && <Image src={user?.avatarUrl || `/avatars/character4.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+                {!mounted && <Image src="/avatars/character4.jpg" alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
               </div>
               <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (user?.name || profileName) : 'Loading...'}</h4>
               <p className="text-[10px] text-gray-300 mb-6 relative z-10">{mounted ? (user?.email || profileEmail) : 'Loading...'}</p>
@@ -261,7 +261,7 @@ export default function AppLayout({
               </button>
               <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
                 <div className="w-10 h-10 bg-gradient-to-tr from-orange-200 to-orange-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
-                  {mounted && <img src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || profileName || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="User Avatar" className="w-full h-full object-cover" />}
+                  {mounted && <img src={user?.avatarUrl || `/avatars/character4.jpg`} alt="User Avatar" className="w-full h-full object-cover" />}
                 </div>
                 <div className="hidden md:block">
                   <p className="text-sm font-bold text-gray-900 leading-tight">{mounted ? (user?.name || profileName) : 'Loading...'}</p>

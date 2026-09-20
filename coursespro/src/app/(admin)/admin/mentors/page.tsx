@@ -106,14 +106,8 @@ export default function MentorsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {mentors.map((mentor: any, i: number) => (
               <div key={mentor.user_id || i} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-gray-200 overflow-hidden border-2 border-white shadow-sm shrink-0">
-                  {mentor.avatar_url ? (
-                    <img src={mentor.avatar_url} alt={mentor.full_name} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-[#146ef5] text-white font-bold text-lg">
-                      {mentor.full_name ? mentor.full_name.charAt(0).toUpperCase() : 'M'}
-                    </div>
-                  )}
+                                <div className="w-14 h-14 rounded-full bg-gray-200 overflow-hidden border-2 border-white shadow-sm shrink-0">
+                  <img src={mentor.avatar_url || '/avatars/character4.jpg'} alt={mentor.full_name || 'Mentor'} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex-1 min-w-0">
                                     <div className="flex justify-between items-start">

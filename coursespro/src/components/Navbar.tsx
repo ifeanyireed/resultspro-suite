@@ -165,9 +165,7 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
                 <Link href={getDashboardUrl()} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', lineHeight: 1.2 }}>
                   </div>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold', color: 'white' }}>
-                    {user?.name?.charAt(0) || user?.email?.charAt(0) || 'U'}
-                  </div>
+                                    <img src={user?.avatar_url || '/avatars/character4.jpg'} alt="Avatar" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} />
                 </Link>
               </div>
             ) : null}
