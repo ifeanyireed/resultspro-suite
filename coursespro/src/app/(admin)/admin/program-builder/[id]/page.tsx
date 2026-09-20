@@ -12,7 +12,7 @@ import {
   VideoCameraIcon,
   DocumentDuplicateIcon
 } from '@heroicons/react/24/outline';
-import { coursesApi } from '@/lib/api';
+import api, { coursesApi } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RichTextEditor } from '@/components/RichTextEditor';
 
@@ -75,6 +75,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   const [editingTextLessonId, setEditingTextLessonId] = React.useState<string | null>(null);
+  const [uploadingHtmlId, setUploadingHtmlId] = React.useState<string | null>(null);
   const [textLessonDraft, setTextLessonDraft] = React.useState<string>('');
 
   React.useEffect(() => {
@@ -366,8 +367,59 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
 
                             {item.type === 'HTML' && (
                               <div className="w-full text-left" onClick={e => e.stopPropagation()}>
-                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg> HTML Content</label>
-                                <textarea className="w-full border border-slate-300 rounded-md p-2 text-sm h-32 font-mono text-xs" placeholder="<iframe...>" value={item.content || ''} onChange={e => { const i = parseContents(mod); i[index].content = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)), content_markdown: null, video_url: null })} />
+                                <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2"><svg className="w-4 h-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg> HTML File Upload</label>
+                                
+                                {item.url ? (
+                                  <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-md p-2 text-sm">
+                                    <div className="flex-1 truncate text-slate-600">{item.url}</div>
+                                    <button 
+                                      className="text-xs text-red-500 font-medium hover:text-red-700 whitespace-nowrap"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        const i = parseContents(mod); 
+                                        i[index].url = ''; 
+                                        setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); 
+                                        handleUpdateModule(mod.id, { contents_json: JSON.stringify(i) });
+                                      }}
+                                    >Remove</button>
+                                  </div>
+                                ) : (
+                                  <div>
+                                    <input 
+                                      type="file" 
+                                      accept=".html,.htm,.zip" 
+                                      className="hidden" 
+                                      id={'html-upload-' + item.id}
+                                      onChange={async (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
+                                        setUploadingHtmlId(item.id);
+                                        try {
+                                          const data = new FormData();
+                                          data.append('file', file);
+                                          data.append('folder', 'uploads/html');
+                                          const res = await api.post('/api/v1/upload', data, {
+                                            headers: { 'Content-Type': 'multipart/form-data' }
+                                          });
+                                          if (res.data && res.data.url) {
+                                            const i = parseContents(mod);
+                                            i[index].url = res.data.url;
+                                            setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m));
+                                            handleUpdateModule(mod.id, { contents_json: JSON.stringify(i) });
+                                          }
+                                        } catch (err) {
+                                          console.error("Upload failed", err);
+                                          alert("Failed to upload file.");
+                                        } finally {
+                                          setUploadingHtmlId(null);
+                                        }
+                                      }}
+                                    />
+                                    <label htmlFor={'html-upload-' + item.id} className="cursor-pointer inline-flex items-center justify-center w-full px-4 py-2 border border-dashed border-slate-300 rounded-md text-sm font-medium text-slate-600 hover:border-blue-500 hover:text-blue-500 transition-colors bg-white">
+                                      {uploadingHtmlId === item.id ? 'Uploading...' : 'Click to select an HTML file'}
+                                    </label>
+                                  </div>
+                                )}
                               </div>
                             )}
 
@@ -491,7 +543,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                           onClick={(e) => { 
                             e.stopPropagation(); 
                             const items = parseContents(mod);
-                            items.push({ id: Math.random().toString(36).substring(7), type: 'HTML', content: '' });
+                            items.push({ id: Math.random().toString(36).substring(7), type: 'HTML', url: '' });
                             setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
                             handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
                           }}
