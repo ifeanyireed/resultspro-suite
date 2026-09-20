@@ -291,3 +291,22 @@ type MentorProfile struct {
 }
 
 func (MentorProfile) TableName() string { return "crs_mentor_profiles" }
+
+type StoreProduct struct {
+	ID          string    `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
+	TenantID    string    `gorm:"type:uuid;not null;index" json:"tenant_id"`
+	Title       string    `gorm:"type:varchar(255);not null" json:"title"`
+	Description string    `gorm:"type:text" json:"description"`
+	ProductType string    `gorm:"type:varchar(50);not null" json:"product_type"` // e.g., BOOK, DOWNLOADABLE_COURSE
+	Price       float64   `gorm:"type:decimal(10,2);not null;default:0" json:"price"`
+	CoverImage  string    `gorm:"type:text" json:"cover_image"`
+	FileUrl     string    `gorm:"type:text" json:"file_url"`
+	IsPublished bool      `gorm:"default:false" json:"is_published"`
+	CreatedAt   time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt   time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+}
+
+// TableName overrides the table name for StoreProduct
+func (StoreProduct) TableName() string {
+	return "crs_store_products"
+}

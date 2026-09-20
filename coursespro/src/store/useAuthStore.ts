@@ -71,6 +71,7 @@ export const useAuthStore = create<AuthState>((set, get) => {
       }
       Cookies.remove('token', { domain: rootDomain, path: '/' });
       Cookies.remove('token'); // Fallback for any exact-match cookies
+      if (typeof window !== 'undefined') localStorage.removeItem('token');
       set({ user: null, token: null, isAuthenticated: false });
       if (typeof window !== 'undefined') {
         window.location.href = '/login';
@@ -93,10 +94,30 @@ export const useAuthStore = create<AuthState>((set, get) => {
         if (res.data && res.data.active) {
           set({ user: res.data.user, isAuthenticated: true });
         } else {
-          set({ isAuthenticated: false, user: null });
+          let rootDomain: string | undefined = undefined;
+          if (typeof window !== 'undefined') {
+            const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+            if (platformDomain !== 'localhost') {
+               rootDomain = `.${platformDomain}`;
+            }
+          }
+          Cookies.remove('token', { domain: rootDomain, path: '/' });
+          Cookies.remove('token');
+          if (typeof window !== 'undefined') localStorage.removeItem('token');
+          set({ isAuthenticated: false, user: null, token: null });
         }
       } catch (err) {
-        // silently fail, maybe clear auth if 401
+        let rootDomain: string | undefined = undefined;
+        if (typeof window !== 'undefined') {
+          const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+          if (platformDomain !== 'localhost') {
+             rootDomain = `.${platformDomain}`;
+          }
+        }
+        Cookies.remove('token', { domain: rootDomain, path: '/' });
+        Cookies.remove('token');
+        if (typeof window !== 'undefined') localStorage.removeItem('token');
+        set({ isAuthenticated: false, user: null, token: null });
       }
     }
   };

@@ -98,7 +98,7 @@ export default function AppLayout({
       }
     };
     fetchTenant();
-  }, []);
+  }, [isAuthenticated, fetchUser, user]);
 
   const isActive = (path: string) => {
     if (path === '/admin') return pathname === '/admin';

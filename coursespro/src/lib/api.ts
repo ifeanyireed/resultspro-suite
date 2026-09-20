@@ -64,6 +64,7 @@ api.interceptors.response.use(
         }
         Cookies.remove('token', { domain: rootDomain, path: '/' });
         Cookies.remove('token');
+        localStorage.removeItem('token');
       }
     }
     return Promise.reject(error);
@@ -110,6 +111,7 @@ coursesApi.interceptors.response.use(
         }
         Cookies.remove('token', { domain: rootDomain, path: '/' });
         Cookies.remove('token');
+        localStorage.removeItem('token');
       }
     }
     return Promise.reject(error);

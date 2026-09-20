@@ -11,7 +11,7 @@ import api from '@/lib/api';
 export default function PaymentsPage() {
   const [summary, setSummary] = useState<any>({ mrr: 0, active_subs: 0, dunning_risk: 0 });
   const [transactions, setTransactions] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
@@ -25,7 +25,7 @@ export default function PaymentsPage() {
       } catch (err) {
         console.error('Failed to load payments data', err);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
     fetchData();
@@ -51,7 +51,7 @@ export default function PaymentsPage() {
           <h3 className="text-xl font-normal text-white z-10">MRR</h3>
           <div className="z-10">
             <h2 className="text-5xl font-medium tracking-tight text-white mb-2">
-              ₦{isLoading ? '...' : summary.mrr.toLocaleString()}
+              ₦{loading ? '...' : summary.mrr.toLocaleString()}
             </h2>
             <div className="flex items-center gap-1.5 text-xs text-white/80">
               <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 12%</div>
@@ -64,7 +64,7 @@ export default function PaymentsPage() {
           <h3 className="text-xl font-normal text-gray-900">Active Subs</h3>
           <div>
             <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">
-              {isLoading ? '...' : summary.active_subs}
+              {loading ? '...' : summary.active_subs}
             </h2>
             <div className="flex items-center gap-1.5 text-xs text-gray-500">
               <span>Paid learners</span>
@@ -76,7 +76,7 @@ export default function PaymentsPage() {
           <h3 className="text-xl font-normal text-gray-900">Dunning Risk</h3>
           <div>
             <h2 className="text-5xl font-medium tracking-tight text-orange-500 mb-2">
-              {isLoading ? '...' : summary.dunning_risk}
+              {loading ? '...' : summary.dunning_risk}
             </h2>
             <div className="flex items-center gap-1.5 text-xs text-gray-500">
               <span>Cards expiring soon</span>
@@ -99,7 +99,7 @@ export default function PaymentsPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {isLoading ? (
+            {loading ? (
               <tr><td colSpan={4} className="px-6 py-4 text-center text-gray-500">Loading transactions...</td></tr>
             ) : transactions.length === 0 ? (
               <tr><td colSpan={4} className="px-6 py-4 text-center text-gray-500">No recent transactions</td></tr>
