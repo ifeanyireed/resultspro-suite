@@ -24,11 +24,23 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   React.useEffect(() => {
-    const fetchProgram = async () => {
+    const fetchProgramAndStages = async () => {
       try {
-        const res = await coursesApi.get(`/api/admin/programs`);
-        const found = res.data.programs?.find((p: any) => p.id === id);
+        const [progRes, stagesRes] = await Promise.all([
+          coursesApi.get(`/api/admin/programs`),
+          coursesApi.get(`/api/admin/programs/${id}/stages`).catch(() => ({ data: { stages: [] } }))
+        ]);
+        const found = progRes.data.programs?.find((p: any) => p.id === id);
         setProgram(found || { title: "Untitled Journey", id });
+        
+        if (stagesRes.data?.stages) {
+          setModules(stagesRes.data.stages.map((s: any) => ({
+            id: s.id,
+            title: s.title,
+            description: s.description || '',
+            type: 'module'
+          })));
+        }
       } catch (e) {
         console.error(e);
         setProgram({ title: "Untitled Journey", id });
@@ -36,18 +48,38 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
         setLoading(false);
       }
     };
-    if (id) fetchProgram();
+    if (id) fetchProgramAndStages();
   }, [id]);
 
   if (loading) {
     return <div className="p-8 text-gray-500">Loading Builder OS...</div>;
   }
 
-  const handleAddModule = () => {
-    const newModule = { id: Date.now().toString(), title: 'New Module' };
-    setModules([...modules, newModule]);
-    setSelectedModuleId(newModule.id);
-    setIsSidebarOpen(true);
+  const handleAddModule = async () => {
+    const stageNumber = modules.length + 1;
+    try {
+      const res = await coursesApi.post(`/api/admin/stages`, {
+        program_id: id,
+        stage_number: stageNumber,
+        title: 'New Module'
+      });
+      const newStage = res.data.stage;
+      const newModule = { id: newStage.id, title: newStage.title, description: newStage.description || '', type: 'module' };
+      setModules([...modules, newModule]);
+      setSelectedModuleId(newModule.id);
+      setIsSidebarOpen(true);
+    } catch (e) {
+      console.error("Failed to create module", e);
+      alert("Failed to create module. Make sure backend is running.");
+    }
+  };
+
+  const handleUpdateModule = async (moduleId: string, updates: any) => {
+    try {
+      await coursesApi.put(`/api/admin/stages/${moduleId}`, updates);
+    } catch (e) {
+      console.error("Failed to update module", e);
+    }
   };
 
   const handleAddTextLesson = (moduleId: string) => {
@@ -218,6 +250,11 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                     onChange={(e) => {
                       setModules(modules.map(m => m.id === selectedModuleId ? { ...m, title: e.target.value } : m));
                     }}
+                    onBlur={(e) => {
+                      if (selectedModuleId) {
+                        handleUpdateModule(selectedModuleId, { title: e.target.value });
+                      }
+                    }}
                     placeholder="Enter title"
                   />
                 </div>
@@ -226,6 +263,15 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                   <textarea 
                     className="w-full border border-gray-300 rounded-md shadow-sm p-2 text-sm h-28 resize-none focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                     placeholder="Optional description"
+                    value={modules.find(m => m.id === selectedModuleId)?.description || ''}
+                    onChange={(e) => {
+                      setModules(modules.map(m => m.id === selectedModuleId ? { ...m, description: e.target.value } : m));
+                    }}
+                    onBlur={(e) => {
+                      if (selectedModuleId) {
+                        handleUpdateModule(selectedModuleId, { description: e.target.value });
+                      }
+                    }}
                   />
                 </div>
               </div>

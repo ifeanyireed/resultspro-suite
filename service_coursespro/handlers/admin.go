@@ -392,3 +392,13 @@ func (h *Handler) AdminDeleteModule(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
+
+func (h *Handler) AdminGetProgramStages(c *gin.Context) {
+	id := c.Param("id")
+	var stages []models.JourneyStage
+	if err := db.WithTenant(c).Where("program_id = ?", id).Order("stage_number ASC").Find(&stages).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch stages"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"stages": stages})
+}

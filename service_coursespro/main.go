@@ -68,6 +68,7 @@ func main() {
 
 		// Admin Endpoints
 		protected.GET("/admin/programs", h.AdminGetPrograms)
+		protected.GET("/admin/programs/:id/stages", h.AdminGetProgramStages)
 		protected.POST("/admin/programs", h.AdminCreateProgram)
 		protected.PUT("/admin/programs/:id", h.AdminUpdateProgram)
 		protected.DELETE("/admin/programs/:id", h.AdminDeleteProgram)
