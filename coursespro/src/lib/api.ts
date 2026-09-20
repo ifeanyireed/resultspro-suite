@@ -19,7 +19,7 @@ export function getTenantSlug(): string {
   const slug = parts[0];
 
   // If the first part is a real tenant slug (not localhost/coursespro/www), use it
-  if (slug && slug !== 'localhost' && slug !== 'coursespro' && slug !== 'www') {
+  if (slug && slug !== 'localhost' && slug !== 'coursespro' && slug !== 'resultspro-service-coursespro' && slug !== 'www') {
     return slug;
   }
 

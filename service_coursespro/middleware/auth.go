@@ -64,7 +64,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Set("user_email", email)
 		}
 
-		if domain != "" && domain != "localhost" && domain != "coursespro" {
+		if domain != "" && domain != "localhost" && domain != "coursespro" && domain != "resultspro-service-coursespro" {
 			tenantsClaim, ok := claims["tenants"].(map[string]interface{})
 			if !ok {
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "Session invalid or expired", "reason": "tenant_not_found"})

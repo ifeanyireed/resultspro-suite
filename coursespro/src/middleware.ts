@@ -9,7 +9,7 @@ export function middleware(req: NextRequest) {
   const hostHeader = req.headers.get('host') || '';
   const hostname = hostHeader.split(':')[0]; // Strip the port
   const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
-  const isPlatform = hostname === platformDomain || hostname === `coursespro.${platformDomain}`;
+  const isPlatform = hostname === platformDomain || hostname === `coursespro.${platformDomain}` || hostname === "resultspro-service-coursespro.onrender.com";
 
   // Extract the tenant slug from the hostname
   const tenantSlug = hostname.split('.')[0]; 
