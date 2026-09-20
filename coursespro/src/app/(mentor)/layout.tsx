@@ -1,11 +1,12 @@
 "use client";
 
 import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import Image from 'next/image';
 import TenantLogo from '@/components/TenantLogo';
 import { usePathname } from 'next/navigation';
-import api, { getTenantSlug } from '@/lib/api';
+import api, { getTenantSlug, coursesApi } from '@/lib/api';
 import { 
   MagnifyingGlassIcon,
   EnvelopeIcon,
@@ -43,6 +44,16 @@ export default function AppLayout({
   const logout = useAuthStore((state) => state.logout);
   const user = useAuthStore((state) => state.user);
   const [mounted, setMounted] = React.useState(false);
+
+  const { data: submissions = [] } = useQuery({
+    queryKey: ['mentor-submissions'],
+    queryFn: async () => {
+      const res = await coursesApi.get('/api/mentor/submissions');
+      return res.data.submissions || [];
+    },
+    enabled: mounted && !!user
+  });
+
   const [tenantName, setTenantName] = React.useState('MENTOR');
   const [logoUrl, setLogoUrl] = React.useState('/logo.png');
   const [profileName, setProfileName] = React.useState('Loading...');
@@ -125,7 +136,11 @@ export default function AppLayout({
                   <DocumentDuplicateIcon className="w-6 h-6" />
                   Reviews
                 </div>
-                <span className="bg-amber-100 text-amber-600 text-[10px] font-bold px-2 py-0.5 rounded-full">12 Pending</span>
+                {submissions.length > 0 && (
+                  <span className="bg-amber-100 text-amber-600 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    {submissions.length} Pending
+                  </span>
+                )}
               </Link>
 
               <Link href="/mentor/cohorts" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/mentor/cohorts') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>

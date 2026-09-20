@@ -1,9 +1,18 @@
 "use client";
 import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { coursesApi } from '@/lib/api';
 import { CheckCircleIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 
 export default function MentorDashboard() {
+  const { data: submissions = [] } = useQuery({
+    queryKey: ['mentor-submissions'],
+    queryFn: async () => {
+      const res = await coursesApi.get('/api/mentor/submissions');
+      return res.data.submissions || [];
+    }
+  });
   return (
     <>
       <div className="flex items-end justify-between mb-8 mt-2">
@@ -19,7 +28,7 @@ export default function MentorDashboard() {
             <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white"><DocumentDuplicateIcon className="w-4 h-4"/></div>
           </div>
           <div className="z-10">
-            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">12</h2>
+            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">{submissions.length}</h2>
           </div>
         </div>
         <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group">
