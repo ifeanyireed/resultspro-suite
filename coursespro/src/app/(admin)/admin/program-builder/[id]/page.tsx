@@ -25,6 +25,7 @@ import { PreviewModal } from './PreviewModal';
 export type ContentItem = {
   id: string;
   type: 'TEXT' | 'VIDEO' | 'AUDIO' | 'PDF' | 'QUIZ' | 'HTML' | 'ASSIGNMENT' | 'PPT';
+  title?: string;
   content?: string;
   url?: string;
 };
