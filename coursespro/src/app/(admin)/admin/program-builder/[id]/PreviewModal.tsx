@@ -34,6 +34,26 @@ const getDirectMediaUrl = (url: string) => {
   return url;
 };
 
+const HtmlFrame = ({ url }: { url: string }) => {
+  const [html, setHtml] = React.useState<string | null>(null);
+  
+  React.useEffect(() => {
+    if (url && url.includes('cloudinary.com/raw/')) {
+      fetch(url)
+        .then(res => res.text())
+        .then(text => setHtml(text))
+        .catch(e => setHtml(null));
+    }
+  }, [url]);
+
+  if (url && url.includes('cloudinary.com/raw/')) {
+    if (html === null) return <div className="absolute inset-0 flex items-center justify-center text-gray-400">Loading HTML content...</div>;
+    return <iframe srcDoc={html} className="w-full h-full border-0" title="HTML Content" allow="fullscreen" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" />;
+  }
+
+  return <iframe src={formatEmbedUrl(url, 'HTML')} className="w-full h-full border-0" title="HTML Content" allow="fullscreen" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" />;
+}
+
 export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
 
@@ -165,7 +185,7 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                         {block.type === 'HTML' && (
                           <div className="w-full h-[600px] bg-white relative">
                             {block.url ? (
-                              <iframe src={formatEmbedUrl(block.url, 'HTML')} className="w-full h-full border-0" title="HTML Content" allow="fullscreen" />
+                              <HtmlFrame url={block.url} />
                             ) : (
                               <div className="absolute inset-0 flex items-center justify-center text-gray-400">No HTML uploaded</div>
                             )}
