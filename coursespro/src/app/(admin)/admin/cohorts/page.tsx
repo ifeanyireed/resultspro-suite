@@ -133,7 +133,7 @@ export default function CohortsPage() {
                 </td>
               </tr>
             ) : (
-              cohorts.map((c, i) => {
+              cohorts.map((c: any, i: number) => {
                 const color = getStatusColor(c.status);
                 const mentorCount = c.cohort_mentors?.length || 0;
                 const displayName = c.program?.title ? `${c.program.title} - ${c.title}` : c.title;

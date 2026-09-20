@@ -6,14 +6,20 @@ import {
   PlusIcon,
   StarIcon,
   AcademicCapIcon,
-  TrashIcon
+  TrashIcon,
+  PencilSquareIcon
 } from '@heroicons/react/24/outline';
 import { coursesApi } from '@/lib/api';
+import MentorEditModal from './MentorEditModal';
 
 export default function MentorsPage() {
 
   
   const queryClient = useQueryClient();
+
+  const [selectedMentor, setSelectedMentor] = useState<any>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
 
   const handleDeleteMentor = async (userId: string) => {
     if (!confirm('Are you sure you want to delete this mentor profile?')) return;
@@ -98,7 +104,7 @@ export default function MentorsPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {mentors.map((mentor, i) => (
+            {mentors.map((mentor: any, i: number) => (
               <div key={mentor.user_id || i} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex items-center gap-4">
                 <div className="w-14 h-14 rounded-full bg-gray-200 overflow-hidden border-2 border-white shadow-sm shrink-0">
                   {mentor.avatar_url ? (
@@ -110,23 +116,28 @@ export default function MentorsPage() {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-start">
+                                    <div className="flex justify-between items-start">
                     <h4 className="font-medium text-gray-900 truncate pr-2">
                       {mentor.full_name || 'Unknown Mentor'}
                     </h4>
-                    
                     <div className="flex items-center gap-1 text-sm font-semibold text-gray-700 shrink-0">
                       <StarIcon className="w-4 h-4 text-orange-400 fill-orange-400" />
                       {mentor.avg_rating.toFixed(1)}
                     </div>
                     <button 
+                      onClick={() => { setSelectedMentor(mentor); setIsEditModalOpen(true); }} 
+                      className="ml-auto p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      title="Edit Mentor"
+                    >
+                      <PencilSquareIcon className="w-4 h-4" />
+                    </button>
+                    <button 
                       onClick={() => handleDeleteMentor(mentor.user_id)} 
-                      className="ml-3 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      className="ml-2 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                       title="Delete Mentor"
                     >
                       <TrashIcon className="w-4 h-4" />
                     </button>
-
                   </div>
                   <p className="text-xs text-gray-500 mt-1 truncate">
                     {mentor.cohort_assignments?.length > 0 
@@ -139,6 +150,13 @@ export default function MentorsPage() {
           </div>
         )}
       </div>
+      <MentorEditModal 
+        isOpen={isEditModalOpen} 
+        onClose={() => setIsEditModalOpen(false)} 
+        onSaved={() => queryClient.invalidateQueries({ queryKey: ['mentors_dashboard'] })} 
+        mentor={selectedMentor} 
+      />
+
     </>
   );
 }

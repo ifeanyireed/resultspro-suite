@@ -106,7 +106,7 @@ export default function MentorReviews() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-4">
             <h3 className="font-semibold text-gray-700 mb-4 px-2">Submissions ({submissions.length})</h3>
-            {submissions.map((sub) => (
+            {submissions.map((sub: any) => (
               <div 
                 key={sub.id} 
                 onClick={() => setSelectedSub(sub)}
