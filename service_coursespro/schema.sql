@@ -72,6 +72,10 @@ CREATE TABLE IF NOT EXISTS crs_enrollments (
     user_id VARCHAR(64) NOT NULL,
     plan_type VARCHAR(32) DEFAULT 'STANDARD',
     payment_status VARCHAR(32) DEFAULT 'PAID',
+    subscription_id VARCHAR(128),
+    billing_cycle VARCHAR(32) DEFAULT 'one-time',
+    next_billing_date TIMESTAMPTZ,
+    last_payment_failed BOOLEAN DEFAULT FALSE,
     current_stage_number INTEGER DEFAULT 1,
     current_xp INTEGER DEFAULT 0,
     streak_days INTEGER DEFAULT 0,
@@ -82,6 +86,23 @@ CREATE TABLE IF NOT EXISTS crs_enrollments (
 );
 CREATE INDEX IF NOT EXISTS idx_enrollments_cohort ON crs_enrollments(cohort_id);
 CREATE INDEX IF NOT EXISTS idx_enrollments_user ON crs_enrollments(user_id);
+
+-- 2.5 Transactions
+CREATE TABLE IF NOT EXISTS crs_transactions (
+    id VARCHAR(64) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    user_id VARCHAR(64) NOT NULL,
+    cohort_id VARCHAR(64) REFERENCES crs_cohorts(id) ON DELETE SET NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    currency VARCHAR(10) DEFAULT 'NGN',
+    gateway VARCHAR(32) DEFAULT 'paystack',
+    reference VARCHAR(128) UNIQUE NOT NULL,
+    status VARCHAR(32) DEFAULT 'PENDING',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_transactions_tenant ON crs_transactions(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_transactions_user ON crs_transactions(user_id);
 
 -- 3. Journey Stages (Now linked to programs, not cohorts directly)
 CREATE TABLE IF NOT EXISTS crs_journey_stages (
@@ -235,3 +256,18 @@ CREATE TABLE IF NOT EXISTS crs_ai_jobs (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX IF NOT EXISTS idx_ai_jobs_tenant ON crs_ai_jobs(tenant_id);
+
+-- 13. Mentor Profiles
+CREATE TABLE IF NOT EXISTS crs_mentor_profiles (
+    user_id VARCHAR(64) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    full_name VARCHAR(255),
+    avatar_url VARCHAR(512),
+    specialization VARCHAR(255),
+    total_reviews INTEGER DEFAULT 0,
+    pending_reviews INTEGER DEFAULT 0,
+    avg_rating FLOAT DEFAULT 0.0,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_mentor_profiles_tenant ON crs_mentor_profiles(tenant_id);

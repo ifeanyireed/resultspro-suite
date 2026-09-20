@@ -80,26 +80,38 @@ func main() {
 		protected.POST("/admin/programs", h.AdminCreateProgram)
 		protected.PUT("/admin/programs/:id", h.AdminUpdateProgram)
 		protected.DELETE("/admin/programs/:id", h.AdminDeleteProgram)
-		
+
 		protected.GET("/admin/cohorts/stats", h.AdminGetCohortStats)
 		protected.GET("/admin/cohorts", h.AdminGetCohorts)
 		protected.POST("/admin/cohorts", h.AdminCreateCohort)
 		protected.PUT("/admin/cohorts/:id", h.AdminUpdateCohort)
-		
+
 		protected.POST("/admin/stages", h.AdminCreateStage)
 		protected.PUT("/admin/stages/:id", h.AdminUpdateStage)
 		protected.DELETE("/admin/stages/:id", h.AdminDeleteStage)
-		
+
 		protected.POST("/admin/modules", h.AdminCreateModule)
 		protected.PUT("/admin/modules/:id", h.AdminUpdateModule)
 		protected.DELETE("/admin/modules/:id", h.AdminDeleteModule)
-		
+
 		protected.GET("/admin/enrollments", h.AdminGetEnrollments)
+		
+		// Admin Mentors
+		protected.GET("/admin/mentors/stats", h.AdminGetMentorsStats)
+		protected.GET("/admin/mentors", h.AdminGetMentors)
+		protected.POST("/admin/mentors/sync", h.SyncMentorProfile)
 
 		// AI Features
 		protected.POST("/ai/modules/:moduleId/generate-quiz", h.GenerateQuiz)
 		protected.POST("/admin/ai/generate-quiz-preview", h.GenerateQuizPreview)
+
+		// Admin Payments
+		protected.GET("/admin/payments/summary", h.GetPaymentSummary)
+		protected.GET("/admin/payments/transactions", h.GetTransactions)
 	}
+
+	// Webhooks
+	r.POST("/api/webhooks/paystack", h.PaystackWebhook)
 
 	port := os.Getenv("PORT")
 	if port == "" {

@@ -52,12 +52,16 @@ type CohortMentor struct {
 
 // Enrollment
 type Enrollment struct {
-	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	TenantID           string     `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID                 string     `gorm:"primaryKey;size:64" json:"id"`
 	CohortID           string     `gorm:"size:64;index;not null" json:"cohort_id"`
 	UserID             string     `gorm:"size:64;index;not null" json:"user_id"`
 	PlanType           string     `gorm:"size:32;default:'STANDARD'" json:"plan_type"`
 	PaymentStatus      string     `gorm:"size:32;default:'PAID'" json:"payment_status"`
+	SubscriptionID     *string    `gorm:"size:128" json:"subscription_id"`
+	BillingCycle       string     `gorm:"size:32;default:'one-time'" json:"billing_cycle"`
+	NextBillingDate    *time.Time `json:"next_billing_date"`
+	LastPaymentFailed  bool       `gorm:"default:false" json:"last_payment_failed"`
 	CurrentStageNumber int        `gorm:"default:1" json:"current_stage_number"`
 	CurrentXP          int        `gorm:"default:0" json:"current_xp"`
 	StreakDays         int        `gorm:"default:0" json:"streak_days"`
@@ -67,14 +71,29 @@ type Enrollment struct {
 	UpdatedAt          time.Time  `json:"updated_at"`
 }
 
+// Transaction
+type Transaction struct {
+	ID        string    `gorm:"primaryKey;size:64" json:"id"`
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	UserID    string    `gorm:"size:64;index;not null" json:"user_id"`
+	CohortID  *string   `gorm:"size:64;index" json:"cohort_id"`
+	Amount    float64   `gorm:"type:decimal(10,2);not null" json:"amount"`
+	Currency  string    `gorm:"size:10;default:'NGN'" json:"currency"`
+	Gateway   string    `gorm:"size:32;default:'paystack'" json:"gateway"`
+	Reference string    `gorm:"unique;size:128;not null" json:"reference"`
+	Status    string    `gorm:"size:32;default:'PENDING'" json:"status"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 // Journey Stage (Linked to Program)
 type JourneyStage struct {
-	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
-	ID          string    `gorm:"primaryKey;size:64" json:"id"`
-	ProgramID   string    `gorm:"size:64;index;not null" json:"program_id"`
-	StageNumber int       `gorm:"not null" json:"stage_number"`
-	Title       string    `gorm:"size:255;not null" json:"title"`
-	Subtitle    string    `gorm:"size:255" json:"subtitle"`
+	TenantID        string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	ID              string    `gorm:"primaryKey;size:64" json:"id"`
+	ProgramID       string    `gorm:"size:64;index;not null" json:"program_id"`
+	StageNumber     int       `gorm:"not null" json:"stage_number"`
+	Title           string    `gorm:"size:255;not null" json:"title"`
+	Subtitle        string    `gorm:"size:255" json:"subtitle"`
 	Description     string    `gorm:"type:text" json:"description"`
 	VideoURL        string    `gorm:"size:512" json:"video_url"`
 	ContentMarkdown string    `gorm:"type:text" json:"content_markdown"`
@@ -85,7 +104,7 @@ type JourneyStage struct {
 
 // Journey Module
 type JourneyModule struct {
-	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	TenantID          string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID                string    `gorm:"primaryKey;size:64" json:"id"`
 	StageID           string    `gorm:"size:64;index;not null" json:"stage_id"`
 	Title             string    `gorm:"size:255;not null" json:"title"`
@@ -107,7 +126,7 @@ type JourneyModule struct {
 
 // Module Progress
 type ModuleProgress struct {
-	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	TenantID         string     `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID               string     `gorm:"primaryKey;size:64" json:"id"`
 	UserID           string     `gorm:"size:64;index;not null" json:"user_id"`
 	ModuleID         string     `gorm:"size:64;index;not null" json:"module_id"`
@@ -121,7 +140,7 @@ type ModuleProgress struct {
 
 // Project Submission
 type ProjectSubmission struct {
-	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	TenantID       string     `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID             string     `gorm:"primaryKey;size:64" json:"id"`
 	CohortID       string     `gorm:"size:64;index;not null" json:"cohort_id"`
 	StageNumber    int        `gorm:"not null" json:"stage_number"`
@@ -141,7 +160,6 @@ type ProjectSubmission struct {
 	UpdatedAt      time.Time  `json:"updated_at"`
 }
 
-
 // Block Submission
 type BlockSubmission struct {
 	ID             string     `gorm:"primaryKey;size:64" json:"id"`
@@ -149,11 +167,11 @@ type BlockSubmission struct {
 	UserID         string     `gorm:"size:64;index;not null" json:"user_id"`
 	ModuleID       string     `gorm:"size:64;index;not null" json:"module_id"`
 	BlockID        string     `gorm:"size:64;index;not null" json:"block_id"`
-	BlockType      string     `gorm:"size:64;not null" json:"block_type"` // ASSIGNMENT, COMPILER, QUIZ
-	SubmissionType string     `gorm:"size:64" json:"submission_type"` // TEXT, LINK, FILE, CODE
-	GroupID        *string    `gorm:"size:64;index" json:"group_id"` // If this is a group assignment
-	Content        string     `gorm:"type:text" json:"content"` // The actual text, link, file URL, or code
-	Score          int        `gorm:"default:0" json:"score"` // For quizzes
+	BlockType      string     `gorm:"size:64;not null" json:"block_type"`      // ASSIGNMENT, COMPILER, QUIZ
+	SubmissionType string     `gorm:"size:64" json:"submission_type"`          // TEXT, LINK, FILE, CODE
+	GroupID        *string    `gorm:"size:64;index" json:"group_id"`           // If this is a group assignment
+	Content        string     `gorm:"type:text" json:"content"`                // The actual text, link, file URL, or code
+	Score          int        `gorm:"default:0" json:"score"`                  // For quizzes
 	Status         string     `gorm:"size:32;default:'PENDING'" json:"status"` // PENDING, REVIEWED
 	MentorID       *string    `gorm:"size:64;index" json:"mentor_id"`
 	MentorFeedback string     `gorm:"type:text" json:"mentor_feedback"`
@@ -165,7 +183,7 @@ func (BlockSubmission) TableName() string { return "crs_block_submissions" }
 
 // Peer Pairing
 type PeerPairing struct {
-	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	TenantID     string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID           string    `gorm:"primaryKey;size:64" json:"id"`
 	CohortID     string    `gorm:"size:64;index;not null" json:"cohort_id"`
 	StudentA_ID  string    `gorm:"size:64;index;not null" json:"student_a_id"`
@@ -178,7 +196,7 @@ type PeerPairing struct {
 
 // Presence Session
 type PresenceSession struct {
-	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	TenantID      string     `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID            string     `gorm:"primaryKey;size:64" json:"id"`
 	UserID        string     `gorm:"size:64;index;not null" json:"user_id"`
 	RoomName      string     `gorm:"size:128;default:'Sprint Room Alpha'" json:"room_name"`
@@ -205,7 +223,7 @@ type PublicPortfolio struct {
 
 // Quiz
 type Quiz struct {
-	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	TenantID      string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID            string    `gorm:"primaryKey;size:64" json:"id"`
 	ModuleID      string    `gorm:"size:64;index;not null" json:"module_id"`
 	Title         string    `gorm:"size:255" json:"title"`
@@ -216,7 +234,7 @@ type Quiz struct {
 
 // Quiz Question
 type QuizQuestion struct {
-	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	TenantID     string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	ID           string    `gorm:"primaryKey;size:64" json:"id"`
 	QuizID       string    `gorm:"size:64;index;not null" json:"quiz_id"`
 	Question     string    `gorm:"type:text;not null" json:"question"`
@@ -245,6 +263,7 @@ type AIJob struct {
 func (Program) TableName() string           { return "crs_programs" }
 func (Cohort) TableName() string            { return "crs_cohorts" }
 func (Enrollment) TableName() string        { return "crs_enrollments" }
+func (Transaction) TableName() string       { return "crs_transactions" }
 func (JourneyStage) TableName() string      { return "crs_journey_stages" }
 func (JourneyModule) TableName() string     { return "crs_journey_modules" }
 func (ModuleProgress) TableName() string    { return "crs_module_progress" }
