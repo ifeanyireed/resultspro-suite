@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { coursesApi } from '@/lib/api';
 import MentorEditModal from './MentorEditModal';
+import InviteMentorModal from './InviteMentorModal';
 
 export default function MentorsPage() {
 
@@ -19,6 +20,7 @@ export default function MentorsPage() {
 
   const [selectedMentor, setSelectedMentor] = useState<any>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
 
   const handleDeleteMentor = async (userId: string) => {
@@ -55,7 +57,7 @@ export default function MentorsPage() {
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Mentor Management</h2>
           <p className="text-sm text-gray-500 mt-1">Onboarding, assignment, and performance tracking.</p>
         </div>
-        <button className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-[#f6f9f8] text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
+        <button onClick={() => setIsInviteModalOpen(true)} className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-[#f6f9f8] text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
           <PlusIcon className="w-4 h-4" />
           Invite Mentor
         </button>
@@ -144,7 +146,12 @@ export default function MentorsPage() {
           </div>
         )}
       </div>
-      <MentorEditModal 
+            <InviteMentorModal 
+        isOpen={isInviteModalOpen} 
+        onClose={() => setIsInviteModalOpen(false)} 
+        onSaved={() => queryClient.invalidateQueries({ queryKey: ['mentors_dashboard'] })} 
+      />
+<MentorEditModal 
         isOpen={isEditModalOpen} 
         onClose={() => setIsEditModalOpen(false)} 
         onSaved={() => queryClient.invalidateQueries({ queryKey: ['mentors_dashboard'] })} 

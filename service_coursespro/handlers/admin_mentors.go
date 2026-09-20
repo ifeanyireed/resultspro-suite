@@ -179,3 +179,65 @@ func (h *Handler) AdminUpdateMentor(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Mentor updated successfully"})
 }
+
+
+// AdminInviteMentor invites an existing user to become a mentor via email
+func (h *Handler) AdminInviteMentor(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+
+	var input struct {
+		Email          string   `json:"email" binding:"required,email"`
+		FullName       string   `json:"full_name" binding:"required"`
+		Specialization string   `json:"specialization"`
+		CohortIDs      []string `json:"cohort_ids"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// 1. Find User by Email in the global users table
+	var user struct {
+		ID    string
+		Email string
+	}
+	if err := db.WithTenant(c).Table("users").Where("email = ?", input.Email).First(&user).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found. They must register an account first."})
+		return
+	}
+
+	// 2. Check if mentor profile already exists
+	var existing models.MentorProfile
+	if err := db.WithTenant(c).Where("user_id = ?", user.ID).First(&existing).Error; err == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "This user is already a mentor."})
+		return
+	}
+
+	// 3. Create Mentor Profile
+	profile := models.MentorProfile{
+		UserID:         user.ID,
+		TenantID:       tenantID.(string),
+		FullName:       input.FullName,
+		Specialization: input.Specialization,
+	}
+
+	if err := db.WithTenant(c).Create(&profile).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create mentor profile"})
+		return
+	}
+
+	// 4. Assign Cohorts
+	if input.CohortIDs != nil {
+		for _, cid := range input.CohortIDs {
+			db.WithTenant(c).Create(&models.CohortMentor{
+				TenantID: tenantID.(string),
+				CohortID: cid,
+				UserID:   user.ID,
+				Role:     "MENTOR",
+			})
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Mentor added successfully", "profile": profile})
+}
