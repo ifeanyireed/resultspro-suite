@@ -302,6 +302,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if isGlobalAdmin {
+		roles = append(roles, "platform-admin")
 		hasTenantAccess = true
 	}
 
@@ -409,7 +410,9 @@ func HandleTokenRefresh(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var status string
-	err = db.DB.QueryRow("SELECT account_status FROM users WHERE id = ?", userID).Scan(&status)
+	var isGlobalAdmin bool
+	var globalRole sql.NullString
+	err = db.DB.QueryRow("SELECT account_status, COALESCE(is_admin, false), role FROM users WHERE id = ?", userID).Scan(&status, &isGlobalAdmin, &globalRole)
 	if err != nil || status == "suspended" {
 		utils.JSONError(w, http.StatusForbidden, "Account suspended or not found")
 		return
@@ -439,6 +442,13 @@ func HandleTokenRefresh(w http.ResponseWriter, r *http.Request) {
 
 	var u models.User
 	db.DB.QueryRow("SELECT coin_balance, has_ican, ican_expires_at, ican_plan, ican_target FROM users WHERE id = ?", userID).Scan(&u.CoinBalance, &u.HasIcan, &u.IcanExpiresAt, &u.IcanPlan, &u.IcanTarget)
+
+	if globalRole.Valid && globalRole.String != "" {
+		roles = append(roles, globalRole.String)
+	}
+	if isGlobalAdmin {
+		roles = append(roles, "platform-admin")
+	}
 
 	customClaims := map[string]interface{}{
 		"has_ican":     u.HasIcan,
