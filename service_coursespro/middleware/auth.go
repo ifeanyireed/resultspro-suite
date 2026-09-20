@@ -74,6 +74,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 			tenantData, exists := tenantsClaim[domain].(map[string]interface{})
 			if !exists {
+				// 1. Check if they are a global admin
 				roles, _ := claims["roles"].([]interface{})
 				isGlobalAdmin := false
 				for _, r := range roles {
@@ -83,22 +84,44 @@ func AuthMiddleware() gin.HandlerFunc {
 					}
 				}
 				
+				// 2. If not a global admin, maybe the domain is just a generic preview URL (like Vercel or Render).
+				// Let's fallback to the first tenant they actually have access to in their JWT.
 				if !isGlobalAdmin {
-					c.JSON(http.StatusUnauthorized, gin.H{"error": "Session invalid or expired", "reason": "user_not_in_tenant"})
-					c.Abort()
-					return
-				}
-				
-				// Global admins need their tenant resolved manually since it's not in the token
-				type Tenant struct { ID string }
-				var t Tenant
-				if err := db.DB.Table("tenants").Select("id").Where("slug = ?", domain).First(&t).Error; err == nil {
-					c.Set("tenant_id", t.ID)
-					c.Set("tenant_role", "platform-admin")
+					fallbackFound := false
+					for _, v := range tenantsClaim {
+						if tData, ok := v.(map[string]interface{}); ok {
+							tenantData = tData
+							exists = true
+							fallbackFound = true
+							break
+						}
+					}
+
+					if !fallbackFound {
+						c.JSON(http.StatusUnauthorized, gin.H{"error": "Session invalid or expired", "reason": "user_not_in_tenant"})
+						c.Abort()
+						return
+					}
+					
+					// We found a fallback tenant, set it and skip the global admin DB check
+					if role, ok := tenantData["role"].(string); ok {
+						c.Set("tenant_role", role)
+					}
+					if tenantID, ok := tenantData["id"].(string); ok {
+						c.Set("tenant_id", tenantID)
+					}
 				} else {
-					c.JSON(http.StatusUnauthorized, gin.H{"error": "Tenant not found in database", "reason": "tenant_not_found"})
-					c.Abort()
-					return
+					// Global admins need their tenant resolved manually since it's not in the token
+					type Tenant struct { ID string }
+					var t Tenant
+					if err := db.DB.Table("tenants").Select("id").Where("slug = ?", domain).First(&t).Error; err == nil {
+						c.Set("tenant_id", t.ID)
+						c.Set("tenant_role", "platform-admin")
+					} else {
+						c.JSON(http.StatusUnauthorized, gin.H{"error": "Tenant not found in database", "reason": "tenant_not_found"})
+						c.Abort()
+						return
+					}
 				}
 			} else {
 				if role, ok := tenantData["role"].(string); ok {
