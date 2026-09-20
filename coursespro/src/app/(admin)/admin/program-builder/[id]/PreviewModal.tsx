@@ -49,33 +49,6 @@ const getDirectMediaUrl = (url: string) => {
 
 
 
-const BlobAudioPlayer = ({ url }: { url: string }) => {
-  const [blobUrl, setBlobUrl] = React.useState<string | null>(null);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(false);
-
-  React.useEffect(() => {
-    if (!url) return;
-    setLoading(true);
-    fetch(url)
-      .then(res => res.blob())
-      .then(blob => {
-        const audioBlob = new Blob([blob], { type: 'audio/mpeg' });
-        setBlobUrl(URL.createObjectURL(audioBlob));
-        setLoading(false);
-      })
-      .catch(e => {
-        console.error('Audio fetch error:', e);
-        setError(true);
-        setLoading(false);
-      });
-  }, [url]);
-
-  if (loading) return <div className="text-sm text-gray-500 flex items-center gap-2"><svg className="animate-spin h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> Buffering secure audio stream...</div>;
-  if (error) return <div className="text-sm text-red-500">Failed to stream audio. URL might be restricted or invalid.</div>;
-  if (blobUrl) return <audio controls className="w-full max-w-md" src={blobUrl} />;
-  return null;
-}
 
 export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
@@ -209,7 +182,11 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                           {block.type === 'AUDIO' && (
                             <div className={`p-6 flex flex-col items-center justify-center gap-4 ${isMediaWithoutCard ? '' : 'bg-white'}`}>
                               {block.url ? (
-                                <BlobAudioPlayer url={getDirectMediaUrl(block.url)} />
+                                <audio controls className="w-full max-w-md bg-gray-50 rounded-full shadow-sm">
+                                  <source src={`/api/audio-proxy?url=${encodeURIComponent(getDirectMediaUrl(block.url))}`} type="audio/mpeg" />
+                                  <source src={`/api/audio-proxy?url=${encodeURIComponent(getDirectMediaUrl(block.url))}`} type="audio/wav" />
+                                  Your browser does not support the audio element.
+                                </audio>
                               ) : (
                                 <span className="text-sm text-gray-500">No audio uploaded</span>
                               )}
@@ -227,15 +204,15 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                           )}
 
                           {block.type === 'PPT' && (
-                            <div className={`w-full h-[500px] relative p-4 flex flex-col ${isMediaWithoutCard ? '' : 'bg-white'}`}>
+                            <div className={`w-full h-[500px] relative flex flex-col ${isMediaWithoutCard ? 'py-4' : 'p-4 bg-white'}`}>
                               {block.url ? (
                                 <iframe 
                                   src={formatEmbedUrl(block.url, 'PPT')} 
-                                  className="w-full flex-1 border border-gray-200 rounded-lg shadow-inner bg-white" 
+                                  className={`w-full flex-1 border ${isMediaWithoutCard ? 'border-none shadow-none rounded-none' : 'border-gray-200 rounded-lg shadow-inner bg-white'}`} 
                                   title="PPT Content"
                                 />
                               ) : (
-                                <div className="flex-1 flex items-center justify-center text-gray-400 border border-gray-200 border-dashed rounded-lg bg-white">No Presentation uploaded</div>
+                                <div className={`flex-1 flex items-center justify-center text-gray-400 border border-dashed rounded-lg ${isMediaWithoutCard ? 'border-gray-300' : 'border-gray-200 bg-white'}`}>No Presentation uploaded</div>
                               )}
                             </div>
                           )}
@@ -246,15 +223,15 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                             return (
                               <div className={`w-full h-[600px] ${isMediaWithoutCard ? 'py-4' : 'p-4 bg-white'}`}>
                                 {block.url ? (
-                                  <div className="w-full h-full relative overflow-hidden rounded-lg border border-gray-200 bg-white">
+                                  <div className={`w-full h-full relative overflow-hidden ${isMediaWithoutCard ? 'rounded-none' : 'rounded-lg border border-gray-200 bg-white'}`}>
                                     <iframe 
                                       src={embedUrl} 
-                                      className={`absolute left-0 w-full border-0 bg-white ${isDocsViewer ? 'top-[-50px] h-[calc(100%+50px)]' : 'top-0 h-full'}`} 
+                                      className={`absolute left-0 w-full border-0 ${isMediaWithoutCard ? '' : 'bg-white'} ${isDocsViewer ? 'top-[-50px] h-[calc(100%+50px)]' : 'top-0 h-full'}`} 
                                       title="PDF Document" 
                                     />
                                   </div>
                                 ) : (
-                                  <div className="flex-1 h-full flex items-center justify-center text-gray-400 border border-gray-200 border-dashed rounded-lg bg-white">No PDF uploaded</div>
+                                  <div className={`flex-1 h-full flex items-center justify-center text-gray-400 border border-dashed rounded-lg ${isMediaWithoutCard ? 'border-gray-300' : 'border-gray-200 bg-white'}`}>No PDF uploaded</div>
                                 )}
                               </div>
                             );

@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduNode — Full Product Blueprint</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e0e0e;
+    --paper: #f5f0e8;
+    --cream: #ede8dc;
+    --gold: #c9973a;
+    --gold-light: #e8c97a;
+    --rust: #b84c2a;
+    --forest: #1e4d3a;
+    --slate: #3a4a5c;
+    --muted: #6b6460;
+    --rule: #c8bfb0;
+    --highlight: #fff9e6;
+    --radius: 4px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* COVER */
+  .cover {
+    background: var(--forest);
+    color: var(--paper);
+    padding: 80px 60px 60px;
+    position: relative;
+    overflow: hidden;
+    min-height: 340px;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    border: 80px solid rgba(201,151,58,0.12);
+  }
+
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 200px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 40px solid rgba(201,151,58,0.08);
+  }
+
+  .cover-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cover-label::after {
+    content: '';
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.4;
+  }
+
+  .cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+
+  .cover h1 span {
+    color: var(--gold);
+  }
+
+  .cover-sub {
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(245,240,232,0.75);
+    margin-top: 16px;
+    max-width: 560px;
+  }
+
+  .cover-meta {
+    margin-top: 40px;
+    display: flex;
+    gap: 40px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(245,240,232,0.5);
+    letter-spacing: 0.1em;
+  }
+
+  .cover-meta strong {
+    display: block;
+    color: var(--gold-light);
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--cream);
+    border-bottom: 1px solid var(--rule);
+    padding: 40px 60px;
+  }
+
+  .toc-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px 20px;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--slate);
+  }
+
+  .toc-num {
+    font-family: 'DM Mono', monospace;
+    color: var(--gold);
+    font-size: 10px;
+    min-width: 20px;
+  }
+
+  /* MAIN */
+  .doc {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 60px 100px;
+  }
+
+  /* SECTION */
+  .section {
+    margin-top: 72px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    padding-bottom: 4px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--highlight);
+    border-left: 3px solid var(--gold);
+    padding: 16px 20px;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+
+  .callout.rust {
+    background: #fff5f2;
+    border-color: var(--rust);
+  }
+
+  .callout.forest {
+    background: #f0f6f3;
+    border-color: var(--forest);
+  }
+
+  .callout strong {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  /* STATS ROW */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 28px 0;
+  }
+
+  .stat {
+    background: var(--paper);
+    padding: 20px 24px;
+  }
+
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--forest);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 13px;
+  }
+
+  th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 500;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td {
+    background: var(--cream);
+  }
+
+  /* SCREEN WIREFRAME */
+  .screen-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 28px 0;
+  }
+
+  .screen-card {
+    border: 1px solid var(--rule);
+    background: white;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .screen-bar {
+    background: var(--ink);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .screen-bar-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--paper);
+    letter-spacing: 0.1em;
+    flex: 1;
+  }
+
+  .screen-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+  }
+
+  .screen-body {
+    padding: 16px;
+  }
+
+  .screen-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .mock-block {
+    background: var(--cream);
+    border-radius: 3px;
+    height: 10px;
+    margin-bottom: 6px;
+  }
+
+  .mock-block.w40 { width: 40%; }
+  .mock-block.w60 { width: 60%; }
+  .mock-block.w80 { width: 80%; }
+  .mock-block.w100 { width: 100%; }
+  .mock-block.dark { background: var(--slate); opacity: 0.15; }
+  .mock-block.gold { background: var(--gold); opacity: 0.4; height: 28px; border-radius: 3px; }
+  .mock-block.h20 { height: 20px; }
+  .mock-block.h40 { height: 40px; }
+  .mock-block.h60 { height: 60px; }
+
+  .mock-nav {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .mock-nav-item {
+    background: var(--cream);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 9px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .mock-nav-item.active {
+    background: var(--forest);
+    color: white;
+  }
+
+  .mock-card {
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+
+  .mock-metric {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .mock-metric-item {
+    background: var(--cream);
+    border-radius: 3px;
+    padding: 8px;
+    text-align: center;
+  }
+
+  .mock-metric-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--forest);
+    font-weight: 500;
+  }
+
+  .mock-metric-lbl {
+    font-size: 8px;
+    color: var(--muted);
+  }
+
+  /* SCHEMA */
+  .schema-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 28px 0;
+  }
+
+  .schema-table {
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    font-size: 12px;
+  }
+
+  .schema-table-head {
+    background: var(--forest);
+    color: var(--paper);
+    padding: 8px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  .schema-field {
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .schema-field:last-child {
+    border-bottom: none;
+  }
+
+  .schema-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .schema-pk {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ROADMAP */
+  .roadmap {
+    margin: 28px 0;
+  }
+
+  .roadmap-phase {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 0;
+    margin-bottom: 0;
+  }
+
+  .roadmap-phase:last-child .roadmap-line {
+    display: none;
+  }
+
+  .roadmap-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .roadmap-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 3px solid var(--paper);
+    box-shadow: 0 0 0 2px var(--gold);
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .roadmap-line {
+    width: 2px;
+    flex: 1;
+    background: var(--rule);
+    margin: 6px 0;
+    min-height: 20px;
+  }
+
+  .roadmap-period {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-align: right;
+    padding-right: 20px;
+    padding-top: 2px;
+  }
+
+  .roadmap-content {
+    padding-bottom: 32px;
+    padding-left: 8px;
+  }
+
+  .roadmap-phase-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--forest);
+  }
+
+  .roadmap-items {
+    list-style: none;
+    font-size: 13px;
+  }
+
+  .roadmap-items li {
+    padding: 4px 0;
+    padding-left: 14px;
+    position: relative;
+    color: var(--slate);
+  }
+
+  .roadmap-items li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 10px;
+    top: 5px;
+  }
+
+  /* FINANCIALS */
+  .fin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 28px 0;
+  }
+
+  .fin-card {
+    border: 1px solid var(--rule);
+    padding: 20px 24px;
+  }
+
+  .fin-card-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .fin-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--rule);
+    font-size: 13px;
+  }
+
+  .fin-row:last-child {
+    border-bottom: none;
+    font-weight: 600;
+    color: var(--forest);
+    padding-top: 10px;
+    margin-top: 4px;
+    border-top: 2px solid var(--ink);
+  }
+
+  .fin-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
+
+  /* PROJECTION TABLE */
+  .proj-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 12.5px;
+  }
+
+  .proj-table th {
+    background: var(--forest);
+    color: var(--paper);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-align: right;
+    padding: 10px 16px;
+  }
+
+  .proj-table th:first-child { text-align: left; }
+
+  .proj-table td {
+    text-align: right;
+    padding: 9px 16px;
+    border-bottom: 1px solid var(--rule);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  .proj-table td:first-child {
+    text-align: left;
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    color: var(--slate);
+  }
+
+  .proj-table tr.total td {
+    background: var(--cream);
+    font-weight: 600;
+    color: var(--forest);
+    border-top: 2px solid var(--forest);
+  }
+
+  .proj-table tr.highlight td {
+    background: var(--forest);
+    color: var(--paper);
+    border-bottom: none;
+  }
+
+  .proj-table tr.highlight td:first-child {
+    color: var(--gold-light);
+  }
+
+  /* TECH STACK */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin: 28px 0;
+  }
+
+  .stack-group {
+    border: 1px solid var(--rule);
+    padding: 20px;
+  }
+
+  .stack-group-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .stack-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--rule);
+    font-size: 13px;
+  }
+
+  .stack-item:last-child { border-bottom: none; }
+
+  .stack-tech {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--forest);
+    min-width: 120px;
+  }
+
+  .stack-why {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  /* RISK TABLE */
+  .risk-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .risk-high { background: #fde8e4; color: var(--rust); }
+  .risk-med { background: #fff5e0; color: #a07020; }
+  .risk-low { background: #e8f5ee; color: var(--forest); }
+
+  /* COMPETITION */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 28px 0;
+  }
+
+  .comp-card {
+    border: 1px solid var(--rule);
+    padding: 16px;
+  }
+
+  .comp-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .comp-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .comp-vs {
+    font-size: 12px;
+    color: var(--slate);
+    line-height: 1.6;
+  }
+
+  /* GTM */
+  .gtm-phases {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 28px 0;
+  }
+
+  .gtm-phase {
+    background: var(--cream);
+    padding: 20px;
+    border-top: 3px solid var(--forest);
+  }
+
+  .gtm-phase-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    margin-bottom: 6px;
+  }
+
+  .gtm-phase-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .gtm-phase-body {
+    font-size: 12px;
+    color: var(--slate);
+    line-height: 1.6;
+  }
+
+  /* MOAT */
+  .moat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 28px 0;
+  }
+
+  .moat-item {
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px;
+    background: var(--highlight);
+  }
+
+  .moat-title {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .moat-body {
+    font-size: 12px;
+    color: var(--slate);
+    line-height: 1.5;
+  }
+
+  /* FOOTER */
+  .doc-footer {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 32px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(245,240,232,0.4);
+  }
+
+  .doc-footer strong {
+    color: var(--gold);
+    font-size: 18px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+  }
+
+  p { margin-bottom: 12px; }
+  p:last-child { margin-bottom: 0; }
+
+  ul.body-list {
+    margin: 12px 0 12px 20px;
+    font-size: 13px;
+    color: var(--slate);
+  }
+
+  ul.body-list li { margin-bottom: 5px; }
+
+  h3.sub {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 28px 0 12px;
+    color: var(--forest);
+  }
+
+  h4.sub2 {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 20px 0 8px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    background: var(--forest);
+    color: var(--paper);
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--rule);
+    margin: 32px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-label">Full Product Blueprint · Confidential</div>
+  <h1>Edu<span>Node</span></h1>
+  <div class="cover-sub">The offline-first school intelligence platform for Sub-Saharan Africa — hardware, software, and data in one box.</div>
+  <div class="cover-meta">
+    <div><strong>Version</strong> 1.0 Draft</div>
+    <div><strong>Market</strong> Nigeria → Pan-Africa</div>
+    <div><strong>Stage</strong> Pre-Seed Blueprint</div>
+    <div><strong>Date</strong> March 2026</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">Contents</div>
+  <div class="toc-grid">
+    <div class="toc-item"><span class="toc-num">01</span> Executive Summary</div>
+    <div class="toc-item"><span class="toc-num">02</span> Problem & Market</div>
+    <div class="toc-item"><span class="toc-num">03</span> Product Architecture</div>
+    <div class="toc-item"><span class="toc-num">04</span> Screen Designs</div>
+    <div class="toc-item"><span class="toc-num">05</span> Database Schema</div>
+    <div class="toc-item"><span class="toc-num">06</span> Technology Stack</div>
+    <div class="toc-item"><span class="toc-num">07</span> Business Model</div>
+    <div class="toc-item"><span class="toc-num">08</span> Financial Projections</div>
+    <div class="toc-item"><span class="toc-num">09</span> Product Roadmap</div>
+    <div class="toc-item"><span class="toc-num">10</span> Go-To-Market</div>
+    <div class="toc-item"><span class="toc-num">11</span> Competitive Landscape</div>
+    <div class="toc-item"><span class="toc-num">12</span> Risks & Mitigation</div>
+  </div>
+</div>
+
+<div class="doc">
+
+<!-- ===================== SECTION 01 ===================== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Executive Summary</h2>
+  </div>
+
+  <p><strong>EduNode</strong> is a plug-and-play school intelligence platform consisting of a pre-configured local server device ("the Node") and a cloud-based SaaS dashboard. Schools in underserved and low-connectivity areas install one Node per campus. Students and teachers connect to it via Wi-Fi on any device — phone, tablet, or laptop — and access a full curriculum library, assessment engine, and teacher tools without needing the internet.</p>
+
+  <p>When the school's internet is available — even briefly — the Node syncs usage data, student performance metrics, and content updates to EduNode's cloud dashboard, giving school admins, LGA officers, and state ministries real-time visibility into learning outcomes across every connected school.</p>
+
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-value">109K</div>
+      <div class="stat-label">Public schools in Nigeria geo-mapped by UNICEF/GenU as of 2025, with only ~1,027 connected to internet</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">54.6%</div>
+      <div class="stat-label">Of Nigeria's population remained offline at the start of 2025 — tens of millions of students among them</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">₦0</div>
+      <div class="stat-label">Cost to students to access content — schools pay a flat annual licence; students get free access over local Wi-Fi</div>
+    </div>
+  </div>
+
+  <div class="callout forest">
+    <strong>The Core Insight</strong>
+    Existing solutions (RACHEL, Kolibri) are NGO/donor-funded, generic in content, and have no commercial SaaS layer — meaning no sustainable business model, no local curriculum alignment, and no data reporting for governments. EduNode is the first commercially sustainable, Nigeria-curriculum-aligned, school-intelligence-grade offline platform.
+  </div>
+</div>
+
+<!-- ===================== SECTION 02 ===================== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Problem & Market</h2>
+  </div>
+
+  <h3 class="sub">The Connectivity Crisis in Nigerian Schools</h3>
+  <p>Nigeria has 109,000 public schools. As of early 2025, UNICEF's GenU 9JA programme — a major public-private initiative involving Airtel, ATC Nigeria, IHS, and the Federal Ministry of Education — had connected just 1,027 of them to the internet. That is less than 1%. The remaining 108,000+ schools operate entirely offline.</p>
+
+  <p>Even where connectivity exists, the economics are brutal. The median price of a 2GB mobile broadband plan in Nigeria costs 4.2% of per capita GNI — more than double the UN Broadband Commission's affordability threshold and the highest of any ITU region globally. For public school administrators, paying for sustained school-wide internet access is simply not feasible.</p>
+
+  <div class="callout">
+    <strong>Device Scarcity</strong>
+    In southern public junior secondary schools, device ratios range from 37 to 61 students per device. In northern states, the ratios are even worse. Yet students increasingly have personal smartphones — meaning the school network, not the device, is the missing link.
+  </div>
+
+  <h3 class="sub">Total Addressable Market</h3>
+  <table>
+    <tr><th>Market Tier</th><th>Description</th><th>School Count</th><th>Estimated Value</th></tr>
+    <tr><td>Nigeria — Public Secondary</td><td>Federal and state-owned JSS/SSS</td><td>~33,000</td><td>₦198B+ annually at ₦600K/yr per school</td></tr>
+    <tr><td>Nigeria — Public Primary</td><td>UBE-funded primary schools</td><td>~76,000</td><td>₦152B+ annually at ₦200K/yr per school</td></tr>
+    <tr><td>Nigeria — Private Schools</td><td>Mid/low-tier private schools without ICT</td><td>~30,000</td><td>₦90B+ annually</td></tr>
+    <tr><td>West Africa Expansion</td><td>Ghana, Côte d'Ivoire, Senegal</td><td>~120,000</td><td>$200M+ USD</td></tr>
+    <tr><td>Pan-Africa (5yr)</td><td>Sub-Saharan Africa total</td><td>~500,000</td><td>$1B+</td></tr>
+  </table>
+
+  <h3 class="sub">Beachhead: Nigerian Public Secondary Schools</h3>
+  <p>EduNode will focus initial commercial effort on Nigerian public secondary schools (JSS1–SS3) in states with active WAEC/NECO intervention programmes. These schools have the most acute need (WAEC pass rates below 40% in many LGAs), a motivated buyer (state ministries seeking data), and an established procurement pathway (SUBEB and state MoE budgets).</p>
+</div>
+
+<!-- ===================== SECTION 03 ===================== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Product Architecture</h2>
+  </div>
+
+  <h3 class="sub">Three Layers, One System</h3>
+
+  <table>
+    <tr><th>Layer</th><th>Component</th><th>Description</th></tr>
+    <tr><td><strong>Hardware</strong></td><td>EduNode Box</td><td>Pre-configured mini-server (Raspberry Pi 5 or equivalent ARM board). Ships with content pre-loaded. Plug in, connect to school router, done.</td></tr>
+    <tr><td><strong>Local Software</strong></td><td>EduNode OS</td><td>Lightweight Linux-based server running a local web app. Students access via browser at <code>edu.local</code> over school Wi-Fi. No app install required.</td></tr>
+    <tr><td><strong>Cloud Layer</strong></td><td>EduNode Dashboard</td><td>SaaS web app for school principals, LGA officers, and state ministries. Receives synced data. Shows analytics, content, and admin tools.</td></tr>
+  </table>
+
+  <h3 class="sub">The Node Hardware Spec</h3>
+  <table>
+    <tr><th>Component</th><th>Spec</th><th>Rationale</th></tr>
+    <tr><td>Board</td><td>Raspberry Pi 5 (8GB RAM)</td><td>Handles 50–80 simultaneous Wi-Fi users. Proven in Tanzania, Kenya, Ghana deployments.</td></tr>
+    <tr><td>Storage</td><td>1TB SSD (via USB3)</td><td>Houses full NERDC-aligned video library, past questions, textbooks for 6 years of secondary school.</td></tr>
+    <tr><td>Wi-Fi</td><td>Dual-band USB Wi-Fi adapter (802.11ac)</td><td>Creates local hotspot; school can add cheap router to extend range.</td></tr>
+    <tr><td>Power</td><td>Standard 5V USB-C + optional 12V solar input</td><td>Compatible with NEPA grid and solar installations.</td></tr>
+    <tr><td>Enclosure</td><td>Custom ABS plastic case, tamper-resistant screws</td><td>Ruggedized for school environments. Logo-branded.</td></tr>
+    <tr><td>Connectivity</td><td>Ethernet port for WAN sync when available</td><td>Wired sync is faster and cheaper than mobile data.</td></tr>
+    <tr><td>BOM Cost</td><td>~$110–130 USD per unit at scale</td><td>Priced to sell at $250 or lease at $0 with annual SaaS commitment.</td></tr>
+  </table>
+
+  <h3 class="sub">How It Works — Data Flow</h3>
+  <div class="callout forest">
+    <strong>Step-by-step flow</strong>
+    1. School installs Node, connects to school router → students see "EduNode Wi-Fi" or access <code>edu.local</code> on any browser<br>
+    2. Students browse curriculum content, watch videos, take past-question quizzes — all stored locally<br>
+    3. All interactions (sessions, quiz scores, subject access) are logged to the local SQLite database on the Node<br>
+    4. When any internet is detected (school's WAN, a visiting staff member's hotspot, etc.), Node syncs a compressed analytics payload to EduNode cloud via HTTPS<br>
+    5. School admin, LGA, and ministry users see live dashboards on cloud.edunode.ng<br>
+    6. New curriculum content, software updates, and AI-generated quizzes are pushed to the Node during sync windows
+  </div>
+
+  <h3 class="sub">Local App — Student-Facing Features</h3>
+  <ul class="body-list">
+    <li><strong>Curriculum Library:</strong> NERDC-aligned video lessons for JSS1–SS3. All subjects. Chapters broken into 8–15 minute segments.</li>
+    <li><strong>Past Question Bank:</strong> WAEC, NECO, JAMB past questions from 2005–present. Subject-filtered, year-filtered, timed mock exams.</li>
+    <li><strong>AI Quiz Generator:</strong> (when Node has occasional internet) Uses Claude API to generate new practice questions on any topic.</li>
+    <li><strong>Offline Textbooks:</strong> NERDC-approved digital textbooks in PDF/ePub for every subject and class level.</li>
+    <li><strong>Teacher Tools:</strong> Lesson planning assistant, class result entry, attendance marking, printable worksheets.</li>
+    <li><strong>Notice Board:</strong> School admin posts announcements; students see them on login screen.</li>
+  </ul>
+
+  <h3 class="sub">Cloud Dashboard — Admin & Government Features</h3>
+  <ul class="body-list">
+    <li><strong>School Overview:</strong> Active students, sessions per week, top subjects, assessment scores.</li>
+    <li><strong>LGA Roll-up:</strong> Aggregate performance across all EduNode schools in an LGA. Identify struggling schools.</li>
+    <li><strong>State Ministry View:</strong> State-level reporting. Export CSV/PDF reports for SUBEB submissions.</li>
+    <li><strong>Content Management:</strong> Upload new curriculum packages, push to all Nodes in a region.</li>
+    <li><strong>Device Health:</strong> Node uptime, storage capacity, last sync timestamp per school.</li>
+    <li><strong>Billing & Licensing:</strong> Manage subscriptions, renewals, and payment history per school.</li>
+  </ul>
+</div>
+
+<!-- ===================== SECTION 04 ===================== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Screen Designs</h2>
+  </div>
+
+  <h3 class="sub">Student-Facing App (Served Locally from Node)</h3>
+  <div class="screen-grid">
+
+    <div class="screen-card">
+      <div class="screen-bar">
+        <div class="screen-dot"></div><div class="screen-dot"></div><div class="screen-dot"></div>
+        <span class="screen-bar-title">edu.local — Home</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-label">Student Home Screen</div>
+        <div class="mock-nav">
+          <div class="mock-nav-item active">Home</div>
+          <div class="mock-nav-item">Subjects</div>
+          <div class="mock-nav-item">Practice</div>
+          <div class="mock-nav-item">Library</div>
+        </div>
+        <div class="mock-block w60 dark h20" style="margin-bottom:10px;"></div>
+        <div class="mock-metric">
+          <div class="mock-metric-item"><div class="mock-metric-val">3</div><div class="mock-metric-lbl">Subjects</div></div>
+          <div class="mock-metric-item"><div class="mock-metric-val">12</div><div class="mock-metric-lbl">Quizzes Done</div></div>
+          <div class="mock-metric-item"><div class="mock-metric-val">74%</div><div class="mock-metric-lbl">Avg Score</div></div>
+        </div>
+        <div class="mock-block w100 gold" style="margin-bottom:8px;"></div>
+        <div class="mock-card"><div class="mock-block w80"></div><div class="mock-block w50"></div></div>
+        <div class="mock-card"><div class="mock-block w70"></div><div class="mock-block w40"></div></div>
+      </div>
+    </div>
+
+    <div class="screen-card">
+      <div class="screen-bar">
+        <div class="screen-dot"></div><div class="screen-dot"></div><div class="screen-dot"></div>
+        <span class="screen-bar-title">edu.local — Subject: Mathematics</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-label">Subject Chapter View</div>
+        <div class="mock-block w40 dark h20" style="margin-bottom:10px;"></div>
+        <div class="mock-block w100 h60" style="background:#e0ede8; border-radius:3px; margin-bottom:10px;"></div>
+        <div class="mock-block w80"></div>
+        <div class="mock-block w60"></div>
+        <div style="margin-top:10px; display:flex; gap:6px;">
+          <div class="mock-block" style="flex:1; height:32px; background:#1e4d3a; border-radius:3px;"></div>
+          <div class="mock-block" style="flex:1; height:32px; background:var(--cream); border-radius:3px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-card">
+      <div class="screen-bar">
+        <div class="screen-dot"></div><div class="screen-dot"></div><div class="screen-dot"></div>
+        <span class="screen-bar-title">edu.local — WAEC Practice</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-label">Past Question Quiz Engine</div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+          <div class="mock-block w40"></div>
+          <div class="mock-block w20" style="background:#c9973a; opacity:0.4; height:10px;"></div>
+        </div>
+        <div class="mock-block w100 h20" style="background:#f0f6f3; margin-bottom:12px;"></div>
+        <div class="mock-card"><div class="mock-block w70"></div></div>
+        <div class="mock-card" style="border-color:#1e4d3a; background:#f0f6f3;"><div class="mock-block w60" style="background:#1e4d3a; opacity:0.3;"></div></div>
+        <div class="mock-card"><div class="mock-block w80"></div></div>
+        <div class="mock-card"><div class="mock-block w50"></div></div>
+        <div class="mock-block w100 gold" style="margin-top:10px;"></div>
+      </div>
+    </div>
+
+    <div class="screen-card">
+      <div class="screen-bar">
+        <div class="screen-dot"></div><div class="screen-dot"></div><div class="screen-dot"></div>
+        <span class="screen-bar-title">edu.local — Teacher View</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-label">Teacher Dashboard (Local)</div>
+        <div class="mock-metric">
+          <div class="mock-metric-item"><div class="mock-metric-val">38</div><div class="mock-metric-lbl">Students</div></div>
+          <div class="mock-metric-item"><div class="mock-metric-val">6</div><div class="mock-metric-lbl">Active Now</div></div>
+          <div class="mock-metric-item"><div class="mock-metric-val">SS2A</div><div class="mock-metric-lbl">Class</div></div>
+        </div>
+        <div class="mock-block w100 h40" style="background:#e0ede8; margin-bottom:8px;"></div>
+        <div class="mock-block w80"></div>
+        <div class="mock-block w60"></div>
+        <div class="mock-block w70"></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sub">Cloud Admin Dashboard (SaaS Web App)</h3>
+  <div class="screen-grid">
+
+    <div class="screen-card">
+      <div class="screen-bar">
+        <div class="screen-dot"></div><div class="screen-dot"></div><div class="screen-dot"></div>
+        <span class="screen-bar-title">cloud.edunode.ng — School Overview</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-label">Principal / School Admin View</div>
+        <div class="mock-metric" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+          <div class="mock-metric-item"><div class="mock-metric-val">214</div><div class="mock-metric-lbl">Students</div></div>
+          <div class="mock-metric-item"><div class="mock-metric-val">18</div><div class="mock-metric-lbl">Sessions/day</div></div>
+          <div class="mock-metric-item"><div class="mock-metric-val">68%</div><div class="mock-metric-lbl">Avg Score</div></div>
+          <div class="mock-metric-item"><div class="mock-metric-val">✓</div><div class="mock-metric-lbl">Node Online</div></div>
+        </div>
+        <div class="mock-block w100 h40" style="background:#e0ede8; margin-bottom:8px;"></div>
+        <div class="mock-block w80"></div><div class="mock-block w60"></div>
+      </div>
+    </div>
+
+    <div class="screen-card">
+      <div class="screen-bar">
+        <div class="screen-dot"></div><div class="screen-dot"></div><div class="screen-dot"></div>
+        <span class="screen-bar-title">cloud.edunode.ng — LGA Roll-up</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-label">LGA Education Officer View</div>
+        <div class="mock-block w50 dark h20" style="margin-bottom:10px;"></div>
+        <div class="mock-card"><div class="mock-block w100"></div><div class="mock-block w80"></div><div class="mock-block w60"></div></div>
+        <div class="mock-card" style="border-color:#c9973a;"><div class="mock-block w100"></div><div class="mock-block w70"></div></div>
+        <div class="mock-card"><div class="mock-block w90"></div><div class="mock-block w50"></div></div>
+      </div>
+    </div>
+
+    <div class="screen-card">
+      <div class="screen-bar">
+        <div class="screen-dot"></div><div class="screen-dot"></div><div class="screen-dot"></div>
+        <span class="screen-bar-title">cloud.edunode.ng — State Ministry</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-label">State-level Performance Map</div>
+        <div class="mock-block w100 h60" style="background:#e0ede8; border-radius:3px; margin-bottom:10px;"></div>
+        <div style="display:flex; gap:8px;">
+          <div class="mock-metric-item" style="flex:1;"><div class="mock-metric-val">42</div><div class="mock-metric-lbl">Schools</div></div>
+          <div class="mock-metric-item" style="flex:1;"><div class="mock-metric-val">8.9K</div><div class="mock-metric-lbl">Students</div></div>
+          <div class="mock-metric-item" style="flex:1;"><div class="mock-metric-val">61%</div><div class="mock-metric-lbl">Pass Rate</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-card">
+      <div class="screen-bar">
+        <div class="screen-dot"></div><div class="screen-dot"></div><div class="screen-dot"></div>
+        <span class="screen-bar-title">cloud.edunode.ng — Device Health</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-label">Node Fleet Management</div>
+        <div class="mock-block w60 dark h20" style="margin-bottom:10px;"></div>
+        <div class="mock-card" style="display:flex; justify-content:space-between; align-items:center;">
+          <div><div class="mock-block w60"></div><div class="mock-block w40"></div></div>
+          <div style="background:#e8f5ee; color:#1e4d3a; font-size:9px; padding:3px 8px; border-radius:20px; font-family:monospace;">ONLINE</div>
+        </div>
+        <div class="mock-card" style="display:flex; justify-content:space-between; align-items:center;">
+          <div><div class="mock-block w70"></div><div class="mock-block w50"></div></div>
+          <div style="background:#fff5e0; color:#a07020; font-size:9px; padding:3px 8px; border-radius:20px; font-family:monospace;">STALE</div>
+        </div>
+        <div class="mock-card" style="display:flex; justify-content:space-between; align-items:center;">
+          <div><div class="mock-block w55"></div><div class="mock-block w35"></div></div>
+          <div style="background:#e8f5ee; color:#1e4d3a; font-size:9px; padding:3px 8px; border-radius:20px; font-family:monospace;">ONLINE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sub">Mobile App (React Native — Optional Phase 2)</h3>
+  <p>A lightweight mobile companion app allows students to continue learning at home via downloaded content packs, sync quiz scores when they return to school, and receive push notifications for upcoming exam dates. Teachers can mark attendance and review class performance from their phones.</p>
+</div>
+
+<!-- ===================== SECTION 05 ===================== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Database Schema</h2>
+  </div>
+
+  <h4 class="sub2">Local Database (SQLite on Node)</h4>
+  <div class="schema-grid">
+
+    <div class="schema-table">
+      <div class="schema-table-head">students</div>
+      <div class="schema-field"><span class="schema-pk">id</span><span class="schema-type">uuid PK</span></div>
+      <div class="schema-field"><span>school_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>name</span><span class="schema-type">text</span></div>
+      <div class="schema-field"><span>class_level</span><span class="schema-type">enum</span></div>
+      <div class="schema-field"><span>arm</span><span class="schema-type">varchar</span></div>
+      <div class="schema-field"><span>pin_hash</span><span class="schema-type">text</span></div>
+      <div class="schema-field"><span>created_at</span><span class="schema-type">timestamp</span></div>
+      <div class="schema-field"><span>synced_at</span><span class="schema-type">timestamp</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-table-head">sessions</div>
+      <div class="schema-field"><span class="schema-pk">id</span><span class="schema-type">uuid PK</span></div>
+      <div class="schema-field"><span>student_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>subject_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>content_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>started_at</span><span class="schema-type">timestamp</span></div>
+      <div class="schema-field"><span>ended_at</span><span class="schema-type">timestamp</span></div>
+      <div class="schema-field"><span>duration_sec</span><span class="schema-type">integer</span></div>
+      <div class="schema-field"><span>device_ua</span><span class="schema-type">text</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-table-head">quiz_attempts</div>
+      <div class="schema-field"><span class="schema-pk">id</span><span class="schema-type">uuid PK</span></div>
+      <div class="schema-field"><span>student_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>quiz_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>score</span><span class="schema-type">decimal</span></div>
+      <div class="schema-field"><span>total_questions</span><span class="schema-type">integer</span></div>
+      <div class="schema-field"><span>correct</span><span class="schema-type">integer</span></div>
+      <div class="schema-field"><span>time_taken_sec</span><span class="schema-type">integer</span></div>
+      <div class="schema-field"><span>completed_at</span><span class="schema-type">timestamp</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-table-head">content</div>
+      <div class="schema-field"><span class="schema-pk">id</span><span class="schema-type">uuid PK</span></div>
+      <div class="schema-field"><span>subject_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>title</span><span class="schema-type">text</span></div>
+      <div class="schema-field"><span>type</span><span class="schema-type">enum</span></div>
+      <div class="schema-field"><span>class_level</span><span class="schema-type">enum</span></div>
+      <div class="schema-field"><span>file_path</span><span class="schema-type">text</span></div>
+      <div class="schema-field"><span>curriculum_ref</span><span class="schema-type">text</span></div>
+      <div class="schema-field"><span>version</span><span class="schema-type">integer</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-table-head">teachers</div>
+      <div class="schema-field"><span class="schema-pk">id</span><span class="schema-type">uuid PK</span></div>
+      <div class="schema-field"><span>school_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>name</span><span class="schema-type">text</span></div>
+      <div class="schema-field"><span>email</span><span class="schema-type">text</span></div>
+      <div class="schema-field"><span>subjects</span><span class="schema-type">text[]</span></div>
+      <div class="schema-field"><span>role</span><span class="schema-type">enum</span></div>
+      <div class="schema-field"><span>pin_hash</span><span class="schema-type">text</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-table-head">attendance</div>
+      <div class="schema-field"><span class="schema-pk">id</span><span class="schema-type">uuid PK</span></div>
+      <div class="schema-field"><span>student_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>teacher_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>date</span><span class="schema-type">date</span></div>
+      <div class="schema-field"><span>status</span><span class="schema-type">enum</span></div>
+      <div class="schema-field"><span>period</span><span class="schema-type">integer</span></div>
+    </div>
+  </div>
+
+  <h4 class="sub2">Cloud Database (PostgreSQL)</h4>
+  <div class="schema-grid">
+
+    <div class="schema-table">
+      <div class="schema-table-head">schools</div>
+      <div class="schema-field"><span class="schema-pk">id</span><span class="schema-type">uuid PK</span></div>
+      <div class="schema-field"><span>name</span><span class="schema-type">text</span></div>
+      <div class="schema-field"><span>lga_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>state_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>node_serial</span><span class="schema-type">text UNIQUE</span></div>
+      <div class="schema-field"><span>last_sync</span><span class="schema-type">timestamp</span></div>
+      <div class="schema-field"><span>subscription_tier</span><span class="schema-type">enum</span></div>
+      <div class="schema-field"><span>licence_expires</span><span class="schema-type">date</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-table-head">sync_payloads</div>
+      <div class="schema-field"><span class="schema-pk">id</span><span class="schema-type">uuid PK</span></div>
+      <div class="schema-field"><span>school_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>payload_hash</span><span class="schema-type">text</span></div>
+      <div class="schema-field"><span>received_at</span><span class="schema-type">timestamp</span></div>
+      <div class="schema-field"><span>sessions_count</span><span class="schema-type">integer</span></div>
+      <div class="schema-field"><span>quizzes_count</span><span class="schema-type">integer</span></div>
+      <div class="schema-field"><span>status</span><span class="schema-type">enum</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-table-head">subscriptions</div>
+      <div class="schema-field"><span class="schema-pk">id</span><span class="schema-type">uuid PK</span></div>
+      <div class="schema-field"><span>school_id</span><span class="schema-type">uuid FK</span></div>
+      <div class="schema-field"><span>plan</span><span class="schema-type">enum</span></div>
+      <div class="schema-field"><span>amount_ngn</span><span class="schema-type">decimal</span></div>
+      <div class="schema-field"><span>paid_at</span><span class="schema-type">timestamp</span></div>
+      <div class="schema-field"><span>expires_at</span><span class="schema-type">date</span></div>
+      <div class="schema-field"><span>payment_ref</span><span class="schema-type">text</span></div>
+      <div class="schema-field"><span>payment_method</span><span class="schema-type">enum</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 06 ===================== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Technology Stack</h2>
+  </div>
+
+  <div class="stack-grid">
+    <div class="stack-group">
+      <div class="stack-group-title">Node Software (Local Server)</div>
+      <div class="stack-item"><span class="stack-tech">Raspberry Pi OS</span><span class="stack-why">Lite (headless) Debian-based OS. Minimal footprint, stable, proven in field deployments across Africa.</span></div>
+      <div class="stack-item"><span class="stack-tech">Node.js + Fastify</span><span class="stack-why">Serves the local web app at edu.local. Lightweight, fast, familiar to your existing stack.</span></div>
+      <div class="stack-item"><span class="stack-tech">SQLite + Litestream</span><span class="stack-why">Local database. Litestream streams WAL to S3 when internet available. Same stack as learn2earnhq.</span></div>
+      <div class="stack-item"><span class="stack-tech">Next.js (PWA)</span><span class="stack-why">Student-facing web app served locally. Works in browser, installable as PWA. No app store needed.</span></div>
+      <div class="stack-item"><span class="stack-tech">FFmpeg</span><span class="stack-why">Serves video content efficiently. Supports adaptive bitrate for slow Wi-Fi connections.</span></div>
+      <div class="stack-item"><span class="stack-tech">hostapd + dnsmasq</span><span class="stack-why">Creates the local Wi-Fi hotspot and routes edu.local DNS to the Node IP address.</span></div>
+    </div>
+
+    <div class="stack-group">
+      <div class="stack-group-title">Cloud Platform</div>
+      <div class="stack-item"><span class="stack-tech">Next.js 14</span><span class="stack-why">Admin dashboard SaaS. Server components for fast initial load. App router for clean navigation.</span></div>
+      <div class="stack-item"><span class="stack-tech">PostgreSQL</span><span class="stack-why">Cloud database for schools, subscriptions, sync payloads, and aggregated analytics.</span></div>
+      <div class="stack-item"><span class="stack-tech">AWS EC2 + S3</span><span class="stack-why">EC2 for API server, S3 for content distribution and Litestream backup. Already in your infrastructure.</span></div>
+      <div class="stack-item"><span class="stack-tech">Nginx</span><span class="stack-why">Reverse proxy, virtual hosting for cloud.edunode.ng. Same setup as ResultsPRO.</span></div>
+      <div class="stack-item"><span class="stack-tech">PM2</span><span class="stack-why">Process management for cloud Node.js server. Same pattern as existing deployments.</span></div>
+      <div class="stack-item"><span class="stack-tech">Paystack</span><span class="stack-why">Nigerian payment processing for school subscriptions. Supports card, bank transfer, and USSD payment.</span></div>
+    </div>
+
+    <div class="stack-group">
+      <div class="stack-group-title">AI & Content</div>
+      <div class="stack-item"><span class="stack-tech">Anthropic Claude API</span><span class="stack-why">AI quiz generation, content summarisation, and teacher lesson plan assistance when sync window is open.</span></div>
+      <div class="stack-item"><span class="stack-tech">ffmpeg + yt-dlp</span><span class="stack-why">Content pipeline tool for ingesting and packaging curriculum video content into Node-compatible format.</span></div>
+      <div class="stack-item"><span class="stack-tech">Custom CMS</span><span class="stack-why">Internal tool to manage curriculum packages, tag content by subject/class/term, and push to Node fleets.</span></div>
+    </div>
+
+    <div class="stack-group">
+      <div class="stack-group-title">Hardware & DevOps</div>
+      <div class="stack-item"><span class="stack-tech">Raspberry Pi Imager</span><span class="stack-why">Custom OS image with pre-configured software. Flash-once-and-ship manufacturing workflow.</span></div>
+      <div class="stack-item"><span class="stack-tech">Ansible</span><span class="stack-why">Remote configuration management for Node fleet. Push config changes over SSH when internet is available.</span></div>
+      <div class="stack-item"><span class="stack-tech">Sentry</span><span class="stack-why">Error monitoring on both cloud and Node software. Batches errors and syncs when connected.</span></div>
+      <div class="stack-item"><span class="stack-tech">Tailscale</span><span class="stack-why">Zero-config VPN for secure remote access into Nodes for debugging and support without exposing ports.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 07 ===================== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Business Model</h2>
+  </div>
+
+  <h3 class="sub">Revenue Streams</h3>
+  <table>
+    <tr><th>Stream</th><th>Description</th><th>Price</th><th>Margin</th></tr>
+    <tr><td><strong>Hardware Sale</strong></td><td>One-time Node device sale to school. BOM ~$120, sold at $250. Shipped with 1 yr licence included.</td><td>₦375,000 (~$250)</td><td>~52%</td></tr>
+    <tr><td><strong>Annual SaaS Licence</strong></td><td>Recurring licence per school. Covers cloud dashboard, content updates, support, and sync services.</td><td>₦120,000–360,000/yr</td><td>~85%</td></tr>
+    <tr><td><strong>Hardware Lease</strong></td><td>Node device leased at ₦0 upfront with 2-yr SaaS commitment (higher annual rate). Reduces barrier to adoption.</td><td>₦480,000/yr bundled</td><td>~70%</td></tr>
+    <tr><td><strong>Government/NGO Bulk</strong></td><td>State ministry or NGO buys 50–500 Nodes for distribution to public schools. Volume discount. Setup fees.</td><td>Custom pricing</td><td>~40–60%</td></tr>
+    <tr><td><strong>Premium Content</strong></td><td>Subject-specific exam prep packs (WAEC, JAMB), third-party courseware, vocational content modules.</td><td>₦30,000–80,000/module</td><td>~90%</td></tr>
+  </table>
+
+  <h3 class="sub">Pricing Tiers</h3>
+  <div class="fin-grid">
+    <div class="fin-card">
+      <div class="fin-card-title">Basic Plan — Public Primary</div>
+      <div class="fin-row"><span>Annual Licence</span><span class="fin-val">₦120,000</span></div>
+      <div class="fin-row"><span>Content</span><span class="fin-val">Primary curriculum only</span></div>
+      <div class="fin-row"><span>Dashboard</span><span class="fin-val">School + LGA view</span></div>
+      <div class="fin-row"><span>Support</span><span class="fin-val">Community + email</span></div>
+      <div class="fin-row"><span>Target</span><span class="fin-val">SUBEB/public primary</span></div>
+    </div>
+    <div class="fin-card">
+      <div class="fin-card-title">Standard Plan — Secondary</div>
+      <div class="fin-row"><span>Annual Licence</span><span class="fin-val">₦240,000</span></div>
+      <div class="fin-row"><span>Content</span><span class="fin-val">JSS + SSS full WAEC/NECO prep</span></div>
+      <div class="fin-row"><span>Dashboard</span><span class="fin-val">School + LGA + export</span></div>
+      <div class="fin-row"><span>Support</span><span class="fin-val">Phone + field agent</span></div>
+      <div class="fin-row"><span>Target</span><span class="fin-val">Public/private secondary</span></div>
+    </div>
+    <div class="fin-card">
+      <div class="fin-card-title">Government Plan — Ministry</div>
+      <div class="fin-row"><span>Per-school fee</span><span class="fin-val">₦180,000 (volume)</span></div>
+      <div class="fin-row"><span>Minimum</span><span class="fin-val">50 schools</span></div>
+      <div class="fin-row"><span>Dashboard</span><span class="fin-val">Full state + ministry view</span></div>
+      <div class="fin-row"><span>Support</span><span class="fin-val">Dedicated success manager</span></div>
+      <div class="fin-row"><span>Target</span><span class="fin-val">State MoE, SUBEB, UBEC</span></div>
+    </div>
+    <div class="fin-card">
+      <div class="fin-card-title">NGO/Grant Plan</div>
+      <div class="fin-row"><span>Model</span><span class="fin-val">Cost-recovery pricing</span></div>
+      <div class="fin-row"><span>Subsidy</span><span class="fin-val">Hardware at BOM, SaaS at cost</span></div>
+      <div class="fin-row"><span>Reporting</span><span class="fin-val">Impact dashboards for donors</span></div>
+      <div class="fin-row"><span>Target</span><span class="fin-val">UNICEF, Giga, GIZ, DFID partners</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 08 ===================== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Financial Projections</h2>
+  </div>
+
+  <div class="callout">
+    <strong>Assumptions</strong>
+    Exchange rate: $1 = ₦1,500. Hardware BOM: $120/unit. Content cost: $15K year 1 (licensing/production), scaling to $50K by year 3. 2 full-time staff year 1, growing to 12 by year 3. All figures in NGN millions unless stated.
+  </div>
+
+  <h3 class="sub">5-Year Revenue Projection (NGN Millions)</h3>
+  <table class="proj-table">
+    <tr>
+      <th>Revenue Line</th>
+      <th>Yr 1</th>
+      <th>Yr 2</th>
+      <th>Yr 3</th>
+      <th>Yr 4</th>
+      <th>Yr 5</th>
+    </tr>
+    <tr>
+      <td>Nodes Deployed (units)</td>
+      <td>80</td>
+      <td>300</td>
+      <td>900</td>
+      <td>2,200</td>
+      <td>5,000</td>
+    </tr>
+    <tr>
+      <td>Hardware Revenue</td>
+      <td>30.0</td>
+      <td>112.5</td>
+      <td>337.5</td>
+      <td>825.0</td>
+      <td>1,875.0</td>
+    </tr>
+    <tr>
+      <td>Annual SaaS Licences</td>
+      <td>9.6</td>
+      <td>60.0</td>
+      <td>210.0</td>
+      <td>528.0</td>
+      <td>1,200.0</td>
+    </tr>
+    <tr>
+      <td>Government / Bulk Deals</td>
+      <td>—</td>
+      <td>45.0</td>
+      <td>180.0</td>
+      <td>450.0</td>
+      <td>900.0</td>
+    </tr>
+    <tr>
+      <td>Premium Content Packs</td>
+      <td>1.2</td>
+      <td>9.0</td>
+      <td>45.0</td>
+      <td>132.0</td>
+      <td>375.0</td>
+    </tr>
+    <tr class="total">
+      <td>Total Revenue</td>
+      <td>40.8</td>
+      <td>226.5</td>
+      <td>772.5</td>
+      <td>1,935.0</td>
+      <td>4,350.0</td>
+    </tr>
+    <tr>
+      <td>COGS (Hardware + Content)</td>
+      <td>22.5</td>
+      <td>70.0</td>
+      <td>180.0</td>
+      <td>385.0</td>
+      <td>825.0</td>
+    </tr>
+    <tr>
+      <td>Gross Profit</td>
+      <td>18.3</td>
+      <td>156.5</td>
+      <td>592.5</td>
+      <td>1,550.0</td>
+      <td>3,525.0</td>
+    </tr>
+    <tr>
+      <td>Gross Margin</td>
+      <td>45%</td>
+      <td>69%</td>
+      <td>77%</td>
+      <td>80%</td>
+      <td>81%</td>
+    </tr>
+    <tr>
+      <td>Opex (Staff, Infra, Sales)</td>
+      <td>36.0</td>
+      <td>90.0</td>
+      <td>240.0</td>
+      <td>480.0</td>
+      <td>900.0</td>
+    </tr>
+    <tr class="highlight">
+      <td>EBITDA</td>
+      <td>(17.7)</td>
+      <td>66.5</td>
+      <td>352.5</td>
+      <td>1,070.0</td>
+      <td>2,625.0</td>
+    </tr>
+  </table>
+
+  <h3 class="sub">Unit Economics — Per School</h3>
+  <div class="fin-grid">
+    <div class="fin-card">
+      <div class="fin-card-title">Year 1 Cohort — Hardware Sale Model</div>
+      <div class="fin-row"><span>Node Revenue</span><span class="fin-val">₦375,000</span></div>
+      <div class="fin-row"><span>Node COGS</span><span class="fin-val">(₦180,000)</span></div>
+      <div class="fin-row"><span>Year 1 SaaS</span><span class="fin-val">₦120,000</span></div>
+      <div class="fin-row"><span>SaaS COGS</span><span class="fin-val">(₦18,000)</span></div>
+      <div class="fin-row"><span>Year 1 Gross Profit</span><span class="fin-val">₦297,000</span></div>
+    </div>
+    <div class="fin-card">
+      <div class="fin-card-title">LTV over 5 Years (Avg School)</div>
+      <div class="fin-row"><span>Hardware (once)</span><span class="fin-val">₦375,000</span></div>
+      <div class="fin-row"><span>SaaS (5 yrs)</span><span class="fin-val">₦600,000–1.2M</span></div>
+      <div class="fin-row"><span>Content upsells</span><span class="fin-val">₦75,000–200,000</span></div>
+      <div class="fin-row"><span>LTV</span><span class="fin-val">₦1.0M–1.8M</span></div>
+      <div class="fin-row"><span>CAC (est.)</span><span class="fin-val">₦45,000–90,000</span></div>
+    </div>
+  </div>
+
+  <h3 class="sub">Funding Requirements</h3>
+  <table>
+    <tr><th>Round</th><th>Amount</th><th>Use of Funds</th><th>Timeline</th></tr>
+    <tr><td>Pre-Seed / Grants</td><td>$100,000–150,000</td><td>Hardware prototypes (30 units), content licensing, 2 hires, 3-state pilot</td><td>Month 0–6</td></tr>
+    <tr><td>Seed</td><td>$500,000–750,000</td><td>300+ Node deployment, sales team, content library expansion, government contracts</td><td>Month 12–18</td></tr>
+    <tr><td>Series A</td><td>$3M–5M</td><td>Manufacturing at scale, 3-country West Africa expansion, enterprise sales</td><td>Month 30–36</td></tr>
+  </table>
+
+  <div class="callout rust">
+    <strong>Grant Opportunity</strong>
+    EduNode is a strong fit for UNICEF Giga Initiative funding, the edtech grant programme referenced in the original document you highlighted, GIZ Digital Transformation, and the Tony Elumelu Foundation. Pre-seed capital can realistically come entirely from grants, preserving equity for seed round.
+  </div>
+</div>
+
+<!-- ===================== SECTION 09 ===================== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2 class="section-title">Product Roadmap</h2>
+  </div>
+
+  <div class="roadmap">
+
+    <div class="roadmap-phase">
+      <div class="roadmap-left">
+        <div class="roadmap-period">Months 1–3</div>
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-line"></div>
+      </div>
+      <div class="roadmap-content">
+        <div class="roadmap-phase-title">Phase 0 — Foundation & Prototype</div>
+        <ul class="roadmap-items">
+          <li>Assemble and configure first 5 Raspberry Pi 5 prototype units with custom enclosures</li>
+          <li>Build EduNode OS image: Fastify server, SQLite, local Next.js app, Wi-Fi hotspot</li>
+          <li>Curate and package initial content library: Mathematics, English, Biology for SS1–SS3</li>
+          <li>Build basic student-facing UI: subject browser, video player, past questions engine</li>
+          <li>Build basic cloud dashboard: school overview, sync log, device health ping</li>
+          <li>Establish Paystack integration for school subscriptions</li>
+          <li>Begin content licensing conversations with NERDC and private publishers</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="roadmap-phase">
+      <div class="roadmap-left">
+        <div class="roadmap-period">Months 4–6</div>
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-line"></div>
+      </div>
+      <div class="roadmap-content">
+        <div class="roadmap-phase-title">Phase 1 — Pilot (Lagos & Ogun)</div>
+        <ul class="roadmap-items">
+          <li>Deploy 15–20 Nodes across 3 states — Lagos, Ogun, Kwara — in partnership with school proprietors or state MoE contacts</li>
+          <li>Full subject library live: 9 core subjects, all SS levels, WAEC/NECO past questions 2010–2024</li>
+          <li>Teacher tools: attendance, class performance report, printable worksheets</li>
+          <li>Sync pipeline fully operational: compressed payload → S3 → cloud DB → dashboard</li>
+          <li>First iteration of Litestream-based backup for Node local database</li>
+          <li>Weekly feedback calls with pilot school heads; iterate UI weekly</li>
+          <li>Grant applications submitted: Giga, Tony Elumelu, Shuttleworth Foundation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="roadmap-phase">
+      <div class="roadmap-left">
+        <div class="roadmap-period">Months 7–12</div>
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-line"></div>
+      </div>
+      <div class="roadmap-content">
+        <div class="roadmap-phase-title">Phase 2 — Commercial Launch</div>
+        <ul class="roadmap-items">
+          <li>Public launch of EduNode product with full pricing tiers</li>
+          <li>Grow to 80+ deployed Nodes; target first government bulk deal (LGA or state ministry)</li>
+          <li>AI quiz generation via Claude API active during sync windows</li>
+          <li>LGA officer dashboard and state ministry roll-up views live</li>
+          <li>Hire: 1 field sales agent (Lagos), 1 content editor, 1 hardware/logistics coordinator</li>
+          <li>Custom Node enclosure manufactured locally (Lagos light manufacturing)</li>
+          <li>JSS content library complete: Primary 4–6 and JSS1–JSS3 full curriculum</li>
+          <li>First premium content pack: JAMB/UTME intensive prep — sold as add-on</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="roadmap-phase">
+      <div class="roadmap-left">
+        <div class="roadmap-period">Year 2</div>
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-line"></div>
+      </div>
+      <div class="roadmap-content">
+        <div class="roadmap-phase-title">Phase 3 — Scale & Government Contracts</div>
+        <ul class="roadmap-items">
+          <li>300+ Nodes deployed; first state-wide government contract signed</li>
+          <li>Mobile companion app (React Native) for student home use and offline sync</li>
+          <li>Multi-Node schools: larger schools get 2–3 Nodes for full campus coverage</li>
+          <li>Expand sales to Rivers, Kano, and Kaduna states</li>
+          <li>Impact reporting dashboard for NGO funders (UNICEF, GIZ, USAID-funded schools)</li>
+          <li>Hausa-language content tracks begin (Northern Nigeria push)</li>
+          <li>Series A fundraise initiated</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="roadmap-phase">
+      <div class="roadmap-left">
+        <div class="roadmap-period">Year 3–5</div>
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-line"></div>
+      </div>
+      <div class="roadmap-content">
+        <div class="roadmap-phase-title">Phase 4 — Pan-Africa Expansion</div>
+        <ul class="roadmap-items">
+          <li>Ghana launch: Adapt content to WAEC GH curriculum; partner with local distributor</li>
+          <li>Côte d'Ivoire: French-language content tracks; partnership with Abidjan-based edtech NGO</li>
+          <li>5,000+ Nodes across Nigeria and West Africa by end of Year 5</li>
+          <li>EduNode Data Platform: sell anonymised, aggregated learning data to MoEs and research institutions</li>
+          <li>EduNode for Tertiary: polytechnic and CBT exam prep nodes</li>
+          <li>Potential OEM white-labelling to telcos (MTN, Airtel) bundled with data packages</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== SECTION 10 ===================== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2 class="section-title">Go-To-Market Strategy</h2>
+  </div>
+
+  <div class="gtm-phases">
+    <div class="gtm-phase">
+      <div class="gtm-phase-num">PHASE 01</div>
+      <div class="gtm-phase-title">Network-Led Pilot</div>
+      <div class="gtm-phase-body">Use personal network to get 5 school heads to accept free 3-month pilot. Measure engagement, get testimonials. This is the proof of concept that unlocks everything else. Target private secondary schools in Lagos and Ogun first — faster decision-making than government schools.</div>
+    </div>
+    <div class="gtm-phase">
+      <div class="gtm-phase-num">PHASE 02</div>
+      <div class="gtm-phase-title">Field Sales & Grants</div>
+      <div class="gtm-phase-body">Hire one Lagos-based field sales agent who visits schools in person. This is a relationship-driven sale. Simultaneously apply for every edtech grant available — Giga, Tony Elumelu, Shuttleworth, USAID, GIZ. Grant capital subsidizes commercial traction.</div>
+    </div>
+    <div class="gtm-phase">
+      <div class="gtm-phase-num">PHASE 03</div>
+      <div class="gtm-phase-title">Government Entry Point</div>
+      <div class="gtm-phase-body">ResultsPRO gives you an existing relationship with school administrators. Use that as a warm intro. Target state Universal Basic Education Board (SUBEB) and WAEC intervention programmes as institutional buyers. One state contract can mean 50–200 schools at once.</div>
+    </div>
+  </div>
+
+  <h3 class="sub">Channel Strategy</h3>
+  <table>
+    <tr><th>Channel</th><th>Target</th><th>Approach</th><th>Est. CAC</th></tr>
+    <tr><td>Direct Field Sales</td><td>Private secondary schools</td><td>Field agents, school visits, demo units</td><td>₦45,000–70,000</td></tr>
+    <tr><td>Government Tender</td><td>State ministries, SUBEB</td><td>RFPs, relationships with civil servants, CSO introductions</td><td>₦15,000–30,000 (bulk)</td></tr>
+    <tr><td>NGO Partnerships</td><td>Schools in NGO programmes</td><td>Partner with implementing organizations who already access schools</td><td>₦0 (partner-funded)</td></tr>
+    <tr><td>ResultsPRO Warm Base</td><td>ResultsPRO existing users</td><td>Cross-sell to school admins already using the results platform</td><td>₦10,000–20,000</td></tr>
+    <tr><td>Community & Press</td><td>Proprietors associations</td><td>Speaking at NANS, NAPPS, and state education conferences</td><td>₦5,000–15,000</td></tr>
+  </table>
+</div>
+
+<!-- ===================== SECTION 11 ===================== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">11</span>
+    <h2 class="section-title">Competitive Landscape</h2>
+  </div>
+
+  <div class="comp-grid">
+    <div class="comp-card">
+      <div class="comp-name">RACHEL (World Possible)</div>
+      <div class="comp-tag">NGO / Nonprofit</div>
+      <div class="comp-vs">Generic global content (Khan Academy, Wikipedia). No Nigeria curriculum alignment. No SaaS dashboard. No commercial model. No analytics. Deployed via charities — cannot scale commercially. <strong>EduNode wins on: local content, data layer, business sustainability.</strong></div>
+    </div>
+    <div class="comp-card">
+      <div class="comp-name">Kolibri (Learning Equality)</div>
+      <div class="comp-tag">NGO / Open Source</div>
+      <div class="comp-vs">Excellent offline LMS but entirely donor-funded. No WAEC/NECO alignment. No hardware product. Implemented by NGOs, not commercially. No recurring revenue model for sustainability at scale in Nigeria. <strong>EduNode wins on: commercial viability, local curriculum, hardware simplicity.</strong></div>
+    </div>
+    <div class="comp-card">
+      <div class="comp-name">ULesson / PrepClass</div>
+      <div class="comp-tag">Nigerian Edtech (Online)</div>
+      <div class="comp-vs">Well-funded Nigerian online platforms with excellent curriculum content but require reliable internet and student data subscriptions. Exclude the 100,000+ schools without connectivity. <strong>EduNode wins on: offline-first, schools as buyers (not students), institutional play.</strong></div>
+    </div>
+  </div>
+
+  <div class="callout forest">
+    <strong>The Real Gap</strong>
+    No commercially sustainable, Nigeria-curriculum-aligned, offline-first, school-intelligence platform exists. RACHEL and Kolibri serve the access problem but have no business model. Ulesson and PrepClass serve connected students but miss the schools entirely. EduNode is the first product that sits at the intersection of all three needs.
+  </div>
+
+  <h3 class="sub">EduNode's Moat</h3>
+  <div class="moat-grid">
+    <div class="moat-item">
+      <div class="moat-title">Nigeria Curriculum Lock-In</div>
+      <div class="moat-body">NERDC-aligned content is a deep moat. Licensing, curating, and tagging 6 years of curriculum content is a 12–18 month effort that competitors cannot easily replicate. Schools don't switch when content is embedded.</div>
+    </div>
+    <div class="moat-item">
+      <div class="moat-title">Hardware + Software Bundle</div>
+      <div class="moat-body">Schools don't want to manage separate hardware and software vendors. A single responsible party for the whole system (device + content + dashboard) is a strong retention mechanism.</div>
+    </div>
+    <div class="moat-item">
+      <div class="moat-title">Government Data Relationships</div>
+      <div class="moat-body">Once state ministries are viewing EduNode dashboards for school performance, replacing the platform means losing institutional data continuity. Switching costs grow rapidly with deployment scale.</div>
+    </div>
+    <div class="moat-item">
+      <div class="moat-title">Fleet Effect</div>
+      <div class="moat-body">Every additional Node deployed improves content recommendations, AI quiz generation quality, and benchmark comparisons for all schools. Network value increases with scale, creating a virtuous cycle.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 12 ===================== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">12</span>
+    <h2 class="section-title">Risks & Mitigation</h2>
+  </div>
+
+  <table>
+    <tr><th>Risk</th><th>Severity</th><th>Likelihood</th><th>Mitigation</th></tr>
+    <tr>
+      <td><strong>Hardware theft / damage</strong> — Schools in low-security environments may lose Nodes</td>
+      <td><span class="risk-badge risk-high">High</span></td>
+      <td><span class="risk-badge risk-high">High</span></td>
+      <td>Tamper-evident enclosure, remote disable via cloud (kills auth token on sync), hardware insurance option, school admin accountability clause in licence agreement</td>
+    </tr>
+    <tr>
+      <td><strong>Content licensing cost</strong> — Publishers or NERDC demand high fees for curriculum content</td>
+      <td><span class="risk-badge risk-high">High</span></td>
+      <td><span class="risk-badge risk-med">Med</span></td>
+      <td>Start with openly licensed content (NTI, Khan Academy localized). Commission original content. Negotiate government access for public school use. Build in-house content team early.</td>
+    </tr>
+    <tr>
+      <td><strong>Slow government procurement</strong> — State ministry deals take 12–24 months to close</td>
+      <td><span class="risk-badge risk-med">Med</span></td>
+      <td><span class="risk-badge risk-high">High</span></td>
+      <td>Private school commercial sales sustain cash flow while government deals develop. Never rely on a single government deal in any quarter. Build pipeline of 10x the needed contracts.</td>
+    </tr>
+    <tr>
+      <td><strong>Naira devaluation</strong> — Hardware priced in USD, revenue in NGN</td>
+      <td><span class="risk-badge risk-high">High</span></td>
+      <td><span class="risk-badge risk-med">Med</span></td>
+      <td>Fix hardware price in USD equivalent on contracts. Source locally assembled alternatives as local electronics manufacturing matures. Build NGN currency buffer on hardware orders.</td>
+    </tr>
+    <tr>
+      <td><strong>Cheap Android tablet competition</strong> — Government imports cheap preloaded tablets</td>
+      <td><span class="risk-badge risk-med">Med</span></td>
+      <td><span class="risk-badge risk-med">Med</span></td>
+      <td>EduNode is the software/data layer, not just a device. Position as platform, not device. Support running EduNode software on government-procured tablets as an alternative SKU.</td>
+    </tr>
+    <tr>
+      <td><strong>Low school payment culture</strong> — Schools agree then fail to pay on renewal</td>
+      <td><span class="risk-badge risk-med">Med</span></td>
+      <td><span class="risk-badge risk-med">Med</span></td>
+      <td>Annual payment upfront (not monthly). Content library is locked/degraded on expired licence. Government and NGO schools are fully pre-funded before deployment. Payment via Paystack bank transfer (schools have accounts).</td>
+    </tr>
+    <tr>
+      <td><strong>Rapid connectivity expansion</strong> — Starlink / Giga connects all schools faster than expected</td>
+      <td><span class="risk-badge risk-low">Low</span></td>
+      <td><span class="risk-badge risk-low">Low</span></td>
+      <td>EduNode's value extends beyond offline access — the curriculum library, AI tools, and government analytics layer remain valuable even with internet. Platform evolves to hybrid online/offline.</td>
+    </tr>
+  </table>
+</div>
+
+</div><!-- end .doc -->
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <strong>EduNode</strong>
+  <span>Confidential · Full Product Blueprint · v1.0 · March 2026</span>
+  <span>Built for Africa's 100,000 disconnected schools</span>
+</div>
+
+</body>
+</html>
