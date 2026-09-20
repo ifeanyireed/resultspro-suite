@@ -45,21 +45,26 @@ export default function SharedLoginPage({
       const res = await api.post(loginEndpoint, { email, password });
       const token = res.data.token || res.data.access_token;
       if (token) {
-        setAuth(res.data.user, token);
-        toast.success("Login successful!");
-        
         let targetPath = redirectPath;
         try {
           // Decode JWT to get roles since it's not always in res.data.user
           const payload = JSON.parse(atob(token.split('.')[1]));
           const roles = payload.roles || res.data.user?.roles || [];
           
-          if (roles.includes("TUTOR") || roles.includes("tutor")) targetPath = "/tutor/dashboard";
+          if (!res.data.user.role && roles.length > 0) {
+             const primaryRole = roles.find((r: string) => ["TUTOR", "tutor", "TEACHER", "teacher", "STUDENT", "student", "PARENT", "parent"].includes(r));
+             res.data.user.role = primaryRole || roles[0];
+          }
+          
+          if (roles.includes("TUTOR") || roles.includes("tutor") || roles.includes("TEACHER") || roles.includes("teacher")) targetPath = "/tutor/dashboard";
           else if (roles.includes("STUDENT") || roles.includes("student")) targetPath = "/student/dashboard";
           else if (roles.includes("PARENT") || roles.includes("parent")) targetPath = "/parent/dashboard";
         } catch (e) {
           console.error("Failed to parse token for redirect", e);
         }
+        
+        setAuth(res.data.user, token);
+        toast.success("Login successful!");
         
         router.push(targetPath);
       } else {

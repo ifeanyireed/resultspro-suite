@@ -81,10 +81,29 @@ export default function SharedSignupPage({
       setIsLoading(true);
       try {
         const res = await api.post(`${USERS_API}/api/v1/auth/google`, { idToken: tokenResponse.access_token, app_module: 'tutorspro' });
+        const token = res.data.token || res.data.access_token;
         const user = res.data.user;
-        setAuth(user, res.data.token || res.data.access_token);
+        
+        let targetPath = redirectPath;
+        try {
+          const payloadJwt = JSON.parse(atob(token.split('.')[1]));
+          const roles = payloadJwt.roles || user?.roles || [];
+          
+          if (!user.role && roles.length > 0) {
+             const primaryRole = roles.find((r: string) => ["TUTOR", "tutor", "TEACHER", "teacher", "STUDENT", "student", "PARENT", "parent"].includes(r));
+             user.role = primaryRole || roles[0];
+          }
+
+          if (roles.includes("TUTOR") || roles.includes("tutor") || roles.includes("TEACHER") || roles.includes("teacher")) targetPath = "/tutor/dashboard";
+          else if (roles.includes("STUDENT") || roles.includes("student")) targetPath = "/student/dashboard";
+          else if (roles.includes("PARENT") || roles.includes("parent")) targetPath = "/parent/dashboard";
+        } catch (e) {
+          console.error("Failed to parse token for redirect", e);
+        }
+
+        setAuth(user, token);
         toast.success('Logged in with Google! 🎉');
-        router.push(redirectPath);
+        router.push(targetPath);
       } catch {
         toast.error('Google login failed. Please try again.');
       } finally {
@@ -107,19 +126,25 @@ export default function SharedSignupPage({
       const res = await api.post(signupEndpoint, payload);
       const token = res.data.token || res.data.access_token;
       if (token) {
-        setAuth(res.data.user, token);
-        toast.success("Account created successfully!");
-        
         let targetPath = redirectPath;
         try {
           const payloadJwt = JSON.parse(atob(token.split('.')[1]));
           const roles = payloadJwt.roles || res.data.user?.roles || [];
-          if (roles.includes("TUTOR") || roles.includes("tutor")) targetPath = "/tutor/dashboard";
+          
+          if (!res.data.user.role && roles.length > 0) {
+             const primaryRole = roles.find((r: string) => ["TUTOR", "tutor", "TEACHER", "teacher", "STUDENT", "student", "PARENT", "parent"].includes(r));
+             res.data.user.role = primaryRole || roles[0];
+          }
+
+          if (roles.includes("TUTOR") || roles.includes("tutor") || roles.includes("TEACHER") || roles.includes("teacher")) targetPath = "/tutor/dashboard";
           else if (roles.includes("STUDENT") || roles.includes("student")) targetPath = "/student/dashboard";
           else if (roles.includes("PARENT") || roles.includes("parent")) targetPath = "/parent/dashboard";
         } catch (e) {
           console.error("Failed to parse token for redirect", e);
         }
+
+        setAuth(res.data.user, token);
+        toast.success("Account created successfully!");
 
         router.push(targetPath);
       } else {

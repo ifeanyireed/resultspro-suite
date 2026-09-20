@@ -63,8 +63,10 @@ export default function Navbar() {
 
     const getDashboardUrl = () => {
     if (!user) return '/login';
-    switch (user?.role) {
-      case 'TUTOR': return '/tutor/dashboard';
+    const role = user?.role?.toUpperCase();
+    switch (role) {
+      case 'TUTOR': 
+      case 'TEACHER': return '/tutor/dashboard';
       case 'PARENT': return '/parent/dashboard';
       case 'STUDENT': return '/student/dashboard';
       default: return '/dashboard';
