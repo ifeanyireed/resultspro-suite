@@ -6,19 +6,19 @@ import {
   DocumentArrowDownIcon
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
-import { coursesApi } from '@/lib/api';
+import api from '@/lib/api';
 
 export default function PaymentsPage() {
-  const [summary, setSummary] = useState({ mrr: 0, active_subs: 0, dunning_risk: 0 });
+  const [summary, setSummary] = useState<any>({ mrr: 0, active_subs: 0, dunning_risk: 0 });
   const [transactions, setTransactions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    async function fetchData() {
       try {
         const [sumRes, txRes] = await Promise.all([
-          coursesApi.get('/api/admin/payments/summary'),
-          coursesApi.get('/api/admin/payments/transactions')
+          api.get('/api/v1/admin/payments/summary'),
+          api.get('/api/v1/admin/payments/transactions')
         ]);
         setSummary(sumRes.data);
         setTransactions(txRes.data);

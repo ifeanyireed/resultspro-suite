@@ -466,6 +466,10 @@ func main() {
 	mux.HandleFunc("PUT /api/v1/support/kb/articles/{id}", middleware.RequireAuth(handlers.UpdateKBArticle))
 	mux.HandleFunc("DELETE /api/v1/support/kb/articles/{id}", middleware.RequireAuth(handlers.DeleteKBArticle))
 
+	mux.HandleFunc("GET /api/v1/admin/payments/summary", middleware.RequireAuth(handlers.HandlePlatformPaymentSummary))
+	mux.HandleFunc("GET /api/v1/admin/payments/transactions", middleware.RequireAuth(handlers.HandlePlatformTransactions))
+	mux.HandleFunc("POST /api/webhooks/paystack", handlers.HandlePlatformPaystackWebhook)
+
 	mux.HandleFunc("/api/v1/support/staff/status", middleware.RequireAuth(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			handlers.HandleGetStaffStatus(w, r)

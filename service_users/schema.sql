@@ -547,3 +547,20 @@ CREATE TABLE IF NOT EXISTS support_staff_status (
     is_active BOOLEAN DEFAULT false,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Added for B2C platform transactions
+CREATE TABLE IF NOT EXISTS user_transactions (
+    id VARCHAR(64) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    user_id VARCHAR(64) NOT NULL,
+    module VARCHAR(64) NOT NULL,
+    module_ref VARCHAR(128),
+    amount DECIMAL(10,2) NOT NULL,
+    currency VARCHAR(10) DEFAULT 'NGN',
+    gateway VARCHAR(32) DEFAULT 'paystack',
+    reference VARCHAR(128) UNIQUE NOT NULL,
+    status VARCHAR(32) DEFAULT 'PENDING',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_user_txn_tenant (tenant_id)
+);

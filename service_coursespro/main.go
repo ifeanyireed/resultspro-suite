@@ -105,13 +105,12 @@ func main() {
 		protected.POST("/ai/modules/:moduleId/generate-quiz", h.GenerateQuiz)
 		protected.POST("/admin/ai/generate-quiz-preview", h.GenerateQuizPreview)
 
-		// Admin Payments
-		protected.GET("/admin/payments/summary", h.GetPaymentSummary)
-		protected.GET("/admin/payments/transactions", h.GetTransactions)
+		// Admin Payments logic has been moved to service_users for centralization
 	}
 
 	// Webhooks
-	r.POST("/api/webhooks/paystack", h.PaystackWebhook)
+	// Paystack webhook moved to service_users
+	r.POST("/api/internal/enrollments/payment-callback", h.InternalPaymentCallback)
 
 	port := os.Getenv("PORT")
 	if port == "" {
