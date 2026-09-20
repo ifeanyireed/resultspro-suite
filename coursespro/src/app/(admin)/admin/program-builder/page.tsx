@@ -1,6 +1,62 @@
 'use client';
 
 import React from 'react';
+import { TrendingUp, BookOpen, FileCheck2, MonitorPlay } from 'lucide-react';
+
+function GradientMetricCard({ title, value, subtitle, trend, icon: Icon }: any) {
+  return (
+    <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+      <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
+      <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
+      
+      <div className="flex justify-between items-start z-10">
+        <h3 className="text-xl font-normal text-white">{title}</h3>
+        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm group-hover:bg-white group-hover:text-[#146ef5] transition-colors">
+          {Icon && <Icon className="w-4 h-4" />}
+        </div>
+      </div>
+      <div className="z-10 mt-6">
+        <h2 className="text-5xl font-medium tracking-tight text-white mb-2">{value}</h2>
+        <div className="flex items-center gap-1.5 text-xs text-white/80">
+          {trend && (
+            <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1">
+              {trend}
+            </div>
+          )}
+          <span>{subtitle}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WhiteMetricCard({ title, value, subtitle, trend, icon: Icon, trendColor = 'gray' }: any) {
+  const trendBg = trendColor === 'green' ? 'bg-green-100 text-green-700' : 
+                  trendColor === 'red' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600';
+
+  return (
+    <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+      <div className="flex justify-between items-start">
+        <h3 className="text-xl font-normal text-gray-900">{title}</h3>
+        <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+          {Icon && <Icon className="w-4 h-4" />}
+        </div>
+      </div>
+      <div className="mt-6">
+        <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">{value}</h2>
+        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+          {trend && (
+            <div className={`${trendBg} px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1`}>
+              {trend}
+            </div>
+          )}
+          <span>{subtitle}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 import { 
   PlusIcon,
   Bars3BottomLeftIcon,
@@ -68,6 +124,41 @@ export default function ProgramBuilderPage() {
         </button>
       </div>
 
+            {/* Top-Level KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        <GradientMetricCard
+          title="Total Journeys"
+          value={programs.length}
+          subtitle="Active curriculum programs"
+          trend="+3"
+          icon={TrendingUp}
+        />
+        <WhiteMetricCard
+          title="Published Modules"
+          value={45}
+          subtitle="Content blocks delivered"
+          trend="+12%"
+          trendColor="green"
+          icon={BookOpen}
+        />
+        <WhiteMetricCard
+          title="Video Lessons"
+          value={18}
+          subtitle="Interactive media assets"
+          trend="+5"
+          trendColor="green"
+          icon={MonitorPlay}
+        />
+        <WhiteMetricCard
+          title="Active Quizzes"
+          value={24}
+          subtitle="Assessments currently live"
+          trend="+2"
+          trendColor="green"
+          icon={FileCheck2}
+        />
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Existing Journeys */}
         <div className="md:col-span-2 space-y-4">
@@ -125,59 +216,6 @@ export default function ProgramBuilderPage() {
         </div>
       </div>
 
-      {/* AI Assistant Block */}
-      <div className="mt-6 bg-white rounded-[1.5rem] p-6 md:p-8 shadow-sm border border-gray-100">
-        <div className="mb-6">
-          <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <span className="bg-blue-50 text-[#146ef5] p-1.5 rounded-lg">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-            </span>
-            Gemini Quiz Generator
-          </h3>
-          <p className="text-sm text-gray-500 mt-1">Paste your lesson markdown below, and Gemini will automatically generate a JSON quiz rubric for the students.</p>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-           <div>
-             <textarea 
-               className="w-full h-64 bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm font-mono text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#146ef5] focus:ring-1 focus:ring-[#146ef5] transition-shadow"
-               placeholder="# Lesson Title\n\nContent goes here..."
-               id="markdownInput"
-             />
-             <button 
-               className="mt-4 bg-[#146ef5] hover:bg-[#105bd1] shadow-sm shadow-[#146ef5]/20 text-white font-semibold py-3 px-6 rounded-xl w-full transition-colors flex items-center justify-center gap-2"
-               onClick={async () => {
-                 const btn = document.getElementById('genBtn') as HTMLButtonElement;
-                 btn.innerText = 'Generating...';
-                 try {
-                   const txt = (document.getElementById('markdownInput') as HTMLTextAreaElement).value;
-                   if (!txt) { alert("Paste some markdown first"); btn.innerText = 'Generate with Gemini'; return; }
-                   
-                   const res = await coursesApi.post('/api/admin/ai/generate-quiz-preview', { content: txt });
-                   (document.getElementById('jsonOutput') as HTMLTextAreaElement).value = JSON.stringify(res.data.quiz, null, 2);
-                   
-                   btn.innerText = 'Generate with Gemini';
-                 } catch (e) {
-                   console.error("Failed to generate quiz:", e);
-                   alert("Failed to generate quiz. Make sure the Go backend is running and GEMINI_API_KEY is set.");
-                   btn.innerText = 'Generate with Gemini';
-                 }
-               }}
-               id="genBtn"
-             >
-               Generate with Gemini
-             </button>
-           </div>
-           <div>
-             <textarea 
-               id="jsonOutput"
-               className="w-full h-full min-h-[16rem] bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm font-mono text-gray-800 focus:outline-none focus:border-[#146ef5] focus:ring-1 focus:ring-[#146ef5] transition-shadow"
-               readOnly
-               placeholder="Generated JSON will appear here..."
-             />
-           </div>
-        </div>
-      </div>
-    </>
+          </>
   );
 }
