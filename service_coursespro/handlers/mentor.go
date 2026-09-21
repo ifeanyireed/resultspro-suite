@@ -75,3 +75,41 @@ func (h *Handler) ReviewSubmission(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Submission review recorded successfully"})
 }
+
+func (h *Handler) GetMentorProfile(c *gin.Context) {
+	userID, _ := c.Get("user_id")
+
+	var profile models.MentorProfile
+	if err := db.WithTenant(c).Where("user_id = ?", userID).First(&profile).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Mentor profile not found"})
+		return
+	}
+
+	var assignments []string
+	var cids []string
+
+	type Result struct {
+		ProgramTitle string
+		CohortTitle  string
+		CohortID     string
+	}
+	var results []Result
+
+	db.WithTenant(c).Table("crs_cohort_mentors").
+		Select("p.title as program_title, c.title as cohort_title, c.id as cohort_id").
+		Joins("JOIN crs_cohorts c ON c.id = crs_cohort_mentors.cohort_id").
+		Joins("JOIN crs_programs p ON p.id = c.program_id").
+		Where("crs_cohort_mentors.user_id = ?", userID).
+		Scan(&results)
+
+	for _, r := range results {
+		assignments = append(assignments, r.ProgramTitle+" • "+r.CohortTitle)
+		cids = append(cids, r.CohortID)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"profile":            profile,
+		"cohort_assignments": assignments,
+		"cohort_ids":         cids,
+	})
+}

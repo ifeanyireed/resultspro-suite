@@ -54,6 +54,15 @@ export default function AppLayout({
     enabled: mounted && !!user
   });
 
+  const { data: mentorProfile } = useQuery({
+    queryKey: ['mentor-profile'],
+    queryFn: async () => {
+      const res = await coursesApi.get('/api/mentor/profile');
+      return res.data;
+    },
+    enabled: mounted && !!user
+  });
+
   const [tenantName, setTenantName] = React.useState('MENTOR');
   const [logoUrl, setLogoUrl] = React.useState('/logo.png');
   const [profileName, setProfileName] = React.useState('Loading...');
@@ -181,10 +190,13 @@ export default function AppLayout({
               <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
               
               <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
-                {mounted && <Image src={user?.avatarUrl || `/avatars/character4.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+                {mounted && <Image src={mentorProfile?.profile?.avatar_url || user?.avatarUrl || `/avatars/character4.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
                 {!mounted && <Image src="/avatars/character4.jpg" alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
               </div>
-              <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (user?.name || profileName) : 'Loading...'}</h4>
+              <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (mentorProfile?.profile?.full_name || user?.name || profileName) : 'Loading...'}</h4>
+              {mentorProfile?.cohort_assignments && mentorProfile.cohort_assignments.length > 0 && (
+                <p className="text-xs text-gray-200 mb-1 relative z-10">{mentorProfile.cohort_assignments[0]}</p>
+              )}
               <p className="text-[10px] text-gray-300 mb-6 relative z-10">{mounted ? (user?.email || profileEmail) : 'Loading...'}</p>
               
               <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] transition-colors text-white text-xs font-semibold py-3 rounded-full relative z-10 shadow-md">
@@ -221,10 +233,10 @@ export default function AppLayout({
               </button>
               <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
                 <div className="w-10 h-10 bg-gradient-to-tr from-orange-200 to-orange-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
-                  {mounted && <img src={user?.avatarUrl || `/avatars/character4.jpg`} alt="User Avatar" className="w-full h-full object-cover" />}
+                  {mounted && <img src={mentorProfile?.profile?.avatar_url || user?.avatarUrl || `/avatars/character4.jpg`} alt="User Avatar" className="w-full h-full object-cover" />}
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-sm font-bold text-gray-900 leading-tight">{mounted ? (user?.name || profileName) : 'Loading...'}</p>
+                  <p className="text-sm font-bold text-gray-900 leading-tight">{mounted ? (mentorProfile?.profile?.full_name || user?.name || profileName) : 'Loading...'}</p>
                   <p className="text-xs text-gray-500">{mounted ? (user?.email || profileEmail) : 'Loading...'}</p>
                 </div>
               </div>

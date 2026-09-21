@@ -64,6 +64,7 @@ func main() {
 		protected.GET("/submissions/blocks", h.GetMyBlockSubmissions)
 
 		// Mentor Console
+		protected.GET("/mentor/profile", h.GetMentorProfile)
 		protected.GET("/mentor/submissions", h.GetPendingSubmissions)
 		protected.POST("/mentor/submissions/:id/review", h.ReviewSubmission)
 		protected.GET("/mentor/submissions/blocks", h.GetPendingBlockSubmissions)
