@@ -11,14 +11,24 @@ export async function generateMetadata({ params }: { params: Promise<{ tenant: s
     };
   }
 
-  return {
+  const logoUrl = tenant.dark_logo_url || tenant.logo_url;
+
+  const metadata: Metadata = {
     title: {
       template: `%s | ${tenant.name}`,
       default: tenant.name,
     },
     description: tenant.motto || `Welcome to ${tenant.name}`,
-        icons: (tenant.dark_logo_url || tenant.logo_url) ? [{ url: tenant.dark_logo_url || tenant.logo_url }] : [],
   };
+
+  if (logoUrl) {
+    metadata.icons = [{ url: logoUrl }];
+    metadata.openGraph = {
+      images: [logoUrl],
+    };
+  }
+
+  return metadata;
 }
 
 export default function TenantLayout({
