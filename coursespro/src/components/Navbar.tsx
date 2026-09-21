@@ -78,7 +78,6 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
     { label: 'Store', href: '/store', enabled: true },
   ].filter(i => i.enabled) : [
     { label: 'Cohorts', href: '/cohorts', enabled: true },
-    { label: 'For Enterprise', href: '/enterprise', enabled: true },
     { label: 'Store', href: '/store', enabled: true },
     { label: 'Become an Instructor', href: '/apply', enabled: !hideInstructorLink },
   ].filter(i => i.enabled);
