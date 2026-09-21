@@ -39,7 +39,6 @@ const getFooterSections = (hideInstructorLink: boolean, isPlatform: boolean) => 
       links: [
         { label: 'Browse Cohorts',            href: '/cohorts' },
         { label: 'Enterprise Training',       href: '/enterprise' },
-        { label: 'Pricing & Plans',           href: '/pricing' },
         { label: 'Student Workspace',         href: '/dashboard' },
       ],
     },
