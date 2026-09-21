@@ -162,7 +162,7 @@ export default function CohortsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <UserGroupIcon className="w-4 h-4 text-gray-400" />
+                        <UserGroupIcon className="w-4 h-4 text-gray-400" strokeWidth={2} />
                         <span className="text-gray-900 font-medium">{mentorCount}</span>
                       </div>
                     </td>
