@@ -171,11 +171,6 @@ func (h *Handler) GetMentorSessions(c *gin.Context) {
 		}
 
 		for moduleID, scheduleData := range schedules {
-			liveDate := scheduleData["live"]
-			if liveDate == "" {
-				continue
-			}
-
 			// Get module details
 			var stage models.JourneyStage
 			if err := db.DB.Where("id = ?", moduleID).First(&stage).Error; err != nil {
@@ -184,15 +179,33 @@ func (h *Handler) GetMentorSessions(c *gin.Context) {
 
 			var meetingURL string
 			var contents []map[string]interface{}
+			var hasLiveClass bool
+
 			if stage.ContentsJSON != "" {
 				json.Unmarshal([]byte(stage.ContentsJSON), &contents)
 				for _, item := range contents {
 					if item["type"] == "LIVE_CLASS" {
-						if url, ok := item["url"].(string); ok {
+						hasLiveClass = true
+						if url, ok := item["url"].(string); ok && url != "" {
 							meetingURL = url
 						}
 					}
 				}
+			}
+
+			// Filter out modules that don't have a LIVE_CLASS content block
+			if !hasLiveClass {
+				continue
+			}
+
+			liveDate := scheduleData["live"]
+			if liveDate == "" {
+				// Fallback to the module start date if a specific live date wasn't set
+				liveDate = scheduleData["start"]
+			}
+			
+			if liveDate == "" {
+				continue
 			}
 
 			allSessions = append(allSessions, MentorSessionResponse{
