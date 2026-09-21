@@ -48,7 +48,7 @@ export default function PlatformPricingPage() {
 
   return (
     <main className="min-h-screen bg-light" style={{ background: 'var(--color-nets-light)' }}>
-      <Navbar hideInstructorLink={true} isPlatform={true} />
+      <Navbar hideInstructorLink={true} isPlatform={true} flattenLogo={false} />
       
       {/* Hero Section */}
       <section className="bg-navy text-white relative overflow-hidden" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '8rem' }}>
@@ -166,7 +166,7 @@ export default function PlatformPricingPage() {
         </div>
       </section>
       
-      <Footer hideInstructorLink={true} isPlatform={true} />
+      <Footer hideInstructorLink={true} isPlatform={true} flattenLogo={false} />
     </main>
   );
 }
