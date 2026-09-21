@@ -20,7 +20,17 @@ export default function TenantLogo({
   className = ''
 }: TenantLogoProps) {
   // 1. Base default
-  let activeSrc = logoUrl || "/logo.png";
+  let activeSrc = logoUrl;
+  let isPlatform = !tenantName || tenantName === 'CoursesPRO';
+  
+  if (!activeSrc) {
+    if (isPlatform) {
+      activeSrc = "/logo.png";
+    } else {
+      return null;
+    }
+  }
+
   let filter = 'none';
 
   // 2. Apply dark theme logic if requested

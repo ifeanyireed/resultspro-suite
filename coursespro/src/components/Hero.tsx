@@ -162,63 +162,6 @@ const Hero = ({
           </motion.div>
         </motion.div>
 
-        {/* ── Right — Quick Practice card ── */}
-        <motion.div
-          style={{ gridColumn: 'span 12', display: 'flex' }}
-          className="lg:col-span-5 lg:col-start-8 lg:justify-end justify-center"
-          variants={slideInRight}
-          initial="hidden"
-          animate="visible"
-        >
-          <div
-            id="quote"
-            style={{
-              width: '100%',
-              maxWidth: '420px',
-              background: 'rgba(13,16,96,0.85)',
-              border: '1px solid rgba(255,255,255,0.15)',
-              borderRadius: '4px',
-              padding: '1.5rem',
-              backdropFilter: 'blur(16px)',
-              boxShadow: '0 24px 64px rgba(0,0,0,0.4)',
-              marginTop: '1.5rem'
-            }}
-          >
-            <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1.25rem' }}>
-              <div className="overline-dark" style={{ marginBottom: '0.5rem' }}>Course Directory</div>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', letterSpacing: '-0.01em' }}>
-                Explore open cohorts
-              </h2>
-            </div>
-
-            <form aria-label="Find Course" style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
-              <div>
-                <label className="field-label-dark">Category</label>
-                <select className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }}>
-                  <option value="tech">Software Engineering</option>
-                  <option value="design">Product Design (UI/UX)</option>
-                  <option value="data">Data Science</option>
-                  <option value="marketing">Digital Marketing</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="field-label-dark">Skill Level</label>
-                <select className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }}>
-                  <option value="beginner">Beginner Friendly</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
-                </select>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.75rem', marginTop: '1rem' }}>
-                <Link href="/cohorts" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
-                  Browse Cohorts
-                </Link>
-              </div>
-            </form>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
