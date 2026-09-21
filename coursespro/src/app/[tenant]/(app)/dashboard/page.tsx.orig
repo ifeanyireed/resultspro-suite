@@ -16,41 +16,27 @@ import {
 import { FireIcon as FireSolid, StarIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useEffect, useState } from 'react';
-import { coursesApi } from '@/lib/api';
-import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 export default function LearnerDashboard() {
-const router = useRouter();
+  const router = useRouter();
   const { user } = useAuthStore();
+
   useEffect(() => {
     if (!user) {
       router.push('/login');
     }
   }, [user, router]);
 
-  const { data: dashboardData, isLoading: loading, error } = useQuery({
-    queryKey: ['student-dashboard-summary', user?.id],
-    queryFn: async () => {
-      const res = await coursesApi.get('/api/student/dashboard/summary');
-      return res.data;
-    },
-    enabled: !!user
-  });
-
-  if (!user || loading || !dashboardData) return (
-    <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-    </div>
-  );
+  if (!user) return null;
 
   return (
     <>
       {/* Dashboard Title & Actions */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 mt-2 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Welcome back, {user?.name?.split(' ')[0] || 'Student'}.</h1>
-          <p className="text-sm text-gray-500 mt-1">{dashboardData.cohort_name || 'No Cohort'} • Stage {dashboardData.enrollment?.current_stage || 1}: {dashboardData.current_module?.title || 'Overview'}</p>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Welcome back, Ada.</h1>
+          <p className="text-sm text-gray-500 mt-1">Cohort 12 • Week 4: Advanced State Management</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <button className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
@@ -80,7 +66,7 @@ const router = useRouter();
           
           <div className="z-10">
             <div className="flex items-baseline gap-2">
-              <h2 className="text-5xl font-bold tracking-tight text-white font-sans">{dashboardData.enrollment?.streak_days || 0}</h2>
+              <h2 className="text-5xl font-bold tracking-tight text-white font-sans">12</h2>
               <span className="text-white/80 font-medium">Days</span>
             </div>
             <p className="text-sm text-white/70 mt-2 font-medium">Top 5% in your cohort</p>
@@ -96,11 +82,11 @@ const router = useRouter();
             </div>
           </div>
           <div>
-            <h2 className="text-4xl font-bold tracking-tight text-gray-900 font-sans">{Math.round(dashboardData.enrollment?.progress || 0)}%</h2>
+            <h2 className="text-4xl font-bold tracking-tight text-gray-900 font-sans">34%</h2>
             <div className="w-full bg-gray-100 rounded-full h-2 mt-4 mb-2">
-              <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${dashboardData.enrollment?.progress || 0}%` }}></div>
+              <div className="bg-blue-600 h-2 rounded-full" style={{ width: '34%' }}></div>
             </div>
-            <p className="text-xs text-gray-500 font-medium">Stage {dashboardData.enrollment?.current_stage || 1} of {dashboardData.enrollment?.total_stages || 12}</p>
+            <p className="text-xs text-gray-500 font-medium">Module 4 of 12</p>
           </div>
         </div>
 
@@ -113,10 +99,10 @@ const router = useRouter();
             </div>
           </div>
           <div>
-            <h2 className="text-4xl font-bold tracking-tight text-gray-900 font-sans">{(dashboardData.enrollment?.current_xp || 0).toLocaleString()}</h2>
+            <h2 className="text-4xl font-bold tracking-tight text-gray-900 font-sans">2,450</h2>
             <div className="flex items-center gap-1.5 mt-3">
               <StarIcon className="w-4 h-4 text-yellow-400" />
-              <p className="text-sm font-bold text-gray-700">Level: {dashboardData.enrollment?.level || 'Novice'}</p>
+              <p className="text-sm font-bold text-gray-700">Level: Architect</p>
             </div>
           </div>
         </div>
@@ -131,11 +117,11 @@ const router = useRouter();
             </div>
           </div>
           <div className="z-10">
-            <h4 className="text-xl font-bold text-white mb-1">{dashboardData.upcoming_milestone?.title || "No Upcoming Milestones"}</h4>
-            <p className="text-sm text-slate-400 mb-4">{dashboardData.upcoming_milestone?.description || "Check back later."}</p>
+            <h4 className="text-xl font-bold text-white mb-1">Project Demo Day</h4>
+            <p className="text-sm text-slate-400 mb-4">Presenting to Chidi & Peers</p>
             <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/30 text-blue-300 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider">
               <ClockIcon className="w-4 h-4" />
-              {dashboardData.upcoming_milestone?.time || 'TBD'}
+              Fri, 5:00 PM
             </div>
           </div>
         </div>
@@ -158,9 +144,9 @@ const router = useRouter();
               </span>
             </div>
             
-            <h2 className="text-2xl font-bold text-gray-900 mb-3 tracking-tight">{dashboardData.current_module?.title || "Next Module Pending"}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3 tracking-tight">4.3 Building Custom React Hooks</h2>
             <p className="text-gray-600 leading-relaxed mb-8">
-              {dashboardData.current_module?.description || "No description available for the next module."}
+              Learn how to extract state logic into reusable functions. We'll build a useFetch hook and a useLocalStorage hook to handle persistent data across our application.
             </p>
             
             <div className="bg-indigo-50/50 border border-indigo-100 rounded-xl p-5 mb-8 relative">
@@ -187,7 +173,6 @@ const router = useRouter();
           </div>
 
           {/* Submission Feedback */}
-                    {dashboardData.recent_feedback ? (
           <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
             <h3 className="text-lg font-bold text-gray-900 mb-4">Recent Feedback</h3>
             <div className="border border-green-100 bg-green-50/50 rounded-xl p-5">
@@ -195,18 +180,17 @@ const router = useRouter();
                 <div className="flex items-center gap-3">
                   <img src="/avatars/mentor.jpg" alt="Mentor" className="w-8 h-8 rounded-full object-cover" onError={(e) => e.currentTarget.src='https://ui-avatars.com/api/?name=Chidi&background=10B981&color=fff'} />
                   <div>
-                    <h4 className="text-sm font-bold text-gray-900">{dashboardData.recent_feedback?.status === 'APPROVED' ? 'Approved by' : 'Reviewed by'} {dashboardData.recent_feedback?.mentor_name || 'Mentor'}</h4>
-                    <p className="text-xs text-gray-500">{dashboardData.recent_feedback?.project_name || 'Project'}</p>
+                    <h4 className="text-sm font-bold text-gray-900">Approved by Mentor Chidi</h4>
+                    <p className="text-xs text-gray-500">Project 3: E-commerce Cart</p>
                   </div>
                 </div>
-                <span className={`text-xs font-bold px-2 py-1 rounded ${dashboardData.recent_feedback?.status === 'APPROVED' ? 'bg-green-100 text-green-700' : 'bg-rose-100 text-rose-700'}`}>{dashboardData.recent_feedback?.status === 'APPROVED' ? 'Passed' : 'Revision'}</span>
+                <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Passed</span>
               </div>
               <p className="text-sm text-gray-700 italic border-l-2 border-green-300 pl-3 py-1">
-                "{dashboardData.recent_feedback?.content}"
+                "Great separation of concerns here Ada. Your Redux slice is very clean. One small tip for next time: try using reselect for memoizing your cart total calculations. Otherwise, perfect. 🚀"
               </p>
             </div>
           </div>
-          ) : null}
         </div>
 
         {/* Right Column: Classroom & Cohort */}

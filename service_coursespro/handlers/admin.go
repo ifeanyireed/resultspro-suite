@@ -505,7 +505,7 @@ func (h *Handler) AdminUpdateSettings(c *gin.Context) {
 
 // AdminGetMentorsActivity aggregates batch reporting for mentors
 func (h *Handler) AdminGetMentorsActivity(c *gin.Context) {
-	tenantID, _ := c.Get("tenant_id")
+	_, _ = c.Get("tenant_id")
 	
 	// Example batch reporting data for UI demonstration
 	type ActivityReport struct {
