@@ -79,7 +79,7 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
   ].filter(i => i.enabled) : [
     { label: 'Cohorts', href: '/cohorts', enabled: true },
     { label: 'Store', href: '/store', enabled: true },
-    { label: 'Become an Instructor', href: '/apply', enabled: !hideInstructorLink },
+    { label: 'Become an Instructor', href: '/apply/mentor', enabled: !hideInstructorLink },
   ].filter(i => i.enabled);
 
   const isActive = (href: string) => pathname.startsWith(href) && href !== '/';

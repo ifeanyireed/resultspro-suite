@@ -44,7 +44,7 @@ const getFooterSections = (hideInstructorLink: boolean, isPlatform: boolean) => 
       title: 'Company',
       links: [
         { label: 'About Us',                  href: '/about' },
-        ...(hideInstructorLink ? [] : [{ label: 'Become an Instructor', href: '/apply' }]),
+        ...(hideInstructorLink ? [] : [{ label: 'Become an Instructor', href: '/apply/mentor' }]),
       ],
     },
     {
