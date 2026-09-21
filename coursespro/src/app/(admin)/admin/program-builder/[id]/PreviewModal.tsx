@@ -388,6 +388,34 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                             );
                           })()}
 
+                        {block.type === 'LIVE_CLASS' && (
+                          <div className={`w-full ${isMediaWithoutCard ? 'py-4' : 'p-6 bg-white'}`}>
+                            <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+                              <div className="flex items-start gap-4">
+                                <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+                                  <VideoCameraIcon className="w-6 h-6 text-emerald-600" />
+                                </div>
+                                <div>
+                                  <h3 className="text-lg font-bold text-emerald-900 tracking-tight">Live Class Room</h3>
+                                  <p className="text-emerald-700 text-sm mt-1 mb-2">Join your mentor and cohort peers for this live session.</p>
+                                  {block.url ? (
+                                    <div className="text-xs text-emerald-600/80 font-mono truncate max-w-xs">{block.url}</div>
+                                  ) : (
+                                    <div className="text-xs text-emerald-600/80 italic">Meeting link will be provided by your mentor.</div>
+                                  )}
+                                </div>
+                              </div>
+                              
+                              <button 
+                                className="w-full md:w-auto px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2"
+                                disabled={!block.url}
+                              >
+                                <VideoCameraIcon className="w-5 h-5" />
+                                {block.url ? 'Join Meeting' : 'No Link Yet'}
+                              </button>
+                            </div>
+                          </div>
+                        )}
                         
                         {block.type === 'COMPILER' && (
                           <div className={`w-full h-[500px] relative ${isMediaWithoutCard ? 'rounded-xl overflow-hidden shadow-sm' : 'bg-white'}`}>
