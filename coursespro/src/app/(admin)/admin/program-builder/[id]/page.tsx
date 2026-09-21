@@ -642,6 +642,28 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                   }}
                                 />
                                 <p className="text-[10px] text-gray-400 mt-1">This module will be schedule-able in the Cohort Configurator.</p>
+                                
+                                {item.url && item.url.length > 5 && (
+                                  <div className="mt-4 p-4 rounded-xl border border-emerald-100 bg-emerald-50/50 flex items-center justify-between">
+                                    <div className="flex items-center gap-3 overflow-hidden pr-4">
+                                      <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+                                        <VideoCameraIcon className="w-5 h-5 text-emerald-600" />
+                                      </div>
+                                      <div className="truncate">
+                                        <h4 className="text-sm font-semibold text-emerald-900">Live Class Room</h4>
+                                        <p className="text-xs text-emerald-600 truncate">{item.url}</p>
+                                      </div>
+                                    </div>
+                                    <a 
+                                      href={item.url.startsWith('http') ? item.url : `https://${item.url}`} 
+                                      target="_blank" 
+                                      rel="noopener noreferrer"
+                                      className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-lg shadow-sm transition-colors whitespace-nowrap"
+                                    >
+                                      Test Link
+                                    </a>
+                                  </div>
+                                )}
                               </div>
                             )}
 
