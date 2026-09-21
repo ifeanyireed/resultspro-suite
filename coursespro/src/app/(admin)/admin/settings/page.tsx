@@ -284,8 +284,7 @@ const { data: tenantData, isLoading } = useQuery({
                     {formData.darkLogoUrl ? (
                       <img src={formData.darkLogoUrl} alt="Dark Logo" className="w-full h-full object-contain" />
                     ) : (
-                      <PhotoIcon,
-  BanknotesIcon className="w-6 h-6 text-gray-400 opacity-50" />
+                      <PhotoIcon className="w-6 h-6 text-gray-400 opacity-50" />
                     )}
                   </div>
                   <input type="file" ref={darkFileInputRef} className="hidden" accept="image/*" onChange={handleDarkLogoUpload} />
