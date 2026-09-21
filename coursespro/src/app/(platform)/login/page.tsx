@@ -88,7 +88,7 @@ export default function LoginPage() {
         <div className="relative z-10 w-full h-full flex flex-col justify-between p-16">
           {/* Brand Logo */}
           <div className="flex items-center space-x-3">
-            <TenantLogo theme="dark" height={64} tenantName="CoursesPRO" />
+            <TenantLogo theme="dark" height={40} tenantName="CoursesPRO" />
             <div>
               <h1 className="font-bold text-white text-3xl tracking-tight">CoursesPRO</h1>
               <p className="text-blue-400 font-semibold text-xs uppercase tracking-widest">EDU SUITE</p>
@@ -142,7 +142,7 @@ export default function LoginPage() {
       <div className="w-full lg:w-[45%] bg-white flex items-center justify-center p-8 sm:p-16 relative">
         {/* Mobile Logo overlay */}
         <div className="lg:hidden flex items-center justify-center mb-10 w-full absolute top-8 left-0 right-0">
-           <TenantLogo theme="light" height={64} tenantName="CoursesPRO" />
+           <TenantLogo theme="light" height={40} tenantName="CoursesPRO" />
         </div>
 
         <div className="w-full max-w-md">

@@ -149,8 +149,6 @@ const router = useRouter();
         <div className="lg:col-span-4 flex flex-col gap-6">
           
           <div className="bg-white rounded-[1.5rem] p-6 md:p-8 shadow-sm border border-gray-100 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-1 h-full bg-blue-600"></div>
-            
             <div className="flex items-center gap-2 mb-4">
               <span className="bg-blue-50 text-blue-600 text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">Up Next</span>
               <span className="text-sm font-medium text-gray-500 flex items-center gap-1">
