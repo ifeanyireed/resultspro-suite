@@ -22,6 +22,7 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
     end_date: '',
     capacity: 50,
     price: 0,
+    image_url: '',
     currency: 'NGN',
     program_id: '',
     status: 'DRAFT',
@@ -39,6 +40,7 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
         end_date: cohort.end_date ? new Date(cohort.end_date).toISOString().split('T')[0] : '',
         capacity: cohort.capacity || 50,
         price: cohort.price || 0,
+        image_url: cohort.image_url || '',
         currency: cohort.currency || 'NGN',
         program_id: cohort.program_id || '',
         status: cohort.status || 'DRAFT',
@@ -54,6 +56,7 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
         end_date: '',
         capacity: 50,
         price: 0,
+    image_url: '',
         currency: 'NGN',
         program_id: '',
         status: 'DRAFT',
@@ -72,6 +75,7 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
         duration_weeks: Number(formData.duration_weeks),
         capacity: Number(formData.capacity),
         price: Number(formData.price),
+        image_url: formData.image_url,
         module_schedules_json: cohort?.module_schedules_json || "",
       };
 

@@ -36,6 +36,7 @@ func (h *Handler) AdminCreateCohort(c *gin.Context) {
 		EndDate             time.Time `json:"end_date"`
 		Capacity            int       `json:"capacity"`
 		Price               float64   `json:"price"`
+		ImageURL            string    `json:"image_url"`
 		Currency            string    `json:"currency"`
 		LeadMentorID        string    `json:"lead_mentor_id"`
 		ProgramID           string    `json:"program_id"`
@@ -69,6 +70,7 @@ func (h *Handler) AdminCreateCohort(c *gin.Context) {
 		EndDate:             input.EndDate,
 		Capacity:            input.Capacity,
 		Price:               input.Price,
+		ImageURL:            input.ImageURL,
 		Currency:            input.Currency,
 		LeadMentorID:        leadMentorID,
 		ProgramID:           programID,
@@ -98,6 +100,7 @@ func (h *Handler) AdminUpdateCohort(c *gin.Context) {
 		EndDate             time.Time `json:"end_date"`
 		Capacity            int       `json:"capacity"`
 		Price               float64   `json:"price"`
+		ImageURL            string    `json:"image_url"`
 		Currency            string    `json:"currency"`
 		LeadMentorID        string    `json:"lead_mentor_id"`
 		ProgramID           string    `json:"program_id"`
@@ -120,6 +123,7 @@ func (h *Handler) AdminUpdateCohort(c *gin.Context) {
 		"end_date":              input.EndDate,
 		"capacity":              input.Capacity,
 		"price":                 input.Price,
+		"image_url":             input.ImageURL,
 		"currency":              input.Currency,
 		"status":                input.Status,
 		"module_schedules_json": input.ModuleSchedulesJSON,
