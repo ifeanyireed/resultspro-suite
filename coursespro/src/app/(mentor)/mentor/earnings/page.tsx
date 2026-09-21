@@ -60,51 +60,51 @@ export default function MentorEarnings() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
         {/* Universal Cards */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-sm font-medium text-gray-500">Cleared Balance</h3>
-            <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center"><WalletIcon className="w-4 h-4" /></div>
+        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start z-10">
+            <h3 className="text-xl font-normal text-white">Cleared Balance</h3>
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white"><WalletIcon className="w-4 h-4" strokeWidth={2} /></div>
           </div>
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-1">₦450,000</h2>
-            <p className="text-xs text-emerald-600 font-medium">+₦45,000 this month</p>
+          <div className="z-10">
+            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">₦450k</h2>
+            <p className="text-xs text-blue-100 font-medium">+₦45k this month</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-sm font-medium text-gray-500">Pending Escrow</h3>
-            <div className="w-8 h-8 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center"><BanknotesIcon className="w-4 h-4" /></div>
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-normal text-gray-900">Pending Escrow</h3>
+            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400"><BanknotesIcon className="w-4 h-4" strokeWidth={2} /></div>
           </div>
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-1">₦24,500</h2>
-            <p className="text-xs text-orange-600 font-medium">Awaiting cycle clearance</p>
+            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">₦24.5k</h2>
+            <p className="text-xs text-orange-500 font-medium">Awaiting clearance</p>
           </div>
         </div>
 
         {/* Dynamic Cards based on Model */}
         {payoutModel === 'BASE_PLUS_SLA' && (
           <>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-sm font-medium text-gray-500">Avg. Review Time</h3>
-                <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center"><ClockIcon className="w-4 h-4" /></div>
+            <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+              <div className="flex justify-between items-start">
+                <h3 className="text-xl font-normal text-gray-900">Review Time</h3>
+                <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400"><ClockIcon className="w-4 h-4" strokeWidth={2} /></div>
               </div>
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-1">14 hours</h2>
-                <p className="text-xs text-gray-500 font-medium">Keep under 24h for SLA bonus</p>
+                <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">14h</h2>
+                <p className="text-xs text-gray-500 font-medium">Keep under 24h for bonus</p>
               </div>
             </div>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-sm font-medium text-gray-500">Student Satisfaction</h3>
-                <div className="w-8 h-8 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center"><StarIcon className="w-4 h-4" /></div>
+            <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+              <div className="flex justify-between items-start">
+                <h3 className="text-xl font-normal text-gray-900">Satisfaction</h3>
+                <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400"><StarIcon className="w-4 h-4" strokeWidth={2} /></div>
               </div>
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-1">4.8 / 5.0</h2>
-                <p className="text-xs text-purple-600 font-medium">Top 10% of mentors</p>
+                <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">4.8</h2>
+                <p className="text-xs text-gray-500 font-medium">Average student rating</p>
               </div>
             </div>
           </>
@@ -112,24 +112,24 @@ export default function MentorEarnings() {
 
         {payoutModel === 'PAY_PER_ACTION' && (
           <>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-sm font-medium text-gray-500">Completed Actions</h3>
-                <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center"><CheckCircleIcon className="w-4 h-4" /></div>
+            <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+              <div className="flex justify-between items-start">
+                <h3 className="text-xl font-normal text-gray-900">Graded</h3>
+                <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400"><CheckCircleIcon className="w-4 h-4" strokeWidth={2} /></div>
               </div>
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-1">45 <span className="text-lg font-medium text-gray-400">Reviews</span></h2>
+                <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">45</h2>
                 <p className="text-xs text-gray-500 font-medium">+4 Live Classes held</p>
               </div>
             </div>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-sm font-medium text-gray-500">Available Bounties</h3>
-                <div className="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center"><CurrencyDollarIcon className="w-4 h-4" /></div>
+            <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+              <div className="flex justify-between items-start">
+                <h3 className="text-xl font-normal text-gray-900">Bounties</h3>
+                <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400"><CurrencyDollarIcon className="w-4 h-4" strokeWidth={2} /></div>
               </div>
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-1">₦12,500</h2>
-                <p className="text-xs text-indigo-600 font-medium">Value of pending review queue</p>
+                <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">₦12.5k</h2>
+                <p className="text-xs text-gray-500 font-medium">Value of pending queue</p>
               </div>
             </div>
           </>
@@ -137,24 +137,24 @@ export default function MentorEarnings() {
 
         {payoutModel === 'REVENUE_SHARE' && (
           <>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-sm font-medium text-gray-500">Active Mentees</h3>
-                <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center"><UserGroupIcon className="w-4 h-4" /></div>
+            <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+              <div className="flex justify-between items-start">
+                <h3 className="text-xl font-normal text-gray-900">Mentees</h3>
+                <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400"><UserGroupIcon className="w-4 h-4" strokeWidth={2} /></div>
               </div>
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-1">124</h2>
+                <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">124</h2>
                 <p className="text-xs text-gray-500 font-medium">Across all assigned cohorts</p>
               </div>
             </div>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-sm font-medium text-gray-500">Cohort Completion</h3>
-                <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center"><ChartBarIcon className="w-4 h-4" /></div>
+            <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+              <div className="flex justify-between items-start">
+                <h3 className="text-xl font-normal text-gray-900">Retention</h3>
+                <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400"><ChartBarIcon className="w-4 h-4" strokeWidth={2} /></div>
               </div>
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-1">82%</h2>
-                <p className="text-xs text-emerald-600 font-medium">High retention rate secured</p>
+                <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">82%</h2>
+                <p className="text-xs text-gray-500 font-medium">High retention rate secured</p>
               </div>
             </div>
           </>
@@ -175,7 +175,6 @@ export default function MentorEarnings() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {/* Mock Rows */}
             <tr className="hover:bg-gray-50/50 transition-colors">
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Sep 20, 2026</td>
               <td className="px-6 py-4 text-sm text-gray-900 font-medium">Reviewed 10 Assignments (Python Module)</td>

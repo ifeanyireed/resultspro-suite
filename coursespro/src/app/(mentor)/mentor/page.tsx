@@ -42,10 +42,10 @@ export default function MentorDashboard() {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between aspect-square relative overflow-hidden group">
+        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start z-10">
             <h3 className="text-xl font-normal text-white">Pending Reviews</h3>
-            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white"><DocumentDuplicateIcon className="w-4 h-4"/></div>
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white"><DocumentDuplicateIcon className="w-4 h-4" strokeWidth={2}/></div>
           </div>
           <div className="z-10">
             <h2 className="text-5xl font-medium tracking-tight text-white mb-2">{submissions.length}</h2>
@@ -53,10 +53,10 @@ export default function MentorDashboard() {
         </div>
         
         {payoutsEnabled && (
-          <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group">
+          <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
             <div className="flex justify-between items-start">
               <h3 className="text-xl font-normal text-gray-900">Total Earnings</h3>
-              <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400"><ArrowTrendingUpIcon className="w-4 h-4" /></div>
+              <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400"><ArrowTrendingUpIcon className="w-4 h-4" strokeWidth={2}/></div>
             </div>
             <div>
               <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">₦450k</h2>
