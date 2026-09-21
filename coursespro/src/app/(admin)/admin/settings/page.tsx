@@ -262,8 +262,7 @@ const { data: tenantData, isLoading } = useQuery({
                     {formData.logoUrl ? (
                       <img src={formData.logoUrl} alt="Logo" className="w-full h-full object-contain" />
                     ) : (
-                      <PhotoIcon,
-  BanknotesIcon className="w-6 h-6 text-gray-400" />
+                      <PhotoIcon className="w-6 h-6 text-gray-400" />
                     )}
                   </div>
                   <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleLogoUpload} />
