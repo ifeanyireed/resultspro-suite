@@ -4,6 +4,9 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { IconClock, IconTrendingUp } from '@tabler/icons-react';
+import { serverFetch } from '@/lib/server-api';
+import { COURSES_API } from '@/lib/api';
+import CohortCard from '@/components/CohortCard';
 
 export default async function CohortsPage({ params }: { params: Promise<{ tenant: string }> }) {
   const resolvedParams = await params;
@@ -12,14 +15,18 @@ export default async function CohortsPage({ params }: { params: Promise<{ tenant
   if (!tenant) {
     notFound();
   }
-  const cohorts = [
-    { title: "Fullstack Engineering Sprint", level: "Beginner", duration: "12 Weeks", tag: "Tech" },
-    { title: "Product Design (UI/UX)", level: "Intermediate", duration: "8 Weeks", tag: "Design" },
-    { title: "Data Science & AI", level: "Advanced", duration: "16 Weeks", tag: "Data" },
-    { title: "Growth Marketing", level: "Beginner", duration: "6 Weeks", tag: "Business" },
-    { title: "Backend Architecture", level: "Advanced", duration: "10 Weeks", tag: "Tech" },
-    { title: "Technical Writing", level: "Beginner", duration: "4 Weeks", tag: "Creative" },
-  ];
+  let cohorts = [];
+  try {
+    const res = await serverFetch(`${COURSES_API}/api/public/cohorts`, {
+      headers: { 'X-Tenant-Domain': tenant.slug }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      cohorts = data.cohorts || [];
+    }
+  } catch (err) {
+    console.error("Failed to fetch cohorts", err);
+  }
 
   return (
     <main>
@@ -36,25 +43,10 @@ export default async function CohortsPage({ params }: { params: Promise<{ tenant
       <section className="section-py bg-light">
         <div className="container-nets">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {cohorts.map((cohort, i) => (
-              <div key={i} className="card overflow-hidden">
-                <div className="h-48 bg-slate-200 relative">
-                   <img src="/images/Students1.jpeg" alt={cohort.title} className="w-full h-full object-cover" />
-                   <span className="absolute top-4 right-4 bg-white text-navy px-3 py-1 text-xs font-bold rounded-full">
-                     {cohort.tag}
-                   </span>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl fw-600 mb-3">{cohort.title}</h3>
-                  <div className="flex gap-4 text-sm text-muted mb-6">
-                    <span className="flex items-center gap-1"><IconClock size={16} /> {cohort.duration}</span>
-                    <span className="flex items-center gap-1"><IconTrendingUp size={16} /> {cohort.level}</span>
-                  </div>
-                  <Link href="/signup" className="btn btn-navy w-full text-center block">
-                    Join Cohort
-                  </Link>
-                </div>
-              </div>
+            {cohorts.length === 0 ? (
+              <div className="col-span-3 text-center py-12 text-slate-500">No active cohorts found.</div>
+            ) : cohorts.map((cohort: any) => (
+              <CohortCard key={cohort.id} cohort={cohort} />
             ))}
           </div>
         </div>

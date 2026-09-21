@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
+import { COURSES_API } from '@/lib/api';
 import Link from 'next/link';
 import Image from 'next/image';
 import TenantLogo from '@/components/TenantLogo';
@@ -11,13 +13,59 @@ export default function PlanForm({ tenant }: { tenant: any }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [plan, setPlan] = useState('upfront');
+  const [cohort, setCohort] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchCohort = async () => {
+      const cohortId = Cookies.get('selected_cohort_id');
+      if (!cohortId) return;
+      try {
+        const res = await fetch(`${COURSES_API}/api/public/cohorts/${cohortId}`, {
+          headers: { 'X-Tenant-Domain': tenant.slug }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setCohort(data.cohort);
+        }
+      } catch (err) {}
+    };
+    fetchCohort();
+  }, [tenant.slug]);
+
+  const upfrontPrice = cohort?.price || 150000;
+  const installmentTotal = upfrontPrice * 1.15;
+  const monthlyCost = installmentTotal / 3;
+
 
   const handlePayment = async () => {
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      const cohortId = Cookies.get('selected_cohort_id');
+      if (!cohortId) {
+        router.push('/dashboard');
+        return;
+      }
+      const token = Cookies.get('token');
+      const res = await fetch(`${COURSES_API}/api/payments/intent`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Tenant-Domain': tenant.slug,
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ cohort_id: cohortId, plan_type: plan })
+      });
+      
+      if (res.ok) {
+        Cookies.remove('selected_cohort_id');
+        router.push('/onboarding/orientation');
+      } else {
+        console.error("Payment failed");
+        setIsLoading(false);
+      }
+    } catch (err) {
       setIsLoading(false);
-      router.push('/onboarding/orientation');
-    }, 1500);
+    }
   };
 
   return (

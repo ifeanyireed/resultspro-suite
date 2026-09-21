@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { Mail, Lock, ArrowRight, Loader2, Sparkles, Building2, Users, ShieldCheck, User } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 // import axiosInstance from '@/lib/axiosConfig'; // we can mock the login for now or use this
@@ -27,14 +28,23 @@ export default function SignupForm({ tenant }: { tenant: any }) {
     setError('');
     try {
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-      await axios.post(`${USERS_API}/api/v1/auth/register`, {
+      const res = await axios.post(`${USERS_API}/api/v1/auth/register`, {
         email,
         password,
         first_name: name.split(' ')[0] || '',
         tenant_slug: tenant?.slug
       });
-      // Signup success -> requires verification
-      setShowOTP(true);
+      
+      const token = res.data?.token || res.data?.access_token;
+      if (token) setAuth(res.data.user, token);
+
+      // Check if they came from cohort browsing
+      const selectedCohortId = Cookies.get('selected_cohort_id');
+      if (selectedCohortId) {
+        router.push('/onboarding/plan');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (err: any) {
       setError(err.response?.data?.error || err.response?.data?.message || err.message || 'Signup failed');
     } finally {
@@ -117,6 +127,23 @@ export default function SignupForm({ tenant }: { tenant: any }) {
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-1.5">
+              <label className="block text-sm font-semibold text-slate-700">Full Name</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-slate-400" />
+                </div>
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                  placeholder="Ada Lovelace"
+                />
+              </div>
+            </div>
+
             <div className="space-y-1.5">
               <label className="block text-sm font-semibold text-slate-700">Email Address</label>
               <div className="relative">
