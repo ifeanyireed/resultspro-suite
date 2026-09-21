@@ -113,8 +113,10 @@ func (h *Handler) GetMentorProfile(c *gin.Context) {
 	var settings models.TenantSettings
 	db.DB.Where("tenant_id = ?", tenantID).First(&settings)
 	payoutsEnabled := true
+	payoutModel := "BASE_PLUS_SLA"
 	if settings.TenantID != "" {
 		payoutsEnabled = settings.EnableMentorPayouts
+		payoutModel = settings.PayoutModel
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -122,6 +124,7 @@ func (h *Handler) GetMentorProfile(c *gin.Context) {
 		"cohort_assignments": assignments,
 		"cohort_ids":         cids,
 		"payouts_enabled":    payoutsEnabled,
+		"payout_model":       payoutModel,
 	})
 }
 
