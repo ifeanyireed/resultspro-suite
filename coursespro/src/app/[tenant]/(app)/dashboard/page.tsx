@@ -54,11 +54,11 @@ const router = useRouter();
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <button className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
-            <VideoCameraIcon className="w-4 h-4 text-emerald-500" />
+            <VideoCameraIcon className="w-4 h-4 text-emerald-500" strokeWidth={2} />
             Join Coworking Room
           </button>
           <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-blue-600/20 transition-all flex items-center gap-2">
-            <PlayIcon className="w-4 h-4" />
+            <PlayIcon className="w-4 h-4" strokeWidth={2} />
             Resume Module
           </button>
         </div>
@@ -92,7 +92,7 @@ const router = useRouter();
           <div className="flex justify-between items-start">
             <h3 className="text-lg font-medium text-gray-500">Journey</h3>
             <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-              <BookOpenIcon className="w-5 h-5" />
+              <BookOpenIcon className="w-5 h-5" strokeWidth={2} />
             </div>
           </div>
           <div>
@@ -109,7 +109,7 @@ const router = useRouter();
           <div className="flex justify-between items-start">
             <h3 className="text-lg font-medium text-gray-500">Builder XP</h3>
             <div className="w-10 h-10 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors">
-              <TrophyIcon className="w-5 h-5" />
+              <TrophyIcon className="w-5 h-5" strokeWidth={2} />
             </div>
           </div>
           <div>
@@ -127,14 +127,14 @@ const router = useRouter();
           <div className="flex justify-between items-start z-10">
             <h3 className="text-lg font-medium text-blue-200">Next Milestone</h3>
             <div className="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center">
-              <CodeBracketSquareIcon className="w-5 h-5" />
+              <CodeBracketSquareIcon className="w-5 h-5" strokeWidth={2} />
             </div>
           </div>
           <div className="z-10">
             <h4 className="text-xl font-bold text-white mb-1">{dashboardData.upcoming_milestone?.title || "No Upcoming Milestones"}</h4>
             <p className="text-sm text-slate-400 mb-4">{dashboardData.upcoming_milestone?.description || "Check back later."}</p>
             <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/30 text-blue-300 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider">
-              <ClockIcon className="w-4 h-4" />
+              <ClockIcon className="w-4 h-4" strokeWidth={2} />
               {dashboardData.upcoming_milestone?.time || 'TBD'}
             </div>
           </div>
@@ -152,7 +152,7 @@ const router = useRouter();
             <div className="flex items-center gap-2 mb-4">
               <span className="bg-blue-50 text-blue-600 text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">Up Next</span>
               <span className="text-sm font-medium text-gray-500 flex items-center gap-1">
-                <ClockIcon className="w-4 h-4" /> 45 mins
+                <ClockIcon className="w-4 h-4" strokeWidth={2} /> 45 mins
               </span>
             </div>
             
@@ -163,7 +163,7 @@ const router = useRouter();
             
             <div className="bg-indigo-50/50 border border-indigo-100 rounded-xl p-5 mb-8 relative">
               <div className="absolute -top-3 -right-3 w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center shadow-sm">
-                <SparklesIcon className="w-4 h-4 text-indigo-600" />
+                <SparklesIcon className="w-4 h-4 text-indigo-600" strokeWidth={2} />
               </div>
               <h4 className="text-sm font-bold text-indigo-900 mb-2 flex items-center gap-2">
                 AI Lesson Summary
@@ -179,7 +179,7 @@ const router = useRouter();
             </div>
             
             <button className="w-full bg-gray-900 hover:bg-black text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2">
-              <PlayIcon className="w-5 h-5" />
+              <PlayIcon className="w-5 h-5" strokeWidth={2} />
               Start Lesson
             </button>
           </div>
@@ -270,7 +270,7 @@ const router = useRouter();
           <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
             <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center justify-between">
               Weekly Top Builders
-              <UsersIcon className="w-5 h-5 text-gray-400" />
+              <UsersIcon className="w-5 h-5 text-gray-400" strokeWidth={2} />
             </h3>
             
             <div className="space-y-4">
