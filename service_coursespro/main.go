@@ -106,10 +106,15 @@ func main() {
 		// Admin Mentors
 		protected.GET("/admin/mentors/stats", h.AdminGetMentorsStats)
 		protected.GET("/admin/mentors", h.AdminGetMentors)
-				protected.POST("/admin/mentors/sync", h.SyncMentorProfile)
+		protected.GET("/admin/mentors/activity-report", h.AdminGetMentorsActivity)
+		protected.POST("/admin/mentors/sync", h.SyncMentorProfile)
 		protected.DELETE("/admin/mentors/:id", h.AdminDeleteMentor)
 		protected.PUT("/admin/mentors/:id", h.AdminUpdateMentor)
 		protected.POST("/admin/mentors/invite", h.AdminInviteMentor)
+
+		// Admin Settings (Courses Specific)
+		protected.GET("/admin/settings", h.AdminGetSettings)
+		protected.PUT("/admin/settings", h.AdminUpdateSettings)
 
 		// Store
 		protected.GET("/admin/store", h.AdminGetStoreProducts)

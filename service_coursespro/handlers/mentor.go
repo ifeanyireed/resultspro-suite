@@ -110,10 +110,18 @@ func (h *Handler) GetMentorProfile(c *gin.Context) {
 		cids = append(cids, r.CohortID)
 	}
 
+	var settings models.TenantSettings
+	db.DB.Where("tenant_id = ?", tenantID).First(&settings)
+	payoutsEnabled := true
+	if settings.TenantID != "" {
+		payoutsEnabled = settings.EnableMentorPayouts
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"profile":            profile,
 		"cohort_assignments": assignments,
 		"cohort_ids":         cids,
+		"payouts_enabled":    payoutsEnabled,
 	})
 }
 

@@ -1,4 +1,8 @@
+const fs = require('fs');
+const file = 'coursespro/src/app/(mentor)/mentor/earnings/page.tsx';
+let code = fs.readFileSync(file, 'utf8');
 
+code = `
 "use client";
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -49,3 +53,5 @@ export default function MentorEarnings() {
     </>
   );
 }
+`;
+fs.writeFileSync(file, code);

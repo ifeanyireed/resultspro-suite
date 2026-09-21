@@ -39,6 +39,7 @@ func InitDB() {
 
 	// Auto-migrate CoursesPRO tables
 	_ = DB.AutoMigrate(
+		&models.TenantSettings{},
 		&models.Program{},
 		&models.Cohort{},
 		&models.CohortMentor{},

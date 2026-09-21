@@ -22,6 +22,17 @@ export default function MentorDashboard() {
     }
   });
 
+  
+  const { data: profile } = useQuery({
+    queryKey: ['mentor-profile-dashboard'],
+    queryFn: async () => {
+      const res = await coursesApi.get('/api/mentor/profile');
+      return res.data;
+    }
+  });
+  
+  const payoutsEnabled = profile?.payouts_enabled ?? true;
+
   return (
     <>
       <div className="flex items-end justify-between mb-8 mt-2">
@@ -39,8 +50,8 @@ export default function MentorDashboard() {
           <div className="z-10">
             <h2 className="text-5xl font-medium tracking-tight text-white mb-2">{submissions.length}</h2>
           </div>
-        </div>
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group">
+        </div>)}
+        {payoutsEnabled && (<div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Total Earnings</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400"><ArrowTrendingUpIcon className="w-4 h-4" /></div>
