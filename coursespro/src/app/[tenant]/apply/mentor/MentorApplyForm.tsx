@@ -28,8 +28,12 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-red-600/20 blur-[150px]" />
         
         <div className="relative z-10 w-full h-full flex flex-col justify-between p-16">
-          <div>
+          <div className="flex items-center space-x-3">
             <TenantLogo theme="dark" height={40} logoUrl={tenant?.logo_url} darkLogoUrl={tenant?.dark_logo_url} flattenLogo={tenant?.flatten_logo} tenantName={tenant?.name} />
+            <div>
+              <h1 className="font-bold text-white text-3xl tracking-tight">{tenant?.name || "Tenant"}</h1>
+              <p className="text-red-400 font-semibold text-xs uppercase tracking-widest">INSTRUCTOR APPLICATION</p>
+            </div>
           </div>
 
           <div className="max-w-xl">
@@ -75,8 +79,11 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
 
       {/* Right Panel - Form */}
       <div className="w-full lg:w-[45%] bg-white flex items-center justify-center p-8 sm:p-16 relative h-screen overflow-y-auto">
-        <div className="lg:hidden flex items-center justify-center mb-10 w-full absolute top-8 left-0 right-0">
-           <TenantLogo theme="light" height={40} logoUrl={tenant?.logo_url} darkLogoUrl={tenant?.dark_logo_url} flattenLogo={tenant?.flatten_logo} tenantName={tenant?.name} />
+        <div className="lg:hidden flex items-center justify-center mb-10 w-full absolute top-8 left-0 right-0 z-10 bg-white/80 backdrop-blur-md py-4 border-b border-slate-100">
+          <div className="flex items-center space-x-2">
+            <TenantLogo theme="light" height={32} logoUrl={tenant?.logo_url} darkLogoUrl={tenant?.dark_logo_url} flattenLogo={tenant?.flatten_logo} tenantName={tenant?.name} />
+            <span className="font-bold text-slate-900 text-xl tracking-tight">{tenant?.name || "Tenant"}</span>
+          </div>
         </div>
 
         <div className="w-full max-w-md my-auto pt-12 lg:pt-0">
