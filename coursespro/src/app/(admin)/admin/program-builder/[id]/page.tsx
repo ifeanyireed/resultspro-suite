@@ -634,7 +634,11 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                   onChange={(e) => {
                                      const items = parseContents(mod);
                                      items[index].url = e.target.value;
-                                     handleUpdateContent(mod.id, items);
+                                     setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
+                                  }}
+                                  onBlur={(e) => {
+                                     const items = parseContents(mod);
+                                     handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
                                   }}
                                 />
                                 <p className="text-[10px] text-gray-400 mt-1">This module will be schedule-able in the Cohort Configurator.</p>
