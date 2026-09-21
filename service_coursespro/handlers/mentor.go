@@ -156,12 +156,22 @@ func (h *Handler) GetMentorSessions(c *gin.Context) {
 			continue
 		}
 		
-		var schedules map[string]string
+		var schedules map[string]map[string]string
 		if err := json.Unmarshal([]byte(ch.ModuleSchedulesJSON), &schedules); err != nil {
-			continue
+			// fallback for legacy single string format (just in case)
+			var oldSchedules map[string]string
+			if err2 := json.Unmarshal([]byte(ch.ModuleSchedulesJSON), &oldSchedules); err2 == nil {
+				schedules = make(map[string]map[string]string)
+				for k, v := range oldSchedules {
+					schedules[k] = map[string]string{"live": v}
+				}
+			} else {
+				continue
+			}
 		}
 
-		for moduleID, liveDate := range schedules {
+		for moduleID, scheduleData := range schedules {
+			liveDate := scheduleData["live"]
 			if liveDate == "" {
 				continue
 			}

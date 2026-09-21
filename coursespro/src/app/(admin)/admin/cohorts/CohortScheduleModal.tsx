@@ -12,7 +12,7 @@ interface CohortScheduleModalProps {
 export default function CohortScheduleModal({ isOpen, onClose, onSave, cohort }: CohortScheduleModalProps) {
   const [loading, setLoading] = useState(false);
   const [modules, setModules] = useState<any[]>([]);
-  const [schedules, setSchedules] = useState<Record<string, string>>({}); // module_id -> datetime-local string
+  const [schedules, setSchedules] = useState<Record<string, { start?: string, end?: string, live?: string }>>({});
 
   useEffect(() => {
     if (isOpen && cohort && cohort.program_id) {
@@ -61,15 +61,17 @@ export default function CohortScheduleModal({ isOpen, onClose, onSave, cohort }:
     }
   };
 
-  const handleDateChange = (moduleId: string, dateStr: string) => {
+  const handleDateChange = (moduleId: string, field: 'start' | 'end' | 'live', dateStr: string) => {
     setSchedules(prev => ({
       ...prev,
-      [moduleId]: dateStr
+      [moduleId]: {
+        ...prev[moduleId],
+        [field]: dateStr
+      }
     }));
   };
 
-  // Filter modules to only those containing a LIVE_CLASS content item
-  const liveClassModules = modules.filter(m => {
+  const hasLiveClass = (m: any) => {
     if (!m.contents_json) return false;
     try {
       const parsed = JSON.parse(m.contents_json);
@@ -77,7 +79,7 @@ export default function CohortScheduleModal({ isOpen, onClose, onSave, cohort }:
     } catch (e) {
       return false;
     }
-  });
+  };
 
   return (
     <AnimatePresence>
@@ -87,11 +89,11 @@ export default function CohortScheduleModal({ isOpen, onClose, onSave, cohort }:
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="bg-white rounded-xl shadow-2xl w-full max-w-2xl flex flex-col my-8 max-h-[90vh]"
+            className="bg-white rounded-xl shadow-2xl w-full max-w-3xl flex flex-col my-8 max-h-[90vh]"
           >
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
               <h3 className="text-lg font-semibold text-slate-900">
-                Schedule Live Classes for {cohort.title}
+                Schedule Modules for {cohort.title}
               </h3>
               <button
                 onClick={onClose}
@@ -104,27 +106,58 @@ export default function CohortScheduleModal({ isOpen, onClose, onSave, cohort }:
             <form onSubmit={handleSubmit} className="p-6 overflow-y-auto flex-1">
               {modules.length === 0 ? (
                 <p className="text-sm text-gray-500 text-center py-8">Loading modules or no modules found...</p>
-              ) : liveClassModules.length === 0 ? (
-                <p className="text-sm text-gray-500 text-center py-8">No live classes found in this program. Add a "Live Class" to a module in the Program Builder first.</p>
               ) : (
                 <div className="space-y-4">
-                  <p className="text-sm text-gray-500 mb-4">Set the date and time for each live class module in this cohort.</p>
-                  {liveClassModules.map(m => (
-                    <div key={m.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border border-gray-100 rounded-xl bg-gray-50">
-                      <div>
-                        <h4 className="font-medium text-gray-900">{m.title}</h4>
-                        <p className="text-xs text-gray-500 mt-1">Stage {m.stage_number || m.order_index + 1}</p>
+                  <p className="text-sm text-gray-500 mb-4">Set the start, end, and (optionally) live class dates for each module in this cohort. Start and end dates will feed into the cohort countdown timers.</p>
+                  {modules.map(m => {
+                    const hasLive = hasLiveClass(m);
+                    const modSchedule = schedules[m.id] || {};
+                    return (
+                      <div key={m.id} className="flex flex-col p-4 border border-gray-100 rounded-xl bg-gray-50 space-y-3">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h4 className="font-medium text-gray-900">{m.title}</h4>
+                            <p className="text-xs text-gray-500 mt-1">Stage {m.stage_number || m.order_index + 1}</p>
+                          </div>
+                          {hasLive && (
+                            <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded">HAS LIVE CLASS</span>
+                          )}
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-500 mb-1">Start Date & Time</label>
+                            <input
+                              type="datetime-local"
+                              className="w-full border border-gray-300 rounded-md p-2 text-sm outline-none focus:border-blue-500"
+                              value={modSchedule.start || ''}
+                              onChange={(e) => handleDateChange(m.id, 'start', e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-500 mb-1">End Date & Time</label>
+                            <input
+                              type="datetime-local"
+                              className="w-full border border-gray-300 rounded-md p-2 text-sm outline-none focus:border-blue-500"
+                              value={modSchedule.end || ''}
+                              onChange={(e) => handleDateChange(m.id, 'end', e.target.value)}
+                            />
+                          </div>
+                          {hasLive && (
+                            <div className="md:col-span-2 border-t border-gray-200/60 pt-3 mt-1">
+                              <label className="block text-xs font-medium text-emerald-600 mb-1">Live Class Date & Time</label>
+                              <input
+                                type="datetime-local"
+                                className="w-full md:w-1/2 border border-gray-300 rounded-md p-2 text-sm outline-none focus:border-emerald-500 bg-white"
+                                value={modSchedule.live || ''}
+                                onChange={(e) => handleDateChange(m.id, 'live', e.target.value)}
+                              />
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="mt-3 sm:mt-0">
-                        <input
-                          type="datetime-local"
-                          className="border border-gray-300 rounded-md p-2 text-sm outline-none focus:border-blue-500"
-                          value={schedules[m.id] || ''}
-                          onChange={(e) => handleDateChange(m.id, e.target.value)}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
 
