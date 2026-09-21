@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { coursesApi } from '@/lib/api';
 import { 
@@ -94,7 +96,7 @@ export default function MentorReviews() {
       </div>
 
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between aspect-square relative overflow-hidden group">
           <div className="flex justify-between items-start z-10">
             <h3 className="text-xl font-normal text-white">Pending Reviews</h3>
@@ -126,8 +128,8 @@ export default function MentorReviews() {
           <p className="text-gray-500 text-sm max-w-sm mx-auto">Your queue is completely clear! Take a break or check back later for new submissions.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-white border border-gray-100 rounded-[1.5rem] overflow-hidden shadow-sm h-fit">
+        <>
+        <div className="bg-white border border-gray-100 rounded-[1.5rem] overflow-hidden shadow-sm w-full">
             <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-white">
               <h3 className="font-semibold text-gray-900">Submissions Queue</h3>
               <span className="text-xs font-semibold px-2.5 py-1 bg-amber-50 text-amber-700 rounded-full uppercase tracking-wider">{submissions.length} Pending</span>
@@ -172,8 +174,29 @@ export default function MentorReviews() {
             </div>
           </div>
 
+          <AnimatePresence>
           {selectedSub && (
-            <div className="bg-white rounded-[1.5rem] p-6 border border-gray-100 shadow-sm flex flex-col h-fit sticky top-6">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              <motion.div 
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm"
+                onClick={() => setSelectedSub(null)}
+              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                className="bg-white rounded-[2rem] shadow-2xl w-full max-w-xl overflow-hidden relative z-10 flex flex-col max-h-[90vh]"
+              >
+                <div className="flex justify-between items-center p-6 border-b border-gray-100 shrink-0">
+                  <h3 className="text-xl font-bold text-gray-900">Review Submission</h3>
+                  <button onClick={() => setSelectedSub(null)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                    <XMarkIcon className="w-6 h-6" />
+                  </button>
+                </div>
+                
+                <div className="p-6 overflow-y-auto flex-1">
+
               <div className="mb-6 pb-6 border-b border-gray-100">
                 <div className="flex justify-between items-start mb-2">
                   <div>
@@ -255,11 +278,14 @@ export default function MentorReviews() {
                 >
                   <XCircleIcon className="w-5 h-5" />
                   Request Revision
-                </button>
+                                </button>
               </div>
             </div>
+            </motion.div>
+            </div>
           )}
-        </div>
+          </AnimatePresence>
+        </>
       )}
     </>
   );
