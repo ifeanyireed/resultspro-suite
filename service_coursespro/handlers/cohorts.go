@@ -9,8 +9,18 @@ import (
 )
 
 func (h *Handler) GetPublicCohorts(c *gin.Context) {
+	tenantID := c.GetHeader("X-Tenant-Domain")
+	if tenantID == "" {
+		tenantID = c.Query("tenant_id")
+	}
+
+	if tenantID == "" {
+		c.JSON(http.StatusOK, gin.H{"cohorts": []models.Cohort{}})
+		return
+	}
+
 	var cohorts []models.Cohort
-	db.WithTenant(c).
+	db.DB.Where("tenant_id = ?", tenantID).
 		Select("crs_cohorts.*, (SELECT COUNT(id) FROM crs_enrollments WHERE crs_enrollments.cohort_id = crs_cohorts.id) as enrolled_count").
 		Where("status != ?", "DRAFT").Order("start_date ASC").Find(&cohorts)
 	c.JSON(http.StatusOK, gin.H{"cohorts": cohorts})
@@ -18,10 +28,20 @@ func (h *Handler) GetPublicCohorts(c *gin.Context) {
 
 func (h *Handler) GetCohortDetail(c *gin.Context) {
 	id := c.Param("id")
+	tenantID := c.GetHeader("X-Tenant-Domain")
+	if tenantID == "" {
+		tenantID = c.Query("tenant_id")
+	}
+
+	if tenantID == "" {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Cohort not found"})
+		return
+	}
+
 	var cohort models.Cohort
-	if err := db.WithTenant(c).
+	if err := db.DB.Where("tenant_id = ?", tenantID).
 		Select("crs_cohorts.*, (SELECT COUNT(id) FROM crs_enrollments WHERE crs_enrollments.cohort_id = crs_cohorts.id) as enrolled_count").
-		First(&cohort, "id = ? OR slug = ?", id, id).Error; err != nil {
+		First(&cohort, "(id = ? OR slug = ?)", id, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Cohort not found"})
 		return
 	}
