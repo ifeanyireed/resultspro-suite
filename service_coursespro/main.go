@@ -127,6 +127,9 @@ func main() {
 		protected.POST("/ai/modules/:moduleId/generate-quiz", h.GenerateQuiz)
 		protected.POST("/admin/ai/generate-quiz-preview", h.GenerateQuizPreview)
 
+		// Student Dashboard
+		protected.GET("/student/dashboard/summary", h.GetStudentDashboardSummary)
+
 		// Admin Payments logic has been moved to service_users for centralization
 	}
 
