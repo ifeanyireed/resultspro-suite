@@ -72,6 +72,7 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
         duration_weeks: Number(formData.duration_weeks),
         capacity: Number(formData.capacity),
         price: Number(formData.price),
+        module_schedules_json: cohort?.module_schedules_json || "",
       };
 
       if (cohort?.id) {
