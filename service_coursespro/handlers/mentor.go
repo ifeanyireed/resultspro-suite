@@ -95,11 +95,13 @@ func (h *Handler) GetMentorProfile(c *gin.Context) {
 	}
 	var results []Result
 
-	db.WithTenant(c).Table("crs_cohort_mentors").
+	tenantID, _ := c.Get("tenant_id")
+
+	db.DB.Table("crs_cohort_mentors").
 		Select("p.title as program_title, c.title as cohort_title, c.id as cohort_id").
 		Joins("JOIN crs_cohorts c ON c.id = crs_cohort_mentors.cohort_id").
 		Joins("JOIN crs_programs p ON p.id = c.program_id").
-		Where("crs_cohort_mentors.user_id = ?", userID).
+		Where("crs_cohort_mentors.tenant_id = ? AND crs_cohort_mentors.user_id = ?", tenantID, userID).
 		Scan(&results)
 
 	for _, r := range results {
