@@ -40,12 +40,13 @@ api.interceptors.request.use((config) => {
   const token = typeof window !== 'undefined' ? (Cookies.get('token') || localStorage.getItem('token')) : null;
   const domain = getTenantSlug();
   
+  if (!config.headers) {
+      config.headers = {} as any;
+  }
+  (config.headers as any)['X-Tenant-Domain'] = domain;
+  
   if (token) {
-    if (!config.headers) {
-       config.headers = {} as any;
-    }
     (config.headers as any)['Authorization'] = `Bearer ${token}`;
-    (config.headers as any)['X-Tenant-Domain'] = domain;
   }
   return config;
 });
@@ -88,12 +89,13 @@ coursesApi.interceptors.request.use((config) => {
   const token = typeof window !== 'undefined' ? (Cookies.get('token') || localStorage.getItem('token')) : null;
   const domain = getTenantSlug();
   
+  if (!config.headers) {
+      config.headers = {} as any;
+  }
+  (config.headers as any)['X-Tenant-Domain'] = domain;
+  
   if (token) {
-    if (!config.headers) {
-       config.headers = {} as any;
-    }
     (config.headers as any)['Authorization'] = `Bearer ${token}`;
-    (config.headers as any)['X-Tenant-Domain'] = domain;
   }
   return config;
 });
