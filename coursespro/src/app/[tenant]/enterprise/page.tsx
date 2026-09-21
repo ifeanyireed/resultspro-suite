@@ -1,12 +1,20 @@
+import { notFound } from 'next/navigation';
+import { getTenant } from '@/lib/tenant';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { IconBook, IconBrain, IconTrophy, IconUserPlus } from '@tabler/icons-react';
 
-export default function EnterprisePage() {
+export default async function EnterprisePage({ params }: { params: Promise<{ tenant: string }> }) {
+  const resolvedParams = await params;
+  const tenant = await getTenant(resolvedParams.tenant);
+
+  if (!tenant) {
+    notFound();
+  }
   return (
     <main>
-      <Navbar />
+      <Navbar tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
       
       {/* Enterprise Hero */}
       <section className="section-py bg-navy text-white text-center" style={{ marginTop: "-72px", paddingTop: "calc(5rem + 72px)" }}>
@@ -100,7 +108,7 @@ export default function EnterprisePage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
     </main>
   );
 }

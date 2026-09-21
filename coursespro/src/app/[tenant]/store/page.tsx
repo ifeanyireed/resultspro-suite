@@ -91,7 +91,7 @@ export default async function StorePage({ params }: { params: Promise<{ tenant: 
         </div>
       </section>
 
-      <Footer />
+      <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
     </main>
   );
 }

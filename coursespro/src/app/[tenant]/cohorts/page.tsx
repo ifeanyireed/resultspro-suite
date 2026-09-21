@@ -1,9 +1,17 @@
+import { notFound } from 'next/navigation';
+import { getTenant } from '@/lib/tenant';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { IconClock, IconTrendingUp } from '@tabler/icons-react';
 
-export default function CohortsPage() {
+export default async function CohortsPage({ params }: { params: Promise<{ tenant: string }> }) {
+  const resolvedParams = await params;
+  const tenant = await getTenant(resolvedParams.tenant);
+
+  if (!tenant) {
+    notFound();
+  }
   const cohorts = [
     { title: "Fullstack Engineering Sprint", level: "Beginner", duration: "12 Weeks", tag: "Tech" },
     { title: "Product Design (UI/UX)", level: "Intermediate", duration: "8 Weeks", tag: "Design" },
@@ -15,7 +23,7 @@ export default function CohortsPage() {
 
   return (
     <main>
-      <Navbar />
+      <Navbar tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
       <section className="section-py bg-navy text-white text-center" style={{ marginTop: "-72px", paddingTop: "calc(5rem + 72px)" }}>
         <div className="container-nets max-w-3xl pt-16">
           <h1 className="text-d2 fw-300 mb-6">Browse Open Cohorts</h1>
@@ -51,7 +59,7 @@ export default function CohortsPage() {
           </div>
         </div>
       </section>
-      <Footer />
+      <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
     </main>
   );
 }

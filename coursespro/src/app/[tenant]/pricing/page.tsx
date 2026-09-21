@@ -1,12 +1,20 @@
+import { notFound } from 'next/navigation';
+import { getTenant } from '@/lib/tenant';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { IconCheck } from '@tabler/icons-react';
 
-export default function PricingPage() {
+export default async function PricingPage({ params }: { params: Promise<{ tenant: string }> }) {
+  const resolvedParams = await params;
+  const tenant = await getTenant(resolvedParams.tenant);
+
+  if (!tenant) {
+    notFound();
+  }
   return (
     <main>
-      <Navbar />
+      <Navbar tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
       <section className="section-py bg-navy text-white text-center" style={{ marginTop: "-72px", paddingTop: "calc(5rem + 72px)" }}>
         <div className="container-nets max-w-3xl pt-16">
           <h1 className="text-d2 fw-300 mb-6">Simple, Transparent Pricing</h1>
@@ -64,7 +72,7 @@ export default function PricingPage() {
           </div>
         </div>
       </section>
-      <Footer />
+      <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
     </main>
   );
 }

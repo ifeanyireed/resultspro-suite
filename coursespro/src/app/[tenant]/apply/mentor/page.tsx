@@ -1,11 +1,19 @@
+import { notFound } from 'next/navigation';
+import { getTenant } from '@/lib/tenant';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 
-export default function ApplyPage() {
+export default async function ApplyPage({ params }: { params: Promise<{ tenant: string }> }) {
+  const resolvedParams = await params;
+  const tenant = await getTenant(resolvedParams.tenant);
+
+  if (!tenant) {
+    notFound();
+  }
   return (
     <main>
-      <Navbar />
+      <Navbar tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
       <section className="section-py bg-navy text-white" style={{ marginTop: "-72px", paddingTop: "calc(5rem + 72px)" }}>
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center pt-16">
@@ -49,7 +57,7 @@ export default function ApplyPage() {
           </div>
         </div>
       </section>
-      <Footer />
+      <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
     </main>
   );
 }
