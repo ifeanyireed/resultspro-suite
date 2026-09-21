@@ -39,13 +39,13 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
           <div className="max-w-xl">
             <div className="inline-flex items-center space-x-2 bg-blue-500/10 border border-blue-500/20 text-blue-300 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4" />
-              <span>Oct 15th Cohort Open</span>
+              <span>Applications Open</span>
             </div>
             <h2 className="text-5xl font-bold text-white leading-[1.1] tracking-tight mb-6">
-              Stop watching tutorials. Start shipping code.
+              Master your craft with guided learning.
             </h2>
             <p className="text-slate-400 text-lg leading-relaxed mb-10">
-              12 weeks of mentor-guided, project-based building. Join 24 other professionals and build the portfolio that gets you hired.
+              Join our intensive programs designed to accelerate your career. Build real projects, learn from experts, and connect with peers.
             </p>
 
             <div className="flex space-x-8">
@@ -54,17 +54,17 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
                   <Users className="w-6 h-6 text-blue-400" />
                 </div>
                 <div>
-                  <h4 className="text-white font-semibold text-xl">24 Seats</h4>
-                  <p className="text-slate-400 text-sm">Strictly limited</p>
+                  <h4 className="text-white font-semibold text-xl">Small Cohorts</h4>
+                  <p className="text-slate-400 text-sm">Personalized attention</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden p-1">
-                  <img src="/avatars/mentor.jpg" alt="Mentor" className="w-full h-full rounded-xl object-cover" onError={(e) => e.currentTarget.src='https://ui-avatars.com/api/?name=Chidi+A&background=5546E0&color=fff'} />
+                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+                  <Target className="w-6 h-6 text-purple-400" />
                 </div>
                 <div>
-                  <h4 className="text-white font-semibold text-xl">Mentor Chidi</h4>
-                  <p className="text-slate-400 text-sm">Senior Engineer @ Stripe</p>
+                  <h4 className="text-white font-semibold text-xl">Expert Mentors</h4>
+                  <p className="text-slate-400 text-sm">Industry professionals</p>
                 </div>
               </div>
             </div>
@@ -72,7 +72,7 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
 
           <div className="flex items-center space-x-2 text-slate-500 text-sm font-medium">
             <ShieldCheck className="w-5 h-5 text-emerald-500" />
-            <span>Applications close October 10th</span>
+            <span>Rolling admissions — secure your spot</span>
           </div>
         </div>
       </div>
