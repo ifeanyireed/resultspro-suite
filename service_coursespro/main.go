@@ -41,8 +41,8 @@ func main() {
 	{
 		public.GET("/cohorts", h.GetPublicCohorts)
 		public.GET("/cohorts/:id", h.GetCohortDetail)
-				public.GET("/portfolio/:username", h.GetPublicPortfolio)
-		
+		public.GET("/portfolio/:username", h.GetPublicPortfolio)
+
 		// Store
 		public.GET("/store", h.PublicGetStoreProducts)
 		public.GET("/store/:id", h.PublicGetStoreProduct)
@@ -56,6 +56,7 @@ func main() {
 		// Journeys & Modules
 		protected.GET("/cohorts/:id/journey", h.GetCohortJourney)
 		protected.POST("/modules/:id/progress", h.UpdateModuleProgress)
+		protected.POST("/payments/intent", h.CreatePaymentIntent)
 
 		// Projects & Submissions
 		protected.POST("/projects/submit", h.SubmitProject)
@@ -102,7 +103,7 @@ func main() {
 		protected.DELETE("/admin/modules/:id", h.AdminDeleteModule)
 
 		protected.GET("/admin/enrollments", h.AdminGetEnrollments)
-		
+
 		// Admin Mentors
 		protected.GET("/admin/mentors/stats", h.AdminGetMentorsStats)
 		protected.GET("/admin/mentors", h.AdminGetMentors)
@@ -121,7 +122,6 @@ func main() {
 		protected.POST("/admin/store", h.AdminCreateStoreProduct)
 		protected.PUT("/admin/store/:id", h.AdminUpdateStoreProduct)
 		protected.DELETE("/admin/store/:id", h.AdminDeleteStoreProduct)
-
 
 		// AI Features
 		protected.POST("/ai/modules/:moduleId/generate-quiz", h.GenerateQuiz)

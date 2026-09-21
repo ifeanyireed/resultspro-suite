@@ -131,10 +131,8 @@ func (h *Handler) AdminGetMentors(c *gin.Context) {
 		})
 	}
 
-
 	c.JSON(http.StatusOK, gin.H{"mentors": response})
 }
-
 
 // AdminUpdateMentor updates a mentor profile and their cohort assignments
 func (h *Handler) AdminUpdateMentor(c *gin.Context) {
@@ -165,7 +163,7 @@ func (h *Handler) AdminUpdateMentor(c *gin.Context) {
 	if input.CohortIDs != nil {
 		// Clear existing
 		db.WithTenant(c).Where("user_id = ?", userID).Delete(&models.CohortMentor{})
-		
+
 		// Insert new
 		for _, cid := range input.CohortIDs {
 			db.WithTenant(c).Create(&models.CohortMentor{
@@ -179,7 +177,6 @@ func (h *Handler) AdminUpdateMentor(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Mentor updated successfully"})
 }
-
 
 // AdminInviteMentor invites an existing user to become a mentor via email
 func (h *Handler) AdminInviteMentor(c *gin.Context) {

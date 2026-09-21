@@ -42,6 +42,8 @@ CREATE TABLE IF NOT EXISTS crs_cohorts (
     duration_weeks INTEGER DEFAULT 12,
     start_date TIMESTAMPTZ,
     end_date TIMESTAMPTZ,
+    image_url VARCHAR(512),
+    price DECIMAL(10,2) DEFAULT 0,
     capacity INTEGER DEFAULT 50,
     enrolled_count INTEGER DEFAULT 0,
     price DECIMAL(10,2) DEFAULT 0,

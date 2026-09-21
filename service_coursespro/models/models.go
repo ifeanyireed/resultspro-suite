@@ -18,25 +18,26 @@ type Program struct {
 
 // Cohort (Instance of a Program)
 type Cohort struct {
-	ID            string    `gorm:"primaryKey;size:64" json:"id"`
-	TenantID      string    `gorm:"size:191;index;not null" json:"tenant_id"`
-	ProgramID     *string   `gorm:"size:64;index" json:"program_id"`
-	Slug          string    `gorm:"unique;size:128;not null" json:"slug"`
-	Title         string    `gorm:"size:255;not null" json:"title"`
-	Subtitle      string    `gorm:"size:255" json:"subtitle"`
-	Description   string    `gorm:"type:text" json:"description"`
-	DurationWeeks int       `gorm:"default:12" json:"duration_weeks"`
-	StartDate     time.Time `json:"start_date"`
-	EndDate       time.Time `json:"end_date"`
-	Capacity      int       `gorm:"default:50" json:"capacity"`
-	EnrolledCount int       `gorm:"default:0" json:"enrolled_count"`
-	Price         float64   `gorm:"type:decimal(10,2);default:0" json:"price"`
-	Currency      string    `gorm:"size:10;default:'NGN'" json:"currency"`
-	LeadMentorID  *string   `gorm:"size:64;index" json:"lead_mentor_id"`
-	Status        string    `gorm:"size:32;default:'ENROLLING'" json:"status"`
-	ModuleSchedulesJSON string `gorm:"type:text" json:"module_schedules_json"`
-	CreatedAt     time.Time `json:"created_at"`
-	UpdatedAt     time.Time `json:"updated_at"`
+	ID                  string    `gorm:"primaryKey;size:64" json:"id"`
+	TenantID            string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	ProgramID           *string   `gorm:"size:64;index" json:"program_id"`
+	Slug                string    `gorm:"unique;size:128;not null" json:"slug"`
+	Title               string    `gorm:"size:255;not null" json:"title"`
+	Subtitle            string    `gorm:"size:255" json:"subtitle"`
+	Description         string    `gorm:"type:text" json:"description"`
+	DurationWeeks       int       `gorm:"default:12" json:"duration_weeks"`
+	StartDate           time.Time `json:"start_date"`
+	EndDate             time.Time `json:"end_date"`
+	Capacity            int       `gorm:"default:50" json:"capacity"`
+	EnrolledCount       int       `gorm:"default:0" json:"enrolled_count"`
+	Price               float64   `gorm:"type:decimal(10,2);default:0" json:"price"`
+	Currency            string    `gorm:"size:10;default:'NGN'" json:"currency"`
+	LeadMentorID        *string   `gorm:"size:64;index" json:"lead_mentor_id"`
+	Status              string    `gorm:"size:32;default:'ENROLLING'" json:"status"`
+	ModuleSchedulesJSON string    `gorm:"type:text" json:"module_schedules_json"`
+	ImageURL            string    `gorm:"size:512" json:"image_url"`
+	CreatedAt           time.Time `json:"created_at"`
+	UpdatedAt           time.Time `json:"updated_at"`
 
 	Program       *Program       `gorm:"foreignKey:ProgramID" json:"program,omitempty"`
 	CohortMentors []CohortMentor `gorm:"foreignKey:CohortID" json:"cohort_mentors,omitempty"`

@@ -62,7 +62,7 @@ func (h *Handler) ReviewSubmission(c *gin.Context) {
 				"current_xp":           gorm.Expr("current_xp + 500"),
 			})
 	}
-	
+
 	// Update mentor stats
 	db.WithTenant(c).Model(&models.MentorProfile{}).Where("user_id = ?", mID).Updates(map[string]interface{}{
 		"total_reviews":   gorm.Expr("total_reviews + 1"),
@@ -166,7 +166,7 @@ func (h *Handler) GetMentorSessions(c *gin.Context) {
 		if ch.ModuleSchedulesJSON == "" || ch.ModuleSchedulesJSON == "{}" {
 			continue
 		}
-		
+
 		var schedules map[string]map[string]string
 		if err := json.Unmarshal([]byte(ch.ModuleSchedulesJSON), &schedules); err != nil {
 			// fallback for legacy single string format (just in case)
@@ -214,7 +214,7 @@ func (h *Handler) GetMentorSessions(c *gin.Context) {
 				// Fallback to the module start date if a specific live date wasn't set
 				liveDate = scheduleData["start"]
 			}
-			
+
 			if liveDate == "" {
 				continue
 			}

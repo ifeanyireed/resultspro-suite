@@ -33,12 +33,12 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		Description string `json:"description"`
 		Duration    string `json:"duration"`
 	}
-	
+
 	var stage models.JourneyStage
 	if enrollment.CurrentStageNumber > 0 {
 		db.DB.Where("tenant_id = ? AND stage_number = ?", tenantID, enrollment.CurrentStageNumber).First(&stage)
 	}
-	
+
 	var module models.JourneyModule
 	var currentModule *ModuleData
 	if stage.ID != "" {
@@ -66,7 +66,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		mentorName := "Mentor"
 		if submission.MentorID != nil {
 			// normally join or fetch user
-			mentorName = "Your Mentor" 
+			mentorName = "Your Mentor"
 		}
 
 		feedback = gin.H{
@@ -90,7 +90,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 	if totalStages == 0 {
 		totalStages = 12 // Prevent division by zero for UI
 	}
-	
+
 	progress := float64(0)
 	if enrollment.CurrentStageNumber > 0 {
 		progress = float64(enrollment.CurrentStageNumber) / float64(totalStages) * 100
@@ -105,9 +105,9 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 			"current_stage": enrollment.CurrentStageNumber,
 			"total_stages":  totalStages,
 		},
-		"cohort_name": cohort.Title,
-		"current_module": currentModule,
-		"recent_feedback": feedback,
+		"cohort_name":        cohort.Title,
+		"current_module":     currentModule,
+		"recent_feedback":    feedback,
 		"upcoming_milestone": nil, // No database model for this yet, so explicitly null
 	})
 }

@@ -451,7 +451,6 @@ func (h *Handler) AdminGetProgramStages(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"stages": stages})
 }
 
-
 func (h *Handler) AdminDeleteMentor(c *gin.Context) {
 	userID := c.Param("id")
 	if err := db.WithTenant(c).Where("user_id = ?", userID).Delete(&models.MentorProfile{}).Error; err != nil {
@@ -465,14 +464,14 @@ func (h *Handler) AdminDeleteMentor(c *gin.Context) {
 func (h *Handler) AdminGetSettings(c *gin.Context) {
 	tenantID, _ := c.Get("tenant_id")
 	var settings models.TenantSettings
-	
+
 	if err := db.DB.Where("tenant_id = ?", tenantID).First(&settings).Error; err != nil {
 		// Return defaults
 		settings = models.TenantSettings{
-			TenantID: tenantID.(string),
+			TenantID:            tenantID.(string),
 			EnableMentorPayouts: true,
-			PayoutModel: "BASE_PLUS_SLA",
-			PayoutConfigJSON: "{}",
+			PayoutModel:         "BASE_PLUS_SLA",
+			PayoutConfigJSON:    "{}",
 		}
 	}
 	c.JSON(http.StatusOK, settings)
@@ -486,7 +485,7 @@ func (h *Handler) AdminUpdateSettings(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	
+
 	var settings models.TenantSettings
 	if err := db.DB.Where("tenant_id = ?", tenantID).First(&settings).Error; err != nil {
 		req.TenantID = tenantID.(string)
@@ -494,19 +493,19 @@ func (h *Handler) AdminUpdateSettings(c *gin.Context) {
 		c.JSON(http.StatusOK, req)
 		return
 	}
-	
+
 	settings.EnableMentorPayouts = req.EnableMentorPayouts
 	settings.PayoutModel = req.PayoutModel
 	settings.PayoutConfigJSON = req.PayoutConfigJSON
 	db.DB.Save(&settings)
-	
+
 	c.JSON(http.StatusOK, settings)
 }
 
 // AdminGetMentorsActivity aggregates batch reporting for mentors
 func (h *Handler) AdminGetMentorsActivity(c *gin.Context) {
 	_, _ = c.Get("tenant_id")
-	
+
 	// Example batch reporting data for UI demonstration
 	type ActivityReport struct {
 		MentorID        string `json:"mentor_id"`
@@ -516,18 +515,18 @@ func (h *Handler) AdminGetMentorsActivity(c *gin.Context) {
 		LiveClasses     int    `json:"live_classes_held"`
 		EstimatedPayout string `json:"estimated_payout"`
 	}
-	
+
 	var reports []ActivityReport
 	// Note: in a real implementation, you'd aggregate this from ProjectSubmission/BlockSubmission and crs_cohort_mentors
 	// Mocking for now to demonstrate the API
 	reports = append(reports, ActivityReport{
-		MentorID: "mentor_1",
-		MentorName: "Tolu Olayinka",
-		ReviewsDone: 45,
-		CohortsManaged: 2,
-		LiveClasses: 4,
+		MentorID:        "mentor_1",
+		MentorName:      "Tolu Olayinka",
+		ReviewsDone:     45,
+		CohortsManaged:  2,
+		LiveClasses:     4,
 		EstimatedPayout: "₦45,000",
 	})
-	
+
 	c.JSON(http.StatusOK, gin.H{"activity_reports": reports})
 }

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	
+
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -72,7 +72,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			}
 
 			tenantData, exists := tenantsClaim[domain].(map[string]interface{})
-			
+
 			// If the exact requested domain isn't in their JWT (e.g. testing on a generic Render URL),
 			// gracefully fallback to the very first tenant they DO have access to.
 			if !exists {
