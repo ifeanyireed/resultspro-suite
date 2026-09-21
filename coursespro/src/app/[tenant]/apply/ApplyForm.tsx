@@ -130,8 +130,8 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <Briefcase className="h-4 w-4 text-slate-400" />
                 </div>
-                <select required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all appearance-none">
-                  <option value="" disabled selected>Select an option</option>
+                <select required defaultValue="" className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all appearance-none">
+                  <option value="" disabled>Select an option</option>
                   <option value="employed_tech">Employed in Tech</option>
                   <option value="employed_non_tech">Employed outside Tech</option>
                   <option value="student">Student / Recent Grad</option>
