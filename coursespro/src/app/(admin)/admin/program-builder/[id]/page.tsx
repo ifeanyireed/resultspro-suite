@@ -24,7 +24,7 @@ import { PreviewModal } from './PreviewModal';
 
 export type ContentItem = {
   id: string;
-  type: 'TEXT' | 'VIDEO' | 'AUDIO' | 'PDF' | 'QUIZ' | 'HTML' | 'ASSIGNMENT' | 'PPT' | 'COMPILER';
+  type: 'TEXT' | 'VIDEO' | 'AUDIO' | 'PDF' | 'QUIZ' | 'HTML' | 'ASSIGNMENT' | 'PPT' | 'COMPILER' | 'LIVE_CLASS';
   title?: string;
   content?: string;
   url?: string;
@@ -623,6 +623,24 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                               </div>
                             )}
 
+                            {item.type === 'LIVE_CLASS' && (
+                              <div className="w-full text-left" onClick={e => e.stopPropagation()}>
+                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><VideoCameraIcon className="w-4 h-4 text-emerald-500"/> Meeting URL (Optional, fallback if not set per cohort)</label>
+                                <input 
+                                  type="text" 
+                                  className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-emerald-500 outline-none"
+                                  placeholder="https://zoom.us/j/..."
+                                  value={item.url || ''}
+                                  onChange={(e) => {
+                                     const items = parseContents(mod);
+                                     items[index].url = e.target.value;
+                                     handleUpdateContent(mod.id, items);
+                                  }}
+                                />
+                                <p className="text-[10px] text-gray-400 mt-1">This module will be schedule-able in the Cohort Configurator.</p>
+                              </div>
+                            )}
+
                             {item.type === 'ASSIGNMENT' && (
                               <div className="w-full text-left" onClick={e => e.stopPropagation()}>
                                 <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg> Assignment Instructions</label>
@@ -702,11 +720,12 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                  <option value="VIDEO">Video</option>
                                  <option value="AUDIO">Audio</option>
                                  <option value="PDF">PDF Document</option>
-<option value="HTML">HTML Embed</option>
+                                 <option value="HTML">HTML Embed</option>
                                  <option value="QUIZ">Quiz</option>
                                  <option value="ASSIGNMENT">Assignment</option>
                                  <option value="PPT">Presentation</option>
-                                 <option value="COMPILER">Compiler</option>
+                                 <option value="COMPILER">Code Compiler</option>
+                                 <option value="LIVE_CLASS">Live Class</option>
                                </select>
                             </div>
 

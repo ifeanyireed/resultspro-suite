@@ -34,6 +34,7 @@ type Cohort struct {
 	Currency      string    `gorm:"size:10;default:'NGN'" json:"currency"`
 	LeadMentorID  *string   `gorm:"size:64;index" json:"lead_mentor_id"`
 	Status        string    `gorm:"size:32;default:'ENROLLING'" json:"status"`
+	ModuleSchedulesJSON string `gorm:"type:text" json:"module_schedules_json"`
 	CreatedAt     time.Time `json:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at"`
 

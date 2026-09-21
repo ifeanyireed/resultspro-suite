@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 
@@ -114,4 +115,84 @@ func (h *Handler) GetMentorProfile(c *gin.Context) {
 		"cohort_assignments": assignments,
 		"cohort_ids":         cids,
 	})
+}
+
+type MentorSessionResponse struct {
+	CohortName  string `json:"cohort_name"`
+	ModuleTitle string `json:"module_title"`
+	LiveDate    string `json:"live_date"`
+	MeetingURL  string `json:"meeting_url"`
+}
+
+func (h *Handler) GetMentorSessions(c *gin.Context) {
+	userID, _ := c.Get("user_id")
+
+	var cohortIds []string
+	db.DB.Table("crs_cohort_mentors").
+		Select("cohort_id").
+		Where("user_id = ?", userID).
+		Pluck("cohort_id", &cohortIds)
+
+	if len(cohortIds) == 0 {
+		c.JSON(http.StatusOK, gin.H{"sessions": []interface{}{}})
+		return
+	}
+
+	type CohortData struct {
+		ID                  string
+		Title               string
+		ModuleSchedulesJSON string
+	}
+	var cohorts []CohortData
+	db.DB.Table("crs_cohorts").
+		Select("id, title, module_schedules_json").
+		Where("id IN ?", cohortIds).
+		Find(&cohorts)
+
+	var allSessions []MentorSessionResponse
+
+	for _, ch := range cohorts {
+		if ch.ModuleSchedulesJSON == "" || ch.ModuleSchedulesJSON == "{}" {
+			continue
+		}
+		
+		var schedules map[string]string
+		if err := json.Unmarshal([]byte(ch.ModuleSchedulesJSON), &schedules); err != nil {
+			continue
+		}
+
+		for moduleID, liveDate := range schedules {
+			if liveDate == "" {
+				continue
+			}
+
+			// Get module details
+			var stage models.JourneyStage
+			if err := db.DB.Where("id = ?", moduleID).First(&stage).Error; err != nil {
+				continue
+			}
+
+			var meetingURL string
+			var contents []map[string]interface{}
+			if stage.ContentsJSON != "" {
+				json.Unmarshal([]byte(stage.ContentsJSON), &contents)
+				for _, item := range contents {
+					if item["type"] == "LIVE_CLASS" {
+						if url, ok := item["url"].(string); ok {
+							meetingURL = url
+						}
+					}
+				}
+			}
+
+			allSessions = append(allSessions, MentorSessionResponse{
+				CohortName:  ch.Title,
+				ModuleTitle: stage.Title,
+				LiveDate:    liveDate,
+				MeetingURL:  meetingURL,
+			})
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"sessions": allSessions})
 }

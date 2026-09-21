@@ -11,9 +11,11 @@ import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import { useQuery } from '@tanstack/react-query';
 import { coursesApi } from '@/lib/api';
 import CohortModal from './CohortModal';
+import CohortScheduleModal from './CohortScheduleModal';
 
 export default function CohortsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [selectedCohort, setSelectedCohort] = useState<any>(null);
 
   const { data, isLoading: loading, refetch } = useQuery({
@@ -54,6 +56,11 @@ export default function CohortsPage() {
   const openEditModal = (cohort: any) => {
     setSelectedCohort(cohort);
     setIsModalOpen(true);
+  };
+
+  const openScheduleModal = (cohort: any) => {
+    setSelectedCohort(cohort);
+    setIsScheduleModalOpen(true);
   };
 
   return (
@@ -149,18 +156,28 @@ export default function CohortsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold bg-${color}-50 text-${color}-600`}>
+                      <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-${color}-100 text-${color}-700`}>
                         {c.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{mentorCount} Assigned</td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <UserGroupIcon className="w-4 h-4" />
-                        {c.enrolled_count || 0} / {c.capacity || 0}
+                      <div className="flex items-center gap-2">
+                        <UserGroupIcon className="w-4 h-4 text-gray-400" />
+                        <span className="text-gray-900 font-medium">{mentorCount}</span>
                       </div>
                     </td>
+                    <td className="px-6 py-4">
+                      <span className="text-gray-900 font-medium">{c.enrolled_count || 0}</span>
+                      <span className="text-gray-400 text-sm"> / {c.capacity}</span>
+                    </td>
                     <td className="px-6 py-4 text-right">
+                      <button 
+                        onClick={() => openScheduleModal(c)}
+                        className="text-gray-400 hover:text-emerald-500 transition-colors p-2"
+                        title="Schedule Live Classes"
+                      >
+                        <CalendarIcon className="w-5 h-5" />
+                      </button>
                       <button 
                         onClick={() => openEditModal(c)}
                         className="text-gray-400 hover:text-[#146ef5] transition-colors p-2"
@@ -186,6 +203,15 @@ export default function CohortsPage() {
         }}
         cohort={selectedCohort}
         programs={programs}
+      />
+      <CohortScheduleModal
+        isOpen={isScheduleModalOpen}
+        onClose={() => setIsScheduleModalOpen(false)}
+        onSave={() => {
+          setIsScheduleModalOpen(false);
+          refetch();
+        }}
+        cohort={selectedCohort}
       />
     </>
   );
