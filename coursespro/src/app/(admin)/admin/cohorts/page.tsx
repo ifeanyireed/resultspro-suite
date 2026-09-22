@@ -152,7 +152,14 @@ export default function CohortsPage() {
                         <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
                           <CalendarIcon className="w-4 h-4 text-gray-500" />
                         </div>
-                        <span className="font-medium text-gray-900">{displayName}</span>
+                        <div>
+                          <span className="font-medium text-gray-900 block">{displayName}</span>
+                          {(c.meeting_days || c.meeting_time || c.location_type) && (
+                            <span className="text-xs text-gray-500 block mt-0.5">
+                              {c.location_type || 'Virtual'} • {c.meeting_days} {c.meeting_time}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">

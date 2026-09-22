@@ -26,6 +26,9 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
     currency: 'NGN',
     program_id: '',
     status: 'DRAFT',
+    meeting_days: '',
+    meeting_time: '',
+    location_type: 'Virtual',
   });
 
   useEffect(() => {
@@ -44,6 +47,9 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
         currency: cohort.currency || 'NGN',
         program_id: cohort.program_id || '',
         status: cohort.status || 'DRAFT',
+        meeting_days: cohort.meeting_days || '',
+        meeting_time: cohort.meeting_time || '',
+        location_type: cohort.location_type || 'Virtual',
       });
     } else {
       setFormData({
@@ -60,6 +66,9 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
         currency: 'NGN',
         program_id: '',
         status: 'DRAFT',
+    meeting_days: '',
+    meeting_time: '',
+    location_type: 'Virtual',
       });
     }
   }, [cohort, isOpen]);
@@ -183,6 +192,40 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
                     onChange={e => setFormData({ ...formData, end_date: e.target.value })}
                     className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   />
+                </div>
+              </div>
+
+                            <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Meeting Days</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Mon, Thu"
+                    value={formData.meeting_days}
+                    onChange={e => setFormData({ ...formData, meeting_days: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Meeting Time</label>
+                  <input
+                    type="time"
+                    value={formData.meeting_time}
+                    onChange={e => setFormData({ ...formData, meeting_time: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Location</label>
+                  <select
+                    value={formData.location_type}
+                    onChange={e => setFormData({ ...formData, location_type: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  >
+                    <option value="Virtual">Virtual</option>
+                    <option value="On-Site">On-Site</option>
+                    <option value="Hybrid">Hybrid</option>
+                  </select>
                 </div>
               </div>
 
