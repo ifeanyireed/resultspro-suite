@@ -327,6 +327,28 @@ const { data: tenantData, isLoading } = useQuery({
                     {uploadingDarkLogo ? 'Uploading...' : 'Upload dark logo'}
                   </button>
                 </div>
+
+              <div className="pt-4 mt-2 border-t border-gray-100">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Landing Page Hero Image</label>
+                <p className="text-xs text-gray-500 mb-3">Upload a banner or illustration for your landing page.</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-24 h-16 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden">
+                    {formData.heroUrl ? (
+                      <img src={formData.heroUrl} alt="Hero" className="w-full h-full object-cover" />
+                    ) : (
+                      <PhotoIcon className="w-6 h-6 text-gray-400" />
+                    )}
+                  </div>
+                  <input type="file" ref={heroFileInputRef} className="hidden" accept="image/*" onChange={handleHeroUpload} />
+                  <button 
+                    onClick={() => heroFileInputRef.current?.click()}
+                    disabled={uploadingHero}
+                    className="text-sm font-medium text-[#146ef5] hover:text-[#105bd1] transition-colors disabled:opacity-50"
+                  >
+                    {uploadingHero ? 'Uploading...' : 'Upload hero image'}
+                  </button>
+                </div>
+              </div>
                 
                 <div className="flex items-center justify-between mt-5">
                   <div>
