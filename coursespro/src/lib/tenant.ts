@@ -3,7 +3,7 @@ export async function getTenant(tenantSlug: string) {
   
   try {
     const res = await fetch(`${USERS_API}/api/public/tenant/resolve?domain=${tenantSlug}`, {
-      next: { revalidate: 3600 } // Cache for 1 hour
+      next: { revalidate: 15 } // Cache for 15 seconds
     });
     console.log(`[getTenant] Fetching slug ${tenantSlug}. Status: ${res.status}`);
     if (!res.ok) {
