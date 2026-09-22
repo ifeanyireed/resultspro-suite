@@ -23,8 +23,8 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
   return (
     <div className="min-h-screen w-full flex">
       {/* Left Panel - Branding & Aesthetic */}
-      <div className="hidden lg:flex w-[55%] relative overflow-hidden bg-tenant-secondary">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-tenant-primary/20 blur-[120px]" />
+      <div className="hidden lg:flex w-[55%] relative overflow-hidden bg-[#0B1021]">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-red-600/20 blur-[150px]" />
         
         <div className="relative z-10 w-full h-full flex flex-col justify-between p-16">
@@ -37,7 +37,7 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
           </div>
 
           <div className="max-w-xl">
-            <div className="inline-flex items-center space-x-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-tenant-primary/80 text-sm font-semibold mb-6">
+            <div className="inline-flex items-center space-x-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-blue-400 text-sm font-semibold mb-6">
               <Sparkles className="w-4 h-4" />
               <span>We're Hiring Instructors</span>
             </div>
@@ -51,7 +51,7 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
             <div className="flex space-x-8">
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
-                  <GraduationCap className="w-6 h-6 text-tenant-primary/80" />
+                  <GraduationCap className="w-6 h-6 text-blue-400" />
                 </div>
                 <div>
                   <h4 className="text-white font-semibold text-xl">Top Talent</h4>
@@ -100,7 +100,7 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                     <User className="h-4 w-4 text-slate-400" />
                   </div>
-                  <input type="text" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-tenant-primary focus:border-transparent transition-all" placeholder="Jane" />
+                  <input type="text" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="Jane" />
                 </div>
               </div>
               <div className="space-y-1.5">
@@ -109,7 +109,7 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                     <User className="h-4 w-4 text-slate-400" />
                   </div>
-                  <input type="text" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-tenant-primary focus:border-transparent transition-all" placeholder="Doe" />
+                  <input type="text" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="Doe" />
                 </div>
               </div>
             </div>
@@ -120,7 +120,7 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <Mail className="h-4 w-4 text-slate-400" />
                 </div>
-                <input type="email" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-tenant-primary focus:border-transparent transition-all" placeholder="jane@example.com" />
+                <input type="email" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="jane@example.com" />
               </div>
             </div>
 
@@ -130,7 +130,7 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <Briefcase className="h-4 w-4 text-slate-400" />
                 </div>
-                <select required defaultValue="" className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-tenant-primary focus:border-transparent transition-all appearance-none">
+                <select required defaultValue="" className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all appearance-none">
                   <option value="" disabled>Select a field</option>
                   <option value="tech">Software Engineering</option>
                   <option value="design">Product Design</option>
@@ -145,11 +145,11 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <Users className="h-4 w-4 text-slate-400" />
                 </div>
-                <input type="url" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-tenant-primary focus:border-transparent transition-all" placeholder="https://linkedin.com/in/..." />
+                <input type="url" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="https://linkedin.com/in/..." />
               </div>
             </div>
 
-            <button type="submit" disabled={isLoading} className="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-tenant-primary hover:bg-tenant-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tenant-primary transition-all disabled:opacity-70 disabled:cursor-not-allowed group mt-2">
+            <button type="submit" disabled={isLoading} className="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed group mt-2">
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (

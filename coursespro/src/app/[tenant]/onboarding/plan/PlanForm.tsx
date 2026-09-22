@@ -71,8 +71,8 @@ export default function PlanForm({ tenant }: { tenant: any }) {
   return (
     <div className="min-h-screen w-full flex">
       {/* Left Panel - Branding & Aesthetic */}
-      <div className="hidden lg:flex w-[35%] relative overflow-hidden bg-tenant-secondary">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-tenant-primary/20 blur-[120px]" />
+      <div className="hidden lg:flex w-[35%] relative overflow-hidden bg-[#0B1021]">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[120px]" />
         
         <div className="relative z-10 w-full h-full flex flex-col justify-between p-16">
           <div className="flex items-center space-x-3">
@@ -113,11 +113,11 @@ export default function PlanForm({ tenant }: { tenant: any }) {
               
               {/* Upfront Plan */}
               <label className={`relative flex flex-col bg-white border-2 rounded-2xl p-6 cursor-pointer transition-all shadow-sm ${plan === 'upfront' ? 'border-blue-600 ring-4 ring-blue-600/10' : 'border-slate-200 hover:border-blue-300'}`}>
-                <div className="absolute -top-3 right-6 bg-tenant-primary text-white font-bold text-[10px] px-3 py-1 rounded-full tracking-widest uppercase shadow-sm">
+                <div className="absolute -top-3 right-6 bg-blue-600 text-white font-bold text-[10px] px-3 py-1 rounded-full tracking-widest uppercase shadow-sm">
                   Recommended
                 </div>
-                <input type="radio" name="plan" value="upfront" checked={plan === 'upfront'} onChange={() => setPlan('upfront')} className="absolute top-6 right-6 w-5 h-5 text-tenant-primary border-slate-300 focus:ring-tenant-primary" />
-                <span className="font-bold text-xs uppercase tracking-widest text-tenant-primary mb-2 block">Full Cohort (Upfront)</span>
+                <input type="radio" name="plan" value="upfront" checked={plan === 'upfront'} onChange={() => setPlan('upfront')} className="absolute top-6 right-6 w-5 h-5 text-blue-600 border-slate-300 focus:ring-blue-600" />
+                <span className="font-bold text-xs uppercase tracking-widest text-blue-600 mb-2 block">Full Cohort (Upfront)</span>
                 <div className="mb-1">
                   <span className="text-3xl font-bold text-slate-900">₦120,000</span>
                 </div>
@@ -125,17 +125,17 @@ export default function PlanForm({ tenant }: { tenant: any }) {
                 
                 <ul className="space-y-2.5 mb-2">
                   <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
-                    <CheckCircle2 className="w-4 h-4 text-tenant-primary mt-0.5" /> Save ₦15,000 immediately
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Save ₦15,000 immediately
                   </li>
                   <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
-                    <CheckCircle2 className="w-4 h-4 text-tenant-primary mt-0.5" /> 1-on-1 portfolio review session
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> 1-on-1 portfolio review session
                   </li>
                 </ul>
               </label>
 
               {/* Monthly Plan */}
               <label className={`relative flex flex-col bg-white border-2 rounded-2xl p-6 cursor-pointer transition-all shadow-sm ${plan === 'monthly' ? 'border-blue-600 ring-4 ring-blue-600/10' : 'border-slate-200 hover:border-blue-300'}`}>
-                <input type="radio" name="plan" value="monthly" checked={plan === 'monthly'} onChange={() => setPlan('monthly')} className="absolute top-6 right-6 w-5 h-5 text-tenant-primary border-slate-300 focus:ring-tenant-primary" />
+                <input type="radio" name="plan" value="monthly" checked={plan === 'monthly'} onChange={() => setPlan('monthly')} className="absolute top-6 right-6 w-5 h-5 text-blue-600 border-slate-300 focus:ring-blue-600" />
                 <span className="font-bold text-xs uppercase tracking-widest text-slate-500 mb-2 block">Monthly Installment</span>
                 <div className="mb-5">
                   <span className="text-3xl font-bold text-slate-900">₦45,000</span>
@@ -143,10 +143,10 @@ export default function PlanForm({ tenant }: { tenant: any }) {
                 </div>
                 <ul className="space-y-2.5 mb-2">
                   <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
-                    <CheckCircle2 className="w-4 h-4 text-tenant-primary mt-0.5" /> Billed every 4 weeks
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Billed every 4 weeks
                   </li>
                   <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
-                    <CheckCircle2 className="w-4 h-4 text-tenant-primary mt-0.5" /> Cancel anytime
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Cancel anytime
                   </li>
                 </ul>
               </label>
@@ -169,7 +169,7 @@ export default function PlanForm({ tenant }: { tenant: any }) {
               )}
               <div className="border-t border-slate-100 pt-4 flex justify-between items-center">
                 <span className="font-bold text-slate-900">Total Due Today</span>
-                <span className="text-2xl font-bold text-tenant-primary">{plan === 'upfront' ? '₦120,000' : '₦45,000'}</span>
+                <span className="text-2xl font-bold text-blue-600">{plan === 'upfront' ? '₦120,000' : '₦45,000'}</span>
               </div>
             </div>
 
@@ -186,12 +186,12 @@ export default function PlanForm({ tenant }: { tenant: any }) {
                   </div>
                 </div>
                 <div className="w-5 h-5 rounded-full border-2 border-blue-600 flex items-center justify-center">
-                  <div className="w-2.5 h-2.5 bg-tenant-primary rounded-full"></div>
+                  <div className="w-2.5 h-2.5 bg-blue-600 rounded-full"></div>
                 </div>
               </div>
             </div>
 
-            <button onClick={handlePayment} disabled={isLoading} className="w-full flex justify-center items-center py-4 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-tenant-primary hover:bg-tenant-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tenant-primary transition-all disabled:opacity-70 disabled:cursor-not-allowed group">
+            <button onClick={handlePayment} disabled={isLoading} className="w-full flex justify-center items-center py-4 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed group">
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
