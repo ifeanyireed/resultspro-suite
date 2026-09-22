@@ -10,11 +10,11 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
   const [step, setStep] = useState(1);
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden bg-[#0B1021]">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden bg-tenant-secondary">
       
       {/* Background Abstract Glows */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/30 blur-[120px]" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-600/20 blur-[150px]" />
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-tenant-primary/30 blur-[120px]" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-tenant-accent/20 blur-[150px]" />
 
       <div className="w-full max-w-3xl relative z-10 flex flex-col items-center">
         
@@ -26,9 +26,9 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
 
         {/* Progress Dots */}
         <div className="flex items-center gap-3 mb-8">
-          <div className={`h-2 rounded-full transition-all duration-500 ${step === 1 ? 'w-12 bg-blue-500' : 'w-2 bg-blue-500/30'}`}></div>
-          <div className={`h-2 rounded-full transition-all duration-500 ${step === 2 ? 'w-12 bg-blue-500' : 'w-2 bg-blue-500/30'}`}></div>
-          <div className={`h-2 rounded-full transition-all duration-500 ${step === 3 ? 'w-12 bg-blue-500' : 'w-2 bg-blue-500/30'}`}></div>
+          <div className={`h-2 rounded-full transition-all duration-500 ${step === 1 ? 'w-12 bg-tenant-primary' : 'w-2 bg-tenant-primary/30'}`}></div>
+          <div className={`h-2 rounded-full transition-all duration-500 ${step === 2 ? 'w-12 bg-tenant-primary' : 'w-2 bg-tenant-primary/30'}`}></div>
+          <div className={`h-2 rounded-full transition-all duration-500 ${step === 3 ? 'w-12 bg-tenant-primary' : 'w-2 bg-tenant-primary/30'}`}></div>
         </div>
 
         {/* Card Content */}
@@ -36,10 +36,10 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
           
           {step === 1 && (
             <div className="flex flex-col items-center text-center animate-in fade-in zoom-in duration-500">
-              <div className="w-24 h-24 rounded-2xl bg-blue-50 border border-blue-100 shadow-sm mb-6 flex items-center justify-center">
-                <Target className="w-12 h-12 text-blue-500" />
+              <div className="w-24 h-24 rounded-2xl bg-tenant-primary/10 border border-tenant-primary/20 shadow-sm mb-6 flex items-center justify-center">
+                <Target className="w-12 h-12 text-tenant-primary" />
               </div>
-              <div className="inline-flex items-center space-x-2 bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
+              <div className="inline-flex items-center space-x-2 bg-tenant-primary/10 text-tenant-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
                 <Target className="w-4 h-4" />
                 <span>Your Mentor</span>
               </div>
@@ -55,7 +55,7 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
               <div className="flex -space-x-4 mb-8">
                 <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-emerald-500 text-white flex items-center justify-center font-bold text-lg z-30">Ada</div>
                 <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-blue-400 z-20"></div>
-                <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-purple-400 z-10"></div>
+                <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-tenant-accent/80 z-10"></div>
                 <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 z-0">+21</div>
               </div>
               <div className="inline-flex items-center space-x-2 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
@@ -75,7 +75,7 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
                 <div className="absolute top-1/2 left-0 right-0 h-1 bg-slate-100 -translate-y-1/2 z-0"></div>
                 
                 <div className="relative z-10 flex flex-col items-center gap-2">
-                  <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/30 font-bold">1</div>
+                  <div className="w-10 h-10 rounded-full bg-tenant-primary text-white flex items-center justify-center shadow-lg shadow-tenant-primary/30 font-bold">1</div>
                   <span className="text-xs font-bold text-slate-900 uppercase">Learn</span>
                 </div>
                 <div className="relative z-10 flex flex-col items-center gap-2">
@@ -88,7 +88,7 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
                 </div>
               </div>
 
-              <div className="inline-flex items-center space-x-2 bg-purple-50 text-purple-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
+              <div className="inline-flex items-center space-x-2 bg-tenant-accent/10 text-tenant-accent px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
                 <BookOpen className="w-4 h-4" />
                 <span>The Journey</span>
               </div>
@@ -115,7 +115,7 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
             {step < 3 ? (
               <button 
                 onClick={() => setStep(step + 1)}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3.5 rounded-full shadow-sm transition-all flex items-center gap-2 group"
+                className="bg-tenant-primary hover:bg-tenant-secondary text-white font-bold px-8 py-3.5 rounded-full shadow-sm transition-all flex items-center gap-2 group"
               >
                 Continue
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

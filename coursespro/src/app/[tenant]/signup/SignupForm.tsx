@@ -55,10 +55,10 @@ export default function SignupForm({ tenant }: { tenant: any }) {
   return (
     <div className="min-h-screen w-full flex">
       {/* Left Panel - Branding & Aesthetic */}
-      <div className="hidden lg:flex w-[55%] relative overflow-hidden bg-[#0B1021]">
+      <div className="hidden lg:flex w-[55%] relative overflow-hidden bg-tenant-secondary">
         {/* Abstract Background Elements */}
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-600/20 blur-[150px]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-tenant-primary/20 blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-tenant-accent/20 blur-[150px]" />
         
         <div className="relative z-10 w-full h-full flex flex-col justify-between p-16">
           {/* Brand Logo */}
@@ -66,13 +66,13 @@ export default function SignupForm({ tenant }: { tenant: any }) {
             <Image src={tenant?.logo_url || "/logo.png"} alt={tenant?.name || "Tenant"} width={64} height={64} className="object-contain" priority />
             <div>
               <h1 className="font-bold text-white text-3xl tracking-tight">{tenant?.name || "Tenant"}</h1>
-              <p className="text-blue-400 font-semibold text-xs uppercase tracking-widest">EDU SUITE</p>
+              <p className="text-tenant-primary/80 font-semibold text-xs uppercase tracking-widest">EDU SUITE</p>
             </div>
           </div>
 
           {/* Value Proposition */}
           <div className="max-w-xl">
-            <div className="inline-flex items-center space-x-2 bg-blue-500/10 border border-blue-500/20 text-blue-300 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
+            <div className="inline-flex items-center space-x-2 bg-tenant-primary/10 border border-tenant-primary/20 text-tenant-primary/70 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4" />
               <span>Version 2.0 Released</span>
             </div>
@@ -86,7 +86,7 @@ export default function SignupForm({ tenant }: { tenant: any }) {
             <div className="flex space-x-8">
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-blue-400" />
+                  <Building2 className="w-6 h-6 text-tenant-primary/80" />
                 </div>
                 <div>
                   <h4 className="text-white font-semibold text-xl">140+</h4>
@@ -138,7 +138,7 @@ export default function SignupForm({ tenant }: { tenant: any }) {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-tenant-primary focus:border-transparent transition-all"
                   placeholder="Ada Lovelace"
                 />
               </div>
@@ -155,7 +155,7 @@ export default function SignupForm({ tenant }: { tenant: any }) {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-tenant-primary focus:border-transparent transition-all"
                   placeholder="user@coursespro.co"
                 />
               </div>
@@ -164,7 +164,7 @@ export default function SignupForm({ tenant }: { tenant: any }) {
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <label className="block text-sm font-semibold text-slate-700">Password</label>
-                <Link href="#" className="text-sm font-semibold text-blue-600 hover:text-blue-700">
+                <Link href="#" className="text-sm font-semibold text-tenant-primary hover:text-tenant-secondary">
                   Forgot password?
                 </Link>
               </div>
@@ -177,7 +177,7 @@ export default function SignupForm({ tenant }: { tenant: any }) {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-tenant-primary focus:border-transparent transition-all"
                   placeholder="••••••••"
                 />
               </div>
@@ -186,7 +186,7 @@ export default function SignupForm({ tenant }: { tenant: any }) {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed group"
+              className="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-tenant-primary hover:bg-tenant-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tenant-primary transition-all disabled:opacity-70 disabled:cursor-not-allowed group"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

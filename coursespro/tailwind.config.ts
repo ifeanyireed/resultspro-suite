@@ -9,6 +9,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        tenant: {
+          primary: "var(--color-nets-navy)",
+          secondary: "var(--color-nets-navy-dark)",
+          accent: "var(--color-nets-red)",
+        },
         canvas: "#FAF9F6",
         surface: "#FFFFFF",
         surface2: "#F2F0E9",

@@ -23,21 +23,21 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
   return (
     <div className="min-h-screen w-full flex">
       {/* Left Panel - Branding & Aesthetic */}
-      <div className="hidden lg:flex w-[55%] relative overflow-hidden bg-[#0B1021]">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-600/20 blur-[150px]" />
+      <div className="hidden lg:flex w-[55%] relative overflow-hidden bg-tenant-secondary">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-tenant-primary/20 blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-tenant-accent/20 blur-[150px]" />
         
         <div className="relative z-10 w-full h-full flex flex-col justify-between p-16">
           <div className="flex items-center space-x-3">
             <TenantLogo theme="dark" height={40} logoUrl={tenant?.logo_url} darkLogoUrl={tenant?.dark_logo_url} flattenLogo={tenant?.flatten_logo} tenantName={tenant?.name} />
             <div>
               <h1 className="font-bold text-white text-3xl tracking-tight">{tenant?.name || "Tenant"}</h1>
-              <p className="text-blue-400 font-semibold text-xs uppercase tracking-widest">COHORT APPLICATION</p>
+              <p className="text-tenant-primary/80 font-semibold text-xs uppercase tracking-widest">COHORT APPLICATION</p>
             </div>
           </div>
 
           <div className="max-w-xl">
-            <div className="inline-flex items-center space-x-2 bg-blue-500/10 border border-blue-500/20 text-blue-300 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
+            <div className="inline-flex items-center space-x-2 bg-tenant-primary/10 border border-tenant-primary/20 text-tenant-primary/70 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4" />
               <span>Applications Open</span>
             </div>
@@ -51,7 +51,7 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
             <div className="flex space-x-8">
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-blue-400" />
+                  <Users className="w-6 h-6 text-tenant-primary/80" />
                 </div>
                 <div>
                   <h4 className="text-white font-semibold text-xl">Small Cohorts</h4>
@@ -100,7 +100,7 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                     <User className="h-4 w-4 text-slate-400" />
                   </div>
-                  <input type="text" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="Ada" />
+                  <input type="text" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-tenant-primary focus:border-transparent transition-all" placeholder="Ada" />
                 </div>
               </div>
               <div className="space-y-1.5">
@@ -109,7 +109,7 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                     <User className="h-4 w-4 text-slate-400" />
                   </div>
-                  <input type="text" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="Lovelace" />
+                  <input type="text" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-tenant-primary focus:border-transparent transition-all" placeholder="Lovelace" />
                 </div>
               </div>
             </div>
@@ -120,7 +120,7 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <Mail className="h-4 w-4 text-slate-400" />
                 </div>
-                <input type="email" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="ada@coursespro.co" />
+                <input type="email" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-tenant-primary focus:border-transparent transition-all" placeholder="ada@coursespro.co" />
               </div>
             </div>
 
@@ -130,7 +130,7 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <Briefcase className="h-4 w-4 text-slate-400" />
                 </div>
-                <select required defaultValue="" className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all appearance-none">
+                <select required defaultValue="" className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-tenant-primary focus:border-transparent transition-all appearance-none">
                   <option value="" disabled>Select an option</option>
                   <option value="employed_tech">Employed in Tech</option>
                   <option value="employed_non_tech">Employed outside Tech</option>
@@ -145,11 +145,11 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
                 <div className="absolute top-3 left-3 flex items-start pointer-events-none">
                   <Target className="h-4 w-4 text-slate-400" />
                 </div>
-                <textarea required rows={3} className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-[1.5rem] text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all resize-none" placeholder="What are you hoping to achieve?"></textarea>
+                <textarea required rows={3} className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-[1.5rem] text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-tenant-primary focus:border-transparent transition-all resize-none" placeholder="What are you hoping to achieve?"></textarea>
               </div>
             </div>
 
-            <button type="submit" disabled={isLoading} className="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed group mt-2">
+            <button type="submit" disabled={isLoading} className="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-tenant-primary hover:bg-tenant-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tenant-primary transition-all disabled:opacity-70 disabled:cursor-not-allowed group mt-2">
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
