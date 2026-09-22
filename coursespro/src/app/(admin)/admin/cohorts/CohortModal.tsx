@@ -12,6 +12,34 @@ interface CohortModalProps {
 
 export default function CohortModal({ isOpen, onClose, onSave, cohort, programs }: CohortModalProps) {
   const [loading, setLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const formDataUpload = new FormData();
+    formDataUpload.append('file', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formDataUpload
+      });
+      const data = await res.json();
+      
+      if (res.ok && data.url) {
+        setFormData({ ...formData, image_url: data.url });
+      } else {
+        alert(data.error || 'Upload failed');
+      }
+    } catch (err) {
+      alert('Something went wrong during upload');
+    } finally {
+      setIsUploading(false);
+    }
+  };
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -291,14 +319,32 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Cover Image URL</label>
-                <input
-                  type="url"
-                  placeholder="https://example.com/image.jpg"
-                  value={formData.image_url}
-                  onChange={e => setFormData({ ...formData, image_url: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                />
+                <label className="block text-sm font-medium text-slate-700 mb-1">Cover Image</label>
+                {formData.image_url ? (
+                  <div className="relative w-full h-32 rounded-lg border border-slate-200 overflow-hidden group">
+                    <img src={formData.image_url} alt="Cover Preview" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, image_url: '' })}
+                      className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity font-medium"
+                    >
+                      Remove Image
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center w-full">
+                    <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 relative">
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg className="w-8 h-8 mb-3 text-slate-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                        </svg>
+                        <p className="mb-2 text-sm text-slate-500 font-semibold">{isUploading ? 'Uploading...' : 'Click to upload image'}</p>
+                        <p className="text-xs text-slate-500">SVG, PNG, JPG or GIF</p>
+                      </div>
+                      <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
+                    </label>
+                  </div>
+                )}
               </div>
                 {cohort && (
                   <div>
