@@ -8,7 +8,7 @@ BEGIN
         IF t_id != 'skillupacademy' THEN 
 
             -- 1. Insert Cohort
-            INSERT INTO crs_cohorts (id, tenant_id, program_id, slug, title, subtitle, description, status, created_at, updated_at)
+            INSERT INTO crs_cohorts (id, tenant_id, program_id, slug, title, subtitle, description, status, meeting_days, meeting_time, location_type, created_at, updated_at)
             VALUES (
                 'cohort_fall_2026_' || t_id,
                 t_id,
@@ -18,6 +18,9 @@ BEGIN
                 'The premier autumn batch',
                 'Intensive bootcamp cohort.',
                 'ACTIVE',
+                'Mon, Thu',
+                '18:00',
+                'Virtual',
                 CURRENT_TIMESTAMP,
                 CURRENT_TIMESTAMP
             ) ON CONFLICT DO NOTHING;

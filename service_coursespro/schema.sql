@@ -50,6 +50,9 @@ CREATE TABLE IF NOT EXISTS crs_cohorts (
     currency VARCHAR(10) DEFAULT 'NGN',
     lead_mentor_id VARCHAR(64),
     status VARCHAR(32) DEFAULT 'ENROLLING',
+    meeting_days VARCHAR(255),
+    meeting_time VARCHAR(64),
+    location_type VARCHAR(64) DEFAULT 'Virtual',
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
