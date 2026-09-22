@@ -457,7 +457,7 @@ export default function CoursesProTenantManager() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Primary Theme Color</label>
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Primary Color</label>
                 <div className="flex gap-2">
                   <input 
                     type="color" 
@@ -469,6 +469,40 @@ export default function CoursesProTenantManager() {
                     type="text" 
                     value={newTenantData.primary_color}
                     onChange={e => setNewTenantData({...newTenantData, primary_color: e.target.value})}
+                    className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Secondary Color</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="color" 
+                    value={newTenantData.secondary_color}
+                    onChange={e => setNewTenantData({...newTenantData, secondary_color: e.target.value})}
+                    className="w-10 h-10 rounded-lg cursor-pointer bg-slate-50 border border-slate-200 p-1"
+                  />
+                  <input 
+                    type="text" 
+                    value={newTenantData.secondary_color}
+                    onChange={e => setNewTenantData({...newTenantData, secondary_color: e.target.value})}
+                    className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Accent Color</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="color" 
+                    value={newTenantData.accent_color}
+                    onChange={e => setNewTenantData({...newTenantData, accent_color: e.target.value})}
+                    className="w-10 h-10 rounded-lg cursor-pointer bg-slate-50 border border-slate-200 p-1"
+                  />
+                  <input 
+                    type="text" 
+                    value={newTenantData.accent_color}
+                    onChange={e => setNewTenantData({...newTenantData, accent_color: e.target.value})}
                     className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
                   />
                 </div>
@@ -557,18 +591,52 @@ export default function CoursesProTenantManager() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Primary Theme Color</label>
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Primary Color</label>
                 <div className="flex gap-2">
                   <input 
                     type="color" 
-                    value={editTenantData.primary_color}
+                    value={editTenantData.primary_color || ''}
                     onChange={e => setEditTenantData({...editTenantData, primary_color: e.target.value})}
                     className="w-10 h-10 rounded-lg cursor-pointer bg-slate-50 border border-slate-200 p-1"
                   />
                   <input 
                     type="text" 
-                    value={editTenantData.primary_color}
+                    value={editTenantData.primary_color || ''}
                     onChange={e => setEditTenantData({...editTenantData, primary_color: e.target.value})}
+                    className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Secondary Color</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="color" 
+                    value={editTenantData.secondary_color || ''}
+                    onChange={e => setEditTenantData({...editTenantData, secondary_color: e.target.value})}
+                    className="w-10 h-10 rounded-lg cursor-pointer bg-slate-50 border border-slate-200 p-1"
+                  />
+                  <input 
+                    type="text" 
+                    value={editTenantData.secondary_color || ''}
+                    onChange={e => setEditTenantData({...editTenantData, secondary_color: e.target.value})}
+                    className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Accent Color</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="color" 
+                    value={editTenantData.accent_color || ''}
+                    onChange={e => setEditTenantData({...editTenantData, accent_color: e.target.value})}
+                    className="w-10 h-10 rounded-lg cursor-pointer bg-slate-50 border border-slate-200 p-1"
+                  />
+                  <input 
+                    type="text" 
+                    value={editTenantData.accent_color || ''}
+                    onChange={e => setEditTenantData({...editTenantData, accent_color: e.target.value})}
                     className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
                   />
                 </div>

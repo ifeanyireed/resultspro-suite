@@ -162,6 +162,8 @@ const { data: tenantData, isLoading } = useQuery({
         contact_phone: formData.phone,
         custom_domain: formData.customDomainEnabled ? formData.customDomain : "",
         primary_color: formData.primaryColor,
+        secondary_color: formData.secondaryColor,
+        accent_color: formData.accentColor,
         logo_url: formData.logoUrl,
         dark_logo_url: formData.darkLogoUrl,
         flatten_logo: formData.flattenLogo,
@@ -326,6 +328,48 @@ const { data: tenantData, isLoading } = useQuery({
                     type="text" 
                     name="primaryColor" 
                     value={formData.primaryColor} 
+                    onChange={handleChange} 
+                    className="w-32 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-[#146ef5] transition-colors uppercase font-mono" 
+                  />
+                </div>
+              </div>
+              <div className="pt-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Brand Secondary Color</label>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0 cursor-pointer relative">
+                    <input 
+                      type="color" 
+                      name="secondaryColor" 
+                      value={formData.secondaryColor} 
+                      onChange={handleChange} 
+                      className="absolute -top-2 -left-2 w-16 h-16 cursor-pointer" 
+                    />
+                  </div>
+                  <input 
+                    type="text" 
+                    name="secondaryColor" 
+                    value={formData.secondaryColor} 
+                    onChange={handleChange} 
+                    className="w-32 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-[#146ef5] transition-colors uppercase font-mono" 
+                  />
+                </div>
+              </div>
+              <div className="pt-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Brand Accent Color</label>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0 cursor-pointer relative">
+                    <input 
+                      type="color" 
+                      name="accentColor" 
+                      value={formData.accentColor} 
+                      onChange={handleChange} 
+                      className="absolute -top-2 -left-2 w-16 h-16 cursor-pointer" 
+                    />
+                  </div>
+                  <input 
+                    type="text" 
+                    name="accentColor" 
+                    value={formData.accentColor} 
                     onChange={handleChange} 
                     className="w-32 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-[#146ef5] transition-colors uppercase font-mono" 
                   />

@@ -31,10 +31,31 @@ export async function generateMetadata({ params }: { params: Promise<{ tenant: s
   return metadata;
 }
 
-export default function TenantLayout({
+export default async function TenantLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ tenant: string }>;
 }) {
-  return <>{children}</>;
+  const resolvedParams = await params;
+  const tenant = await getTenant(resolvedParams.tenant);
+
+  if (!tenant) return <>{children}</>;
+
+  // Dynamically override nets.css hardcoded colors
+  const customStyles = `
+    :root {
+      ${tenant.primary_color ? `--color-nets-navy: ${tenant.primary_color};` : ''}
+      ${tenant.secondary_color ? `--color-nets-navy-dark: ${tenant.secondary_color};` : ''}
+      ${tenant.accent_color ? `--color-nets-red: ${tenant.accent_color};` : ''}
+    }
+  `;
+
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: customStyles }} />
+      {children}
+    </>
+  );
 }
