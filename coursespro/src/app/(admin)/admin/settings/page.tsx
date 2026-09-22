@@ -44,6 +44,8 @@ export default function SettingsPage() {
   const darkFileInputRef = useRef<HTMLInputElement>(null);
   const [uploadingDarkLogo, setUploadingDarkLogo] = useState(false);
   const [uploadingHero, setUploadingHero] = useState(false);
+  const [uploadingPreview, setUploadingPreview] = useState(false);
+  const previewFileInputRef = useRef<HTMLInputElement>(null);
   const heroFileInputRef = useRef<HTMLInputElement>(null);
   const [uploadingLogo, setUploadingLogo] = useState(false);
 
@@ -63,6 +65,7 @@ export default function SettingsPage() {
     secondaryColor: '#0D1060',
     accentColor: '#C0272D',
     heroUrl: '',
+    previewUrl: '',
     logoUrl: '',
     darkLogoUrl: '',
     flattenLogo: true,
@@ -97,6 +100,7 @@ const { data: tenantData, isLoading } = useQuery({
         primaryColor: t.primary_color || '#146ef5',
         logoUrl: t.logo_url || '',
         heroUrl: t.hero_bg_url || '',
+        previewUrl: t.preview_image_url || '',
         darkLogoUrl: t.dark_logo_url || '',
         flattenLogo: t.flatten_logo !== false,
       }));
@@ -125,6 +129,28 @@ const { data: tenantData, isLoading } = useQuery({
       alert("Failed to upload dark logo.");
     } finally {
       setUploadingDarkLogo(false);
+    }
+  };
+
+  const handlePreviewUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingPreview(true);
+    try {
+      const data = new FormData();
+      data.append('file', file);
+      data.append('folder', 'uploads/heroes');
+      const res = await api.post('/api/v1/upload', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      if (res.data && res.data.url) {
+        setFormData(prev => ({ ...prev, previewUrl: res.data.url }));
+      }
+    } catch (err) {
+      console.error("Upload failed", err);
+      alert("Failed to upload preview image.");
+    } finally {
+      setUploadingPreview(false);
     }
   };
 
@@ -194,6 +220,7 @@ const { data: tenantData, isLoading } = useQuery({
         accent_color: formData.accentColor,
         logo_url: formData.logoUrl,
         hero_bg_url: formData.heroUrl,
+        preview_image_url: formData.previewUrl,
         dark_logo_url: formData.darkLogoUrl,
         flatten_logo: formData.flattenLogo,
       };
@@ -350,7 +377,29 @@ const { data: tenantData, isLoading } = useQuery({
                 </div>
               </div>
                 
-                <div className="flex items-center justify-between mt-5">
+              <div className="pt-4 mt-2 border-t border-gray-100">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Dashboard Preview Image</label>
+                <p className="text-xs text-gray-500 mb-3">Upload the illustration shown next to your services grid.</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-24 h-16 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden">
+                    {formData.previewUrl ? (
+                      <img src={formData.previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <PhotoIcon className="w-6 h-6 text-gray-400" />
+                    )}
+                  </div>
+                  <input type="file" ref={previewFileInputRef} className="hidden" accept="image/*" onChange={handlePreviewUpload} />
+                  <button 
+                    onClick={() => previewFileInputRef.current?.click()}
+                    disabled={uploadingPreview}
+                    className="text-sm font-medium text-[#146ef5] hover:text-[#105bd1] transition-colors disabled:opacity-50"
+                  >
+                    {uploadingPreview ? 'Uploading...' : 'Upload preview image'}
+                  </button>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between mt-5">
                   <div>
                     <p className="text-sm font-medium text-gray-700">Flatten to white</p>
                     <p className="text-xs text-gray-500">Automatically make primary logo solid white on dark backgrounds if no dark logo is provided.</p>

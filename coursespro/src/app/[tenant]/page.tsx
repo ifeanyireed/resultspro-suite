@@ -75,7 +75,7 @@ export default async function TenantHome({ params }: { params: Promise<{ tenant:
             <div className="relative w-full h-full min-h-[400px] lg:aspect-square">
               <div className="w-full h-full bg-light border border-nets-border flex items-center justify-center relative overflow-hidden rounded-none shadow-sm">
                 <img 
-                  src={tenant.hero_bg_url || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"} 
+                  src={tenant.preview_image_url || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"} 
                   alt={`${tenant.name} Preview`}
                   className="absolute inset-0 w-full h-full object-cover rounded-none"
                 />
