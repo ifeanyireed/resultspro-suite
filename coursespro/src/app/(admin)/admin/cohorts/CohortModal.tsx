@@ -29,6 +29,7 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
     meeting_days: '',
     meeting_time: '',
     location_type: 'Virtual',
+    difficulty_level: 'All Levels',
   });
 
   useEffect(() => {
@@ -50,6 +51,7 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
         meeting_days: cohort.meeting_days || '',
         meeting_time: cohort.meeting_time || '',
         location_type: cohort.location_type || 'Virtual',
+        difficulty_level: cohort.difficulty_level || 'All Levels',
       });
     } else {
       setFormData({
@@ -69,6 +71,7 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
     meeting_days: '',
     meeting_time: '',
     location_type: 'Virtual',
+    difficulty_level: 'All Levels',
       });
     }
   }, [cohort, isOpen]);
@@ -230,6 +233,19 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
               </div>
 
               <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Difficulty Level</label>
+                  <select
+                    value={formData.difficulty_level}
+                    onChange={e => setFormData({ ...formData, difficulty_level: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  >
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="All Levels">All Levels</option>
+                  </select>
+                </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Duration (Weeks)</label>
                   <input

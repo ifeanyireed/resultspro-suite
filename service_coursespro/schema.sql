@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS crs_cohorts (
     meeting_days VARCHAR(255),
     meeting_time VARCHAR(64),
     location_type VARCHAR(64) DEFAULT 'Virtual',
+    difficulty_level VARCHAR(64) DEFAULT 'All Levels',
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );

@@ -156,7 +156,7 @@ export default function CohortsPage() {
                           <span className="font-medium text-gray-900 block">{displayName}</span>
                           {(c.meeting_days || c.meeting_time || c.location_type) && (
                             <span className="text-xs text-gray-500 block mt-0.5">
-                              {c.location_type || 'Virtual'} • {c.meeting_days} {c.meeting_time}
+                              {c.location_type || 'Virtual'} • {c.difficulty_level || 'All Levels'} • {c.meeting_days} {c.meeting_time}
                             </span>
                           )}
                         </div>
