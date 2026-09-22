@@ -3,8 +3,10 @@ import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
 import { IconBook, IconBrain, IconTrophy, IconUserPlus, IconChartBar, IconDeviceLaptop, IconCertificate, IconSchool } from '@tabler/icons-react';
 import Link from 'next/link';
+import { getTenant } from '@/lib/tenant';
 
-export default function PlatformLandingPage() {
+export default async function PlatformLandingPage() {
+  const tenant = await getTenant('coursespro');
   return (
     <main>
       <Navbar hideInstructorLink={true} isPlatform={true} flattenLogo={false} />
@@ -84,14 +86,13 @@ export default function PlatformLandingPage() {
             </div>
             
             {/* Right side placeholder for UI illustration */}
-            <div className="relative">
-              <div className="aspect-square rounded-3xl bg-light border border-nets-border flex items-center justify-center relative overflow-hidden">
-                <div style={{ position: 'absolute', inset: 0, opacity: 0.1, background: 'radial-gradient(circle at center, var(--color-nets-red) 0%, transparent 70%)' }} />
-                <div className="text-center p-8 relative z-10 bg-white rounded-2xl shadow-xl border border-nets-border">
-                  <IconSchool className="w-16 h-16 text-red mx-auto mb-4" />
-                  <div className="text-xl fw-600 mb-2">Commerce Excellence</div>
-                  <div className="text-sm text-muted">Sell courses and books effortlessly...</div>
-                </div>
+            <div className="relative w-full h-full min-h-[400px] lg:aspect-square">
+              <div className="w-full h-full bg-light border border-nets-border flex items-center justify-center relative overflow-hidden rounded-none shadow-sm">
+                <img 
+                  src={tenant?.hero_bg_url || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"} 
+                  alt="Platform Preview"
+                  className="absolute inset-0 w-full h-full object-cover rounded-none"
+                />
               </div>
             </div>
           </div>
