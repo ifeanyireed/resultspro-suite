@@ -104,14 +104,13 @@ export default async function PlatformLandingPage() {
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left side placeholder for UI illustration */}
-            <div className="relative order-2 lg:order-1">
-              <div className="aspect-square rounded-3xl bg-white border border-nets-border flex items-center justify-center relative overflow-hidden shadow-sm">
-                <div style={{ position: 'absolute', inset: 0, opacity: 0.05, background: 'radial-gradient(circle at center, var(--color-nets-navy) 0%, transparent 70%)' }} />
-                <div className="text-center p-8 relative z-10 bg-white rounded-2xl shadow-xl border border-nets-border">
-                  <IconTrophy className="w-16 h-16 text-navy mx-auto mb-4" style={{ color: 'var(--color-nets-navy)' }} />
-                  <div className="text-xl fw-600 mb-2">Learner Portal</div>
-                  <div className="text-sm text-muted">Give them a home of their own...</div>
-                </div>
+            <div className="relative order-2 lg:order-1 w-full h-full min-h-[400px] lg:aspect-square">
+              <div className="w-full h-full bg-light border border-nets-border flex items-center justify-center relative overflow-hidden rounded-none shadow-sm">
+                <img 
+                  src={tenant?.learner_image_url || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"} 
+                  alt="Learner Portal Preview"
+                  className="absolute inset-0 w-full h-full object-cover rounded-none"
+                />
               </div>
             </div>
 

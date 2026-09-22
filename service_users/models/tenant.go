@@ -16,6 +16,7 @@ type Tenant struct {
 	DarkLogoURL           string     `json:"dark_logo_url,omitempty"`
 	HeroBgURL             string     `json:"hero_bg_url,omitempty"`
 	PreviewImageURL       string     `json:"preview_image_url,omitempty"`
+	LearnerImageURL       string     `json:"learner_image_url,omitempty"`
 	FlattenLogo           *bool      `json:"flatten_logo,omitempty"`
 	LogoEmoji             string     `json:"logo_emoji,omitempty"`
 	PrimaryColor          string     `json:"primary_color,omitempty"`

@@ -46,6 +46,8 @@ export default function SettingsPage() {
   const [uploadingHero, setUploadingHero] = useState(false);
   const [uploadingPreview, setUploadingPreview] = useState(false);
   const previewFileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingLearner, setUploadingLearner] = useState(false);
+  const learnerFileInputRef = useRef<HTMLInputElement>(null);
   const heroFileInputRef = useRef<HTMLInputElement>(null);
   const [uploadingLogo, setUploadingLogo] = useState(false);
 
@@ -66,6 +68,7 @@ export default function SettingsPage() {
     accentColor: '#C0272D',
     heroUrl: '',
     previewUrl: '',
+    learnerUrl: '',
     logoUrl: '',
     darkLogoUrl: '',
     flattenLogo: true,
@@ -101,6 +104,7 @@ const { data: tenantData, isLoading } = useQuery({
         logoUrl: t.logo_url || '',
         heroUrl: t.hero_bg_url || '',
         previewUrl: t.preview_image_url || '',
+        learnerUrl: t.learner_image_url || '',
         darkLogoUrl: t.dark_logo_url || '',
         flattenLogo: t.flatten_logo !== false,
       }));
@@ -129,6 +133,28 @@ const { data: tenantData, isLoading } = useQuery({
       alert("Failed to upload dark logo.");
     } finally {
       setUploadingDarkLogo(false);
+    }
+  };
+
+  const handleLearnerUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingLearner(true);
+    try {
+      const data = new FormData();
+      data.append('file', file);
+      data.append('folder', 'uploads/heroes');
+      const res = await api.post('/api/v1/upload', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      if (res.data && res.data.url) {
+        setFormData(prev => ({ ...prev, learnerUrl: res.data.url }));
+      }
+    } catch (err) {
+      console.error("Upload failed", err);
+      alert("Failed to upload learner portal image.");
+    } finally {
+      setUploadingLearner(false);
     }
   };
 
@@ -221,6 +247,7 @@ const { data: tenantData, isLoading } = useQuery({
         logo_url: formData.logoUrl,
         hero_bg_url: formData.heroUrl,
         preview_image_url: formData.previewUrl,
+        learner_image_url: formData.learnerUrl,
         dark_logo_url: formData.darkLogoUrl,
         flatten_logo: formData.flattenLogo,
       };
@@ -395,6 +422,28 @@ const { data: tenantData, isLoading } = useQuery({
                     className="text-sm font-medium text-[#146ef5] hover:text-[#105bd1] transition-colors disabled:opacity-50"
                   >
                     {uploadingPreview ? 'Uploading...' : 'Upload preview image'}
+                  </button>
+                </div>
+              </div>
+              
+              <div className="pt-4 mt-2 border-t border-gray-100">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Learner Portal Image</label>
+                <p className="text-xs text-gray-500 mb-3">Upload the second illustration shown on the landing page.</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-24 h-16 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden">
+                    {formData.learnerUrl ? (
+                      <img src={formData.learnerUrl} alt="Learner" className="w-full h-full object-cover" />
+                    ) : (
+                      <PhotoIcon className="w-6 h-6 text-gray-400" />
+                    )}
+                  </div>
+                  <input type="file" ref={learnerFileInputRef} className="hidden" accept="image/*" onChange={handleLearnerUpload} />
+                  <button 
+                    onClick={() => learnerFileInputRef.current?.click()}
+                    disabled={uploadingLearner}
+                    className="text-sm font-medium text-[#146ef5] hover:text-[#105bd1] transition-colors disabled:opacity-50"
+                  >
+                    {uploadingLearner ? 'Uploading...' : 'Upload learner image'}
                   </button>
                 </div>
               </div>
