@@ -23,9 +23,14 @@ export default function CohortCard({ cohort }: { cohort: any }) {
       <div className="p-6">
         <h3 className="text-xl fw-600 mb-2">{cohort.title}</h3>
         <p className="text-sm text-gray-500 mb-4 line-clamp-2">{cohort.description}</p>
-        <div className="flex gap-4 text-sm text-muted mb-6">
+        <div className="flex flex-wrap gap-4 text-sm text-muted mb-6">
           <span className="flex items-center gap-1"><IconClock size={16} /> {cohort.duration_weeks} Weeks</span>
-          <span className="flex items-center gap-1"><IconTrendingUp size={16} /> All Levels</span>
+          <span className="flex items-center gap-1"><IconTrendingUp size={16} /> {cohort.difficulty_level || 'All Levels'}</span>
+          {(cohort.location_type || cohort.meeting_days) && (
+            <span className="flex items-center gap-1 w-full mt-1 text-xs text-slate-500">
+              {cohort.location_type || 'Virtual'} • {cohort.meeting_days} {cohort.meeting_time}
+            </span>
+          )}
         </div>
         <button onClick={handleJoin} className="btn btn-navy w-full text-center block">
           Enroll Now
