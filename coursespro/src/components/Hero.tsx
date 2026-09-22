@@ -24,6 +24,7 @@ const slideInRight = {
 
 interface HeroProps {
   tenantName?: string;
+  heroBgUrl?: string;
   overline?: string;
   titleLine1?: string;
   titleLine2?: string;
@@ -38,6 +39,7 @@ interface HeroProps {
 
 const Hero = ({ 
   tenantName = "CoursesPRO",
+  heroBgUrl,
   overline,
   titleLine1 = "Master New",
   titleLine2 = "Skills",
@@ -66,7 +68,7 @@ const Hero = ({
       {/* ── Full-bleed background photo ── */}
       <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <img
-          src="/images/Students1.jpeg"
+          src={heroBgUrl || "/images/Students1.jpeg"}
           alt=""
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
           loading="eager"

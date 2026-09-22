@@ -483,6 +483,9 @@ func HandleUpdateTenantBranding(w http.ResponseWriter, r *http.Request) {
 		if logo, ok := branding["logo_url"].(string); ok {
 			db.DB.Exec("UPDATE tenants SET logo_url = ?, updated_at = ? WHERE id = ?", logo, now, tenantID)
 		}
+		if heroBg, ok := branding["hero_bg_url"].(string); ok {
+			db.DB.Exec("UPDATE tenants SET hero_bg_url = ?, updated_at = ? WHERE id = ?", heroBg, now, tenantID)
+		}
 		if emoji, ok := branding["logo_emoji"].(string); ok {
 			db.DB.Exec("UPDATE tenants SET logo_emoji = ?, updated_at = ? WHERE id = ?", emoji, now, tenantID)
 		}

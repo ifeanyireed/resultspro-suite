@@ -18,6 +18,7 @@ export default function CoursesProTenantManager() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
+  const [isUploadingHero, setIsUploadingHero] = useState(false);
   const [editTenantData, setEditTenantData] = useState<any>(null);
 
   const [newTenantData, setNewTenantData] = useState({

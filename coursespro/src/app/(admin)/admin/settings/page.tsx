@@ -165,6 +165,7 @@ const { data: tenantData, isLoading } = useQuery({
         secondary_color: formData.secondaryColor,
         accent_color: formData.accentColor,
         logo_url: formData.logoUrl,
+        hero_bg_url: formData.heroUrl,
         dark_logo_url: formData.darkLogoUrl,
         flatten_logo: formData.flattenLogo,
       };
