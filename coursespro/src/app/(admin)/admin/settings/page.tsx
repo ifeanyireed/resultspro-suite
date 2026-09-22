@@ -101,6 +101,8 @@ const { data: tenantData, isLoading } = useQuery({
         customDomainEnabled: !!t.custom_domain,
         customDomain: t.custom_domain || '',
         primaryColor: t.primary_color || '#146ef5',
+        secondaryColor: t.secondary_color || '#0D1060',
+        accentColor: t.accent_color || '#C0272D',
         logoUrl: t.logo_url || '',
         heroUrl: t.hero_bg_url || '',
         previewUrl: t.preview_image_url || '',
