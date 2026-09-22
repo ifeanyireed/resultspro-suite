@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { PhotoIcon } from '@heroicons/react/24/outline';
 import { coursesApi } from '@/lib/api';
 
 interface CohortModalProps {
@@ -13,6 +14,7 @@ interface CohortModalProps {
 export default function CohortModal({ isOpen, onClose, onSave, cohort, programs }: CohortModalProps) {
   const [loading, setLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -319,32 +321,36 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Cover Image</label>
-                {formData.image_url ? (
-                  <div className="relative w-full h-32 rounded-lg border border-slate-200 overflow-hidden group">
-                    <img src={formData.image_url} alt="Cover Preview" className="w-full h-full object-cover" />
+                <label className="block text-sm font-medium text-slate-700 mb-2">Cover Image</label>
+                <div className="flex items-center gap-4">
+                  <div className="w-24 h-16 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden">
+                    {formData.image_url ? (
+                      <img src={formData.image_url} alt="Cover Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <PhotoIcon className="w-6 h-6 text-gray-400" />
+                    )}
+                  </div>
+                  <input type="file" ref={imageInputRef} className="hidden" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
+                  <div className="flex flex-col items-start gap-1">
                     <button
                       type="button"
-                      onClick={() => setFormData({ ...formData, image_url: '' })}
-                      className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity font-medium"
+                      onClick={() => imageInputRef.current?.click()}
+                      disabled={isUploading}
+                      className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors disabled:opacity-50"
                     >
-                      Remove Image
+                      {isUploading ? 'Uploading...' : (formData.image_url ? 'Change image' : 'Upload image')}
                     </button>
+                    {formData.image_url && (
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, image_url: '' })}
+                        className="text-xs font-medium text-red-500 hover:text-red-600 transition-colors"
+                      >
+                        Remove
+                      </button>
+                    )}
                   </div>
-                ) : (
-                  <div className="flex items-center justify-center w-full">
-                    <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 relative">
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <svg className="w-8 h-8 mb-3 text-slate-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                        </svg>
-                        <p className="mb-2 text-sm text-slate-500 font-semibold">{isUploading ? 'Uploading...' : 'Click to upload image'}</p>
-                        <p className="text-xs text-slate-500">SVG, PNG, JPG or GIF</p>
-                      </div>
-                      <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
-                    </label>
-                  </div>
-                )}
+                </div>
               </div>
                 {cohort && (
                   <div>
