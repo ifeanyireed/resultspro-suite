@@ -36,6 +36,10 @@ type Cohort struct {
 	Status              string    `gorm:"size:32;default:'ENROLLING'" json:"status"`
 	ModuleSchedulesJSON string    `gorm:"type:text" json:"module_schedules_json"`
 	ImageURL            string    `gorm:"size:512" json:"image_url"`
+	MeetingDays         string    `gorm:"size:255" json:"meeting_days"`
+	MeetingTime         string    `gorm:"size:64" json:"meeting_time"`
+	LocationType        string    `gorm:"size:64" json:"location_type"`
+	DifficultyLevel     string    `gorm:"size:64" json:"difficulty_level"`
 	CreatedAt           time.Time `json:"created_at"`
 	UpdatedAt           time.Time `json:"updated_at"`
 

@@ -37,6 +37,10 @@ func (h *Handler) AdminCreateCohort(c *gin.Context) {
 		Capacity            int       `json:"capacity"`
 		Price               float64   `json:"price"`
 		ImageURL            string    `json:"image_url"`
+		MeetingDays         string    `json:"meeting_days"`
+		MeetingTime         string    `json:"meeting_time"`
+		LocationType        string    `json:"location_type"`
+		DifficultyLevel     string    `json:"difficulty_level"`
 		Currency            string    `json:"currency"`
 		LeadMentorID        string    `json:"lead_mentor_id"`
 		ProgramID           string    `json:"program_id"`
@@ -71,6 +75,10 @@ func (h *Handler) AdminCreateCohort(c *gin.Context) {
 		Capacity:            input.Capacity,
 		Price:               input.Price,
 		ImageURL:            input.ImageURL,
+		MeetingDays:         input.MeetingDays,
+		MeetingTime:         input.MeetingTime,
+		LocationType:        input.LocationType,
+		DifficultyLevel:     input.DifficultyLevel,
 		Currency:            input.Currency,
 		LeadMentorID:        leadMentorID,
 		ProgramID:           programID,
@@ -101,6 +109,10 @@ func (h *Handler) AdminUpdateCohort(c *gin.Context) {
 		Capacity            int       `json:"capacity"`
 		Price               float64   `json:"price"`
 		ImageURL            string    `json:"image_url"`
+		MeetingDays         string    `json:"meeting_days"`
+		MeetingTime         string    `json:"meeting_time"`
+		LocationType        string    `json:"location_type"`
+		DifficultyLevel     string    `json:"difficulty_level"`
 		Currency            string    `json:"currency"`
 		LeadMentorID        string    `json:"lead_mentor_id"`
 		ProgramID           string    `json:"program_id"`
@@ -124,6 +136,10 @@ func (h *Handler) AdminUpdateCohort(c *gin.Context) {
 		"capacity":              input.Capacity,
 		"price":                 input.Price,
 		"image_url":             input.ImageURL,
+		"meeting_days":          input.MeetingDays,
+		"meeting_time":          input.MeetingTime,
+		"location_type":         input.LocationType,
+		"difficulty_level":      input.DifficultyLevel,
 		"currency":              input.Currency,
 		"status":                input.Status,
 		"module_schedules_json": input.ModuleSchedulesJSON,

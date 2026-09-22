@@ -29,9 +29,19 @@ export default function CohortCard({ cohort }: { cohort: any }) {
           <span className="flex items-center gap-1">
             <IconClock size={16} /> {cohort.duration_weeks} Weeks
           </span>
-          {cohort.start_date && (
+          {cohort.difficulty_level && (
             <span className="flex items-center gap-1">
-              <IconTrendingUp size={16} /> Starts {new Date(cohort.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              <IconTrendingUp size={16} /> {cohort.difficulty_level}
+            </span>
+          )}
+          {cohort.start_date && (
+            <span className="flex items-center gap-1 w-full mt-1 text-xs text-slate-500">
+              Starts {new Date(cohort.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </span>
+          )}
+          {(cohort.location_type || cohort.meeting_days) && (
+            <span className="flex items-center gap-1 w-full text-xs text-slate-500">
+              {cohort.location_type || 'Virtual'} • {cohort.meeting_days} {cohort.meeting_time}
             </span>
           )}
           
