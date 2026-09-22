@@ -43,6 +43,8 @@ export default function SettingsPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const darkFileInputRef = useRef<HTMLInputElement>(null);
   const [uploadingDarkLogo, setUploadingDarkLogo] = useState(false);
+  const [uploadingHero, setUploadingHero] = useState(false);
+  const heroFileInputRef = useRef<HTMLInputElement>(null);
   const [uploadingLogo, setUploadingLogo] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -94,6 +96,7 @@ const { data: tenantData, isLoading } = useQuery({
         customDomain: t.custom_domain || '',
         primaryColor: t.primary_color || '#146ef5',
         logoUrl: t.logo_url || '',
+        heroUrl: t.hero_bg_url || '',
         darkLogoUrl: t.dark_logo_url || '',
         flattenLogo: t.flatten_logo !== false,
       }));
@@ -122,6 +125,28 @@ const { data: tenantData, isLoading } = useQuery({
       alert("Failed to upload dark logo.");
     } finally {
       setUploadingDarkLogo(false);
+    }
+  };
+
+  const handleHeroUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingHero(true);
+    try {
+      const data = new FormData();
+      data.append('file', file);
+      data.append('folder', 'uploads/heroes');
+      const res = await api.post('/api/v1/upload', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      if (res.data && res.data.url) {
+        setFormData(prev => ({ ...prev, heroUrl: res.data.url }));
+      }
+    } catch (err) {
+      console.error("Upload failed", err);
+      alert("Failed to upload hero image.");
+    } finally {
+      setUploadingHero(false);
     }
   };
 
