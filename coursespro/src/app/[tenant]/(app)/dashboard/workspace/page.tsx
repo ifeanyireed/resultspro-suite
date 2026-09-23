@@ -2,7 +2,49 @@
 import React from 'react';
 import { PlusIcon, ChatBubbleLeftIcon, PaperClipIcon } from '@heroicons/react/24/outline';
 
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useAuthStore } from '@/store/useAuthStore';
+
 export default function WorkspacePage() {
+  const searchParams = useSearchParams();
+  const [verifying, setVerifying] = useState(false);
+  const token = useAuthStore((state: any) => state.token);
+
+  useEffect(() => {
+    const reference = searchParams.get('reference');
+    if (reference && token) {
+      setVerifying(true);
+      const tenantSlug = window.location.pathname.split('/')[1];
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "http://localhost:5001";
+      
+      fetch(`${USERS_API}/api/v1/payments/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Tenant-Domain': tenantSlug,
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ reference })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          alert('Payment verified successfully!');
+        } else {
+          alert('Payment verification failed or pending.');
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      })
+      .finally(() => {
+        setVerifying(false);
+        // Clean URL to prevent re-verifying on refresh
+        window.history.replaceState(null, '', window.location.pathname);
+      });
+    }
+  }, [searchParams, token]);
   const columns = [
     { name: 'To Do', count: 3, color: 'bg-gray-100 text-gray-600', dot: 'bg-gray-400' },
     { name: 'In Progress', count: 2, color: 'bg-blue-50 text-[#146ef5]', dot: 'bg-[#146ef5]' },

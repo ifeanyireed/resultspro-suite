@@ -43,6 +43,55 @@ export default function SettingsPage() {
             </button>
           </div>
         </div>
+
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
+          <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
+            Subscription & Billing
+          </h3>
+          <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-xl mb-4">
+            <div>
+              <p className="font-bold text-gray-900">Monthly Installment</p>
+              <p className="text-sm text-gray-500">Next payment of ₦45,000 due soon.</p>
+            </div>
+            <button 
+              onClick={async () => {
+                try {
+                  const token = useAuthStore.getState().token;
+                  const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "http://localhost:5001";
+                  const tenantSlug = window.location.pathname.split('/')[1];
+                  const res = await fetch(`${USERS_API}/api/v1/payments/initialize`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'X-Tenant-Domain': tenantSlug,
+                      'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ 
+                      amount: 45000,
+                      purpose: 'subscription_renewal',
+                      reference_id: 'sub_renewal_1',
+                      callback_url: window.location.href
+                    })
+                  });
+                  const data = await res.json();
+                  if (res.ok && data.authorization_url) {
+                    window.location.href = data.authorization_url;
+                  } else {
+                    alert(data.error || "Payment failed to initialize");
+                  }
+                } catch (e) {
+                  alert("Network error");
+                }
+              }}
+              className="bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-sm transition-all"
+            >
+              Pay Now
+            </button>
+          </div>
+          <p className="text-xs text-gray-500 flex items-center gap-1">
+             Payments are securely processed via Paystack.
+          </p>
+        </div>
       </div>
     </>
   );

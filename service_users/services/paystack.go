@@ -197,3 +197,33 @@ func (c *PaystackClient) VerifyWebhookSignature(payload []byte, signature string
 	
 	return hmac.Equal([]byte(expectedMAC), []byte(signature))
 }
+
+// InitializeTransaction starts a Paystack transaction
+func (c *PaystackClient) InitializeTransaction(amount int, email, reference, subaccount, callbackURL string) (string, string, string, error) {
+	payload := map[string]interface{}{
+		"amount":       amount,
+		"email":        email,
+		"reference":    reference,
+		"callback_url": callbackURL,
+	}
+
+	if subaccount != "" {
+		payload["subaccount"] = subaccount
+	}
+
+	result, err := c.doRequest("POST", "/transaction/initialize", payload)
+	if err != nil {
+		return "", "", "", err
+	}
+
+	data, ok := result["data"].(map[string]interface{})
+	if !ok {
+		return "", "", "", fmt.Errorf("invalid response format")
+	}
+
+	authURL, _ := data["authorization_url"].(string)
+	accessCode, _ := data["access_code"].(string)
+	ref, _ := data["reference"].(string)
+
+	return authURL, accessCode, ref, nil
+}

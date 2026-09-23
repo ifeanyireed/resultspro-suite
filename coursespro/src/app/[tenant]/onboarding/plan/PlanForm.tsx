@@ -46,21 +46,29 @@ export default function PlanForm({ tenant }: { tenant: any }) {
         return;
       }
       const token = Cookies.get('token');
-      const res = await fetch(`${COURSES_API}/api/payments/intent`, {
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "http://localhost:5001";
+      const res = await fetch(`${USERS_API}/api/v1/payments/initialize`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-Tenant-Domain': tenant.slug,
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ cohort_id: cohortId, plan_type: plan })
+        body: JSON.stringify({ 
+          amount: plan === 'upfront' ? upfrontPrice * 0.8 : monthlyCost,
+          purpose: 'cohort_enrollment',
+          reference_id: cohortId,
+          callback_url: window.location.origin + `/${tenant.slug}/dashboard/workspace?verify=true`
+        })
       });
       
-      if (res.ok) {
+      const data = await res.json();
+      if (res.ok && data.authorization_url) {
         Cookies.remove('selected_cohort_id');
-        router.push('/onboarding/orientation');
+        window.location.href = data.authorization_url;
       } else {
-        console.error("Payment failed");
+        console.error("Payment failed", data);
+        alert(data.error || "Payment initialization failed");
         setIsLoading(false);
       }
     } catch (err) {
