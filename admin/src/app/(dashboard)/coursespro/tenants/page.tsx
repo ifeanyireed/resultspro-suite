@@ -326,201 +326,157 @@ export default function CoursesProTenantManager() {
       {/* Create Tenant Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md flex flex-col max-h-[90vh] animate-in fade-in zoom-in duration-200">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0 rounded-t-3xl">
               <h3 className="font-bold text-slate-800 flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-blue-600" />
                 Provision CoursesPro Tenant
               </h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
+              <button type="button" onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <form onSubmit={handleCreateTenant} className="p-6 space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">CoursesPro Tenant Name</label>
-                <input 
-                  type="text" required
-                  value={newTenantData.name}
-                  onChange={e => setNewTenantData({...newTenantData, name: e.target.value})}
-                  placeholder="e.g. Greenwood High"
-                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Subdomain (Slug)</label>
-                <div className="relative">
+            <form onSubmit={handleCreateTenant} className="flex flex-col flex-1 overflow-hidden">
+              <div className="p-6 space-y-4 overflow-y-auto flex-1">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">CoursesPro Tenant Name</label>
                   <input 
                     type="text" required
-                    value={newTenantData.slug}
-                    onChange={e => setNewTenantData({...newTenantData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')})}
-                    placeholder="greenwood"
-                    className="w-full pl-4 pr-28 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                    value={newTenantData.name}
+                    onChange={e => setNewTenantData({...newTenantData, name: e.target.value})}
+                    placeholder="e.g. Greenwood High"
+                    className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
                   />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <span className="text-[10px] text-slate-400 font-medium">.ofia.shop</span>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Subdomain (Slug)</label>
+                  <div className="relative">
+                    <input 
+                      type="text" required
+                      value={newTenantData.slug}
+                      onChange={e => setNewTenantData({...newTenantData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')})}
+                      placeholder="greenwood"
+                      className="w-full pl-4 pr-28 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                    />
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <span className="text-[10px] text-slate-400 font-medium">.ofia.shop</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tenant Logo</label>
+                  <div className="flex items-center gap-4">
+                    {newTenantData.logo_url ? (
+                      <img src={newTenantData.logo_url} alt="Logo" className="w-10 h-10 object-contain bg-slate-50 rounded" />
+                    ) : (
+                      <div className="w-10 h-10 bg-slate-100 rounded flex items-center justify-center text-slate-400 text-xs">No Logo</div>
+                    )}
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={handleNewLogoUpload}
+                      disabled={isUploadingLogo}
+                      className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                    />
+                    {isUploadingLogo && <span className="text-xs text-blue-500">Uploading...</span>}
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Admin Contact Email</label>
+                  <input 
+                    type="email" required
+                    value={newTenantData.contact_email}
+                    onChange={e => setNewTenantData({...newTenantData, contact_email: e.target.value})}
+                    placeholder="admin@school.com"
+                    className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                  />
+                </div>
+  
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Contact Person Name</label>
+                  <input 
+                    type="text" 
+                    value={newTenantData.contact_person_name}
+                    onChange={e => setNewTenantData({...newTenantData, contact_person_name: e.target.value})}
+                    placeholder="e.g. John Doe"
+                    className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Contact Phone</label>
+                  <input 
+                    type="tel" 
+                    value={newTenantData.contact_phone}
+                    onChange={e => setNewTenantData({...newTenantData, contact_phone: e.target.value})}
+                    placeholder="+234 800 000 0000"
+                    className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Full Address</label>
+                  <input 
+                    type="text" 
+                    value={newTenantData.full_address}
+                    onChange={e => setNewTenantData({...newTenantData, full_address: e.target.value})}
+                    placeholder="e.g. 123 School Ave"
+                    className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                  />
+                </div>
+  
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Primary Color</label>
+                  <div className="flex gap-2">
+                    <input 
+                      type="color" 
+                      value={newTenantData.primary_color}
+                      onChange={e => setNewTenantData({...newTenantData, primary_color: e.target.value})}
+                      className="w-10 h-10 rounded-lg cursor-pointer bg-slate-50 border border-slate-200 p-1"
+                    />
+                    <input 
+                      type="text" 
+                      value={newTenantData.primary_color}
+                      onChange={e => setNewTenantData({...newTenantData, primary_color: e.target.value})}
+                      className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Secondary Color</label>
+                  <div className="flex gap-2">
+                    <input 
+                      type="color" 
+                      value={newTenantData.secondary_color}
+                      onChange={e => setNewTenantData({...newTenantData, secondary_color: e.target.value})}
+                      className="w-10 h-10 rounded-lg cursor-pointer bg-slate-50 border border-slate-200 p-1"
+                    />
+                    <input 
+                      type="text" 
+                      value={newTenantData.secondary_color}
+                      onChange={e => setNewTenantData({...newTenantData, secondary_color: e.target.value})}
+                      className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Accent Color</label>
+                  <div className="flex gap-2">
+                    <input 
+                      type="color" 
+                      value={newTenantData.accent_color}
+                      onChange={e => setNewTenantData({...newTenantData, accent_color: e.target.value})}
+                      className="w-10 h-10 rounded-lg cursor-pointer bg-slate-50 border border-slate-200 p-1"
+                    />
+                    <input 
+                      type="text" 
+                      value={newTenantData.accent_color}
+                      onChange={e => setNewTenantData({...newTenantData, accent_color: e.target.value})}
+                      className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
+                    />
                   </div>
                 </div>
               </div>
-                            <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tenant Logo</label>
-                <div className="flex items-center gap-4">
-                  {editTenantData.logo_url ? (
-                    <img src={editTenantData.logo_url} alt="Logo" className="w-10 h-10 object-contain bg-slate-50 rounded" />
-                  ) : (
-                    <div className="w-10 h-10 bg-slate-100 rounded flex items-center justify-center text-slate-400 text-xs">No Logo</div>
-                  )}
-                  <input 
-                    type="file" 
-                    accept="image/*"
-                    onChange={handleEditLogoUpload}
-                    disabled={isUploadingLogo}
-                    className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
-                  />
-                  {isUploadingLogo && <span className="text-xs text-blue-500">Uploading...</span>}
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tenant Logo</label>
-                <div className="flex items-center gap-4">
-                  {newTenantData.logo_url ? (
-                    <img src={newTenantData.logo_url} alt="Logo" className="w-10 h-10 object-contain bg-slate-50 rounded" />
-                  ) : (
-                    <div className="w-10 h-10 bg-slate-100 rounded flex items-center justify-center text-slate-400 text-xs">No Logo</div>
-                  )}
-                  <input 
-                    type="file" 
-                    accept="image/*"
-                    onChange={handleNewLogoUpload}
-                    disabled={isUploadingLogo}
-                    className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
-                  />
-                  {isUploadingLogo && <span className="text-xs text-blue-500">Uploading...</span>}
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Admin Contact Email</label>
-                <input 
-                  type="email" required
-                  value={newTenantData.contact_email}
-                  onChange={e => setNewTenantData({...newTenantData, contact_email: e.target.value})}
-                  placeholder="admin@school.com"
-                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Contact Person Name</label>
-                <input 
-                  type="text" 
-                  value={newTenantData.contact_person_name}
-                  onChange={e => setNewTenantData({...newTenantData, contact_person_name: e.target.value})}
-                  placeholder="e.g. John Doe"
-                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Contact Phone</label>
-                <input 
-                  type="tel" 
-                  value={newTenantData.contact_phone}
-                  onChange={e => setNewTenantData({...newTenantData, contact_phone: e.target.value})}
-                  placeholder="+234 800 000 0000"
-                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Full Address</label>
-                <input 
-                  type="text" 
-                  value={newTenantData.full_address}
-                  onChange={e => setNewTenantData({...newTenantData, full_address: e.target.value})}
-                  placeholder="e.g. 123 School Ave"
-                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Contact Person Name</label>
-                <input 
-                  type="text" 
-                  value={editTenantData.contact_person_name}
-                  onChange={e => setEditTenantData({...editTenantData, contact_person_name: e.target.value})}
-                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Contact Phone</label>
-                <input 
-                  type="tel" 
-                  value={editTenantData.contact_phone}
-                  onChange={e => setEditTenantData({...editTenantData, contact_phone: e.target.value})}
-                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Full Address</label>
-                <input 
-                  type="text" 
-                  value={editTenantData.full_address}
-                  onChange={e => setEditTenantData({...editTenantData, full_address: e.target.value})}
-                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Primary Color</label>
-                <div className="flex gap-2">
-                  <input 
-                    type="color" 
-                    value={newTenantData.primary_color}
-                    onChange={e => setNewTenantData({...newTenantData, primary_color: e.target.value})}
-                    className="w-10 h-10 rounded-lg cursor-pointer bg-slate-50 border border-slate-200 p-1"
-                  />
-                  <input 
-                    type="text" 
-                    value={newTenantData.primary_color}
-                    onChange={e => setNewTenantData({...newTenantData, primary_color: e.target.value})}
-                    className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
-                  />
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Secondary Color</label>
-                <div className="flex gap-2">
-                  <input 
-                    type="color" 
-                    value={newTenantData.secondary_color}
-                    onChange={e => setNewTenantData({...newTenantData, secondary_color: e.target.value})}
-                    className="w-10 h-10 rounded-lg cursor-pointer bg-slate-50 border border-slate-200 p-1"
-                  />
-                  <input 
-                    type="text" 
-                    value={newTenantData.secondary_color}
-                    onChange={e => setNewTenantData({...newTenantData, secondary_color: e.target.value})}
-                    className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
-                  />
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Accent Color</label>
-                <div className="flex gap-2">
-                  <input 
-                    type="color" 
-                    value={newTenantData.accent_color}
-                    onChange={e => setNewTenantData({...newTenantData, accent_color: e.target.value})}
-                    className="w-10 h-10 rounded-lg cursor-pointer bg-slate-50 border border-slate-200 p-1"
-                  />
-                  <input 
-                    type="text" 
-                    value={newTenantData.accent_color}
-                    onChange={e => setNewTenantData({...newTenantData, accent_color: e.target.value})}
-                    className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-slate-800"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-4 flex gap-3">
+  
+              <div className="px-6 py-4 flex gap-3 border-t border-slate-100 shrink-0 bg-white rounded-b-3xl">
                 <button 
                   type="button" 
                   onClick={() => setIsModalOpen(false)}

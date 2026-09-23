@@ -41,7 +41,7 @@ export default function SignupForm({ tenant }: { tenant: any }) {
       // Check if they came from cohort browsing
       const selectedCohortId = Cookies.get('selected_cohort_id');
       if (selectedCohortId) {
-        router.push('/onboarding/plan');
+        router.push('/onboarding/orientation');
       } else {
         router.push('/dashboard');
       }

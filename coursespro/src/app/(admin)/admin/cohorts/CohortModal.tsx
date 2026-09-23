@@ -138,18 +138,19 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="bg-white rounded-xl shadow-2xl w-full max-w-2xl flex flex-col my-8"
+            className="bg-white rounded-xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh]"
           >
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
               <h3 className="text-lg font-semibold text-slate-900">
                 {cohort ? 'Edit Cohort' : 'New Cohort'}
               </h3>
               <button
+                type="button"
                 onClick={onClose}
                 className="text-slate-400 hover:text-slate-500"
               >
@@ -157,231 +158,233 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
               </button>
             </div>
             
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Title</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.title}
-                    onChange={e => setFormData({ ...formData, title: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-') })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Slug</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.slug}
-                    onChange={e => setFormData({ ...formData, slug: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Subtitle</label>
-                <input
-                  type="text"
-                  value={formData.subtitle}
-                  onChange={e => setFormData({ ...formData, subtitle: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  placeholder="e.g. The premier autumn batch"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Program</label>
-                <select
-                  value={formData.program_id}
-                  onChange={e => setFormData({ ...formData, program_id: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                >
-                  <option value="">Select a Program</option>
-                  {programs.map(p => (
-                    <option key={p.id} value={p.id}>{p.title}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Description</label>
-                <textarea
-                  rows={3}
-                  value={formData.description}
-                  onChange={e => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Start Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={formData.start_date}
-                    onChange={e => setFormData({ ...formData, start_date: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">End Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={formData.end_date}
-                    onChange={e => setFormData({ ...formData, end_date: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Meeting Days</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Mon, Thu"
-                    value={formData.meeting_days}
-                    onChange={e => setFormData({ ...formData, meeting_days: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Meeting Time</label>
-                  <input
-                    type="time"
-                    value={formData.meeting_time}
-                    onChange={e => setFormData({ ...formData, meeting_time: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Location</label>
-                  <select
-                    value={formData.location_type}
-                    onChange={e => setFormData({ ...formData, location_type: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  >
-                    <option value="Virtual">Virtual</option>
-                    <option value="On-Site">On-Site</option>
-                    <option value="Hybrid">Hybrid</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Difficulty Level</label>
-                  <select
-                    value={formData.difficulty_level}
-                    onChange={e => setFormData({ ...formData, difficulty_level: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  >
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Advanced">Advanced</option>
-                    <option value="All Levels">All Levels</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Duration (Weeks)</label>
-                  <input
-                    type="number"
-                    value={formData.duration_weeks}
-                    onChange={e => setFormData({ ...formData, duration_weeks: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Capacity</label>
-                  <input
-                    type="number"
-                    value={formData.capacity}
-                    onChange={e => setFormData({ ...formData, capacity: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Price</label>
-                  <input
-                    type="number"
-                    value={formData.price}
-                    onChange={e => setFormData({ ...formData, price: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Currency</label>
-                  <select
-                    value={formData.currency}
-                    onChange={e => setFormData({ ...formData, currency: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  >
-                    <option value="NGN">NGN</option>
-                    <option value="USD">USD</option>
-                    <option value="GBP">GBP</option>
-                    <option value="EUR">EUR</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Cover Image</label>
-                <div className="flex items-center gap-4">
-                  <div className="w-24 h-16 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden">
-                    {formData.image_url ? (
-                      <img src={formData.image_url} alt="Cover Preview" className="w-full h-full object-cover" />
-                    ) : (
-                      <PhotoIcon className="w-6 h-6 text-gray-400" />
-                    )}
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+              <div className="p-6 space-y-4 overflow-y-auto flex-1">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Title</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.title}
+                      onChange={e => setFormData({ ...formData, title: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-') })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    />
                   </div>
-                  <input type="file" ref={imageInputRef} className="hidden" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
-                  <div className="flex flex-col items-start gap-1">
-                    <button
-                      type="button"
-                      onClick={() => imageInputRef.current?.click()}
-                      disabled={isUploading}
-                      className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors disabled:opacity-50"
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Slug</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.slug}
+                      onChange={e => setFormData({ ...formData, slug: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Subtitle</label>
+                  <input
+                    type="text"
+                    value={formData.subtitle}
+                    onChange={e => setFormData({ ...formData, subtitle: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    placeholder="e.g. The premier autumn batch"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Program</label>
+                  <select
+                    value={formData.program_id}
+                    onChange={e => setFormData({ ...formData, program_id: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  >
+                    <option value="">Select a Program</option>
+                    {programs.map(p => (
+                      <option key={p.id} value={p.id}>{p.title}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Description</label>
+                  <textarea
+                    rows={3}
+                    value={formData.description}
+                    onChange={e => setFormData({ ...formData, description: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Start Date</label>
+                    <input
+                      type="date"
+                      required
+                      value={formData.start_date}
+                      onChange={e => setFormData({ ...formData, start_date: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">End Date</label>
+                    <input
+                      type="date"
+                      required
+                      value={formData.end_date}
+                      onChange={e => setFormData({ ...formData, end_date: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Meeting Days</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Mon, Thu"
+                      value={formData.meeting_days}
+                      onChange={e => setFormData({ ...formData, meeting_days: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Meeting Time</label>
+                    <input
+                      type="time"
+                      value={formData.meeting_time}
+                      onChange={e => setFormData({ ...formData, meeting_time: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Location</label>
+                    <select
+                      value={formData.location_type}
+                      onChange={e => setFormData({ ...formData, location_type: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     >
-                      {isUploading ? 'Uploading...' : (formData.image_url ? 'Change image' : 'Upload image')}
-                    </button>
-                    {formData.image_url && (
+                      <option value="Virtual">Virtual</option>
+                      <option value="On-Site">On-Site</option>
+                      <option value="Hybrid">Hybrid</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Difficulty Level</label>
+                    <select
+                      value={formData.difficulty_level}
+                      onChange={e => setFormData({ ...formData, difficulty_level: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    >
+                      <option value="Beginner">Beginner</option>
+                      <option value="Intermediate">Intermediate</option>
+                      <option value="Advanced">Advanced</option>
+                      <option value="All Levels">All Levels</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Duration (Weeks)</label>
+                    <input
+                      type="number"
+                      value={formData.duration_weeks}
+                      onChange={e => setFormData({ ...formData, duration_weeks: Number(e.target.value) })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Capacity</label>
+                    <input
+                      type="number"
+                      value={formData.capacity}
+                      onChange={e => setFormData({ ...formData, capacity: Number(e.target.value) })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Price</label>
+                    <input
+                      type="number"
+                      value={formData.price}
+                      onChange={e => setFormData({ ...formData, price: Number(e.target.value) })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Currency</label>
+                    <select
+                      value={formData.currency}
+                      onChange={e => setFormData({ ...formData, currency: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    >
+                      <option value="NGN">NGN</option>
+                      <option value="USD">USD</option>
+                      <option value="GBP">GBP</option>
+                      <option value="EUR">EUR</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Cover Image</label>
+                  <div className="flex items-center gap-4">
+                    <div className="w-24 h-16 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden">
+                      {formData.image_url ? (
+                        <img src={formData.image_url} alt="Cover Preview" className="w-full h-full object-cover" />
+                      ) : (
+                        <PhotoIcon className="w-6 h-6 text-gray-400" />
+                      )}
+                    </div>
+                    <input type="file" ref={imageInputRef} className="hidden" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
+                    <div className="flex flex-col items-start gap-1">
                       <button
                         type="button"
-                        onClick={() => setFormData({ ...formData, image_url: '' })}
-                        className="text-xs font-medium text-red-500 hover:text-red-600 transition-colors"
+                        onClick={() => imageInputRef.current?.click()}
+                        disabled={isUploading}
+                        className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors disabled:opacity-50"
                       >
-                        Remove
+                        {isUploading ? 'Uploading...' : (formData.image_url ? 'Change image' : 'Upload image')}
                       </button>
-                    )}
+                      {formData.image_url && (
+                        <button
+                          type="button"
+                          onClick={() => setFormData({ ...formData, image_url: '' })}
+                          className="text-xs font-medium text-red-500 hover:text-red-600 transition-colors"
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
+                
+                {cohort && (
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
+                    <select
+                      value={formData.status}
+                      onChange={e => setFormData({ ...formData, status: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    >
+                      <option value="DRAFT">DRAFT</option>
+                      <option value="ENROLLING">ENROLLING</option>
+                      <option value="ACTIVE">ACTIVE</option>
+                      <option value="COMPLETED">COMPLETED</option>
+                    </select>
+                  </div>
+                )}
               </div>
-              
-              {cohort && (
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
-                  <select
-                    value={formData.status}
-                    onChange={e => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  >
-                    <option value="DRAFT">DRAFT</option>
-                    <option value="ENROLLING">ENROLLING</option>
-                    <option value="ACTIVE">ACTIVE</option>
-                    <option value="COMPLETED">COMPLETED</option>
-                  </select>
-                </div>
-              )}
 
-              <div className="flex justify-between items-center pt-4 border-t border-slate-100">
+              <div className="px-6 py-4 flex justify-between items-center border-t border-slate-100 shrink-0">
                 <div>
                   {cohort && (
                     <button

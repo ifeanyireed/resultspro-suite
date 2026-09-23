@@ -90,7 +90,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
   const [isQuizModalOpen, setIsQuizModalOpen] = React.useState<string | null>(null);
   const [moduleTextContext, setModuleTextContext] = React.useState('');
   const [textLessonDraft, setTextLessonDraft] = React.useState<string>('');
-
+  const [draggedContent, setDraggedContent] = React.useState<{ modId: string; index: number } | null>(null);
   React.useEffect(() => {
     const fetchProgramAndStages = async () => {
       try {
@@ -344,8 +344,34 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                     <div className="space-y-4">
                       {parseContents(mod).map((item, index) => {
                         return (
-                          <div key={item.id} className="relative group bg-slate-50 border border-slate-200 rounded-lg p-6 flex flex-col items-center justify-center gap-3 hover:border-slate-300 transition-colors">
-                            
+                          <div 
+                            key={item.id} 
+                            draggable
+                            onDragStart={(e) => {
+                              setDraggedContent({ modId: mod.id, index });
+                              e.dataTransfer.effectAllowed = 'move';
+                            }}
+                            onDragOver={(e) => {
+                              e.preventDefault();
+                              e.dataTransfer.dropEffect = 'move';
+                            }}
+                            onDrop={(e) => {
+                              e.preventDefault();
+                              if (!draggedContent || draggedContent.modId !== mod.id || draggedContent.index === index) return;
+                              const items = parseContents(mod);
+                              const draggedItem = items[draggedContent.index];
+                              items.splice(draggedContent.index, 1);
+                              items.splice(index, 0, draggedItem);
+                              setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
+                              handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                              setDraggedContent(null);
+                            }}
+                            onDragEnd={() => setDraggedContent(null)}
+                            className={`relative group bg-slate-50 border border-slate-200 rounded-lg p-6 flex flex-col items-center justify-center gap-3 hover:border-slate-300 transition-colors ${draggedContent?.modId === mod.id && draggedContent?.index === index ? 'opacity-50 border-dashed border-blue-400 bg-blue-50/30' : ''}`}
+                          >
+                            <div className="absolute top-2 left-2 cursor-grab text-slate-400 hover:text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <GripVertical className="w-5 h-5" />
+                            </div>
                             <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                <button 
                                  onClick={(e) => { 

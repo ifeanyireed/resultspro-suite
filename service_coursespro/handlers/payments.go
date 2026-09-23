@@ -39,12 +39,29 @@ func (h *Handler) InternalPaymentCallback(c *gin.Context) {
 
 	if payload.CohortID != "" && payload.UserID != "" {
 		if payload.Status == "SUCCESS" {
-			db.DB.Model(&models.Enrollment{}).
-				Where("user_id = ? AND cohort_id = ?", payload.UserID, payload.CohortID).
-				Updates(map[string]interface{}{
-					"payment_status":      "PAID",
-					"last_payment_failed": false,
-				})
+			var cohort models.Cohort
+			if err := db.DB.Where("id = ?", payload.CohortID).First(&cohort).Error; err == nil {
+				var enrollment models.Enrollment
+				err := db.DB.Where("user_id = ? AND cohort_id = ?", payload.UserID, payload.CohortID).First(&enrollment).Error
+				if err != nil {
+					// Create enrollment
+					enrollment = models.Enrollment{
+						ID:            uuid.New().String(),
+						TenantID:      cohort.TenantID,
+						CohortID:      payload.CohortID,
+						UserID:        payload.UserID,
+						PaymentStatus: "PAID",
+						PlanType:      "STANDARD",
+					}
+					db.DB.Create(&enrollment)
+				} else {
+					// Update existing enrollment
+					db.DB.Model(&enrollment).Updates(map[string]interface{}{
+						"payment_status":      "PAID",
+						"last_payment_failed": false,
+					})
+				}
+			}
 		} else if payload.Status == "FAILED" {
 			db.DB.Model(&models.Enrollment{}).
 				Where("user_id = ? AND cohort_id = ?", payload.UserID, payload.CohortID).

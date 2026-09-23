@@ -198,6 +198,8 @@ func HandleTenantPaymentVerify(w http.ResponseWriter, r *http.Request) {
 	if err := db.GormDB.Where("reference = ?", req.Reference).First(&payment).Error; err == nil {
 		if status == "success" {
 			payment.Status = "paid"
+			// Dispatch to courses service to finalize enrollment
+			go dispatchToCoursesPro(payment.StudentID, payment.EnrollmentID, "SUCCESS")
 		} else {
 			payment.Status = "failed"
 		}

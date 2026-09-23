@@ -18,7 +18,10 @@ export default function CohortsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [selectedCohort, setSelectedCohort] = useState<any>(null);
-
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const { data, isLoading: loading, refetch } = useQuery({
     queryKey: ['cohorts_dashboard'],
     queryFn: async () => {
@@ -38,6 +41,16 @@ export default function CohortsPage() {
   const cohorts = data?.cohorts || [];
   const stats = data?.stats || { active_cohorts: 0, active_programs: 0, fill_rate: 0 };
   const programs = data?.programs || [];
+
+  const filteredCohorts = cohorts.filter((c: any) => {
+    const searchString = `${c.title || ''} ${c.program?.title || ''}`.toLowerCase();
+    const matchesSearch = searchString.includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter ? c.status === statusFilter : true;
+    return matchesSearch && matchesStatus;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filteredCohorts.length / itemsPerPage));
+  const currentCohorts = filteredCohorts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
 
   const getStatusColor = (status: string) => {

@@ -16,7 +16,7 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      router.push('/onboarding/plan');
+      router.push('/onboarding/orientation');
     }, 1500);
   };
 

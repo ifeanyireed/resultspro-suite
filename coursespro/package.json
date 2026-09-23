@@ -17,6 +17,7 @@
     "@tiptap/react": "^3.31.3",
     "@tiptap/starter-kit": "^3.31.3",
     "axios": "^1.20.0",
+    "cloudinary": "^2.11.0",
     "clsx": "^2.1.1",
     "framer-motion": "^13.2.0",
     "js-cookie": "^3.0.8",

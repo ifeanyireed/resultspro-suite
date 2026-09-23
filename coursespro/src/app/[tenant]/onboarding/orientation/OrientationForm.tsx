@@ -122,10 +122,10 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
               </button>
             ) : (
               <Link 
-                href="/dashboard"
+                href="/onboarding/plan"
                 className="bg-slate-900 hover:bg-black text-white font-bold px-8 py-3.5 rounded-full shadow-sm transition-all flex items-center gap-2 group"
               >
-                Enter Workspace
+                Continue to Payment
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             )}
