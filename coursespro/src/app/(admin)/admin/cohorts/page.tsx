@@ -5,7 +5,8 @@ import {
   PlusIcon,
   CalendarIcon,
   UserGroupIcon,
-  PencilSquareIcon
+  PencilSquareIcon,
+  TrashIcon
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import { useQuery } from '@tanstack/react-query';
@@ -201,6 +202,22 @@ export default function CohortsPage() {
                         title="Edit Cohort"
                       >
                         <PencilSquareIcon className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={async () => {
+                          if (confirm('Are you sure you want to delete this cohort?')) {
+                            try {
+                              await coursesApi.delete(`/api/admin/cohorts/${c.id}`);
+                              refetch();
+                            } catch (err) {
+                              alert('Failed to delete cohort');
+                            }
+                          }
+                        }}
+                        className="text-gray-400 hover:text-red-500 transition-colors p-2"
+                        title="Delete Cohort"
+                      >
+                        <TrashIcon className="w-5 h-5" />
                       </button>
                     </td>
                   </tr>

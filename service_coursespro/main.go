@@ -93,6 +93,7 @@ func main() {
 		protected.GET("/admin/cohorts", h.AdminGetCohorts)
 		protected.POST("/admin/cohorts", h.AdminCreateCohort)
 		protected.PUT("/admin/cohorts/:id", h.AdminUpdateCohort)
+		protected.DELETE("/admin/cohorts/:id", h.AdminDeleteCohort)
 
 		protected.POST("/admin/stages", h.AdminCreateStage)
 		protected.PUT("/admin/stages/:id", h.AdminUpdateStage)
