@@ -18,7 +18,8 @@ export default async function CohortsPage({ params }: { params: Promise<{ tenant
   let cohorts = [];
   try {
     const res = await serverFetch(`${COURSES_API}/api/public/cohorts`, {
-      headers: { 'X-Tenant-Domain': tenant.slug }
+      headers: { 'X-Tenant-Domain': tenant.slug },
+      cache: 'no-store'
     });
     if (res.ok) {
       const data = await res.json();

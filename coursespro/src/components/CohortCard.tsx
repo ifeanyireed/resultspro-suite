@@ -21,9 +21,9 @@ export default function CohortCard({ cohort }: { cohort: any }) {
          </span>
       </div>
       <div className="p-6">
-        <h3 className="text-xl fw-600 mb-1">{cohort.title}</h3>
+        <h3 className="text-xl fw-600 mb-1">{cohort.title || cohort.program?.title}</h3>
         {cohort.subtitle && <p className="text-xs text-navy font-semibold mb-2">{cohort.subtitle}</p>}
-        <p className="text-sm text-gray-500 mb-4 line-clamp-2">{cohort.description}</p>
+        <p className="text-sm text-gray-500 mb-4 line-clamp-2">{cohort.description || cohort.program?.description}</p>
         
         <div className="flex flex-wrap gap-4 text-sm text-muted mb-6">
           <span className="flex items-center gap-1">

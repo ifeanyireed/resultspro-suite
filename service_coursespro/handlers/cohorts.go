@@ -22,6 +22,7 @@ func (h *Handler) GetPublicCohorts(c *gin.Context) {
 	var cohorts []models.Cohort
 	db.DB.Where("tenant_id = ?", tenantID).
 		Select("crs_cohorts.*, (SELECT COUNT(id) FROM crs_enrollments WHERE crs_enrollments.cohort_id = crs_cohorts.id) as enrolled_count").
+		Preload("Program").Preload("CohortMentors").
 		Where("status != ?", "DRAFT").Order("start_date ASC").Find(&cohorts)
 	c.JSON(http.StatusOK, gin.H{"cohorts": cohorts})
 }
@@ -41,6 +42,7 @@ func (h *Handler) GetCohortDetail(c *gin.Context) {
 	var cohort models.Cohort
 	if err := db.DB.Where("tenant_id = ?", tenantID).
 		Select("crs_cohorts.*, (SELECT COUNT(id) FROM crs_enrollments WHERE crs_enrollments.cohort_id = crs_cohorts.id) as enrolled_count").
+		Preload("Program").Preload("CohortMentors").
 		First(&cohort, "(id = ? OR slug = ?)", id, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Cohort not found"})
 		return
