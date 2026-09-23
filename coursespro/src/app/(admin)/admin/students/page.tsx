@@ -129,6 +129,7 @@ export default function StudentsPage() {
           plan_type: enrollment.plan_type || 'N/A',
           billing_cycle: enrollment.billing_cycle || 'N/A',
           current_stage_number: enrollment.current_stage_number || 0,
+          cohort_id: enrollment.cohort_id || null,
           user: users[s.user_id] || { full_name: s.full_name, email: s.email, avatar_url: null }
         };
       })
@@ -190,6 +191,7 @@ export default function StudentsPage() {
           <thead>
             <tr className="bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               <th className="px-6 py-4">Student</th>
+              <th className="px-6 py-4">Cohort</th>
               <th className="px-6 py-4">Enrollment Date</th>
               <th className="px-6 py-4">Payment Status</th>
               <th className="px-6 py-4">Plan / Cycle</th>
@@ -200,7 +202,7 @@ export default function StudentsPage() {
           <tbody className="divide-y divide-gray-100">
             {isLoading ? (
               <tr>
-                <td colSpan={6} className="px-6 py-8 text-center text-gray-500 text-sm">
+                <td colSpan={7} className="px-6 py-8 text-center text-gray-500 text-sm">
                   <div className="flex flex-col items-center justify-center gap-2">
                     <div className="w-6 h-6 border-2 border-[#146ef5] border-t-transparent rounded-full animate-spin"></div>
                     <span>Loading students...</span>
@@ -209,7 +211,7 @@ export default function StudentsPage() {
               </tr>
             ) : cohorts.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
                   <UserGroupIcon className="w-12 h-12 mx-auto text-gray-300 mb-3" />
                   <p className="text-base font-medium text-gray-900">No cohorts found</p>
                   <p className="text-sm mt-1">Create a cohort first to manage students.</p>
@@ -217,7 +219,7 @@ export default function StudentsPage() {
               </tr>
             ) : students.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
                   <UserGroupIcon className="w-12 h-12 mx-auto text-gray-300 mb-3" />
                   <p className="text-base font-medium text-gray-900">No students enrolled</p>
                   <p className="text-sm mt-1">This cohort doesn't have any students yet.</p>
@@ -242,6 +244,11 @@ export default function StudentsPage() {
                         <p className="text-xs text-gray-500">{s.user.email}</p>
                       </div>
                     </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="text-sm text-gray-900 font-medium whitespace-nowrap">
+                      {s.cohort_id ? (cohorts.find((c: any) => c.id === s.cohort_id)?.title || 'Unknown Cohort') : <span className="text-gray-400 italic">Unassigned</span>}
+                    </span>
                   </td>
                   <td className="px-6 py-4">
                     <span className="text-sm text-gray-600 font-medium">
