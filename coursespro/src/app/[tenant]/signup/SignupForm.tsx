@@ -66,7 +66,7 @@ export default function SignupForm({ tenant }: { tenant: any }) {
             <Image src={tenant?.logo_url || "/logo.png"} alt={tenant?.name || "Tenant"} width={64} height={64} className="object-contain" priority />
             <div>
               <h1 className="font-bold text-white text-3xl tracking-tight">{tenant?.name || "Tenant"}</h1>
-              <p className="text-blue-400 font-semibold text-xs uppercase tracking-widest">EDU SUITE</p>
+              <p className="text-blue-400 font-semibold text-xs uppercase tracking-widest">Learning Management System</p>
             </div>
           </div>
 
