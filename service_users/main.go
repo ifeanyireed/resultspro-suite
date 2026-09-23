@@ -208,6 +208,8 @@ func main() {
 				handlers.HandleGetTenantHierarchy(w, r)
 			case "update":
 				handlers.HandleUpdateTenant(w, r)
+			case "provision-dva":
+				handlers.HandleProvisionTenantDVA(w, r)
 			case "branding":
 				if r.Method == http.MethodGet {
 					handlers.HandleGetTenantBranding(w, r)

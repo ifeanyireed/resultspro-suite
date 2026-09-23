@@ -4,13 +4,14 @@ interface ModernDashboardLayoutProps {
   sidebarContent: React.ReactNode;
   headerContent?: React.ReactNode;
   children: React.ReactNode;
+  isCollapsed?: boolean;
 }
 
-export function ModernDashboardLayout({ sidebarContent, headerContent, children }: ModernDashboardLayoutProps) {
+export function ModernDashboardLayout({ sidebarContent, headerContent, children, isCollapsed = false }: ModernDashboardLayoutProps) {
   return (
-    <div className="dashboard-page min-h-screen bg-[#f9fafc] font-sans text-gray-900 flex">
+    <div className="dashboard-page min-h-screen bg-[#f9fafc] font-sans text-gray-900 flex transition-all duration-300">
       {/* Sidebar - Sticky */}
-      <aside className="w-[280px] bg-white border-r border-gray-100 flex flex-col justify-between py-4 shrink-0 h-screen sticky top-0 overflow-y-auto custom-scrollbar">
+      <aside className={`${isCollapsed ? 'w-[80px]' : 'w-[280px]'} bg-white border-r border-gray-100 flex flex-col justify-between py-4 shrink-0 h-screen sticky top-0 overflow-y-auto custom-scrollbar transition-all duration-300`}>
         {sidebarContent}
       </aside>
 

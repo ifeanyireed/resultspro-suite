@@ -203,6 +203,38 @@ export default function TenantPaymentConfig() {
                   </select>
                 </div>
               </div>
+              
+              <div className="pt-6 mt-6 border-t border-gray-100 flex items-center justify-between">
+                <div>
+                  <h4 className="font-semibold text-gray-900">Provision Paystack DVA</h4>
+                  <p className="text-sm text-gray-500 mt-1">Automatically create a subaccount and assign a virtual bank account.</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const bankCode = prompt("Enter Settlement Bank Code (e.g. 058 for GTB):", "058");
+                    if (!bankCode) return;
+                    const accNum = prompt("Enter Tenant Settlement Account Number:");
+                    if (!accNum) return;
+                    
+                    try {
+                      alert("Provisioning... This may take a moment.");
+                      const res = await api.post(`/api/v1/tenants/provision-dva/${tenantId}`, {
+                        bank_code: bankCode,
+                        account_number: accNum
+                      });
+                      alert("Provisioned successfully! DVA: " + res.data.dva.AccountNumber);
+                      window.location.reload();
+                    } catch (e) {
+                      alert("Provisioning failed. Check console.");
+                      console.error(e);
+                    }
+                  }}
+                  className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition-colors"
+                >
+                  Provision Now
+                </button>
+              </div>
             </div>
           ) : (
             <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm space-y-6">
@@ -231,6 +263,38 @@ export default function TenantPaymentConfig() {
                     <option value="failed">Connection Failed</option>
                   </select>
                 </div>
+              </div>
+              
+              <div className="pt-6 mt-6 border-t border-gray-100 flex items-center justify-between">
+                <div>
+                  <h4 className="font-semibold text-gray-900">Provision Paystack DVA</h4>
+                  <p className="text-sm text-gray-500 mt-1">Automatically create a subaccount and assign a virtual bank account.</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const bankCode = prompt("Enter Settlement Bank Code (e.g. 058 for GTB):", "058");
+                    if (!bankCode) return;
+                    const accNum = prompt("Enter Tenant Settlement Account Number:");
+                    if (!accNum) return;
+                    
+                    try {
+                      alert("Provisioning... This may take a moment.");
+                      const res = await api.post(`/api/v1/tenants/provision-dva/${tenantId}`, {
+                        bank_code: bankCode,
+                        account_number: accNum
+                      });
+                      alert("Provisioned successfully! DVA: " + res.data.dva.AccountNumber);
+                      window.location.reload();
+                    } catch (e) {
+                      alert("Provisioning failed. Check console.");
+                      console.error(e);
+                    }
+                  }}
+                  className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition-colors"
+                >
+                  Provision Now
+                </button>
               </div>
             </div>
           )}

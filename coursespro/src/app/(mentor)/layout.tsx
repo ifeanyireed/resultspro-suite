@@ -7,6 +7,7 @@ import Image from 'next/image';
 import TenantLogo from '@/components/TenantLogo';
 import { usePathname } from 'next/navigation';
 import api, { getTenantSlug, coursesApi } from '@/lib/api';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { 
   MagnifyingGlassIcon,
   EnvelopeIcon,
@@ -67,6 +68,7 @@ export default function AppLayout({
   const [logoUrl, setLogoUrl] = React.useState('/logo.png');
   const [profileName, setProfileName] = React.useState('Loading...');
   const [profileEmail, setProfileEmail] = React.useState('Loading...');
+  const [isCollapsed, setIsCollapsed] = React.useState(false);
 
   React.useEffect(() => {
     setMounted(true);
@@ -116,24 +118,43 @@ export default function AppLayout({
 
   return (
     <ModernDashboardLayout
+      isCollapsed={isCollapsed}
       sidebarContent={
         <>
           
           <div>
             {/* Logo */}
-            <div className="px-8 mb-6">
-              <TenantLogo 
-                theme="light"
-                height={48}
-                logoUrl={logoUrl}
-                tenantName={tenantName}
-                className="w-auto h-12 object-contain"
-              />
+            <div className={`${isCollapsed ? 'px-4' : 'px-8'} mb-6 flex items-center justify-between`}>
+              {!isCollapsed ? (
+                <TenantLogo 
+                  theme="light"
+                  height={48}
+                  logoUrl={logoUrl}
+                  tenantName={tenantName}
+                  className="w-auto h-12 object-contain"
+                />
+              ) : (
+                <div className="w-10 h-10 overflow-hidden flex items-center justify-start shrink-0">
+                  <TenantLogo 
+                    theme="light"
+                    height={40}
+                    logoUrl={logoUrl}
+                    tenantName={tenantName}
+                    className="w-auto h-10 object-left object-cover max-w-none"
+                  />
+                </div>
+              )}
+              <button 
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                className={`w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 ${isCollapsed ? 'absolute -right-4 top-6 bg-white border border-gray-200 shadow-sm z-50' : ''}`}
+              >
+                {isCollapsed ? <ChevronRightIcon className="w-4 h-4" /> : <ChevronLeftIcon className="w-5 h-5" />}
+              </button>
             </div>
 
                         {/* Menu Sections */}
-            <div className="px-6 space-y-1">
-              <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">{tenantName}</p>
+            <div className={`${isCollapsed ? 'px-3' : 'px-6'} space-y-1`}>
+              {!isCollapsed && <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">{tenantName}</p>}
               
               <Link href="/mentor" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/mentor') && pathname === '/mentor' ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
                 <Squares2X2Icon className="w-6 h-6" />
@@ -169,18 +190,19 @@ export default function AppLayout({
 
               <div className="pt-4 mt-4 border-t border-gray-100">
                 <Link href="/mentor/settings" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/mentor/settings') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                  <Cog6ToothIcon className="w-6 h-6" />
-                  Settings
+                  <Cog6ToothIcon className="w-6 h-6 shrink-0" />
+                  {!isCollapsed && <span className="truncate">Settings</span>}
                 </Link>
                 <button onClick={() => logout()} className="w-full text-left flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
-                  <ArrowRightOnRectangleIcon className="w-6 h-6" />
-                  Logout
+                  <ArrowRightOnRectangleIcon className="w-6 h-6 shrink-0" />
+                  {!isCollapsed && <span className="truncate">Logout</span>}
                 </button>
               </div>
             </div>
           </div>
 
           {/* User Info */}
+          {!isCollapsed ? (
           <div className="px-6 mt-8">
             <div 
               className="rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
@@ -204,6 +226,14 @@ export default function AppLayout({
               </button>
             </div>
           </div>
+          ) : (
+            <div className="px-2 mt-8 flex justify-center">
+               <div className="w-10 h-10 rounded-full flex items-center justify-center relative z-10 shadow-sm border border-gray-200 overflow-hidden bg-white/20 backdrop-blur-sm cursor-pointer hover:ring-2 hover:ring-blue-500 transition-all">
+                {mounted && <Image src={mentorProfile?.profile?.avatar_url || user?.avatarUrl || `/avatars/character4.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+                {!mounted && <Image src="/avatars/character4.jpg" alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+              </div>
+            </div>
+          )}
         
         </>
       }

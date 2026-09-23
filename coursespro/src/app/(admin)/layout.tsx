@@ -6,6 +6,7 @@ import Image from 'next/image';
 import TenantLogo from '@/components/TenantLogo';
 import { usePathname } from 'next/navigation';
 import api, { getTenantSlug } from '@/lib/api';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { 
   MagnifyingGlassIcon,
   EnvelopeIcon,
@@ -49,6 +50,7 @@ export default function AppLayout({
   const [logoUrl, setLogoUrl] = React.useState('/logo.png');
   const [profileName, setProfileName] = React.useState('Loading...');
   const [profileEmail, setProfileEmail] = React.useState('Loading...');
+  const [isCollapsed, setIsCollapsed] = React.useState(false);
 
   
   React.useEffect(() => {
@@ -104,69 +106,89 @@ export default function AppLayout({
 
   return (
     <ModernDashboardLayout
+      isCollapsed={isCollapsed}
       sidebarContent={
         <>
           
           <div>
             {/* Logo */}
-            <div className="px-8 mb-6">
-              <TenantLogo 
-                theme="light"
-                height={48}
-                logoUrl={logoUrl}
-                tenantName={tenantName}
-                className="w-auto h-12 object-contain"
-              />
+            <div className={`${isCollapsed ? 'px-4' : 'px-8'} mb-6 flex items-center justify-between`}>
+              {!isCollapsed ? (
+                <TenantLogo 
+                  theme="light"
+                  height={48}
+                  logoUrl={logoUrl}
+                  tenantName={tenantName}
+                  className="w-auto h-12 object-contain"
+                />
+              ) : (
+                <div className="w-10 h-10 overflow-hidden flex items-center justify-start shrink-0">
+                  <TenantLogo 
+                    theme="light"
+                    height={40}
+                    logoUrl={logoUrl}
+                    tenantName={tenantName}
+                    className="w-auto h-10 object-left object-cover max-w-none"
+                  />
+                </div>
+              )}
+              <button 
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                className={`w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 ${isCollapsed ? 'absolute -right-4 top-6 bg-white border border-gray-200 shadow-sm z-50' : ''}`}
+              >
+                {isCollapsed ? <ChevronRightIcon className="w-4 h-4" /> : <ChevronLeftIcon className="w-5 h-5" />}
+              </button>
             </div>
 
                         {/* Menu Sections */}
-            <div className="px-6 space-y-1">
-              <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">{tenantName}</p>
+            <div className={`${isCollapsed ? 'px-3' : 'px-6'} space-y-1`}>
+              {!isCollapsed && <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">{tenantName}</p>}
               
               <Link href="/admin/program-builder" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/admin/program-builder') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <Squares2X2Icon className="w-6 h-6" />
-                Program Builder
+                <Squares2X2Icon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Program Builder</span>}
               </Link>
 
               <Link href="/admin/cohorts" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/admin/cohorts') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <CalendarIcon className="w-6 h-6" />
-                Cohort Configurator
+                <CalendarIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Cohort Configurator</span>}
               </Link>
 
               <Link href="/admin/mentors" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/admin/mentors') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <AcademicCapIcon className="w-6 h-6" />
-                Mentor Management
+                <AcademicCapIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Mentor Management</span>}
               </Link>
               
               <Link href="/admin/payments" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/admin/payments') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <BriefcaseIcon className="w-6 h-6" />
-                Payments
+                <BriefcaseIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Payments</span>}
               </Link>
               <Link href="/admin/store" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/admin/store') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <ShoppingBagIcon className="w-6 h-6" strokeWidth={2} />
-                Store
+                <ShoppingBagIcon className="w-6 h-6 shrink-0" strokeWidth={2} />
+                {!isCollapsed && <span className="truncate">Store</span>}
               </Link>
 
 
               <Link href="/admin/reports" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/admin/reports') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <DocumentDuplicateIcon className="w-6 h-6" />
-                Reports
+                <DocumentDuplicateIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Reports</span>}
               </Link>
 
               <div className="pt-4 mt-4 border-t border-gray-100">
                 <Link href="/admin/settings" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/admin/settings') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                  <Cog6ToothIcon className="w-6 h-6" />
-                  Settings
+                  <Cog6ToothIcon className="w-6 h-6 shrink-0" />
+                  {!isCollapsed && <span className="truncate">Settings</span>}
                 </Link>
                 <button onClick={() => logout()} className="w-full text-left flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
-                  <ArrowRightOnRectangleIcon className="w-6 h-6" />
-                  Logout
+                  <ArrowRightOnRectangleIcon className="w-6 h-6 shrink-0" />
+                  {!isCollapsed && <span className="truncate">Logout</span>}
                 </button>
               </div>
             </div>
           </div>
 
           {/* User Info */}
+          {!isCollapsed ? (
           <div className="px-6 mt-8">
             <div 
               className="rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
@@ -187,6 +209,14 @@ export default function AppLayout({
               </button>
             </div>
           </div>
+          ) : (
+            <div className="px-2 mt-8 flex justify-center">
+               <div className="w-10 h-10 rounded-full flex items-center justify-center relative z-10 shadow-sm border border-gray-200 overflow-hidden bg-white/20 backdrop-blur-sm cursor-pointer hover:ring-2 hover:ring-blue-500 transition-all">
+                {mounted && <Image src={user?.avatarUrl || `/avatars/character4.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+                {!mounted && <Image src="/avatars/character4.jpg" alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+              </div>
+            </div>
+          )}
         
         </>
       }
