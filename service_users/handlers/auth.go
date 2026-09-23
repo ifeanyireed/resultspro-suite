@@ -124,11 +124,14 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	var tenantName, tenantLogo string
 	// Assign tenant role if requested
 	if input.TenantSlug != "" || input.TenantID != "" {
 		tenantID := input.TenantID
 		if tenantID == "" && input.TenantSlug != "" {
-			db.DB.QueryRow("SELECT id FROM tenants WHERE slug = ?", input.TenantSlug).Scan(&tenantID)
+			db.DB.QueryRow("SELECT id, name, COALESCE(logo_url, '') FROM tenants WHERE slug = ?", input.TenantSlug).Scan(&tenantID, &tenantName, &tenantLogo)
+		} else if tenantID != "" {
+			db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE id = ?", tenantID).Scan(&tenantName, &tenantLogo)
 		}
 
 		if tenantID != "" {
@@ -159,7 +162,7 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	go func() {
-		if err := utils.SendVerificationEmail(email, otp); err != nil {
+		if err := utils.SendVerificationEmail(email, otp, tenantName, tenantLogo); err != nil {
 			log.Printf("Failed to send verification email: %v", err)
 		}
 	}()
@@ -218,13 +221,23 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if user.AccountStatus == "unverified" {
+		var tenantName, tenantLogo string
+		if input.TenantSlug != "" || input.TenantID != "" {
+			tenantID := input.TenantID
+			if tenantID == "" && input.TenantSlug != "" {
+				db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE slug = ?", input.TenantSlug).Scan(&tenantName, &tenantLogo)
+			} else if tenantID != "" {
+				db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE id = ?", tenantID).Scan(&tenantName, &tenantLogo)
+			}
+		}
+
 		otp := utils.GenerateOTP()
 		expiresAt := time.Now().Add(time.Hour * 24)
 		_, err = db.DB.Exec("INSERT INTO verification_tokens (id, user_id, token_hash, type, expires_at) VALUES (?, ?, ?, 'email_verify', ?)",
 			uuid.New().String(), user.ID, otp, expiresAt.UTC().Format("2006-01-02 15:04:05"))
 		if err == nil {
 			go func() {
-				utils.SendVerificationEmail(user.Email, otp)
+				utils.SendVerificationEmail(user.Email, otp, tenantName, tenantLogo)
 			}()
 		}
 
@@ -724,7 +737,7 @@ func HandleResendVerification(w http.ResponseWriter, r *http.Request) {
 	}
 
 	go func() {
-		if err := utils.SendVerificationEmail(email, otp); err != nil {
+		if err := utils.SendVerificationEmail(email, otp, "", ""); err != nil {
 			log.Printf("Failed to send verification email: %v", err)
 		}
 	}()

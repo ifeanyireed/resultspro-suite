@@ -65,17 +65,27 @@ func SendEmail(to string, subject string, htmlBody string, textBody string) erro
 	return nil
 }
 
-func SendVerificationEmail(to string, otp string) error {
-	subject := otp + " is your ResultsPRO verification code"
-	textBody := fmt.Sprintf("Your ResultsPRO verification code is: %s. This code will expire in 24 hours.", otp)
+func SendVerificationEmail(to string, otp string, tenantName string, tenantLogo string) error {
+	brandName := "ResultsPRO"
+	brandLogo := "https://resultspro.ng/logo.png"
+
+	if tenantName != "" {
+		brandName = tenantName
+	}
+	if tenantLogo != "" {
+		brandLogo = tenantLogo
+	}
+
+	subject := otp + " is your " + brandName + " verification code"
+	textBody := fmt.Sprintf("Your %s verification code is: %s. This code will expire in 24 hours.", brandName, otp)
 	htmlBody := fmt.Sprintf(`
 <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; padding: 40px; margin: 0; color: #1e293b; border: 1px solid #e2e8f0; border-radius: 12px; max-width: 580px;">
   <div style="margin-bottom: 24px; display: flex; align-items: center;">
-    <img src="https://resultspro.ng/logo.png" alt="ResultsPRO" style="height: 40px; width: auto; object-fit: contain;" />
+    <img src="%s" alt="%s" style="height: 40px; width: auto; object-fit: contain;" />
   </div>
   <h2 style="font-size: 20px; font-weight: 600; color: #0f172a; margin-top: 0; margin-bottom: 16px;">Verify your email address</h2>
   <p style="font-size: 14px; line-height: 22px; color: #475569; margin-bottom: 24px;">
-    Welcome to the ResultsPRO Suite. Use the 6-digit code below to complete your registration:
+    Welcome to %s. Use the 6-digit code below to complete your registration:
   </p>
   <div style="background-color: #f1f5f9; border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 24px;">
     <span style="font-size: 36px; font-weight: 700; letter-spacing: 10px; color: #2563eb; font-family: monospace;">%s</span>
@@ -85,9 +95,9 @@ func SendVerificationEmail(to string, otp string) error {
   </p>
   <hr style="border: none; border-top: 1px solid #e2e8f0; margin-bottom: 20px;">
   <p style="font-size: 11px; color: #94a3b8; line-height: 16px;">
-    ResultsPRO Suite &bull; Centralized Identity &amp; Academics Platform
+    %s &bull; Centralized Identity &amp; Academics Platform
   </p>
-</div>`, otp)
+</div>`, brandLogo, brandName, brandName, otp, brandName)
 	return SendEmail(to, subject, htmlBody, textBody)
 }
 

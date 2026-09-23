@@ -386,7 +386,7 @@ func HandleChangeEmail(w http.ResponseWriter, r *http.Request) {
 		uuid.New().String(), userID, otp, expiresAt.UTC().Format("2006-01-02 15:04:05"))
 
 	go func() {
-		utils.SendVerificationEmail(newEmail, otp)
+		utils.SendVerificationEmail(newEmail, otp, "", "")
 	}()
 
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Email updated. A verification code has been sent to your new email."})

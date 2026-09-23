@@ -509,8 +509,8 @@ export default function CoursesProTenantManager() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <form onSubmit={handleUpdateTenant} className="flex flex-col overflow-hidden">
-              <div className="p-6 space-y-4 overflow-y-auto">
+            <form onSubmit={handleUpdateTenant} className="flex flex-col flex-1 overflow-hidden">
+              <div className="p-6 space-y-4 overflow-y-auto flex-1">
                             <div className="space-y-1.5 flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl mt-4">
                 <div>
                   <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Account Status</label>

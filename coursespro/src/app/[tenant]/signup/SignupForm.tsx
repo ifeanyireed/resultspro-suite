@@ -29,22 +29,24 @@ export default function SignupForm({ tenant }: { tenant: any }) {
     setError('');
     try {
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-      const res = await axios.post(`${USERS_API}/api/v1/auth/register`, {
+      const res = await axios.post(`${USERS_API}/api/v1/auth/signup`, {
         email,
         password,
-        first_name: name.split(' ')[0] || '',
+        full_name: name,
         tenant_slug: tenant?.slug
       });
       
       const token = res.data?.token || res.data?.access_token;
-      if (token) setAuth(res.data.user, token);
-
-      // Check if they came from cohort browsing
-      const selectedCohortId = Cookies.get('selected_cohort_id');
-      if (selectedCohortId) {
-        router.push('/onboarding/orientation');
+      if (token) {
+        setAuth(res.data.user, token);
+        const selectedCohortId = Cookies.get('selected_cohort_id');
+        if (selectedCohortId) {
+          router.push('/onboarding/orientation');
+        } else {
+          router.push('/dashboard');
+        }
       } else {
-        router.push('/dashboard');
+        setShowOTP(true);
       }
     } catch (err: any) {
       setError(err.response?.data?.error || err.response?.data?.message || err.message || 'Signup failed');
@@ -122,91 +124,176 @@ export default function SignupForm({ tenant }: { tenant: any }) {
         </div>
 
         <div className="w-full max-w-md">
-          <div className="mb-10 text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Create Account</h2>
-            <p className="text-slate-500 font-medium">Enter your details to create an account and access the hub.</p>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-slate-700">Full Name</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-slate-400" />
+          {showOTP ? (
+            <div className="w-full mx-auto">
+              <div className="text-center mb-10">
+                <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Mail className="w-8 h-8" />
                 </div>
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                  placeholder="Ada Lovelace"
-                />
+                <h2 className="text-3xl font-bold text-slate-900 mb-2 tracking-tight">Verify Your Email</h2>
+                <p className="text-slate-500 text-sm">
+                  We've sent a 6-digit verification code to <span className="font-semibold text-slate-700">{email}</span>.
+                </p>
               </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-slate-700">Email Address</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-slate-400" />
+              
+              {error && <div className="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg">{error}</div>}
+              
+              <form onSubmit={async (e) => {
+                e.preventDefault();
+                setVerificationLoading(true);
+                setError('');
+                try {
+                  const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+                  await axios.post(`${USERS_API}/api/v1/auth/verify-email`, { token: otp });
+                  
+                  // Auto-login after verification
+                  try {
+                    const loginRes = await axios.post(`${USERS_API}/api/v1/auth/login`, {
+                      email,
+                      password,
+                      tenant_slug: tenant?.slug
+                    });
+                    const token = loginRes.data.access_token || loginRes.data.token;
+                    if (token) {
+                      setAuth(loginRes.data.user, token);
+                      const selectedCohortId = Cookies.get('selected_cohort_id');
+                      if (selectedCohortId) {
+                        router.push('/onboarding/orientation');
+                      } else {
+                        router.push('/dashboard');
+                      }
+                    } else {
+                      router.push('/login');
+                    }
+                  } catch (loginErr) {
+                    // Fallback if login fails
+                    router.push('/login');
+                  }
+                } catch (err: any) {
+                  setError(err.response?.data?.error || err.response?.data?.message || "Invalid OTP");
+                } finally {
+                  setVerificationLoading(false);
+                }
+              }} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">Verification Code</label>
+                  <input 
+                    type="text" 
+                    value={otp} 
+                    onChange={(e) => setOtp(e.target.value)} 
+                    placeholder="000000"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-center tracking-widest text-xl"
+                    maxLength={6}
+                    required
+                  />
                 </div>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                  placeholder="user@coursespro.co"
-                />
-              </div>
-            </div>
 
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="block text-sm font-semibold text-slate-700">Password</label>
-                <Link href="#" className="text-sm font-semibold text-blue-600 hover:text-blue-700">
-                  Forgot password?
-                </Link>
+                <button
+                  type="submit"
+                  disabled={verificationLoading || otp.length < 5}
+                  className="w-full flex justify-center items-center py-3.5 px-4 rounded-xl shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed group"
+                >
+                  {verificationLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      Verify Email <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+          ) : (
+            <>
+              <div className="mb-10 text-center lg:text-left">
+                <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Create Account</h2>
+                <p className="text-slate-500 font-medium">Enter your details to create an account and access the hub.</p>
               </div>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-400" />
+
+              {error && <div className="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg">{error}</div>}
+
+              <form onSubmit={handleLogin} className="space-y-6">
+                <div className="space-y-1.5">
+                  <label className="block text-sm font-semibold text-slate-700">Full Name</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <User className="h-5 w-5 text-slate-400" />
+                    </div>
+                    <input
+                      type="text"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                      placeholder="Ada Lovelace"
+                    />
+                  </div>
                 </div>
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                  placeholder="••••••••"
-                />
+
+                <div className="space-y-1.5">
+                  <label className="block text-sm font-semibold text-slate-700">Email Address</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Mail className="h-5 w-5 text-slate-400" />
+                    </div>
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                      placeholder="user@coursespro.co"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-semibold text-slate-700">Password</label>
+                    <Link href="#" className="text-sm font-semibold text-blue-600 hover:text-blue-700">
+                      Forgot password?
+                    </Link>
+                  </div>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Lock className="h-5 w-5 text-slate-400" />
+                    </div>
+                    <input
+                      type="password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed group"
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      Create Free Account
+                      <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </button>
+              </form>
+
+              <div className="mt-8 text-center">
+                <p className="text-xs text-slate-400 font-medium">
+                  Protected by reCAPTCHA and subject to the {tenant?.name || "Tenant"}{' '}
+                  <a href="https://www.resultspro.ng/privacy" className="text-slate-600 hover:underline">Privacy Policy</a> and{' '}
+                  <a href="https://www.resultspro.ng/terms" className="text-slate-600 hover:underline">Terms of Service</a>.
+                </p>
               </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed group"
-            >
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  Create Free Account
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
-            </button>
-          </form>
-
-          <div className="mt-8 text-center">
-            <p className="text-xs text-slate-400 font-medium">
-              Protected by reCAPTCHA and subject to the {tenant?.name || "Tenant"}{' '}
-              <a href="https://www.resultspro.ng/privacy" className="text-slate-600 hover:underline">Privacy Policy</a> and{' '}
-              <a href="https://www.resultspro.ng/terms" className="text-slate-600 hover:underline">Terms of Service</a>.
-            </p>
-          </div>
+            </>
+          )}
         </div>
       </div>
     </div>

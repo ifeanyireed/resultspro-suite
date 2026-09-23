@@ -65,10 +65,22 @@ export default function LoginForm({ tenant }: { tenant: any }) {
           } else if (roles.includes('mentor')) {
             router.push('/mentor');
           } else {
-            router.push('/dashboard');
+            const Cookies = require('js-cookie');
+            const selectedCohortId = Cookies.get('selected_cohort_id');
+            if (selectedCohortId) {
+              router.push('/onboarding/orientation');
+            } else {
+              router.push('/dashboard');
+            }
           }
         } catch (e) {
-          router.push('/dashboard');
+          const Cookies = require('js-cookie');
+          const selectedCohortId = Cookies.get('selected_cohort_id');
+          if (selectedCohortId) {
+            router.push('/onboarding/orientation');
+          } else {
+            router.push('/dashboard');
+          }
         }
       }
     } catch (err: any) {
