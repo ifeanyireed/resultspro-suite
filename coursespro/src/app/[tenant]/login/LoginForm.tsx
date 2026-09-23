@@ -98,7 +98,7 @@ export default function LoginForm({ tenant }: { tenant: any }) {
             <TenantLogo theme="dark" height={40} logoUrl={tenant?.logo_url} darkLogoUrl={tenant?.dark_logo_url} flattenLogo={tenant?.flatten_logo} tenantName={tenant?.name} />
             <div>
               <h1 className="font-bold text-white text-3xl tracking-tight">{tenant?.name || "Tenant"}</h1>
-              <p className="text-blue-400 font-semibold text-xs uppercase tracking-widest">LEARNING MANAGEMENT SYSTEM</p>
+              <p className="text-blue-400 font-semibold text-xs uppercase tracking-widest">Learning Management System</p>
             </div>
           </div>
 
