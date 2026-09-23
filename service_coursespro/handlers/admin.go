@@ -328,8 +328,8 @@ func (h *Handler) AdminGetCohortStats(c *gin.Context) {
 	var totalCohorts int64
 	var distinctPrograms int64
 
-	db.DB.Model(&models.Cohort{}).Where("tenant_id = ? AND status = ?", tenantID, "ACTIVE").Count(&totalCohorts)
-	db.DB.Model(&models.Cohort{}).Where("tenant_id = ? AND status = ?", tenantID, "ACTIVE").Distinct("program_id").Count(&distinctPrograms)
+	db.DB.Model(&models.Cohort{}).Where("tenant_id = ? AND status IN ?", tenantID, []string{"ACTIVE", "ENROLLING"}).Count(&totalCohorts)
+	db.DB.Model(&models.Cohort{}).Where("tenant_id = ? AND status IN ?", tenantID, []string{"ACTIVE", "ENROLLING"}).Distinct("program_id").Count(&distinctPrograms)
 
 	var totalEnrolled int64
 	db.DB.Model(&models.Enrollment{}).Where("tenant_id = ?", tenantID).Count(&totalEnrolled)

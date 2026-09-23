@@ -120,9 +120,9 @@ export default function CohortsPage() {
           <thead>
             <tr className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               <th className="px-6 py-4">Cohort Name</th>
+              <th className="px-6 py-4">Details & Pricing</th>
               <th className="px-6 py-4">Status</th>
-              <th className="px-6 py-4">Mentors</th>
-              <th className="px-6 py-4">Students</th>
+              <th className="px-6 py-4">Mentors & Students</th>
               <th className="px-6 py-4 text-right">Actions</th>
             </tr>
           </thead>
@@ -163,19 +163,29 @@ export default function CohortsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
+                      <div className="text-sm text-gray-900 font-medium">
+                        {c.price > 0 ? new Intl.NumberFormat('en-NG', { style: 'currency', currency: c.currency || 'NGN' }).format(c.price) : 'Free'}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-0.5">
+                        {c.start_date && c.start_date !== '0001-01-01T00:00:00Z' ? new Date(c.start_date).toLocaleDateString() : 'TBD'} • {c.duration_weeks} weeks
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
                       <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-${color}-100 text-${color}-700`}>
                         {c.status}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <UserGroupIcon className="w-4 h-4 text-gray-400" strokeWidth={2} />
-                        <span className="text-gray-900 font-medium">{mentorCount}</span>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-1.5" title="Mentors">
+                          <UserGroupIcon className="w-4 h-4 text-gray-400" strokeWidth={2} />
+                          <span className="text-gray-900 font-medium text-sm">{mentorCount}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5" title="Students">
+                          <span className="text-gray-900 font-medium text-sm">{c.enrolled_count || 0}</span>
+                          <span className="text-gray-400 text-xs">/ {c.capacity}</span>
+                        </div>
                       </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-gray-900 font-medium">{c.enrolled_count || 0}</span>
-                      <span className="text-gray-400 text-sm"> / {c.capacity}</span>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button 
