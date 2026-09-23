@@ -12,7 +12,8 @@ import {
   Bars3Icon,
   DocumentTextIcon,
   VideoCameraIcon,
-  DocumentDuplicateIcon
+  DocumentDuplicateIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 import api, { coursesApi } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -221,7 +222,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center gap-2">
+          <button onClick={() => setIsSettingsOpen(true)} className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center gap-2">
             <Cog6ToothIcon className="w-4 h-4 stroke-2" />
             Settings
           </button>
@@ -232,8 +233,11 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
             <PlayIcon className="w-4 h-4 stroke-2" />
             Preview
           </button>
-          <button className="px-4 py-1.5 text-sm font-medium bg-gray-900 text-white rounded-md hover:bg-gray-800">
-            Publish
+          <button 
+            disabled={isPublishing}
+            onClick={handlePublishToggle}
+            className={`px-4 py-1.5 text-sm font-medium text-white rounded-md transition-colors disabled:opacity-70 ${program?.status === 'published' ? 'bg-amber-600 hover:bg-amber-700' : 'bg-gray-900 hover:bg-gray-800'}`}>
+            {isPublishing ? '...' : (program?.status === 'published' ? 'Unpublish' : 'Publish')}
           </button>
         </div>
       </div>
@@ -1047,6 +1051,75 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                   content={textLessonDraft}
                   onChange={setTextLessonDraft}
                 />
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+
+      <AnimatePresence>
+        {isSettingsOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden flex flex-col"
+            >
+              <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+                <h2 className="text-lg font-bold text-gray-900">Program Settings</h2>
+                <button onClick={() => setIsSettingsOpen(false)} className="text-gray-400 hover:text-gray-600">
+                  <XMarkIcon className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Title</label>
+                  <input 
+                    type="text" 
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-[#146ef5]" 
+                    placeholder="E.g., Web Dev Mastery"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
+                  <textarea 
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                    rows={3}
+                    className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-[#146ef5]" 
+                    placeholder="Brief description..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Duration (Weeks)</label>
+                  <input 
+                    type="number" 
+                    value={editDuration}
+                    onChange={(e) => setEditDuration(parseInt(e.target.value) || 1)}
+                    className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-[#146ef5]" 
+                  />
+                </div>
+              </div>
+
+              <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
+                <button 
+                  onClick={() => setIsSettingsOpen(false)}
+                  className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleSaveSettings}
+                  disabled={savingSettings}
+                  className="px-5 py-2.5 text-sm font-semibold bg-[#146ef5] text-white hover:bg-[#105bd1] rounded-xl shadow-sm transition-colors disabled:opacity-70"
+                >
+                  {savingSettings ? 'Saving...' : 'Save Settings'}
+                </button>
               </div>
             </motion.div>
           </div>
