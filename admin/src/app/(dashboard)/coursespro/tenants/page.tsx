@@ -499,8 +499,8 @@ export default function CoursesProTenantManager() {
       {/* Edit Tenant Modal */}
       {isEditModalOpen && editTenantData && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col max-h-[90vh]">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0">
               <h3 className="font-bold text-slate-800 flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-blue-600" />
                 Edit Tenant
@@ -509,7 +509,8 @@ export default function CoursesProTenantManager() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <form onSubmit={handleUpdateTenant} className="p-6 space-y-4">
+            <form onSubmit={handleUpdateTenant} className="flex flex-col overflow-hidden">
+              <div className="p-6 space-y-4 overflow-y-auto">
                             <div className="space-y-1.5 flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl mt-4">
                 <div>
                   <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Account Status</label>
@@ -669,7 +670,8 @@ export default function CoursesProTenantManager() {
               )}
 
 
-              <div className="pt-4 flex gap-3">
+              </div>
+              <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex gap-3 shrink-0">
                 <button 
                   type="button" 
                   onClick={() => setIsEditModalOpen(false)}

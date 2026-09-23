@@ -103,6 +103,9 @@ func main() {
 		protected.PUT("/admin/modules/:id", h.AdminUpdateModule)
 		protected.DELETE("/admin/modules/:id", h.AdminDeleteModule)
 
+		protected.POST("/admin/enrollments", h.AdminAssignStudentToCohort)
+		protected.DELETE("/admin/enrollments/:id", h.AdminRemoveStudentFromCohort)
+
 		protected.GET("/admin/enrollments", h.AdminGetEnrollments)
 
 		// Admin Mentors

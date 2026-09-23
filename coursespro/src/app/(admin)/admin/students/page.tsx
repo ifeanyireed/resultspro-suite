@@ -2,27 +2,90 @@
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import api, { coursesApi } from '@/lib/api';
+import api, { coursesApi, getTenantSlug } from '@/lib/api';
 import { UserGroupIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 export default function StudentsPage() {
   const [selectedCohortId, setSelectedCohortId] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [managingStudent, setManagingStudent] = useState<any>(null);
+  const [isManageModalOpen, setIsManageModalOpen] = useState(false);
+  const [targetCohortId, setTargetCohortId] = useState('');
+  const [isAssigning, setIsAssigning] = useState(false);
+
+  const openManageModal = (student: any) => {
+    setManagingStudent(student);
+    const currentEnrollment = data?.enrollments?.find((e: any) => e.user_id === student.user_id);
+    setTargetCohortId(currentEnrollment ? currentEnrollment.cohort_id : '');
+    setIsManageModalOpen(true);
+  };
+
+  const handleAssignCohort = async () => {
+    if (!targetCohortId || !managingStudent) return;
+    setIsAssigning(true);
+    try {
+      await coursesApi.post('/api/admin/enrollments', {
+        user_id: managingStudent.user_id,
+        cohort_id: targetCohortId
+      });
+      setIsManageModalOpen(false);
+      refetch();
+    } catch (e: any) {
+      alert(e.response?.data?.error || "Failed to assign cohort");
+    } finally {
+      setIsAssigning(false);
+    }
+  };
+
+  const handleRemoveCohort = async () => {
+    if (!managingStudent) return;
+    const currentEnrollment = data?.enrollments?.find((e: any) => e.user_id === managingStudent.user_id);
+    if (!currentEnrollment) return;
+
+    if (!confirm("Are you sure you want to remove this student from their current cohort?")) return;
+
+    setIsAssigning(true);
+    try {
+      await coursesApi.delete(`/api/admin/enrollments/${currentEnrollment.id}`);
+      setIsManageModalOpen(false);
+      refetch();
+    } catch (e: any) {
+      alert("Failed to remove cohort");
+    } finally {
+      setIsAssigning(false);
+    }
+  };
+
 
   // Fetch cohorts and enrollments
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['admin_students_data'],
     queryFn: async () => {
-      const [cohortsRes, enrollmentsRes] = await Promise.all([
+      const slug = getTenantSlug();
+      const [cohortsRes, enrollmentsRes, tenantRes] = await Promise.all([
         coursesApi.get('/api/admin/cohorts'),
-        coursesApi.get('/api/admin/enrollments')
+        coursesApi.get('/api/admin/enrollments'),
+        api.get(`/api/public/tenant/resolve?domain=${slug}`)
       ]);
       
       const cohorts = cohortsRes.data.cohorts || [];
       const enrollments = enrollmentsRes.data.enrollments || [];
+      const tenantId = tenantRes.data?.tenant?.id;
+      
+      let allStudents = [];
+      if (tenantId) {
+        try {
+          const rolesRes = await api.get(`/api/v1/tenants/${tenantId}/roles?role=student`);
+          allStudents = rolesRes.data || [];
+        } catch (e) {
+          console.error("Failed to fetch tenant roles", e);
+        }
+      }
       
       // Extract unique user IDs
-      const userIds = [...new Set(enrollments.map((e: any) => e.user_id))];
+      const enrolledUserIds = enrollments.map((e: any) => e.user_id);
+      const studentRoleUserIds = allStudents.map((s: any) => s.user_id);
+      const userIds = [...new Set([...enrolledUserIds, ...studentRoleUserIds])];
       
       // Fetch user profiles in bulk
       let users: Record<string, any> = {};
@@ -38,29 +101,44 @@ export default function StudentsPage() {
         }
       }
 
-      return { cohorts, enrollments, users };
+      return { cohorts, enrollments, allStudents, users };
     }
   });
 
   const cohorts = data?.cohorts || [];
   const enrollments = data?.enrollments || [];
+  const allStudents = data?.allStudents || [];
   const users = data?.users || {};
 
-  // Default to first cohort if none selected and cohorts exist
+  // Default to 'all' if none selected
   React.useEffect(() => {
-    if (!selectedCohortId && cohorts.length > 0) {
-      setSelectedCohortId(cohorts[0].id);
+    if (!selectedCohortId) {
+      setSelectedCohortId('all');
     }
-  }, [cohorts, selectedCohortId]);
-
-  // Filter enrollments by selected cohort
-  const cohortEnrollments = enrollments.filter((e: any) => e.cohort_id === selectedCohortId);
+  }, [selectedCohortId]);
 
   // Map to student data and apply search filter
-  const students = cohortEnrollments.map((e: any) => ({
-    ...e,
-    user: users[e.user_id] || { full_name: 'Unknown User', email: 'N/A' }
-  })).filter((s: any) => {
+  const students = (selectedCohortId === 'all' 
+    ? allStudents.map((s: any) => {
+        const enrollment = enrollments.find((e: any) => e.user_id === s.user_id) || {};
+        return {
+          id: s.id,
+          user_id: s.user_id,
+          enrolled_at: enrollment.enrolled_at || s.created_at,
+          payment_status: enrollment.payment_status || 'UNENROLLED',
+          plan_type: enrollment.plan_type || 'N/A',
+          billing_cycle: enrollment.billing_cycle || 'N/A',
+          current_stage_number: enrollment.current_stage_number || 0,
+          user: users[s.user_id] || { full_name: s.full_name, email: s.email, avatar_url: null }
+        };
+      })
+    : enrollments
+        .filter((e: any) => e.cohort_id === selectedCohortId)
+        .map((e: any) => ({
+          ...e,
+          user: users[e.user_id] || { full_name: 'Unknown User', email: 'N/A' }
+        }))
+  ).filter((s: any) => {
     const searchString = `${s.user.full_name || ''} ${s.user.email || ''}`.toLowerCase();
     return searchString.includes(searchQuery.toLowerCase());
   });
@@ -82,7 +160,8 @@ export default function StudentsPage() {
               onChange={(e) => setSelectedCohortId(e.target.value)}
               className="px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#146ef5] bg-white text-gray-900 shadow-sm font-medium min-w-[250px]"
             >
-              <option value="" disabled>Select a Cohort</option>
+              <option value="all">All Students (Tenant)</option>
+              <option value="" disabled>--- Cohorts ---</option>
               {cohorts.map((c: any) => (
                 <option key={c.id} value={c.id}>
                   {c.program?.title ? `${c.program.title} - ${c.title}` : c.title} ({c.status})
@@ -115,12 +194,13 @@ export default function StudentsPage() {
               <th className="px-6 py-4">Payment Status</th>
               <th className="px-6 py-4">Plan / Cycle</th>
               <th className="px-6 py-4">Progress</th>
+              <th className="px-6 py-4 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {isLoading ? (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-gray-500 text-sm">
+                <td colSpan={6} className="px-6 py-8 text-center text-gray-500 text-sm">
                   <div className="flex flex-col items-center justify-center gap-2">
                     <div className="w-6 h-6 border-2 border-[#146ef5] border-t-transparent rounded-full animate-spin"></div>
                     <span>Loading students...</span>
@@ -129,7 +209,7 @@ export default function StudentsPage() {
               </tr>
             ) : cohorts.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
                   <UserGroupIcon className="w-12 h-12 mx-auto text-gray-300 mb-3" />
                   <p className="text-base font-medium text-gray-900">No cohorts found</p>
                   <p className="text-sm mt-1">Create a cohort first to manage students.</p>
@@ -137,7 +217,7 @@ export default function StudentsPage() {
               </tr>
             ) : students.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
                   <UserGroupIcon className="w-12 h-12 mx-auto text-gray-300 mb-3" />
                   <p className="text-base font-medium text-gray-900">No students enrolled</p>
                   <p className="text-sm mt-1">This cohort doesn't have any students yet.</p>
@@ -198,12 +278,82 @@ export default function StudentsPage() {
                       <span className="text-xs font-medium text-gray-600">Stage {s.current_stage_number}</span>
                     </div>
                   </td>
+                  <td className="px-6 py-4 text-right">
+                    <button 
+                      onClick={() => openManageModal(s)}
+                      className="text-[#146ef5] hover:text-[#105bd1] font-semibold text-xs bg-[#146ef5]/10 hover:bg-[#146ef5]/20 px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      Manage
+                    </button>
+                  </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
       </div>
+      {isManageModalOpen && managingStudent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0">
+              <h3 className="font-bold text-slate-800">
+                Manage Cohort Assignment
+              </h3>
+              <button onClick={() => setIsManageModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                ✕
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <p className="text-sm text-gray-600">
+                Assign <span className="font-semibold text-gray-900">{managingStudent.user.full_name}</span> to a cohort.
+              </p>
+              
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Select Cohort</label>
+                <select
+                  value={targetCohortId}
+                  onChange={(e) => setTargetCohortId(e.target.value)}
+                  className="w-full px-4 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-[#146ef5] bg-slate-50 text-slate-800"
+                >
+                  <option value="" disabled>Select a cohort to assign...</option>
+                  {cohorts.map((c: any) => (
+                    <option key={c.id} value={c.id}>
+                      {c.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-between gap-3 shrink-0">
+              <button 
+                type="button" 
+                onClick={handleRemoveCohort}
+                disabled={isAssigning || !data?.enrollments?.find((e: any) => e.user_id === managingStudent.user_id)}
+                className="px-4 py-2.5 rounded-xl border border-red-200 text-red-600 font-bold text-xs hover:bg-red-50 disabled:opacity-50"
+              >
+                Remove from Cohort
+              </button>
+              <div className="flex gap-2">
+                <button 
+                  type="button" 
+                  onClick={() => setIsManageModalOpen(false)}
+                  className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="button"
+                  onClick={handleAssignCohort}
+                  disabled={isAssigning || !targetCohortId}
+                  className="px-4 py-2.5 rounded-xl bg-[#146ef5] text-white font-bold text-xs hover:bg-[#105bd1] disabled:opacity-50"
+                >
+                  {isAssigning ? 'Saving...' : 'Assign'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

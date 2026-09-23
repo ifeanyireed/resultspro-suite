@@ -570,3 +570,55 @@ func (h *Handler) AdminDeleteCohort(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Cohort deleted successfully"})
 }
+
+func (h *Handler) AdminAssignStudentToCohort(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	var input struct {
+		UserID   string `json:"user_id" binding:"required"`
+		CohortID string `json:"cohort_id" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Check if already enrolled
+	var existing models.Enrollment
+	if err := db.WithTenant(c).Where("user_id = ? AND cohort_id = ?", input.UserID, input.CohortID).First(&existing).Error; err == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Student is already enrolled in this cohort"})
+		return
+	}
+
+	enrollment := models.Enrollment{
+		ID:                 uuid.New().String(),
+		TenantID:           tenantID.(string),
+		UserID:             input.UserID,
+		CohortID:           input.CohortID,
+		Status:             "ACTIVE",
+		PaymentStatus:      "PAID", // Admin assignment bypasses payment
+		PlanType:           "STANDARD",
+		CurrentStageNumber: 1,
+		EnrolledAt:         time.Now(),
+		UpdatedAt:          time.Now(),
+	}
+
+	if err := db.WithTenant(c).Create(&enrollment).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to enroll student"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Student assigned to cohort successfully", "enrollment": enrollment})
+}
+
+func (h *Handler) AdminRemoveStudentFromCohort(c *gin.Context) {
+    tenantID, _ := c.Get("tenant_id")
+	enrollmentID := c.Param("id")
+
+	if err := db.WithTenant(c).Where("id = ? AND tenant_id = ?", enrollmentID, tenantID).Delete(&models.Enrollment{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to remove student from cohort"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Student removed from cohort successfully"})
+}
