@@ -54,7 +54,7 @@ export default function MentorsPage() {
     <>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 tracking-tight">Mentor Management</h2>
+          <h2 className="text-xl font-bold text-gray-900 tracking-tight">Mentors</h2>
           <p className="text-sm text-gray-500 mt-1">Onboarding, assignment, and performance tracking.</p>
         </div>
         <button onClick={() => setIsInviteModalOpen(true)} className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-[#f6f9f8] text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">

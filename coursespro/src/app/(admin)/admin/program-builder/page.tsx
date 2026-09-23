@@ -61,7 +61,8 @@ import {
   PlusIcon,
   Bars3BottomLeftIcon,
   DocumentDuplicateIcon,
-  ArrowUpRightIcon
+  ArrowUpRightIcon,
+  TrashIcon
 } from '@heroicons/react/24/outline';
 import { coursesApi } from '@/lib/api';
 import { useRouter } from 'next/navigation';
@@ -72,6 +73,16 @@ export default function ProgramBuilderPage() {
   const [stats, setStats] = React.useState<any>({ total_modules: 0, total_videos: 0, total_quizzes: 0 });
   const [loading, setLoading] = React.useState(true);
   const [creating, setCreating] = React.useState(false);
+
+  const handleDeleteProgram = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this program? This action cannot be undone.")) return;
+    try {
+      await coursesApi.delete(`/api/admin/programs/${id}`);
+      fetchPrograms();
+    } catch (e: any) {
+      alert("Failed to delete program. It may be in use by a cohort.");
+    }
+  };
 
   const fetchPrograms = async () => {
     try {
@@ -190,9 +201,21 @@ export default function ProgramBuilderPage() {
                     <p className="text-sm text-gray-500">{prog.duration_weeks} Weeks • {prog.modules_count || 0} Modules</p>
                   </div>
                 </div>
-                <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
-                  <ArrowUpRightIcon className="w-5 h-5" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteProgram(prog.id);
+                    }}
+                    className="w-10 h-10 rounded-full bg-red-50 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-100"
+                    title="Delete Program"
+                  >
+                    <TrashIcon className="w-5 h-5" />
+                  </button>
+                  <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
+                    <ArrowUpRightIcon className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
             ))
           )}
