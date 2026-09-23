@@ -5,6 +5,16 @@ import { useQuery } from '@tanstack/react-query';
 import api, { coursesApi, getTenantSlug } from '@/lib/api';
 import { UserGroupIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
+const getDeterministicAvatar = (id: string) => {
+  if (!id) return '/avatars/character1.jpg';
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = id.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = (Math.abs(hash) % 20) + 1;
+  return `/avatars/character${index}.jpg`;
+};
+
 export default function StudentsPage() {
   const [selectedCohortId, setSelectedCohortId] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -231,13 +241,11 @@ export default function StudentsPage() {
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 shrink-0 border border-gray-200">
-                        {s.user.avatar_url ? (
-                          <img src={s.user.avatar_url} alt="" className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-blue-50 text-blue-600 font-bold text-sm">
-                            {(s.user.full_name || 'U').charAt(0).toUpperCase()}
-                          </div>
-                        )}
+                        <img 
+                          src={s.user.avatar_url || getDeterministicAvatar(s.user_id || s.id)} 
+                          alt="" 
+                          className="w-full h-full object-cover bg-blue-50" 
+                        />
                       </div>
                       <div>
                         <p className="font-semibold text-gray-900 text-sm">{s.user.full_name || 'Unnamed Student'}</p>
