@@ -9,9 +9,12 @@ import (
 )
 
 func (h *Handler) GetPublicCohorts(c *gin.Context) {
-	tenantID := c.GetHeader("X-Tenant-Domain")
+	tenantID := c.Query("tenant_id")
 	if tenantID == "" {
-		tenantID = c.Query("tenant_id")
+		tenantID = c.GetHeader("X-Tenant-ID")
+	}
+	if tenantID == "" {
+		tenantID = c.GetHeader("X-Tenant-Domain")
 	}
 
 	if tenantID == "" {
@@ -29,9 +32,12 @@ func (h *Handler) GetPublicCohorts(c *gin.Context) {
 
 func (h *Handler) GetCohortDetail(c *gin.Context) {
 	id := c.Param("id")
-	tenantID := c.GetHeader("X-Tenant-Domain")
+	tenantID := c.Query("tenant_id")
 	if tenantID == "" {
-		tenantID = c.Query("tenant_id")
+		tenantID = c.GetHeader("X-Tenant-ID")
+	}
+	if tenantID == "" {
+		tenantID = c.GetHeader("X-Tenant-Domain")
 	}
 
 	if tenantID == "" {
