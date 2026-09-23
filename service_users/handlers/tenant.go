@@ -289,7 +289,7 @@ func HandleGetTenantHierarchy(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 	tenantID := ""
 	for i, part := range parts {
-		if (part == "tenant" || part == "tenants") && i+1 < len(parts) {
+		if part == "hierarchy" && i+1 < len(parts) {
 			tenantID = parts[i+1]
 			break
 		}
@@ -380,7 +380,7 @@ func HandleGetTenantBranding(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 	tenantID := ""
 	for i, part := range parts {
-		if (part == "tenant" || part == "tenants") && i+1 < len(parts) {
+		if part == "branding" && i+1 < len(parts) {
 			tenantID = parts[i+1]
 			break
 		}
@@ -451,7 +451,7 @@ func HandleUpdateTenantBranding(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 	tenantID := ""
 	for i, part := range parts {
-		if (part == "tenant" || part == "tenants") && i+1 < len(parts) {
+		if part == "branding" && i+1 < len(parts) {
 			tenantID = parts[i+1]
 			break
 		}
@@ -676,7 +676,7 @@ func HandleGetTenantRoles(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 	tenantID := ""
 	for i, part := range parts {
-		if (part == "tenants" || part == "tenant") && i+1 < len(parts) {
+		if part == "roles" && i+1 < len(parts) {
 			tenantID = parts[i+1]
 			break
 		}

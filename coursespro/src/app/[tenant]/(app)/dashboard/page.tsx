@@ -220,7 +220,7 @@ const router = useRouter();
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                 </span>
               </h3>
-              <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded-md">8 Online</span>
+              <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded-md">{dashboardData.classroom?.length || 0} Online</span>
             </div>
 
             <div className="space-y-4">

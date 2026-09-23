@@ -75,7 +75,7 @@ export default function StudentsPage() {
       let allStudents = [];
       if (tenantId) {
         try {
-          const rolesRes = await api.get(`/api/v1/tenants/${tenantId}/roles?role=student`);
+          const rolesRes = await api.get(`/api/v1/tenants/roles/${tenantId}?role=student`);
           allStudents = rolesRes.data || [];
         } catch (e) {
           console.error("Failed to fetch tenant roles", e);
