@@ -122,19 +122,19 @@ export default function AppLayout({
                   className="w-auto h-12 object-contain"
                 />
               ) : (
-                <div className="w-8 h-8 overflow-hidden flex items-center justify-start shrink-0">
+                <div className="flex items-center justify-center shrink-0 w-full pl-2">
                   <TenantLogo 
                     theme="light"
-                    height={28}
+                    height={32}
                     logoUrl={logoUrl}
                     tenantName={tenantName}
-                    className="w-auto h-7 object-left max-w-none"
+                    className="w-auto h-8 object-contain"
                   />
                 </div>
               )}
               <button 
                 onClick={() => setIsCollapsed(!isCollapsed)}
-                className={`w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 ${isCollapsed ? 'absolute -right-4 top-6 bg-white border border-gray-200 shadow-sm z-50' : ''}`}
+                className={`w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 ${isCollapsed ? 'absolute -right-4 top-6 bg-white border border-gray-200 shadow-sm z-[100]' : 'relative z-[100]'}`}
               >
                 {isCollapsed ? <ChevronRightIcon className="w-4 h-4" /> : <ChevronLeftIcon className="w-5 h-5" />}
               </button>
