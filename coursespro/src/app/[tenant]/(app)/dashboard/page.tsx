@@ -224,45 +224,23 @@ const router = useRouter();
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <img src="/avatars/mentor.jpg" alt="Mentor" className="w-10 h-10 rounded-full border-2 border-blue-100" onError={(e) => e.currentTarget.src='/avatars/character4.jpg'} />
-                    <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5"><div className="w-2.5 h-2.5 bg-emerald-500 rounded-full"></div></div>
+              {dashboardData.classroom?.length > 0 ? dashboardData.classroom.map((peer: any, idx: number) => (
+                <div key={idx} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="relative">
+                      <img src={peer.avatar || "/avatars/character1.jpg"} alt={peer.name} className="w-10 h-10 rounded-full border-2 border-white object-cover" onError={(e) => e.currentTarget.src='/avatars/character1.jpg'} />
+                      <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5"><div className="w-2.5 h-2.5 bg-emerald-500 rounded-full"></div></div>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-gray-900">{peer.name}</h4>
+                      <p className="text-xs text-blue-600 font-medium">{peer.action}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-gray-900">Mentor Chidi <span className="text-blue-500 text-xs">◆</span></h4>
-                    <p className="text-xs text-gray-500">Reviewing Pull Requests</p>
-                  </div>
+                  <button className="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors">Join</button>
                 </div>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <img src="/avatars/character1.jpg" alt="Sarah Jenkins" className="w-10 h-10 rounded-full border-2 border-white object-cover" />
-                    <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5"><div className="w-2.5 h-2.5 bg-emerald-500 rounded-full"></div></div>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-gray-900">Sarah Jenkins</h4>
-                    <p className="text-xs text-blue-600 font-medium">In Coworking Room B</p>
-                  </div>
-                </div>
-                <button className="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors">Join</button>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <img src="/avatars/character2.jpg" alt="David O." className="w-10 h-10 rounded-full border-2 border-white object-cover" />
-                    <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5"><div className="w-2.5 h-2.5 bg-emerald-500 rounded-full"></div></div>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-gray-900">David O.</h4>
-                    <p className="text-xs text-gray-500">Watching Module 4.2</p>
-                  </div>
-                </div>
-              </div>
+              )) : (
+                <div className="text-sm text-gray-500 italic py-4">No other peers online right now.</div>
+              )}
             </div>
           </div>
 
@@ -274,32 +252,18 @@ const router = useRouter();
             </h3>
             
             <div className="space-y-4">
-              <div className="flex items-center gap-4 bg-yellow-50/50 p-3 rounded-xl border border-yellow-100">
-                <span className="text-lg font-bold text-yellow-600 w-4 text-center">1</span>
-                <img src="/avatars/character3.jpg" alt="Michael Chen" className="w-8 h-8 rounded-full border border-yellow-200 object-cover" />
-                <div className="flex-1">
-                  <h4 className="text-sm font-bold text-gray-900">Michael Chen</h4>
+              {dashboardData.leaderboard?.length > 0 ? dashboardData.leaderboard.map((student: any) => (
+                <div key={student.rank} className={`flex items-center gap-4 p-3 rounded-xl ${student.is_me ? 'bg-blue-50/50 border border-blue-100' : ''} ${student.rank === 1 ? 'bg-yellow-50/50 border border-yellow-100' : ''}`}>
+                  <span className={`text-lg font-bold w-4 text-center ${student.rank === 1 ? 'text-yellow-600' : student.rank === 2 ? 'text-gray-400' : student.rank === 3 ? 'text-orange-400' : 'text-gray-300'}`}>{student.rank}</span>
+                  <img src={student.avatar || `/avatars/character${(student.rank % 4) + 1}.jpg`} alt={student.name} className={`w-8 h-8 rounded-full border object-cover ${student.rank === 1 ? 'border-yellow-200' : 'border-gray-200'}`} onError={(e) => e.currentTarget.src=`/avatars/character${(student.rank % 4) + 1}.jpg`} />
+                  <div className="flex-1">
+                    <h4 className="text-sm font-bold text-gray-900">{student.name} {student.is_me && '(You)'}</h4>
+                  </div>
+                  <span className="text-sm font-bold text-gray-700">{student.xp} XP</span>
                 </div>
-                <span className="text-sm font-bold text-gray-700">850 XP</span>
-              </div>
-              
-              <div className="flex items-center gap-4 p-3 rounded-xl">
-                <span className="text-lg font-bold text-gray-400 w-4 text-center">2</span>
-                <img src="/avatars/character4.jpg" alt="Ada Lovelace" className="w-8 h-8 rounded-full border border-gray-200 object-cover" />
-                <div className="flex-1">
-                  <h4 className="text-sm font-bold text-gray-900">Ada Lovelace (You)</h4>
-                </div>
-                <span className="text-sm font-bold text-gray-700">720 XP</span>
-              </div>
-
-              <div className="flex items-center gap-4 p-3 rounded-xl">
-                <span className="text-lg font-bold text-orange-400 w-4 text-center">3</span>
-                <img src="/avatars/character1.jpg" alt="Sarah Jenkins" className="w-8 h-8 rounded-full border border-gray-200 object-cover" />
-                <div className="flex-1">
-                  <h4 className="text-sm font-bold text-gray-900">Sarah Jenkins</h4>
-                </div>
-                <span className="text-sm font-bold text-gray-700">690 XP</span>
-              </div>
+              )) : (
+                <div className="text-sm text-gray-500 italic py-4">Leaderboard is empty.</div>
+              )}
             </div>
             
             <button className="w-full mt-4 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors py-2 text-center">

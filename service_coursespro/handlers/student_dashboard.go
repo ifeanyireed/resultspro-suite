@@ -96,6 +96,69 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		progress = float64(enrollment.CurrentStageNumber) / float64(totalStages) * 100
 	}
 
+	// Define a lightweight struct to fetch user details from the shared DB
+	type SharedUser struct {
+		ID        string `gorm:"column:id"`
+		FirstName string `gorm:"column:first_name"`
+		LastName  string `gorm:"column:last_name"`
+		AvatarURL string `gorm:"column:avatar_url"`
+	}
+
+	var leaderboard []gin.H
+	var classroom []gin.H
+
+	if enrollment.CohortID != "" {
+		// Fetch Top Builders (Leaderboard)
+		var topEnrollments []models.Enrollment
+		db.DB.Where("tenant_id = ? AND cohort_id = ?", tenantID, enrollment.CohortID).
+			Order("current_xp DESC").
+			Limit(5).
+			Find(&topEnrollments)
+
+		for i, e := range topEnrollments {
+			var u SharedUser
+			if err := db.DB.Table("users").Where("id = ?", e.UserID).First(&u).Error; err == nil {
+				name := u.FirstName
+				if u.LastName != "" {
+					name += " " + u.LastName
+				}
+				if name == "" {
+					name = "Student"
+				}
+				leaderboard = append(leaderboard, gin.H{
+					"rank":   i + 1,
+					"name":   name,
+					"avatar": u.AvatarURL,
+					"xp":     e.CurrentXP,
+					"is_me":  e.UserID == userID,
+				})
+			}
+		}
+
+		// Fetch Classroom Peers (Recently Active)
+		var peerEnrollments []models.Enrollment
+		db.DB.Where("tenant_id = ? AND cohort_id = ? AND user_id != ?", tenantID, enrollment.CohortID, userID).
+			Order("last_active_date DESC NULLS LAST").
+			Limit(4).
+			Find(&peerEnrollments)
+
+		for _, e := range peerEnrollments {
+			var u SharedUser
+			if err := db.DB.Table("users").Where("id = ?", e.UserID).First(&u).Error; err == nil {
+				name := u.FirstName
+				if name == "" {
+					name = "Student"
+				}
+				classroom = append(classroom, gin.H{
+					"name":   name,
+					"avatar": u.AvatarURL,
+					"status": "Online",
+					"action": "In Coworking Room",
+				})
+			}
+		}
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"enrollment": gin.H{
 			"streak_days":   enrollment.StreakDays,
@@ -108,6 +171,8 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		"cohort_name":        cohort.Title,
 		"current_module":     currentModule,
 		"recent_feedback":    feedback,
-		"upcoming_milestone": nil, // No database model for this yet, so explicitly null
+		"upcoming_milestone": nil,
+		"leaderboard":        leaderboard,
+		"classroom":          classroom,
 	})
 }
