@@ -26,6 +26,10 @@ export default function CoursesProTenantManager() {
     slug: '',
     contact_email: '',
     primary_color: '#2563eb',
+    secondary_color: '',
+    accent_color: '',
+    payment_mode: 'managed',
+    platform_fee_percent: 5.0,
     type: 'COURSESPRO',
     enabled_modules: ['coursepro'], // Default module
     logo_url: '',
@@ -57,7 +61,7 @@ export default function CoursesProTenantManager() {
     setCreating(false);
     if (ok) {
       setIsModalOpen(false);
-      setNewTenantData({ name: '', slug: '', contact_email: '', primary_color: '#2563eb', type: 'COURSESPRO', enabled_modules: ['coursepro'], logo_url: '', full_address: '', contact_phone: '', contact_person_name: '' });
+      setNewTenantData({ name: '', slug: '', contact_email: '', primary_color: '#2563eb', secondary_color: '', accent_color: '', payment_mode: 'managed', platform_fee_percent: 5.0, type: 'COURSESPRO', enabled_modules: ['coursepro'], logo_url: '', full_address: '', contact_phone: '', contact_person_name: '' });
       load();
     } else {
       alert("Failed to create tenant");
@@ -274,8 +278,15 @@ export default function CoursesProTenantManager() {
                               contact_phone: school.contact_phone || '',
                               contact_person_name: school.contact_person_name || '',
                               status: school.status || 'ACTIVE',
-                              primary_color: school.primary_color || '#2563eb'
-                            });
+                              primary_color: school.primary_color || '#2563eb',
+                              secondary_color: school.secondary_color || '',
+                              accent_color: school.accent_color || '',
+                              payment_mode: school.payment_mode || 'managed',
+                              platform_fee_percent: school.platform_fee_percent || 5.0,
+                              dva_account_number: school.dva_account_number || '',
+                              paystack_public_key: school.paystack_public_key || '',
+                              paystack_secret_key: school.paystack_secret_key || ''
+                            } as any);
                             setIsEditModalOpen(true);
                           }}
                           className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full font-medium text-[11px] hover:bg-blue-600 hover:text-white transition-all shadow-sm hover:shadow-blue-500/30"
@@ -642,6 +653,65 @@ export default function CoursesProTenantManager() {
                   />
                 </div>
               </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Payment Mode</label>
+                <select 
+                  value={editTenantData.payment_mode || 'managed'}
+                  onChange={e => setEditTenantData({...editTenantData, payment_mode: e.target.value})}
+                  className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                >
+                  <option value="managed">CoursesPro Managed (DVA)</option>
+                  <option value="byo_paystack">BYO Paystack (Tenant Keys)</option>
+                </select>
+              </div>
+
+              {editTenantData.payment_mode === 'managed' ? (
+                <>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Platform Fee (%)</label>
+                    <input 
+                      type="number" step="0.1"
+                      value={editTenantData.platform_fee_percent || 5.0}
+                      onChange={e => setEditTenantData({...editTenantData, platform_fee_percent: parseFloat(e.target.value)})}
+                      className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">DVA Account Number</label>
+                    <input 
+                      type="text"
+                      value={editTenantData.dva_account_number || ''}
+                      onChange={e => setEditTenantData({...editTenantData, dva_account_number: e.target.value})}
+                      placeholder="Will be auto-provisioned"
+                      className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-mono text-slate-800"
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Paystack Public Key</label>
+                    <input 
+                      type="text"
+                      value={editTenantData.paystack_public_key || ''}
+                      onChange={e => setEditTenantData({...editTenantData, paystack_public_key: e.target.value})}
+                      placeholder="pk_live_..."
+                      className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-mono text-slate-800"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Paystack Secret Key</label>
+                    <input 
+                      type="password"
+                      value={editTenantData.paystack_secret_key || ''}
+                      onChange={e => setEditTenantData({...editTenantData, paystack_secret_key: e.target.value})}
+                      placeholder="sk_live_..."
+                      className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-mono text-slate-800"
+                    />
+                  </div>
+                </>
+              )}
+
 
               <div className="pt-4 flex gap-3">
                 <button 

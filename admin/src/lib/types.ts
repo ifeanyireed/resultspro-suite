@@ -22,6 +22,14 @@ export interface School {
   logo_url?: string;
   logo_emoji?: string;
   primary_color?: string;
+  secondary_color?: string;
+  accent_color?: string;
+  payment_mode?: string;
+  platform_fee_percent?: number;
+  dva_account_number?: string;
+  paystack_public_key?: string;
+  paystack_secret_key?: string;
+
   contact_email?: string;
   contact_phone?: string;
   contact_person_name?: string;
