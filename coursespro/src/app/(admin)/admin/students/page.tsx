@@ -129,18 +129,19 @@ export default function StudentsPage() {
 
   // Map to student data and apply search filter
   const students = (selectedCohortId === 'all' 
-    ? allStudents.map((s: any) => {
-        const enrollment = enrollments.find((e: any) => e.user_id === s.user_id) || {};
+    ? userIds.map((userId: any) => {
+        const enrollment = enrollments.find((e: any) => e.user_id === userId) || {};
+        const roleUser = allStudents.find((s: any) => s.user_id === userId) || {};
         return {
-          id: s.id,
-          user_id: s.user_id,
-          enrolled_at: enrollment.enrolled_at || s.created_at,
+          id: enrollment.id || roleUser.id || userId,
+          user_id: userId,
+          enrolled_at: enrollment.enrolled_at || roleUser.created_at || null,
           payment_status: enrollment.payment_status || 'UNENROLLED',
           plan_type: enrollment.plan_type || 'N/A',
           billing_cycle: enrollment.billing_cycle || 'N/A',
           current_stage_number: enrollment.current_stage_number || 0,
           cohort_id: enrollment.cohort_id || null,
-          user: users[s.user_id] || { full_name: s.full_name, email: s.email, avatar_url: null }
+          user: users[userId] || { full_name: roleUser.full_name || 'Unknown User', email: roleUser.email || 'N/A', avatar_url: null }
         };
       })
     : enrollments

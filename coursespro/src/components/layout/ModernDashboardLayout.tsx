@@ -11,7 +11,7 @@ export function ModernDashboardLayout({ sidebarContent, headerContent, children,
   return (
     <div className="dashboard-page min-h-screen bg-[#f9fafc] font-sans text-gray-900 flex transition-all duration-300">
       {/* Sidebar - Sticky */}
-      <aside className={`${isCollapsed ? 'w-[80px]' : 'w-[280px]'} bg-white border-r border-gray-100 flex flex-col justify-between py-4 shrink-0 h-screen sticky top-0 z-[60] transition-all duration-300`}>
+      <aside className={`${isCollapsed ? 'w-[80px]' : 'w-[280px]'} bg-white border-r border-gray-100 flex flex-col justify-between py-4 shrink-0 h-screen sticky top-0 z-[60] transition-all duration-300 !overflow-visible`}>
         {sidebarContent}
       </aside>
 

@@ -146,7 +146,7 @@ export default function AppLayout({
               )}
               <button 
                 onClick={() => setIsCollapsed(!isCollapsed)}
-                className={`w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 ${isCollapsed ? 'absolute -right-4 top-6 bg-white border border-gray-200 shadow-sm z-50' : ''}`}
+                className={`absolute -right-4 top-6 w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-100 text-gray-500 z-[100]`}
               >
                 {isCollapsed ? <ChevronRightIcon className="w-4 h-4" /> : <ChevronLeftIcon className="w-5 h-5" />}
               </button>
