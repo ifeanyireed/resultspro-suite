@@ -10,6 +10,7 @@ type Program struct {
 	TenantID      string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	Title         string    `gorm:"size:255;not null" json:"title"`
 	Description   string    `gorm:"type:text" json:"description"`
+	Status        string    `gorm:"size:32;default:'draft'" json:"status"` // draft, published
 	DurationWeeks int       `gorm:"default:12" json:"duration_weeks"`
 	BasePrice     float64   `gorm:"type:decimal(10,2);default:0" json:"base_price"`
 	CreatedAt     time.Time `json:"created_at"`

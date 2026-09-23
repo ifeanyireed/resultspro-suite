@@ -152,7 +152,7 @@ const router = useRouter();
             <div className="flex items-center gap-2 mb-4">
               <span className="bg-blue-50 text-blue-600 text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">Up Next</span>
               <span className="text-sm font-medium text-gray-500 flex items-center gap-1">
-                <ClockIcon className="w-4 h-4" strokeWidth={2} /> 45 mins
+                <ClockIcon className="w-4 h-4" strokeWidth={2} /> {dashboardData.current_module?.duration || '45 mins'}
               </span>
             </div>
             
@@ -169,12 +169,11 @@ const router = useRouter();
                 AI Lesson Summary
               </h4>
               <ul className="space-y-2">
-                <li className="text-sm text-indigo-800/80 flex gap-2">
-                  <span className="text-indigo-400">•</span> Hooks must start with "use" to leverage React's linter.
-                </li>
-                <li className="text-sm text-indigo-800/80 flex gap-2">
-                  <span className="text-indigo-400">•</span> They allow you to reuse stateful logic without changing your component hierarchy.
-                </li>
+                {dashboardData.current_module?.ai_summary?.map((point: string, idx: number) => (
+                  <li key={idx} className="text-sm text-indigo-800/80 flex gap-2">
+                    <span className="text-indigo-400">•</span> {point.replace(/^[-\*•]\s*/, '')}
+                  </li>
+                ))}
               </ul>
             </div>
             

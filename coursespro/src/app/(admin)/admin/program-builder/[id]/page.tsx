@@ -91,6 +91,12 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
   const [moduleTextContext, setModuleTextContext] = React.useState('');
   const [textLessonDraft, setTextLessonDraft] = React.useState<string>('');
   const [draggedContent, setDraggedContent] = React.useState<{ modId: string; index: number } | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
+  const [editTitle, setEditTitle] = React.useState('');
+  const [editDescription, setEditDescription] = React.useState('');
+  const [editDuration, setEditDuration] = React.useState(12);
+  const [savingSettings, setSavingSettings] = React.useState(false);
+  const [isPublishing, setIsPublishing] = React.useState(false);
   React.useEffect(() => {
     const fetchProgramAndStages = async () => {
       try {
@@ -98,7 +104,14 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
         const progRes = await coursesApi.get(`/api/admin/programs`);
         try { const quizzesRes = await coursesApi.get(`/api/admin/quizzes`); setQuizzes(quizzesRes.data.quizzes || []); } catch(e){}
         const found = progRes.data.programs?.find((p: any) => p.id === id);
-        setProgram(found || { title: "Untitled Journey", id });
+        if (found) {
+          setProgram(found);
+          setEditTitle(found.title || '');
+          setEditDescription(found.description || '');
+          setEditDuration(found.duration_weeks || 12);
+        } else {
+          setProgram({ title: "Untitled Journey", id });
+        }
         
         try {
           const stagesRes = await coursesApi.get(`/api/admin/programs/${id}/stages`);

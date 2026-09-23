@@ -361,6 +361,7 @@ func (h *Handler) AdminUpdateProgram(c *gin.Context) {
 		Description   string  `json:"description"`
 		DurationWeeks int     `json:"duration_weeks"`
 		BasePrice     float64 `json:"base_price"`
+		Status        string  `json:"status"`
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {

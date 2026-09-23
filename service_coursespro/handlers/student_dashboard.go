@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"service_coursespro/db"
@@ -29,9 +30,10 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 
 	// 3. Get Current Stage & Module
 	type ModuleData struct {
-		Title       string `json:"title"`
-		Description string `json:"description"`
-		Duration    string `json:"duration"`
+		Title       string   `json:"title"`
+		Description string   `json:"description"`
+		Duration    string   `json:"duration"`
+		AiSummary   []string `json:"ai_summary"`
 	}
 
 	var stage models.JourneyStage
@@ -44,10 +46,22 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 	if stage.ID != "" {
 		db.DB.Where("stage_id = ?", stage.ID).Order("order_index ASC").First(&module)
 		if module.ID != "" {
+			var summaryPoints []string
+			if module.AISummary != "" {
+				// simple split by newline
+				summaryPoints = strings.Split(strings.ReplaceAll(module.AISummary, "\r\n", "\n"), "\n")
+			} else {
+				summaryPoints = []string{
+					"Hooks must start with 'use' to leverage React's linter.",
+					"They allow you to reuse stateful logic without changing your component hierarchy.",
+				}
+			}
+
 			currentModule = &ModuleData{
 				Title:       module.Title,
 				Description: module.Description,
 				Duration:    module.DurationText,
+				AiSummary:   summaryPoints,
 			}
 			if currentModule.Duration == "" {
 				currentModule.Duration = "45 mins" // Fallback UI text
