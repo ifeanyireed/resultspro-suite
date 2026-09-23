@@ -1,0 +1,139 @@
+"use client";
+
+import React, { useEffect, useState } from 'react';
+import api from '@/lib/api';
+import { ModernDashboardLayout } from '@/components/layout/ModernDashboardLayout';
+import { 
+  BuildingOfficeIcon, 
+  Cog6ToothIcon,
+  CheckCircleIcon,
+  XCircleIcon
+} from '@heroicons/react/24/outline';
+import Link from 'next/link';
+
+interface Tenant {
+  id: string;
+  name: string;
+  slug: string;
+  status: string;
+  payment_mode: string;
+  platform_fee_percent: number;
+  dva_account_number?: string;
+  paystack_status: string;
+}
+
+export default function SuperAdminTenantsPage() {
+  const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTenants();
+  }, []);
+
+  const fetchTenants = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get('/api/v1/tenants');
+      if (res.data) {
+        setTenants(res.data);
+      }
+    } catch (err) {
+      console.error("Failed to load tenants", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <ModernDashboardLayout
+      sidebarContent={
+        <div className="flex-1 px-4 py-6 overflow-y-auto">
+          <div className="mb-8 px-4">
+            <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Platform Administration</h2>
+            <div className="space-y-1">
+              <Link href="/platform-admin/tenants" className="flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal text-[#146ef5] bg-[#146ef5]/10 relative before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full">
+                <BuildingOfficeIcon className="w-6 h-6" />
+                Tenant Management
+              </Link>
+            </div>
+          </div>
+        </div>
+      }
+      headerContent={
+        <div className="flex items-center justify-between w-full">
+          <h2 className="text-xl font-bold text-gray-900">Super Admin Control Center</h2>
+        </div>
+      }
+    >
+      <div className="p-8 max-w-7xl mx-auto">
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Tenant Payment Management</h1>
+            <p className="text-gray-500 mt-1">Configure payment gateways, DVA splits, and platform fees across all tenant academies.</p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-gray-100 bg-gray-50/50">
+                  <th className="py-4 px-6 font-semibold text-sm text-gray-900">Tenant</th>
+                  <th className="py-4 px-6 font-semibold text-sm text-gray-900">Payment Mode</th>
+                  <th className="py-4 px-6 font-semibold text-sm text-gray-900 text-right">Platform Fee</th>
+                  <th className="py-4 px-6 font-semibold text-sm text-gray-900">DVA</th>
+                  <th className="py-4 px-6 font-semibold text-sm text-gray-900">Paystack Status</th>
+                  <th className="py-4 px-6 font-semibold text-sm text-gray-900 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {loading ? (
+                  <tr><td colSpan={6} className="py-8 text-center text-gray-500">Loading tenants...</td></tr>
+                ) : tenants.length === 0 ? (
+                  <tr><td colSpan={6} className="py-8 text-center text-gray-500">No tenants found.</td></tr>
+                ) : tenants.map((tenant) => (
+                  <tr key={tenant.id} className="hover:bg-gray-50/50 transition-colors">
+                    <td className="py-4 px-6">
+                      <div className="font-semibold text-gray-900">{tenant.name}</div>
+                      <div className="text-xs text-gray-500">{tenant.slug}.coursespro.com</div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        tenant.payment_mode === 'byo_paystack' 
+                          ? 'bg-purple-100 text-purple-800' 
+                          : 'bg-blue-100 text-blue-800'
+                      }`}>
+                        {tenant.payment_mode === 'byo_paystack' ? 'BYO Paystack' : 'Managed DVA'}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-right font-medium text-gray-900">
+                      {tenant.payment_mode === 'byo_paystack' ? '—' : `${tenant.platform_fee_percent || 5}%`}
+                    </td>
+                    <td className="py-4 px-6 text-sm text-gray-600 font-mono">
+                      {tenant.payment_mode === 'byo_paystack' ? '—' : (tenant.dva_account_number || 'Unassigned')}
+                    </td>
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-1.5 text-sm">
+                        {tenant.paystack_status === 'Active' || tenant.paystack_status === 'Connected' ? (
+                          <CheckCircleIcon className="w-5 h-5 text-emerald-500" />
+                        ) : (
+                          <XCircleIcon className="w-5 h-5 text-gray-400" />
+                        )}
+                        <span className="text-gray-700 capitalize">{tenant.paystack_status || 'Pending'}</span>
+                      </div>
+                    </td>
+                    <td className="py-4 px-6 text-right">
+                      <Link href={`/platform-admin/tenants/${tenant.id}/payments`} className="text-[#146ef5] hover:text-[#105bd1] font-medium text-sm inline-flex items-center gap-1">
+                        Configure <Cog6ToothIcon className="w-4 h-4" />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </ModernDashboardLayout>
+  );
+}

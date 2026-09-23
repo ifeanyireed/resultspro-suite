@@ -564,3 +564,53 @@ CREATE TABLE IF NOT EXISTS user_transactions (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_user_txn_tenant (tenant_id)
 );
+ALTER TABLE tenants ADD COLUMN IF NOT EXISTS payment_mode VARCHAR(50) DEFAULT 'managed';
+ALTER TABLE tenants ADD COLUMN IF NOT EXISTS platform_fee_percent DECIMAL(5,2) DEFAULT 5.00;
+ALTER TABLE tenants ADD COLUMN IF NOT EXISTS paystack_public_key VARCHAR(255);
+ALTER TABLE tenants ADD COLUMN IF NOT EXISTS paystack_secret_key VARCHAR(255);
+ALTER TABLE tenants ADD COLUMN IF NOT EXISTS paystack_subaccount_code VARCHAR(100);
+ALTER TABLE tenants ADD COLUMN IF NOT EXISTS dva_account_number VARCHAR(100);
+ALTER TABLE tenants ADD COLUMN IF NOT EXISTS dva_bank VARCHAR(100);
+ALTER TABLE tenants ADD COLUMN IF NOT EXISTS dva_status VARCHAR(50) DEFAULT 'pending';
+ALTER TABLE tenants ADD COLUMN IF NOT EXISTS paystack_status VARCHAR(50) DEFAULT 'pending';
+ALTER TABLE tenants ADD COLUMN IF NOT EXISTS paystack_customer_code VARCHAR(100);
+
+CREATE TABLE IF NOT EXISTS platform_payments (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    student_id VARCHAR(191) NOT NULL,
+    enrollment_id VARCHAR(191),
+    amount DECIMAL(10,2) NOT NULL,
+    processor_fee DECIMAL(10,2) DEFAULT 0.00,
+    platform_fee DECIMAL(10,2) DEFAULT 0.00,
+    tenant_amount DECIMAL(10,2) NOT NULL,
+    status VARCHAR(50) DEFAULT 'pending',
+    reference VARCHAR(191) UNIQUE NOT NULL,
+    payment_method VARCHAR(50),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS instructor_earnings (
+    id VARCHAR(191) PRIMARY KEY,
+    instructor_id VARCHAR(191) NOT NULL,
+    tenant_id VARCHAR(191) NOT NULL,
+    course_id VARCHAR(191),
+    amount DECIMAL(10,2) NOT NULL,
+    status VARCHAR(50) DEFAULT 'pending',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS payout_requests (
+    id VARCHAR(191) PRIMARY KEY,
+    instructor_id VARCHAR(191) NOT NULL,
+    tenant_id VARCHAR(191) NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    status VARCHAR(50) DEFAULT 'requested',
+    approved_by VARCHAR(191),
+    paid_at TIMESTAMP WITH TIME ZONE,
+    payment_reference VARCHAR(191),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);

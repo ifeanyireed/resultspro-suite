@@ -17,6 +17,16 @@ type Tenant struct {
 	HeroBgURL             string     `json:"hero_bg_url,omitempty"`
 	PreviewImageURL       string     `json:"preview_image_url,omitempty"`
 	LearnerImageURL       string     `json:"learner_image_url,omitempty"`
+	PaymentMode           string     `json:"payment_mode,omitempty"`
+	PlatformFeePercent    float64    `json:"platform_fee_percent,omitempty"`
+	PaystackPublicKey     string     `json:"paystack_public_key,omitempty"`
+	PaystackSecretKey     string     `json:"paystack_secret_key,omitempty"`
+	PaystackSubaccountCode string    `json:"paystack_subaccount_code,omitempty"`
+	DvaAccountNumber      string     `json:"dva_account_number,omitempty"`
+	DvaBank               string     `json:"dva_bank,omitempty"`
+	DvaStatus             string     `json:"dva_status,omitempty"`
+	PaystackStatus        string     `json:"paystack_status,omitempty"`
+	PaystackCustomerCode  string     `json:"paystack_customer_code,omitempty"`
 	FlattenLogo           *bool      `json:"flatten_logo,omitempty"`
 	LogoEmoji             string     `json:"logo_emoji,omitempty"`
 	PrimaryColor          string     `json:"primary_color,omitempty"`
@@ -87,4 +97,48 @@ type PayoutRequest struct {
 	Status      string     `json:"status"` // PENDING, APPROVED, PAID, REJECTED
 	ProcessedAt *time.Time `json:"processed_at,omitempty"`
 	CreatedAt   time.Time  `json:"created_at"`
+}
+
+
+// PlatformPayment represents a transaction processed through CoursesPro
+type PlatformPayment struct {
+	ID             string    `json:"id" gorm:"primaryKey"`
+	TenantID       string    `json:"tenant_id"`
+	StudentID      string    `json:"student_id"`
+	EnrollmentID   string    `json:"enrollment_id"`
+	Amount         float64   `json:"amount"`
+	ProcessorFee   float64   `json:"processor_fee"`
+	PlatformFee    float64   `json:"platform_fee"`
+	TenantAmount   float64   `json:"tenant_amount"`
+	Status         string    `json:"status"`
+	Reference      string    `json:"reference"`
+	PaymentMethod  string    `json:"payment_method"`
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
+}
+
+// InstructorEarning represents a mentor's earnings
+type InstructorEarning struct {
+	ID           string    `json:"id" gorm:"primaryKey"`
+	InstructorID string    `json:"instructor_id"`
+	TenantID     string    `json:"tenant_id"`
+	CourseID     string    `json:"course_id"`
+	Amount       float64   `json:"amount"`
+	Status       string    `json:"status"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
+}
+
+// PayoutRequest represents a mentor's withdrawal request
+type InstructorPayoutRequest struct {
+	ID               string    `json:"id" gorm:"primaryKey"`
+	InstructorID     string    `json:"instructor_id"`
+	TenantID         string    `json:"tenant_id"`
+	Amount           float64   `json:"amount"`
+	Status           string    `json:"status"`
+	ApprovedBy       string    `json:"approved_by,omitempty"`
+	PaidAt           *time.Time `json:"paid_at,omitempty"`
+	PaymentReference string    `json:"payment_reference,omitempty"`
+	CreatedAt        time.Time `json:"created_at"`
+	UpdatedAt        time.Time `json:"updated_at"`
 }

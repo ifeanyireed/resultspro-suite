@@ -519,7 +519,7 @@ func HandleUpdateTenantBranding(w http.ResponseWriter, r *http.Request) {
 
 // HandleListTenants returns a paginated/filtered list of tenants
 func HandleListTenants(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.DB.Query("SELECT id, type, name, slug, status, verification_status, state, lga, subscription_tier, created_at, contact_email, primary_color, logo_url, contact_phone, contact_person_name, full_address FROM tenants ORDER BY created_at DESC LIMIT 200")
+	rows, err := db.DB.Query("SELECT id, type, name, slug, status, verification_status, state, lga, subscription_tier, created_at, contact_email, primary_color, logo_url, contact_phone, contact_person_name, full_address, payment_mode, platform_fee_percent, dva_account_number, paystack_status FROM tenants ORDER BY created_at DESC LIMIT 200")
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
 		return
@@ -543,13 +543,18 @@ func HandleListTenants(w http.ResponseWriter, r *http.Request) {
 		ContactPhone       string    `json:"contact_phone,omitempty"`
 		ContactPersonName  string    `json:"contact_person_name,omitempty"`
 		FullAddress        string    `json:"full_address,omitempty"`
+		PaymentMode        string    `json:"payment_mode,omitempty"`
+		PlatformFeePercent float64   `json:"platform_fee_percent,omitempty"`
+		DvaAccountNumber   string    `json:"dva_account_number,omitempty"`
+		PaystackStatus     string    `json:"paystack_status,omitempty"`
 	}
 
 	tenants := []TenantSummary{}
 	for rows.Next() {
 		var s TenantSummary
-		var state, lga, tier, tenantType, contactEmail, primaryColor, logoUrl, contactPhone, contactPersonName, fullAddress sql.NullString
-		if err := rows.Scan(&s.ID, &tenantType, &s.Name, &s.Slug, &s.Status, &s.VerificationStatus, &state, &lga, &tier, &s.CreatedAt, &contactEmail, &primaryColor, &logoUrl, &contactPhone, &contactPersonName, &fullAddress); err == nil {
+		var state, lga, tier, tenantType, contactEmail, primaryColor, logoUrl, contactPhone, contactPersonName, fullAddress, paymentMode, dvaAcc, pStatus sql.NullString
+		var pFee sql.NullFloat64
+		if err := rows.Scan(&s.ID, &tenantType, &s.Name, &s.Slug, &s.Status, &s.VerificationStatus, &state, &lga, &tier, &s.CreatedAt, &contactEmail, &primaryColor, &logoUrl, &contactPhone, &contactPersonName, &fullAddress, &paymentMode, &pFee, &dvaAcc, &pStatus); err == nil {
 			if tenantType.Valid {
 				s.Type = tenantType.String
 			}
@@ -579,6 +584,24 @@ func HandleListTenants(w http.ResponseWriter, r *http.Request) {
 			}
 			if fullAddress.Valid {
 				s.FullAddress = fullAddress.String
+			}
+			if paymentMode.Valid {
+				s.PaymentMode = paymentMode.String
+			} else {
+				s.PaymentMode = "managed"
+			}
+			if pFee.Valid {
+				s.PlatformFeePercent = pFee.Float64
+			} else {
+				s.PlatformFeePercent = 5.0
+			}
+			if dvaAcc.Valid {
+				s.DvaAccountNumber = dvaAcc.String
+			}
+			if pStatus.Valid {
+				s.PaystackStatus = pStatus.String
+			} else {
+				s.PaystackStatus = "pending"
 			}
 			tenants = append(tenants, s)
 		} else {

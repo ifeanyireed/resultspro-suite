@@ -1,0 +1,241 @@
+"use client";
+
+import React, { useEffect, useState } from 'react';
+import api from '@/lib/api';
+import { ModernDashboardLayout } from '@/components/layout/ModernDashboardLayout';
+import { 
+  BuildingOfficeIcon, 
+  ArrowLeftIcon,
+  CreditCardIcon,
+  BanknotesIcon,
+  KeyIcon
+} from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+
+export default function TenantPaymentConfig() {
+  const params = useParams();
+  const router = useRouter();
+  const tenantId = params.id as string;
+  
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [tenant, setTenant] = useState<any>(null);
+  
+  const [formData, setFormData] = useState({
+    payment_mode: 'managed',
+    platform_fee_percent: 5.0,
+    dva_account_number: '',
+    dva_bank: '',
+    paystack_subaccount_code: '',
+    paystack_public_key: '',
+    paystack_secret_key: '',
+    paystack_status: 'pending'
+  });
+
+  useEffect(() => {
+    if (tenantId) fetchTenant();
+  }, [tenantId]);
+
+  const fetchTenant = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get(`/api/v1/tenants/${tenantId}`);
+      if (res.data) {
+        setTenant(res.data);
+        setFormData({
+          payment_mode: res.data.payment_mode || 'managed',
+          platform_fee_percent: res.data.platform_fee_percent || 5.0,
+          dva_account_number: res.data.dva_account_number || '',
+          dva_bank: res.data.dva_bank || '',
+          paystack_subaccount_code: res.data.paystack_subaccount_code || '',
+          paystack_public_key: res.data.paystack_public_key || '',
+          paystack_secret_key: res.data.paystack_secret_key || '',
+          paystack_status: res.data.paystack_status || 'pending'
+        });
+      }
+    } catch (err) {
+      console.error("Failed to load tenant", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      await api.patch(`/api/v1/tenants/update/${tenantId}`, formData);
+      alert('Payment configuration saved securely!');
+      router.push('/platform-admin/tenants');
+    } catch (err) {
+      console.error("Save failed", err);
+      alert("Failed to save configuration.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleChange = (e: any) => {
+    const { name, value, type } = e.target;
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: type === 'number' ? parseFloat(value) : value 
+    }));
+  };
+
+  if (loading) {
+    return <div className="p-8 text-center text-gray-500">Loading configuration...</div>;
+  }
+
+  return (
+    <ModernDashboardLayout
+      sidebarContent={
+        <div className="flex-1 px-4 py-6 overflow-y-auto">
+          <div className="mb-8 px-4">
+            <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Platform Administration</h2>
+            <div className="space-y-1">
+              <Link href="/platform-admin/tenants" className="flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal text-[#146ef5] bg-[#146ef5]/10 relative before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full">
+                <BuildingOfficeIcon className="w-6 h-6" />
+                Tenant Management
+              </Link>
+            </div>
+          </div>
+        </div>
+      }
+      headerContent={
+        <div className="flex items-center justify-between w-full">
+          <h2 className="text-xl font-bold text-gray-900">Super Admin Control Center</h2>
+        </div>
+      }
+    >
+      <div className="p-8 max-w-4xl mx-auto">
+        <button onClick={() => router.back()} className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 font-medium mb-6 transition-colors">
+          <ArrowLeftIcon className="w-4 h-4" />
+          Back to Tenants
+        </button>
+
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Payment Configuration</h1>
+            <p className="text-gray-500 mt-1">Manage payment architecture for <strong className="text-gray-900">{tenant?.name}</strong>.</p>
+          </div>
+          <button 
+            onClick={handleSave}
+            disabled={saving}
+            className="bg-[#146ef5] hover:bg-[#105bd1] disabled:opacity-50 text-white font-medium px-6 py-2.5 rounded-xl transition-all shadow-sm flex items-center gap-2"
+          >
+            {saving ? 'Saving...' : 'Save Configuration'}
+          </button>
+        </div>
+
+        <div className="grid gap-8">
+          {/* Payment Mode Selection */}
+          <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm">
+            <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <CreditCardIcon className="w-5 h-5 text-gray-400" />
+              Payment Architecture Mode
+            </h3>
+            
+            <div className="grid md:grid-cols-2 gap-4">
+              <label className={`relative flex flex-col p-6 rounded-2xl border-2 cursor-pointer transition-all ${formData.payment_mode === 'managed' ? 'border-[#146ef5] bg-blue-50/50' : 'border-gray-200 hover:border-blue-200 bg-white'}`}>
+                <input 
+                  type="radio" name="payment_mode" value="managed" 
+                  checked={formData.payment_mode === 'managed'} 
+                  onChange={handleChange} className="sr-only" 
+                />
+                <span className="font-bold text-gray-900 mb-2 flex items-center justify-between">
+                  CoursesPro Managed
+                  {formData.payment_mode === 'managed' && <span className="w-3 h-3 rounded-full bg-[#146ef5] ring-4 ring-blue-100" />}
+                </span>
+                <span className="text-sm text-gray-500 leading-relaxed">
+                  Uses the central CoursesPro Paystack integration. Creates a Dedicated Virtual Account (DVA) and automatically splits payments based on platform fees.
+                </span>
+              </label>
+
+              <label className={`relative flex flex-col p-6 rounded-2xl border-2 cursor-pointer transition-all ${formData.payment_mode === 'byo_paystack' ? 'border-[#146ef5] bg-blue-50/50' : 'border-gray-200 hover:border-blue-200 bg-white'}`}>
+                <input 
+                  type="radio" name="payment_mode" value="byo_paystack" 
+                  checked={formData.payment_mode === 'byo_paystack'} 
+                  onChange={handleChange} className="sr-only" 
+                />
+                <span className="font-bold text-gray-900 mb-2 flex items-center justify-between">
+                  BYO Paystack
+                  {formData.payment_mode === 'byo_paystack' && <span className="w-3 h-3 rounded-full bg-[#146ef5] ring-4 ring-blue-100" />}
+                </span>
+                <span className="text-sm text-gray-500 leading-relaxed">
+                  Enterprise mode. The tenant uses their own Paystack account and API keys. All revenue settles directly to the tenant's own bank account.
+                </span>
+              </label>
+            </div>
+          </div>
+
+          {/* Conditional Config Blocks */}
+          {formData.payment_mode === 'managed' ? (
+            <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm space-y-6">
+              <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <BanknotesIcon className="w-5 h-5 text-gray-400" />
+                Managed DVA & Split Settings
+              </h3>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Platform Fee (%)</label>
+                  <input type="number" step="0.1" name="platform_fee_percent" value={formData.platform_fee_percent} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#146ef5] focus:bg-white transition-colors" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Paystack Subaccount Code</label>
+                  <input type="text" name="paystack_subaccount_code" value={formData.paystack_subaccount_code} onChange={handleChange} placeholder="e.g. SUB_xxxxxxx" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#146ef5] focus:bg-white transition-colors font-mono" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">DVA Account Number</label>
+                  <input type="text" name="dva_account_number" value={formData.dva_account_number} onChange={handleChange} placeholder="e.g. 1234567890" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#146ef5] focus:bg-white transition-colors font-mono" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">DVA Bank Name</label>
+                  <input type="text" name="dva_bank" value={formData.dva_bank} onChange={handleChange} placeholder="e.g. Titan Trust Bank" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#146ef5] focus:bg-white transition-colors" />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Paystack Configuration Status</label>
+                  <select name="paystack_status" value={formData.paystack_status} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#146ef5] focus:bg-white transition-colors">
+                    <option value="pending">Pending Provisioning</option>
+                    <option value="Active">Active (DVA Assigned)</option>
+                    <option value="failed">Provisioning Failed</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm space-y-6">
+              <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <KeyIcon className="w-5 h-5 text-gray-400" />
+                Tenant API Credentials
+              </h3>
+              <p className="text-sm text-gray-500">
+                These keys are stored securely on the CoursesPro backend and are <strong>never</strong> exposed to the tenant dashboard UI.
+              </p>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Paystack Public Key</label>
+                  <input type="text" name="paystack_public_key" value={formData.paystack_public_key} onChange={handleChange} placeholder="pk_live_xxxx" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#146ef5] focus:bg-white transition-colors font-mono" />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Paystack Secret Key</label>
+                  <input type="password" name="paystack_secret_key" value={formData.paystack_secret_key} onChange={handleChange} placeholder="sk_live_xxxx" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#146ef5] focus:bg-white transition-colors font-mono" />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Connection Status</label>
+                  <select name="paystack_status" value={formData.paystack_status} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#146ef5] focus:bg-white transition-colors">
+                    <option value="pending">Pending Validation</option>
+                    <option value="Connected">Connected & Verified</option>
+                    <option value="failed">Connection Failed</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </ModernDashboardLayout>
+  );
+}
