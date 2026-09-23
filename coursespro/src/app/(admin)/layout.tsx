@@ -122,13 +122,13 @@ export default function AppLayout({
                   className="w-auto h-12 object-contain"
                 />
               ) : (
-                <div className="w-10 h-10 overflow-hidden flex items-center justify-start shrink-0">
+                <div className="w-8 h-8 overflow-hidden flex items-center justify-start shrink-0">
                   <TenantLogo 
                     theme="light"
-                    height={40}
+                    height={28}
                     logoUrl={logoUrl}
                     tenantName={tenantName}
-                    className="w-auto h-10 object-left object-cover max-w-none"
+                    className="w-auto h-7 object-left max-w-none"
                   />
                 </div>
               )}
