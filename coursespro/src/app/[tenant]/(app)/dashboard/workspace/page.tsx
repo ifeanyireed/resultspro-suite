@@ -2,12 +2,13 @@
 import React from 'react';
 import { PlusIcon, ChatBubbleLeftIcon, PaperClipIcon } from '@heroicons/react/24/outline';
 
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 
 export default function WorkspacePage() {
   const searchParams = useSearchParams();
+  const params = useParams();
   const [verifying, setVerifying] = useState(false);
   const token = useAuthStore((state: any) => state.token);
 
@@ -15,14 +16,14 @@ export default function WorkspacePage() {
     const reference = searchParams.get('reference');
     if (reference && token) {
       setVerifying(true);
-      const tenantSlug = window.location.pathname.split('/')[1];
+      const tenantSlug = params?.tenant as string;
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "http://localhost:5001";
       
       fetch(`${USERS_API}/api/v1/payments/verify`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Tenant-Domain': tenantSlug,
+          'X-Tenant-Domain': tenantSlug || window.location.hostname,
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ reference })
