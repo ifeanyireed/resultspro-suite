@@ -9,13 +9,18 @@ export default function SettingsPage() {
   const router = useRouter();
   const { user } = useAuthStore();
 
+  const [mounted, setMounted] = React.useState(false);
   useEffect(() => {
-    if (!user) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !user) {
       router.push('/login');
     }
-  }, [user, router]);
+  }, [user, router, mounted]);
 
-  if (!user) return null;
+  if (!mounted || !user) return null;
 
   return (
     <>

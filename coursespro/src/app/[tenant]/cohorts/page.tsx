@@ -9,6 +9,8 @@ import { COURSES_API } from '@/lib/api';
 import CohortCard from '@/components/CohortCard';
 import CohortSlideshow from '@/components/CohortSlideshow';
 
+export const dynamic = 'force-dynamic';
+
 export default async function CohortsPage({ params }: { params: Promise<{ tenant: string }> }) {
   const resolvedParams = await params;
   const tenant = await getTenant(resolvedParams.tenant);

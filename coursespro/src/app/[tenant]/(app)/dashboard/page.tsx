@@ -19,15 +19,21 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useEffect, useState } from 'react';
 import { coursesApi } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
+import Cookies from 'js-cookie';
 
 export default function LearnerDashboard() {
 const router = useRouter();
   const { user, token } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    if (!user) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !user) {
       router.push('/login');
     }
-  }, [user, router]);
+  }, [user, router, mounted]);
 
   const { data: dashboardData, isLoading: loading, error } = useQuery({
     queryKey: ['student-dashboard-summary', user?.id],
@@ -62,10 +68,12 @@ const router = useRouter();
         }
       }
       router.push('/');
+    } else if (dashboardData && dashboardData.has_enrollment === true) {
+      Cookies.remove('selected_cohort_id');
     }
   }, [dashboardData, router, token]);
 
-  if (!user || loading || !dashboardData || dashboardData.has_enrollment === false) return (
+  if (!mounted || !user || loading || !dashboardData || dashboardData.has_enrollment === false) return (
     <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
     </div>
