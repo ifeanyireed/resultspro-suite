@@ -4,9 +4,12 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Users, Target, BookOpen } from 'lucide-react';
+import { useAuthStore } from '@/store/useAuthStore';
 
 export default function OrientationWalkthroughPage() {
   const [step, setStep] = useState(1);
+  const user = useAuthStore((state) => state.user);
+  const firstName = user?.full_name?.split(' ')[0] || 'Builder';
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden bg-[#0B1021]">
@@ -42,7 +45,7 @@ export default function OrientationWalkthroughPage() {
                 <Target className="w-4 h-4" />
                 <span>Your Mentor</span>
               </div>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">Welcome to the cohort, Ada.</h2>
+              <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">Welcome to the cohort, {firstName}.</h2>
               <p className="text-slate-500 max-w-lg mx-auto text-lg leading-relaxed font-medium">
                 "I'm Chidi, your mentor for the next 12 weeks. My goal isn't just to teach you code—it's to help you build the portfolio and confidence to get hired."
               </p>
@@ -52,7 +55,7 @@ export default function OrientationWalkthroughPage() {
           {step === 2 && (
             <div className="flex flex-col items-center text-center animate-in fade-in zoom-in duration-500">
               <div className="flex -space-x-4 mb-8">
-                <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-emerald-500 text-white flex items-center justify-center font-bold text-lg z-30">Ada</div>
+                <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-emerald-500 text-white flex items-center justify-center font-bold text-lg z-30 truncate px-1" title={firstName}>{firstName.length > 5 ? firstName.substring(0, 4) + '.' : firstName}</div>
                 <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-blue-400 z-20"></div>
                 <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-purple-400 z-10"></div>
                 <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 z-0">+21</div>

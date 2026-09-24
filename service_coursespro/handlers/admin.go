@@ -20,7 +20,11 @@ func (h *Handler) AdminGetCohorts(c *gin.Context) {
 
 func (h *Handler) AdminGetEnrollments(c *gin.Context) {
 	var enrollments []models.Enrollment
-	db.WithTenant(c).Order("created_at DESC").Find(&enrollments)
+	err := db.WithTenant(c).Order("enrolled_at DESC").Find(&enrollments).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error", "details": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"enrollments": enrollments})
 }
 
