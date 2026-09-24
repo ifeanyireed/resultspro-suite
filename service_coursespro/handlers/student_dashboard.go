@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -99,8 +100,19 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		level = "Builder"
 	}
 
-	totalStages := int64(12)
-	db.DB.Model(&models.JourneyStage{}).Where("tenant_id = ?", tenantID).Count(&totalStages)
+	totalStages := int64(0)
+	var stagesForCount []models.JourneyStage
+	if cohort.ProgramID != nil {
+		db.WithTenant(c).Where("program_id = ?", *cohort.ProgramID).Find(&stagesForCount)
+		for _, s := range stagesForCount {
+			if s.ContentsJSON != "" && s.ContentsJSON != "[]" {
+				var blocks []interface{}
+				if err := json.Unmarshal([]byte(s.ContentsJSON), &blocks); err == nil {
+					totalStages += int64(len(blocks))
+				}
+			}
+		}
+	}
 	if totalStages == 0 {
 		totalStages = 12 // Prevent division by zero for UI
 	}
