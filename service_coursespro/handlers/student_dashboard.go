@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"service_coursespro/db"
@@ -21,7 +22,41 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 
 	// 1. Get Enrollment
 	var enrollment models.Enrollment
-	db.DB.Where("tenant_id = ? AND user_id = ?", tenantID, userID).First(&enrollment)
+	if err := db.DB.Where("tenant_id = ? AND user_id = ?", tenantID, userID).First(&enrollment).Error; err == nil {
+		now := time.Now()
+		updated := false
+
+		if enrollment.LastActiveDate == nil {
+			enrollment.StreakDays = 1
+			enrollment.LastActiveDate = &now
+			updated = true
+		} else {
+			y1, m1, d1 := enrollment.LastActiveDate.Date()
+			y2, m2, d2 := now.Date()
+
+			if y1 != y2 || m1 != m2 || d1 != d2 {
+				t1 := time.Date(y1, m1, d1, 0, 0, 0, 0, time.UTC)
+				t2 := time.Date(y2, m2, d2, 0, 0, 0, 0, time.UTC)
+				daysDiff := int(t2.Sub(t1).Hours() / 24)
+
+				if daysDiff == 1 {
+					enrollment.StreakDays++
+				} else if daysDiff > 1 {
+					enrollment.StreakDays = 1
+				}
+
+				enrollment.LastActiveDate = &now
+				updated = true
+			}
+		}
+
+		if updated {
+			db.DB.Model(&enrollment).Updates(map[string]interface{}{
+				"streak_days":      enrollment.StreakDays,
+				"last_active_date": enrollment.LastActiveDate,
+			})
+		}
+	}
 
 	// 2. Get Cohort (if they have one)
 	var cohort models.Cohort
