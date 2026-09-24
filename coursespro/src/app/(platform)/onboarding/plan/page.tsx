@@ -18,11 +18,15 @@ export default function PlanSelectionPage() {
 
   React.useEffect(() => {
     const fetchCohort = async () => {
-      const cohortId = Cookies.get('selected_cohort_id');
+      let cohortId = Cookies.get('selected_cohort_id');
       if (!cohortId) {
         setError('No cohort selected. Please return to the catalogue and select a cohort to enroll in.');
         return;
       }
+
+      cohortId = cohortId.replace(/['"]+/g, '');
+      console.log("Fetching cohort with ID:", cohortId, "for platform");
+      
       try {
         const res = await axios.get(`${COURSES_API}/api/public/cohorts/${cohortId}?tenant_id=coursespro`);
         if (res.data?.cohort) {

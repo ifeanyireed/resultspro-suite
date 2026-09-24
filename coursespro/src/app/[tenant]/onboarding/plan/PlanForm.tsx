@@ -18,11 +18,15 @@ export default function PlanForm({ tenant }: { tenant: any }) {
 
   useEffect(() => {
     const fetchCohort = async () => {
-      const cohortId = Cookies.get('selected_cohort_id');
+      let cohortId = Cookies.get('selected_cohort_id');
       if (!cohortId) {
         setError('No cohort selected. Please return to the catalogue and select a cohort to enroll in.');
         return;
       }
+      
+      cohortId = cohortId.replace(/['"]+/g, '');
+      console.log("Fetching cohort with ID:", cohortId, "for tenant:", tenant?.slug);
+      
       try {
         const res = await fetch(`${COURSES_API}/api/public/cohorts/${cohortId}`, {
           headers: { 'X-Tenant-Domain': tenant.slug }
