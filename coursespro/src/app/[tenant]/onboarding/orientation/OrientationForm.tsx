@@ -13,7 +13,7 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
   const [step, setStep] = useState(1);
   const [cohortSize, setCohortSize] = useState<number | null>(null);
   const user = useAuthStore((state) => state.user);
-  const firstName = user?.full_name?.split(' ')[0] || 'Builder';
+  const firstName = user?.name?.split(' ')[0] || 'Builder';
 
   React.useEffect(() => {
     const cohortId = Cookies.get('selected_cohort_id');

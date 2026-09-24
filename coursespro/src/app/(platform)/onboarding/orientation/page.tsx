@@ -9,7 +9,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 export default function OrientationWalkthroughPage() {
   const [step, setStep] = useState(1);
   const user = useAuthStore((state) => state.user);
-  const firstName = user?.full_name?.split(' ')[0] || 'Builder';
+  const firstName = user?.name?.split(' ')[0] || 'Builder';
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden bg-[#0B1021]">
