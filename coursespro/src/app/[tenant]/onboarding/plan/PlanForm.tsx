@@ -29,7 +29,7 @@ export default function PlanForm({ tenant }: { tenant: any }) {
       
       try {
         const res = await fetch(`${COURSES_API}/api/public/cohorts/${cohortId}?tenant_id=${tenant.id}`, {
-          headers: { 'X-Tenant-Domain': tenant.slug, 'X-Tenant-ID': tenant.id }
+          headers: { 'X-Tenant-Domain': tenant.slug }
         });
         if (res.ok) {
           const data = await res.json();
