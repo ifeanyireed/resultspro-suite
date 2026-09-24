@@ -23,6 +23,18 @@ export default function SignupForm({ tenant }: { tenant: any }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const user = useAuthStore((state) => state.user);
+
+  React.useEffect(() => {
+    if (user) {
+      const selectedCohortId = Cookies.get('selected_cohort_id');
+      if (selectedCohortId) {
+        router.push('/onboarding/plan');
+      } else {
+        router.push('/dashboard');
+      }
+    }
+  }, [user, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
