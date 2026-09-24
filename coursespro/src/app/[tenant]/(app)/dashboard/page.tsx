@@ -22,7 +22,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export default function LearnerDashboard() {
 const router = useRouter();
-  const { user } = useAuthStore();
+  const { user, token } = useAuthStore();
   useEffect(() => {
     if (!user) {
       router.push('/login');
@@ -40,9 +40,30 @@ const router = useRouter();
 
   useEffect(() => {
     if (dashboardData && dashboardData.has_enrollment === false) {
+      if (token) {
+        try {
+          const base64Url = token.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join(''));
+          const payload = JSON.parse(jsonPayload);
+          const roles = payload.roles || [];
+          
+          if (roles.includes('tenant-admin') || roles.includes('superadmin') || roles.includes('platform-admin')) {
+            router.push('/admin');
+            return;
+          } else if (roles.includes('mentor')) {
+            router.push('/mentor');
+            return;
+          }
+        } catch (e) {
+          // Ignore
+        }
+      }
       router.push('/');
     }
-  }, [dashboardData, router]);
+  }, [dashboardData, router, token]);
 
   if (!user || loading || !dashboardData || dashboardData.has_enrollment === false) return (
     <div className="flex justify-center items-center h-64">

@@ -19,18 +19,40 @@ export default function LoginForm({ tenant }: { tenant: any }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const user = useAuthStore((state) => state.user);
+  const token = useAuthStore((state) => state.token);
 
   React.useEffect(() => {
-    if (user) {
+    if (user && token) {
       const Cookies = require('js-cookie');
       const selectedCohortId = Cookies.get('selected_cohort_id');
+      
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        const payload = JSON.parse(jsonPayload);
+        const roles = payload.roles || [];
+        
+        if (roles.includes('tenant-admin') || roles.includes('superadmin') || roles.includes('platform-admin')) {
+          router.push('/admin');
+          return;
+        } else if (roles.includes('mentor')) {
+          router.push('/mentor');
+          return;
+        }
+      } catch (e) {
+        // ignore decode errors
+      }
+
       if (selectedCohortId) {
         router.push('/onboarding/plan');
       } else {
         router.push('/dashboard');
       }
     }
-  }, [user, router]);
+  }, [user, token, router]);
   
   React.useEffect(() => {
     if (typeof window !== 'undefined') {

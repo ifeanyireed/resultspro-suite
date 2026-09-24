@@ -25,7 +25,7 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
   const pathname = usePathname();
 
   
-  const { isAuthenticated, user, logout } = useAuthStore();
+  const { isAuthenticated, user, token, logout } = useAuthStore();
   const [mounted, setMounted] = useState(false);
   const [featureFlags, setFeatureFlags] = useState<Record<string, string>>({});
   const [unreadCount, setUnreadCount] = useState(0); const getUnreadCount = async () => 0; const api = { get: async (url: string) => ({ data: url.includes("feature") ? ({} as Record<string, string>) : { unread: 0 } as any }) };
@@ -86,9 +86,18 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
 
   const getDashboardUrl = () => {
     if (!user) return '/login';
-    const role = user.role || '';
-    if (user.isAdmin || role.includes('admin') || role === 'superadmin') return '/admin';
-    if (role === 'mentor') return '/mentor';
+    let roles: string[] = [];
+    if (token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+        roles = JSON.parse(jsonPayload).roles || [];
+      } catch (e) {}
+    }
+    
+    if (user.isAdmin || roles.includes('tenant-admin') || roles.includes('superadmin') || roles.includes('platform-admin')) return '/admin';
+    if (roles.includes('mentor')) return '/mentor';
     return '/dashboard';
   };
 
