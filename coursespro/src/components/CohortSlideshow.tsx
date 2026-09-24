@@ -1,17 +1,13 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 
-export default function CohortSlideshow({ imagesRaw, fallbackImage }: { imagesRaw?: string, fallbackImage?: string }) {
+export default function CohortSlideshow({ imagesRaw }: { imagesRaw?: string }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Parse comma-separated images
-  let images = imagesRaw
+  const images = imagesRaw
     ? imagesRaw.split(',').map(s => s.trim()).filter(Boolean)
     : [];
-
-  if (images.length === 0 && fallbackImage) {
-    images = [fallbackImage];
-  }
 
   const resolvedImages = images.map(img => {
     switch (img) {
