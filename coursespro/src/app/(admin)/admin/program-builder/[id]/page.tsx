@@ -204,6 +204,20 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
     handleUpdateModule(moduleId, { video_url: '' });
   };
 
+  const handlePublishToggle = async () => {
+    setIsPublishing(true);
+    try {
+      const newStatus = program?.status === 'published' ? 'draft' : 'published';
+      const res = await coursesApi.put(`/api/admin/programs/${id}`, { status: newStatus });
+      setProgram({ ...program, status: newStatus });
+    } catch (e) {
+      console.error("Failed to publish", e);
+      alert("Failed to change status. Check backend.");
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-2rem)] bg-gray-50 -mx-8 -mb-8 -mt-2 rounded-t-2xl overflow-hidden border-t border-gray-200 shadow-sm">
       {/* Builder Top Nav */}
