@@ -69,6 +69,7 @@ export default function SettingsPage() {
     heroUrl: '',
     previewUrl: '',
     learnerUrl: '',
+    slideshowImages: '',
     logoUrl: '',
     darkLogoUrl: '',
     flattenLogo: true,
@@ -107,6 +108,7 @@ const { data: tenantData, isLoading } = useQuery({
         heroUrl: t.hero_bg_url || '',
         previewUrl: t.preview_image_url || '',
         learnerUrl: t.learner_image_url || '',
+        slideshowImages: t.slideshow_images || '',
         darkLogoUrl: t.dark_logo_url || '',
         flattenLogo: t.flatten_logo !== false,
       }));
@@ -250,6 +252,7 @@ const { data: tenantData, isLoading } = useQuery({
         hero_bg_url: formData.heroUrl,
         preview_image_url: formData.previewUrl,
         learner_image_url: formData.learnerUrl,
+        slideshow_images: formData.slideshowImages,
         dark_logo_url: formData.darkLogoUrl,
         flatten_logo: formData.flattenLogo,
       };
@@ -450,6 +453,19 @@ const { data: tenantData, isLoading } = useQuery({
                 </div>
               </div>
               
+              <div className="pt-4 mt-2 border-t border-gray-100">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Cohort Slideshow Images (comma separated)</label>
+                <p className="text-xs text-gray-500 mb-3">Enter image URLs or aliases (e.g. @img01, @img02) to display a slideshow on the cohort enrollment page.</p>
+                <input 
+                  type="text" 
+                  name="slideshowImages" 
+                  value={formData.slideshowImages} 
+                  onChange={handleChange} 
+                  placeholder="e.g. @img01, @img02, https://url.com/img.jpg"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#146ef5] transition-colors" 
+                />
+              </div>
+
               <div className="flex items-center justify-between mt-5">
                   <div>
                     <p className="text-sm font-medium text-gray-700">Flatten to white</p>

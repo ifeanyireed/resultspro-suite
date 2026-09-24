@@ -17,6 +17,7 @@ type Tenant struct {
 	HeroBgURL             string     `json:"hero_bg_url,omitempty"`
 	PreviewImageURL       string     `json:"preview_image_url,omitempty"`
 	LearnerImageURL       string     `json:"learner_image_url,omitempty"`
+	SlideshowImages       string     `json:"slideshow_images,omitempty"`
 	PaymentMode           string     `json:"payment_mode,omitempty"`
 	PlatformFeePercent    float64    `json:"platform_fee_percent,omitempty"`
 	PaystackPublicKey     string     `json:"paystack_public_key,omitempty"`
