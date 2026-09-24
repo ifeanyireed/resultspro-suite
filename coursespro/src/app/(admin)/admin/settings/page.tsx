@@ -50,6 +50,8 @@ export default function SettingsPage() {
   const learnerFileInputRef = useRef<HTMLInputElement>(null);
   const heroFileInputRef = useRef<HTMLInputElement>(null);
   const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [uploadingSlideshow, setUploadingSlideshow] = useState(false);
+  const slideshowFileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -227,6 +229,43 @@ const { data: tenantData, isLoading } = useQuery({
       setUploadingLogo(false);
     }
   };
+
+  const handleSlideshowUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setUploadingSlideshow(true);
+    try {
+      const newUrls = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const data = new FormData();
+        data.append('file', file);
+        data.append('folder', 'uploads/slideshows');
+        const res = await api.post('/api/v1/upload', data, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        if (res.data && res.data.url) {
+          newUrls.push(res.data.url);
+        }
+      }
+      
+      if (newUrls.length > 0) {
+        setFormData(prev => {
+          const existing = prev.slideshowImages ? prev.slideshowImages.split(',').map(s => s.trim()).filter(Boolean) : [];
+          return { ...prev, slideshowImages: [...existing, ...newUrls].join(', ') };
+        });
+      }
+    } catch (err) {
+      console.error("Upload failed", err);
+      alert("Failed to upload one or more slideshow images.");
+    } finally {
+      setUploadingSlideshow(false);
+      if (slideshowFileInputRef.current) {
+         slideshowFileInputRef.current.value = '';
+      }
+    }
+  };
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -454,16 +493,27 @@ const { data: tenantData, isLoading } = useQuery({
               </div>
               
               <div className="pt-4 mt-2 border-t border-gray-100">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Cohort Slideshow Images (comma separated)</label>
-                <p className="text-xs text-gray-500 mb-3">Enter image URLs or aliases (e.g. @img01, @img02) to display a slideshow on the cohort enrollment page.</p>
-                <input 
-                  type="text" 
-                  name="slideshowImages" 
-                  value={formData.slideshowImages} 
-                  onChange={handleChange} 
-                  placeholder="e.g. @img01, @img02, https://url.com/img.jpg"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#146ef5] transition-colors" 
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">Cohort Slideshow Images</label>
+                <p className="text-xs text-gray-500 mb-3">Upload images or enter URLs (comma separated) to display a slideshow on the cohort enrollment page.</p>
+                <div className="flex gap-3 items-start">
+                  <input 
+                    type="text" 
+                    name="slideshowImages" 
+                    value={formData.slideshowImages} 
+                    onChange={handleChange} 
+                    placeholder="e.g. @img01, @img02, https://url.com/img.jpg"
+                    className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#146ef5] transition-colors" 
+                  />
+                  <input type="file" ref={slideshowFileInputRef} className="hidden" accept="image/*" multiple onChange={handleSlideshowUpload} />
+                  <button 
+                    type="button"
+                    onClick={() => slideshowFileInputRef.current?.click()}
+                    disabled={uploadingSlideshow}
+                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium px-4 py-2.5 rounded-xl transition-colors disabled:opacity-50 whitespace-nowrap"
+                  >
+                    {uploadingSlideshow ? 'Uploading...' : 'Upload Images'}
+                  </button>
+                </div>
               </div>
 
               <div className="flex items-center justify-between mt-5">
