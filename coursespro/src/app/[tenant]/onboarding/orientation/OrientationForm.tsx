@@ -4,13 +4,26 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import TenantLogo from '@/components/TenantLogo';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 import { ArrowRight, Users, Target, BookOpen } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 
 export default function OrientationForm({ tenant }: { tenant: any }) {
   const [step, setStep] = useState(1);
+  const [cohortSize, setCohortSize] = useState<number | null>(null);
   const user = useAuthStore((state) => state.user);
   const firstName = user?.full_name?.split(' ')[0] || 'Builder';
+
+  React.useEffect(() => {
+    const cohortId = Cookies.get('selected_cohort_id');
+    if (cohortId && tenant?.slug) {
+      const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
+      axios.get(`${COURSES_API}/api/public/cohorts/${cohortId}?tenant_id=${tenant.slug}`)
+        .then(res => setCohortSize(res.data?.enrolled_count))
+        .catch(err => console.error(err));
+    }
+  }, [tenant]);
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden bg-[#0B1021]">
@@ -59,7 +72,7 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
                 <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-emerald-500 text-white flex items-center justify-center font-bold text-lg z-30 truncate px-1" title={firstName}>{firstName.length > 5 ? firstName.substring(0, 4) + '.' : firstName}</div>
                 <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-blue-400 z-20"></div>
                 <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-purple-400 z-10"></div>
-                <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 z-0">+21</div>
+                <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 z-0">+{cohortSize !== null ? Math.max(0, cohortSize - 1) : 21}</div>
               </div>
               <div className="inline-flex items-center space-x-2 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
                 <Users className="w-4 h-4" />
@@ -67,7 +80,7 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
               </div>
               <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">You are not building alone.</h2>
               <p className="text-slate-500 max-w-lg mx-auto text-lg leading-relaxed font-medium">
-                You're joining 23 other builders. You will review each other's code, debug together in the coworking rooms, and present your final projects on Demo Day.
+                You're joining {cohortSize !== null ? Math.max(0, cohortSize) : 23} other builders. You will review each other's code, debug together in the coworking rooms, and present your final projects on Demo Day.
               </p>
             </div>
           )}

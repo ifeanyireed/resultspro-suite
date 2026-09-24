@@ -4,12 +4,37 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 import { CreditCard, CheckCircle2, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
+import { COURSES_API } from '@/lib/api';
 
 export default function PlanSelectionPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [plan, setPlan] = useState('upfront');
+  const [cohort, setCohort] = useState<any>(null);
+
+  React.useEffect(() => {
+    const fetchCohort = async () => {
+      const cohortId = Cookies.get('selected_cohort_id');
+      if (!cohortId) return;
+      try {
+        const res = await axios.get(`${COURSES_API}/api/public/cohorts/${cohortId}?tenant_id=coursespro`);
+        setCohort(res.data.cohort);
+      } catch (err) {}
+    };
+    fetchCohort();
+  }, []);
+
+  const basePrice = cohort?.price || 135000;
+  const upfrontDiscount = basePrice >= 50000 ? 15000 : (basePrice > 10000 ? 5000 : 0);
+  const upfrontPrice = basePrice - upfrontDiscount;
+  const monthlyCost = Math.round(basePrice / 3);
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-NG', { style: 'currency', currency: cohort?.currency || 'NGN', minimumFractionDigits: 0 }).format(amount);
+  };
 
   const handlePayment = async () => {
     setIsLoading(true);
@@ -70,13 +95,13 @@ export default function PlanSelectionPage() {
                 <input type="radio" name="plan" value="upfront" checked={plan === 'upfront'} onChange={() => setPlan('upfront')} className="absolute top-6 right-6 w-5 h-5 text-blue-600 border-slate-300 focus:ring-blue-600" />
                 <span className="font-bold text-xs uppercase tracking-widest text-blue-600 mb-2 block">Full Cohort (Upfront)</span>
                 <div className="mb-1">
-                  <span className="text-3xl font-bold text-slate-900">₦120,000</span>
+                  <span className="text-3xl font-bold text-slate-900">{formatCurrency(upfrontPrice)}</span>
                 </div>
-                <p className="text-sm text-slate-400 mb-5 line-through">₦135,000</p>
+                <p className="text-sm text-slate-400 mb-5 line-through">{formatCurrency(basePrice)}</p>
                 
                 <ul className="space-y-2.5 mb-2">
                   <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
-                    <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Save ₦15,000 immediately
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Save {formatCurrency(upfrontDiscount)} immediately
                   </li>
                   <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
                     <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> 1-on-1 portfolio review session
@@ -89,7 +114,7 @@ export default function PlanSelectionPage() {
                 <input type="radio" name="plan" value="monthly" checked={plan === 'monthly'} onChange={() => setPlan('monthly')} className="absolute top-6 right-6 w-5 h-5 text-blue-600 border-slate-300 focus:ring-blue-600" />
                 <span className="font-bold text-xs uppercase tracking-widest text-slate-500 mb-2 block">Monthly Installment</span>
                 <div className="mb-5">
-                  <span className="text-3xl font-bold text-slate-900">₦45,000</span>
+                  <span className="text-3xl font-bold text-slate-900">{formatCurrency(monthlyCost)}</span>
                   <span className="text-slate-500 text-sm font-medium">/mo</span>
                 </div>
                 <ul className="space-y-2.5 mb-2">
@@ -110,17 +135,17 @@ export default function PlanSelectionPage() {
             <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm mb-6">
               <div className="flex justify-between mb-4">
                 <span className="text-sm font-semibold text-slate-700">{plan === 'upfront' ? 'Full Cohort (Upfront)' : 'Monthly Installment'}</span>
-                <span className="text-sm font-bold text-slate-900">{plan === 'upfront' ? '₦135,000' : '₦45,000'}</span>
+                <span className="text-sm font-bold text-slate-900">{plan === 'upfront' ? formatCurrency(basePrice) : formatCurrency(monthlyCost)}</span>
               </div>
               {plan === 'upfront' && (
                 <div className="flex justify-between mb-4 text-emerald-600">
                   <span className="text-sm font-semibold">Upfront Discount</span>
-                  <span className="text-sm font-bold">-₦15,000</span>
+                  <span className="text-sm font-bold">-{formatCurrency(upfrontDiscount)}</span>
                 </div>
               )}
               <div className="border-t border-slate-100 pt-4 flex justify-between items-center">
                 <span className="font-bold text-slate-900">Total Due Today</span>
-                <span className="text-2xl font-bold text-blue-600">{plan === 'upfront' ? '₦120,000' : '₦45,000'}</span>
+                <span className="text-2xl font-bold text-blue-600">{plan === 'upfront' ? formatCurrency(upfrontPrice) : formatCurrency(monthlyCost)}</span>
               </div>
             </div>
 
@@ -147,7 +172,7 @@ export default function PlanSelectionPage() {
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  Pay {plan === 'upfront' ? '₦120,000' : '₦45,000'} securely
+                  Pay {plan === 'upfront' ? formatCurrency(upfrontPrice) : formatCurrency(monthlyCost)} securely
                   <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
