@@ -14,11 +14,15 @@ export default function PlanForm({ tenant }: { tenant: any }) {
   const [isLoading, setIsLoading] = useState(false);
   const [plan, setPlan] = useState('upfront');
   const [cohort, setCohort] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCohort = async () => {
       const cohortId = Cookies.get('selected_cohort_id');
-      if (!cohortId) return;
+      if (!cohortId) {
+        setError('No cohort selected. Please return to the catalogue and select a cohort to enroll in.');
+        return;
+      }
       try {
         const res = await fetch(`${COURSES_API}/api/public/cohorts/${cohortId}`, {
           headers: { 'X-Tenant-Domain': tenant.slug }
@@ -26,19 +30,51 @@ export default function PlanForm({ tenant }: { tenant: any }) {
         if (res.ok) {
           const data = await res.json();
           setCohort(data.cohort);
+        } else {
+          setError('Failed to load cohort details. The cohort may have been removed or is unavailable.');
         }
-      } catch (err) {}
+      } catch (err) {
+        setError('A network error occurred while loading the cohort details.');
+      }
     };
     fetchCohort();
   }, [tenant.slug]);
 
-  const basePrice = cohort ? Number(cohort.price) : 135000;
+  if (error) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 p-8">
+        <div className="bg-white p-8 rounded-2xl shadow-sm max-w-md w-full text-center border border-slate-200">
+          <div className="w-16 h-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+          </div>
+          <h3 className="text-xl font-bold text-slate-900 mb-2">Checkout Error</h3>
+          <p className="text-slate-500 mb-6">{error}</p>
+          <Link href="/" className="inline-flex justify-center items-center py-3 px-6 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all">
+            Return to Catalogue
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!cohort) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center">
+          <Loader2 className="w-10 h-10 text-blue-600 animate-spin mb-4" />
+          <p className="text-slate-500 font-medium">Preparing your checkout...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const basePrice = Number(cohort.price);
   const upfrontDiscount = basePrice >= 50000 ? 15000 : (basePrice > 10000 ? 5000 : 0);
   const upfrontPrice = basePrice - upfrontDiscount;
   const monthlyCost = Math.round(basePrice / 3);
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-NG', { style: 'currency', currency: cohort?.currency || 'NGN', minimumFractionDigits: 0 }).format(amount);
+    return new Intl.NumberFormat('en-NG', { style: 'currency', currency: cohort.currency || 'NGN', minimumFractionDigits: 0 }).format(amount);
   };
 
   const handlePayment = async () => {
