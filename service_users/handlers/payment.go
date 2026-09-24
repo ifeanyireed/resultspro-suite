@@ -108,6 +108,7 @@ func HandleTenantPaymentInitialize(w http.ResponseWriter, r *http.Request) {
 		paymentRef,
 		subaccountCode,
 		req.CallbackURL,
+		tenant.Name,
 	)
 	if err != nil {
 		log.Printf("Paystack initialization failed: %v", err)

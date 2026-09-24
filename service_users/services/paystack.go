@@ -199,7 +199,7 @@ func (c *PaystackClient) VerifyWebhookSignature(payload []byte, signature string
 }
 
 // InitializeTransaction starts a Paystack transaction
-func (c *PaystackClient) InitializeTransaction(amount int, email, reference, subaccount, callbackURL string) (string, string, string, error) {
+func (c *PaystackClient) InitializeTransaction(amount int, email, reference, subaccount, callbackURL, tenantName string) (string, string, string, error) {
 	payload := map[string]interface{}{
 		"amount":       amount,
 		"email":        email,
@@ -209,6 +209,18 @@ func (c *PaystackClient) InitializeTransaction(amount int, email, reference, sub
 
 	if subaccount != "" {
 		payload["subaccount"] = subaccount
+	}
+	
+	if tenantName != "" {
+		payload["metadata"] = map[string]interface{}{
+			"custom_fields": []map[string]interface{}{
+				{
+					"display_name": "Academy",
+					"variable_name": "tenant_name",
+					"value": tenantName,
+				},
+			},
+		}
 	}
 
 	result, err := c.doRequest("POST", "/transaction/initialize", payload)
