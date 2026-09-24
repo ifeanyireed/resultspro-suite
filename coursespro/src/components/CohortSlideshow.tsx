@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 
-export default function CohortSlideshow({ imagesRaw }: { imagesRaw?: string }) {
+export default function CohortSlideshow({ imagesRaw, className = "w-full h-[400px] md:h-[500px] relative overflow-hidden bg-slate-100 rounded-2xl shadow-sm mb-12" }: { imagesRaw?: string, className?: string }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Parse comma-separated images
@@ -28,11 +28,11 @@ export default function CohortSlideshow({ imagesRaw }: { imagesRaw?: string }) {
   }, [resolvedImages.length]);
 
   if (resolvedImages.length === 0) {
-    return null; // Don't render anything if no images are set
+    return null;
   }
 
   return (
-    <div className="w-full h-[400px] md:h-[500px] relative overflow-hidden bg-slate-100 rounded-2xl shadow-sm mb-12">
+    <div className={className}>
       {resolvedImages.map((src, index) => (
         <div
           key={index}
