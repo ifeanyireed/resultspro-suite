@@ -174,6 +174,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
+		"has_enrollment": enrollment.ID != "",
 		"enrollment": gin.H{
 			"streak_days":   enrollment.StreakDays,
 			"current_xp":    enrollment.CurrentXP,

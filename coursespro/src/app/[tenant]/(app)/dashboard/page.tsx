@@ -38,7 +38,13 @@ const router = useRouter();
     enabled: !!user
   });
 
-  if (!user || loading || !dashboardData) return (
+  useEffect(() => {
+    if (dashboardData && dashboardData.has_enrollment === false) {
+      router.push('/');
+    }
+  }, [dashboardData, router]);
+
+  if (!user || loading || !dashboardData || dashboardData.has_enrollment === false) return (
     <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
     </div>
