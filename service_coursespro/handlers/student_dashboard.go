@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -73,14 +74,19 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 	}
 
 	var stage models.JourneyStage
-	if enrollment.CurrentStageNumber > 0 {
-		db.DB.Where("tenant_id = ? AND stage_number = ?", tenantID, enrollment.CurrentStageNumber).First(&stage)
+	if enrollment.CurrentStageNumber > 0 && cohort.ProgramID != nil {
+		db.DB.Where("program_id = ? AND stage_number = ?", *cohort.ProgramID, enrollment.CurrentStageNumber).First(&stage)
 	}
 
 	var module models.JourneyModule
 	var currentModule *ModuleData
 	if stage.ID != "" {
-		db.DB.Where("stage_id = ?", stage.ID).Order("order_index ASC").First(&module)
+		db.DB.Table("crs_journey_modules").
+			Select("crs_journey_modules.*").
+			Joins("LEFT JOIN crs_module_progress mp ON mp.module_id = crs_journey_modules.id AND mp.user_id = ?", userID).
+			Where("crs_journey_modules.stage_id = ? AND (mp.completed IS NULL OR mp.completed = false)", stage.ID).
+			Order("crs_journey_modules.order_index ASC").
+			First(&module)
 		if module.ID != "" {
 			var summaryPoints []string
 			if module.AISummary != "" {
@@ -101,6 +107,13 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 			}
 			if currentModule.Duration == "" {
 				currentModule.Duration = "45 mins" // Fallback UI text
+			}
+		} else {
+			currentModule = &ModuleData{
+				Title:       "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " Completed",
+				Description: "You have completed all modules for this stage. Please complete your project or wait for your mentor's review to proceed to the next stage.",
+				Duration:    "Pending",
+				AiSummary:   []string{"Great job completing all modules in this stage!", "Next step: Project submission or review."},
 			}
 		}
 	}
