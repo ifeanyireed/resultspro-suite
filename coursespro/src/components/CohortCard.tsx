@@ -12,13 +12,32 @@ export default function CohortCard({ cohort }: { cohort: any }) {
     router.push('/signup');
   };
 
+  const basePrice = Number(cohort.price) || 0;
+  const upfrontDiscount = basePrice >= 50000 ? 15000 : (basePrice > 10000 ? 5000 : 0);
+  const discountedPrice = basePrice - upfrontDiscount;
+  const currencySymbol = cohort.currency === 'NGN' ? '₦' : cohort.currency === 'USD' ? '$' : (cohort.currency ? cohort.currency + ' ' : '₦');
+
   return (
     <div className="card overflow-hidden">
       <div className="h-48 bg-slate-200 relative">
          <img src={cohort.image_url || "/images/Students1.jpeg"} alt={cohort.title} className="w-full h-full object-cover" />
-         <span className="absolute top-4 right-4 bg-white text-navy px-3 py-1 text-xs font-bold rounded-full shadow">
-           {(cohort.currency === 'NGN' ? '₦' : cohort.currency === 'USD' ? '$' : cohort.currency + ' ')}{cohort.price?.toLocaleString() || '0'}
-         </span>
+         
+         <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3 py-1.5 rounded-xl shadow-lg border border-white/20 flex flex-col items-end leading-tight">
+           {upfrontDiscount > 0 ? (
+             <>
+               <span className="text-[10px] text-slate-400 line-through font-medium">
+                 {currencySymbol}{basePrice.toLocaleString()}
+               </span>
+               <span className="text-sm font-bold text-navy">
+                 {currencySymbol}{discountedPrice.toLocaleString()}
+               </span>
+             </>
+           ) : (
+             <span className="text-sm font-bold text-navy">
+               {currencySymbol}{basePrice.toLocaleString()}
+             </span>
+           )}
+         </div>
       </div>
       <div className="p-6">
         <h3 className="text-xl fw-600 mb-1">{cohort.title || cohort.program?.title}</h3>
