@@ -21,11 +21,14 @@ type EmailPayload struct {
 	Text     string `json:"text"`
 }
 
-func SendEmail(to string, subject string, htmlBody string, textBody string) error {
+func SendEmail(to string, subject string, htmlBody string, textBody string, fromName string) error {
+	if fromName == "" {
+		fromName = "ResultsPRO"
+	}
 	payload := EmailPayload{
 		To:       to,
 		From:     "hello@resultspro.ng",
-		FromName: "ResultsPRO",
+		FromName: fromName,
 		Subject:  subject,
 		HTML:     htmlBody,
 		Text:     textBody,
@@ -98,7 +101,7 @@ func SendVerificationEmail(to string, otp string, tenantName string, tenantLogo 
     %s &bull; Centralized Identity &amp; Academics Platform
   </p>
 </div>`, brandLogo, brandName, brandName, otp, brandName)
-	return SendEmail(to, subject, htmlBody, textBody)
+	return SendEmail(to, subject, htmlBody, textBody, brandName)
 }
 
 func SendPasswordResetEmail(to string, token string, resetURL string) error {
@@ -133,5 +136,5 @@ func SendPasswordResetEmail(to string, token string, resetURL string) error {
     ResultsPRO Suite &bull; Centralized Identity &amp; Academics Platform
   </p>
 </div>`, link)
-	return SendEmail(to, subject, htmlBody, textBody)
+	return SendEmail(to, subject, htmlBody, textBody, "ResultsPRO")
 }
