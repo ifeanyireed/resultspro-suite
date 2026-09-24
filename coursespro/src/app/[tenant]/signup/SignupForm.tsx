@@ -305,7 +305,10 @@ export default function SignupForm({ tenant }: { tenant: any }) {
                 </button>
               </form>
 
-              <div className="mt-8 text-center">
+              <div className="mt-8 text-center flex flex-col gap-4">
+                <p className="text-sm font-medium text-slate-600">
+                  Already have an account? <Link href="/login" className="text-blue-600 hover:underline">Log in</Link>
+                </p>
                 <p className="text-xs text-slate-400 font-medium">
                   Protected by reCAPTCHA and subject to the {tenant?.name || "Tenant"}{' '}
                   <a href="https://www.resultspro.ng/privacy" className="text-slate-600 hover:underline">Privacy Policy</a> and{' '}
