@@ -46,8 +46,8 @@ export default function PlanSelectionPage() {
           </div>
           <h3 className="text-xl font-bold text-slate-900 mb-2">Checkout Error</h3>
           <p className="text-slate-500 mb-6">{error}</p>
-          <Link href="/" className="inline-flex justify-center items-center py-3 px-6 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all">
-            Return to Catalogue
+          <Link href="/cohorts" className="inline-flex justify-center items-center py-3 px-6 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all">
+            Pick a Cohort
           </Link>
         </div>
       </div>
