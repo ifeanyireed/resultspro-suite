@@ -470,6 +470,10 @@ func main() {
 	mux.HandleFunc("PUT /api/v1/support/kb/articles/{id}", middleware.RequireAuth(handlers.UpdateKBArticle))
 	mux.HandleFunc("DELETE /api/v1/support/kb/articles/{id}", middleware.RequireAuth(handlers.DeleteKBArticle))
 
+	// Payments
+	mux.HandleFunc("POST /api/v1/payments/initialize", handlers.HandleTenantPaymentInitialize)
+	mux.HandleFunc("POST /api/v1/payments/verify", handlers.HandleTenantPaymentVerify)
+
 	mux.HandleFunc("GET /api/v1/admin/payments/summary", middleware.RequireAuth(handlers.HandlePlatformPaymentSummary))
 	mux.HandleFunc("GET /api/v1/admin/payments/transactions", middleware.RequireAuth(handlers.HandlePlatformTransactions))
 	mux.HandleFunc("POST /api/webhooks/paystack", handlers.HandlePlatformPaystackWebhook)
