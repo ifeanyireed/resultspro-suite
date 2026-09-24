@@ -221,6 +221,8 @@ func main() {
 			case "roles":
 				if r.Method == http.MethodPost {
 					handlers.HandleAssignTenantRole(w, r)
+				} else if r.Method == http.MethodDelete {
+					handlers.HandleRemoveTenantRole(w, r)
 				} else {
 					handlers.HandleGetTenantRoles(w, r)
 				}

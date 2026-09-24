@@ -66,6 +66,40 @@ export default function StudentsPage() {
     }
   };
 
+  const [isDeleting, setIsDeleting] = React.useState(false);
+
+  const handleDeleteStudent = async () => {
+    if (!managingStudent) return;
+    
+    if (!confirm(`Are you sure you want to completely delete ${managingStudent.user?.full_name || 'this student'} from this tenant? This action cannot be undone.`)) return;
+
+    setIsDeleting(true);
+    try {
+      if (managingStudent.enrollment_id) {
+        try {
+          await coursesApi.delete(`/api/admin/enrollments/${managingStudent.enrollment_id}`);
+        } catch(e) {
+          console.warn("Enrollment delete failed/skipped", e);
+        }
+      }
+      
+      if (managingStudent.role_id && tenantId) {
+        try {
+          await api.delete(`/api/v1/tenants/${tenantId}/roles/${managingStudent.role_id}`);
+        } catch(e) {
+          console.warn("Role delete failed/skipped", e);
+        }
+      }
+
+      setIsManageModalOpen(false);
+      refetch();
+    } catch (e: any) {
+      alert("Failed to delete student completely");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
 
   // Fetch cohorts and enrollments
   const { data, isLoading, refetch } = useQuery({
@@ -111,7 +145,7 @@ export default function StudentsPage() {
         }
       }
 
-      return { cohorts, enrollments, allStudents, users };
+      return { cohorts, enrollments, allStudents, users, tenantId };
     }
   });
 
@@ -119,6 +153,7 @@ export default function StudentsPage() {
   const enrollments = data?.enrollments || [];
   const allStudents = data?.allStudents || [];
   const users = data?.users || {};
+  const tenantId = data?.tenantId || '';
 
   // Default to 'all' if none selected
   React.useEffect(() => {
@@ -126,6 +161,10 @@ export default function StudentsPage() {
       setSelectedCohortId('all');
     }
   }, [selectedCohortId]);
+
+  const enrolledUserIds = enrollments.map((e: any) => e.user_id);
+  const studentRoleUserIds = allStudents.map((s: any) => s.user_id);
+  const userIds = [...new Set([...enrolledUserIds, ...studentRoleUserIds])];
 
   // Map to student data and apply search filter
   const students = (selectedCohortId === 'all' 
@@ -141,15 +180,22 @@ export default function StudentsPage() {
           billing_cycle: enrollment.billing_cycle || 'N/A',
           current_stage_number: enrollment.current_stage_number || 0,
           cohort_id: enrollment.cohort_id || null,
+          role_id: roleUser.id || null,
+          enrollment_id: enrollment.id || null,
           user: users[userId] || { full_name: roleUser.full_name || 'Unknown User', email: roleUser.email || 'N/A', avatar_url: null }
         };
       })
     : enrollments
         .filter((e: any) => e.cohort_id === selectedCohortId)
-        .map((e: any) => ({
-          ...e,
-          user: users[e.user_id] || { full_name: 'Unknown User', email: 'N/A' }
-        }))
+        .map((e: any) => {
+          const roleUser = allStudents.find((s: any) => s.user_id === e.user_id) || {};
+          return {
+            ...e,
+            role_id: roleUser.id || null,
+            enrollment_id: e.id,
+            user: users[e.user_id] || { full_name: 'Unknown User', email: 'N/A' }
+          };
+        })
   ).filter((s: any) => {
     const searchString = `${s.user.full_name || ''} ${s.user.email || ''}`.toLowerCase();
     return searchString.includes(searchQuery.toLowerCase());
@@ -341,14 +387,26 @@ export default function StudentsPage() {
               </div>
             </div>
             <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-between gap-3 shrink-0">
-              <button 
-                type="button" 
-                onClick={handleRemoveCohort}
-                disabled={isAssigning || !data?.enrollments?.find((e: any) => e.user_id === managingStudent.user_id)}
-                className="px-4 py-2.5 rounded-xl border border-red-200 text-red-600 font-bold text-xs hover:bg-red-50 disabled:opacity-50"
-              >
-                Remove from Cohort
-              </button>
+              <div className="flex gap-2">
+                <button 
+                  type="button" 
+                  onClick={handleRemoveCohort}
+                  disabled={isAssigning || !managingStudent.enrollment_id}
+                  className="px-4 py-2.5 rounded-xl border border-orange-200 text-orange-600 font-bold text-xs hover:bg-orange-50 disabled:opacity-50"
+                  title="Remove from current cohort"
+                >
+                  Unassign
+                </button>
+                <button 
+                  type="button" 
+                  onClick={handleDeleteStudent}
+                  disabled={isDeleting || isAssigning}
+                  className="px-4 py-2.5 rounded-xl border border-red-200 text-red-600 font-bold text-xs hover:bg-red-50 disabled:opacity-50"
+                  title="Delete student from tenant completely"
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete Student'}
+                </button>
+              </div>
               <div className="flex gap-2">
                 <button 
                   type="button" 
