@@ -175,7 +175,11 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		roles = append(roles, input.AppModule)
 	}
 
-	tokenString, _ := utils.GenerateJWT(userID, email, "active", roles)
+	customClaims := map[string]interface{}{
+		"email": email,
+		"status": "active",
+	}
+	tokenString, _ := utils.GenerateAccessToken(userID, roles, customClaims)
 
 	utils.JSONResponse(w, http.StatusCreated, map[string]interface{}{
 		"message":      "User created successfully.",
