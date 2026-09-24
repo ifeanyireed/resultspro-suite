@@ -83,9 +83,9 @@ export default function StudentsPage() {
         }
       }
       
-      if (managingStudent.role_id && tenantId) {
+      if (managingStudent.role_id) {
         try {
-          await api.delete(`/api/v1/tenants/${tenantId}/roles/${managingStudent.role_id}`);
+          await api.delete(`/api/v1/tenants/roles/${managingStudent.role_id}`);
         } catch(e) {
           console.warn("Role delete failed/skipped", e);
         }
