@@ -44,7 +44,9 @@ export default async function CohortsPage({ params }: { params: Promise<{ tenant
 
       <section className="section-py bg-light">
         <div className="container-nets">
-          {tenant.slideshow_images && <CohortSlideshow imagesRaw={tenant.slideshow_images} />}
+          {(tenant.slideshow_images || tenant.hero_bg_url) && (
+            <CohortSlideshow imagesRaw={tenant.slideshow_images} fallbackImage={tenant.hero_bg_url} />
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {cohorts.length === 0 ? (
               <div className="col-span-3 text-center py-12 text-slate-500">No active cohorts found.</div>
