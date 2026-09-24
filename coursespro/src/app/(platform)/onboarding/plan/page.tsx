@@ -70,12 +70,14 @@ export default function PlanSelectionPage() {
   }
 
   const basePrice = Number(cohort.price);
+  const durationWeeks = Number(cohort.duration_weeks) || 12;
+  const divisor = Math.max(1, Math.floor(durationWeeks / 4));
   const upfrontDiscount = basePrice >= 50000 ? 15000 : (basePrice > 10000 ? 5000 : 0);
   const upfrontPrice = basePrice - upfrontDiscount;
-  const monthlyCost = Math.round(basePrice / 3);
+  const monthlyCost = Math.round(basePrice / divisor);
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-NG', { style: 'currency', currency: cohort?.currency || 'NGN', minimumFractionDigits: 0 }).format(amount);
+    return new Intl.NumberFormat('en-NG', { style: 'currency', currency: cohort.currency || 'NGN', minimumFractionDigits: 0 }).format(amount);
   };
 
   const handlePayment = async () => {
@@ -109,7 +111,7 @@ export default function PlanSelectionPage() {
               Choose your commitment
             </h2>
             <p className="text-slate-400 text-base leading-relaxed mb-10">
-              Select how you'd like to fund your transformation. Pay upfront to save, or split it across 3 months.
+              Select how you'd like to fund your transformation. Pay upfront to save, or split it across {divisor === 1 ? '1 month' : divisor + ' months'}.
             </p>
           </div>
 
