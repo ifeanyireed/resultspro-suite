@@ -360,13 +360,7 @@ func (h *Handler) AdminGetCohortStats(c *gin.Context) {
 
 func (h *Handler) AdminUpdateProgram(c *gin.Context) {
 	id := c.Param("id")
-	var input struct {
-		Title         string  `json:"title"`
-		Description   string  `json:"description"`
-		DurationWeeks int     `json:"duration_weeks"`
-		BasePrice     float64 `json:"base_price"`
-		Status        string  `json:"status"`
-	}
+	var input map[string]interface{}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -374,11 +368,23 @@ func (h *Handler) AdminUpdateProgram(c *gin.Context) {
 	}
 
 	updates := map[string]interface{}{
-		"title":          input.Title,
-		"description":    input.Description,
-		"duration_weeks": input.DurationWeeks,
-		"base_price":     input.BasePrice,
-		"updated_at":     time.Now(),
+		"updated_at": time.Now(),
+	}
+
+	if val, ok := input["title"]; ok {
+		updates["title"] = val
+	}
+	if val, ok := input["description"]; ok {
+		updates["description"] = val
+	}
+	if val, ok := input["duration_weeks"]; ok {
+		updates["duration_weeks"] = val
+	}
+	if val, ok := input["base_price"]; ok {
+		updates["base_price"] = val
+	}
+	if val, ok := input["status"]; ok {
+		updates["status"] = val
 	}
 
 	if err := db.WithTenant(c).Model(&models.Program{}).Where("id = ?", id).Updates(updates).Error; err != nil {

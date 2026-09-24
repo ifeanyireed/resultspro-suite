@@ -218,6 +218,25 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
     }
   };
 
+  const handleSaveSettings = async () => {
+    setSavingSettings(true);
+    try {
+      const payload = {
+        title: editTitle,
+        description: editDescription,
+        duration_weeks: editDuration
+      };
+      await coursesApi.put(`/api/admin/programs/${id}`, payload);
+      setProgram({ ...program, ...payload });
+      setIsSettingsOpen(false);
+    } catch (e) {
+      console.error("Failed to save settings", e);
+      alert("Failed to save settings");
+    } finally {
+      setSavingSettings(false);
+    }
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-2rem)] bg-gray-50 -mx-8 -mb-8 -mt-2 rounded-t-2xl overflow-hidden border-t border-gray-200 shadow-sm">
       {/* Builder Top Nav */}
