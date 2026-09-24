@@ -229,6 +229,32 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		}
 	}
 
+	var upcomingMilestone interface{} = nil
+	isStageEnd := false
+	if currentModule != nil && strings.Contains(currentModule.Title, "Completed") {
+		isStageEnd = true
+	}
+
+	if isStageEnd {
+		upcomingMilestone = map[string]interface{}{
+			"title":       "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " Project",
+			"description": "Submit your capstone project for mentor review to unlock the next stage.",
+			"time":        "Pending Submission",
+		}
+	} else if cohort.MeetingDays != "" && cohort.MeetingTime != "" {
+		upcomingMilestone = map[string]interface{}{
+			"title":       "Live Class",
+			"description": "Join your cohort and mentor for the weekly live coworking and Q&A session.",
+			"time":        cohort.MeetingDays + " @ " + cohort.MeetingTime,
+		}
+	} else if !cohort.EndDate.IsZero() && cohort.EndDate.After(time.Now()) {
+		upcomingMilestone = map[string]interface{}{
+			"title":       "Graduation",
+			"description": "The official end date of this cohort. Make sure all projects are submitted!",
+			"time":        cohort.EndDate.Format("Jan 02, 2006"),
+		}
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"has_enrollment": enrollment.ID != "",
 		"enrollment": gin.H{
@@ -242,7 +268,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		"cohort_name":        cohort.Title,
 		"current_module":     currentModule,
 		"recent_feedback":    feedback,
-		"upcoming_milestone": nil,
+		"upcoming_milestone": upcomingMilestone,
 		"leaderboard":        leaderboard,
 		"classroom":          classroom,
 	})
