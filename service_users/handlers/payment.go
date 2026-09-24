@@ -42,7 +42,7 @@ func HandleTenantPaymentInitialize(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	claims, _ := token.Claims.(jwt.MapClaims)
-	userID, _ := claims["user_id"].(string)
+	userID, _ := claims["sub"].(string)
 	
 	var user models.User
 	if err := db.GormDB.Where("id = ?", userID).First(&user).Error; err != nil {
