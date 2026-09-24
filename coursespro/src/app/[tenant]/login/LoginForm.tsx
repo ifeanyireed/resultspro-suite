@@ -66,13 +66,21 @@ export default function LoginForm({ tenant }: { tenant: any }) {
             router.push('/mentor');
           } else {
             const Cookies = require('js-cookie');
-            Cookies.remove('selected_cohort_id');
-            router.push('/dashboard');
+            const selectedCohortId = Cookies.get('selected_cohort_id');
+            if (selectedCohortId) {
+              router.push('/onboarding/plan');
+            } else {
+              router.push('/dashboard');
+            }
           }
         } catch (e) {
           const Cookies = require('js-cookie');
-          Cookies.remove('selected_cohort_id');
-          router.push('/dashboard');
+          const selectedCohortId = Cookies.get('selected_cohort_id');
+          if (selectedCohortId) {
+            router.push('/onboarding/plan');
+          } else {
+            router.push('/dashboard');
+          }
         }
       }
     } catch (err: any) {
