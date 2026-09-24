@@ -44,6 +44,7 @@ export async function fetchSuiteStats(): Promise<SuiteStats> {
       activeAgents: 0,
       cbtExamsCount: 0,
       activeTutors: 0,
+      supportTicketsPending: 0,
     };
   }
 }

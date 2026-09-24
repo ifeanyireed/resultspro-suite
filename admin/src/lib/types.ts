@@ -132,5 +132,6 @@ export interface SuiteStats {
   activeAgents: number;
   cbtExamsCount: number;
   activeTutors: number;
+  supportTicketsPending?: number;
   salesAnalytics?: { day: string; percentage: number; status: string; tooltip: string }[];
 }

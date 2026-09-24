@@ -27,7 +27,7 @@ export default function PlanSelectionPage() {
     fetchCohort();
   }, []);
 
-  const basePrice = cohort?.price || 135000;
+  const basePrice = cohort ? Number(cohort.price) : 135000;
   const upfrontDiscount = basePrice >= 50000 ? 15000 : (basePrice > 10000 ? 5000 : 0);
   const upfrontPrice = basePrice - upfrontDiscount;
   const monthlyCost = Math.round(basePrice / 3);
@@ -61,7 +61,7 @@ export default function PlanSelectionPage() {
           <div className="max-w-xl">
             <div className="inline-flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
               <CheckCircle2 className="w-4 h-4" />
-              <span>Application Accepted</span>
+              <span>Accepted into {cohort ? cohort.title : 'Cohort'}</span>
             </div>
             <h2 className="text-4xl font-bold text-white leading-[1.1] tracking-tight mb-4">
               Choose your commitment
@@ -93,7 +93,7 @@ export default function PlanSelectionPage() {
                   Recommended
                 </div>
                 <input type="radio" name="plan" value="upfront" checked={plan === 'upfront'} onChange={() => setPlan('upfront')} className="absolute top-6 right-6 w-5 h-5 text-blue-600 border-slate-300 focus:ring-blue-600" />
-                <span className="font-bold text-xs uppercase tracking-widest text-blue-600 mb-2 block">Full Cohort (Upfront)</span>
+                <span className="font-bold text-xs uppercase tracking-widest text-blue-600 mb-2 block">{cohort ? cohort.title : 'Full Cohort'} (Upfront)</span>
                 <div className="mb-1">
                   <span className="text-3xl font-bold text-slate-900">{formatCurrency(upfrontPrice)}</span>
                 </div>
@@ -134,7 +134,7 @@ export default function PlanSelectionPage() {
             <h3 className="text-xl font-bold text-slate-900 tracking-tight mb-6">Order Summary</h3>
             <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm mb-6">
               <div className="flex justify-between mb-4">
-                <span className="text-sm font-semibold text-slate-700">{plan === 'upfront' ? 'Full Cohort (Upfront)' : 'Monthly Installment'}</span>
+                <span className="text-sm font-semibold text-slate-700">{plan === 'upfront' ? `${cohort ? cohort.title : 'Full Cohort'} (Upfront)` : 'Monthly Installment'}</span>
                 <span className="text-sm font-bold text-slate-900">{plan === 'upfront' ? formatCurrency(basePrice) : formatCurrency(monthlyCost)}</span>
               </div>
               {plan === 'upfront' && (

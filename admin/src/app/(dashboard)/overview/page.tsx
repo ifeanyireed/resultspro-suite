@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from '@/components/dashboards/Dashboard.module.css';
-import { Building2, Users, CreditCard, Briefcase, TrendingUp, FileCheck2, Sparkles, BookOpen, MonitorPlay, GraduationCap, Building } from 'lucide-react';
+import { Building2, Users, CreditCard, Briefcase, TrendingUp, FileCheck2, Sparkles, BookOpen, MonitorPlay, GraduationCap, Building, LifeBuoy } from 'lucide-react';
 import { fetchSuiteStats, fetchSchools, fetchPayoutRequests } from '@/lib/api';
 import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@/components/ui/Cards';
 import { SuiteStats, School, PayoutRequest } from '@/lib/types';
@@ -65,12 +65,12 @@ export default function OverviewPage() {
             icon={Users}
           />
           <WhiteMetricCard
-            title="Active Agents"
-            value={(stats?.activeAgents ?? 0).toLocaleString()}
-            subtitle="Registered field partners"
-            trend={stats?.activeAgents ? "+2%" : "0%"}
+            title="Support Tickets Pending"
+            value={(stats?.supportTicketsPending ?? 0).toLocaleString()}
+            subtitle="Awaiting resolution"
+            trend={stats?.supportTicketsPending ? "-5%" : "0%"}
             trendColor="green"
-            icon={Briefcase}
+            icon={LifeBuoy}
           />
         </div>
 
