@@ -265,6 +265,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 			"current_stage": enrollment.CurrentStageNumber,
 			"total_stages":  totalStages,
 		},
+		"cohort_id":          cohort.ID,
 		"cohort_name":        cohort.Title,
 		"current_module":     currentModule,
 		"recent_feedback":    feedback,

@@ -182,15 +182,24 @@ func (h *Handler) AdminGetPrograms(c *gin.Context) {
 	type ProgramWithStats struct {
 		models.Program
 		ModulesCount int64 `json:"modules_count"`
+		StagesCount  int64 `json:"stages_count"`
 	}
 
 	var result []ProgramWithStats
 	for _, p := range programs {
-		var count int64
-		db.WithTenant(c).Model(&models.JourneyStage{}).Where("program_id = ?", p.ID).Count(&count)
+		var stagesCount int64
+		db.WithTenant(c).Model(&models.JourneyStage{}).Where("program_id = ?", p.ID).Count(&stagesCount)
+
+		var modulesCount int64
+		db.WithTenant(c).Model(&models.JourneyModule{}).
+			Joins("JOIN journey_stages ON journey_stages.id = journey_modules.stage_id").
+			Where("journey_stages.program_id = ?", p.ID).
+			Count(&modulesCount)
+
 		result = append(result, ProgramWithStats{
 			Program:      p,
-			ModulesCount: count,
+			ModulesCount: modulesCount,
+			StagesCount:  stagesCount,
 		})
 	}
 
