@@ -87,7 +87,7 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query := `INSERT INTO users (id, email, password_hash, auth_provider, full_name, phone, sex, date_of_birth, address, account_status, mfa_enabled, referral_code, referred_by, coin_balance, created_at, updated_at) 
-	          VALUES (?, ?, ?, 'local', ?, ?, ?, ?, ?, 'unverified', false, ?, ?, ?, ?, ?)`
+	          VALUES (?, ?, ?, 'local', ?, ?, ?, ?, ?, 'active', false, ?, ?, ?, ?, ?)`
 
 	_, err = db.DB.Exec(query,
 		userID,
@@ -167,10 +167,28 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
+	roles := []string{}
+	if input.TenantSlug != "" || input.TenantID != "" {
+		roles = append(roles, "student")
+	}
+	if input.AppModule != "" {
+		roles = append(roles, input.AppModule)
+	}
+
+	tokenString, _ := utils.GenerateJWT(userID, email, "active", roles)
+
 	utils.JSONResponse(w, http.StatusCreated, map[string]interface{}{
-		"message": "User created. Please check your email for the verification code.",
-		"user_id": userID,
-		"email":   email,
+		"message":      "User created successfully.",
+		"user_id":      userID,
+		"email":        email,
+		"access_token": tokenString,
+		"user": map[string]interface{}{
+			"id":             userID,
+			"email":          email,
+			"full_name":      input.FullName,
+			"roles":          roles,
+			"account_status": "active",
+		},
 	})
 }
 
