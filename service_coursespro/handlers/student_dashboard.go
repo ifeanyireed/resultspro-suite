@@ -173,8 +173,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 	// Define a lightweight struct to fetch user details from the shared DB
 	type SharedUser struct {
 		ID        string `gorm:"column:id"`
-		FirstName string `gorm:"column:first_name"`
-		LastName  string `gorm:"column:last_name"`
+		FullName  string `gorm:"column:full_name"`
 		AvatarURL string `gorm:"column:avatar_url"`
 	}
 
@@ -192,10 +191,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		for i, e := range topEnrollments {
 			var u SharedUser
 			if err := db.DB.Table("users").Where("id = ?", e.UserID).First(&u).Error; err == nil {
-				name := u.FirstName
-				if u.LastName != "" {
-					name += " " + u.LastName
-				}
+				name := u.FullName
 				if name == "" {
 					name = "Student"
 				}
@@ -219,7 +215,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		for _, e := range peerEnrollments {
 			var u SharedUser
 			if err := db.DB.Table("users").Where("id = ?", e.UserID).First(&u).Error; err == nil {
-				name := u.FirstName
+				name := u.FullName
 				if name == "" {
 					name = "Student"
 				}
