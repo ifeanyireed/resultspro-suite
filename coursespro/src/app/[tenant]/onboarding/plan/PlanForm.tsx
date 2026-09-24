@@ -104,7 +104,7 @@ export default function PlanForm({ tenant }: { tenant: any }) {
           amount: plan === 'upfront' ? upfrontPrice : monthlyCost,
           purpose: 'cohort_enrollment',
           reference_id: cohortId,
-          callback_url: window.location.origin + `/${tenant.slug}/dashboard/workspace?verify=true`
+          callback_url: window.location.origin + (window.location.pathname.startsWith(`/${tenant.slug}`) ? `/${tenant.slug}` : '') + `/dashboard/workspace?verify=true`
         })
       });
       
