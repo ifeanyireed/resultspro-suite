@@ -30,6 +30,17 @@ type ContentItem = {
   is_group_assignment?: boolean;
 };
 
+const getDirectMediaUrl = (url: string) => {
+  if (!url) return '';
+  if (url.includes('drive.google.com/file/d/')) {
+    const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (match) {
+      return `https://docs.google.com/uc?export=download&id=${match[1]}`;
+    }
+  }
+  return url;
+};
+
 function getIconForType(type: string) {
   switch (type) {
     case 'VIDEO': return <PlayIcon className="w-6 h-6" />;
@@ -405,7 +416,7 @@ export default function LessonPlayerPage() {
                   );
                 })()}
 
-                {(currentItem?.type === 'TEXT' || currentItem?.type === 'HTML') && (
+                {currentItem?.type === 'TEXT' && (
                   <div className="space-y-6">
                     {currentItem.title && <h2 className="font-bold text-2xl">{currentItem.title}</h2>}
                     <div 
@@ -414,6 +425,23 @@ export default function LessonPlayerPage() {
                     />
                   </div>
                 )}
+
+                {currentItem?.type === 'HTML' && (() => {
+                  const isProxyRequired = currentItem.url && (currentItem.url.includes('cloudinary.com') || currentItem.url.includes('drive.google.com') || currentItem.url.includes('docs.google.com'));
+                  const iframeSrc = isProxyRequired ? `/api/html-proxy?url=${encodeURIComponent(getDirectMediaUrl(currentItem.url || ''))}` : currentItem.url;
+                  return (
+                    <div className="space-y-6">
+                      {currentItem.title && <h2 className="font-bold text-2xl">{currentItem.title}</h2>}
+                      <div className="w-full h-[600px] relative rounded-xl overflow-hidden shadow-sm bg-white border border-gray-200">
+                        {currentItem.url ? (
+                          <iframe src={iframeSrc} className="w-full h-full border-0 bg-white" title="HTML Content" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center text-gray-400 bg-white">No HTML uploaded</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {currentItem?.type === 'QUIZ' && (
                   <InteractiveQuizRenderer quizId={currentItem.url || ''} />
