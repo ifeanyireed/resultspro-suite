@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -161,19 +162,32 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 	}
 
 	var totalStages int64
+	var completedStages int64
+
 	if cohort.ProgramID != nil {
-		db.WithTenant(c).Model(&models.JourneyStage{}).Where("program_id = ?", *cohort.ProgramID).Count(&totalStages)
-	}
-	if totalStages == 0 {
-		totalStages = 12 // Prevent division by zero for UI
+		var programStages []models.JourneyStage
+		db.WithTenant(c).Where("program_id = ?", *cohort.ProgramID).Order("stage_number ASC").Find(&programStages)
+		
+		for _, s := range programStages {
+			var blocksInStage int64 = 0
+			if s.ContentsJSON != "" && s.ContentsJSON != "[]" {
+				var blocks []interface{}
+				if err := json.Unmarshal([]byte(s.ContentsJSON), &blocks); err == nil {
+					blocksInStage = int64(len(blocks))
+				}
+			}
+			
+			totalStages += blocksInStage
+			
+			// If they have fully completed this top-level module, add its blocks to completed count
+			if s.StageNumber < enrollment.CurrentStageNumber {
+				completedStages += blocksInStage
+			}
+		}
 	}
 
-	completedStages := int(enrollment.CurrentStageNumber) - 1
-	if completedStages < 0 {
-		completedStages = 0
-	}
-	if completedStages > int(totalStages) {
-		completedStages = int(totalStages)
+	if totalStages == 0 {
+		totalStages = 13 // Prevent division by zero for UI fallback
 	}
 
 	progress := float64(0)
