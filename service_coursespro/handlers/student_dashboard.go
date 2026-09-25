@@ -94,7 +94,13 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		}
 
 		if len(items) > 0 {
-			if progress.Completed {
+			var comp []int
+			if progress.CompletedItems != "" {
+				json.Unmarshal([]byte(progress.CompletedItems), &comp)
+			}
+			isGenuinelyCompleted := progress.Completed && len(comp) >= len(items)
+
+			if isGenuinelyCompleted {
 				currentModule = &ModuleData{
 					ID:           stage.ID,
 					Title:        "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " Completed",

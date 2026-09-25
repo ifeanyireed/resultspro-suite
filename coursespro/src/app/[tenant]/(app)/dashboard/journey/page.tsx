@@ -73,8 +73,13 @@ export default function JourneyPage() {
           ) : (
             stages.map((stage: any, i: number) => {
               let status = 'locked';
-              if (stage.stage_number < currentStage) status = 'completed';
-              if (stage.stage_number === currentStage) status = 'current';
+              const progressObj = journeyData?.progress?.find((p: any) => p.module_id === stage.id);
+              
+              if (progressObj?.completed) {
+                status = 'completed';
+              } else if (stage.stage_number <= currentStage) {
+                status = 'current';
+              }
 
               return (
                 <div key={i} 
