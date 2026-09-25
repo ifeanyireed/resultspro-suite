@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 
@@ -191,10 +192,16 @@ func (h *Handler) AdminGetPrograms(c *gin.Context) {
 		db.WithTenant(c).Model(&models.JourneyStage{}).Where("program_id = ?", p.ID).Count(&stagesCount)
 
 		var modulesCount int64
-		db.WithTenant(c).Model(&models.JourneyModule{}).
-			Joins("JOIN crs_journey_stages ON crs_journey_stages.id = crs_journey_modules.stage_id").
-			Where("crs_journey_stages.program_id = ?", p.ID).
-			Count(&modulesCount)
+		var programStages []models.JourneyStage
+		db.WithTenant(c).Where("program_id = ?", p.ID).Find(&programStages)
+		for _, s := range programStages {
+			if s.ContentsJSON != "" && s.ContentsJSON != "[]" {
+				var blocks []interface{}
+				if err := json.Unmarshal([]byte(s.ContentsJSON), &blocks); err == nil {
+					modulesCount += int64(len(blocks))
+				}
+			}
+		}
 
 		result = append(result, ProgramWithStats{
 			Program:      p,
