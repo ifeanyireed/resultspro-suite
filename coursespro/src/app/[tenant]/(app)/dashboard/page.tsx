@@ -135,7 +135,7 @@ const router = useRouter();
             <div className="w-full bg-gray-100 rounded-full h-2 mt-4 mb-2">
               <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${dashboardData.enrollment?.progress || 0}%` }}></div>
             </div>
-            <p className="text-xs text-gray-500 font-medium">Stage {dashboardData.enrollment?.current_stage || 1} of {dashboardData.enrollment?.total_stages || 12}</p>
+            <p className="text-xs text-gray-500 font-medium">{dashboardData.enrollment?.completed_stages || 0}/{dashboardData.enrollment?.total_stages || 12} stages completed</p>
           </div>
         </div>
 

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -148,26 +147,25 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		level = "Builder"
 	}
 
-	totalStages := int64(0)
-	var stagesForCount []models.JourneyStage
+	var totalStages int64
 	if cohort.ProgramID != nil {
-		db.WithTenant(c).Where("program_id = ?", *cohort.ProgramID).Find(&stagesForCount)
-		for _, s := range stagesForCount {
-			if s.ContentsJSON != "" && s.ContentsJSON != "[]" {
-				var blocks []interface{}
-				if err := json.Unmarshal([]byte(s.ContentsJSON), &blocks); err == nil {
-					totalStages += int64(len(blocks))
-				}
-			}
-		}
+		db.WithTenant(c).Model(&models.JourneyStage{}).Where("program_id = ?", *cohort.ProgramID).Count(&totalStages)
 	}
 	if totalStages == 0 {
 		totalStages = 12 // Prevent division by zero for UI
 	}
 
+	completedStages := int(enrollment.CurrentStageNumber) - 1
+	if completedStages < 0 {
+		completedStages = 0
+	}
+	if completedStages > int(totalStages) {
+		completedStages = int(totalStages)
+	}
+
 	progress := float64(0)
-	if enrollment.CurrentStageNumber > 0 {
-		progress = float64(enrollment.CurrentStageNumber) / float64(totalStages) * 100
+	if totalStages > 0 {
+		progress = float64(completedStages) / float64(totalStages) * 100
 	}
 
 	// Define a lightweight struct to fetch user details from the shared DB
@@ -258,12 +256,13 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"has_enrollment": enrollment.ID != "",
 		"enrollment": gin.H{
-			"streak_days":   enrollment.StreakDays,
-			"current_xp":    enrollment.CurrentXP,
-			"level":         level,
-			"progress":      progress,
-			"current_stage": enrollment.CurrentStageNumber,
-			"total_stages":  totalStages,
+			"streak_days":      enrollment.StreakDays,
+			"current_xp":       enrollment.CurrentXP,
+			"level":            level,
+			"progress":         progress,
+			"current_stage":    enrollment.CurrentStageNumber,
+			"completed_stages": completedStages,
+			"total_stages":     totalStages,
 		},
 		"cohort_id":          cohort.ID,
 		"cohort_name":        cohort.Title,
