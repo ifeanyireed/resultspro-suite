@@ -446,7 +446,7 @@ export default function LessonPlayerPage() {
                 <button 
                   onClick={handleMarkComplete}
                   disabled={progressMutation.isPending}
-                  className="px-8 py-4 bg-[#146ef5] text-white rounded-xl font-bold text-sm hover:bg-[#105bd1] shadow-md flex items-center gap-2 transition-all disabled:opacity-70"
+                  className="px-8 py-4 bg-[#146ef5] text-white rounded-full font-bold text-sm hover:bg-[#105bd1] shadow-md flex items-center gap-2 transition-all disabled:opacity-70"
                 >
                   <CheckCircleIcon className="w-5 h-5" />
                   {progressMutation.isPending 
