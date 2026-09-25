@@ -40,6 +40,25 @@ const getDirectMediaUrl = (url: string) => {
     }
   }
   return url;
+}
+
+function getEmbedUrl(url: string) {
+  if (!url) return '';
+  if (url.includes('youtube.com/watch?v=')) {
+    const videoId = url.split('v=')[1]?.split('&')[0];
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  if (url.includes('youtu.be/')) {
+    const videoId = url.split('youtu.be/')[1]?.split('?')[0];
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  if (url.includes('vimeo.com/') && !url.includes('player.vimeo.com')) {
+    const match = url.match(/vimeo\.com\/(\d+)/);
+    if (match) {
+      return `https://player.vimeo.com/video/${match[1]}`;
+    }
+  }
+  return url;
 };
 
 function getIconForType(type: string) {
@@ -360,7 +379,7 @@ export default function LessonPlayerPage() {
                     {currentItem.title && <h2 className="font-bold text-2xl">{currentItem.title}</h2>}
                     <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black shadow-inner">
                       {currentItem.url?.includes('youtube.com') || currentItem.url?.includes('youtu.be') || currentItem.url?.includes('vimeo') ? (
-                        <iframe src={currentItem.url} className="absolute inset-0 w-full h-full border-0" allowFullScreen></iframe>
+                        <iframe src={getEmbedUrl(currentItem.url)} className="absolute inset-0 w-full h-full border-0" allowFullScreen></iframe>
                       ) : (
                         <video src={currentItem.url} controls className="absolute inset-0 w-full h-full object-contain" />
                       )}

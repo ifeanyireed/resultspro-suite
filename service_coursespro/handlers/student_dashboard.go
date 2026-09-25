@@ -67,6 +67,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 
 	// 3. Get Current Stage & Module
 	type ModuleData struct {
+		ID           string   `json:"id"`
 		Title        string   `json:"title"`
 		ContentTitle string   `json:"content_title"`
 		Description  string   `json:"description"`
@@ -94,6 +95,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		if len(items) > 0 {
 			if progress.Completed {
 				currentModule = &ModuleData{
+					ID:           stage.ID,
 					Title:        "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " Completed",
 					ContentTitle: "Project Time",
 					Description:  "You have completed all modules for this stage. Please complete your project or wait for your mentor's review to proceed to the next stage.",
@@ -136,6 +138,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 				}
 
 				currentModule = &ModuleData{
+					ID:           stage.ID,
 					Title:        stage.Title,
 					ContentTitle: contentTitle,
 					Description:  fmt.Sprintf("%s\n\n%s", contentTitle, contentDesc),
@@ -145,6 +148,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 			}
 		} else {
 			currentModule = &ModuleData{
+				ID:           stage.ID,
 				Title:        "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " (Coming Soon)",
 				ContentTitle: "Coming Soon",
 				Description:  "Your instructor is still preparing the content for this stage. Check back soon!",

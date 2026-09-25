@@ -45,6 +45,25 @@ const getDirectMediaUrl = (url: string) => {
     }
   }
   return url;
+}
+
+function getEmbedUrl(url: string) {
+  if (!url) return '';
+  if (url.includes('youtube.com/watch?v=')) {
+    const videoId = url.split('v=')[1]?.split('&')[0];
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  if (url.includes('youtu.be/')) {
+    const videoId = url.split('youtu.be/')[1]?.split('?')[0];
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  if (url.includes('vimeo.com/') && !url.includes('player.vimeo.com')) {
+    const match = url.match(/vimeo\.com\/(\d+)/);
+    if (match) {
+      return `https://player.vimeo.com/video/${match[1]}`;
+    }
+  }
+  return url;
 };
 
 
@@ -310,9 +329,9 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                           {block.type === 'VIDEO' && (
                             <div className="bg-white aspect-video flex items-center justify-center text-gray-500 relative overflow-hidden rounded-b-xl">
                               {block.url ? (
-                                (block.url.includes('youtube.com') || block.url.includes('youtu.be')) ? (
+                                (block.url.includes('youtube.com') || block.url.includes('youtu.be') || block.url.includes('vimeo')) ? (
                                   <iframe 
-                                    src={block.url.includes('youtube.com/embed') ? block.url : `https://www.youtube.com/embed/${block.url.split('v=')[1]?.split('&')[0] || block.url.split('youtu.be/')[1]?.split('?')[0]}`} 
+                                    src={getEmbedUrl(block.url)} 
                                     className="w-full h-full border-0 absolute inset-0"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen
