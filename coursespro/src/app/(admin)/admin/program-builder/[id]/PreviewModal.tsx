@@ -287,7 +287,7 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                   ) : (
                     contents.map((block: any, i: number) => {
                       const isMediaBlock = ['VIDEO', 'AUDIO', 'PDF', 'PPT', 'HTML'].includes(block.type);
-                      const hasCardBody = isMediaBlock && !!block.content;
+                      const hasCardBody = (isMediaBlock && !!block.content) || !!block.description;
                       const hasTitleOrBody = !!block.title || hasCardBody;
                       const isMediaWithoutCard = ['PDF', 'PPT', 'AUDIO', 'HTML'].includes(block.type) && !hasTitleOrBody;
 
@@ -296,7 +296,7 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                           {hasTitleOrBody && (
                             <div className="p-6 border-b border-gray-100 bg-white">
                                {block.title && <h3 className="text-lg font-bold text-gray-900 mb-2">{block.title}</h3>}
-                               {hasCardBody && <p className="text-gray-600 whitespace-pre-wrap text-sm">{block.content}</p>}
+                               {hasCardBody && <p className="text-gray-600 whitespace-pre-wrap text-sm">{block.description || block.content}</p>}
                             </div>
                           )}
 
@@ -397,7 +397,7 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                                 </div>
                                 <div>
                                   <h3 className="text-lg font-bold text-emerald-900 tracking-tight">Live Class Room</h3>
-                                  <p className="text-emerald-700 text-sm mt-1 mb-2">Join your mentor and cohort peers for this live session.</p>
+                                  <p className="text-emerald-700 text-sm mt-1 mb-2">{block.description || 'Join your mentor and cohort peers for this live session.'}</p>
                                   {block.url ? (
                                     <div className="text-xs text-emerald-600/80 font-mono truncate max-w-xs">{block.url}</div>
                                   ) : (
@@ -463,7 +463,7 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                             <div className="p-8">
                               <div className="bg-indigo-50 border border-indigo-100 rounded-lg p-6">
                                 <div className="flex items-center justify-between mb-2">
-                                  <h3 className="font-semibold text-indigo-900">Assignment Task</h3>
+                                  <h3 className="font-semibold text-indigo-900">{block.title || 'Assignment Task'}</h3>
                                   {block.is_group_assignment && (
                                     <span className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-bold rounded flex items-center gap-1">
                                       <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>

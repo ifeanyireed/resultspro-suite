@@ -78,7 +78,6 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		db.DB.Where("program_id = ? AND stage_number = ?", *cohort.ProgramID, enrollment.CurrentStageNumber).First(&stage)
 	}
 
-	var module models.JourneyModule
 	var currentModule *ModuleData
 	if stage.ID != "" {
 		// Fetch progress for this stage (which is treated as "module" in frontend)
