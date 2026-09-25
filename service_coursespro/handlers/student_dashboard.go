@@ -108,11 +108,24 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 				currentModule.Duration = "45 mins" // Fallback UI text
 			}
 		} else {
-			currentModule = &ModuleData{
-				Title:       "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " Completed",
-				Description: "You have completed all modules for this stage. Please complete your project or wait for your mentor's review to proceed to the next stage.",
-				Duration:    "Pending",
-				AiSummary:   []string{"Great job completing all modules in this stage!", "Next step: Project submission or review."},
+			// Check if the stage actually has any modules at all
+			var totalModulesInStage int64
+			db.DB.Table("crs_journey_modules").Where("stage_id = ?", stage.ID).Count(&totalModulesInStage)
+
+			if totalModulesInStage == 0 {
+				currentModule = &ModuleData{
+					Title:       "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " (Coming Soon)",
+					Description: "Your instructor is still preparing the content for this stage. Check back soon!",
+					Duration:    "Pending",
+					AiSummary:   []string{"This stage is currently empty.", "Wait for your instructor to publish modules here."},
+				}
+			} else {
+				currentModule = &ModuleData{
+					Title:       "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " Completed",
+					Description: "You have completed all modules for this stage. Please complete your project or wait for your mentor's review to proceed to the next stage.",
+					Duration:    "Pending",
+					AiSummary:   []string{"Great job completing all modules in this stage!", "Next step: Project submission or review."},
+				}
 			}
 		}
 	}
