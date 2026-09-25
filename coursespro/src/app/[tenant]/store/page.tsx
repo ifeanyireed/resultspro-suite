@@ -37,7 +37,7 @@ export default async function StorePage({ params }: { params: Promise<{ tenant: 
 
   return (
     <main>
-      <Navbar tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
+      <Navbar tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} contactEmail={tenant.contact_email} contactPhone={tenant.contact_phone} contactLocation={tenant.full_address} />
       
       <section className="section-py bg-navy text-white text-center" style={{ marginTop: "-72px", paddingTop: "calc(5rem + 72px)" }}>
         <div className="container-nets max-w-3xl pt-16">
@@ -91,7 +91,7 @@ export default async function StorePage({ params }: { params: Promise<{ tenant: 
         </div>
       </section>
 
-      <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
+      <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} contactEmail={tenant.contact_email} contactPhone={tenant.contact_phone} contactLocation={tenant.full_address} />
     </main>
   );
 }

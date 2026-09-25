@@ -17,9 +17,11 @@ interface NavbarProps {
   tenantLogo?: string;
   darkLogoUrl?: string;
   flattenLogo?: boolean;
+  contactEmail?: string;
+  contactLocation?: string;
 }
 
-export default function Navbar({ hideInstructorLink = false, isPlatform = false, tenantName, tenantLogo, darkLogoUrl, flattenLogo }: NavbarProps = {}) {
+export default function Navbar({ hideInstructorLink = false, isPlatform = false, tenantName, tenantLogo, darkLogoUrl, flattenLogo, contactEmail, contactLocation }: NavbarProps = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -139,7 +141,7 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
             
             {/* Always show a red primary action button at the end of nav links */}
             {mounted && !isAuthenticated ? (
-              <Link href="mailto:hello@resultspro.ng" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
+              <Link href={`mailto:${contactEmail || 'hello@resultspro.ng'}`} className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
                 Talk to Us
               </Link>
             ) : null}
@@ -252,7 +254,7 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
                 style={{ marginTop: '2.5rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}
               >
                 {!isAuthenticated ? (
-                  <Link href="mailto:hello@resultspro.ng" onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
+                  <Link href={`mailto:${contactEmail || 'hello@resultspro.ng'}`} onClick={() => setMobileOpen(false)} className="btn btn-red" style={{ width: '100%', justifyContent: 'center', padding: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', textAlign: 'center' }}>
                     Talk to Us
                   </Link>
                 ) : (
@@ -263,12 +265,12 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
 
                 {/* Contact Info */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <a href="mailto:hello@resultspro.ng" style={{ fontSize: '0.875rem', color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>Email</span> hello@resultspro.ng
+                  <a href={`mailto:${contactEmail || 'hello@resultspro.ng'}`} style={{ fontSize: '0.875rem', color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>Email</span> {contactEmail || 'hello@resultspro.ng'}
                   </a>
                   <div style={{ fontSize: '0.875rem', color: '#fff', display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
                     <span style={{ color: 'rgba(255,255,255,0.5)' }}>HQ</span> 
-                    <span>Lagos, Nigeria</span>
+                    <span>{contactLocation || 'Lagos, Nigeria'}</span>
                   </div>
                 </div>
               </motion.div>

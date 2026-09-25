@@ -34,7 +34,7 @@ export default async function CohortsPage({ params }: { params: Promise<{ tenant
 
   return (
     <main>
-      <Navbar tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
+      <Navbar tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} contactEmail={tenant.contact_email} contactPhone={tenant.contact_phone} contactLocation={tenant.full_address} />
       <section className="section-py bg-navy text-white text-center relative overflow-hidden flex flex-col justify-center" style={{ marginTop: "-72px", paddingTop: "calc(5rem + 72px)", minHeight: "60vh", background: "var(--color-nets-navy-dark)" }}>
         {tenant.slideshow_images && tenant.slideshow_images.length > 0 && (
           <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
@@ -69,7 +69,7 @@ export default async function CohortsPage({ params }: { params: Promise<{ tenant
           </div>
         </div>
       </section>
-      <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
+      <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} contactEmail={tenant.contact_email} contactPhone={tenant.contact_phone} contactLocation={tenant.full_address} />
     </main>
   );
 }

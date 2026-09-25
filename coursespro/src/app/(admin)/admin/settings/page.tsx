@@ -597,7 +597,7 @@ const { data: tenantData, isLoading } = useQuery({
             {/* Right Column */}
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Admin Email</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Public Contact Email</label>
                 <input type="email" name="adminEmail" value={formData.adminEmail} onChange={handleChange} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#146ef5] transition-colors" />
               </div>
               <div>
@@ -605,15 +605,15 @@ const { data: tenantData, isLoading } = useQuery({
                 <input type="password" name="password" placeholder="Enter new password to change..." value={formData.password} onChange={handleChange} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#146ef5] transition-colors" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Contact Person & Phone</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Contact Person & Public Phone</label>
                 <div className="flex gap-3">
                   <input type="text" name="contactPerson" placeholder="Name" value={formData.contactPerson} onChange={handleChange} className="w-1/2 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#146ef5] transition-colors" />
                   <input type="text" name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} className="w-1/2 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#146ef5] transition-colors" />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Full Address</label>
-                <input type="text" name="address" value={formData.address} onChange={handleChange} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#146ef5] transition-colors" />
+                <label className="block text-sm font-medium text-gray-700 mb-1">Public HQ Address</label>
+                <input type="text" name="address" placeholder="e.g., Lagos, Nigeria" value={formData.address} onChange={handleChange} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#146ef5] transition-colors" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Plan Details</label>

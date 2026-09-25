@@ -65,9 +65,12 @@ interface FooterProps {
   flattenLogo?: boolean;
   hideInstructorLink?: boolean;
   isPlatform?: boolean;
+  contactEmail?: string;
+  contactPhone?: string;
+  contactLocation?: string;
 }
 
-export default function Footer({ hideInstructorLink = false, isPlatform = false, tenantName, tenantLogo, darkLogoUrl, flattenLogo }: FooterProps = {}) {
+export default function Footer({ hideInstructorLink = false, isPlatform = false, tenantName, tenantLogo, darkLogoUrl, flattenLogo, contactEmail, contactPhone, contactLocation }: FooterProps = {}) {
   const footerSections = getFooterSections(hideInstructorLink, isPlatform);
 
   return (
@@ -89,9 +92,10 @@ export default function Footer({ hideInstructorLink = false, isPlatform = false,
 
             {/* Contact quick */}
             {[
-              { label: 'Email',    value: 'hello@resultspro.ng' },
-              { label: 'Location', value: 'Lagos, Nigeria' },
-            ].map(c => (
+              { label: 'Email',    value: contactEmail || 'hello@resultspro.ng' },
+              { label: 'Phone',    value: contactPhone },
+              { label: 'Location', value: contactLocation || 'Lagos, Nigeria' },
+            ].filter(c => c.value).map(c => (
               <div key={c.label} style={{ display: 'flex', gap: '1rem', marginBottom: '0.625rem', alignItems: 'flex-start' }}>
                 <span style={{
                   fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.1em',
@@ -146,7 +150,7 @@ export default function Footer({ hideInstructorLink = false, isPlatform = false,
           flexWrap: 'wrap', gap: '1rem',
         }}>
           <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem' }}>
-            © {new Date().getFullYear()} CoursesPRO.ng · All rights reserved
+            © {new Date().getFullYear()} {tenantName || 'CoursesPRO.ng'} · All rights reserved
           </div>
           <div style={{ display: 'flex', gap: '0.25rem' }}>
             {[
