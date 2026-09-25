@@ -443,7 +443,7 @@ export default function LessonPlayerPage() {
             <div className="flex items-center gap-4">
               {timeLeft && (
                 <div className={`text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5 ${isValidTime ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
-                  <ClockIcon className="w-4 h-4" />
+                  <ClockIcon className="w-4 h-4" strokeWidth={2} />
                   {timeLeft}
                 </div>
               )}
