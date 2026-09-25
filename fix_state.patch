@@ -1,0 +1,13 @@
+--- coursespro/src/app/[tenant]/(app)/dashboard/journey/[moduleId]/page.tsx
++++ coursespro/src/app/[tenant]/(app)/dashboard/journey/[moduleId]/page.tsx
+@@ -204,6 +204,11 @@
+   const [completedItems, setCompletedItems] = useState<number[]>([]);
+   const [sidebarOpen, setSidebarOpen] = useState(true);
+ 
++  useEffect(() => {
++    setActiveIndex(0);
++    setCompletedItems([]);
++  }, [moduleId]);
++
+   const { data: dashboardData, isLoading: dashLoading } = useQuery({
+     queryKey: ['student-dashboard-summary'],

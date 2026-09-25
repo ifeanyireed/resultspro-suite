@@ -62,6 +62,7 @@ func main() {
 		{"resultspro-app-id", "ResultPRO", "resultspro_secret_456"},
 		{"examspro-app-id", "examsPRO", "examspro_secret_789"},
 		{"tutorspro-app-id", "TutorsPRO", "tutorspro_secret_101"},
+		{"coursespro-app-id", "CoursesPRO", "coursespro_secret_112"},
 		{"tenanthub-app-id", "TenantHub", "tenanthub_secret_202"},
 		{"acad_service_001", "AcadService", "your_secret_here"},
 	}

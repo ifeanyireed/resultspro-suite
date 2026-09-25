@@ -25,8 +25,9 @@ import { PreviewModal } from './PreviewModal';
 
 export type ContentItem = {
   id: string;
-  type: 'TEXT' | 'VIDEO' | 'AUDIO' | 'PDF' | 'QUIZ' | 'HTML' | 'ASSIGNMENT' | 'PPT' | 'COMPILER' | 'LIVE_CLASS';
+  type: 'TEXT' | 'VIDEO' | 'AUDIO' | 'PDF' | 'QUIZ' | 'HTML' | 'ASSIGNMENT' | 'PPT' | 'COMPILER' | 'LIVE_CLASS' | 'PROJECT';
   title?: string;
+  description?: string;
   content?: string;
   url?: string;
   is_group_assignment?: boolean;
@@ -469,23 +470,40 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                             )}
 
                             {item.type === 'VIDEO' && (
-                              <div className="w-full text-left" onClick={e => e.stopPropagation()}>
-                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><VideoCameraIcon className="w-4 h-4 text-purple-500"/> Video URL</label>
-                                <input 
-                                  type="text" 
-                                  className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-blue-500 outline-none"
-                                  placeholder="https://"
-                                  value={item.url || ''}
-                                  onChange={(e) => {
-                                     const items = parseContents(mod);
-                                     items[index].url = e.target.value;
-                                     setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
-                                  }}
-                                  onBlur={(e) => {
-                                     const items = parseContents(mod);
-                                     handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
-                                  }}
-                                />
+                              <div className="w-full text-left space-y-4" onClick={e => e.stopPropagation()}>
+                                <div>
+                                  <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><VideoCameraIcon className="w-4 h-4 text-purple-500"/> Video URL</label>
+                                  <input 
+                                    type="text" 
+                                    className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-blue-500 outline-none"
+                                    placeholder="https://"
+                                    value={item.url || ''}
+                                    onChange={(e) => {
+                                       const items = parseContents(mod);
+                                       items[index].url = e.target.value;
+                                       setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
+                                    }}
+                                    onBlur={(e) => {
+                                       const items = parseContents(mod);
+                                       handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                                    }}
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2">Description</label>
+                                  <textarea
+                                    className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm outline-none"
+                                    placeholder="Enter video description..."
+                                    rows={2}
+                                    value={item.content || ''}
+                                    onChange={e => { 
+                                      const items = parseContents(mod); 
+                                      items[index].content = e.target.value; 
+                                      setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m)); 
+                                    }} 
+                                    onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })}
+                                  />
+                                </div>
                               </div>
                             )}
 
@@ -645,6 +663,17 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                     <label className="block text-xs font-medium text-slate-500 mb-1">Card Title (Optional)</label>
                                     <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="e.g. Try it yourself!" value={item.title || ''} onChange={e => { const i = parseContents(mod); i[index].title = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} />
                                   </div>
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-500 mb-1">Description / Instructions</label>
+                                    <textarea 
+                                      className="w-full border border-slate-300 rounded-md p-2 text-sm" 
+                                      placeholder="Provide instructions for this coding exercise..." 
+                                      rows={2} 
+                                      value={item.description || ''} 
+                                      onChange={e => { const i = parseContents(mod); i[index].description = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} 
+                                      onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} 
+                                    />
+                                  </div>
                                 </div>
                               </div>
                             )}
@@ -704,7 +733,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                 <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><VideoCameraIcon className="w-4 h-4 text-emerald-500"/> Meeting URL (Optional, fallback if not set per cohort)</label>
                                 <input 
                                   type="text" 
-                                  className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-emerald-500 outline-none"
+                                  className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-emerald-500 outline-none mb-3"
                                   placeholder="https://zoom.us/j/..."
                                   value={item.url || ''}
                                   onChange={(e) => {
@@ -716,6 +745,19 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                      const items = parseContents(mod);
                                      handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
                                   }}
+                                />
+                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2">Description / Instructions</label>
+                                <textarea
+                                  className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm outline-none"
+                                  placeholder="Provide meeting agenda or notes..."
+                                  rows={2}
+                                  value={item.description || ''}
+                                  onChange={e => { 
+                                    const items = parseContents(mod); 
+                                    items[index].description = e.target.value; 
+                                    setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m)); 
+                                  }} 
+                                  onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })}
                                 />
                                 <p className="text-[10px] text-gray-400 mt-1">This module will be schedule-able in the Cohort Configurator.</p>
                                 
@@ -745,7 +787,10 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
 
                             {item.type === 'ASSIGNMENT' && (
                               <div className="w-full text-left" onClick={e => e.stopPropagation()}>
-                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg> Assignment Instructions</label>
+                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg> Assignment Title</label>
+                                <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm mb-3" placeholder="Enter assignment title..." value={item.title || ''} onChange={e => { const i = parseContents(mod); i[index].title = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} />
+                                
+                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2">Assignment Description / Instructions</label>
                                 <textarea className="w-full border border-slate-300 rounded-md p-2 text-sm h-32 mb-3" placeholder="Describe the assignment task here..." value={item.content || ''} onChange={e => { const i = parseContents(mod); i[index].content = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)), content_markdown: null, video_url: null })} />
                                 
                                 <label className="block text-xs font-medium text-slate-700 mb-1">Requested Submission Type</label>
@@ -782,6 +827,42 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                               </div>
                             )}
 
+                            {item.type === 'PROJECT' && (
+                              <div className="w-full text-left" onClick={e => e.stopPropagation()}>
+                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2">
+                                  <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                                  Project Title
+                                </label>
+                                <input 
+                                  type="text" 
+                                  className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-blue-500 outline-none mb-3"
+                                  placeholder="Enter project title..."
+                                  value={item.title || ''}
+                                  onChange={e => { 
+                                    const i = parseContents(mod); 
+                                    i[index].title = e.target.value; 
+                                    setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); 
+                                  }} 
+                                  onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} 
+                                />
+
+                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2">
+                                  Project Description & Requirements
+                                </label>
+                                <textarea 
+                                  className="w-full border border-slate-300 rounded-md p-2 text-sm h-32 mb-3" 
+                                  placeholder="Describe the project requirements..." 
+                                  value={item.content || ''} 
+                                  onChange={e => { 
+                                    const i = parseContents(mod); 
+                                    i[index].content = e.target.value; 
+                                    setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); 
+                                  }} 
+                                  onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} 
+                                />
+                              </div>
+                            )}
+
                             {item.type === 'PPT' && (
                               <div className="w-full text-left" onClick={e => e.stopPropagation()}>
                                 <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><svg className="w-4 h-4 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" /></svg> Presentation URL (Google Slides, etc.)</label>
@@ -811,7 +892,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                    e.stopPropagation();
                                    const items = parseContents(mod);
                                    items[index].type = e.target.value as any;
-                                   if(items[index].type === 'TEXT' || items[index].type === 'HTML' || items[index].type === 'ASSIGNMENT') items[index].content = '';
+                                   if(items[index].type === 'TEXT' || items[index].type === 'HTML' || items[index].type === 'ASSIGNMENT' || items[index].type === 'PROJECT') items[index].content = '';
                                    else items[index].url = '';
                                    setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
                                    handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
@@ -828,6 +909,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                  <option value="PPT">Presentation</option>
                                  <option value="COMPILER">Code Compiler</option>
                                  <option value="LIVE_CLASS">Live Class</option>
+                                 <option value="PROJECT">Project</option>
                                </select>
                             </div>
 
@@ -974,6 +1056,19 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                         >
                           <VideoCameraIcon className="w-4 h-4 text-emerald-500 stroke-2" />
                           Add Live Class
+                        </button>
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            const items = parseContents(mod);
+                            items.push({ id: Math.random().toString(36).substring(7), type: 'PROJECT', content: '' });
+                            setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
+                            handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                          }}
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap"
+                        >
+                          <svg className="w-4 h-4 text-blue-600 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                          Add Project
                         </button>
 
 

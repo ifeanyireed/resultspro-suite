@@ -197,6 +197,8 @@ func processOAuthUser(w http.ResponseWriter, r *http.Request, googleID, microsof
 			appID := appModule
 			if appID == "examspro" {
 				appID = "examspro-app-id"
+			} else if appID == "coursespro" {
+				appID = "coursespro-app-id"
 			}
 			_, err := db.DB.Exec("INSERT INTO user_apps (user_id, app_id, last_login_at) VALUES (?, ?, ?)",
 				user.ID, appID, now)
@@ -245,6 +247,8 @@ func processOAuthUser(w http.ResponseWriter, r *http.Request, googleID, microsof
 			appID := appModule
 			if appID == "examspro" {
 				appID = "examspro-app-id"
+			} else if appID == "coursespro" {
+				appID = "coursespro-app-id"
 			}
 			var exists bool
 			err := db.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM user_apps WHERE user_id = ? AND app_id = ?)", user.ID, appID).Scan(&exists)

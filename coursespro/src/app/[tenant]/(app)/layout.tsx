@@ -26,7 +26,8 @@ import {
   Cog6ToothIcon,
   QuestionMarkCircleIcon,
   ShoppingBagIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  CreditCardIcon
 } from '@heroicons/react/24/outline';
 import { 
   Squares2X2Icon as Squares2X2Solid,
@@ -210,6 +211,10 @@ export default function AppLayout({
               </Link>
 
               <div className="pt-4 mt-4 border-t border-gray-100">
+                <Link href="/dashboard/billing" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/billing') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
+                  <CreditCardIcon className="w-6 h-6" />
+                  Billing & Orders
+                </Link>
                 <Link href="/dashboard/settings" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/settings') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
                   <Cog6ToothIcon className="w-6 h-6" />
                   Settings

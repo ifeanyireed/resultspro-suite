@@ -46,7 +46,8 @@ export default function SignupForm({ tenant }: { tenant: any }) {
         email,
         password,
         full_name: name,
-        tenant_slug: tenant?.slug
+        tenant_slug: tenant?.slug,
+        app_module: 'coursespro'
       });
       
       const token = res.data?.token || res.data?.access_token;
@@ -164,7 +165,8 @@ export default function SignupForm({ tenant }: { tenant: any }) {
                     const loginRes = await axios.post(`${USERS_API}/api/v1/auth/login`, {
                       email,
                       password,
-                      tenant_slug: tenant?.slug
+                      tenant_slug: tenant?.slug,
+                      app_module: 'coursespro'
                     });
                     const token = loginRes.data.access_token || loginRes.data.token;
                     if (token) {

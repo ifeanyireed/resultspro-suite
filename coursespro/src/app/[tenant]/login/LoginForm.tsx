@@ -79,7 +79,8 @@ export default function LoginForm({ tenant }: { tenant: any }) {
       const res = await axios.post(`${USERS_API}/api/v1/auth/login`, { 
         email, 
         password,
-        tenant_slug: tenantSlug 
+        tenant_slug: tenantSlug,
+        app_module: 'coursespro'
       });
       
       const token = res.data.access_token || res.data.token;

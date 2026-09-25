@@ -437,6 +437,21 @@ export function PreviewModal({ isOpen, onClose, programTitle, modules }: any) {
                           </div>
                         )}
                         
+                        {block.type === 'PROJECT' && (
+                          <div className="p-8">
+                            <div className="bg-blue-50 border border-blue-100 rounded-lg p-6">
+                              <h3 className="font-semibold text-blue-900 mb-2">{block.title || 'Project'}</h3>
+                              <p className="text-blue-800 text-sm mb-4 whitespace-pre-wrap">{block.content || 'No requirements provided.'}</p>
+                              <div className="flex items-center gap-3 mt-4 pt-4 border-t border-blue-100/50">
+                                <button className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium shadow-sm" disabled>
+                                  Submit Project
+                                </button>
+                                <span className="text-xs text-blue-500 italic">Submissions disabled in preview mode</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        
                         {block.type === 'ASSIGNMENT' && (() => {
                           const subType = block.url || 'TEXT';
                           let btnText = 'Submit Assignment';

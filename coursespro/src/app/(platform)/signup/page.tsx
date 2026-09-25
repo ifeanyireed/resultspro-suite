@@ -24,7 +24,7 @@ export default function PlatformSignupPage() {
       const res = await fetch(`${USERS_API}/api/v1/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, full_name: fullName })
+        body: JSON.stringify({ email, password, full_name: fullName, app_module: 'coursespro' })
       });
       
       const data = await res.json();

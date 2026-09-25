@@ -116,6 +116,8 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		appID := input.AppModule
 		if appID == "examspro" {
 			appID = "examspro-app-id"
+		} else if appID == "coursespro" {
+			appID = "coursespro-app-id"
 		}
 		_, err = db.DB.Exec("INSERT INTO user_apps (user_id, app_id, last_login_at) VALUES (?, ?, ?)",
 			userID, appID, now.UTC().Format("2006-01-02 15:04:05"))

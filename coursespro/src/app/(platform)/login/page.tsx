@@ -49,7 +49,7 @@ export default function LoginPage() {
       // If they are a platform superadmin (e.g. logging in with a non-tenant email)
       // we CAN process their login directly here on the platform domain.
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-      const res = await axios.post(`${USERS_API}/api/v1/auth/login`, { email, password });
+      const res = await axios.post(`${USERS_API}/api/v1/auth/login`, { email, password, app_module: 'coursespro' });
       
       const token = res.data.access_token || res.data.token;
       if (token) {
