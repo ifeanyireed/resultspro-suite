@@ -279,6 +279,7 @@ export default function LessonPlayerPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['student-dashboard-summary'] });
+      queryClient.invalidateQueries({ queryKey: ['cohort-journey'] });
     }
   });
 
