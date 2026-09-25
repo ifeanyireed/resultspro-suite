@@ -198,7 +198,7 @@ export default function ProgramBuilderPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-gray-900">{prog.title}</h3>
-                    <p className="text-sm text-gray-500">{prog.duration_weeks} Weeks • {prog.modules_count || 0} Modules • {prog.stages_count || 0} Stages</p>
+                    <p className="text-sm text-gray-500">{prog.duration_weeks} Weeks • {prog.stages_count || 0} Modules • {prog.modules_count || 0} Stages</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
