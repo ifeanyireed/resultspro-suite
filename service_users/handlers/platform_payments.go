@@ -6,6 +6,7 @@ import (
 	"crypto/sha512"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -15,6 +16,7 @@ import (
 	"gorm.io/gorm"
 	"service_users.resultspro.ng/db"
 	"service_users.resultspro.ng/models"
+	"service_users.resultspro.ng/utils"
 )
 
 // resolveTenantID resolves the tenant ID from X-Tenant-Domain header
@@ -112,6 +114,10 @@ func HandlePlatformPaystackWebhook(w http.ResponseWriter, r *http.Request) {
 			Customer  struct {
 				Email string `json:"email"`
 			} `json:"customer"`
+			Authorization struct {
+				Last4 string `json:"last4"`
+				Brand string `json:"brand"`
+			} `json:"authorization"`
 			Metadata struct {
 				UserID   string `json:"user_id"`
 				TenantID string `json:"tenant_id"`
@@ -176,6 +182,20 @@ func HandlePlatformPaystackWebhook(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, `{"error":"DB Error"}`, http.StatusInternalServerError)
 			return
 		}
+
+		// Send Custom Receipt Email
+		go func() {
+			var tenant models.Tenant
+			if db.GormDB.Where("id = ?", payload.Data.Metadata.TenantID).First(&tenant).Error == nil {
+				formattedAmount := fmt.Sprintf("%.2f", actualAmount)
+				dateStr := time.Now().Format("2nd Jan, 2006")
+				cardSuffix := payload.Data.Authorization.Last4
+				if cardSuffix == "" {
+					cardSuffix = "N/A"
+				}
+				utils.SendPaymentReceiptEmail(payload.Data.Customer.Email, payload.Data.Reference, formattedAmount, dateStr, cardSuffix, tenant.Name, tenant.ContactEmail)
+			}
+		}()
 
 		// Dispatch to the specific module
 		if module == "coursespro" {

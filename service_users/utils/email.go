@@ -138,3 +138,50 @@ func SendPasswordResetEmail(to string, token string, resetURL string) error {
 </div>`, link)
 	return SendEmail(to, subject, htmlBody, textBody, "ResultsPRO")
 }
+
+func SendPaymentReceiptEmail(to string, reference string, amount string, date string, cardSuffix string, tenantName string, tenantEmail string) error {
+	if tenantName == "" {
+		tenantName = "ResultsPRO"
+	}
+	if tenantEmail == "" {
+		tenantEmail = "hello@resultspro.ng"
+	}
+
+	subject := "Payment Receipt from " + tenantName
+	textBody := fmt.Sprintf("You have made a payment of NGN %s to %s.\nReference: %s\nDate: %s\nCard: Ending with %s\n\nIf you have any issues, contact %s", amount, tenantName, reference, date, cardSuffix, tenantEmail)
+	htmlBody := fmt.Sprintf(`
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; padding: 0; margin: 0; color: #1e293b; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0;">
+  <div style="text-align: center; padding: 20px;">
+    <p style="font-size: 14px; color: #475569; margin: 0;">If you have any issues with payment, kindly reply to this email or send an email to <a href="mailto:%[6]s" style="color: #2563eb; text-decoration: underline;">%[6]s</a></p>
+  </div>
+  <div style="background-color: #0f172a; padding: 40px 20px; text-align: center; color: #ffffff;">
+    <p style="font-size: 16px; margin: 0 0 10px 0;">%[1]s<br/>received your payment of</p>
+    <h1 style="font-size: 36px; font-weight: 700; margin: 0;">NGN %[2]s</h1>
+  </div>
+  <div style="padding: 40px;">
+    <h3 style="text-align: center; font-size: 18px; margin-top: 0; margin-bottom: 30px; color: #333333;">Transaction Details</h3>
+    
+    <table style="width: 100%%; border-collapse: collapse;">
+      <tr>
+        <td style="padding: 15px 0; border-bottom: 1px solid #e2e8f0; color: #475569;">Reference</td>
+        <td style="padding: 15px 0; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: 600; color: #333333;">%[3]s</td>
+      </tr>
+      <tr>
+        <td style="padding: 15px 0; border-bottom: 1px solid #e2e8f0; color: #475569;">Date</td>
+        <td style="padding: 15px 0; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: 600; color: #333333;">%[4]s</td>
+      </tr>
+      <tr>
+        <td style="padding: 15px 0; border-bottom: 1px solid #e2e8f0; color: #475569;">Card</td>
+        <td style="padding: 15px 0; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: 600; color: #333333;">Ending with %[5]s</td>
+      </tr>
+    </table>
+
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+      <p style="font-size: 16px; margin: 0 0 5px 0;">%[1]s</p>
+      <a href="mailto:%[6]s" style="color: #2563eb; text-decoration: underline; font-size: 14px;">%[6]s</a>
+    </div>
+  </div>
+</div>`, tenantName, amount, reference, date, cardSuffix, tenantEmail)
+
+	return SendEmail(to, subject, htmlBody, textBody, tenantName)
+}
