@@ -95,8 +95,8 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 				currentModule = &ModuleData{
 					Title:       "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " Completed",
 					Description: "You have completed all modules for this stage. Please complete your project or wait for your mentor's review to proceed to the next stage.",
-					Duration:    "Pending",
-					AiSummary:   []string{"Great job completing all modules in this stage!", "Next step: Project submission or review."},
+					Duration:    "",
+					AiSummary:   nil,
 				}
 			} else {
 				activeIndex := progress.LastActiveIndex
@@ -108,42 +108,44 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 				}
 				
 				item := items[activeIndex]
-				title := "Content Item"
+				contentTitle := "Content Item"
 				if t, ok := item["title"].(string); ok && t != "" {
-					title = t
+					contentTitle = t
 				} else if typ, ok := item["type"].(string); ok && typ != "" {
-					title = typ
+					contentTitle = typ
 				}
 
-				desc := "Continue your learning journey."
+				contentDesc := "Continue your learning journey."
 				if d, ok := item["description"].(string); ok && d != "" {
-					desc = d
+					contentDesc = d
 				} else if c, ok := item["content"].(string); ok && c != "" {
 					if len(c) > 100 {
-						desc = c[:97] + "..."
+						contentDesc = c[:97] + "..."
 					} else {
-						desc = c
+						contentDesc = c
 					}
 				}
 				
-				summaryPoints := []string{
-					"Resume from where you left off.",
-					fmt.Sprintf("You are on content block %d of %d.", activeIndex+1, len(items)),
+				duration := ""
+				if dur, ok := item["duration"].(string); ok && dur != "" {
+					duration = dur
+				} else if durNum, ok := item["duration"].(float64); ok {
+					duration = fmt.Sprintf("%.0f mins", durNum)
 				}
 
 				currentModule = &ModuleData{
-					Title:       title,
-					Description: desc,
-					Duration:    "15 mins", // Fallback text
-					AiSummary:   summaryPoints,
+					Title:       stage.Title,
+					Description: fmt.Sprintf("%s\n\n%s", contentTitle, contentDesc),
+					Duration:    duration,
+					AiSummary:   nil,
 				}
 			}
 		} else {
 			currentModule = &ModuleData{
 				Title:       "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " (Coming Soon)",
 				Description: "Your instructor is still preparing the content for this stage. Check back soon!",
-				Duration:    "Pending",
-				AiSummary:   []string{"This stage is currently empty.", "Wait for your instructor to publish modules here."},
+				Duration:    "",
+				AiSummary:   nil,
 			}
 		}
 	}

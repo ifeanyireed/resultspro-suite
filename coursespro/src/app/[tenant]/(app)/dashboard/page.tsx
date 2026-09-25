@@ -186,31 +186,19 @@ const router = useRouter();
           <div className="bg-white rounded-[1.5rem] p-6 md:p-8 shadow-sm border border-gray-100 relative overflow-hidden">
             <div className="flex items-center gap-2 mb-4">
               <span className="bg-blue-50 text-blue-600 text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">Up Next</span>
-              <span className="text-sm font-medium text-gray-500 flex items-center gap-1">
-                <ClockIcon className="w-4 h-4" strokeWidth={2} /> {dashboardData.current_module?.duration || '45 mins'}
-              </span>
+              {dashboardData.current_module?.duration && (
+                <span className="text-sm font-medium text-gray-500 flex items-center gap-1">
+                  <ClockIcon className="w-4 h-4" strokeWidth={2} /> {dashboardData.current_module.duration}
+                </span>
+              )}
             </div>
             
             <h2 className="text-2xl font-bold text-gray-900 mb-3 tracking-tight">{dashboardData.current_module?.title || "Next Module Pending"}</h2>
-            <p className="text-gray-600 leading-relaxed mb-8">
+            <p className="text-gray-600 leading-relaxed mb-8 whitespace-pre-line">
               {dashboardData.current_module?.description || "No description available for the next module."}
             </p>
             
-            <div className="bg-indigo-50/50 border border-indigo-100 rounded-xl p-5 mb-8 relative">
-              <div className="absolute -top-3 -right-3 w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center shadow-sm">
-                <SparklesIcon className="w-4 h-4 text-indigo-600" strokeWidth={2} />
-              </div>
-              <h4 className="text-sm font-bold text-indigo-900 mb-2 flex items-center gap-2">
-                AI Lesson Summary
-              </h4>
-              <ul className="space-y-2">
-                {dashboardData.current_module?.ai_summary?.map((point: string, idx: number) => (
-                  <li key={idx} className="text-sm text-indigo-800/80 flex gap-2">
-                    <span className="text-indigo-400">•</span> {point.replace(/^[-\*•]\s*/, '')}
-                  </li>
-                ))}
-              </ul>
-            </div>
+
             
             <button className="w-full bg-gray-900 hover:bg-black text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2">
               <PlayIcon className="w-5 h-5" strokeWidth={2} />
