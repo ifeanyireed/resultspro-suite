@@ -235,7 +235,7 @@ const { data: tenantData, isLoading } = useQuery({
     if (!files || files.length === 0) return;
     setUploadingSlideshow(true);
     try {
-      const newUrls = [];
+      const newUrls: string[] = [];
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const data = new FormData();
