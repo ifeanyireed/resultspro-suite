@@ -67,10 +67,11 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 
 	// 3. Get Current Stage & Module
 	type ModuleData struct {
-		Title       string   `json:"title"`
-		Description string   `json:"description"`
-		Duration    string   `json:"duration"`
-		AiSummary   []string `json:"ai_summary"`
+		Title        string   `json:"title"`
+		ContentTitle string   `json:"content_title"`
+		Description  string   `json:"description"`
+		Duration     string   `json:"duration"`
+		AiSummary    []string `json:"ai_summary"`
 	}
 
 	var stage models.JourneyStage
@@ -93,10 +94,11 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		if len(items) > 0 {
 			if progress.Completed {
 				currentModule = &ModuleData{
-					Title:       "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " Completed",
-					Description: "You have completed all modules for this stage. Please complete your project or wait for your mentor's review to proceed to the next stage.",
-					Duration:    "",
-					AiSummary:   nil,
+					Title:        "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " Completed",
+					ContentTitle: "Project Time",
+					Description:  "You have completed all modules for this stage. Please complete your project or wait for your mentor's review to proceed to the next stage.",
+					Duration:     "",
+					AiSummary:    nil,
 				}
 			} else {
 				activeIndex := progress.LastActiveIndex
@@ -134,18 +136,20 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 				}
 
 				currentModule = &ModuleData{
-					Title:       stage.Title,
-					Description: fmt.Sprintf("%s\n\n%s", contentTitle, contentDesc),
-					Duration:    duration,
-					AiSummary:   nil,
+					Title:        stage.Title,
+					ContentTitle: contentTitle,
+					Description:  fmt.Sprintf("%s\n\n%s", contentTitle, contentDesc),
+					Duration:     duration,
+					AiSummary:    nil,
 				}
 			}
 		} else {
 			currentModule = &ModuleData{
-				Title:       "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " (Coming Soon)",
-				Description: "Your instructor is still preparing the content for this stage. Check back soon!",
-				Duration:    "",
-				AiSummary:   nil,
+				Title:        "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " (Coming Soon)",
+				ContentTitle: "Coming Soon",
+				Description:  "Your instructor is still preparing the content for this stage. Check back soon!",
+				Duration:     "",
+				AiSummary:    nil,
 			}
 		}
 	}

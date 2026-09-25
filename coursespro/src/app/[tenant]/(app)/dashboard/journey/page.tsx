@@ -115,8 +115,8 @@ export default function JourneyPage() {
              <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full filter blur-[2rem] opacity-30"></div>
              <h3 className="text-xl font-normal text-white mb-6">Journey Progress</h3>
              <h2 className="text-5xl font-medium tracking-tight text-white mb-2">{Math.round(dashboardData?.enrollment?.progress || 0)}%</h2>
-             {dashboardData?.upcoming_milestone ? (
-                <p className="text-sm text-white/80">Next: {dashboardData.upcoming_milestone.title}</p>
+             {dashboardData?.current_module?.content_title ? (
+                <p className="text-sm text-white/80">Next: {dashboardData.current_module.content_title}</p>
              ) : (
                 <p className="text-sm text-white/80">Keep up the great work!</p>
              )}

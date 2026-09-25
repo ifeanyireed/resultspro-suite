@@ -25,6 +25,7 @@ type ContentItem = {
   id: string;
   type: 'TEXT' | 'VIDEO' | 'AUDIO' | 'PDF' | 'QUIZ' | 'HTML' | 'ASSIGNMENT' | 'PPT' | 'COMPILER' | 'LIVE_CLASS';
   title?: string;
+  description?: string;
   content?: string;
   url?: string;
   is_group_assignment?: boolean;
@@ -566,12 +567,16 @@ export default function LessonPlayerPage() {
                     <div className={`shrink-0 ${isCompleted ? 'text-green-500' : (isActive ? 'text-gray-900' : 'text-gray-400')}`}>
                       {isCompleted ? <CheckCircleSolid className="w-6 h-6" /> : getIconForType(item.type)}
                     </div>
-                    <div className="truncate flex-1">
+                    <div className="flex-1 min-w-0">
                       <p className={`text-[15px] font-normal truncate leading-tight ${isActive ? 'text-gray-900 font-semibold' : 'text-gray-700'}`}>
                         {item.title || item.type}
                       </p>
-                      <p className={`text-[11px] capitalize mt-0.5 ${isActive ? 'text-gray-500' : 'text-gray-400'}`}>
-                        {item.type.toLowerCase()}
+                      <p className={`text-[11px] mt-0.5 truncate ${isActive ? 'text-gray-500' : 'text-gray-400'}`}>
+                        {item.description 
+                          ? item.description 
+                          : (item.content 
+                              ? (item.content.length > 50 ? item.content.substring(0, 47) + '...' : item.content)
+                              : item.type.toLowerCase())}
                       </p>
                     </div>
                   </div>
