@@ -408,7 +408,7 @@ export default function CohortModal({ isOpen, onClose, onSave, cohort, programs 
                     </button>
                   )}
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-3 w-fit">
                   <button
                     type="button"
                     onClick={onClose}

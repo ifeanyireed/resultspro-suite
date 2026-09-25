@@ -410,12 +410,12 @@ export default function StudentsPage() {
               </div>
             </div>
             <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-between gap-3 shrink-0">
-              <div className="flex gap-2 flex-wrap">
+              <div className="flex gap-2 flex-wrap w-fit">
                 <button 
                   type="button" 
                   onClick={handleResetProgress}
                   disabled={isAssigning || !managingStudent.enrollment_id}
-                  className="px-4 py-2.5 rounded-xl border border-yellow-200 text-yellow-700 font-bold text-xs hover:bg-yellow-50 disabled:opacity-50"
+                  className="px-4 py-2.5 rounded-xl whitespace-nowrap w-fit border border-yellow-200 text-yellow-700 font-bold text-xs hover:bg-yellow-50 disabled:opacity-50"
                   title="Reset student progress (XP and stages)"
                 >
                   Reset Progress
@@ -424,7 +424,7 @@ export default function StudentsPage() {
                   type="button" 
                   onClick={handleRemoveCohort}
                   disabled={isAssigning || !managingStudent.enrollment_id}
-                  className="px-4 py-2.5 rounded-xl border border-orange-200 text-orange-600 font-bold text-xs hover:bg-orange-50 disabled:opacity-50"
+                  className="px-4 py-2.5 rounded-xl whitespace-nowrap w-fit border border-orange-200 text-orange-600 font-bold text-xs hover:bg-orange-50 disabled:opacity-50"
                   title="Remove from current cohort"
                 >
                   Unassign
@@ -433,17 +433,17 @@ export default function StudentsPage() {
                   type="button" 
                   onClick={handleDeleteStudent}
                   disabled={isDeleting || isAssigning}
-                  className="px-4 py-2.5 rounded-xl border border-red-200 text-red-600 font-bold text-xs hover:bg-red-50 disabled:opacity-50"
+                  className="px-4 py-2.5 rounded-xl whitespace-nowrap w-fit border border-red-200 text-red-600 font-bold text-xs hover:bg-red-50 disabled:opacity-50"
                   title="Delete student from tenant completely"
                 >
                   {isDeleting ? 'Deleting...' : 'Delete Student'}
                 </button>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 w-fit">
                 <button 
                   type="button" 
                   onClick={() => setIsManageModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 disabled:opacity-50"
+                  className="px-4 py-2.5 rounded-xl whitespace-nowrap w-fit border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -451,7 +451,7 @@ export default function StudentsPage() {
                   type="button"
                   onClick={handleAssignCohort}
                   disabled={isAssigning || !targetCohortId}
-                  className="px-4 py-2.5 rounded-xl bg-[#146ef5] text-white font-bold text-xs hover:bg-[#105bd1] disabled:opacity-50"
+                  className="px-4 py-2.5 rounded-xl whitespace-nowrap w-fit bg-[#146ef5] text-white font-bold text-xs hover:bg-[#105bd1] disabled:opacity-50"
                 >
                   {isAssigning ? 'Saving...' : 'Assign'}
                 </button>
