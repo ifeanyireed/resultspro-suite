@@ -11,7 +11,11 @@ import {
   DocumentTextIcon,
   CodeBracketIcon,
   QuestionMarkCircleIcon,
-  DocumentIcon
+  DocumentIcon,
+  VideoCameraIcon,
+  SpeakerWaveIcon,
+  PresentationChartBarIcon,
+  ClipboardDocumentCheckIcon
 } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as CheckCircleSolid } from '@heroicons/react/24/solid';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -23,25 +27,71 @@ type ContentItem = {
   title?: string;
   content?: string;
   url?: string;
+  is_group_assignment?: boolean;
 };
 
 function getIconForType(type: string) {
   switch (type) {
-    case 'VIDEO': return <PlayIcon className="w-5 h-5" />;
+    case 'VIDEO': return <PlayIcon className="w-6 h-6" />;
+    case 'AUDIO': return <SpeakerWaveIcon className="w-6 h-6" />;
+    case 'LIVE_CLASS': return <VideoCameraIcon className="w-6 h-6" />;
     case 'TEXT':
-    case 'HTML': return <DocumentTextIcon className="w-5 h-5" />;
-    case 'QUIZ': return <QuestionMarkCircleIcon className="w-5 h-5" />;
-    case 'COMPILER': return <CodeBracketIcon className="w-5 h-5" />;
-    case 'PDF': return <DocumentIcon className="w-5 h-5" />;
-    default: return <DocumentTextIcon className="w-5 h-5" />;
+    case 'HTML': return <DocumentTextIcon className="w-6 h-6" />;
+    case 'QUIZ': return <QuestionMarkCircleIcon className="w-6 h-6" />;
+    case 'COMPILER': return <CodeBracketIcon className="w-6 h-6" />;
+    case 'PDF': return <DocumentIcon className="w-6 h-6" />;
+    case 'PPT': return <PresentationChartBarIcon className="w-6 h-6" />;
+    case 'ASSIGNMENT': return <ClipboardDocumentCheckIcon className="w-6 h-6" />;
+    default: return <DocumentTextIcon className="w-6 h-6" />;
   }
 }
 
-// Sub-component to render a quiz
-function QuizRenderer({ quizData }: { quizData: any }) {
-  const [answers, setAnswers] = useState<Record<number, number>>({});
-  const [submitted, setSubmitted] = useState(false);
-  const questions = quizData.questions || [];
+function InteractiveQuizRenderer({ quizId }: { quizId: string }) {
+  const [quiz, setQuiz] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState('');
+  const [answers, setAnswers] = React.useState<Record<number, number>>({});
+  const [submitted, setSubmitted] = React.useState(false);
+
+  React.useEffect(() => {
+    async function load() {
+      if (!quizId) {
+        setLoading(false);
+        setError('No Quiz ID provided.');
+        return;
+      }
+      try {
+        setLoading(true);
+        const res = await coursesApi.get(`/api/admin/quizzes/${quizId}`);
+        const found = res.data.quiz || res.data;
+        if (found) {
+          found.questions = res.data.questions || found.questions || [];
+          setQuiz(found);
+        } else {
+          setError('Quiz not found.');
+        }
+      } catch (err) {
+        setError('Failed to load quiz.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [quizId]);
+
+  if (loading) return <div className="p-8 text-center text-gray-500 animate-pulse">Loading quiz...</div>;
+  if (error || !quiz) return <div className="p-8 text-center text-red-500">{error || 'Unknown error'}</div>;
+
+  let rawQuestions = quiz.questions;
+  if ((!rawQuestions || rawQuestions.length === 0) && quiz.questions_json) {
+    try { rawQuestions = typeof quiz.questions_json === 'string' ? JSON.parse(quiz.questions_json) : quiz.questions_json; } catch(e) {}
+  }
+  const questions = (rawQuestions || []).map((q: any) => {
+    if (!q.options && q.options_json) {
+      try { q.options = JSON.parse(q.options_json); } catch(e) { q.options = []; }
+    }
+    return q;
+  });
 
   if (!questions.length) {
     return <div className="text-gray-500">No questions in this quiz.</div>;
@@ -51,7 +101,7 @@ function QuizRenderer({ quizData }: { quizData: any }) {
     <div className="space-y-8">
       <div className="flex items-center gap-2 mb-6 border-b border-gray-100 pb-4">
         <QuestionMarkCircleIcon className="w-6 h-6 text-blue-500" />
-        <h3 className="font-bold text-xl text-gray-900">{quizData.title || "Knowledge Check"}</h3>
+        <h3 className="font-bold text-xl text-gray-900">{quiz.title || "Knowledge Check"}</h3>
       </div>
 
       <div className="space-y-10">
@@ -123,7 +173,7 @@ function QuizRenderer({ quizData }: { quizData: any }) {
         {!submitted && (
           <button
             onClick={() => setSubmitted(true)}
-            className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-blue-700 transition-all shadow-sm"
+            className="bg-[#146ef5] text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-[#105bd1] transition-all shadow-sm"
           >
             Submit Quiz
           </button>
@@ -142,7 +192,6 @@ export default function LessonPlayerPage() {
   const [completedItems, setCompletedItems] = useState<number[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // Fetch dashboard data to get cohort_id
   const { data: dashboardData, isLoading: dashLoading } = useQuery({
     queryKey: ['student-dashboard-summary'],
     queryFn: async () => {
@@ -151,7 +200,6 @@ export default function LessonPlayerPage() {
     }
   });
 
-  // Fetch journey data using cohort_id
   const { data: journeyData, isLoading: journeyLoading } = useQuery({
     queryKey: ['cohort-journey', dashboardData?.cohort_id],
     queryFn: async () => {
@@ -188,7 +236,7 @@ export default function LessonPlayerPage() {
     return (
       <div className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Module Not Found</h2>
-        <Link href="/dashboard/journey" className="px-6 py-3 bg-blue-600 text-white rounded-xl font-medium">
+        <Link href="/dashboard/journey" className="px-6 py-3 bg-[#146ef5] text-white rounded-xl font-medium">
           Return to Journey Map
         </Link>
       </div>
@@ -212,7 +260,6 @@ export default function LessonPlayerPage() {
       setCompletedItems([...completedItems, activeIndex]);
     }
     
-    // If it's the last item, mark module as complete via API
     if (activeIndex === items.length - 1) {
       progressMutation.mutate(true, {
         onSuccess: () => {
@@ -224,7 +271,6 @@ export default function LessonPlayerPage() {
         }
       });
     } else {
-      // Move to next item automatically
       setActiveIndex(activeIndex + 1);
     }
   };
@@ -235,7 +281,6 @@ export default function LessonPlayerPage() {
     <div className="fixed inset-0 z-[100] bg-white flex overflow-hidden font-grotesk text-gray-900">
       {/* Main Left Content */}
       <div className="flex-1 flex flex-col h-full relative transition-all duration-300">
-        {/* Header */}
         <header className="h-16 border-b border-gray-100 flex items-center justify-between px-6 bg-white shrink-0">
           <Link href="/dashboard/journey" className="flex items-center gap-2 text-gray-500 hover:text-gray-900 font-medium text-sm">
             <ArrowLeftIcon className="w-4 h-4" />
@@ -249,21 +294,21 @@ export default function LessonPlayerPage() {
           </div>
         </header>
 
-        {/* Content Area */}
         <main className="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-12 flex flex-col items-center">
           {items.length === 0 ? (
-            <div className="w-full max-w-4xl bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center text-gray-500 mt-10">
+            <div className="w-full max-w-5xl bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center text-gray-500 mt-10">
               This module has no content items baked into it yet.
             </div>
           ) : (
             <>
-              <div className="w-full max-w-4xl bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10 min-h-[60vh]">
+              <div className="w-full max-w-5xl bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10 min-h-[60vh]">
+                
                 {currentItem?.type === 'VIDEO' && (
                   <div className="space-y-6">
                     {currentItem.title && <h2 className="font-bold text-2xl">{currentItem.title}</h2>}
-                    <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black">
+                    <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black shadow-inner">
                       {currentItem.url?.includes('youtube.com') || currentItem.url?.includes('youtu.be') || currentItem.url?.includes('vimeo') ? (
-                        <iframe src={currentItem.url} className="absolute inset-0 w-full h-full" allowFullScreen></iframe>
+                        <iframe src={currentItem.url} className="absolute inset-0 w-full h-full border-0" allowFullScreen></iframe>
                       ) : (
                         <video src={currentItem.url} controls className="absolute inset-0 w-full h-full object-contain" />
                       )}
@@ -271,49 +316,137 @@ export default function LessonPlayerPage() {
                   </div>
                 )}
 
+                {currentItem?.type === 'AUDIO' && (
+                  <div className="space-y-6">
+                    {currentItem.title && <h2 className="font-bold text-2xl">{currentItem.title}</h2>}
+                    <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center gap-4">
+                      <SpeakerWaveIcon className="w-12 h-12 text-[#146ef5]" />
+                      <audio src={currentItem.url} controls className="w-full max-w-md mt-4" />
+                    </div>
+                  </div>
+                )}
+
+                {currentItem?.type === 'LIVE_CLASS' && (
+                  <div className="space-y-6">
+                    {currentItem.title && <h2 className="font-bold text-2xl">{currentItem.title}</h2>}
+                    <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+                      <div className="flex items-start gap-4">
+                        <div className="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+                          <VideoCameraIcon className="w-7 h-7 text-emerald-600" />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-emerald-900 tracking-tight">Live Class Room</h3>
+                          <p className="text-emerald-700 mt-2 mb-3">Join your mentor and cohort peers for this live session.</p>
+                          {currentItem.url ? (
+                            <div className="text-sm text-emerald-600/80 font-mono truncate max-w-sm">{currentItem.url}</div>
+                          ) : (
+                            <div className="text-sm text-emerald-600/80 italic">Meeting link will be provided by your mentor.</div>
+                          )}
+                        </div>
+                      </div>
+                      <a 
+                        href={currentItem.url || '#'}
+                        target={currentItem.url ? "_blank" : "_self"}
+                        rel="noreferrer"
+                        className={`w-full md:w-auto px-8 py-4 bg-emerald-600 text-white font-bold rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2 ${!currentItem.url && 'opacity-50 cursor-not-allowed'}`}
+                      >
+                        <VideoCameraIcon className="w-6 h-6" />
+                        {currentItem.url ? 'Join Meeting' : 'No Link Yet'}
+                      </a>
+                    </div>
+                  </div>
+                )}
+                
+                {currentItem?.type === 'COMPILER' && (
+                  <div className="space-y-6">
+                    {currentItem.title && <h2 className="font-bold text-2xl">{currentItem.title}</h2>}
+                    <div className="w-full h-[600px] relative rounded-xl overflow-hidden shadow-sm border border-gray-200">
+                      {currentItem.url ? (
+                        <iframe 
+                          src={`https://onecompiler.com/embed/${currentItem.url}?code=${encodeURIComponent(currentItem.content || '')}&hideLanguageSelection=true&hideNew=true&hideTitle=true`}
+                          className="w-full h-full border-0 bg-white" 
+                          title="Code Compiler" 
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center text-gray-400 bg-gray-50">No language selected</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {currentItem?.type === 'ASSIGNMENT' && (() => {
+                  const subType = currentItem.url || 'TEXT';
+                  let btnText = 'Submit Assignment';
+                  if (subType === 'TEXT') btnText = 'Write Submission';
+                  else if (subType === 'LINK') btnText = 'Attach Link';
+                  else if (subType === 'FILE') btnText = 'Upload File';
+
+                  return (
+                    <div className="space-y-6">
+                      {currentItem.title && <h2 className="font-bold text-2xl">{currentItem.title}</h2>}
+                      <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-8">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="text-lg font-bold text-indigo-900">Assignment Task</h3>
+                          {currentItem.is_group_assignment && (
+                            <span className="px-3 py-1.5 bg-indigo-100 text-indigo-700 text-xs font-bold rounded-md flex items-center gap-1">
+                              <ClipboardDocumentCheckIcon className="w-4 h-4" />
+                              Group Assignment
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-indigo-800 text-base mb-6 whitespace-pre-wrap leading-relaxed">{currentItem.content || 'No instructions provided.'}</p>
+                        <div className="flex items-center gap-4 mt-6 pt-6 border-t border-indigo-200/50">
+                          <button className="px-6 py-3 bg-[#146ef5] hover:bg-[#105bd1] text-white rounded-xl text-sm font-bold shadow-sm transition-colors">
+                            {btnText}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
                 {(currentItem?.type === 'TEXT' || currentItem?.type === 'HTML') && (
                   <div className="space-y-6">
                     {currentItem.title && <h2 className="font-bold text-2xl">{currentItem.title}</h2>}
                     <div 
-                      className="prose prose-blue max-w-none text-gray-700"
+                      className="prose prose-lg prose-blue max-w-none text-gray-800"
                       dangerouslySetInnerHTML={{ __html: currentItem.content || '' }}
                     />
                   </div>
                 )}
 
                 {currentItem?.type === 'QUIZ' && (
-                  <QuizRenderer quizData={currentItem.content ? JSON.parse(currentItem.content) : {}} />
+                  <InteractiveQuizRenderer quizId={currentItem.url || ''} />
                 )}
 
-                {currentItem?.type === 'PDF' && (
-                  <div className="space-y-6 text-center py-12">
-                    <DocumentIcon className="w-16 h-16 text-blue-500 mx-auto" />
-                    <h2 className="font-bold text-2xl">{currentItem.title || 'PDF Document'}</h2>
-                    <p className="text-gray-500">Click below to view or download this document.</p>
-                    <a href={currentItem.url} target="_blank" rel="noreferrer" className="inline-block px-8 py-3 bg-blue-50 text-blue-700 rounded-xl font-bold hover:bg-blue-100 transition-colors">
-                      Open PDF
-                    </a>
+                {(currentItem?.type === 'PDF' || currentItem?.type === 'PPT') && (
+                  <div className="space-y-6">
+                    {currentItem.title && <h2 className="font-bold text-2xl">{currentItem.title}</h2>}
+                    <div className="w-full h-[600px] border border-gray-200 rounded-xl overflow-hidden bg-gray-50 relative">
+                      {currentItem.url ? (
+                        currentItem.url.toLowerCase().endsWith('.pdf') ? (
+                          <iframe src={`${currentItem.url}#view=FitH`} className="w-full h-full border-0" title="Document" />
+                        ) : (
+                          <iframe src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(currentItem.url)}`} className="w-full h-full border-0" title="Document" />
+                        )
+                      ) : (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 gap-4">
+                          <DocumentIcon className="w-12 h-12" />
+                          <span>No document attached</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
 
-                {!['VIDEO', 'TEXT', 'HTML', 'QUIZ', 'PDF'].includes(currentItem?.type || '') && (
-                  <div className="space-y-6 text-center py-12">
-                    <h2 className="font-bold text-2xl">{currentItem?.title || currentItem?.type}</h2>
-                    {currentItem?.url && (
-                      <a href={currentItem.url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">
-                        {currentItem.url}
-                      </a>
-                    )}
-                  </div>
-                )}
               </div>
 
               {/* Footer Actions */}
-              <div className="w-full max-w-4xl mt-8 flex justify-end">
+              <div className="w-full max-w-5xl mt-8 flex justify-end">
                 <button 
                   onClick={handleMarkComplete}
                   disabled={progressMutation.isPending}
-                  className="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-sm hover:bg-blue-700 shadow-md flex items-center gap-2 transition-all disabled:opacity-70"
+                  className="px-8 py-4 bg-[#146ef5] text-white rounded-xl font-bold text-sm hover:bg-[#105bd1] shadow-md flex items-center gap-2 transition-all disabled:opacity-70"
                 >
                   <CheckCircleIcon className="w-5 h-5" />
                   {progressMutation.isPending 
@@ -330,13 +463,13 @@ export default function LessonPlayerPage() {
 
       {/* Right Sidebar */}
       {sidebarOpen && (
-        <aside className="w-80 border-l border-gray-100 bg-white h-full flex flex-col shrink-0 shadow-[-10px_0_30px_rgba(0,0,0,0.03)] z-10">
+        <aside className="w-80 border-l border-gray-200 bg-white h-full flex flex-col shrink-0 z-10">
           <div className="p-6 border-b border-gray-100">
             <h3 className="font-bold text-gray-900 text-lg">Module Contents</h3>
-            <div className="flex items-center gap-2 mt-2">
+            <div className="flex items-center gap-3 mt-3">
               <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-blue-500 transition-all" 
+                  className="h-full bg-[#146ef5] transition-all" 
                   style={{ width: items.length > 0 ? `${(completedItems.length / items.length) * 100}%` : '0%' }}
                 ></div>
               </div>
@@ -345,7 +478,7 @@ export default function LessonPlayerPage() {
               </span>
             </div>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+          <div className="flex-1 overflow-y-auto p-4 space-y-1">
             {items.map((item, idx) => {
               const isCompleted = completedItems.includes(idx);
               const isActive = activeIndex === idx;
@@ -353,20 +486,20 @@ export default function LessonPlayerPage() {
                 <button 
                   key={idx}
                   onClick={() => setActiveIndex(idx)}
-                  className={`w-full text-left p-4 rounded-xl border transition-all flex items-start gap-3
-                    ${isActive ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-transparent hover:bg-gray-50'}
-                  `}
+                  className={`w-full text-left flex flex-col justify-center px-4 py-3 rounded-xl relative transition-colors ${isActive ? 'text-[#146ef5] bg-[#146ef5]/5 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-10 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}
                 >
-                  <div className={`mt-0.5 shrink-0 ${isCompleted ? 'text-green-500' : (isActive ? 'text-blue-500' : 'text-gray-400')}`}>
-                    {isCompleted ? <CheckCircleSolid className="w-6 h-6" /> : getIconForType(item.type)}
-                  </div>
-                  <div>
-                    <p className={`text-sm font-bold ${isActive ? 'text-blue-900' : 'text-gray-700'}`}>
-                      {item.title || item.type}
-                    </p>
-                    <p className={`text-xs ${isActive ? 'text-blue-600/70' : 'text-gray-400'}`}>
-                      {item.type.toLowerCase()}
-                    </p>
+                  <div className="flex items-center gap-3 w-full">
+                    <div className={`shrink-0 ${isCompleted ? 'text-green-500' : (isActive ? 'text-[#146ef5]' : 'text-gray-400')}`}>
+                      {isCompleted ? <CheckCircleSolid className="w-6 h-6" /> : getIconForType(item.type)}
+                    </div>
+                    <div className="truncate flex-1">
+                      <p className={`text-[15px] font-normal truncate leading-tight ${isActive ? 'text-[#146ef5] font-semibold' : 'text-gray-700'}`}>
+                        {item.title || item.type}
+                      </p>
+                      <p className={`text-[11px] capitalize mt-0.5 ${isActive ? 'text-[#146ef5]/70' : 'text-gray-400'}`}>
+                        {item.type.toLowerCase()}
+                      </p>
+                    </div>
                   </div>
                 </button>
               )
