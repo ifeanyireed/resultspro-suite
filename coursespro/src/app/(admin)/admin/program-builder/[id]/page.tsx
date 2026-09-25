@@ -31,6 +31,11 @@ export type ContentItem = {
   content?: string;
   url?: string;
   is_group_assignment?: boolean;
+  date?: string;
+  time?: string;
+  class_type?: 'PHYSICAL' | 'VIRTUAL';
+  address?: string;
+  classroom?: string;
 };
 
 const parseContents = (mod: any): ContentItem[] => {
@@ -490,6 +495,24 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                   />
                                 </div>
                                 <div>
+                                  <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2">Video Title (Optional)</label>
+                                  <input 
+                                    type="text" 
+                                    className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-blue-500 outline-none"
+                                    placeholder="Enter video title..."
+                                    value={item.title || ''}
+                                    onChange={(e) => {
+                                       const items = parseContents(mod);
+                                       items[index].title = e.target.value;
+                                       setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
+                                    }}
+                                    onBlur={(e) => {
+                                       const items = parseContents(mod);
+                                       handleUpdateModule(mod.id, { contents_json: JSON.stringify(items) });
+                                    }}
+                                  />
+                                </div>
+                                <div>
                                   <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2">Description</label>
                                   <textarea
                                     className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm outline-none"
@@ -729,39 +752,127 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                             )}
 
                             {item.type === 'LIVE_CLASS' && (
-                              <div className="w-full text-left" onClick={e => e.stopPropagation()}>
-                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><VideoCameraIcon className="w-4 h-4 text-emerald-500"/> Meeting URL (Optional, fallback if not set per cohort)</label>
-                                <input 
-                                  type="text" 
-                                  className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-emerald-500 outline-none mb-3"
-                                  placeholder="https://zoom.us/j/..."
-                                  value={item.url || ''}
-                                  onChange={(e) => {
-                                     const items = parseContents(mod);
-                                     items[index].url = e.target.value;
-                                     setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
-                                  }}
-                                  onBlur={(e) => {
-                                     const items = parseContents(mod);
-                                     handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
-                                  }}
-                                />
-                                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2">Description / Instructions</label>
-                                <textarea
-                                  className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm outline-none"
-                                  placeholder="Provide meeting agenda or notes..."
-                                  rows={2}
-                                  value={item.description || ''}
-                                  onChange={e => { 
-                                    const items = parseContents(mod); 
-                                    items[index].description = e.target.value; 
-                                    setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m)); 
-                                  }} 
-                                  onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })}
-                                />
+                              <div className="w-full text-left space-y-4" onClick={e => e.stopPropagation()}>
+                                <div>
+                                  <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2"><VideoCameraIcon className="w-4 h-4 text-emerald-500"/> Class Format</label>
+                                  <select 
+                                    className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-emerald-500 outline-none"
+                                    value={item.class_type || 'VIRTUAL'}
+                                    onChange={(e) => {
+                                      const items = parseContents(mod);
+                                      items[index].class_type = e.target.value as any;
+                                      setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
+                                    }}
+                                    onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })}
+                                  >
+                                    <option value="VIRTUAL">Virtual</option>
+                                    <option value="PHYSICAL">Physical</option>
+                                  </select>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-700 mb-1">Date (Optional)</label>
+                                    <input 
+                                      type="date" 
+                                      className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-emerald-500 outline-none"
+                                      value={item.date || ''}
+                                      onChange={(e) => {
+                                        const items = parseContents(mod);
+                                        items[index].date = e.target.value;
+                                        setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
+                                      }}
+                                      onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-700 mb-1">Time (Optional)</label>
+                                    <input 
+                                      type="time" 
+                                      className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-emerald-500 outline-none"
+                                      value={item.time || ''}
+                                      onChange={(e) => {
+                                        const items = parseContents(mod);
+                                        items[index].time = e.target.value;
+                                        setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
+                                      }}
+                                      onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })}
+                                    />
+                                  </div>
+                                </div>
+
+                                {(!item.class_type || item.class_type === 'VIRTUAL') ? (
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2">Meeting Link</label>
+                                    <input 
+                                      type="text" 
+                                      className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-emerald-500 outline-none"
+                                      placeholder="https://zoom.us/j/..."
+                                      value={item.url || ''}
+                                      onChange={(e) => {
+                                        const items = parseContents(mod);
+                                        items[index].url = e.target.value;
+                                        setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
+                                      }}
+                                      onBlur={(e) => {
+                                        const items = parseContents(mod);
+                                        handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                                      }}
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="space-y-4">
+                                    <div>
+                                      <label className="block text-xs font-medium text-slate-700 mb-1">Address</label>
+                                      <input 
+                                        type="text" 
+                                        className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-emerald-500 outline-none"
+                                        placeholder="123 Learning Street, City"
+                                        value={item.address || ''}
+                                        onChange={(e) => {
+                                          const items = parseContents(mod);
+                                          items[index].address = e.target.value;
+                                          setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
+                                        }}
+                                        onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })}
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="block text-xs font-medium text-slate-700 mb-1">Classroom / Room Number</label>
+                                      <input 
+                                        type="text" 
+                                        className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm focus:ring-emerald-500 outline-none"
+                                        placeholder="Room 4B"
+                                        value={item.classroom || ''}
+                                        onChange={(e) => {
+                                          const items = parseContents(mod);
+                                          items[index].classroom = e.target.value;
+                                          setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m));
+                                        }}
+                                        onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })}
+                                      />
+                                    </div>
+                                  </div>
+                                )}
+
+                                <div>
+                                  <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center gap-2">Description / Instructions</label>
+                                  <textarea
+                                    className="w-full border border-slate-300 rounded-md shadow-sm p-2 text-sm outline-none"
+                                    placeholder="Provide meeting agenda or notes..."
+                                    rows={2}
+                                    value={item.description || ''}
+                                    onChange={e => { 
+                                      const items = parseContents(mod); 
+                                      items[index].description = e.target.value; 
+                                      setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items) } : m)); 
+                                    }} 
+                                    onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })}
+                                  />
+                                </div>
                                 <p className="text-[10px] text-gray-400 mt-1">This module will be schedule-able in the Cohort Configurator.</p>
                                 
-                                {item.url && item.url.length > 5 && (
+                                {(!item.class_type || item.class_type === 'VIRTUAL') && item.url && item.url.length > 5 && (
                                   <div className="mt-4 p-4 rounded-xl border border-emerald-100 bg-emerald-50/50 flex items-center justify-between">
                                     <div className="flex items-center gap-3 overflow-hidden pr-4">
                                       <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
