@@ -203,6 +203,11 @@ export default function LessonPlayerPage() {
   const [completedItems, setCompletedItems] = useState<number[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  useEffect(() => {
+    setActiveIndex(0);
+    setCompletedItems([]);
+  }, [moduleId]);
+
   const { data: dashboardData, isLoading: dashLoading } = useQuery({
     queryKey: ['student-dashboard-summary'],
     queryFn: async () => {
@@ -223,7 +228,7 @@ export default function LessonPlayerPage() {
   const queryClient = useQueryClient();
   const progressMutation = useMutation({
     mutationFn: async (completed: boolean) => {
-      const res = await coursesApi.post(`/api/student/journey/modules/${moduleId}/progress`, {
+      const res = await coursesApi.post(`/api/modules/${moduleId}/progress`, {
         completed
       });
       return res.data;
@@ -279,6 +284,10 @@ export default function LessonPlayerPage() {
           } else {
             router.push('/dashboard/journey');
           }
+        },
+        onError: (error) => {
+          console.error("Failed to mark module as complete:", error);
+          alert("Failed to save progress. Please try again or check your connection.");
         }
       });
     } else {
@@ -289,30 +298,31 @@ export default function LessonPlayerPage() {
   const currentItem = items[activeIndex];
 
   return (
-    <div className="fixed inset-0 z-[100] bg-white flex overflow-hidden font-grotesk text-gray-900">
-      {/* Main Left Content */}
-      <div className="flex-1 flex flex-col h-full relative transition-all duration-300">
-        <header className="h-16 border-b border-gray-100 flex items-center justify-between px-6 bg-white shrink-0">
-          <Link href="/dashboard/journey" className="flex items-center gap-2 text-gray-500 hover:text-gray-900 font-medium text-sm">
-            <ArrowLeftIcon className="w-4 h-4" />
-            Back to Journey Map
-          </Link>
-          <div className="flex items-center gap-4">
-            <span className="text-sm font-bold text-gray-900 hidden md:inline-block">{stage.title}</span>
-            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 bg-gray-50 rounded-lg hover:bg-gray-100 text-gray-600">
-              <Bars3Icon className="w-5 h-5" />
-            </button>
-          </div>
-        </header>
+    <div className="fixed inset-0 z-[100] bg-white overflow-y-auto font-grotesk text-gray-900">
+      <div className="flex min-h-full w-full">
+        {/* Main Left Content */}
+        <div className="flex-1 flex flex-col relative transition-all duration-300">
+          <header className="h-16 border-b border-gray-100 flex items-center justify-between px-6 bg-white sticky top-0 z-50 shrink-0">
+            <Link href="/dashboard/journey" className="flex items-center gap-2 text-gray-500 hover:text-gray-900 font-medium text-sm">
+              <ArrowLeftIcon className="w-4 h-4" />
+              Back to Journey Map
+            </Link>
+            <div className="flex items-center gap-4">
+              <span className="text-sm font-medium text-gray-900 hidden md:inline-block">{stage.title}</span>
+              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 bg-gray-50 rounded-lg hover:bg-gray-100 text-gray-600">
+                <Bars3Icon className="w-5 h-5" />
+              </button>
+            </div>
+          </header>
 
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-12 flex flex-col items-center">
+          <main className="flex-1 bg-gray-50 p-4 md:p-12 flex flex-col items-center">
           {items.length === 0 ? (
             <div className="w-full max-w-5xl bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center text-gray-500 mt-10">
               This module has no content items baked into it yet.
             </div>
           ) : (
             <>
-              <div className="w-full max-w-5xl bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10 min-h-[60vh]">
+              <div className="w-full max-w-5xl bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10 min-h-[60vh] relative">
                 
                 {currentItem?.type === 'VIDEO' && (
                   <div className="space-y-6">
@@ -432,6 +442,12 @@ export default function LessonPlayerPage() {
                   return (
                     <div className="space-y-6">
                       {currentItem.title && <h2 className="font-bold text-2xl">{currentItem.title}</h2>}
+                      {currentItem.content && (
+                        <div 
+                          className="prose prose-lg prose-blue max-w-none text-gray-800"
+                          dangerouslySetInnerHTML={{ __html: currentItem.content }}
+                        />
+                      )}
                       <div className="w-full h-[600px] relative rounded-xl overflow-hidden shadow-sm bg-white border border-gray-200">
                         {currentItem.url ? (
                           <iframe src={iframeSrc} className="w-full h-full border-0 bg-white" title="HTML Content" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" />
@@ -491,7 +507,7 @@ export default function LessonPlayerPage() {
 
       {/* Right Sidebar */}
       {sidebarOpen && (
-        <aside className="w-80 border-l border-gray-200 bg-white h-full flex flex-col shrink-0 z-10">
+        <aside className="w-80 border-l border-gray-200 bg-white sticky top-0 h-screen flex flex-col shrink-0 z-10 overflow-y-auto">
           <div className="p-6 border-b border-gray-100">
             <h3 className="font-bold text-gray-900 text-lg">Module Contents</h3>
             <div className="flex items-center gap-3 mt-3">
@@ -514,17 +530,17 @@ export default function LessonPlayerPage() {
                 <button 
                   key={idx}
                   onClick={() => setActiveIndex(idx)}
-                  className={`w-full text-left flex flex-col justify-center px-4 py-3 rounded-xl relative transition-colors ${isActive ? 'text-[#146ef5] bg-[#146ef5]/5 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-10 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}
+                  className={`w-full text-left flex flex-col justify-center px-4 py-3 rounded-xl relative transition-colors ${isActive ? 'text-gray-900 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-10 before:bg-gray-900 before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}
                 >
                   <div className="flex items-center gap-3 w-full">
-                    <div className={`shrink-0 ${isCompleted ? 'text-green-500' : (isActive ? 'text-[#146ef5]' : 'text-gray-400')}`}>
+                    <div className={`shrink-0 ${isCompleted ? 'text-green-500' : (isActive ? 'text-gray-900' : 'text-gray-400')}`}>
                       {isCompleted ? <CheckCircleSolid className="w-6 h-6" /> : getIconForType(item.type)}
                     </div>
                     <div className="truncate flex-1">
-                      <p className={`text-[15px] font-normal truncate leading-tight ${isActive ? 'text-[#146ef5] font-semibold' : 'text-gray-700'}`}>
+                      <p className={`text-[15px] font-normal truncate leading-tight ${isActive ? 'text-gray-900 font-semibold' : 'text-gray-700'}`}>
                         {item.title || item.type}
                       </p>
-                      <p className={`text-[11px] capitalize mt-0.5 ${isActive ? 'text-[#146ef5]/70' : 'text-gray-400'}`}>
+                      <p className={`text-[11px] capitalize mt-0.5 ${isActive ? 'text-gray-500' : 'text-gray-400'}`}>
                         {item.type.toLowerCase()}
                       </p>
                     </div>
@@ -535,6 +551,7 @@ export default function LessonPlayerPage() {
           </div>
         </aside>
       )}
+      </div>
     </div>
   );
 }

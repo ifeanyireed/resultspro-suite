@@ -59,6 +59,7 @@ func (h *Handler) UpdateModuleProgress(c *gin.Context) {
 	err := db.WithTenant(c).Where("user_id = ? AND module_id = ?", userID.(string), moduleID).First(&progress).Error
 
 	now := time.Now()
+	wasCompleted := false
 	if err != nil {
 		progress = models.ModuleProgress{
 			TenantID:         tenantID.(string),
@@ -74,18 +75,25 @@ func (h *Handler) UpdateModuleProgress(c *gin.Context) {
 		}
 		db.WithTenant(c).Create(&progress)
 	} else {
+		wasCompleted = progress.Completed
 		progress.Completed = input.Completed
 		progress.ReflectionAnswer = input.ReflectionAnswer
 		progress.QuizScore = input.QuizScore
 		progress.QuizPassed = input.QuizPassed
 		progress.UpdatedAt = now
+		if input.Completed && !wasCompleted {
+			progress.CompletedAt = &now
+		}
 		db.WithTenant(c).Save(&progress)
 	}
 
-	if input.Completed {
+	if input.Completed && !wasCompleted {
 		db.WithTenant(c).Model(&models.Enrollment{}).
 			Where("user_id = ?", userID.(string)).
-			Update("current_xp", gorm.Expr("current_xp + ?", 100))
+			Updates(map[string]interface{}{
+				"current_xp":           gorm.Expr("current_xp + ?", 100),
+				"current_stage_number": gorm.Expr("current_stage_number + ?", 1),
+			})
 	}
 
 	c.JSON(http.StatusOK, gin.H{"progress": progress})
