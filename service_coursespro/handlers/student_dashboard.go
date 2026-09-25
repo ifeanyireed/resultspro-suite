@@ -81,52 +81,70 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 	var module models.JourneyModule
 	var currentModule *ModuleData
 	if stage.ID != "" {
-		db.DB.Table("crs_journey_modules").
-			Select("crs_journey_modules.*").
-			Joins("LEFT JOIN crs_module_progress mp ON mp.module_id = crs_journey_modules.id AND mp.user_id = ?", userID).
-			Where("crs_journey_modules.stage_id = ? AND (mp.completed IS NULL OR mp.completed = false)", stage.ID).
-			Order("crs_journey_modules.order_index ASC").
-			First(&module)
-		if module.ID != "" {
-			var summaryPoints []string
-			if module.AISummary != "" {
-				// simple split by newline
-				summaryPoints = strings.Split(strings.ReplaceAll(module.AISummary, "\r\n", "\n"), "\n")
-			} else {
-				summaryPoints = []string{
-					"Hooks must start with 'use' to leverage React's linter.",
-					"They allow you to reuse stateful logic without changing your component hierarchy.",
-				}
-			}
+		// Fetch progress for this stage (which is treated as "module" in frontend)
+		var progress models.ModuleProgress
+		db.DB.Where("user_id = ? AND module_id = ?", userID, stage.ID).First(&progress)
 
-			currentModule = &ModuleData{
-				Title:       module.Title,
-				Description: module.Description,
-				Duration:    module.DurationText,
-				AiSummary:   summaryPoints,
-			}
-			if currentModule.Duration == "" {
-				currentModule.Duration = "45 mins" // Fallback UI text
-			}
-		} else {
-			// Check if the stage actually has any modules at all
-			var totalModulesInStage int64
-			db.DB.Table("crs_journey_modules").Where("stage_id = ?", stage.ID).Count(&totalModulesInStage)
+		// Parse the stage contents JSON
+		var items []map[string]interface{}
+		if stage.ContentsJSON != "" {
+			json.Unmarshal([]byte(stage.ContentsJSON), &items)
+		}
 
-			if totalModulesInStage == 0 {
-				currentModule = &ModuleData{
-					Title:       "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " (Coming Soon)",
-					Description: "Your instructor is still preparing the content for this stage. Check back soon!",
-					Duration:    "Pending",
-					AiSummary:   []string{"This stage is currently empty.", "Wait for your instructor to publish modules here."},
-				}
-			} else {
+		if len(items) > 0 {
+			if progress.Completed {
 				currentModule = &ModuleData{
 					Title:       "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " Completed",
 					Description: "You have completed all modules for this stage. Please complete your project or wait for your mentor's review to proceed to the next stage.",
 					Duration:    "Pending",
 					AiSummary:   []string{"Great job completing all modules in this stage!", "Next step: Project submission or review."},
 				}
+			} else {
+				activeIndex := progress.LastActiveIndex
+				if activeIndex >= len(items) {
+					activeIndex = len(items) - 1
+				}
+				if activeIndex < 0 {
+					activeIndex = 0
+				}
+				
+				item := items[activeIndex]
+				title := "Content Item"
+				if t, ok := item["title"].(string); ok && t != "" {
+					title = t
+				} else if typ, ok := item["type"].(string); ok && typ != "" {
+					title = typ
+				}
+
+				desc := "Continue your learning journey."
+				if d, ok := item["description"].(string); ok && d != "" {
+					desc = d
+				} else if c, ok := item["content"].(string); ok && c != "" {
+					if len(c) > 100 {
+						desc = c[:97] + "..."
+					} else {
+						desc = c
+					}
+				}
+				
+				summaryPoints := []string{
+					"Resume from where you left off.",
+					fmt.Sprintf("You are on content block %d of %d.", activeIndex+1, len(items)),
+				}
+
+				currentModule = &ModuleData{
+					Title:       title,
+					Description: desc,
+					Duration:    "15 mins", // Fallback text
+					AiSummary:   summaryPoints,
+				}
+			}
+		} else {
+			currentModule = &ModuleData{
+				Title:       "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " (Coming Soon)",
+				Description: "Your instructor is still preparing the content for this stage. Check back soon!",
+				Duration:    "Pending",
+				AiSummary:   []string{"This stage is currently empty.", "Wait for your instructor to publish modules here."},
 			}
 		}
 	}
@@ -182,6 +200,15 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 			// If they have fully completed this top-level module, add its blocks to completed count
 			if s.StageNumber < enrollment.CurrentStageNumber {
 				completedStages += blocksInStage
+			} else if s.StageNumber == enrollment.CurrentStageNumber {
+				var progress models.ModuleProgress
+				db.DB.Where("user_id = ? AND module_id = ?", userID, s.ID).First(&progress)
+				if progress.CompletedItems != "" && progress.CompletedItems != "[]" {
+					var comp []int
+					if err := json.Unmarshal([]byte(progress.CompletedItems), &comp); err == nil {
+						completedStages += int64(len(comp))
+					}
+				}
 			}
 		}
 	}

@@ -203,11 +203,6 @@ export default function LessonPlayerPage() {
   const [completedItems, setCompletedItems] = useState<number[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  useEffect(() => {
-    setActiveIndex(0);
-    setCompletedItems([]);
-  }, [moduleId]);
-
   const { data: dashboardData, isLoading: dashLoading } = useQuery({
     queryKey: ['student-dashboard-summary'],
     queryFn: async () => {
@@ -225,11 +220,35 @@ export default function LessonPlayerPage() {
     enabled: !!dashboardData?.cohort_id
   });
 
+  useEffect(() => {
+    if (journeyData && journeyData.progress) {
+      const p = journeyData.progress.find((pr: any) => pr.module_id === moduleId);
+      if (p) {
+        setActiveIndex(p.last_active_index || 0);
+        if (p.completed_items) {
+          try {
+            setCompletedItems(JSON.parse(p.completed_items));
+          } catch(e) {}
+        } else {
+          setCompletedItems([]);
+        }
+      } else {
+        setActiveIndex(0);
+        setCompletedItems([]);
+      }
+    } else if (!journeyLoading) {
+      setActiveIndex(0);
+      setCompletedItems([]);
+    }
+  }, [moduleId, journeyData, journeyLoading]);
+
   const queryClient = useQueryClient();
   const progressMutation = useMutation({
-    mutationFn: async (completed: boolean) => {
+    mutationFn: async ({ completed, last_active_index, completed_items }: { completed: boolean, last_active_index: number, completed_items: string }) => {
       const res = await coursesApi.post(`/api/modules/${moduleId}/progress`, {
-        completed
+        completed,
+        last_active_index,
+        completed_items
       });
       return res.data;
     },
@@ -272,12 +291,14 @@ export default function LessonPlayerPage() {
   const nextStage = journeyData.stages[currentStageIndex + 1];
 
   const handleMarkComplete = () => {
-    if (!completedItems.includes(activeIndex)) {
-      setCompletedItems([...completedItems, activeIndex]);
+    let newCompleted = [...completedItems];
+    if (!newCompleted.includes(activeIndex)) {
+      newCompleted.push(activeIndex);
+      setCompletedItems(newCompleted);
     }
     
     if (activeIndex === items.length - 1) {
-      progressMutation.mutate(true, {
+      progressMutation.mutate({ completed: true, last_active_index: activeIndex, completed_items: JSON.stringify(newCompleted) }, {
         onSuccess: () => {
           if (nextStage) {
             router.push(`/dashboard/journey/${nextStage.id}`);
@@ -291,7 +312,16 @@ export default function LessonPlayerPage() {
         }
       });
     } else {
-      setActiveIndex(activeIndex + 1);
+      const nextIndex = activeIndex + 1;
+      progressMutation.mutate({ completed: false, last_active_index: nextIndex, completed_items: JSON.stringify(newCompleted) }, {
+        onSuccess: () => {
+          setActiveIndex(nextIndex);
+        },
+        onError: (error) => {
+          console.error("Failed to mark module as complete:", error);
+          alert("Failed to save progress. Please try again or check your connection.");
+        }
+      });
     }
   };
 

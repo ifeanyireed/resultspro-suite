@@ -138,6 +138,8 @@ type ModuleProgress struct {
 	UserID           string     `gorm:"size:64;index;not null" json:"user_id"`
 	ModuleID         string     `gorm:"size:64;index;not null" json:"module_id"`
 	Completed        bool       `gorm:"default:false" json:"completed"`
+	LastActiveIndex  int        `gorm:"default:0" json:"last_active_index"`
+	CompletedItems   string     `gorm:"type:text" json:"completed_items"` // JSON array of completed indices
 	ReflectionAnswer string     `gorm:"type:text" json:"reflection_answer"`
 	QuizScore        int        `gorm:"default:0" json:"quiz_score"`
 	QuizPassed       bool       `gorm:"default:false" json:"quiz_passed"`
