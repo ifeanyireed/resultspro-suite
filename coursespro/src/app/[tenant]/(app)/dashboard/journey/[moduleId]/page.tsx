@@ -15,7 +15,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as CheckCircleSolid } from '@heroicons/react/24/solid';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import api from '@/lib/api';
+import api, { coursesApi } from '@/lib/api';
 
 type ContentItem = {
   id: string;
@@ -146,7 +146,7 @@ export default function LessonPlayerPage() {
   const { data: dashboardData, isLoading: dashLoading } = useQuery({
     queryKey: ['student-dashboard-summary'],
     queryFn: async () => {
-      const res = await api.get('/api/student/dashboard/summary');
+      const res = await coursesApi.get('/api/student/dashboard/summary');
       return res.data;
     }
   });
@@ -155,7 +155,7 @@ export default function LessonPlayerPage() {
   const { data: journeyData, isLoading: journeyLoading } = useQuery({
     queryKey: ['cohort-journey', dashboardData?.cohort_id],
     queryFn: async () => {
-      const res = await api.get(`/api/cohorts/${dashboardData.cohort_id}/journey`);
+      const res = await coursesApi.get(`/api/cohorts/${dashboardData.cohort_id}/journey`);
       return res.data;
     },
     enabled: !!dashboardData?.cohort_id
@@ -164,7 +164,7 @@ export default function LessonPlayerPage() {
   const queryClient = useQueryClient();
   const progressMutation = useMutation({
     mutationFn: async (completed: boolean) => {
-      const res = await api.post(`/api/student/journey/modules/${moduleId}/progress`, {
+      const res = await coursesApi.post(`/api/student/journey/modules/${moduleId}/progress`, {
         completed
       });
       return res.data;
