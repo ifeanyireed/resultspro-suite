@@ -61,6 +61,11 @@ function getEmbedUrl(url: string) {
   return url;
 };
 
+function stripHtml(html: string) {
+  if (!html) return '';
+  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 function getIconForType(type: string) {
   switch (type) {
     case 'VIDEO': return <PlayIcon className="w-6 h-6" />;
@@ -594,7 +599,7 @@ export default function LessonPlayerPage() {
                         {item.description 
                           ? item.description 
                           : (item.content 
-                              ? (item.content.length > 50 ? item.content.substring(0, 47) + '...' : item.content)
+                              ? (stripHtml(item.content).length > 50 ? stripHtml(item.content).substring(0, 47) + '...' : stripHtml(item.content))
                               : item.type.toLowerCase())}
                       </p>
                     </div>
