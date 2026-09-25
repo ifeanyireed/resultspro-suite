@@ -192,8 +192,8 @@ func (h *Handler) AdminGetPrograms(c *gin.Context) {
 
 		var modulesCount int64
 		db.WithTenant(c).Model(&models.JourneyModule{}).
-			Joins("JOIN journey_stages ON journey_stages.id = journey_modules.stage_id").
-			Where("journey_stages.program_id = ?", p.ID).
+			Joins("JOIN crs_journey_stages ON crs_journey_stages.id = crs_journey_modules.stage_id").
+			Where("crs_journey_stages.program_id = ?", p.ID).
 			Count(&modulesCount)
 
 		result = append(result, ProgramWithStats{
