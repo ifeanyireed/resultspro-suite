@@ -35,16 +35,22 @@ export default async function CohortsPage({ params }: { params: Promise<{ tenant
   return (
     <main>
       <Navbar tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} />
-      <section className="section-py bg-navy text-white text-center relative overflow-hidden" style={{ marginTop: "-72px", paddingTop: "calc(5rem + 72px)" }}>
-        {tenant.slideshow_images && (
-          <div className="absolute inset-0 z-0 opacity-40">
+      <section className="section-py bg-navy text-white text-center relative overflow-hidden flex flex-col justify-center" style={{ marginTop: "-72px", paddingTop: "calc(5rem + 72px)", minHeight: "60vh", background: "var(--color-nets-navy-dark)" }}>
+        {tenant.slideshow_images && tenant.slideshow_images.length > 0 && (
+          <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
             <CohortSlideshow 
               imagesRaw={tenant.slideshow_images} 
-              className="w-full h-full relative"
+              className="w-full h-full absolute inset-0"
             />
+            {/* Cinematic overlay matching the main hero */}
+            <div style={{
+              position: 'absolute', inset: 0, zIndex: 30, pointerEvents: 'none',
+              background: 'linear-gradient(105deg, rgba(13,16,96,0.95) 0%, rgba(13,16,96,0.7) 45%, rgba(13,16,96,0) 100%)',
+            }}></div>
+            <div style={{ position: 'absolute', inset: 0, zIndex: 30, pointerEvents: 'none', background: 'linear-gradient(to top, rgba(13,16,96,0.8) 0%, transparent 60%)' }}></div>
           </div>
         )}
-        <div className="container-nets max-w-3xl pt-16 relative z-10">
+        <div className="container-nets max-w-3xl pt-16 pb-16 relative z-10 flex-1 flex flex-col justify-center">
           <h1 className="text-d2 fw-300 mb-6">Browse Open Cohorts</h1>
           <p className="text-body-lg text-white/90 mb-10">
             Join a live, interactive learning environment led by industry experts.

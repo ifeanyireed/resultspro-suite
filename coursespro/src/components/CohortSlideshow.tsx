@@ -44,7 +44,7 @@ export default function CohortSlideshow({ imagesRaw, className = "w-full h-[400p
           <img
             src={src}
             alt={`Slide ${index + 1}`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover" style={{ objectFit: 'cover' }}
           />
         </div>
       ))}
