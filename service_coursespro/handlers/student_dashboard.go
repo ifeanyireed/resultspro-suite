@@ -80,6 +80,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		db.DB.Where("program_id = ? AND stage_number = ?", *cohort.ProgramID, enrollment.CurrentStageNumber).First(&stage)
 	}
 
+	var nextMilestoneItem map[string]interface{}
 	var currentModule *ModuleData
 	if stage.ID != "" {
 		// Fetch progress for this stage (which is treated as "module" in frontend)
@@ -111,6 +112,16 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 					activeIndex = 0
 				}
 				
+				for i := activeIndex; i < len(items); i++ {
+					if t, ok := items[i]["type"].(string); ok {
+						t = strings.ToUpper(t)
+						if t == "ASSIGNMENT" || t == "QUIZ" || t == "LIVE_CLASS" || t == "PROJECT" || t == "COMPILER" {
+							nextMilestoneItem = items[i]
+							break
+						}
+					}
+				}
+
 				item := items[activeIndex]
 				contentTitle := "Content Item"
 				if t, ok := item["title"].(string); ok && t != "" {
@@ -296,7 +307,38 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		isStageEnd = true
 	}
 
-	if isStageEnd {
+	if nextMilestoneItem != nil {
+		mTitle := "Milestone"
+		if t, ok := nextMilestoneItem["title"].(string); ok && t != "" {
+			mTitle = t
+		} else if typ, ok := nextMilestoneItem["type"].(string); ok && typ != "" {
+			mTitle = typ
+		}
+		
+		mDesc := "Complete this milestone to progress."
+		if d, ok := nextMilestoneItem["description"].(string); ok && d != "" {
+			mDesc = d
+		} else if c, ok := nextMilestoneItem["content"].(string); ok && c != "" {
+			if len(c) > 60 {
+				mDesc = c[:57] + "..."
+			} else {
+				mDesc = c
+			}
+		}
+
+		mTime := "Pending"
+		if dur, ok := nextMilestoneItem["duration"].(string); ok && dur != "" {
+			mTime = dur
+		} else if durNum, ok := nextMilestoneItem["duration"].(float64); ok {
+			mTime = fmt.Sprintf("%.0f mins", durNum)
+		}
+
+		upcomingMilestone = map[string]interface{}{
+			"title":       mTitle,
+			"description": mDesc,
+			"time":        mTime,
+		}
+	} else if isStageEnd {
 		upcomingMilestone = map[string]interface{}{
 			"title":       "Stage " + fmt.Sprintf("%d", enrollment.CurrentStageNumber) + " Project",
 			"description": "Submit your capstone project for mentor review to unlock the next stage.",
