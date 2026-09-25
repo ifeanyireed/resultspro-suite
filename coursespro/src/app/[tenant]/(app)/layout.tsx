@@ -135,7 +135,7 @@ export default function AppLayout({
                 </div>
                 {dashboardData?.enrollment?.current_stage && (
                   <span className="bg-[#146ef5] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-                    Module {dashboardData.enrollment.current_stage}
+                    Stage {dashboardData.enrollment.current_stage}
                   </span>
                 )}
               </Link>
