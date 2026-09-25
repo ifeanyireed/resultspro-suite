@@ -15,7 +15,8 @@ import {
   VideoCameraIcon,
   SpeakerWaveIcon,
   PresentationChartBarIcon,
-  ClipboardDocumentCheckIcon
+  ClipboardDocumentCheckIcon,
+  ClockIcon
 } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as CheckCircleSolid } from '@heroicons/react/24/solid';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -82,7 +83,7 @@ function getIconForType(type: string) {
   }
 }
 
-function InteractiveQuizRenderer({ quizId }: { quizId: string }) {
+function InteractiveQuizRenderer({ quizId, onQuizCompleted }: { quizId: string, onQuizCompleted?: (score: number, passed: boolean) => void }) {
   const [quiz, setQuiz] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState('');
@@ -208,7 +209,21 @@ function InteractiveQuizRenderer({ quizId }: { quizId: string }) {
       <div className="flex justify-end pt-6 border-t border-gray-100 mt-8">
         {!submitted && (
           <button
-            onClick={() => setSubmitted(true)}
+            onClick={() => {
+              setSubmitted(true);
+              let correct = 0;
+              let mcqCount = 0;
+              questions.forEach((q: any, idx: number) => {
+                if (q.question_type !== 'THEORY') {
+                  mcqCount++;
+                  if (answers[idx] === q.correct_index) correct++;
+                }
+              });
+              let score = 100;
+              if (mcqCount > 0) score = (correct / mcqCount) * 100;
+              const passed = score >= 80;
+              if (onQuizCompleted) onQuizCompleted(score, passed);
+            }}
             className="bg-[#146ef5] text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-[#105bd1] transition-all shadow-sm"
           >
             Submit Quiz
@@ -227,6 +242,7 @@ export default function LessonPlayerPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [completedItems, setCompletedItems] = useState<number[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [quizScores, setQuizScores] = useState<Record<number, { score: number, passed: boolean }>>({});
 
   const { data: dashboardData, isLoading: dashLoading } = useQuery({
     queryKey: ['student-dashboard-summary'],
@@ -267,13 +283,46 @@ export default function LessonPlayerPage() {
     }
   }, [moduleId, journeyData, journeyLoading]);
 
+  const schedule = journeyData?.schedules?.[moduleId];
+  const deadline = schedule?.end_date || journeyData?.cohort_end_date;
+  const [timeLeft, setTimeLeft] = useState('');
+  const [isValidTime, setIsValidTime] = useState(true);
+
+  React.useEffect(() => {
+    if (!deadline) {
+      setTimeLeft('No deadline');
+      return;
+    }
+    const end = new Date(deadline).getTime();
+    const updateTimer = () => {
+      const now = new Date().getTime();
+      const dist = end - now;
+      if (dist < 0) {
+        setTimeLeft("Deadline passed");
+        setIsValidTime(false);
+      } else {
+        const d = Math.floor(dist / (1000 * 60 * 60 * 24));
+        const h = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
+        setTimeLeft(`${d}d ${h}h ${m}m remaining`);
+        setIsValidTime(true);
+      }
+    };
+    updateTimer();
+    const timer = setInterval(updateTimer, 60000);
+    return () => clearInterval(timer);
+  }, [deadline]);
+
+
   const queryClient = useQueryClient();
   const progressMutation = useMutation({
-    mutationFn: async ({ completed, last_active_index, completed_items }: { completed: boolean, last_active_index: number, completed_items: string }) => {
+    mutationFn: async ({ completed, last_active_index, completed_items, quiz_score, quiz_passed }: { completed: boolean, last_active_index: number, completed_items: string, quiz_score?: number, quiz_passed?: boolean }) => {
       const res = await coursesApi.post(`/api/modules/${moduleId}/progress`, {
         completed,
         last_active_index,
-        completed_items
+        completed_items,
+        quiz_score,
+        quiz_passed
       });
       return res.data;
     },
@@ -317,14 +366,35 @@ export default function LessonPlayerPage() {
   const nextStage = journeyData.stages[currentStageIndex + 1];
 
   const handleMarkComplete = () => {
+    const currentItem = items[activeIndex];
+    
+    let quizScore: number | undefined = undefined;
+    let quizPassed: boolean | undefined = undefined;
+    
+    if (currentItem?.type === 'QUIZ') {
+      const result = quizScores[activeIndex];
+      if (!result) {
+        alert("Please submit the quiz before proceeding.");
+        return;
+      }
+      if (!result.passed) {
+        alert(`You scored ${result.score.toFixed(0)}%. You must score at least 80% to proceed.`);
+        return;
+      }
+      quizScore = result.score;
+      quizPassed = result.passed;
+    }
+
     let newCompleted = [...completedItems];
     if (!newCompleted.includes(activeIndex)) {
       newCompleted.push(activeIndex);
       setCompletedItems(newCompleted);
     }
     
-    if (activeIndex === items.length - 1) {
-      progressMutation.mutate({ completed: true, last_active_index: activeIndex, completed_items: JSON.stringify(newCompleted) }, {
+    const isFullyCompleted = newCompleted.length === items.length;
+    
+    if (activeIndex === items.length - 1 && isFullyCompleted) {
+      progressMutation.mutate({ completed: true, last_active_index: activeIndex, completed_items: JSON.stringify(newCompleted), quiz_score: quizScore, quiz_passed: quizPassed }, {
         onSuccess: () => {
           if (nextStage) {
             router.push(`/dashboard/journey/${nextStage.id}`);
@@ -337,9 +407,16 @@ export default function LessonPlayerPage() {
           alert("Failed to save progress. Please try again or check your connection.");
         }
       });
+    } else if (activeIndex === items.length - 1 && !isFullyCompleted) {
+      alert("You have marked this block complete, but there are still incomplete blocks in this module. Please complete them all to unlock the next stage.");
+      progressMutation.mutate({ completed: false, last_active_index: activeIndex, completed_items: JSON.stringify(newCompleted), quiz_score: quizScore, quiz_passed: quizPassed }, {
+        onError: (error) => {
+          console.error("Failed to mark block as complete:", error);
+        }
+      });
     } else {
       const nextIndex = activeIndex + 1;
-      progressMutation.mutate({ completed: false, last_active_index: nextIndex, completed_items: JSON.stringify(newCompleted) }, {
+      progressMutation.mutate({ completed: false, last_active_index: nextIndex, completed_items: JSON.stringify(newCompleted), quiz_score: quizScore, quiz_passed: quizPassed }, {
         onSuccess: () => {
           setActiveIndex(nextIndex);
         },
@@ -364,6 +441,12 @@ export default function LessonPlayerPage() {
               Back to Journey Map
             </Link>
             <div className="flex items-center gap-4">
+              {timeLeft && (
+                <div className={`text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5 ${isValidTime ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
+                  <ClockIcon className="w-4 h-4" />
+                  {timeLeft}
+                </div>
+              )}
               <span className="text-sm font-medium text-gray-900 hidden md:inline-block">{stage.title}</span>
               <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 bg-gray-50 rounded-lg hover:bg-gray-100 text-gray-600">
                 <Bars3Icon className="w-5 h-5" />
@@ -516,7 +599,12 @@ export default function LessonPlayerPage() {
                 })()}
 
                 {currentItem?.type === 'QUIZ' && (
-                  <InteractiveQuizRenderer quizId={currentItem.url || ''} />
+                  <InteractiveQuizRenderer 
+                    quizId={currentItem.url || ''} 
+                    onQuizCompleted={(score, passed) => {
+                      setQuizScores(prev => ({ ...prev, [activeIndex]: { score, passed } }));
+                    }}
+                  />
                 )}
 
                 {(currentItem?.type === 'PDF' || currentItem?.type === 'PPT') && (

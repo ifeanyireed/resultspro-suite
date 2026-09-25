@@ -42,7 +42,18 @@ func (h *Handler) GetCohortJourney(c *gin.Context) {
 		db.WithTenant(c).Where("user_id = ? AND module_id IN ?", userID.(string), stageIDs).Find(&progresses)
 	}
 
-	c.JSON(http.StatusOK, gin.H{"stages": stages, "modules": modules, "progress": progresses})
+	var schedules map[string]interface{}
+	if cohort.ModuleSchedulesJSON != "" {
+		json.Unmarshal([]byte(cohort.ModuleSchedulesJSON), &schedules)
+	}
+	
+	// Default to cohort end date if schedules not mapped for stage
+	var globalEnd string
+	if !cohort.EndDate.IsZero() {
+		globalEnd = cohort.EndDate.Format(time.RFC3339)
+	}
+
+	c.JSON(http.StatusOK, gin.H{"stages": stages, "modules": modules, "progress": progresses, "schedules": schedules, "cohort_end_date": globalEnd})
 }
 
 func (h *Handler) UpdateModuleProgress(c *gin.Context) {
@@ -120,7 +131,34 @@ func (h *Handler) UpdateModuleProgress(c *gin.Context) {
 		db.WithTenant(c).Save(&progress)
 	}
 
-	if addedXP > 0 {
+	isValid := true
+	var enrollment models.Enrollment
+	db.WithTenant(c).Where("user_id = ?", userID.(string)).First(&enrollment)
+	
+	if enrollment.CohortID != "" {
+		var cohort models.Cohort
+		if db.WithTenant(c).Where("id = ?", enrollment.CohortID).First(&cohort).Error == nil {
+			if cohort.EndDate.IsZero() == false && now.After(cohort.EndDate) {
+				isValid = false
+			}
+			if cohort.ModuleSchedulesJSON != "" {
+				var schedules map[string]map[string]interface{}
+				if json.Unmarshal([]byte(cohort.ModuleSchedulesJSON), &schedules) == nil {
+					if sched, ok := schedules[moduleID]; ok {
+						if endStr, ok := sched["end_date"].(string); ok && endStr != "" {
+							if endT, err := time.Parse(time.RFC3339, endStr); err == nil {
+								if now.After(endT) {
+									isValid = false
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if isValid && addedXP > 0 {
 		db.WithTenant(c).Model(&models.Enrollment{}).
 			Where("user_id = ?", userID.(string)).
 			Updates(map[string]interface{}{
@@ -129,13 +167,16 @@ func (h *Handler) UpdateModuleProgress(c *gin.Context) {
 	}
 
 	if input.Completed && !wasCompleted {
+		updates := map[string]interface{}{
+			"current_stage_number": gorm.Expr("current_stage_number + ?", 1),
+		}
+		if isValid {
+			updates["current_xp"] = gorm.Expr("current_xp + ?", 100)
+		}
 		db.WithTenant(c).Model(&models.Enrollment{}).
 			Where("user_id = ?", userID.(string)).
-			Updates(map[string]interface{}{
-				"current_xp":           gorm.Expr("current_xp + ?", 100),
-				"current_stage_number": gorm.Expr("current_stage_number + ?", 1),
-			})
+			Updates(updates)
 	}
 
-	c.JSON(http.StatusOK, gin.H{"progress": progress})
+	c.JSON(http.StatusOK, gin.H{"progress": progress, "is_valid": isValid})
 }
