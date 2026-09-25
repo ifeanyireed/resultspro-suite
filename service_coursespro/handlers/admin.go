@@ -649,3 +649,31 @@ func (h *Handler) AdminRemoveStudentFromCohort(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Student removed from cohort successfully"})
 }
+
+func (h *Handler) AdminResetStudentProgress(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	enrollmentID := c.Param("id")
+
+	var enrollment models.Enrollment
+	if err := db.WithTenant(c).Where("id = ? AND tenant_id = ?", enrollmentID, tenantID).First(&enrollment).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Enrollment not found"})
+		return
+	}
+
+	// Reset XP and stages
+	if err := db.WithTenant(c).Model(&enrollment).Updates(map[string]interface{}{
+		"current_stage_number": 1,
+		"current_xp":           0,
+		"streak_days":          0,
+	}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to reset student progress"})
+		return
+	}
+
+	// Delete progress records for this user in this tenant
+	db.WithTenant(c).Where("user_id = ? AND tenant_id = ?", enrollment.UserID, tenantID).Delete(&models.ModuleProgress{})
+	db.WithTenant(c).Where("user_id = ? AND tenant_id = ?", enrollment.UserID, tenantID).Delete(&models.ProjectSubmission{})
+	db.WithTenant(c).Where("user_id = ? AND tenant_id = ?", enrollment.UserID, tenantID).Delete(&models.BlockSubmission{})
+
+	c.JSON(http.StatusOK, gin.H{"message": "Student progress reset successfully"})
+}

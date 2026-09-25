@@ -66,6 +66,29 @@ export default function StudentsPage() {
     }
   };
 
+  const handleResetProgress = async () => {
+    if (!managingStudent) return;
+    const currentEnrollment = data?.enrollments?.find((e: any) => e.user_id === managingStudent.user_id);
+    if (!currentEnrollment) {
+      alert("Student is not enrolled in any cohort");
+      return;
+    }
+
+    if (!confirm("Are you sure you want to reset all progress for this student? This includes XP and stages and cannot be undone.")) return;
+
+    setIsAssigning(true);
+    try {
+      await coursesApi.post(`/api/admin/enrollments/${currentEnrollment.id}/reset`);
+      setIsManageModalOpen(false);
+      refetch();
+    } catch (e: any) {
+      alert("Failed to reset student progress");
+    } finally {
+      setIsAssigning(false);
+    }
+  };
+
+
   const [isDeleting, setIsDeleting] = React.useState(false);
 
   const handleDeleteStudent = async () => {
@@ -387,7 +410,16 @@ export default function StudentsPage() {
               </div>
             </div>
             <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-between gap-3 shrink-0">
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
+                <button 
+                  type="button" 
+                  onClick={handleResetProgress}
+                  disabled={isAssigning || !managingStudent.enrollment_id}
+                  className="px-4 py-2.5 rounded-xl border border-yellow-200 text-yellow-700 font-bold text-xs hover:bg-yellow-50 disabled:opacity-50"
+                  title="Reset student progress (XP and stages)"
+                >
+                  Reset Progress
+                </button>
                 <button 
                   type="button" 
                   onClick={handleRemoveCohort}

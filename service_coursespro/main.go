@@ -105,6 +105,7 @@ func main() {
 
 		protected.POST("/admin/enrollments", h.AdminAssignStudentToCohort)
 		protected.DELETE("/admin/enrollments/:id", h.AdminRemoveStudentFromCohort)
+		protected.POST("/admin/enrollments/:id/reset", h.AdminResetStudentProgress)
 
 		protected.GET("/admin/enrollments", h.AdminGetEnrollments)
 
