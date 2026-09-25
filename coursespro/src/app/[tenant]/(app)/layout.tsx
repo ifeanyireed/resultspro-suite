@@ -34,6 +34,8 @@ import {
 
 import { ModernDashboardLayout } from '@/components/layout/ModernDashboardLayout';
 import { useAuthStore } from '@/store/useAuthStore';
+import { useQuery } from '@tanstack/react-query';
+import { coursesApi } from '@/lib/api';
 
 export default function AppLayout({
   children,
@@ -49,6 +51,15 @@ export default function AppLayout({
   const [logoUrl, setLogoUrl] = React.useState('/logo.png');
   const [profileName, setProfileName] = React.useState('Loading...');
   const [profileEmail, setProfileEmail] = React.useState('Loading...');
+
+  const { data: dashboardData } = useQuery({
+    queryKey: ['student-dashboard-summary', user?.id],
+    queryFn: async () => {
+      const res = await coursesApi.get('/api/student/dashboard/summary');
+      return res.data;
+    },
+    enabled: !!user && mounted
+  });
 
   React.useEffect(() => {
     if (!isAuthenticated) {
@@ -122,7 +133,11 @@ export default function AppLayout({
                   <MapIcon className="w-6 h-6" />
                   Journey
                 </div>
-                <span className="bg-[#146ef5] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Stage 2</span>
+                {dashboardData?.enrollment?.current_stage && (
+                  <span className="bg-[#146ef5] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    Module {dashboardData.enrollment.current_stage}
+                  </span>
+                )}
               </Link>
 
               <Link href="/dashboard/projects" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/projects') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
