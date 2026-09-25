@@ -27,7 +27,7 @@ func SendEmail(to string, subject string, htmlBody string, textBody string, from
 	}
 	payload := EmailPayload{
 		To:       to,
-		From:     "hello@resultspro.ng",
+		From:     "noreply@resultspro.ng",
 		FromName: fromName,
 		Subject:  subject,
 		HTML:     htmlBody,
