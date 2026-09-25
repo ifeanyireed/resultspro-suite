@@ -88,3 +88,9 @@ users.md
 .neon
 service_examspro/test_build
 service_users/test_build
+
+# Temporary email proxy scripts
+config-update.php
+send-email-update.php
+test_email.go
+
