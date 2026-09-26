@@ -39,7 +39,7 @@ export default function CoursesCatalogPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <span className="mono text-[10px] font-bold uppercase text-signal">{c.badge}</span>
-                <h3 className="font-grotesk font-bold text-xl text-ink mt-1">{c.title}</h3>
+                <h3 className="font-bold text-xl text-ink mt-1">{c.title}</h3>
               </div>
               <span className="mono text-xs font-bold text-growth bg-growth-soft px-3 py-1 rounded-full border border-growth/20">
                 {c.seatsLeft} Seats Remaining

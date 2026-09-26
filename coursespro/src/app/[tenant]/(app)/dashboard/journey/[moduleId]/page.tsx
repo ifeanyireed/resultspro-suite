@@ -431,7 +431,7 @@ export default function LessonPlayerPage() {
   const currentItem = items[activeIndex];
 
   return (
-    <div className="fixed inset-0 z-[100] bg-white overflow-y-auto font-grotesk text-gray-900">
+    <div className="fixed inset-0 z-[100] bg-white overflow-y-auto text-gray-900">
       <div className="flex min-h-full w-full">
         {/* Main Left Content */}
         <div className="flex-1 flex flex-col relative transition-all duration-300">
