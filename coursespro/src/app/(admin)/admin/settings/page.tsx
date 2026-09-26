@@ -9,7 +9,9 @@ import {
   SparklesIcon,
   BuildingOfficeIcon,
   PhotoIcon,
-  BanknotesIcon
+  BanknotesIcon,
+  ChevronDownIcon,
+  ChevronUpIcon
 } from '@heroicons/react/24/outline';
 
 export default function SettingsPage() {
@@ -52,6 +54,7 @@ export default function SettingsPage() {
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingSlideshow, setUploadingSlideshow] = useState(false);
   const slideshowFileInputRef = useRef<HTMLInputElement>(null);
+  const [showDnsConfig, setShowDnsConfig] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -370,14 +373,14 @@ const { data: tenantData, isLoading } = useQuery({
                 <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden focus-within:border-[#146ef5] transition-colors">
                   <span className="px-4 py-2.5 bg-gray-50 text-gray-500 text-sm border-r border-gray-200">https://</span>
                   <input type="text" name="slug" value={formData.slug} onChange={handleChange} className="w-full px-4 py-2.5 text-sm focus:outline-none" />
-                  <span className="px-4 py-2.5 bg-gray-50 text-gray-500 text-sm border-l border-gray-200">.resultspro.ng</span>
+                  <span className="px-4 py-2.5 bg-gray-50 text-gray-500 text-sm border-l border-gray-200">.ofia.shop</span>
                 </div>
               </div>
               <div className="pt-4 mt-4 border-t border-gray-100">
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Custom Domain</label>
-                    <p className="text-xs text-gray-500">Use your own domain instead of .resultspro.ng</p>
+                    <p className="text-xs text-gray-500">Use your own domain instead of .ofia.shop</p>
                   </div>
                   <div 
                     className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors ${formData.customDomainEnabled ? 'bg-[#146ef5]' : 'bg-gray-200'}`}
@@ -398,22 +401,36 @@ const { data: tenantData, isLoading } = useQuery({
                     />
                     {formData.customDomain && (
                       <div className="mt-3 p-4 bg-blue-50 border border-blue-100 rounded-xl">
-                        <p className="text-sm font-semibold text-blue-900 mb-2">DNS Configuration Required</p>
-                        <p className="text-xs text-blue-800 mb-3">To complete the setup, please add the following record to your domain's DNS settings at your registrar (e.g. Namecheap, GoDaddy):</p>
-                        <div className="bg-white p-3 rounded-lg border border-blue-100 font-mono text-xs text-slate-700 flex flex-col gap-2">
-                          <div className="flex gap-4">
-                            <span className="w-16 font-bold">Type:</span>
-                            <span>{formData.customDomain.split('.').length > 2 ? 'CNAME' : 'A'}</span>
-                          </div>
-                          <div className="flex gap-4">
-                            <span className="w-16 font-bold">Name:</span>
-                            <span>{formData.customDomain.split('.').length > 2 ? formData.customDomain.split('.')[0] : '@'}</span>
-                          </div>
-                          <div className="flex gap-4">
-                            <span className="w-16 font-bold">Value:</span>
-                            <span>{formData.customDomain.split('.').length > 2 ? 'cname.vercel-dns.com' : '76.76.21.21'}</span>
-                          </div>
+                        <div 
+                          className="flex items-center justify-between cursor-pointer"
+                          onClick={() => setShowDnsConfig(!showDnsConfig)}
+                        >
+                          <p className="text-sm font-semibold text-blue-900">DNS Configuration Required</p>
+                          {showDnsConfig ? (
+                            <ChevronUpIcon className="w-4 h-4 text-blue-900" />
+                          ) : (
+                            <ChevronDownIcon className="w-4 h-4 text-blue-900" />
+                          )}
                         </div>
+                        {showDnsConfig && (
+                          <div className="mt-2">
+                            <p className="text-xs text-blue-800 mb-3">To complete the setup, please add the following record to your domain's DNS settings at your registrar (e.g. Namecheap, GoDaddy):</p>
+                            <div className="bg-white p-3 rounded-lg border border-blue-100 font-mono text-xs text-slate-700 flex flex-col gap-2">
+                              <div className="flex gap-4">
+                                <span className="w-16 font-bold">Type:</span>
+                                <span>{formData.customDomain.split('.').length > 2 ? 'CNAME' : 'A'}</span>
+                              </div>
+                              <div className="flex gap-4">
+                                <span className="w-16 font-bold">Name:</span>
+                                <span>{formData.customDomain.split('.').length > 2 ? formData.customDomain.split('.')[0] : '@'}</span>
+                              </div>
+                              <div className="flex gap-4">
+                                <span className="w-16 font-bold">Value:</span>
+                                <span>{formData.customDomain.split('.').length > 2 ? 'cname.vercel-dns.com' : '76.76.21.21'}</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
