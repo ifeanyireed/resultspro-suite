@@ -214,7 +214,20 @@ func (h *Handler) AdminGetPrograms(c *gin.Context) {
 	db.WithTenant(c).Model(&models.JourneyStage{}).Count(&totalModules)
 
 	var totalVideos int64
-	db.WithTenant(c).Model(&models.JourneyStage{}).Where("contents_json LIKE ?", "%\"type\":\"VIDEO\"%").Count(&totalVideos)
+	var allStages []models.JourneyStage
+	db.WithTenant(c).Find(&allStages)
+	for _, s := range allStages {
+		if s.ContentsJSON != "" && s.ContentsJSON != "[]" {
+			var blocks []map[string]interface{}
+			if err := json.Unmarshal([]byte(s.ContentsJSON), &blocks); err == nil {
+				for _, block := range blocks {
+					if blockType, ok := block["type"].(string); ok && blockType == "VIDEO" {
+						totalVideos++
+					}
+				}
+			}
+		}
+	}
 
 	var totalQuizzes int64
 	db.WithTenant(c).Model(&models.Quiz{}).Count(&totalQuizzes)

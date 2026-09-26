@@ -12,7 +12,9 @@ export function middleware(req: NextRequest) {
   const isPlatform = hostname === platformDomain || hostname === `coursespro.${platformDomain}` || hostname === "resultspro-service-coursespro.onrender.com";
 
   // Extract the tenant slug from the hostname
-  const tenantSlug = hostname.split('.')[0]; 
+  // If it's a completely custom domain, use the entire hostname so the backend can resolve it by custom_domain.
+  const isCustomDomain = !hostname.includes(platformDomain) && !hostname.includes('onrender.com');
+  const tenantSlug = isCustomDomain ? hostname : hostname.split('.')[0]; 
   
   // Prepare headers to pass down to Server Components
   const requestHeaders = new Headers(req.headers);

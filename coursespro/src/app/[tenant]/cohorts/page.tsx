@@ -11,8 +11,11 @@ import CohortSlideshow from '@/components/CohortSlideshow';
 
 export const dynamic = 'force-dynamic';
 
-export default async function CohortsPage({ params }: { params: Promise<{ tenant: string }> }) {
+import CohortSearchFilters from '@/components/CohortSearchFilters';
+
+export default async function CohortsPage({ params, searchParams }: { params: Promise<{ tenant: string }>, searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
   const tenant = await getTenant(resolvedParams.tenant);
 
   if (!tenant) {
@@ -31,6 +34,33 @@ export default async function CohortsPage({ params }: { params: Promise<{ tenant
   } catch (err) {
     console.error("Failed to fetch cohorts", err);
   }
+
+  // Extract unique statuses and difficulties for the filters
+  const statuses = Array.from(new Set(cohorts.map((c: any) => c.status).filter(Boolean))) as string[];
+  const difficulties = Array.from(new Set(cohorts.map((c: any) => c.difficulty_level).filter(Boolean))) as string[];
+
+  // Apply filters
+  const q = typeof resolvedSearchParams?.q === 'string' ? resolvedSearchParams.q.toLowerCase() : '';
+  const filterStatus = typeof resolvedSearchParams?.status === 'string' ? resolvedSearchParams.status : '';
+  const filterDifficulty = typeof resolvedSearchParams?.difficulty === 'string' ? resolvedSearchParams.difficulty : '';
+
+  let filteredCohorts = cohorts.filter((cohort: any) => {
+    let matches = true;
+    if (q) {
+      const title = (cohort.title || cohort.program?.title || '').toLowerCase();
+      const desc = (cohort.description || cohort.program?.description || '').toLowerCase();
+      if (!title.includes(q) && !desc.includes(q)) {
+        matches = false;
+      }
+    }
+    if (filterStatus && cohort.status !== filterStatus) {
+      matches = false;
+    }
+    if (filterDifficulty && cohort.difficulty_level !== filterDifficulty) {
+      matches = false;
+    }
+    return matches;
+  });
 
   return (
     <main>
@@ -60,10 +90,11 @@ export default async function CohortsPage({ params }: { params: Promise<{ tenant
 
       <section className="section-py bg-light">
         <div className="container-nets">
+          <CohortSearchFilters statuses={statuses} difficulties={difficulties} />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {cohorts.length === 0 ? (
-              <div className="col-span-3 text-center py-12 text-slate-500">No active cohorts found.</div>
-            ) : cohorts.map((cohort: any) => (
+            {filteredCohorts.length === 0 ? (
+              <div className="col-span-3 text-center py-12 text-slate-500">No cohorts found matching your search.</div>
+            ) : filteredCohorts.map((cohort: any) => (
               <CohortCard key={cohort.id} cohort={cohort} />
             ))}
           </div>

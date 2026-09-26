@@ -301,6 +301,19 @@ const { data: tenantData, isLoading } = useQuery({
       }
       
       await api.patch(`/api/v1/tenants/update/${tenantId}`, payload);
+      
+      if (formData.customDomainEnabled && formData.customDomain) {
+        try {
+          await fetch('/api/vercel/domain', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ domain: formData.customDomain })
+          });
+        } catch (e) {
+          console.error("Failed to register domain with Vercel", e);
+        }
+      }
+
       alert('Platform profile updated successfully!');
       if (formData.password) {
         setFormData(prev => ({ ...prev, password: '' }));
@@ -374,14 +387,36 @@ const { data: tenantData, isLoading } = useQuery({
                   </div>
                 </div>
                 {formData.customDomainEnabled && (
-                  <input 
-                    type="text" 
-                    name="customDomain" 
-                    placeholder="e.g., academy.com"
-                    value={formData.customDomain} 
-                    onChange={handleChange} 
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#146ef5] transition-colors" 
-                  />
+                  <div className="mt-3">
+                    <input 
+                      type="text" 
+                      name="customDomain" 
+                      placeholder="e.g., academy.com"
+                      value={formData.customDomain} 
+                      onChange={handleChange} 
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#146ef5] transition-colors" 
+                    />
+                    {formData.customDomain && (
+                      <div className="mt-3 p-4 bg-blue-50 border border-blue-100 rounded-xl">
+                        <p className="text-sm font-semibold text-blue-900 mb-2">DNS Configuration Required</p>
+                        <p className="text-xs text-blue-800 mb-3">To complete the setup, please add the following record to your domain's DNS settings at your registrar (e.g. Namecheap, GoDaddy):</p>
+                        <div className="bg-white p-3 rounded-lg border border-blue-100 font-mono text-xs text-slate-700 flex flex-col gap-2">
+                          <div className="flex gap-4">
+                            <span className="w-16 font-bold">Type:</span>
+                            <span>{formData.customDomain.split('.').length > 2 ? 'CNAME' : 'A'}</span>
+                          </div>
+                          <div className="flex gap-4">
+                            <span className="w-16 font-bold">Name:</span>
+                            <span>{formData.customDomain.split('.').length > 2 ? formData.customDomain.split('.')[0] : '@'}</span>
+                          </div>
+                          <div className="flex gap-4">
+                            <span className="w-16 font-bold">Value:</span>
+                            <span>{formData.customDomain.split('.').length > 2 ? 'cname.vercel-dns.com' : '76.76.21.21'}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
                             <div className="pt-2">

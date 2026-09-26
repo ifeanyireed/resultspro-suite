@@ -284,7 +284,7 @@ export default function LessonPlayerPage() {
   }, [moduleId, journeyData, journeyLoading]);
 
   const schedule = journeyData?.schedules?.[moduleId];
-  const deadline = schedule?.end_date || journeyData?.cohort_end_date;
+  const deadline = schedule?.end || journeyData?.cohort_end_date;
   const [timeLeft, setTimeLeft] = useState('');
   const [isValidTime, setIsValidTime] = useState(true);
 
