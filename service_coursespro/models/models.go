@@ -376,3 +376,33 @@ type CohortResource struct {
 	CreatedAt    time.Time      `json:"createdAt"`
 	UpdatedAt    time.Time      `json:"updatedAt"`
 }
+
+// Conversation represents a chat thread
+type Conversation struct {
+	ID        string    `gorm:"primaryKey;size:64" json:"id"`
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	Type      string    `gorm:"size:32;default:'DIRECT'" json:"type"` // DIRECT, COHORT, GROUP
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+func (Conversation) TableName() string { return "crs_conversations" }
+
+// ConversationParticipant links users to conversations
+type ConversationParticipant struct {
+	ConversationID string    `gorm:"primaryKey;size:64" json:"conversation_id"`
+	UserID         string    `gorm:"primaryKey;size:64" json:"user_id"`
+	LastReadAt     *time.Time `json:"last_read_at"`
+	CreatedAt      time.Time `json:"created_at"`
+}
+func (ConversationParticipant) TableName() string { return "crs_conversation_participants" }
+
+// Message represents a single chat message
+type Message struct {
+	ID             string    `gorm:"primaryKey;size:64" json:"id"`
+	ConversationID string    `gorm:"size:64;index;not null" json:"conversation_id"`
+	SenderID       string    `gorm:"size:64;index;not null" json:"sender_id"`
+	Content        string    `gorm:"type:text;not null" json:"content"`
+	IsEdited       bool      `gorm:"default:false" json:"is_edited"`
+	CreatedAt      time.Time `json:"created_at"`
+}
+func (Message) TableName() string { return "crs_messages" }

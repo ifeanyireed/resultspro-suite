@@ -142,11 +142,18 @@ func main() {
 		// Student Dashboard
 		protected.GET("/student/dashboard/summary", h.GetStudentDashboardSummary)
 		protected.GET("/student/projects", h.GetStudentProjects)
+		protected.GET("/student/classroom/session", h.GetClassroomSession)
 		protected.GET("/student/resources", h.GetStudentResources)
 
 		// Portfolio
 		protected.GET("/portfolio", h.GetMyPortfolio)
 		protected.POST("/portfolio", h.UpsertPortfolio)
+
+		// Messaging
+		protected.GET("/messages/conversations", h.GetConversations)
+		protected.GET("/messages/conversations/:id", h.GetMessages)
+		protected.POST("/messages/conversations/:id", h.SendMessage)
+		protected.POST("/messages/direct/:targetUserId", h.StartDirectMessage)
 
 		// Admin Payments logic has been moved to service_users for centralization
 	}

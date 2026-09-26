@@ -308,3 +308,33 @@ CREATE TABLE IF NOT EXISTS crs_workspace_attachments (
     file_name VARCHAR(255) NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 14. Messaging System
+CREATE TABLE IF NOT EXISTS crs_conversations (
+    id VARCHAR(64) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    type VARCHAR(32) DEFAULT 'DIRECT',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_conv_tenant ON crs_conversations(tenant_id);
+
+CREATE TABLE IF NOT EXISTS crs_conversation_participants (
+    conversation_id VARCHAR(64) NOT NULL REFERENCES crs_conversations(id) ON DELETE CASCADE,
+    user_id VARCHAR(64) NOT NULL,
+    last_read_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (conversation_id, user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_conv_part_user ON crs_conversation_participants(user_id);
+
+CREATE TABLE IF NOT EXISTS crs_messages (
+    id VARCHAR(64) PRIMARY KEY,
+    conversation_id VARCHAR(64) NOT NULL REFERENCES crs_conversations(id) ON DELETE CASCADE,
+    sender_id VARCHAR(64) NOT NULL,
+    content TEXT NOT NULL,
+    is_edited BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_msgs_conv ON crs_messages(conversation_id);
+CREATE INDEX IF NOT EXISTS idx_msgs_sender ON crs_messages(sender_id);

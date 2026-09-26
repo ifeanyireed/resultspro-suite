@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"github.com/google/uuid"
 
 	"github.com/gin-gonic/gin"
 	"service_coursespro/db"
@@ -62,7 +63,7 @@ func (h *Handler) UpsertPortfolio(c *gin.Context) {
 	if err != nil {
 		// Create new
 		portfolio = models.PublicPortfolio{
-			ID:                 models.GenerateID("ptf_"),
+			ID:                 "ptf_" + uuid.New().String(),
 			TenantID:           tid,
 			UserID:             uid,
 			Username:           req.Username,
