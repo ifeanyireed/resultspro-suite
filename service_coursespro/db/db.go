@@ -44,6 +44,7 @@ func InitDB() {
 		&models.Cohort{},
 		&models.CohortMentor{},
 		&models.Enrollment{},
+		&models.CohortResource{},
 		&models.JourneyStage{},
 		&models.JourneyModule{},
 		&models.ModuleProgress{},

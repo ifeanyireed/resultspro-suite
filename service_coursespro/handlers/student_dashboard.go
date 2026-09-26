@@ -501,3 +501,19 @@ func (h *Handler) GetStudentProjects(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"projects": output})
 }
+
+func (h *Handler) GetStudentResources(c *gin.Context) {
+	userID, _ := c.Get("user_id")
+	tenantID, _ := c.Get("tenant_id")
+
+	var enrollment models.Enrollment
+	if err := db.DB.Where("tenant_id = ? AND user_id = ?", tenantID, userID).First(&enrollment).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Enrollment not found"})
+		return
+	}
+
+	var resources []models.CohortResource
+	db.DB.Where("tenant_id = ? AND cohort_id = ? AND is_published = ?", tenantID, enrollment.CohortID, true).Order("created_at DESC").Find(&resources)
+
+	c.JSON(http.StatusOK, resources)
+}

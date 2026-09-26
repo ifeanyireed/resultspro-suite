@@ -690,3 +690,38 @@ func (h *Handler) AdminResetStudentProgress(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Student progress reset successfully"})
 }
+
+func (h *Handler) AdminCreateCohortResource(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	cohortID := c.Param("id")
+
+	var input struct {
+		Title        string `json:"title" binding:"required"`
+		ResourceType string `json:"resourceType" binding:"required"`
+		URL          string `json:"url" binding:"required"`
+		IsPublished  bool   `json:"isPublished"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+    tenantIDStr := tenantID.(string)
+	resource := models.CohortResource{
+		TenantID:     &tenantIDStr,
+		ID:           uuid.New().String(),
+		CohortID:     cohortID,
+		Title:        input.Title,
+		ResourceType: input.ResourceType,
+		URL:          input.URL,
+		IsPublished:  input.IsPublished,
+	}
+
+	if err := db.DB.Create(&resource).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create resource"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, resource)
+}

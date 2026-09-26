@@ -364,3 +364,15 @@ type WorkspaceAttachment struct {
 	FileName  string    `gorm:"size:255;not null" json:"file_name"`
 	CreatedAt time.Time `json:"created_at"`
 }
+
+type CohortResource struct {
+	TenantID     *string        `gorm:"size:64;index" json:"tenant_id"`
+	ID           string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
+	CohortID     string         `gorm:"index;not null" json:"cohortId"`
+	Title        string         `json:"title"`
+	ResourceType string         `json:"resourceType"` // e.g., "video", "document", "link"
+	URL          string         `json:"url"`
+	IsPublished  bool           `gorm:"default:true" json:"isPublished"`
+	CreatedAt    time.Time      `json:"createdAt"`
+	UpdatedAt    time.Time      `json:"updatedAt"`
+}
