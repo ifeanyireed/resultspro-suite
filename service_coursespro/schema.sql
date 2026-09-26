@@ -277,3 +277,34 @@ CREATE TABLE IF NOT EXISTS crs_mentor_profiles (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX IF NOT EXISTS idx_mentor_profiles_tenant ON crs_mentor_profiles(tenant_id);
+
+-- Workspace Tables
+CREATE TABLE IF NOT EXISTS crs_workspace_tasks (
+    id VARCHAR(64) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    user_id VARCHAR(64) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    status VARCHAR(64) NOT NULL DEFAULT 'To Do',
+    tags JSONB DEFAULT '[]',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS crs_workspace_comments (
+    id VARCHAR(64) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    task_id VARCHAR(64) NOT NULL REFERENCES crs_workspace_tasks(id) ON DELETE CASCADE,
+    user_id VARCHAR(64) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS crs_workspace_attachments (
+    id VARCHAR(64) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    task_id VARCHAR(64) NOT NULL REFERENCES crs_workspace_tasks(id) ON DELETE CASCADE,
+    user_id VARCHAR(64) NOT NULL,
+    file_url VARCHAR(512) NOT NULL,
+    file_name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);

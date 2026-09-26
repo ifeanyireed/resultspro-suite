@@ -328,3 +328,39 @@ type TenantSettings struct {
 	PayoutConfigJSON    string    `gorm:"type:text;default:'{}'" json:"payout_config_json"`
 	UpdatedAt           time.Time `json:"updated_at"`
 }
+
+// Workspace Task
+type WorkspaceTask struct {
+	ID        string    `gorm:"primaryKey;size:64" json:"id"`
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	UserID    string    `gorm:"size:64;index;not null" json:"user_id"`
+	Title     string    `gorm:"size:255;not null" json:"title"`
+	Status    string    `gorm:"size:64;default:'To Do'" json:"status"`
+	Tags      string    `gorm:"type:jsonb;default:'[]'" json:"tags"` // JSON array string
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+
+	CommentCount    int64 `gorm:"-" json:"comments"`
+	AttachmentCount int64 `gorm:"-" json:"attachments"`
+}
+
+// Workspace Comment
+type WorkspaceComment struct {
+	ID        string    `gorm:"primaryKey;size:64" json:"id"`
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	TaskID    string    `gorm:"size:64;index;not null" json:"task_id"`
+	UserID    string    `gorm:"size:64;index;not null" json:"user_id"`
+	Content   string    `gorm:"type:text;not null" json:"content"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// Workspace Attachment
+type WorkspaceAttachment struct {
+	ID        string    `gorm:"primaryKey;size:64" json:"id"`
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	TaskID    string    `gorm:"size:64;index;not null" json:"task_id"`
+	UserID    string    `gorm:"size:64;index;not null" json:"user_id"`
+	FileURL   string    `gorm:"size:512;not null" json:"file_url"`
+	FileName  string    `gorm:"size:255;not null" json:"file_name"`
+	CreatedAt time.Time `json:"created_at"`
+}

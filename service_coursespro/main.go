@@ -134,6 +134,7 @@ func main() {
 
 		// Student Dashboard
 		protected.GET("/student/dashboard/summary", h.GetStudentDashboardSummary)
+		protected.GET("/student/projects", h.GetStudentProjects)
 
 		// Admin Payments logic has been moved to service_users for centralization
 	}

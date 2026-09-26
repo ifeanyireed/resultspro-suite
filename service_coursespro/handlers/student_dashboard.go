@@ -384,3 +384,120 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		"classroom":          classroom,
 	})
 }
+
+func (h *Handler) GetStudentProjects(c *gin.Context) {
+	userID, _ := c.Get("user_id")
+	tenantID, _ := c.Get("tenant_id")
+
+	var enrollment models.Enrollment
+	if err := db.DB.Where("tenant_id = ? AND user_id = ?", tenantID, userID).First(&enrollment).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Enrollment not found"})
+		return
+	}
+
+	if enrollment.CohortID == "" {
+		c.JSON(http.StatusOK, gin.H{"projects": []interface{}{}})
+		return
+	}
+
+	var cohort models.Cohort
+	if err := db.DB.Where("tenant_id = ? AND id = ?", tenantID, enrollment.CohortID).First(&cohort).Error; err != nil || cohort.ProgramID == nil {
+		c.JSON(http.StatusOK, gin.H{"projects": []interface{}{}})
+		return
+	}
+
+	var stages []models.JourneyStage
+	db.DB.Where("tenant_id = ? AND program_id = ?", tenantID, *cohort.ProgramID).Order("stage_number ASC").Find(&stages)
+
+	var submissions []models.ProjectSubmission
+	db.DB.Where("tenant_id = ? AND user_id = ? AND cohort_id = ?", tenantID, userID, enrollment.CohortID).Find(&submissions)
+
+	subMap := make(map[string]models.ProjectSubmission)
+	for _, sub := range submissions {
+		// Key by stage number and project title to handle multiple assignments per stage
+		key := fmt.Sprintf("%d-%s", sub.StageNumber, sub.ProjectTitle)
+		subMap[key] = sub
+	}
+
+	var schedules map[string]map[string]interface{}
+	if cohort.ModuleSchedulesJSON != "" {
+		json.Unmarshal([]byte(cohort.ModuleSchedulesJSON), &schedules)
+	}
+
+	type ProjectOutput struct {
+		ID       string `json:"id"`
+		Title    string `json:"title"`
+		Desc     string `json:"desc"`
+		Status   string `json:"status"`
+		Due      string `json:"due"`
+		StageID  string `json:"stage_id"`
+		ModuleID string `json:"module_id"` // Same as stage_id for frontend journey link
+	}
+
+	var output []ProjectOutput
+
+	for _, stage := range stages {
+		var items []map[string]interface{}
+		if stage.ContentsJSON != "" {
+			json.Unmarshal([]byte(stage.ContentsJSON), &items)
+		}
+
+		dueDate := ""
+		if schedules != nil {
+			if sched, ok := schedules[stage.ID]; ok {
+				if end, ok := sched["end"].(string); ok {
+					if t, err := time.Parse(time.RFC3339, end); err == nil {
+						dueDate = t.Format("Jan 02")
+					}
+				}
+			}
+		}
+		if dueDate == "" && !cohort.EndDate.IsZero() {
+			dueDate = cohort.EndDate.Format("Jan 02")
+		}
+
+		for _, item := range items {
+			itemType, _ := item["type"].(string)
+			if itemType == "ASSIGNMENT" || itemType == "PROJECT" {
+				title, _ := item["title"].(string)
+				desc, _ := item["description"].(string)
+
+				if title == "" {
+					title = "Assignment"
+				}
+
+				key := fmt.Sprintf("%d-%s", stage.StageNumber, title)
+				status := "In Progress"
+				
+				// Optional logic: if the stage is ahead of current stage, mark as Locked
+				if stage.StageNumber > enrollment.CurrentStageNumber {
+					status = "Locked"
+				}
+
+				if sub, exists := subMap[key]; exists {
+					if sub.Status == "PENDING" || sub.Status == "MENTOR_REVIEW" {
+						status = "Submitted"
+					} else if sub.Status == "APPROVED" {
+						status = "Approved"
+					} else if sub.Status == "REVISION_REQUESTED" {
+						status = "Needs Revision"
+					} else {
+						status = sub.Status
+					}
+				}
+
+				output = append(output, ProjectOutput{
+					ID:       fmt.Sprintf("%s-%s", stage.ID, title),
+					Title:    title,
+					Desc:     desc,
+					Status:   status,
+					Due:      dueDate,
+					StageID:  stage.ID,
+					ModuleID: stage.ID,
+				})
+			}
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"projects": output})
+}
