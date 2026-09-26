@@ -18,10 +18,11 @@ interface NavbarProps {
   darkLogoUrl?: string;
   flattenLogo?: boolean;
   contactEmail?: string;
+  contactPhone?: string;
   contactLocation?: string;
 }
 
-export default function Navbar({ hideInstructorLink = false, isPlatform = false, tenantName, tenantLogo, darkLogoUrl, flattenLogo, contactEmail, contactLocation }: NavbarProps = {}) {
+export default function Navbar({ hideInstructorLink = false, isPlatform = false, tenantName, tenantLogo, darkLogoUrl, flattenLogo, contactEmail, contactPhone, contactLocation }: NavbarProps = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
