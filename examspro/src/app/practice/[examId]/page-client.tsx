@@ -222,7 +222,7 @@ export default function SubjectSelectionPage() {
                   onClick={(e) => {
                     if (sub.isLocked) {
                       e.preventDefault();
-                      alert("You have reached the maximum number of papers allowed by your ICAN plan. Upgrade to access more.");
+                      alert("This paper is locked. Your free ICAN trial has ended, or you have reached your plan's maximum limit. Upgrade your Study Pack to access more papers.");
                     } else {
                       handleSubjectClick(e, sub.id);
                     }

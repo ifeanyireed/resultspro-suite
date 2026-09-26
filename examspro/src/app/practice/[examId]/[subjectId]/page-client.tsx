@@ -94,11 +94,7 @@ export default function TopicListPage() {
 
   const handleStartPractice = useCallback(
     (e: React.MouseEvent, topicId: number, year?: number) => {
-      if (examId === 'ican' && user && !user.hasIcan && (!user.icanPlan || user.icanPlan === "")) {
-        e.preventDefault();
-        setShowPremiumModal(true);
-        return;
-      }
+      // The backend will now handle ICAN access blocking after the implicit trial is exhausted
       if (!isAuthenticated) {
         e.preventDefault();
         if (topicId) {
@@ -108,7 +104,7 @@ export default function TopicListPage() {
         }
       }
     },
-    [isAuthenticated, router, examId, user, subjectId]
+    [isAuthenticated, router, subjectId]
   );
 
   const filteredTopics = topics?.filter(topic =>

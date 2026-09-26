@@ -7,13 +7,36 @@ import (
 	"exams-resultspro-backend/internal/database"
 )
 
+func GetIcanTrialQuizzesCount(userID string) int64 {
+	var count int64
+	err := database.DB.Table("nat_exams_user_answers").
+		Joins("JOIN nat_exams_questions ON nat_exams_questions.id = nat_exams_user_answers.question_id").
+		Joins("JOIN nat_exams_topics ON nat_exams_topics.id = nat_exams_questions.topic_id").
+		Joins("JOIN nat_exams_subjects ON nat_exams_subjects.id = nat_exams_topics.subject_id").
+		Joins("JOIN nat_exams_exams ON nat_exams_exams.id = nat_exams_subjects.exam_id").
+		Where("nat_exams_user_answers.user_id = ? AND LOWER(nat_exams_exams.name) = ?", userID, "ican").
+		Select("COUNT(DISTINCT nat_exams_user_answers.session_id)").
+		Scan(&count).Error
+	if err != nil {
+		return 5 // If error occurs, fail closed to prevent unlimited free access
+	}
+	return count
+}
+
 func CheckIcanAccess(user *models.User, examName string, subjectID string) error {
 	if strings.ToLower(examName) != "ican" {
 		return nil
 	}
+	
 	if !user.HasIcan && (user.IcanPlan == nil || *user.IcanPlan == "") {
-		return fmt.Errorf("You do not have an active ICAN plan.")
+		trialQuizzesTaken := GetIcanTrialQuizzesCount(user.ID)
+		if trialQuizzesTaken >= 5 {
+			return fmt.Errorf("Your free ICAN Trial has ended. Please upgrade to a Study Pack to continue crushing your exams.")
+		}
+		// Allow access as part of the implicit trial
+		return nil
 	}
+	
 	if user.IcanPlan == nil {
 		return nil
 	}
@@ -67,9 +90,15 @@ func IsSubjectLocked(user *models.User, examName string, subjectID string) bool 
 	if strings.ToLower(examName) != "ican" {
 		return false
 	}
+	
 	if !user.HasIcan && (user.IcanPlan == nil || *user.IcanPlan == "") {
-		return true // They don't have a plan at all
+		trialQuizzesTaken := GetIcanTrialQuizzesCount(user.ID)
+		if trialQuizzesTaken >= 5 {
+			return true // Trial exhausted, locked
+		}
+		return false // Trial active, unlocked
 	}
+	
 	if user.IcanPlan == nil {
 		return false
 	}
