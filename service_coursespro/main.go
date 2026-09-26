@@ -58,6 +58,12 @@ func main() {
 		protected.POST("/modules/:id/progress", h.UpdateModuleProgress)
 		protected.POST("/payments/intent", h.CreatePaymentIntent)
 
+		// Workspace
+		protected.GET("/workspace/tasks", h.GetWorkspaceTasks)
+		protected.POST("/workspace/tasks", h.CreateWorkspaceTask)
+		protected.PUT("/workspace/tasks/:id/status", h.UpdateWorkspaceTaskStatus)
+		protected.DELETE("/workspace/tasks/:id", h.DeleteWorkspaceTask)
+
 		// Projects & Submissions
 		protected.POST("/projects/submit", h.SubmitProject)
 		protected.GET("/projects/my-submissions", h.GetMySubmissions)
@@ -94,6 +100,7 @@ func main() {
 		protected.POST("/admin/cohorts", h.AdminCreateCohort)
 		protected.PUT("/admin/cohorts/:id", h.AdminUpdateCohort)
 		protected.DELETE("/admin/cohorts/:id", h.AdminDeleteCohort)
+		protected.POST("/admin/cohorts/:id/resources", h.AdminCreateCohortResource)
 
 		protected.POST("/admin/stages", h.AdminCreateStage)
 		protected.PUT("/admin/stages/:id", h.AdminUpdateStage)
@@ -135,6 +142,11 @@ func main() {
 		// Student Dashboard
 		protected.GET("/student/dashboard/summary", h.GetStudentDashboardSummary)
 		protected.GET("/student/projects", h.GetStudentProjects)
+		protected.GET("/student/resources", h.GetStudentResources)
+
+		// Portfolio
+		protected.GET("/portfolio", h.GetMyPortfolio)
+		protected.POST("/portfolio", h.UpsertPortfolio)
 
 		// Admin Payments logic has been moved to service_users for centralization
 	}
