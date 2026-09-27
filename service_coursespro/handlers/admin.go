@@ -764,3 +764,123 @@ func (h *Handler) AdminCreateCohortEvent(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, event)
 }
+
+func (h *Handler) AdminUpdateCohortResource(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	resourceID := c.Param("id")
+
+	var input struct {
+		Title        string `json:"title"`
+		ResourceType string `json:"resourceType"`
+		URL          string `json:"url"`
+		IsPublished  bool   `json:"isPublished"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var resource models.CohortResource
+	if err := db.DB.Where("tenant_id = ? AND id = ?", tenantID, resourceID).First(&resource).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Resource not found"})
+		return
+	}
+
+	if input.Title != "" {
+		resource.Title = input.Title
+	}
+	if input.ResourceType != "" {
+		resource.ResourceType = input.ResourceType
+	}
+	if input.URL != "" {
+		resource.URL = input.URL
+	}
+	// Always update boolean
+	resource.IsPublished = input.IsPublished
+
+	if err := db.DB.Save(&resource).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update resource"})
+		return
+	}
+
+	c.JSON(http.StatusOK, resource)
+}
+
+func (h *Handler) AdminDeleteCohortResource(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	resourceID := c.Param("id")
+
+	if err := db.DB.Where("tenant_id = ? AND id = ?", tenantID, resourceID).Delete(&models.CohortResource{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete resource"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Resource deleted"})
+}
+
+func (h *Handler) AdminUpdateCohortEvent(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	eventID := c.Param("id")
+
+	var input struct {
+		Title       string     `json:"title"`
+		Description string     `json:"description"`
+		EventType   string     `json:"eventType"`
+		StartTime   *time.Time `json:"startTime"`
+		EndTime     *time.Time `json:"endTime"`
+		MeetingURL  string     `json:"meetingUrl"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var event models.CohortEvent
+	if err := db.DB.Where("tenant_id = ? AND id = ?", tenantID, eventID).First(&event).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
+		return
+	}
+
+	if input.Title != "" {
+		event.Title = input.Title
+	}
+	if input.Description != "" {
+		event.Description = input.Description
+	}
+	if input.EventType != "" {
+		event.EventType = input.EventType
+	}
+	if input.StartTime != nil {
+		event.StartTime = *input.StartTime
+	}
+	if input.EndTime != nil {
+		event.EndTime = *input.EndTime
+	}
+	if input.MeetingURL != "" {
+		event.MeetingURL = input.MeetingURL
+	}
+
+	if err := db.DB.Save(&event).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update event"})
+		return
+	}
+
+	c.JSON(http.StatusOK, event)
+}
+
+func (h *Handler) AdminDeleteCohortEvent(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	eventID := c.Param("id")
+
+	if err := db.DB.Where("tenant_id = ? AND id = ?", tenantID, eventID).Delete(&models.CohortEvent{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete event"})
+		return
+	}
+	
+	// Also delete RSVPs
+	db.DB.Where("tenant_id = ? AND event_id = ?", tenantID, eventID).Delete(&models.EventRSVP{})
+
+	c.JSON(http.StatusOK, gin.H{"message": "Event deleted"})
+}
