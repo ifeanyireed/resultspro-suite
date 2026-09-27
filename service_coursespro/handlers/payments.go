@@ -125,3 +125,95 @@ func (h *Handler) CreatePaymentIntent(c *gin.Context) {
 		"reference":         uuid.New().String(),
 	})
 }
+
+func (h *Handler) GetBillingSubscriptions(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	userID, _ := c.Get("user_id")
+
+	var enrollments []models.Enrollment
+	db.DB.Where("tenant_id = ? AND user_id = ? AND billing_cycle != ?", tenantID, userID, "one-time").Find(&enrollments)
+
+	var response []map[string]interface{}
+	for _, e := range enrollments {
+		var cohort models.Cohort
+		db.DB.Where("id = ?", e.CohortID).Preload("Program").First(&cohort)
+		
+		planName := "Subscription"
+		if cohort.Program != nil {
+			planName = cohort.Program.Title
+		}
+
+		response = append(response, map[string]interface{}{
+			"id": e.ID,
+			"planName": planName,
+			"status": "active", // simplified for now
+			"amount": cohort.Price,
+			"interval": e.BillingCycle,
+			"nextBillingDate": e.NextBillingDate,
+		})
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *Handler) CancelBillingSubscription(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	userID, _ := c.Get("user_id")
+	subID := c.Param("id")
+
+	var enrollment models.Enrollment
+	if err := db.DB.Where("tenant_id = ? AND user_id = ? AND id = ?", tenantID, userID, subID).First(&enrollment).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Subscription not found"})
+		return
+	}
+
+	enrollment.Status = "CANCELED"
+	enrollment.BillingCycle = "one-time"
+	db.DB.Save(&enrollment)
+
+	c.JSON(http.StatusOK, gin.H{"message": "Subscription canceled"})
+}
+
+func (h *Handler) GetBillingHistory(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	userID, _ := c.Get("user_id")
+
+	var transactions []models.Transaction
+	db.DB.Where("tenant_id = ? AND user_id = ?", tenantID, userID).Order("created_at DESC").Find(&transactions)
+
+	var response []map[string]interface{}
+	for _, t := range transactions {
+		response = append(response, map[string]interface{}{
+			"id": t.Reference,
+			"description": "Payment for " + t.Gateway,
+			"date": t.CreatedAt.Format("Jan 02, 2006"),
+			"amount": t.Amount,
+			"status": t.Status,
+		})
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *Handler) GetPaymentMethods(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	userID, _ := c.Get("user_id")
+
+	var methods []models.PaymentMethod
+	db.DB.Where("tenant_id = ? AND user_id = ?", tenantID, userID).Order("created_at DESC").Find(&methods)
+
+	c.JSON(http.StatusOK, methods)
+}
+
+func (h *Handler) DeletePaymentMethod(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	userID, _ := c.Get("user_id")
+	pmID := c.Param("id")
+
+	if err := db.DB.Where("tenant_id = ? AND user_id = ? AND id = ?", tenantID, userID, pmID).Delete(&models.PaymentMethod{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete payment method"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Payment method deleted"})
+}
