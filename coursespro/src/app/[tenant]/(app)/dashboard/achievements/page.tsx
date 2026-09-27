@@ -28,7 +28,7 @@ export default function AchievementsPage() {
       
       {isLoading ? (
         <div className="text-center text-gray-500 mt-10">Loading achievements...</div>
-      ) : achievements?.length === 0 ? (
+      ) : !achievements || achievements.length === 0 ? (
         <div className="text-center text-gray-500 mt-10">No achievements available yet.</div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
