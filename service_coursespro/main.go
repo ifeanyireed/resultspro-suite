@@ -101,6 +101,7 @@ func main() {
 		protected.PUT("/admin/cohorts/:id", h.AdminUpdateCohort)
 		protected.DELETE("/admin/cohorts/:id", h.AdminDeleteCohort)
 		protected.POST("/admin/cohorts/:id/resources", h.AdminCreateCohortResource)
+		protected.POST("/admin/cohorts/:id/events", h.AdminCreateCohortEvent)
 
 		protected.POST("/admin/stages", h.AdminCreateStage)
 		protected.PUT("/admin/stages/:id", h.AdminUpdateStage)
@@ -144,6 +145,8 @@ func main() {
 		protected.GET("/student/projects", h.GetStudentProjects)
 		protected.GET("/student/classroom/session", h.GetClassroomSession)
 		protected.GET("/student/resources", h.GetStudentResources)
+		protected.GET("/student/events", h.GetStudentEvents)
+		protected.POST("/student/events/:id/rsvp", h.RSVPEvent)
 
 		// Portfolio
 		protected.GET("/portfolio", h.GetMyPortfolio)

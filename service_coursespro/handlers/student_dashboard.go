@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"service_coursespro/db"
 	"service_coursespro/models"
 )
@@ -516,4 +517,83 @@ func (h *Handler) GetStudentResources(c *gin.Context) {
 	db.DB.Where("tenant_id = ? AND cohort_id = ? AND is_published = ?", tenantID, enrollment.CohortID, true).Order("created_at DESC").Find(&resources)
 
 	c.JSON(http.StatusOK, resources)
+}
+
+func (h *Handler) GetStudentEvents(c *gin.Context) {
+	userID, _ := c.Get("user_id")
+	tenantID, _ := c.Get("tenant_id")
+
+	var enrollment models.Enrollment
+	if err := db.DB.Where("tenant_id = ? AND user_id = ?", tenantID, userID).First(&enrollment).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Enrollment not found"})
+		return
+	}
+
+	var events []models.CohortEvent
+	db.DB.Where("tenant_id = ? AND cohort_id = ?", tenantID, enrollment.CohortID).Order("start_time ASC").Find(&events)
+
+	// Fetch RSVPs
+	var rsvps []models.EventRSVP
+	db.DB.Where("tenant_id = ? AND user_id = ?", tenantID, userID).Find(&rsvps)
+
+	rsvpMap := make(map[string]bool)
+	for _, r := range rsvps {
+		if r.Status == "going" {
+			rsvpMap[r.EventID] = true
+		}
+	}
+
+	// Format response
+	var response []map[string]interface{}
+	for _, e := range events {
+		isGoing := rsvpMap[e.ID]
+		response = append(response, map[string]interface{}{
+			"id": e.ID,
+			"title": e.Title,
+			"description": e.Description,
+			"eventType": e.EventType,
+			"startTime": e.StartTime,
+			"endTime": e.EndTime,
+			"meetingUrl": e.MeetingURL,
+			"isGoing": isGoing,
+		})
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *Handler) RSVPEvent(c *gin.Context) {
+	userID, _ := c.Get("user_id")
+	tenantID, _ := c.Get("tenant_id")
+	eventID := c.Param("id")
+
+	var input struct {
+		Status string `json:"status" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var rsvp models.EventRSVP
+	result := db.DB.Where("tenant_id = ? AND user_id = ? AND event_id = ?", tenantID, userID, eventID).First(&rsvp)
+	
+	if result.Error != nil {
+		tenantIDStr := tenantID.(string)
+		userIDStr := userID.(string)
+		rsvp = models.EventRSVP{
+			TenantID: &tenantIDStr,
+			ID:       uuid.New().String(),
+			EventID:  eventID,
+			UserID:   userIDStr,
+			Status:   input.Status,
+		}
+		db.DB.Create(&rsvp)
+	} else {
+		rsvp.Status = input.Status
+		db.DB.Save(&rsvp)
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "RSVP updated successfully", "status": rsvp.Status})
 }

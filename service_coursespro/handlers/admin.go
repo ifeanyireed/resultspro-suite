@@ -725,3 +725,42 @@ func (h *Handler) AdminCreateCohortResource(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, resource)
 }
+
+func (h *Handler) AdminCreateCohortEvent(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	cohortID := c.Param("id")
+
+	var input struct {
+		Title       string    `json:"title" binding:"required"`
+		Description string    `json:"description"`
+		EventType   string    `json:"eventType" binding:"required"`
+		StartTime   time.Time `json:"startTime" binding:"required"`
+		EndTime     time.Time `json:"endTime" binding:"required"`
+		MeetingURL  string    `json:"meetingUrl"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	tenantIDStr := tenantID.(string)
+	event := models.CohortEvent{
+		TenantID:    &tenantIDStr,
+		ID:          uuid.New().String(),
+		CohortID:    cohortID,
+		Title:       input.Title,
+		Description: input.Description,
+		EventType:   input.EventType,
+		StartTime:   input.StartTime,
+		EndTime:     input.EndTime,
+		MeetingURL:  input.MeetingURL,
+	}
+
+	if err := db.DB.Create(&event).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create event"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, event)
+}

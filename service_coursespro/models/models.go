@@ -406,3 +406,27 @@ type Message struct {
 	CreatedAt      time.Time `json:"created_at"`
 }
 func (Message) TableName() string { return "crs_messages" }
+
+type CohortEvent struct {
+	TenantID    *string        `gorm:"size:64;index" json:"tenant_id"`
+	ID          string         `gorm:"primaryKey;type:varchar(191)" json:"id"`
+	CohortID    string         `gorm:"index;not null" json:"cohortId"`
+	Title       string         `json:"title"`
+	Description string         `json:"description"`
+	EventType   string         `json:"eventType"` // e.g. "Live Class", "Deadline", "Mentor Sync"
+	StartTime   time.Time      `json:"startTime"`
+	EndTime     time.Time      `json:"endTime"`
+	MeetingURL  string         `json:"meetingUrl"`
+	CreatedAt   time.Time      `json:"createdAt"`
+	UpdatedAt   time.Time      `json:"updatedAt"`
+}
+
+type EventRSVP struct {
+	TenantID  *string   `gorm:"size:64;index" json:"tenant_id"`
+	ID        string    `gorm:"primaryKey;type:varchar(191)" json:"id"`
+	EventID   string    `gorm:"index;not null" json:"eventId"`
+	UserID    string    `gorm:"index;not null" json:"userId"`
+	Status    string    `json:"status"` // e.g. "going"
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+}
