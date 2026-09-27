@@ -431,3 +431,44 @@ type EventRSVP struct {
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
+
+// Achievement represents a possible badge or certificate
+type Achievement struct {
+	ID          string    `gorm:"primaryKey;size:64" json:"id"`
+	TenantID    string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	Title       string    `gorm:"size:255;not null" json:"title"`
+	Description string    `gorm:"type:text" json:"description"`
+	Type        string    `gorm:"size:32;default:'BADGE'" json:"type"` // BADGE, CERTIFICATE
+	IconURL     string    `gorm:"size:512" json:"icon_url"`
+	IsActive    bool      `gorm:"default:true" json:"is_active"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
+func (Achievement) TableName() string { return "crs_achievements" }
+
+// UserAchievement represents a badge/certificate earned by a student
+type UserAchievement struct {
+	ID            string      `gorm:"primaryKey;size:64" json:"id"`
+	TenantID      string      `gorm:"size:191;index;not null" json:"tenant_id"`
+	UserID        string      `gorm:"size:64;index;not null" json:"user_id"`
+	AchievementID string      `gorm:"size:64;index;not null" json:"achievement_id"`
+	EarnedAt      time.Time   `json:"earned_at"`
+	
+	Achievement   Achievement `gorm:"foreignKey:AchievementID" json:"achievement,omitempty"`
+}
+func (UserAchievement) TableName() string { return "crs_user_achievements" }
+
+type PaymentMethod struct {
+	TenantID  string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	ID        string    `gorm:"primaryKey;size:64" json:"id"`
+	UserID    string    `gorm:"size:64;index;not null" json:"user_id"`
+	Gateway   string    `gorm:"size:32;default:'paystack'" json:"gateway"`
+	Brand     string    `gorm:"size:32" json:"brand"`
+	Last4     string    `gorm:"size:4" json:"last4"`
+	Expiry    string    `gorm:"size:16" json:"expiry"`
+	Token     string    `gorm:"size:255;not null" json:"-"`
+	IsDefault bool      `gorm:"default:false" json:"is_default"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+func (PaymentMethod) TableName() string { return "crs_payment_methods" }

@@ -339,3 +339,27 @@ CREATE TABLE IF NOT EXISTS crs_messages (
 );
 CREATE INDEX IF NOT EXISTS idx_msgs_conv ON crs_messages(conversation_id);
 CREATE INDEX IF NOT EXISTS idx_msgs_sender ON crs_messages(sender_id);
+
+-- 15. Achievements System
+CREATE TABLE IF NOT EXISTS crs_achievements (
+    id VARCHAR(64) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    type VARCHAR(32) DEFAULT 'BADGE',
+    icon_url VARCHAR(512),
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_achieve_tenant ON crs_achievements(tenant_id);
+
+CREATE TABLE IF NOT EXISTS crs_user_achievements (
+    id VARCHAR(64) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    user_id VARCHAR(64) NOT NULL,
+    achievement_id VARCHAR(64) NOT NULL REFERENCES crs_achievements(id) ON DELETE CASCADE,
+    earned_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_uachieve_user ON crs_user_achievements(user_id);
+CREATE INDEX IF NOT EXISTS idx_uachieve_achieve ON crs_user_achievements(achievement_id);

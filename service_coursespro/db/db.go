@@ -47,6 +47,7 @@ func InitDB() {
 		&models.CohortResource{},
 		&models.CohortEvent{},
 		&models.EventRSVP{},
+		&models.PaymentMethod{},
 		&models.JourneyStage{},
 		&models.JourneyModule{},
 		&models.ModuleProgress{},
@@ -66,6 +67,8 @@ func InitDB() {
 		&models.Conversation{},
 		&models.ConversationParticipant{},
 		&models.Message{},
+		&models.Achievement{},
+		&models.UserAchievement{},
 	)
 
 	log.Println("CoursesPRO connected to MySQL with GORM successfully")

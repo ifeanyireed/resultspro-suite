@@ -148,6 +148,12 @@ func main() {
 
 		// Student Dashboard
 		protected.GET("/student/dashboard/summary", h.GetStudentDashboardSummary)
+		protected.GET("/student/billing/subscriptions", h.GetBillingSubscriptions)
+		protected.PUT("/student/billing/subscriptions/:id/cancel", h.CancelBillingSubscription)
+		protected.GET("/student/billing/history", h.GetBillingHistory)
+		protected.GET("/student/billing/methods", h.GetPaymentMethods)
+		protected.DELETE("/student/billing/methods/:id", h.DeletePaymentMethod)
+
 		protected.GET("/student/mentors", h.GetStudentMentors)
 		protected.GET("/student/projects", h.GetStudentProjects)
 		protected.GET("/student/classroom/session", h.GetClassroomSession)
@@ -164,6 +170,9 @@ func main() {
 		protected.GET("/messages/conversations/:id", h.GetMessages)
 		protected.POST("/messages/conversations/:id", h.SendMessage)
 		protected.POST("/messages/direct/:targetUserId", h.StartDirectMessage)
+
+		// Achievements
+		protected.GET("/achievements", h.GetMyAchievements)
 
 		// Admin Payments logic has been moved to service_users for centralization
 	}
