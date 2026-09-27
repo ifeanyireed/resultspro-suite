@@ -132,6 +132,12 @@ func main() {
 		protected.PUT("/admin/mentors/:id", h.AdminUpdateMentor)
 		protected.POST("/admin/mentors/invite", h.AdminInviteMentor)
 
+		// Admin Achievements
+		protected.GET("/admin/achievements", h.AdminGetAchievements)
+		protected.POST("/admin/achievements", h.AdminCreateAchievement)
+		protected.PUT("/admin/achievements/:id", h.AdminUpdateAchievement)
+		protected.DELETE("/admin/achievements/:id", h.AdminDeleteAchievement)
+
 		// Admin Settings (Courses Specific)
 		protected.GET("/admin/settings", h.AdminGetSettings)
 		protected.PUT("/admin/settings", h.AdminUpdateSettings)

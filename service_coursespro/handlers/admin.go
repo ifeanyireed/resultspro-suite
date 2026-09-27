@@ -884,3 +884,101 @@ func (h *Handler) AdminDeleteCohortEvent(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Event deleted"})
 }
+
+// --- Achievements Admin ---
+
+func (h *Handler) AdminGetAchievements(c *gin.Context) {
+	var achievements []models.Achievement
+	if err := db.WithTenant(c).Find(&achievements).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch achievements"})
+		return
+	}
+	c.JSON(http.StatusOK, achievements)
+}
+
+func (h *Handler) AdminCreateAchievement(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+
+	var req struct {
+		Title       string `json:"title" binding:"required"`
+		CodeName    string `json:"code_name"`
+		Description string `json:"description"`
+		Type        string `json:"type"`
+		IconURL     string `json:"icon_url"`
+		IsActive    bool   `json:"is_active"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if req.Type == "" {
+		req.Type = "BADGE"
+	}
+
+	ach := models.Achievement{
+		ID:          "ach_" + uuid.New().String(),
+		TenantID:    tenantID.(string),
+		Title:       req.Title,
+		CodeName:    req.CodeName,
+		Description: req.Description,
+		Type:        req.Type,
+		IconURL:     req.IconURL,
+		IsActive:    req.IsActive,
+	}
+
+	if err := db.WithTenant(c).Create(&ach).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create achievement, codename might not be unique"})
+		return
+	}
+
+	c.JSON(http.StatusOK, ach)
+}
+
+func (h *Handler) AdminUpdateAchievement(c *gin.Context) {
+	id := c.Param("id")
+
+	var req struct {
+		Title       string `json:"title"`
+		CodeName    string `json:"code_name"`
+		Description string `json:"description"`
+		Type        string `json:"type"`
+		IconURL     string `json:"icon_url"`
+		IsActive    bool   `json:"is_active"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var ach models.Achievement
+	if err := db.WithTenant(c).Where("id = ?", id).First(&ach).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Achievement not found"})
+		return
+	}
+
+	ach.Title = req.Title
+	ach.CodeName = req.CodeName
+	ach.Description = req.Description
+	ach.Type = req.Type
+	ach.IconURL = req.IconURL
+	ach.IsActive = req.IsActive
+
+	if err := db.WithTenant(c).Save(&ach).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update achievement"})
+		return
+	}
+
+	c.JSON(http.StatusOK, ach)
+}
+
+func (h *Handler) AdminDeleteAchievement(c *gin.Context) {
+	id := c.Param("id")
+	if err := db.WithTenant(c).Where("id = ?", id).Delete(&models.Achievement{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete achievement"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Achievement deleted successfully"})
+}

@@ -172,6 +172,11 @@ export default function AppLayout({
                 <ShoppingBagIcon className="w-6 h-6 shrink-0" strokeWidth={2} />
                 {!isCollapsed && <span className="truncate">Store</span>}
               </Link>
+              
+              <Link href="/admin/achievements" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/admin/achievements') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
+                <TrophyIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Achievements</span>}
+              </Link>
 
 
               <Link href="/admin/reports" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/admin/reports') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
