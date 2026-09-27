@@ -532,6 +532,7 @@ func (h *Handler) AdminGetSettings(c *gin.Context) {
 			EnableMentorPayouts: true,
 			PayoutModel:         "BASE_PLUS_SLA",
 			PayoutConfigJSON:    "{}",
+			MentorTerminology:   "Mentor",
 		}
 	}
 	c.JSON(http.StatusOK, settings)
@@ -557,6 +558,9 @@ func (h *Handler) AdminUpdateSettings(c *gin.Context) {
 	settings.EnableMentorPayouts = req.EnableMentorPayouts
 	settings.PayoutModel = req.PayoutModel
 	settings.PayoutConfigJSON = req.PayoutConfigJSON
+	if req.MentorTerminology != "" {
+		settings.MentorTerminology = req.MentorTerminology
+	}
 	db.DB.Save(&settings)
 
 	c.JSON(http.StatusOK, settings)

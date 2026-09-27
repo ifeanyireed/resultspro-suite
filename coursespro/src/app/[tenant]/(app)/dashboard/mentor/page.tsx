@@ -18,6 +18,8 @@ export default function MentorsPage() {
   });
 
   const mentors = data?.mentors || [];
+  const term = data?.terminology || 'Mentor';
+  const termPlural = term + 's';
 
   const handleMessage = async (mentorId: string) => {
     try {
@@ -35,7 +37,7 @@ export default function MentorsPage() {
     <>
       <div className="flex items-end justify-between mb-8 mt-2">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Mentor Directory</h1>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{term} Directory</h1>
           <p className="text-sm text-gray-500 mt-1">Book 1-on-1 sessions with industry experts for code reviews and guidance.</p>
         </div>
       </div>
@@ -52,7 +54,7 @@ export default function MentorsPage() {
         </div>
       ) : mentors.length === 0 ? (
         <div className="text-gray-500 py-12 text-center bg-white rounded-[1.5rem] border border-gray-100 shadow-sm">
-          No mentors have been assigned to your cohort yet.
+          No {termPlural.toLowerCase()} have been assigned to your cohort yet.
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -365,6 +365,12 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		}
 	}
 
+	var settings models.TenantSettings
+	terminology := "Mentor"
+	if err := db.DB.Where("tenant_id = ?", tenantID).First(&settings).Error; err == nil && settings.MentorTerminology != "" {
+		terminology = settings.MentorTerminology
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"has_enrollment": enrollment.ID != "",
 		"enrollment": gin.H{
@@ -383,6 +389,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 		"upcoming_milestone": upcomingMilestone,
 		"leaderboard":        leaderboard,
 		"classroom":          classroom,
+		"mentor_terminology": terminology,
 	})
 }
 
@@ -634,6 +641,11 @@ func (h *Handler) GetStudentMentors(c *gin.Context) {
 	var profiles []models.MentorProfile
 	db.DB.Where("tenant_id = ? AND user_id IN ?", tenantID, mentorUserIDs).Find(&profiles)
 
-	// In case there are missing profiles for users defined in cohortMentors, we can return what we have.
-	c.JSON(http.StatusOK, gin.H{"mentors": profiles})
+	var settings models.TenantSettings
+	terminology := "Mentor"
+	if err := db.DB.Where("tenant_id = ?", tenantID).First(&settings).Error; err == nil && settings.MentorTerminology != "" {
+		terminology = settings.MentorTerminology
+	}
+
+	c.JSON(http.StatusOK, gin.H{"mentors": profiles, "terminology": terminology})
 }

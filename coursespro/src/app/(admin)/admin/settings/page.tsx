@@ -21,7 +21,8 @@ export default function SettingsPage() {
   const [coursesSettings, setCoursesSettings] = useState({
     enable_mentor_payouts: true,
     payout_model: 'BASE_PLUS_SLA',
-    payout_config_json: '{}'
+    payout_config_json: '{}',
+    mentor_terminology: 'Mentor'
   });
 
   const { data: cSettings } = useQuery({
@@ -37,7 +38,8 @@ export default function SettingsPage() {
       setCoursesSettings({
         enable_mentor_payouts: cSettings.enable_mentor_payouts,
         payout_model: cSettings.payout_model || 'BASE_PLUS_SLA',
-        payout_config_json: cSettings.payout_config_json || '{}'
+        payout_config_json: cSettings.payout_config_json || '{}',
+        mentor_terminology: cSettings.mentor_terminology || 'Mentor'
       });
     }
   }, [cSettings]);
@@ -305,6 +307,9 @@ const { data: tenantData, isLoading } = useQuery({
       
       await api.patch(`/api/v1/tenants/update/${tenantId}`, payload);
       
+      // Save courses settings
+      await api.put('/api/admin/settings', coursesSettings);
+      
       if (formData.customDomainEnabled && formData.customDomain) {
         try {
           await fetch('/api/vercel/domain', {
@@ -317,7 +322,7 @@ const { data: tenantData, isLoading } = useQuery({
         }
       }
 
-      alert('Platform profile updated successfully!');
+      alert('Platform settings updated successfully!');
       if (formData.password) {
         setFormData(prev => ({ ...prev, password: '' }));
       }
@@ -689,6 +694,21 @@ const { data: tenantData, isLoading } = useQuery({
           </div>
           
           <div className="space-y-4">
+            <div className="flex items-center justify-between py-3 border-b border-gray-100">
+              <div>
+                <p className="font-medium text-gray-900">Frontend Terminology</p>
+                <p className="text-xs text-gray-500 mt-0.5">What should this role be called in the student dashboard?</p>
+              </div>
+              <select 
+                className="border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-[#146ef5] bg-gray-50/50"
+                value={coursesSettings.mentor_terminology}
+                onChange={e => setCoursesSettings({...coursesSettings, mentor_terminology: e.target.value})}
+              >
+                <option value="Mentor">Mentor</option>
+                <option value="Instructor">Instructor</option>
+              </select>
+            </div>
+
             <div className="flex items-center justify-between py-3 border-b border-gray-100">
               <div>
                 <p className="font-medium text-gray-900">Enable On-Platform Earnings</p>
