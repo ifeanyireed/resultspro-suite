@@ -273,6 +273,7 @@ CREATE TABLE IF NOT EXISTS crs_mentor_profiles (
     total_reviews INTEGER DEFAULT 0,
     pending_reviews INTEGER DEFAULT 0,
     avg_rating FLOAT DEFAULT 0.0,
+    booking_url VARCHAR(512),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );

@@ -295,6 +295,7 @@ type MentorProfile struct {
 	TotalReviews   int       `gorm:"default:0" json:"total_reviews"`
 	PendingReviews int       `gorm:"default:0" json:"pending_reviews"`
 	AvgRating      float64   `gorm:"default:0.0" json:"avg_rating"`
+	BookingURL     string    `gorm:"size:512" json:"booking_url"`
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at"`
 }

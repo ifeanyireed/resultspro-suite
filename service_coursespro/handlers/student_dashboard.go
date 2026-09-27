@@ -597,3 +597,43 @@ func (h *Handler) RSVPEvent(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "RSVP updated successfully", "status": rsvp.Status})
 }
+
+func (h *Handler) GetStudentMentors(c *gin.Context) {
+	userID, _ := c.Get("user_id")
+	tenantID, _ := c.Get("tenant_id")
+
+	// Get all cohorts the user is enrolled in
+	var enrollments []models.Enrollment
+	db.DB.Where("tenant_id = ? AND user_id = ? AND status = ?", tenantID, userID, "ACTIVE").Find(&enrollments)
+
+	var cohortIDs []string
+	for _, e := range enrollments {
+		cohortIDs = append(cohortIDs, e.CohortID)
+	}
+
+	if len(cohortIDs) == 0 {
+		c.JSON(http.StatusOK, gin.H{"mentors": []interface{}{}})
+		return
+	}
+
+	// Get cohort mentors
+	var cohortMentors []models.CohortMentor
+	db.DB.Where("tenant_id = ? AND cohort_id IN ?", tenantID, cohortIDs).Find(&cohortMentors)
+
+	var mentorUserIDs []string
+	for _, cm := range cohortMentors {
+		mentorUserIDs = append(mentorUserIDs, cm.UserID)
+	}
+
+	if len(mentorUserIDs) == 0 {
+		c.JSON(http.StatusOK, gin.H{"mentors": []interface{}{}})
+		return
+	}
+
+	// Fetch Mentor Profiles
+	var profiles []models.MentorProfile
+	db.DB.Where("tenant_id = ? AND user_id IN ?", tenantID, mentorUserIDs).Find(&profiles)
+
+	// In case there are missing profiles for users defined in cohortMentors, we can return what we have.
+	c.JSON(http.StatusOK, gin.H{"mentors": profiles})
+}

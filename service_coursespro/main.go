@@ -83,6 +83,7 @@ func main() {
 		protected.POST("/classroom/heartbeat", h.PresenceHeartbeat)
 		protected.GET("/classroom/ws", ws.HandleWS)
 		protected.GET("/peers/roster", h.GetPeers)
+		protected.GET("/leaderboard", h.GetLeaderboard)
 
 		// Admin Endpoints
 		protected.GET("/admin/programs", h.AdminGetPrograms)
@@ -101,7 +102,12 @@ func main() {
 		protected.PUT("/admin/cohorts/:id", h.AdminUpdateCohort)
 		protected.DELETE("/admin/cohorts/:id", h.AdminDeleteCohort)
 		protected.POST("/admin/cohorts/:id/resources", h.AdminCreateCohortResource)
+		protected.PUT("/admin/cohort_resources/:id", h.AdminUpdateCohortResource)
+		protected.DELETE("/admin/cohort_resources/:id", h.AdminDeleteCohortResource)
+
 		protected.POST("/admin/cohorts/:id/events", h.AdminCreateCohortEvent)
+		protected.PUT("/admin/cohort_events/:id", h.AdminUpdateCohortEvent)
+		protected.DELETE("/admin/cohort_events/:id", h.AdminDeleteCohortEvent)
 
 		protected.POST("/admin/stages", h.AdminCreateStage)
 		protected.PUT("/admin/stages/:id", h.AdminUpdateStage)
@@ -142,6 +148,7 @@ func main() {
 
 		// Student Dashboard
 		protected.GET("/student/dashboard/summary", h.GetStudentDashboardSummary)
+		protected.GET("/student/mentors", h.GetStudentMentors)
 		protected.GET("/student/projects", h.GetStudentProjects)
 		protected.GET("/student/classroom/session", h.GetClassroomSession)
 		protected.GET("/student/resources", h.GetStudentResources)
