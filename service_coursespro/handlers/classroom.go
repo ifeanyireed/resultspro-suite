@@ -236,8 +236,29 @@ func (h *Handler) GetClassroomSession(c *gin.Context) {
 	var tokenRes DailyTokenResponse
 	json.Unmarshal(bodyBytes, &tokenRes)
 
+	// 3. Ensure a COHORT conversation exists for chat persistence
+	convID := cohort.ID
+	var conv models.Conversation
+	if err := db.DB.Where("id = ?", convID).First(&conv).Error; err != nil {
+		conv = models.Conversation{
+			ID:       convID,
+			TenantID: tenantID.(string),
+			Type:     "COHORT",
+		}
+		db.DB.Create(&conv)
+	}
+
+	var participant models.ConversationParticipant
+	if err := db.DB.Where("conversation_id = ? AND user_id = ?", convID, userID).First(&participant).Error; err != nil {
+		db.DB.Create(&models.ConversationParticipant{
+			ConversationID: convID,
+			UserID:         userID.(string),
+		})
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"room_url": roomRes.URL,
-		"token":    tokenRes.Token,
+		"room_url":        roomRes.URL,
+		"token":           tokenRes.Token,
+		"conversation_id": convID,
 	})
 }

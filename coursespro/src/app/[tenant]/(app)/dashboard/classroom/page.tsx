@@ -13,6 +13,8 @@ export default function ClassroomPage() {
   const [messages, setMessages] = useState<Array<{sender: string, text: string, isSelf: boolean}>>([]);
   const [participantCount, setParticipantCount] = useState(0);
 
+  const [conversationId, setConversationId] = useState<string | null>(null);
+
   useEffect(() => {
     return () => {
       if (callObject) {
@@ -28,7 +30,22 @@ export default function ClassroomPage() {
     
     try {
       const res = await api.get('/api/v1/student/classroom/session');
-      const { room_url, token } = res.data;
+      const { room_url, token, conversation_id } = res.data;
+      
+      setConversationId(conversation_id);
+
+      if (conversation_id) {
+        api.get(`/api/v1/messages/conversations/${conversation_id}`).then(msgRes => {
+          if (msgRes.data?.messages) {
+            const history = msgRes.data.messages.map((m: any) => ({
+              sender: m.sender_id, // We'd ideally map this to a name
+              text: m.content,
+              isSelf: false // For simplicity on history
+            }));
+            setMessages(history);
+          }
+        }).catch(e => console.error("Failed to fetch message history", e));
+      }
 
       if (videoRef.current) {
         const frame = DailyIframe.createFrame(videoRef.current, {
@@ -88,16 +105,24 @@ export default function ClassroomPage() {
     setParticipantCount(Object.keys(participants).length);
   };
 
-  const sendMessage = (e: React.FormEvent) => {
+  const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatMessage.trim() || !callObject) return;
 
-    // Broadcast to other participants
-    callObject.sendAppMessage({ message: chatMessage });
+    const msg = chatMessage;
+    setChatMessage("");
+    
+    // Broadcast instantly to other live participants
+    callObject.sendAppMessage({ message: msg });
     
     // Add to our own local state
-    setMessages(prev => [...prev, { sender: 'Me', text: chatMessage, isSelf: true }]);
-    setChatMessage("");
+    setMessages(prev => [...prev, { sender: 'Me', text: msg, isSelf: true }]);
+
+    // Persist to DB for history
+    if (conversationId) {
+      api.post(`/api/v1/messages/conversations/${conversationId}`, { content: msg })
+         .catch(e => console.error("Failed to persist message", e));
+    }
   };
 
   return (
