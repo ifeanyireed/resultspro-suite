@@ -262,3 +262,43 @@ func (h *Handler) GetClassroomSession(c *gin.Context) {
 		"conversation_id": convID,
 	})
 }
+
+func (h *Handler) GetLeaderboard(c *gin.Context) {
+	userID, _ := c.Get("user_id")
+
+	cohortID := c.Query("cohort_id")
+	var userCohortIDs []string
+
+	if cohortID != "" {
+		userCohortIDs = append(userCohortIDs, cohortID)
+	} else {
+		var myEnrollments []models.Enrollment
+		db.WithTenant(c).Where("user_id = ? AND status = ?", userID, "ACTIVE").Find(&myEnrollments)
+		for _, e := range myEnrollments {
+			userCohortIDs = append(userCohortIDs, e.CohortID)
+		}
+	}
+
+	if len(userCohortIDs) == 0 {
+		c.JSON(http.StatusOK, gin.H{"leaders": []interface{}{}})
+		return
+	}
+
+	var enrollments []models.Enrollment
+	db.WithTenant(c).Where("status = ? AND cohort_id IN ?", "ACTIVE", userCohortIDs).
+		Order("current_xp DESC").Find(&enrollments)
+
+	var result []map[string]interface{}
+	for i, e := range enrollments {
+		result = append(result, map[string]interface{}{
+			"rank":        i + 1,
+			"user_id":     e.UserID,
+			"cohort_id":   e.CohortID,
+			"current_xp":  e.CurrentXP,
+			"streak_days": e.StreakDays,
+			"is_me":       e.UserID == userID,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"leaders": result})
+}
