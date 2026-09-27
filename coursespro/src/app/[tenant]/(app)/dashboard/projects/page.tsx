@@ -45,11 +45,8 @@ export default function ProjectsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((proj: any, i: number) => {
             const isLocked = proj.status === 'Locked';
-            const Wrapper = isLocked ? 'div' : Link;
-            const props = isLocked ? {} : { href: `/dashboard/journey/${proj.module_id}` };
-            
-            return (
-              <Wrapper key={i} {...props} className={`bg-white rounded-[1.5rem] p-6 border border-gray-100 shadow-sm flex flex-col ${isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:border-blue-200 hover:shadow-md transition-all cursor-pointer'}`}>
+            const content = (
+              <>
                 <div className="w-10 h-10 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center mb-4">
                   <FolderOpenIcon className="w-5 h-5" />
                 </div>
@@ -67,7 +64,21 @@ export default function ProjectsPage() {
                   </span>
                   <span className="text-xs font-medium text-gray-400">Due {proj.due || 'TBD'}</span>
                 </div>
-              </Wrapper>
+              </>
+            );
+
+            if (isLocked) {
+              return (
+                <div key={i} className="bg-white rounded-[1.5rem] p-6 border border-gray-100 shadow-sm flex flex-col opacity-60 cursor-not-allowed">
+                  {content}
+                </div>
+              );
+            }
+
+            return (
+              <Link key={i} href={`/dashboard/journey/${proj.module_id}`} className="bg-white rounded-[1.5rem] p-6 border border-gray-100 shadow-sm flex flex-col hover:border-blue-200 hover:shadow-md transition-all cursor-pointer">
+                {content}
+              </Link>
             );
           })}
         </div>
