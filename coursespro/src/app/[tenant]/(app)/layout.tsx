@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import ProfileModal from '@/components/ProfileModal';
 import TenantLogo from '@/components/TenantLogo';
 import { usePathname } from 'next/navigation';
 import api, { getTenantSlug } from '@/lib/api';
@@ -53,6 +54,7 @@ export default function AppLayout({
   const [logoUrl, setLogoUrl] = React.useState('/logo.png');
   const [profileName, setProfileName] = React.useState('Loading...');
   const [profileEmail, setProfileEmail] = React.useState('Loading...');
+  const [isProfileModalOpen, setIsProfileModalOpen] = React.useState(false);
 
   const { data: dashboardData } = useQuery({
     queryKey: ['student-dashboard-summary', user?.id],
@@ -220,14 +222,6 @@ export default function AppLayout({
                 <Link href="/dashboard/billing" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/billing') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
                   <CreditCardIcon className="w-6 h-6" />
                   Billing & Orders
-                </Link>
-                <Link href="/dashboard/settings" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/settings') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                  <Cog6ToothIcon className="w-6 h-6" />
-                  Settings
-                </Link>
-                <Link href="/dashboard/help" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/help') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                  <QuestionMarkCircleIcon className="w-6 h-6" />
-                  Help
                 </Link>
                 <button onClick={() => logout()} className="w-full text-left flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
                   <ArrowRightOnRectangleIcon className="w-6 h-6" />

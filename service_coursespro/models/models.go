@@ -437,6 +437,7 @@ type Achievement struct {
 	ID          string    `gorm:"primaryKey;size:64" json:"id"`
 	TenantID    string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	Title       string    `gorm:"size:255;not null" json:"title"`
+	CodeName    string    `gorm:"size:64;unique" json:"code_name"`
 	Description string    `gorm:"type:text" json:"description"`
 	Type        string    `gorm:"size:32;default:'BADGE'" json:"type"` // BADGE, CERTIFICATE
 	IconURL     string    `gorm:"size:512" json:"icon_url"`

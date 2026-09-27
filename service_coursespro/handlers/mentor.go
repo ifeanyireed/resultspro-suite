@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"github.com/google/uuid"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -61,6 +62,22 @@ func (h *Handler) ReviewSubmission(c *gin.Context) {
 				"current_stage_number": gorm.Expr("current_stage_number + 1"),
 				"current_xp":           gorm.Expr("current_xp + 500"),
 			})
+
+		// Award FIRST_PROJECT_APPROVED achievement
+		var achievement models.Achievement
+		if err := db.WithTenant(c).Where("code_name = ?", "FIRST_PROJECT_APPROVED").First(&achievement).Error; err == nil {
+			var count int64
+			db.WithTenant(c).Model(&models.UserAchievement{}).Where("user_id = ? AND achievement_id = ?", sub.UserID, achievement.ID).Count(&count)
+			if count == 0 {
+				ua := models.UserAchievement{
+					ID:            "uach_" + uuid.New().String(),
+					TenantID:      sub.TenantID,
+					UserID:        sub.UserID,
+					AchievementID: achievement.ID,
+				}
+				db.WithTenant(c).Create(&ua)
+			}
+		}
 	}
 
 	// Update mentor stats

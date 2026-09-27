@@ -345,6 +345,7 @@ CREATE TABLE IF NOT EXISTS crs_achievements (
     id VARCHAR(64) PRIMARY KEY,
     tenant_id VARCHAR(191) NOT NULL,
     title VARCHAR(255) NOT NULL,
+    code_name VARCHAR(64) UNIQUE,
     description TEXT,
     type VARCHAR(32) DEFAULT 'BADGE',
     icon_url VARCHAR(512),
