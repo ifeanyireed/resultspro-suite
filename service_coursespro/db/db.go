@@ -60,6 +60,9 @@ func InitDB() {
 		&models.AIJob{},
 		&models.MentorProfile{},
 		&models.StoreProduct{},
+		&models.WorkspaceTask{},
+		&models.WorkspaceComment{},
+		&models.WorkspaceAttachment{},
 	)
 
 	log.Println("CoursesPRO connected to MySQL with GORM successfully")
