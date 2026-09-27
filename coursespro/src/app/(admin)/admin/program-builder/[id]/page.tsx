@@ -1095,6 +1095,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                  <option value="COMPILER">Code Compiler</option>
                                  <option value="LIVE_CLASS">Live Class</option>
                                  <option value="PROJECT">Project</option>
+                                 <option value="CERTIFICATE">Certificate</option>
                                </select>
                             </div>
 
