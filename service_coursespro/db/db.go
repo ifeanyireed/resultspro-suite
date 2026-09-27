@@ -63,6 +63,9 @@ func InitDB() {
 		&models.WorkspaceTask{},
 		&models.WorkspaceComment{},
 		&models.WorkspaceAttachment{},
+		&models.Conversation{},
+		&models.ConversationParticipant{},
+		&models.Message{},
 	)
 
 	log.Println("CoursesPRO connected to MySQL with GORM successfully")
