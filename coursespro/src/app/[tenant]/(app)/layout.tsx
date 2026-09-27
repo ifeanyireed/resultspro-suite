@@ -22,6 +22,7 @@ import {
   GlobeAltIcon,
   StarIcon,
   AcademicCapIcon,
+  CheckBadgeIcon,
   TrophyIcon,
   Cog6ToothIcon,
   QuestionMarkCircleIcon,
@@ -208,6 +209,11 @@ export default function AppLayout({
               <Link href="/dashboard/achievements" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/achievements') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
                 <StarIcon className="w-6 h-6" />
                 Achievements
+              </Link>
+              
+              <Link href="/dashboard/certificates" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/certificates') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
+                <CheckBadgeIcon className="w-6 h-6" />
+                Certificates
               </Link>
 
               <div className="pt-4 mt-4 border-t border-gray-100">

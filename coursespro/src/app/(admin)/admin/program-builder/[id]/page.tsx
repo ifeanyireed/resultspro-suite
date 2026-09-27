@@ -25,7 +25,7 @@ import { PreviewModal } from './PreviewModal';
 
 export type ContentItem = {
   id: string;
-  type: 'TEXT' | 'VIDEO' | 'AUDIO' | 'PDF' | 'QUIZ' | 'HTML' | 'ASSIGNMENT' | 'PPT' | 'COMPILER' | 'LIVE_CLASS' | 'PROJECT';
+  type: 'TEXT' | 'VIDEO' | 'AUDIO' | 'PDF' | 'QUIZ' | 'HTML' | 'ASSIGNMENT' | 'PPT' | 'COMPILER' | 'LIVE_CLASS' | 'PROJECT' | 'CERTIFICATE';
   title?: string;
   description?: string;
   content?: string;
@@ -635,6 +635,80 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                               </div>
                             )}
 
+                            {item.type === 'CERTIFICATE' && (
+                              <div className="w-full text-left bg-yellow-50/50 p-4 border border-yellow-100 rounded-md shadow-sm" onClick={e => e.stopPropagation()}>
+                                <label className="block text-xs font-medium text-yellow-800 mb-2 flex items-center gap-2">
+                                  <svg className="w-4 h-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg> 
+                                  Certificate Template Upload
+                                </label>
+                                
+                                {item.url ? (
+                                  <div className="flex items-center gap-3 bg-white border border-yellow-200 rounded-md p-3 text-sm">
+                                    <div className="flex-1 truncate text-slate-600">
+                                      <a href={item.url} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline">View Template</a>
+                                    </div>
+                                    <button 
+                                      className="text-xs text-red-500 font-medium hover:text-red-700 whitespace-nowrap"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        const i = parseContents(mod); 
+                                        i[index].url = ''; 
+                                        setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); 
+                                        handleUpdateModule(mod.id, { contents_json: JSON.stringify(i) });
+                                      }}
+                                    >Remove</button>
+                                  </div>
+                                ) : (
+                                  <div>
+                                    <input 
+                                      type="file" 
+                                      accept="image/*,.pdf" 
+                                      className="hidden" 
+                                      id={'cert-upload-' + item.id}
+                                      onChange={async (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
+                                        setUploadingHtmlId(item.id); // reuse state for simplicity
+                                        try {
+                                          const data = new FormData();
+                                          data.append('file', file);
+                                          data.append('folder', 'uploads/certificates');
+                                          const res = await api.post('/api/v1/upload', data, {
+                                            headers: { 'Content-Type': 'multipart/form-data' }
+                                          });
+                                          if (res.data && res.data.url) {
+                                            const i = parseContents(mod);
+                                            i[index].url = res.data.url;
+                                            setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m));
+                                            handleUpdateModule(mod.id, { contents_json: JSON.stringify(i) });
+                                          }
+                                        } catch (err) {
+                                          console.error("Upload failed", err);
+                                          alert("Failed to upload file.");
+                                        } finally {
+                                          setUploadingHtmlId(null);
+                                        }
+                                      }}
+                                    />
+                                    <label htmlFor={'cert-upload-' + item.id} className="cursor-pointer flex flex-col items-center justify-center w-full px-4 py-6 border-2 border-dashed border-yellow-300 rounded-md text-sm font-medium text-yellow-700 hover:border-yellow-500 hover:text-yellow-800 transition-colors bg-white">
+                                      {uploadingHtmlId === item.id ? 'Uploading...' : 'Click to upload Certificate Background (PNG/JPG/PDF)'}
+                                    </label>
+                                  </div>
+                                )}
+
+                                <div className="mt-4 space-y-3">
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-500 mb-1">Certificate Title</label>
+                                    <input type="text" className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="e.g. Front-End Web Development Certificate" value={item.title || ''} onChange={e => { const i = parseContents(mod); i[index].title = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} />
+                                  </div>
+                                  <div>
+                                    <label className="block text-xs font-medium text-slate-500 mb-1">Earning Criteria (Optional)</label>
+                                    <textarea className="w-full border border-slate-300 rounded-md p-2 text-sm" placeholder="e.g. Complete all modules and final project." rows={2} value={item.description || ''} onChange={e => { const i = parseContents(mod); i[index].description = e.target.value; setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m)); }} onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
                             
                             {item.type === 'COMPILER' && (
                               <div className="w-full text-left bg-white p-3 border border-slate-200 rounded-md shadow-sm" onClick={e => e.stopPropagation()}>
@@ -1102,6 +1176,19 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                         >
                           <svg className="w-4 h-4 text-orange-500 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
                           Add HTML
+                        </button>
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            const items = parseContents(mod);
+                            items.push({ id: Math.random().toString(36).substring(7), type: 'CERTIFICATE', url: '' });
+                            setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(items), content_markdown: undefined, video_url: undefined } : m));
+                            handleUpdateModule(mod.id, { contents_json: JSON.stringify(items), content_markdown: null, video_url: null });
+                          }}
+                          className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap"
+                        >
+                          <svg className="w-4 h-4 text-yellow-500 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                          Add Certificate
                         </button>
                         <button 
                           onClick={(e) => { 
