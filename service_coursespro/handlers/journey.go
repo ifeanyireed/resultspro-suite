@@ -122,7 +122,10 @@ func (h *Handler) UpdateModuleProgress(c *gin.Context) {
 				addedXP = len(newComp) * 10
 			}
 		}
-		db.WithTenant(c).Create(&progress)
+		if err := db.WithTenant(c).Create(&progress).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create progress record", "details": err.Error()})
+			return
+		}
 	} else {
 		wasCompleted = progress.Completed
 		
@@ -148,7 +151,10 @@ func (h *Handler) UpdateModuleProgress(c *gin.Context) {
 		if input.Completed && !wasCompleted {
 			progress.CompletedAt = &now
 		}
-		db.WithTenant(c).Save(&progress)
+		if err := db.WithTenant(c).Save(&progress).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update progress record", "details": err.Error()})
+			return
+		}
 	}
 
 	isValid := true
