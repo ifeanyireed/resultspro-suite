@@ -109,7 +109,7 @@ function QuizContent() {
       console.error("Failed to fetch questions:", err);
       const msg = err.response?.data?.error || "Failed to load questions. Please try again later.";
       setError(msg);
-      setQuizStep('mode');
+      setQuizStep('active');
     } finally {
       setLoading(false);
     }
