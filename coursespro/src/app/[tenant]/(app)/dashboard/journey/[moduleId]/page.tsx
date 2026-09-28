@@ -16,7 +16,8 @@ import {
   SpeakerWaveIcon,
   PresentationChartBarIcon,
   ClipboardDocumentCheckIcon,
-  ClockIcon
+  ClockIcon,
+  LockClosedIcon
 } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as CheckCircleSolid } from '@heroicons/react/24/solid';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -713,15 +714,18 @@ export default function LessonPlayerPage() {
             {items.map((item, idx) => {
               const isCompleted = completedItems.includes(idx);
               const isActive = activeIndex === idx;
+              const isAccessible = idx === 0 || completedItems.includes(idx - 1) || isCompleted;
+              
               return (
                 <button 
                   key={idx}
-                  onClick={() => setActiveIndex(idx)}
-                  className={`w-full text-left flex flex-col justify-center px-4 py-3 rounded-xl relative transition-colors ${isActive ? 'text-gray-900 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-10 before:bg-gray-900 before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}
+                  onClick={() => isAccessible && setActiveIndex(idx)}
+                  disabled={!isAccessible}
+                  className={`w-full text-left flex flex-col justify-center px-4 py-3 rounded-xl relative transition-colors ${isActive ? 'text-gray-900 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-10 before:bg-gray-900 before:rounded-full' : (isAccessible ? 'text-gray-500 hover:text-gray-900 hover:bg-gray-50' : 'text-gray-400 opacity-60 cursor-not-allowed')}`}
                 >
                   <div className="flex items-center gap-3 w-full">
                     <div className={`shrink-0 ${isCompleted ? 'text-green-500' : (isActive ? 'text-gray-900' : 'text-gray-400')}`}>
-                      {isCompleted ? <CheckCircleSolid className="w-6 h-6" /> : getIconForType(item.type)}
+                      {isCompleted ? <CheckCircleSolid className="w-6 h-6" /> : (!isAccessible ? <LockClosedIcon className="w-5 h-5" /> : getIconForType(item.type))}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className={`text-[15px] font-normal truncate leading-tight ${isActive ? 'text-gray-900 font-semibold' : 'text-gray-700'}`}>
