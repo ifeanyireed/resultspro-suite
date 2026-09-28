@@ -681,9 +681,10 @@ export default function LessonPlayerPage() {
                   <CheckCircleIcon className="w-5 h-5" />
                   {progressMutation.isPending 
                     ? 'Saving...' 
-                    : activeIndex === items.length - 1 
-                      ? 'Complete Module & Continue' 
-                      : 'Mark Complete & Next'}
+                    : completedItems.includes(activeIndex)
+                      ? (completedItems.length === items.length ? 'Return to Journey' : 'Next Block')
+                      : (completedItems.length === items.length - 1 ? 'Complete Module & Continue' : 'Mark Complete & Next')
+                  }
                 </button>
               </div>
             </>
