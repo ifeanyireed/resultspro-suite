@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -21,7 +22,7 @@ type PaystackClient struct {
 
 func NewPaystackClient(secretKey string) *PaystackClient {
 	return &PaystackClient{
-		SecretKey: secretKey,
+		SecretKey: strings.TrimSpace(secretKey),
 		HTTPClient: &http.Client{
 			Timeout: 15 * time.Second,
 		},

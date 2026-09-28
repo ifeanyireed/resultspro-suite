@@ -112,7 +112,7 @@ func HandleTenantPaymentInitialize(w http.ResponseWriter, r *http.Request) {
 	)
 	if err != nil {
 		log.Printf("Paystack initialization failed: %v", err)
-		utils.JSONError(w, http.StatusInternalServerError, "Failed to initialize payment gateway")
+		utils.JSONError(w, http.StatusInternalServerError, "Payment Gateway Error: "+err.Error())
 		return
 	}
 

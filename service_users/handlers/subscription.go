@@ -592,7 +592,7 @@ func HandleInitializePayment(w http.ResponseWriter, r *http.Request) {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to build payment request")
 		return
 	}
-	req.Header.Set("Authorization", "Bearer "+paystackSecret)
+	req.Header.Set("Authorization", "Bearer "+strings.TrimSpace(paystackSecret))
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{Timeout: 10 * time.Second}
