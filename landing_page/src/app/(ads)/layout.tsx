@@ -1,22 +1,6 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, DM_Sans, Inter } from "next/font/google";
 import "../globals.css";
 import "../nets.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
-});
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
-});
 
 export const metadata: Metadata = {
   title: "ResultsPRO NG | Education Infrastructure",
@@ -35,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${spaceGrotesk.variable} ${dmSans.variable} font-primary`}>
+      <body className="font-primary">
                 {children}
         </body>
     </html>
