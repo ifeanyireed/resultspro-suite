@@ -38,6 +38,7 @@ export type ContentItem = {
   class_type?: 'PHYSICAL' | 'VIRTUAL';
   address?: string;
   classroom?: string;
+  attachments?: { url: string; name: string }[];
 };
 
 const parseContents = (mod: any): ContentItem[] => {
@@ -96,6 +97,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
 
   const [editingTextLessonId, setEditingTextLessonId] = React.useState<string | null>(null);
   const [uploadingHtmlId, setUploadingHtmlId] = React.useState<string | null>(null);
+  const [uploadingAttachmentId, setUploadingAttachmentId] = React.useState<string | null>(null);
   const [quizzes, setQuizzes] = React.useState<any[]>([]);
   const [isQuizModalOpen, setIsQuizModalOpen] = React.useState<string | null>(null);
   const [moduleTextContext, setModuleTextContext] = React.useState('');
@@ -1027,8 +1029,69 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                   />
                                   Make this a Group Assignment (Peer-to-Peer Pairing)
                                 </label>
+                                {/* Resource Attachments UI */}
+                                <div className="mt-4 border-t border-slate-100 pt-3">
+                                  <label className="block text-xs font-bold text-slate-700 mb-2">Resource Attachments</label>
+                                  <div className="flex flex-col gap-2 mb-2">
+                                    {(item.attachments || []).map((att, aIdx) => (
+                                      <div key={aIdx} className="flex items-center justify-between bg-slate-50 border border-slate-200 rounded p-2 text-xs">
+                                        <a href={att.url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline truncate max-w-[200px]">{att.name}</a>
+                                        <button 
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            const i = parseContents(mod);
+                                            if(i[index].attachments) {
+                                               i[index].attachments.splice(aIdx, 1);
+                                               setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m));
+                                               handleUpdateModule(mod.id, { contents_json: JSON.stringify(i) });
+                                            }
+                                          }}
+                                          className="text-red-500 hover:text-red-700"
+                                        >
+                                          <Trash2 className="w-4 h-4" />
+                                        </button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                  <input 
+                                    type="file" 
+                                    id={'attach-upload-' + item.id} 
+                                    className="hidden" 
+                                    onChange={async (e) => {
+                                      e.stopPropagation();
+                                      const file = e.target.files?.[0];
+                                      if(!file) return;
+                                      setUploadingAttachmentId(item.id);
+                                      try {
+                                        const data = new FormData();
+                                        data.append('file', file);
+                                        data.append('folder', 'uploads/resources');
+                                        const res = await api.post('/api/v1/upload', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+                                        if(res.data && res.data.url) {
+                                           const i = parseContents(mod);
+                                           if(!i[index].attachments) i[index].attachments = [];
+                                           i[index].attachments.push({ url: res.data.url, name: file.name });
+                                           setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m));
+                                           handleUpdateModule(mod.id, { contents_json: JSON.stringify(i) });
+                                        }
+                                      } catch(err) {
+                                        alert("Failed to upload attachment");
+                                      } finally {
+                                        setUploadingAttachmentId(null);
+                                      }
+                                    }} 
+                                  />
+                                  <label 
+                                    htmlFor={'attach-upload-' + item.id} 
+                                    className="cursor-pointer inline-flex items-center justify-center w-full px-3 py-2 border border-dashed border-slate-300 rounded text-xs font-medium text-slate-600 hover:border-blue-500 hover:text-blue-500 transition-colors bg-white"
+                                    onClick={e => e.stopPropagation()}
+                                  >
+                                    {uploadingAttachmentId === item.id ? 'Uploading...' : '+ Attach File'}
+                                  </label>
+                                </div>
                               </div>
                             )}
+
 
                             {item.type === 'PROJECT' && (
                               <div className="w-full text-left" onClick={e => e.stopPropagation()}>
@@ -1063,8 +1126,69 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                                   }} 
                                   onBlur={() => handleUpdateModule(mod.id, { contents_json: JSON.stringify(parseContents(mod)) })} 
                                 />
+                                {/* Resource Attachments UI */}
+                                <div className="mt-4 border-t border-slate-100 pt-3">
+                                  <label className="block text-xs font-bold text-slate-700 mb-2">Resource Attachments</label>
+                                  <div className="flex flex-col gap-2 mb-2">
+                                    {(item.attachments || []).map((att, aIdx) => (
+                                      <div key={aIdx} className="flex items-center justify-between bg-slate-50 border border-slate-200 rounded p-2 text-xs">
+                                        <a href={att.url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline truncate max-w-[200px]">{att.name}</a>
+                                        <button 
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            const i = parseContents(mod);
+                                            if(i[index].attachments) {
+                                               i[index].attachments.splice(aIdx, 1);
+                                               setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m));
+                                               handleUpdateModule(mod.id, { contents_json: JSON.stringify(i) });
+                                            }
+                                          }}
+                                          className="text-red-500 hover:text-red-700"
+                                        >
+                                          <Trash2 className="w-4 h-4" />
+                                        </button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                  <input 
+                                    type="file" 
+                                    id={'attach-upload-' + item.id} 
+                                    className="hidden" 
+                                    onChange={async (e) => {
+                                      e.stopPropagation();
+                                      const file = e.target.files?.[0];
+                                      if(!file) return;
+                                      setUploadingAttachmentId(item.id);
+                                      try {
+                                        const data = new FormData();
+                                        data.append('file', file);
+                                        data.append('folder', 'uploads/resources');
+                                        const res = await api.post('/api/v1/upload', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+                                        if(res.data && res.data.url) {
+                                           const i = parseContents(mod);
+                                           if(!i[index].attachments) i[index].attachments = [];
+                                           i[index].attachments.push({ url: res.data.url, name: file.name });
+                                           setModules(modules.map(m => m.id === mod.id ? { ...m, contents_json: JSON.stringify(i) } : m));
+                                           handleUpdateModule(mod.id, { contents_json: JSON.stringify(i) });
+                                        }
+                                      } catch(err) {
+                                        alert("Failed to upload attachment");
+                                      } finally {
+                                        setUploadingAttachmentId(null);
+                                      }
+                                    }} 
+                                  />
+                                  <label 
+                                    htmlFor={'attach-upload-' + item.id} 
+                                    className="cursor-pointer inline-flex items-center justify-center w-full px-3 py-2 border border-dashed border-slate-300 rounded text-xs font-medium text-slate-600 hover:border-blue-500 hover:text-blue-500 transition-colors bg-white"
+                                    onClick={e => e.stopPropagation()}
+                                  >
+                                    {uploadingAttachmentId === item.id ? 'Uploading...' : '+ Attach File'}
+                                  </label>
+                                </div>
                               </div>
                             )}
+
 
                             {item.type === 'PPT' && (
                               <div className="w-full text-left" onClick={e => e.stopPropagation()}>

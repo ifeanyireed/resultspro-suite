@@ -24,12 +24,13 @@ import api, { coursesApi } from '@/lib/api';
 
 type ContentItem = {
   id: string;
-  type: 'TEXT' | 'VIDEO' | 'AUDIO' | 'PDF' | 'QUIZ' | 'HTML' | 'ASSIGNMENT' | 'PPT' | 'COMPILER' | 'LIVE_CLASS';
+  type: 'TEXT' | 'VIDEO' | 'AUDIO' | 'PDF' | 'QUIZ' | 'HTML' | 'ASSIGNMENT' | 'PPT' | 'COMPILER' | 'LIVE_CLASS' | 'PROJECT' | 'CERTIFICATE';
   title?: string;
   description?: string;
   content?: string;
   url?: string;
   is_group_assignment?: boolean;
+  attachments?: { url: string; name: string }[];
 };
 
 const getDirectMediaUrl = (url: string) => {
@@ -549,6 +550,23 @@ export default function LessonPlayerPage() {
                           )}
                         </div>
                         <p className="text-indigo-800 text-base mb-6 whitespace-pre-wrap leading-relaxed">{currentItem.content || 'No instructions provided.'}</p>
+                        
+                        {currentItem.attachments && currentItem.attachments.length > 0 && (
+                          <div className="mt-4 p-4 bg-white rounded-xl border border-indigo-100">
+                            <h4 className="text-sm font-bold text-indigo-900 mb-3 flex items-center gap-2">
+                              <svg className="w-5 h-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                              Resources for this Assignment
+                            </h4>
+                            <div className="flex flex-col gap-2">
+                              {currentItem.attachments.map((att: any, idx: number) => (
+                                <a key={idx} href={att.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-3 bg-indigo-50/50 hover:bg-indigo-50 rounded-lg text-sm text-indigo-700 transition-colors border border-indigo-100/50">
+                                  <svg className="w-5 h-5 shrink-0 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                                  <span className="truncate font-medium">{att.name}</span>
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                         <div className="flex items-center gap-4 mt-6 pt-6 border-t border-indigo-200/50">
                           <button className="px-6 py-3 bg-[#146ef5] hover:bg-[#105bd1] text-white rounded-xl text-sm font-bold shadow-sm transition-colors">
                             {btnText}
@@ -558,6 +576,36 @@ export default function LessonPlayerPage() {
                     </div>
                   );
                 })()}
+
+                
+                {currentItem?.type === 'PROJECT' && (
+                  <div className="space-y-6">
+                    {currentItem.title && <h2 className="font-bold text-2xl">{currentItem.title}</h2>}
+                    <div className="bg-blue-50 border border-blue-100 rounded-2xl p-8">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-bold text-blue-900">Project Details</h3>
+                      </div>
+                      <p className="text-blue-800 text-base mb-6 whitespace-pre-wrap leading-relaxed">{currentItem.content || 'No description provided.'}</p>
+                      
+                      {currentItem.attachments && currentItem.attachments.length > 0 && (
+                        <div className="mt-4 p-4 bg-white rounded-xl border border-blue-100">
+                          <h4 className="text-sm font-bold text-blue-900 mb-3 flex items-center gap-2">
+                            <svg className="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                            Project Resources
+                          </h4>
+                          <div className="flex flex-col gap-2">
+                            {currentItem.attachments.map((att: any, idx: number) => (
+                              <a key={idx} href={att.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-3 bg-blue-50/50 hover:bg-blue-50 rounded-lg text-sm text-blue-700 transition-colors border border-blue-100/50">
+                                <svg className="w-5 h-5 shrink-0 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                                <span className="truncate font-medium">{att.name}</span>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {currentItem?.type === 'TEXT' && (
                   <div className="space-y-6">
