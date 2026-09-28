@@ -3,6 +3,8 @@ package handlers
 import (
 	"encoding/json"
 	"io"
+	"log"
+	"time"
 	"net/http"
 	"os"
 
@@ -52,8 +54,11 @@ func (h *Handler) InternalPaymentCallback(c *gin.Context) {
 						UserID:        payload.UserID,
 						PaymentStatus: "PAID",
 						PlanType:      "STANDARD",
+						EnrolledAt:    time.Now().UTC(),
 					}
-					db.DB.Create(&enrollment)
+					if err := db.DB.Create(&enrollment).Error; err != nil {
+						log.Printf("[Webhook Error] Failed to create enrollment for %s: %v", payload.UserID, err)
+					}
 				} else {
 					// Update existing enrollment
 					db.DB.Model(&enrollment).Updates(map[string]interface{}{
