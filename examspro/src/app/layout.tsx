@@ -1,21 +1,9 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Space_Grotesk, DM_Sans } from "next/font/google";
 import { ClientProviders } from "./providers";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import "./nets.css";
-
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "FREE JAMB. WAEC, NECO CBT Practice with 2026 Syllabus and AI Tutor",
@@ -37,9 +25,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/logo.png" />
       </head>
-      <body
-        className={`${spaceGrotesk.variable} ${dmSans.variable} antialiased`}
-      >
+      <body className="antialiased font-primary">
         <Script id="meta-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)
