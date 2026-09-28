@@ -14,6 +14,7 @@ export default function PlanForm({ tenant }: { tenant: any }) {
   const [isLoading, setIsLoading] = useState(false);
   const [plan, setPlan] = useState('upfront');
   const [cohort, setCohort] = useState<any>(null);
+  const [upfrontDiscountAmount, setUpfrontDiscountAmount] = useState(15000);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,6 +35,9 @@ export default function PlanForm({ tenant }: { tenant: any }) {
         if (res.ok) {
           const data = await res.json();
           setCohort(data.cohort);
+          if (data.upfront_discount_amount !== undefined) {
+            setUpfrontDiscountAmount(data.upfront_discount_amount);
+          }
         } else {
           setError('Failed to load cohort details. The cohort may have been removed or is unavailable.');
         }
@@ -75,7 +79,7 @@ export default function PlanForm({ tenant }: { tenant: any }) {
   const basePrice = Number(cohort.price);
   const durationWeeks = Number(cohort.duration_weeks) || 12;
   const divisor = Math.max(1, Math.floor(durationWeeks / 4));
-  const upfrontDiscount = basePrice >= 50000 ? 15000 : (basePrice > 10000 ? 5000 : 0);
+  const upfrontDiscount = Math.min(upfrontDiscountAmount, basePrice);
   const upfrontPrice = basePrice - upfrontDiscount;
   const monthlyCost = Math.round(basePrice / divisor);
 

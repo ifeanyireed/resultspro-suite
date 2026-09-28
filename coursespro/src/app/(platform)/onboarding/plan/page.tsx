@@ -14,6 +14,7 @@ export default function PlanSelectionPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [plan, setPlan] = useState('upfront');
   const [cohort, setCohort] = useState<any>(null);
+  const [upfrontDiscountAmount, setUpfrontDiscountAmount] = useState(15000);
   const [error, setError] = useState<string | null>(null);
 
   React.useEffect(() => {
@@ -31,6 +32,9 @@ export default function PlanSelectionPage() {
         const res = await axios.get(`${COURSES_API}/api/public/cohorts/${cohortId}?tenant_id=coursespro`);
         if (res.data?.cohort) {
           setCohort(res.data.cohort);
+          if (res.data.upfront_discount_amount !== undefined) {
+            setUpfrontDiscountAmount(res.data.upfront_discount_amount);
+          }
         } else {
           setError('Failed to load cohort details. The cohort may have been removed or is unavailable.');
         }
@@ -72,7 +76,7 @@ export default function PlanSelectionPage() {
   const basePrice = Number(cohort.price);
   const durationWeeks = Number(cohort.duration_weeks) || 12;
   const divisor = Math.max(1, Math.floor(durationWeeks / 4));
-  const upfrontDiscount = basePrice >= 50000 ? 15000 : (basePrice > 10000 ? 5000 : 0);
+  const upfrontDiscount = Math.min(upfrontDiscountAmount, basePrice);
   const upfrontPrice = basePrice - upfrontDiscount;
   const monthlyCost = Math.round(basePrice / divisor);
 

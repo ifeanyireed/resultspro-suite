@@ -22,7 +22,8 @@ export default function SettingsPage() {
     enable_mentor_payouts: true,
     payout_model: 'BASE_PLUS_SLA',
     payout_config_json: '{}',
-    mentor_terminology: 'Mentor'
+    mentor_terminology: 'Mentor',
+    upfront_discount_amount: 15000
   });
 
   const { data: cSettings } = useQuery({
@@ -39,7 +40,8 @@ export default function SettingsPage() {
         enable_mentor_payouts: cSettings.enable_mentor_payouts,
         payout_model: cSettings.payout_model || 'BASE_PLUS_SLA',
         payout_config_json: cSettings.payout_config_json || '{}',
-        mentor_terminology: cSettings.mentor_terminology || 'Mentor'
+        mentor_terminology: cSettings.mentor_terminology || 'Mentor',
+        upfront_discount_amount: cSettings.upfront_discount_amount !== undefined ? cSettings.upfront_discount_amount : 15000
       });
     }
   }, [cSettings]);
@@ -744,6 +746,34 @@ const { data: tenantData, isLoading } = useQuery({
           </div>
         </div>
 
+
+        {/* Checkout & Pricing Config */}
+        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center">
+              <BanknotesIcon className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-lg font-medium text-gray-900">Checkout & Pricing</h3>
+              <p className="text-xs text-gray-500">Configure tuition and discount behavior for students.</p>
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            <div className="flex items-center justify-between py-3">
+              <div>
+                <p className="font-medium text-gray-900">Upfront Discount Amount (₦)</p>
+                <p className="text-xs text-gray-500 mt-0.5">Discount applied when a student pays the full tuition upfront.</p>
+              </div>
+              <input 
+                type="number" 
+                value={coursesSettings.upfront_discount_amount} 
+                onChange={(e) => setCoursesSettings({...coursesSettings, upfront_discount_amount: parseInt(e.target.value) || 0})}
+                className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm w-32 text-right focus:outline-none focus:border-[#146ef5]" 
+              />
+            </div>
+          </div>
+        </div>
 
         {/* AI Config */}
         <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">

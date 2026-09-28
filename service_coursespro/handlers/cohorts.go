@@ -53,5 +53,17 @@ func (h *Handler) GetCohortDetail(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Cohort not found"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"cohort": cohort})
+
+	var settings models.TenantSettings
+	upfrontDiscount := 15000.0
+	if tenantID != "" {
+		if err := db.DB.Where("tenant_id = ?", tenantID).First(&settings).Error; err == nil {
+			upfrontDiscount = settings.UpfrontDiscountAmount
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"cohort": cohort,
+		"upfront_discount_amount": upfrontDiscount,
+	})
 }

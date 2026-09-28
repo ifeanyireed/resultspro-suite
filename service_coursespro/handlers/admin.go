@@ -531,8 +531,9 @@ func (h *Handler) AdminGetSettings(c *gin.Context) {
 			TenantID:            tenantID.(string),
 			EnableMentorPayouts: true,
 			PayoutModel:         "BASE_PLUS_SLA",
-			PayoutConfigJSON:    "{}",
-			MentorTerminology:   "Mentor",
+			PayoutConfigJSON:      "{}",
+			MentorTerminology:     "Mentor",
+			UpfrontDiscountAmount: 15000,
 		}
 	}
 	c.JSON(http.StatusOK, settings)
@@ -550,6 +551,9 @@ func (h *Handler) AdminUpdateSettings(c *gin.Context) {
 	var settings models.TenantSettings
 	if err := db.DB.Where("tenant_id = ?", tenantID).First(&settings).Error; err != nil {
 		req.TenantID = tenantID.(string)
+		if req.UpfrontDiscountAmount == 0 {
+			req.UpfrontDiscountAmount = 15000
+		}
 		db.DB.Create(&req)
 		c.JSON(http.StatusOK, req)
 		return
@@ -561,6 +565,10 @@ func (h *Handler) AdminUpdateSettings(c *gin.Context) {
 	if req.MentorTerminology != "" {
 		settings.MentorTerminology = req.MentorTerminology
 	}
+	// Always allow updating to a specific amount, but if it's completely missing we could fallback, though 0 might be intentional.
+	// We'll trust the JSON unmarshaller; if they pass 0, they want 0 discount.
+	settings.UpfrontDiscountAmount = req.UpfrontDiscountAmount
+	
 	db.DB.Save(&settings)
 
 	c.JSON(http.StatusOK, settings)

@@ -326,9 +326,10 @@ type TenantSettings struct {
 	TenantID            string    `gorm:"primaryKey;size:191" json:"tenant_id"`
 	EnableMentorPayouts bool      `gorm:"default:true" json:"enable_mentor_payouts"`
 	PayoutModel         string    `gorm:"size:50;default:'BASE_PLUS_SLA'" json:"payout_model"` // "PAY_PER_ACTION", "BASE_PLUS_SLA", "REVENUE_SHARE"
-	PayoutConfigJSON    string    `gorm:"type:text;default:'{}'" json:"payout_config_json"`
-	MentorTerminology   string    `gorm:"size:50;default:'Mentor'" json:"mentor_terminology"` // "Mentor" or "Instructor"
-	UpdatedAt           time.Time `json:"updated_at"`
+	PayoutConfigJSON      string    `gorm:"type:text;default:'{}'" json:"payout_config_json"`
+	MentorTerminology     string    `gorm:"size:50;default:'Mentor'" json:"mentor_terminology"` // "Mentor" or "Instructor"
+	UpfrontDiscountAmount float64   `gorm:"default:15000" json:"upfront_discount_amount"`
+	UpdatedAt             time.Time `json:"updated_at"`
 }
 
 // Workspace Task
