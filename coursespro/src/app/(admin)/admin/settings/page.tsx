@@ -23,6 +23,7 @@ export default function SettingsPage() {
     payout_model: 'BASE_PLUS_SLA',
     payout_config_json: '{}',
     mentor_terminology: 'Mentor',
+    enable_upfront_discount: true,
     upfront_discount_amount: 15000
   });
 
@@ -41,6 +42,7 @@ export default function SettingsPage() {
         payout_model: cSettings.payout_model || 'BASE_PLUS_SLA',
         payout_config_json: cSettings.payout_config_json || '{}',
         mentor_terminology: cSettings.mentor_terminology || 'Mentor',
+        enable_upfront_discount: cSettings.enable_upfront_discount !== undefined ? cSettings.enable_upfront_discount : true,
         upfront_discount_amount: cSettings.upfront_discount_amount !== undefined ? cSettings.upfront_discount_amount : 15000
       });
     }
@@ -760,18 +762,33 @@ const { data: tenantData, isLoading } = useQuery({
           </div>
           
           <div className="space-y-4">
-            <div className="flex items-center justify-between py-3">
+            <div className="flex items-center justify-between py-3 border-b border-gray-100">
               <div>
-                <p className="font-medium text-gray-900">Upfront Discount Amount (₦)</p>
-                <p className="text-xs text-gray-500 mt-0.5">Discount applied when a student pays the full tuition upfront.</p>
+                <p className="font-medium text-gray-900">Enable Upfront Discount</p>
+                <p className="text-xs text-gray-500 mt-0.5">Offer a discount to students who pay full tuition at once.</p>
               </div>
-              <input 
-                type="number" 
-                value={coursesSettings.upfront_discount_amount} 
-                onChange={(e) => setCoursesSettings({...coursesSettings, upfront_discount_amount: parseInt(e.target.value) || 0})}
-                className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm w-32 text-right focus:outline-none focus:border-[#146ef5]" 
-              />
+              <div 
+                className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors ${coursesSettings.enable_upfront_discount ? 'bg-[#146ef5]' : 'bg-gray-200'}`}
+                onClick={() => setCoursesSettings({...coursesSettings, enable_upfront_discount: !coursesSettings.enable_upfront_discount})}
+              >
+                <div className={`w-4 h-4 bg-white rounded-full absolute top-1 shadow-sm transition-all ${coursesSettings.enable_upfront_discount ? 'right-1' : 'left-1'}`}></div>
+              </div>
             </div>
+            
+            {coursesSettings.enable_upfront_discount && (
+              <div className="flex items-center justify-between py-3">
+                <div>
+                  <p className="font-medium text-gray-900">Upfront Discount Amount (₦)</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Discount applied when a student pays the full tuition upfront.</p>
+                </div>
+                <input 
+                  type="number" 
+                  value={coursesSettings.upfront_discount_amount} 
+                  onChange={(e) => setCoursesSettings({...coursesSettings, upfront_discount_amount: parseInt(e.target.value) || 0})}
+                  className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm w-32 text-right focus:outline-none focus:border-[#146ef5]" 
+                />
+              </div>
+            )}
           </div>
         </div>
 

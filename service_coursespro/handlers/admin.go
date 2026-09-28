@@ -533,6 +533,7 @@ func (h *Handler) AdminGetSettings(c *gin.Context) {
 			PayoutModel:         "BASE_PLUS_SLA",
 			PayoutConfigJSON:      "{}",
 			MentorTerminology:     "Mentor",
+			EnableUpfrontDiscount: true,
 			UpfrontDiscountAmount: 15000,
 		}
 	}
@@ -542,7 +543,7 @@ func (h *Handler) AdminGetSettings(c *gin.Context) {
 // AdminUpdateSettings updates the courses-specific tenant settings
 func (h *Handler) AdminUpdateSettings(c *gin.Context) {
 	tenantID, _ := c.Get("tenant_id")
-	var req models.TenantSettings
+	var req map[string]interface{}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -550,26 +551,39 @@ func (h *Handler) AdminUpdateSettings(c *gin.Context) {
 
 	var settings models.TenantSettings
 	if err := db.DB.Where("tenant_id = ?", tenantID).First(&settings).Error; err != nil {
-		req.TenantID = tenantID.(string)
-		if req.UpfrontDiscountAmount == 0 {
-			req.UpfrontDiscountAmount = 15000
+		settings = models.TenantSettings{
+			TenantID:            tenantID.(string),
+			EnableMentorPayouts: true,
+			PayoutModel:         "BASE_PLUS_SLA",
+			PayoutConfigJSON:    "{}",
+			MentorTerminology:   "Mentor",
+			EnableUpfrontDiscount: true,
+			UpfrontDiscountAmount: 15000,
 		}
-		db.DB.Create(&req)
-		c.JSON(http.StatusOK, req)
-		return
 	}
 
-	settings.EnableMentorPayouts = req.EnableMentorPayouts
-	settings.PayoutModel = req.PayoutModel
-	settings.PayoutConfigJSON = req.PayoutConfigJSON
-	if req.MentorTerminology != "" {
-		settings.MentorTerminology = req.MentorTerminology
+	if val, ok := req["enable_mentor_payouts"].(bool); ok {
+		settings.EnableMentorPayouts = val
 	}
-	// Always allow updating to a specific amount, but if it's completely missing we could fallback, though 0 might be intentional.
-	// We'll trust the JSON unmarshaller; if they pass 0, they want 0 discount.
-	settings.UpfrontDiscountAmount = req.UpfrontDiscountAmount
-	
-	db.DB.Save(&settings)
+	if val, ok := req["payout_model"].(string); ok {
+		settings.PayoutModel = val
+	}
+	if val, ok := req["payout_config_json"].(string); ok {
+		settings.PayoutConfigJSON = val
+	}
+	if val, ok := req["mentor_terminology"].(string); ok {
+		settings.MentorTerminology = val
+	}
+	if val, ok := req["enable_upfront_discount"].(bool); ok {
+		settings.EnableUpfrontDiscount = val
+	}
+	if val, ok := req["upfront_discount_amount"].(float64); ok {
+		settings.UpfrontDiscountAmount = val
+	}
+
+	if db.DB.Model(&settings).Where("tenant_id = ?", tenantID).Updates(settings).RowsAffected == 0 {
+		db.DB.Create(&settings)
+	}
 
 	c.JSON(http.StatusOK, settings)
 }

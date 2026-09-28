@@ -15,6 +15,7 @@ export default function PlanSelectionPage() {
   const [plan, setPlan] = useState('upfront');
   const [cohort, setCohort] = useState<any>(null);
   const [upfrontDiscountAmount, setUpfrontDiscountAmount] = useState(15000);
+  const [enableUpfrontDiscount, setEnableUpfrontDiscount] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   React.useEffect(() => {
@@ -34,6 +35,9 @@ export default function PlanSelectionPage() {
           setCohort(res.data.cohort);
           if (res.data.upfront_discount_amount !== undefined) {
             setUpfrontDiscountAmount(res.data.upfront_discount_amount);
+          }
+          if (res.data.enable_upfront_discount !== undefined) {
+            setEnableUpfrontDiscount(res.data.enable_upfront_discount);
           }
         } else {
           setError('Failed to load cohort details. The cohort may have been removed or is unavailable.');
@@ -76,7 +80,7 @@ export default function PlanSelectionPage() {
   const basePrice = Number(cohort.price);
   const durationWeeks = Number(cohort.duration_weeks) || 12;
   const divisor = Math.max(1, Math.floor(durationWeeks / 4));
-  const upfrontDiscount = Math.min(upfrontDiscountAmount, basePrice);
+  const upfrontDiscount = enableUpfrontDiscount ? Math.min(upfrontDiscountAmount, basePrice) : 0;
   const upfrontPrice = basePrice - upfrontDiscount;
   const monthlyCost = Math.round(basePrice / divisor);
 
@@ -145,12 +149,14 @@ export default function PlanSelectionPage() {
                 <div className="mb-1">
                   <span className="text-3xl font-bold text-slate-900">{formatCurrency(upfrontPrice)}</span>
                 </div>
-                <p className="text-sm text-slate-400 mb-5 line-through">{formatCurrency(basePrice)}</p>
+                {upfrontDiscount > 0 && <p className="text-sm text-slate-400 mb-5 line-through">{formatCurrency(basePrice)}</p>}
                 
                 <ul className="space-y-2.5 mb-2">
+                  {upfrontDiscount > 0 && (
                   <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
                     <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Save {formatCurrency(upfrontDiscount)} immediately
                   </li>
+                  )}
                   <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
                     <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> 1-on-1 portfolio review session
                   </li>
