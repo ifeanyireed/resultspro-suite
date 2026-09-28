@@ -11,7 +11,7 @@ export default function PortfolioPage() {
   const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState({
-    username: user?.username || '',
+    username: (user as any)?.username || '',
     headline: '',
     bio: '',
     is_available_for_hire: true,
@@ -31,7 +31,7 @@ export default function PortfolioPage() {
   useEffect(() => {
     if (data?.portfolio) {
       setFormData({
-        username: data.portfolio.username || user?.username || '',
+        username: data.portfolio.username || (user as any)?.username || '',
         headline: data.portfolio.headline || '',
         bio: data.portfolio.bio || '',
         is_available_for_hire: data.portfolio.is_available_for_hire,
