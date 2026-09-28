@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import https from 'https';
+import http from 'http';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -11,27 +13,53 @@ export async function GET(request: Request) {
     return new NextResponse('Missing URL', { status: 400 });
   }
 
-  try {
-    const cleanUrl = url.trim();
-    const res = await fetch(cleanUrl, { 
-      redirect: 'follow', 
-      cache: 'no-store',
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
-      }
-    });
-    if (!res.ok) {
-      return new NextResponse('Upstream error', { status: res.status });
-    }
+  const cleanUrl = url.trim();
 
-    let html = await res.text();
+  try {
+    const html = await new Promise<string>((resolve, reject) => {
+      const client = cleanUrl.startsWith('https:') ? https : http;
+      const req = client.get(cleanUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+        }
+      }, (res) => {
+        if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+          // Handle one redirect manually if needed, or reject and handle upstream
+          reject(new Error(`Upstream redirect not supported in fast proxy: ${res.statusCode}`));
+          return;
+        }
+
+        if (res.statusCode !== 200) {
+          reject(new Error(`Upstream error: ${res.statusCode}`));
+          return;
+        }
+
+        let data = '';
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+        res.on('end', () => {
+          resolve(data);
+        });
+      });
+
+      req.on('error', (err) => {
+        reject(err);
+      });
+      
+      req.setTimeout(10000, () => {
+        req.destroy();
+        reject(new Error('Request timeout'));
+      });
+    });
     
+    let processedHtml = html;
     // Inject <base> tag to fix relative links just in case
     try {
-      const baseUrl = new URL('.', url).href;
-      if (!html.includes('<base ') && html.includes('<head>')) {
-        html = html.replace(/<head[^>]*>/i, `$&<base href="${baseUrl}">`);
+      const baseUrl = new URL('.', cleanUrl).href;
+      if (!processedHtml.includes('<base ') && processedHtml.includes('<head>')) {
+        processedHtml = processedHtml.replace(/<head[^>]*>/i, `$&<base href="${baseUrl}">`);
       }
     } catch (e) {}
 
@@ -39,7 +67,7 @@ export async function GET(request: Request) {
     headers.set('Content-Type', 'text/html; charset=utf-8');
     headers.set('Access-Control-Allow-Origin', '*');
 
-    return new NextResponse(html, { status: 200, headers });
+    return new NextResponse(processedHtml, { status: 200, headers });
   } catch (err: any) {
     console.error('HTML proxy error:', err);
     return new NextResponse(`Proxy error: ${err.message || err.toString()}`, { status: 500 });
