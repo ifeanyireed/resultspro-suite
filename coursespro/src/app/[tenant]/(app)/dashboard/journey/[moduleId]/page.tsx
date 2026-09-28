@@ -728,15 +728,18 @@ export default function LessonPlayerPage() {
                       {isCompleted ? <CheckCircleSolid className="w-6 h-6" /> : (!isAccessible ? <LockClosedIcon className="w-5 h-5" /> : getIconForType(item.type))}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-[15px] font-normal truncate leading-tight ${isActive ? 'text-gray-900 font-semibold' : 'text-gray-700'}`}>
-                        {item.title || item.type}
-                      </p>
-                      <p className={`text-[11px] mt-0.5 truncate ${isActive ? 'text-gray-500' : 'text-gray-400'}`}>
+                      {item.title && (
+                        <p className={`text-[15px] font-normal truncate leading-tight ${isActive ? 'text-gray-900 font-semibold' : 'text-gray-700'}`}>
+                          {item.title}
+                        </p>
+                      )}
+                      
+                      <p className={`${item.title ? 'text-[11px] mt-0.5' : 'text-[14px] font-medium leading-tight'} truncate ${isActive ? (item.title ? 'text-gray-500' : 'text-gray-900') : 'text-gray-500'}`}>
                         {item.description 
                           ? item.description 
                           : (item.content 
                               ? (stripHtml(item.content).length > 50 ? stripHtml(item.content).substring(0, 47) + '...' : stripHtml(item.content))
-                              : item.type.toLowerCase())}
+                              : `Block ${idx + 1}`)}
                       </p>
                     </div>
                   </div>
