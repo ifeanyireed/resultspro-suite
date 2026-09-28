@@ -28,7 +28,7 @@ export async function POST(req: Request) {
         'Authorization': `Bearer ${VERCEL_TOKEN}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name: domain, gitBranch: process.env.VERCEL_DOMAIN_BRANCH || "dev" }),
+      body: JSON.stringify({ name: domain }),
     });
 
     const data = await response.json();
