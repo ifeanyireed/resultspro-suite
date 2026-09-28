@@ -14,8 +14,8 @@
   --color-blue: #1565C0;
   --color-amber: #1e3a8a;
   
-  --font-display: 'Dropa', sans-serif;
-  --font-body: 'Dropa', sans-serif;
+  --font-display: 'Dropa';
+  --font-body: 'Dropa';
   
   --color-background: var(--background);
   --color-foreground: var(--foreground);

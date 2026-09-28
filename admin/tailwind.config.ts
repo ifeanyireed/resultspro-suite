@@ -20,6 +20,9 @@ const config: Config = {
           textActive: "#ffffff",
         },
       },
+      fontFamily: {
+        sans: ["Dropa"],
+      },
     },
   },
   plugins: [

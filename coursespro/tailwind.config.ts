@@ -42,7 +42,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["Dropa", "system-ui", "-apple-system", "sans-serif"],
+        sans: ["Dropa"],
         grotesk: ["Space Grotesk", "sans-serif"],
         mono: ["IBM Plex Mono", "monospace"],
       },
