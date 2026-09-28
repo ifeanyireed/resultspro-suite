@@ -99,7 +99,7 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 			if progress.CompletedItems != "" {
 				json.Unmarshal([]byte(progress.CompletedItems), &comp)
 			}
-			isGenuinelyCompleted := progress.Completed && len(comp) >= len(items)
+			isGenuinelyCompleted := len(items) > 0 && len(comp) >= len(items)
 
 			if isGenuinelyCompleted {
 				currentModule = &ModuleData{

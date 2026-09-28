@@ -403,7 +403,7 @@ export default function LessonPlayerPage() {
       quiz_passed: quizPassed 
     }, {
       onSuccess: () => {
-        if (isLastItem && isFullyCompleted) {
+        if (isFullyCompleted) {
           if (nextStage) {
             router.push(`/dashboard/journey/${nextStage.id}`);
           } else {

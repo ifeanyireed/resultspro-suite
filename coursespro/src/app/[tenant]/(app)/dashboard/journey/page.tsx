@@ -75,7 +75,18 @@ export default function JourneyPage() {
               let status = 'locked';
               const progressObj = journeyData?.progress?.find((p: any) => p.module_id === stage.id);
               
-              if (progressObj?.completed) {
+              let isCompleted = progressObj?.completed;
+              if (!isCompleted && progressObj?.completed_items && stage.contents_json) {
+                 try {
+                   const cItems = JSON.parse(progressObj.completed_items);
+                   const sItems = JSON.parse(stage.contents_json);
+                   if (cItems.length >= sItems.length && sItems.length > 0) {
+                     isCompleted = true;
+                   }
+                 } catch(e) {}
+              }
+              
+              if (isCompleted) {
                 status = 'completed';
               } else if (stage.stage_number <= currentStage) {
                 status = 'current';

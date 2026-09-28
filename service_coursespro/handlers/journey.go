@@ -79,20 +79,22 @@ func (h *Handler) UpdateModuleProgress(c *gin.Context) {
 	err := db.WithTenant(c).Where("user_id = ? AND module_id = ?", userID.(string), moduleID).First(&progress).Error
 
 	// Strict validation: A module can only be complete when its sub content blocks are all marked complete.
-	if input.Completed {
-		var stage models.JourneyStage
-		if db.WithTenant(c).Where("id = ?", moduleID).First(&stage).Error == nil {
-			var items []interface{}
-			if stage.ContentsJSON != "" {
-				json.Unmarshal([]byte(stage.ContentsJSON), &items)
-			}
-			var comp []int
-			if input.CompletedItems != "" {
-				json.Unmarshal([]byte(input.CompletedItems), &comp)
-			}
-			if len(comp) < len(items) {
-				input.Completed = false
-			}
+	var stage models.JourneyStage
+	if db.WithTenant(c).Where("id = ?", moduleID).First(&stage).Error == nil {
+		var items []interface{}
+		if stage.ContentsJSON != "" {
+			json.Unmarshal([]byte(stage.ContentsJSON), &items)
+		}
+		var comp []int
+		if input.CompletedItems != "" {
+			json.Unmarshal([]byte(input.CompletedItems), &comp)
+		}
+		
+		// Auto-correct completion status based on actual blocks completed
+		if len(items) > 0 && len(comp) >= len(items) {
+			input.Completed = true
+		} else if len(comp) < len(items) {
+			input.Completed = false
 		}
 	}
 
