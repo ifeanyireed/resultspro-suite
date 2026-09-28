@@ -222,14 +222,12 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 				}
 			}
 			
+			// Always count total blocks in the program
 			totalStages += blocksInStage
 			
-			// If they have fully completed this top-level module, add its blocks to completed count
-			if s.StageNumber < enrollment.CurrentStageNumber {
-				completedStages += blocksInStage
-			} else if s.StageNumber == enrollment.CurrentStageNumber {
-				var progress models.ModuleProgress
-				db.DB.Where("user_id = ? AND module_id = ?", userID, s.ID).First(&progress)
+			// Always fetch the exact progress for this module, regardless of CurrentStageNumber
+			var progress models.ModuleProgress
+			if db.DB.Where("user_id = ? AND module_id = ?", userID, s.ID).First(&progress).Error == nil {
 				if progress.CompletedItems != "" && progress.CompletedItems != "[]" {
 					var comp []int
 					if err := json.Unmarshal([]byte(progress.CompletedItems), &comp); err == nil {
