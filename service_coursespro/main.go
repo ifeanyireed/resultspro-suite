@@ -42,6 +42,7 @@ func main() {
 		public.GET("/cohorts", h.GetPublicCohorts)
 		public.GET("/cohorts/:id", h.GetCohortDetail)
 		public.GET("/portfolio/:username", h.GetPublicPortfolio)
+		public.POST("/mentor/apply", h.ApplyForMentor)
 
 		// Store
 		public.GET("/store", h.PublicGetStoreProducts)
@@ -131,6 +132,11 @@ func main() {
 		protected.DELETE("/admin/mentors/:id", h.AdminDeleteMentor)
 		protected.PUT("/admin/mentors/:id", h.AdminUpdateMentor)
 		protected.POST("/admin/mentors/invite", h.AdminInviteMentor)
+		
+		// Admin Mentor Applications
+		protected.GET("/admin/mentor-applications", h.AdminGetMentorApplications)
+		protected.POST("/admin/mentor-applications/:id/approve", h.AdminApproveMentorApplication)
+		protected.POST("/admin/mentor-applications/:id/reject", h.AdminRejectMentorApplication)
 
 		// Admin Achievements
 		protected.GET("/admin/achievements", h.AdminGetAchievements)

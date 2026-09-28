@@ -364,3 +364,19 @@ CREATE TABLE IF NOT EXISTS crs_user_achievements (
 );
 CREATE INDEX IF NOT EXISTS idx_uachieve_user ON crs_user_achievements(user_id);
 CREATE INDEX IF NOT EXISTS idx_uachieve_achieve ON crs_user_achievements(achievement_id);
+
+-- 16. Mentor Applications
+CREATE TABLE IF NOT EXISTS crs_mentor_applications (
+    id VARCHAR(64) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    first_name VARCHAR(128) NOT NULL,
+    last_name VARCHAR(128) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    expertise VARCHAR(128),
+    linkedin_url VARCHAR(512),
+    status VARCHAR(32) DEFAULT 'PENDING',
+    admin_notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_mentor_app_tenant ON crs_mentor_applications(tenant_id);

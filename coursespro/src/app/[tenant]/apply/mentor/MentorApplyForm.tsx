@@ -4,20 +4,38 @@ import React, { useState } from 'react';
 import TenantLogo from '@/components/TenantLogo';
 import { useRouter } from 'next/navigation';
 import { User, Mail, Briefcase, Sparkles, Users, ShieldCheck, ArrowRight, Loader2, Target, GraduationCap } from 'lucide-react';
+import { coursesApi } from '@/lib/api';
+import toast from 'react-hot-toast';
 
 export default function MentorApplyForm({ tenant }: { tenant: any }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    expertise: '',
+    linkedin_url: ''
+  });
 
   const handleApply = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate application process
-    setTimeout(() => {
+    
+    try {
+      await coursesApi.post('/api/public/mentor/apply', formData, {
+        headers: {
+          'x-tenant': tenant.id
+        }
+      });
+      toast.success('Application submitted successfully!');
+      setTimeout(() => {
+        router.push('/login'); 
+      }, 1500);
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || 'Failed to submit application');
       setIsLoading(false);
-      // Typically mentors would see a confirmation screen, but for now we route them to home
-      router.push('/login'); 
-    }, 1500);
+    }
   };
 
   return (
@@ -100,7 +118,7 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                     <User className="h-4 w-4 text-slate-400" />
                   </div>
-                  <input type="text" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="Jane" />
+                  <input type="text" value={formData.first_name} onChange={e => setFormData({...formData, first_name: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="Jane" />
                 </div>
               </div>
               <div className="space-y-1.5">
@@ -109,7 +127,7 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                     <User className="h-4 w-4 text-slate-400" />
                   </div>
-                  <input type="text" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="Doe" />
+                  <input type="text" value={formData.last_name} onChange={e => setFormData({...formData, last_name: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="Doe" />
                 </div>
               </div>
             </div>
@@ -120,7 +138,7 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <Mail className="h-4 w-4 text-slate-400" />
                 </div>
-                <input type="email" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="jane@example.com" />
+                <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="jane@example.com" />
               </div>
             </div>
 
@@ -130,12 +148,7 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <Briefcase className="h-4 w-4 text-slate-400" />
                 </div>
-                <select required defaultValue="" className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all appearance-none">
-                  <option value="" disabled>Select a field</option>
-                  <option value="tech">Software Engineering</option>
-                  <option value="design">Product Design</option>
-                  <option value="business">Business & Marketing</option>
-                </select>
+                <input type="text" value={formData.expertise} onChange={e => setFormData({...formData, expertise: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="e.g. Software Engineering" />
               </div>
             </div>
 
@@ -145,7 +158,7 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <Users className="h-4 w-4 text-slate-400" />
                 </div>
-                <input type="url" required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="https://linkedin.com/in/..." />
+                <input type="url" value={formData.linkedin_url} onChange={e => setFormData({...formData, linkedin_url: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="https://linkedin.com/in/..." />
               </div>
             </div>
 

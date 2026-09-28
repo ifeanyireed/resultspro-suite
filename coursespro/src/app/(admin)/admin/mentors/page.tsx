@@ -12,6 +12,7 @@ import {
 import { coursesApi } from '@/lib/api';
 import MentorEditModal from './MentorEditModal';
 import InviteMentorModal from './InviteMentorModal';
+import MentorApplicationsSection from './MentorApplicationsSection';
 
 export default function MentorsPage() {
 
@@ -92,6 +93,8 @@ export default function MentorsPage() {
           </div>
         </div>
       </div>
+
+      <MentorApplicationsSection />
 
       <div className="space-y-4">
         <h3 className="text-lg font-medium text-gray-900 mb-2">Top Performers</h3>

@@ -476,3 +476,19 @@ type PaymentMethod struct {
 }
 
 func (PaymentMethod) TableName() string { return "crs_payment_methods" }
+
+// MentorApplication represents a public application to become a mentor
+type MentorApplication struct {
+	ID             string    `gorm:"primaryKey;size:64" json:"id"`
+	TenantID       string    `gorm:"size:191;index;not null" json:"tenant_id"`
+	FirstName      string    `gorm:"size:128;not null" json:"first_name"`
+	LastName       string    `gorm:"size:128;not null" json:"last_name"`
+	Email          string    `gorm:"size:255;index;not null" json:"email"`
+	Expertise      string    `gorm:"size:128" json:"expertise"`
+	LinkedInURL    string    `gorm:"size:512" json:"linkedin_url"`
+	Status         string    `gorm:"size:32;default:'PENDING'" json:"status"` // PENDING, APPROVED, REJECTED
+	AdminNotes     string    `gorm:"type:text" json:"admin_notes"`
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
+}
+func (MentorApplication) TableName() string { return "crs_mentor_applications" }
