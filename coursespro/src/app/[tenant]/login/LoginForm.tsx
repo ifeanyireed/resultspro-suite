@@ -82,7 +82,6 @@ export default function LoginForm({ tenant }: { tenant: any }) {
   const [showOTP, setShowOTP] = useState(false);
   const [otp, setOtp] = useState('');
   const [verificationLoading, setVerificationLoading] = useState(false);
-  const [showUnenrolledPopup, setShowUnenrolledPopup] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
