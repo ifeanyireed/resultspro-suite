@@ -98,13 +98,8 @@ func (h *Handler) CreatePaymentIntent(c *gin.Context) {
 		return
 	}
 
-	// Calculate final amount
-	var amount float64
-	if req.PlanType == "installment" {
-		amount = cohort.Price * 1.15
-	} else {
-		amount = cohort.Price
-	}
+	// Calculate final amount (frontend handles upfront discounts)
+	amount := cohort.Price
 
 	// In a real app, you'd call Paystack API here and get an auth_url.
 	// For this mock, we'll return a success immediately and simulate a webhook.
