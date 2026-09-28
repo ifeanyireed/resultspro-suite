@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -234,5 +235,17 @@ func dispatchToCoursesPro(userID, cohortID, status string) {
 	req.Header.Set("X-Internal-Secret", "super_secret_internal_key_42")
 
 	client := &http.Client{Timeout: 10 * time.Second}
-	client.Do(req)
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Printf("[Webhook Error] Failed to dispatch to courses service (%s): %v", coursesURL, err)
+		return
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode >= 400 {
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		log.Printf("[Webhook Error] Courses service returned status %d: %s", resp.StatusCode, string(bodyBytes))
+	} else {
+		log.Printf("[Webhook Success] Dispatched payment success to courses service for User %s, Cohort %s", userID, cohortID)
+	}
 }

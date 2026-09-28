@@ -18,6 +18,7 @@ func GetIcanTrialQuizzesCount(userID string) int64 {
 		Select("COUNT(DISTINCT nat_exams_user_answers.session_id)").
 		Scan(&count).Error
 	if err != nil {
+		fmt.Printf("GetIcanTrialQuizzesCount ERROR: %v\n", err)
 		return 5 // If error occurs, fail closed to prevent unlimited free access
 	}
 	return count
