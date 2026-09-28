@@ -13,7 +13,9 @@ import {
   DocumentTextIcon,
   VideoCameraIcon,
   DocumentDuplicateIcon,
-  XMarkIcon
+  XMarkIcon,
+  ChevronDownIcon,
+  ChevronUpIcon
 } from '@heroicons/react/24/outline';
 import api, { coursesApi } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -88,6 +90,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
 
   const [modules, setModules] = React.useState<any[]>([]);
   const [selectedModuleId, setSelectedModuleId] = React.useState<string | null>(null);
+  const [collapsedModules, setCollapsedModules] = React.useState<Record<string, boolean>>({});
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = React.useState(false);
 
@@ -393,11 +396,26 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
                         setIsSidebarOpen(true); 
                       }}
                     >
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">{mod.title || 'Untitled Module'}</h3>
-                    
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-medium text-gray-900">{mod.title || 'Untitled Module'}</h3>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCollapsedModules(prev => ({ ...prev, [mod.id]: !prev[mod.id] }));
+                          }}
+                          className="p-1.5 hover:bg-gray-100 rounded-lg text-gray-400 transition-colors"
+                        >
+                          {collapsedModules[mod.id] ? (
+                            <ChevronDownIcon className="w-5 h-5" />
+                          ) : (
+                            <ChevronUpIcon className="w-5 h-5" />
+                          )}
+                        </button>
+                      </div>
 
-                    
-                    <div className="space-y-4">
+                      {!collapsedModules[mod.id] && (
+                        <>
+                          <div className="space-y-4">
                       {parseContents(mod).map((item, index) => {
                         return (
                           <div 
@@ -1273,6 +1291,8 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
 
                       </div>
                     </div>
+                    </>
+                    )}
                     </motion.div>
 
                   ))}
