@@ -392,40 +392,34 @@ export default function LessonPlayerPage() {
     }
     
     const isFullyCompleted = newCompleted.length === items.length;
+    const isLastItem = activeIndex === items.length - 1;
+    const nextIndex = isLastItem ? activeIndex : activeIndex + 1;
     
-    if (activeIndex === items.length - 1 && isFullyCompleted) {
-      progressMutation.mutate({ completed: true, last_active_index: activeIndex, completed_items: JSON.stringify(newCompleted), quiz_score: quizScore, quiz_passed: quizPassed }, {
-        onSuccess: () => {
+    progressMutation.mutate({ 
+      completed: isFullyCompleted, 
+      last_active_index: nextIndex, 
+      completed_items: JSON.stringify(newCompleted), 
+      quiz_score: quizScore, 
+      quiz_passed: quizPassed 
+    }, {
+      onSuccess: () => {
+        if (isLastItem && isFullyCompleted) {
           if (nextStage) {
             router.push(`/dashboard/journey/${nextStage.id}`);
           } else {
             router.push('/dashboard/journey');
           }
-        },
-        onError: (error) => {
-          console.error("Failed to mark module as complete:", error);
-          alert("Failed to save progress. Please try again or check your connection.");
-        }
-      });
-    } else if (activeIndex === items.length - 1 && !isFullyCompleted) {
-      alert("You have marked this block complete, but there are still incomplete blocks in this module. Please complete them all to unlock the next stage.");
-      progressMutation.mutate({ completed: false, last_active_index: activeIndex, completed_items: JSON.stringify(newCompleted), quiz_score: quizScore, quiz_passed: quizPassed }, {
-        onError: (error) => {
-          console.error("Failed to mark block as complete:", error);
-        }
-      });
-    } else {
-      const nextIndex = activeIndex + 1;
-      progressMutation.mutate({ completed: false, last_active_index: nextIndex, completed_items: JSON.stringify(newCompleted), quiz_score: quizScore, quiz_passed: quizPassed }, {
-        onSuccess: () => {
+        } else if (isLastItem && !isFullyCompleted) {
+          alert("You have marked this block complete, but there are still incomplete blocks in this module. Please complete them all to unlock the next stage.");
+        } else {
           setActiveIndex(nextIndex);
-        },
-        onError: (error) => {
-          console.error("Failed to mark module as complete:", error);
-          alert("Failed to save progress. Please try again or check your connection.");
         }
-      });
-    }
+      },
+      onError: (error) => {
+        console.error("Failed to mark item as complete:", error);
+        alert("Failed to save progress. Please try again or check your connection.");
+      }
+    });
   };
 
   const currentItem = items[activeIndex];
