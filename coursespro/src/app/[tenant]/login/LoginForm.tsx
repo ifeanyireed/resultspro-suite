@@ -20,6 +20,7 @@ export default function LoginForm({ tenant }: { tenant: any }) {
   const [showPassword, setShowPassword] = useState(false);
   const user = useAuthStore((state) => state.user);
   const token = useAuthStore((state) => state.token);
+  const [showUnenrolledPopup, setShowUnenrolledPopup] = useState(false);
 
   React.useEffect(() => {
     if (user && token) {
@@ -49,7 +50,21 @@ export default function LoginForm({ tenant }: { tenant: any }) {
       if (selectedCohortId) {
         router.push('/onboarding/orientation');
       } else {
-        router.push('/dashboard');
+        const checkEnrollment = async () => {
+          try {
+            const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
+            const tenantSlug = params?.tenant as string;
+            const res = await axios.get(`${COURSES_API}/api/v1/student/dashboard-summary`, {
+              headers: { 'Authorization': `Bearer ${token}`, 'X-Tenant-Domain': tenantSlug }
+            });
+            if (res.data && res.data.has_enrollment === false) {
+              setShowUnenrolledPopup(true);
+              return;
+            }
+          } catch (e) {}
+          router.push('/dashboard');
+        };
+        checkEnrollment();
       }
     }
   }, [user, token, router]);
@@ -67,6 +82,7 @@ export default function LoginForm({ tenant }: { tenant: any }) {
   const [showOTP, setShowOTP] = useState(false);
   const [otp, setOtp] = useState('');
   const [verificationLoading, setVerificationLoading] = useState(false);
+  const [showUnenrolledPopup, setShowUnenrolledPopup] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,6 +122,17 @@ export default function LoginForm({ tenant }: { tenant: any }) {
             if (selectedCohortId) {
               router.push('/onboarding/orientation');
             } else {
+              try {
+                const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
+                const tenantSlug = params?.tenant as string;
+                const summaryRes = await axios.get(`${COURSES_API}/api/v1/student/dashboard-summary`, {
+                  headers: { 'Authorization': `Bearer ${token}`, 'X-Tenant-Domain': tenantSlug }
+                });
+                if (summaryRes.data && summaryRes.data.has_enrollment === false) {
+                  setShowUnenrolledPopup(true);
+                  return;
+                }
+              } catch (e) {}
               router.push('/dashboard');
             }
           }
@@ -115,6 +142,17 @@ export default function LoginForm({ tenant }: { tenant: any }) {
           if (selectedCohortId) {
             router.push('/onboarding/orientation');
           } else {
+            try {
+              const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
+              const tenantSlug = params?.tenant as string;
+              const summaryRes = await axios.get(`${COURSES_API}/api/v1/student/dashboard-summary`, {
+                headers: { 'Authorization': `Bearer ${token}`, 'X-Tenant-Domain': tenantSlug }
+              });
+              if (summaryRes.data && summaryRes.data.has_enrollment === false) {
+                setShowUnenrolledPopup(true);
+                return;
+              }
+            } catch (e) {}
             router.push('/dashboard');
           }
         }
@@ -288,6 +326,25 @@ export default function LoginForm({ tenant }: { tenant: any }) {
           </div>
         </div>
       </div>
+      
+      {/* Unenrolled Popup Modal */}
+      {showUnenrolledPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 text-center animate-in fade-in zoom-in duration-200">
+            <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Sparkles className="w-8 h-8 text-blue-600" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">You're not yet enrolled!</h3>
+            <p className="text-gray-500 mb-8">Please select a cohort to complete your enrollment and access the dashboard.</p>
+            <button
+              onClick={() => router.push('/cohorts')}
+              className="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-semibold shadow-sm transition-colors"
+            >
+              Select a cohort
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
