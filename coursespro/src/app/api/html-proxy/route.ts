@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const url = searchParams.get('url');
@@ -9,7 +12,15 @@ export async function GET(request: Request) {
   }
 
   try {
-    const res = await fetch(url, { redirect: 'follow' });
+    const cleanUrl = url.trim();
+    const res = await fetch(cleanUrl, { 
+      redirect: 'follow', 
+      cache: 'no-store',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+      }
+    });
     if (!res.ok) {
       return new NextResponse('Upstream error', { status: res.status });
     }
@@ -29,8 +40,8 @@ export async function GET(request: Request) {
     headers.set('Access-Control-Allow-Origin', '*');
 
     return new NextResponse(html, { status: 200, headers });
-  } catch (err) {
+  } catch (err: any) {
     console.error('HTML proxy error:', err);
-    return new NextResponse('Proxy error', { status: 500 });
+    return new NextResponse(`Proxy error: ${err.message || err.toString()}`, { status: 500 });
   }
 }
