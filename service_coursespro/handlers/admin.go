@@ -581,8 +581,16 @@ func (h *Handler) AdminUpdateSettings(c *gin.Context) {
 		settings.UpfrontDiscountAmount = val
 	}
 
-	if db.DB.Model(&settings).Where("tenant_id = ?", tenantID).Updates(settings).RowsAffected == 0 {
+	// Check if record exists
+	var count int64
+	db.DB.Model(&models.TenantSettings{}).Where("tenant_id = ?", tenantID).Count(&count)
+
+	if count == 0 {
+		settings.TenantID = tenantID.(string)
 		db.DB.Create(&settings)
+	} else {
+		// Use Select("*").Updates or Save to ensure boolean false values are updated
+		db.DB.Model(&settings).Where("tenant_id = ?", tenantID).Select("*").Updates(settings)
 	}
 
 	c.JSON(http.StatusOK, settings)
