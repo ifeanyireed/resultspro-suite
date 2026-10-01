@@ -22,6 +22,10 @@ export default async function CohortsPage({ params, searchParams }: { params: Pr
     notFound();
   }
   let cohorts = [];
+  let settings = {
+    upfront_discount_amount: 15000,
+    enable_upfront_discount: true
+  };
   try {
     const res = await serverFetch(`${COURSES_API}/api/public/cohorts?tenant_id=${tenant.id}`, {
       headers: { 'X-Tenant-Domain': tenant.slug },
@@ -30,6 +34,10 @@ export default async function CohortsPage({ params, searchParams }: { params: Pr
     if (res.ok) {
       const data = await res.json();
       cohorts = data.cohorts || [];
+      settings = {
+        upfront_discount_amount: data.upfront_discount_amount !== undefined ? data.upfront_discount_amount : 15000,
+        enable_upfront_discount: data.enable_upfront_discount !== undefined ? data.enable_upfront_discount : true
+      };
     }
   } catch (err) {
     console.error("Failed to fetch cohorts", err);
@@ -95,7 +103,7 @@ export default async function CohortsPage({ params, searchParams }: { params: Pr
             {filteredCohorts.length === 0 ? (
               <div className="col-span-3 text-center py-12 text-slate-500">No cohorts found matching your search.</div>
             ) : filteredCohorts.map((cohort: any) => (
-              <CohortCard key={cohort.id} cohort={cohort} />
+              <CohortCard key={cohort.id} cohort={cohort} settings={settings} />
             ))}
           </div>
         </div>
