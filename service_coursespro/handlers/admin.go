@@ -558,6 +558,7 @@ func (h *Handler) AdminUpdateSettings(c *gin.Context) {
 			PayoutConfigJSON:    "{}",
 			MentorTerminology:   "Mentor",
 			EnableUpfrontDiscount: true,
+			EnableInstallments:  true,
 			UpfrontDiscountAmount: 15000,
 		}
 	}
@@ -576,6 +577,9 @@ func (h *Handler) AdminUpdateSettings(c *gin.Context) {
 	}
 	if val, ok := req["enable_upfront_discount"].(bool); ok {
 		settings.EnableUpfrontDiscount = val
+	}
+	if val, ok := req["enable_installments"].(bool); ok {
+		settings.EnableInstallments = val
 	}
 	if val, ok := req["upfront_discount_amount"].(float64); ok {
 		settings.UpfrontDiscountAmount = val

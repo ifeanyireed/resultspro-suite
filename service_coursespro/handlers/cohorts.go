@@ -57,10 +57,12 @@ func (h *Handler) GetCohortDetail(c *gin.Context) {
 	var settings models.TenantSettings
 	upfrontDiscount := 15000.0
 	enableUpfrontDiscount := true
+	enableInstallments := true
 	if tenantID != "" {
 		if err := db.DB.Where("tenant_id = ?", tenantID).First(&settings).Error; err == nil {
 			upfrontDiscount = settings.UpfrontDiscountAmount
 			enableUpfrontDiscount = settings.EnableUpfrontDiscount
+			enableInstallments = settings.EnableInstallments
 		}
 	}
 
@@ -68,5 +70,6 @@ func (h *Handler) GetCohortDetail(c *gin.Context) {
 		"cohort": cohort,
 		"upfront_discount_amount": upfrontDiscount,
 		"enable_upfront_discount": enableUpfrontDiscount,
+		"enable_installments": enableInstallments,
 	})
 }

@@ -24,6 +24,7 @@ export default function SettingsPage() {
     payout_config_json: '{}',
     mentor_terminology: 'Mentor',
     enable_upfront_discount: true,
+    enable_installments: true,
     upfront_discount_amount: 15000
   });
 
@@ -43,6 +44,7 @@ export default function SettingsPage() {
         payout_config_json: cSettings.payout_config_json || '{}',
         mentor_terminology: cSettings.mentor_terminology || 'Mentor',
         enable_upfront_discount: cSettings.enable_upfront_discount !== undefined ? cSettings.enable_upfront_discount : true,
+        enable_installments: cSettings.enable_installments !== undefined ? cSettings.enable_installments : true,
         upfront_discount_amount: cSettings.upfront_discount_amount !== undefined ? cSettings.upfront_discount_amount : 15000
       });
     }
@@ -789,6 +791,19 @@ const { data: tenantData, isLoading } = useQuery({
                 />
               </div>
             )}
+            
+            <div className="flex items-center justify-between py-3 border-t border-gray-100">
+              <div>
+                <p className="font-medium text-gray-900">Enable Installment Plan</p>
+                <p className="text-xs text-gray-500 mt-0.5">Allow students to split their tuition into monthly payments.</p>
+              </div>
+              <div 
+                className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors ${coursesSettings.enable_installments ? 'bg-[#146ef5]' : 'bg-gray-200'}`}
+                onClick={() => setCoursesSettings({...coursesSettings, enable_installments: !coursesSettings.enable_installments})}
+              >
+                <div className={`w-4 h-4 bg-white rounded-full absolute top-1 shadow-sm transition-all ${coursesSettings.enable_installments ? 'right-1' : 'left-1'}`}></div>
+              </div>
+            </div>
           </div>
         </div>
 

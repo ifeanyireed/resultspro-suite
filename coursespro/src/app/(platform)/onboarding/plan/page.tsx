@@ -16,6 +16,7 @@ export default function PlanSelectionPage() {
   const [cohort, setCohort] = useState<any>(null);
   const [upfrontDiscountAmount, setUpfrontDiscountAmount] = useState(15000);
   const [enableUpfrontDiscount, setEnableUpfrontDiscount] = useState(true);
+  const [enableInstallments, setEnableInstallments] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   React.useEffect(() => {
@@ -38,6 +39,9 @@ export default function PlanSelectionPage() {
           }
           if (res.data.enable_upfront_discount !== undefined) {
             setEnableUpfrontDiscount(res.data.enable_upfront_discount);
+          }
+          if (res.data.enable_installments !== undefined) {
+            setEnableInstallments(res.data.enable_installments);
           }
         } else {
           setError('Failed to load cohort details. The cohort may have been removed or is unavailable.');
@@ -168,6 +172,7 @@ export default function PlanSelectionPage() {
               </label>
 
               {/* Monthly Plan */}
+              {enableInstallments && divisor > 1 && (
               <label className={`relative flex flex-col bg-white border-2 rounded-2xl p-6 cursor-pointer transition-all shadow-sm ${plan === 'monthly' ? 'border-blue-600 ring-4 ring-blue-600/10' : 'border-slate-200 hover:border-blue-300'}`}>
                 <input type="radio" name="plan" value="monthly" checked={plan === 'monthly'} onChange={() => setPlan('monthly')} className="absolute top-6 right-6 w-5 h-5 text-blue-600 border-slate-300 focus:ring-blue-600" />
                 <span className="font-bold text-xs uppercase tracking-widest text-slate-500 mb-2 block">Monthly Installment</span>
@@ -184,6 +189,7 @@ export default function PlanSelectionPage() {
                   </li>
                 </ul>
               </label>
+              )}
             </div>
           </div>
 

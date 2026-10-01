@@ -330,6 +330,7 @@ type TenantSettings struct {
 	MentorTerminology     string    `gorm:"size:50;default:'Mentor'" json:"mentor_terminology"` // "Mentor" or "Instructor"
 	EnableUpfrontDiscount bool      `gorm:"default:true" json:"enable_upfront_discount"`
 	UpfrontDiscountAmount float64   `gorm:"default:15000" json:"upfront_discount_amount"`
+	EnableInstallments    bool      `gorm:"default:true" json:"enable_installments"`
 	UpdatedAt             time.Time `json:"updated_at"`
 }
 
