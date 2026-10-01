@@ -331,6 +331,7 @@ type TenantSettings struct {
 	EnableUpfrontDiscount bool      `gorm:"default:true" json:"enable_upfront_discount"`
 	UpfrontDiscountAmount float64   `gorm:"default:15000" json:"upfront_discount_amount"`
 	EnableInstallments    bool      `gorm:"default:true" json:"enable_installments"`
+	RequireCardForInstallments bool `gorm:"default:false" json:"require_card_for_installments"`
 	UpdatedAt             time.Time `json:"updated_at"`
 }
 

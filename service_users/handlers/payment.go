@@ -21,6 +21,7 @@ type InitPaymentRequest struct {
 	Purpose       string  `json:"purpose"` // e.g. "cohort_enrollment", "subscription"
 	ReferenceID   string  `json:"reference_id"` // e.g. cohort_id or plan_id
 	CallbackURL   string  `json:"callback_url"`
+	ForceCard     bool    `json:"force_card"`
 }
 
 // HandleTenantPaymentInitialize initializes a payment transaction using the tenant's payment configuration
@@ -149,6 +150,7 @@ func HandleTenantPaymentInitialize(w http.ResponseWriter, r *http.Request) {
 		subaccountCode,
 		req.CallbackURL,
 		tenant.Name,
+		req.ForceCard,
 	)
 	if err != nil {
 		log.Printf("Paystack initialization failed: %v", err)

@@ -534,6 +534,8 @@ func (h *Handler) AdminGetSettings(c *gin.Context) {
 			PayoutConfigJSON:      "{}",
 			MentorTerminology:     "Mentor",
 			EnableUpfrontDiscount: true,
+			EnableInstallments:    true,
+			RequireCardForInstallments: false,
 			UpfrontDiscountAmount: 15000,
 		}
 	}
@@ -559,6 +561,7 @@ func (h *Handler) AdminUpdateSettings(c *gin.Context) {
 			MentorTerminology:   "Mentor",
 			EnableUpfrontDiscount: true,
 			EnableInstallments:  true,
+			RequireCardForInstallments: false,
 			UpfrontDiscountAmount: 15000,
 		}
 	}
@@ -580,6 +583,9 @@ func (h *Handler) AdminUpdateSettings(c *gin.Context) {
 	}
 	if val, ok := req["enable_installments"].(bool); ok {
 		settings.EnableInstallments = val
+	}
+	if val, ok := req["require_card_for_installments"].(bool); ok {
+		settings.RequireCardForInstallments = val
 	}
 	if val, ok := req["upfront_discount_amount"].(float64); ok {
 		settings.UpfrontDiscountAmount = val

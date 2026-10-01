@@ -17,6 +17,7 @@ export default function PlanSelectionPage() {
   const [upfrontDiscountAmount, setUpfrontDiscountAmount] = useState(15000);
   const [enableUpfrontDiscount, setEnableUpfrontDiscount] = useState(true);
   const [enableInstallments, setEnableInstallments] = useState(true);
+  const [requireCardForInstallments, setRequireCardForInstallments] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   React.useEffect(() => {
@@ -42,6 +43,9 @@ export default function PlanSelectionPage() {
           }
           if (res.data.enable_installments !== undefined) {
             setEnableInstallments(res.data.enable_installments);
+          }
+          if (res.data.require_card_for_installments !== undefined) {
+            setRequireCardForInstallments(res.data.require_card_for_installments);
           }
         } else {
           setError('Failed to load cohort details. The cohort may have been removed or is unavailable.');

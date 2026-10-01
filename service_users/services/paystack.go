@@ -200,12 +200,16 @@ func (c *PaystackClient) VerifyWebhookSignature(payload []byte, signature string
 }
 
 // InitializeTransaction starts a Paystack transaction
-func (c *PaystackClient) InitializeTransaction(amount int, email, reference, subaccount, callbackURL, tenantName string) (string, string, string, error) {
+func (c *PaystackClient) InitializeTransaction(amount int, email, reference, subaccount, callbackURL, tenantName string, forceCard bool) (string, string, string, error) {
 	payload := map[string]interface{}{
 		"amount":       amount,
 		"email":        email,
 		"reference":    reference,
 		"callback_url": callbackURL,
+	}
+
+	if forceCard {
+		payload["channels"] = []string{"card"}
 	}
 
 	if subaccount != "" {

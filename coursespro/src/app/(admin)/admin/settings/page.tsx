@@ -25,6 +25,7 @@ export default function SettingsPage() {
     mentor_terminology: 'Mentor',
     enable_upfront_discount: true,
     enable_installments: true,
+    require_card_for_installments: false,
     upfront_discount_amount: 15000
   });
 
@@ -45,6 +46,7 @@ export default function SettingsPage() {
         mentor_terminology: cSettings.mentor_terminology || 'Mentor',
         enable_upfront_discount: cSettings.enable_upfront_discount !== undefined ? cSettings.enable_upfront_discount : true,
         enable_installments: cSettings.enable_installments !== undefined ? cSettings.enable_installments : true,
+        require_card_for_installments: cSettings.require_card_for_installments !== undefined ? cSettings.require_card_for_installments : false,
         upfront_discount_amount: cSettings.upfront_discount_amount !== undefined ? cSettings.upfront_discount_amount : 15000
       });
     }
@@ -804,6 +806,21 @@ const { data: tenantData, isLoading } = useQuery({
                 <div className={`w-4 h-4 bg-white rounded-full absolute top-1 shadow-sm transition-all ${coursesSettings.enable_installments ? 'right-1' : 'left-1'}`}></div>
               </div>
             </div>
+
+            {coursesSettings.enable_installments && (
+              <div className="flex items-center justify-between py-3 border-t border-gray-100">
+                <div>
+                  <p className="font-medium text-gray-900">Force Card for Installments</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Disable bank transfers for installments to guarantee automatic billing for future months.</p>
+                </div>
+                <div 
+                  className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors ${coursesSettings.require_card_for_installments ? 'bg-[#146ef5]' : 'bg-gray-200'}`}
+                  onClick={() => setCoursesSettings({...coursesSettings, require_card_for_installments: !coursesSettings.require_card_for_installments})}
+                >
+                  <div className={`w-4 h-4 bg-white rounded-full absolute top-1 shadow-sm transition-all ${coursesSettings.require_card_for_installments ? 'right-1' : 'left-1'}`}></div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

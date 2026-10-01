@@ -11,19 +11,26 @@ import { useAuthStore } from '@/store/useAuthStore';
 
 export default function OrientationForm({ tenant }: { tenant: any }) {
   const [step, setStep] = useState(1);
-  const [cohortSize, setCohortSize] = useState<number | null>(null);
+  const [cohort, setCohort] = useState<any>(null);
   const user = useAuthStore((state) => state.user);
   const firstName = user?.name?.split(' ')[0] || 'Builder';
 
   React.useEffect(() => {
-    const cohortId = Cookies.get('selected_cohort_id');
+    let cohortId = Cookies.get('selected_cohort_id');
     if (cohortId && tenant?.slug) {
+      cohortId = cohortId.replace(/['"]+/g, '');
       const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
       axios.get(`${COURSES_API}/api/public/cohorts/${cohortId}?tenant_id=${tenant.slug}`)
-        .then(res => setCohortSize(res.data?.enrolled_count))
+        .then(res => {
+          if (res.data?.cohort) setCohort(res.data.cohort);
+        })
         .catch(err => console.error(err));
     }
   }, [tenant]);
+
+  const mentorName = cohort?.mentor_name || 'Chidi';
+  const classmateCount = cohort?.enrolled_count || 23;
+  const durationInWeeks = cohort?.duration_weeks || 12;
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden bg-[#0B1021]">
@@ -52,8 +59,8 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
           
           {step === 1 && (
             <div className="flex flex-col items-center text-center animate-in fade-in zoom-in duration-500">
-              <div className="w-24 h-24 rounded-2xl bg-blue-50 border border-blue-100 shadow-sm mb-6 flex items-center justify-center">
-                <Target className="w-12 h-12 text-blue-500" />
+              <div className="w-24 h-24 rounded-2xl bg-blue-50 border border-blue-100 shadow-sm mb-6 flex items-center justify-center overflow-hidden p-1">
+                <img src="/avatars/mentor.jpg" alt="Mentor" className="w-full h-full rounded-xl object-cover" onError={(e) => e.currentTarget.src=`https://ui-avatars.com/api/?name=${encodeURIComponent(mentorName)}&background=2563EB&color=fff`} />
               </div>
               <div className="inline-flex items-center space-x-2 bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
                 <Target className="w-4 h-4" />
@@ -61,7 +68,7 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
               </div>
               <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">Welcome to the cohort, {firstName}.</h2>
               <p className="text-slate-500 max-w-lg mx-auto text-lg leading-relaxed font-medium">
-                "We are thrilled to welcome you. Our goal isn't just to teach you skills—it's to help you build a real portfolio and the confidence to succeed."
+                "I'm {mentorName}, your mentor for the next {durationInWeeks} weeks. My goal isn't just to teach you skills—it's to help you build a real portfolio and the confidence to succeed."
               </p>
             </div>
           )}
@@ -72,7 +79,11 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
                 <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-emerald-500 text-white flex items-center justify-center font-bold text-lg z-30 truncate px-1" title={firstName}>{firstName.length > 5 ? firstName.substring(0, 4) + '.' : firstName}</div>
                 <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-blue-400 z-20"></div>
                 <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-purple-400 z-10"></div>
-                <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 z-0">+{cohortSize !== null ? Math.max(0, cohortSize - 1) : 21}</div>
+                {classmateCount > 2 && (
+                  <div className="w-16 h-16 rounded-full border-4 border-white shadow-sm bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 z-0">
+                    +{classmateCount - 2}
+                  </div>
+                )}
               </div>
               <div className="inline-flex items-center space-x-2 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
                 <Users className="w-4 h-4" />
@@ -80,7 +91,7 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
               </div>
               <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">You are not building alone.</h2>
               <p className="text-slate-500 max-w-lg mx-auto text-lg leading-relaxed font-medium">
-                You're joining {cohortSize !== null ? Math.max(0, cohortSize) : 23} other builders. You will review each other's code, debug together in the coworking rooms, and present your final projects on Demo Day.
+                You're joining {classmateCount} other builders. You will review each other's code, debug together in the coworking rooms, and present your final projects on Demo Day.
               </p>
             </div>
           )}
@@ -110,7 +121,7 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
               </div>
               <h2 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">Progress is earned.</h2>
               <p className="text-slate-500 max-w-lg mx-auto text-lg leading-relaxed font-medium">
-                This isn't a passive video library. The next module only unlocks when you submit your project and Chidi approves it. Let's build your portfolio.
+                This isn't a passive video library. The next module only unlocks when you submit your project and {mentorName} approves it. Let's build your portfolio.
               </p>
             </div>
           )}

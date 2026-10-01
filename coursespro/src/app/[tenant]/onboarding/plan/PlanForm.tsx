@@ -17,6 +17,7 @@ export default function PlanForm({ tenant }: { tenant: any }) {
   const [upfrontDiscountAmount, setUpfrontDiscountAmount] = useState(15000);
   const [enableUpfrontDiscount, setEnableUpfrontDiscount] = useState(true);
   const [enableInstallments, setEnableInstallments] = useState(true);
+  const [requireCardForInstallments, setRequireCardForInstallments] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -45,6 +46,9 @@ export default function PlanForm({ tenant }: { tenant: any }) {
           }
           if (data.enable_installments !== undefined) {
             setEnableInstallments(data.enable_installments);
+          }
+          if (data.require_card_for_installments !== undefined) {
+            setRequireCardForInstallments(data.require_card_for_installments);
           }
         } else {
           setError('Failed to load cohort details. The cohort may have been removed or is unavailable.');
@@ -119,6 +123,7 @@ export default function PlanForm({ tenant }: { tenant: any }) {
         body: JSON.stringify({ 
           amount: plan === 'upfront' ? upfrontPrice : monthlyCost,
           purpose: 'cohort_enrollment',
+          force_card: plan === 'monthly' ? requireCardForInstallments : false,
           reference_id: cohortId,
           callback_url: window.location.origin + (window.location.pathname.startsWith(`/${tenant.slug}`) ? `/${tenant.slug}` : '') + `/dashboard/workspace?verify=true`
         })

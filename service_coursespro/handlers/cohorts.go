@@ -27,7 +27,26 @@ func (h *Handler) GetPublicCohorts(c *gin.Context) {
 		Select("crs_cohorts.*, (SELECT COUNT(id) FROM crs_enrollments WHERE crs_enrollments.cohort_id = crs_cohorts.id) as enrolled_count").
 		Preload("Program").Preload("CohortMentors").
 		Where("status != ?", "DRAFT").Order("start_date ASC").Find(&cohorts)
-	c.JSON(http.StatusOK, gin.H{"cohorts": cohorts})
+
+	var settings models.TenantSettings
+	upfrontDiscount := 15000.0
+	enableUpfrontDiscount := true
+	enableInstallments := true
+	requireCardForInstallments := false
+	if err := db.DB.Where("tenant_id = ?", tenantID).First(&settings).Error; err == nil {
+		upfrontDiscount = settings.UpfrontDiscountAmount
+		enableUpfrontDiscount = settings.EnableUpfrontDiscount
+		enableInstallments = settings.EnableInstallments
+		requireCardForInstallments = settings.RequireCardForInstallments
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"cohorts": cohorts,
+		"upfront_discount_amount": upfrontDiscount,
+		"enable_upfront_discount": enableUpfrontDiscount,
+		"enable_installments": enableInstallments,
+		"require_card_for_installments": requireCardForInstallments,
+	})
 }
 
 func (h *Handler) GetCohortDetail(c *gin.Context) {
@@ -58,11 +77,13 @@ func (h *Handler) GetCohortDetail(c *gin.Context) {
 	upfrontDiscount := 15000.0
 	enableUpfrontDiscount := true
 	enableInstallments := true
+	requireCardForInstallments := false
 	if tenantID != "" {
 		if err := db.DB.Where("tenant_id = ?", tenantID).First(&settings).Error; err == nil {
 			upfrontDiscount = settings.UpfrontDiscountAmount
 			enableUpfrontDiscount = settings.EnableUpfrontDiscount
 			enableInstallments = settings.EnableInstallments
+			requireCardForInstallments = settings.RequireCardForInstallments
 		}
 	}
 
@@ -71,5 +92,6 @@ func (h *Handler) GetCohortDetail(c *gin.Context) {
 		"upfront_discount_amount": upfrontDiscount,
 		"enable_upfront_discount": enableUpfrontDiscount,
 		"enable_installments": enableInstallments,
+		"require_card_for_installments": requireCardForInstallments,
 	})
 }
