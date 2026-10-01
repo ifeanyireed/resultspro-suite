@@ -80,9 +80,13 @@ export default function PlanSelectionPage() {
   const basePrice = Number(cohort.price);
   const durationWeeks = Number(cohort.duration_weeks) || 12;
   const divisor = Math.max(1, Math.floor(durationWeeks / 4));
-  const upfrontDiscount = enableUpfrontDiscount ? Math.min(upfrontDiscountAmount, basePrice) : 0;
-  const upfrontPrice = basePrice - upfrontDiscount;
-  const monthlyCost = Math.round(basePrice / divisor);
+  
+  // The 'discount amount' from settings is now treated as an installment markup
+  const markup = enableUpfrontDiscount ? upfrontDiscountAmount : 0;
+  
+  const officialPrice = basePrice + markup;
+  const upfrontPrice = basePrice;
+  const monthlyCost = Math.round(officialPrice / divisor);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-NG', { style: 'currency', currency: cohort.currency || 'NGN', minimumFractionDigits: 0 }).format(amount);
@@ -149,12 +153,12 @@ export default function PlanSelectionPage() {
                 <div className="mb-1">
                   <span className="text-3xl font-bold text-slate-900">{formatCurrency(upfrontPrice)}</span>
                 </div>
-                {upfrontDiscount > 0 && <p className="text-sm text-slate-400 mb-5 line-through">{formatCurrency(basePrice)}</p>}
+                {markup > 0 && <p className="text-sm text-slate-400 mb-5 line-through">{formatCurrency(officialPrice)}</p>}
                 
                 <ul className="space-y-2.5 mb-2">
-                  {upfrontDiscount > 0 && (
+                  {markup > 0 && (
                   <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
-                    <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Save {formatCurrency(upfrontDiscount)} immediately
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Save {formatCurrency(markup)} immediately
                   </li>
                   )}
                   <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
@@ -189,12 +193,12 @@ export default function PlanSelectionPage() {
             <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm mb-6">
               <div className="flex justify-between mb-4">
                 <span className="text-sm font-semibold text-slate-700">{plan === 'upfront' ? `${cohort ? cohort.title : 'Full Cohort'} (Upfront)` : 'Monthly Installment'}</span>
-                <span className="text-sm font-bold text-slate-900">{plan === 'upfront' ? formatCurrency(basePrice) : formatCurrency(monthlyCost)}</span>
+                <span className="text-sm font-bold text-slate-900">{plan === 'upfront' ? formatCurrency(officialPrice) : formatCurrency(monthlyCost)}</span>
               </div>
-              {plan === 'upfront' && (
+              {plan === 'upfront' && markup > 0 && (
                 <div className="flex justify-between mb-4 text-emerald-600">
                   <span className="text-sm font-semibold">Upfront Discount</span>
-                  <span className="text-sm font-bold">-{formatCurrency(upfrontDiscount)}</span>
+                  <span className="text-sm font-bold">-{formatCurrency(markup)}</span>
                 </div>
               )}
               <div className="border-t border-slate-100 pt-4 flex justify-between items-center">
