@@ -116,6 +116,7 @@ func HandlePlatformPaystackWebhook(w http.ResponseWriter, r *http.Request) {
 				Email string `json:"email"`
 			} `json:"customer"`
 			Authorization struct {
+				AuthorizationCode string `json:"authorization_code"`
 				Last4 string `json:"last4"`
 				Brand string `json:"brand"`
 			} `json:"authorization"`
@@ -125,6 +126,7 @@ func HandlePlatformPaystackWebhook(w http.ResponseWriter, r *http.Request) {
 				Module   string `json:"module"`
 				ModuleRef string `json:"module_ref"`
 				CohortID string `json:"cohort_id"` // Fallback for old webhooks
+				PlanType string `json:"plan_type"`
 			} `json:"metadata"`
 		} `json:"data"`
 	}
@@ -214,13 +216,13 @@ func HandlePlatformPaystackWebhook(w http.ResponseWriter, r *http.Request) {
 
 		// Dispatch to the specific module
 		if module == "coursespro" {
-			go dispatchToCoursesPro(payload.Data.Metadata.UserID, moduleRef, "SUCCESS")
+			go dispatchToCoursesPro(payload.Data.Metadata.UserID, moduleRef, "SUCCESS", payload.Data.Authorization.AuthorizationCode, payload.Data.Metadata.PlanType)
 		}
 
 	} else if payload.Event == "invoice.payment_failed" || payload.Event == "charge.failed" {
 		db.GormDB.Model(&models.UserTransaction{}).Where("reference = ?", payload.Data.Reference).Update("status", "FAILED")
 		if module == "coursespro" {
-			go dispatchToCoursesPro(payload.Data.Metadata.UserID, moduleRef, "FAILED")
+			go dispatchToCoursesPro(payload.Data.Metadata.UserID, moduleRef, "FAILED", payload.Data.Authorization.AuthorizationCode, payload.Data.Metadata.PlanType)
 		}
 	}
 
@@ -229,7 +231,7 @@ func HandlePlatformPaystackWebhook(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status":"received"}`))
 }
 
-func dispatchToCoursesPro(userID, cohortID, status string) {
+func dispatchToCoursesPro(userID, cohortID, status, authCode, planType string) {
 	coursesURL := os.Getenv("COURSES_SERVICE_URL")
 	if coursesURL == "" {
 		coursesURL = "https://resultspro-service-coursespro.onrender.com"
@@ -242,6 +244,8 @@ func dispatchToCoursesPro(userID, cohortID, status string) {
 		"user_id":   userID,
 		"cohort_id": cohortID,
 		"status":    status,
+		"authorization_code": authCode,
+		"plan_type": planType,
 	})
 
 	req, _ := http.NewRequest("POST", coursesURL+"/api/internal/enrollments/payment-callback", bytes.NewBuffer(payload))

@@ -29,9 +29,11 @@ func (h *Handler) InternalPaymentCallback(c *gin.Context) {
 	}
 
 	var payload struct {
-		UserID   string `json:"user_id"`
-		CohortID string `json:"cohort_id"`
-		Status   string `json:"status"` // SUCCESS or FAILED
+		UserID            string `json:"user_id"`
+		CohortID          string `json:"cohort_id"`
+		Status            string `json:"status"` // SUCCESS or FAILED
+		AuthorizationCode string `json:"authorization_code"`
+		PlanType          string `json:"plan_type"`
 	}
 
 	if err := json.Unmarshal(body, &payload); err != nil {
@@ -47,24 +49,54 @@ func (h *Handler) InternalPaymentCallback(c *gin.Context) {
 				err := db.DB.Where("user_id = ? AND cohort_id = ?", payload.UserID, payload.CohortID).First(&enrollment).Error
 				if err != nil {
 					// Create enrollment
+					billingCycle := "once"
+					var nextBillingDate time.Time
+					if payload.PlanType == "monthly" {
+						billingCycle = "monthly"
+						nextBillingDate = time.Now().UTC().AddDate(0, 1, 0)
+					}
+					
+					var subID *string
+					if payload.AuthorizationCode != "" {
+						subID = &payload.AuthorizationCode
+					}
+					
 					enrollment = models.Enrollment{
 						ID:            uuid.New().String(),
 						TenantID:      cohort.TenantID,
 						CohortID:      payload.CohortID,
 						UserID:        payload.UserID,
 						PaymentStatus: "PAID",
-						PlanType:      "STANDARD",
+						PlanType:      payload.PlanType,
 						EnrolledAt:    time.Now().UTC(),
+						BillingCycle:  billingCycle,
+						SubscriptionID: subID,
+					}
+					if nextBillingDate.IsZero() == false {
+						enrollment.NextBillingDate = &nextBillingDate
 					}
 					if err := db.DB.Create(&enrollment).Error; err != nil {
 						log.Printf("[Webhook Error] Failed to create enrollment for %s: %v", payload.UserID, err)
 					}
 				} else {
 					// Update existing enrollment
-					db.DB.Model(&enrollment).Updates(map[string]interface{}{
+					updates := map[string]interface{}{
 						"payment_status":      "PAID",
 						"last_payment_failed": false,
-					})
+					}
+					if payload.AuthorizationCode != "" {
+						updates["subscription_id"] = payload.AuthorizationCode
+					}
+					if payload.PlanType == "monthly" {
+						updates["plan_type"] = "monthly"
+						updates["billing_cycle"] = "monthly"
+						nextBill := time.Now().UTC().AddDate(0, 1, 0)
+						updates["next_billing_date"] = &nextBill
+					} else {
+						updates["plan_type"] = payload.PlanType
+					}
+					
+					db.DB.Model(&enrollment).Updates(updates)
 				}
 			}
 		} else if payload.Status == "FAILED" {

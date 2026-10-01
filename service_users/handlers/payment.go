@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"log"
 	"time"
 	"net/http"
@@ -22,6 +23,7 @@ type InitPaymentRequest struct {
 	ReferenceID   string  `json:"reference_id"` // e.g. cohort_id or plan_id
 	CallbackURL   string  `json:"callback_url"`
 	ForceCard     bool    `json:"force_card"`
+	PlanType      string  `json:"plan_type"` // e.g. "upfront", "monthly"
 }
 
 // HandleTenantPaymentInitialize initializes a payment transaction using the tenant's payment configuration
@@ -125,7 +127,7 @@ func HandleTenantPaymentInitialize(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Dispatch immediately
-		go dispatchToCoursesPro(user.ID, req.ReferenceID, "SUCCESS")
+		go dispatchToCoursesPro(user.ID, req.ReferenceID, "SUCCESS", "", req.PlanType)
 
 		authURL := req.CallbackURL
 		if strings.Contains(authURL, "?") {
@@ -142,6 +144,21 @@ func HandleTenantPaymentInitialize(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	meta := map[string]interface{}{
+		"user_id":   user.ID,
+		"tenant_id": tenant.ID,
+		"module":    "coursespro",
+		"module_ref": req.ReferenceID,
+		"plan_type": req.PlanType,
+		"custom_fields": []map[string]interface{}{
+			{
+				"display_name": "Academy",
+				"variable_name": "tenant_name",
+				"value": tenant.Name,
+			},
+		},
+	}
+
 	// 4. Initialize Transaction
 	authURL, accessCode, transactionRef, err := paystack.InitializeTransaction(
 		amountInKobo,
@@ -149,8 +166,8 @@ func HandleTenantPaymentInitialize(w http.ResponseWriter, r *http.Request) {
 		paymentRef,
 		subaccountCode,
 		req.CallbackURL,
-		tenant.Name,
 		req.ForceCard,
+		meta,
 	)
 	if err != nil {
 		log.Printf("Paystack initialization failed: %v", err)
@@ -253,7 +270,8 @@ func HandleTenantPaymentVerify(w http.ResponseWriter, r *http.Request) {
 		if status == "success" {
 			payment.Status = "paid"
 			// Dispatch to courses service to finalize enrollment
-			go dispatchToCoursesPro(payment.StudentID, payment.EnrollmentID, "SUCCESS")
+			// Ideally we could get auth code here if Paystack returned it, but for manual verify we might just rely on the webhook
+			go dispatchToCoursesPro(payment.StudentID, payment.EnrollmentID, "SUCCESS", "", "")
 		} else {
 			payment.Status = "failed"
 		}
@@ -263,5 +281,114 @@ func HandleTenantPaymentVerify(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
 		"status": status,
 		"data":   verifyData,
+	})
+}
+
+type ChargeAuthRequest struct {
+	TenantID          string  `json:"tenant_id"`
+	UserID            string  `json:"user_id"`
+	Module            string  `json:"module"`
+	ModuleRef         string  `json:"module_ref"`
+	Amount            float64 `json:"amount"` // in main currency (e.g., Naira)
+	AuthorizationCode string  `json:"authorization_code"`
+	Email             string  `json:"email"`
+}
+
+func HandleChargeAuthorization(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	// Verify internal secret
+	secret := r.Header.Get("X-Internal-Secret")
+	if secret != "super_secret_internal_key_42" {
+		utils.JSONError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	var req ChargeAuthRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+
+	if req.TenantID == "" || req.UserID == "" || req.AuthorizationCode == "" || req.Amount <= 0 {
+		utils.JSONError(w, http.StatusBadRequest, "Missing required fields")
+		return
+	}
+
+	var tenant models.Tenant
+	if err := db.GormDB.Where("id = ?", req.TenantID).First(&tenant).Error; err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Tenant not found")
+		return
+	}
+
+	var user models.User
+	if req.Email == "" {
+		if err := db.GormDB.Where("id = ?", req.UserID).First(&user).Error; err == nil {
+			req.Email = user.Email
+		} else {
+			req.Email = "unknown@example.com"
+		}
+	}
+
+	// Fetch tenant Paystack keys
+	secretKey := tenant.PaystackSecretKey
+	if secretKey == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Tenant Paystack secret key not configured")
+		return
+	}
+
+	paystack := services.NewPaystackClient(secretKey)
+	amountInKobo := int(req.Amount * 100)
+	
+	// Create platform payment record so it can be verified if needed
+	paymentRef := fmt.Sprintf("txn_%s", uuid.New().String()[:8])
+	
+	payment := models.PlatformPayment{
+		ID:            uuid.New().String(),
+		TenantID:      tenant.ID,
+		StudentID:     req.UserID,
+		EnrollmentID:  req.ModuleRef,
+		Amount:        req.Amount,
+		Status:        "pending",
+		Reference:     paymentRef,
+		CreatedAt:     time.Now(),
+		UpdatedAt:     time.Now(),
+	}
+	db.GormDB.Create(&payment)
+	
+	meta := map[string]interface{}{
+		"user_id":   req.UserID,
+		"tenant_id": req.TenantID,
+		"module":    req.Module,
+		"module_ref": req.ModuleRef,
+		"plan_type": "monthly",
+		"custom_fields": []map[string]interface{}{
+			{
+				"display_name": "Academy",
+				"variable_name": "tenant_name",
+				"value": tenant.Name,
+			},
+		},
+	}
+
+	// We hit Paystack's /transaction/charge_authorization endpoint
+	resData, err := paystack.ChargeAuthorization(amountInKobo, req.Email, req.AuthorizationCode, paymentRef, meta)
+	if err != nil {
+		payment.Status = "failed"
+		db.GormDB.Save(&payment)
+		utils.JSONError(w, http.StatusInternalServerError, fmt.Sprintf("Failed to charge authorization: %v", err))
+		return
+	}
+
+	// Depending on the Paystack response, it might be successful right away
+	// But usually, charge_authorization triggers the webhook charge.success anyway
+	// We'll return success to the caller
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"status": "success",
+		"message": "Charge initiated",
+		"data": resData,
 	})
 }

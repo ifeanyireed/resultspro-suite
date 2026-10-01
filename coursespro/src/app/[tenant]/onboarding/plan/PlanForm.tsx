@@ -123,6 +123,7 @@ export default function PlanForm({ tenant }: { tenant: any }) {
         body: JSON.stringify({ 
           amount: plan === 'upfront' ? upfrontPrice : monthlyCost,
           purpose: 'cohort_enrollment',
+          plan_type: plan,
           force_card: plan === 'monthly' ? requireCardForInstallments : false,
           reference_id: cohortId,
           callback_url: window.location.origin + (window.location.pathname.startsWith(`/${tenant.slug}`) ? `/${tenant.slug}` : '') + `/dashboard/workspace?verify=true`

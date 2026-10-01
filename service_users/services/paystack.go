@@ -200,7 +200,7 @@ func (c *PaystackClient) VerifyWebhookSignature(payload []byte, signature string
 }
 
 // InitializeTransaction starts a Paystack transaction
-func (c *PaystackClient) InitializeTransaction(amount int, email, reference, subaccount, callbackURL, tenantName string, forceCard bool) (string, string, string, error) {
+func (c *PaystackClient) InitializeTransaction(amount int, email, reference, subaccount, callbackURL string, forceCard bool, meta map[string]interface{}) (string, string, string, error) {
 	payload := map[string]interface{}{
 		"amount":       amount,
 		"email":        email,
@@ -216,16 +216,8 @@ func (c *PaystackClient) InitializeTransaction(amount int, email, reference, sub
 		payload["subaccount"] = subaccount
 	}
 	
-	if tenantName != "" {
-		payload["metadata"] = map[string]interface{}{
-			"custom_fields": []map[string]interface{}{
-				{
-					"display_name": "Academy",
-					"variable_name": "tenant_name",
-					"value": tenantName,
-				},
-			},
-		}
+	if meta != nil {
+		payload["metadata"] = meta
 	}
 
 	result, err := c.doRequest("POST", "/transaction/initialize", payload)
@@ -243,4 +235,25 @@ func (c *PaystackClient) InitializeTransaction(amount int, email, reference, sub
 	ref, _ := data["reference"].(string)
 
 	return authURL, accessCode, ref, nil
+}
+
+// ChargeAuthorization charges a previously saved card authorization
+func (c *PaystackClient) ChargeAuthorization(amount int, email, authorizationCode, reference string, meta map[string]interface{}) (map[string]interface{}, error) {
+	payload := map[string]interface{}{
+		"amount":             amount,
+		"email":              email,
+		"authorization_code": authorizationCode,
+		"reference":          reference,
+	}
+
+	if meta != nil {
+		payload["metadata"] = meta
+	}
+
+	result, err := c.doRequest("POST", "/transaction/charge_authorization", payload)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }

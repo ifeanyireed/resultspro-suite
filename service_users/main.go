@@ -473,6 +473,7 @@ func main() {
 	// Payments
 	mux.HandleFunc("POST /api/v1/payments/initialize", handlers.HandleTenantPaymentInitialize)
 	mux.HandleFunc("POST /api/v1/payments/verify", handlers.HandleTenantPaymentVerify)
+	mux.HandleFunc("POST /api/internal/payments/charge-authorization", handlers.HandleChargeAuthorization)
 
 	mux.HandleFunc("GET /api/v1/admin/payments/summary", middleware.RequireAuth(handlers.HandlePlatformPaymentSummary))
 	mux.HandleFunc("GET /api/v1/admin/payments/transactions", middleware.RequireAuth(handlers.HandlePlatformTransactions))

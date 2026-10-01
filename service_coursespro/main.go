@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"service_coursespro/db"
+	"service_coursespro/cron"
 	"service_coursespro/handlers"
 	"service_coursespro/middleware"
 	"service_coursespro/ws"
@@ -20,6 +21,9 @@ func main() {
 	}
 
 	db.InitDB()
+
+	// Start background tasks
+	cron.StartCronJobs()
 
 	h := handlers.NewHandler()
 	r := gin.Default()
