@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import api, { getTenantSlug } from '@/lib/api';
+import api, { coursesApi, getTenantSlug } from '@/lib/api';
 import { 
   CheckCircleIcon,
   CogIcon,
@@ -30,7 +30,7 @@ export default function SettingsPage() {
   const { data: cSettings } = useQuery({
     queryKey: ['courses_settings'],
     queryFn: async () => {
-      const res = await api.get('/api/admin/settings');
+      const res = await coursesApi.get('/api/admin/settings');
       return res.data;
     }
   });
@@ -312,7 +312,7 @@ const { data: tenantData, isLoading } = useQuery({
       await api.patch(`/api/v1/tenants/update/${tenantId}`, payload);
       
       // Save courses settings
-      await api.put('/api/admin/settings', coursesSettings);
+      await coursesApi.put('/api/admin/settings', coursesSettings);
       
       if (formData.customDomainEnabled && formData.customDomain) {
         try {
