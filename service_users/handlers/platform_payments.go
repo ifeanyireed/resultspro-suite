@@ -139,6 +139,17 @@ func HandlePlatformPaystackWebhook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Fallback to PlatformPayment if metadata is missing
+	if payload.Data.Metadata.UserID == "" {
+		var pp models.PlatformPayment
+		if err := db.GormDB.Where("reference = ?", payload.Data.Reference).First(&pp).Error; err == nil {
+			payload.Data.Metadata.UserID = pp.StudentID
+			payload.Data.Metadata.TenantID = pp.TenantID
+			payload.Data.Metadata.Module = "coursespro"
+			payload.Data.Metadata.ModuleRef = pp.EnrollmentID
+		}
+	}
+
 	module := payload.Data.Metadata.Module
 	if module == "" {
 		module = "coursespro"
@@ -150,6 +161,9 @@ func HandlePlatformPaystackWebhook(w http.ResponseWriter, r *http.Request) {
 
 	if payload.Event == "charge.success" {
 		actualAmount := payload.Data.Amount / 100
+
+		// Update PlatformPayment status if it exists
+		db.GormDB.Model(&models.PlatformPayment{}).Where("reference = ?", payload.Data.Reference).Update("status", "paid")
 
 		err = db.GormDB.Transaction(func(tx *gorm.DB) error {
 			var trans models.UserTransaction
