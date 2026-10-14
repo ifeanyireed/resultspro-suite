@@ -166,10 +166,10 @@ export default function BlogCMSPage() {
         subtitle="Manage global articles, categories, tags, and comments across the suite"
       />
 
-      <div className="p-8 space-y-8">
+      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-6 sm:space-y-8">
         
         {/* Header Actions */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div className="flex bg-slate-100 p-1 rounded-full shadow-inner border border-slate-200 overflow-x-auto whitespace-nowrap hide-scrollbar">
             {TABS.map((tab) => {
               const Icon = tab.icon;

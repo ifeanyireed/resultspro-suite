@@ -714,3 +714,28 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 768px) {
+  .welcomeBanner {
+    padding: 1rem 1.25rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 10px;
+    margin-bottom: 1.25rem;
+    border-radius: 1.25rem;
+  }
+  .monsterContainer {
+    display: none;
+  }
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  .bottomGrid {
+    grid-template-columns: 1fr;
+  }
+  .sidebarArea {
+    height: auto;
+    position: static;
+  }
+}

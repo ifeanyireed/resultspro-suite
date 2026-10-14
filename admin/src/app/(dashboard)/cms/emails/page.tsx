@@ -40,7 +40,7 @@ export default function EmailsPage() {
         subtitle="Dispatch system-wide notifications, manage subscriber lists, and view campaign history"
       />
 
-      <div className="p-8 space-y-6 w-full">
+      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-4 sm:space-y-6 w-full">
         {/* Header Actions */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex bg-slate-100 p-1 rounded-full shadow-inner border border-slate-200 overflow-x-auto whitespace-nowrap hide-scrollbar">

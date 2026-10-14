@@ -159,7 +159,7 @@ function CreateBlogPostContent() {
         subtitle="Write and publish a new article to the suite blog"
       />
 
-      <div className="p-8 space-y-6 max-w-[1200px] mx-auto w-full">
+      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-4 sm:space-y-6 max-w-[1200px] mx-auto w-full">
         {/* Actions Header */}
         <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
           <Link href="/cms/blog" className="flex items-center gap-2 text-slate-500 hover:text-slate-700 text-sm font-medium transition-colors">

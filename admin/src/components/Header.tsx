@@ -10,13 +10,13 @@ interface HeaderProps {
 
 export function Header({ title, subtitle, children }: HeaderProps & { children?: React.ReactNode }) {
   return (
-    <div className="flex items-end justify-between mb-8 mt-2 px-3">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{title}</h1>
-        {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
+    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-4 sm:mb-8 mt-1 sm:mt-2 px-1 sm:px-3">
+      <div className="min-w-0">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">{title}</h1>
+        {subtitle && <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1 leading-relaxed">{subtitle}</p>}
       </div>
       {children && (
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0">
           {children}
         </div>
       )}

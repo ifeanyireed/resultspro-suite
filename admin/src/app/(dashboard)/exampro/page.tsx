@@ -38,8 +38,8 @@ export default function ExamsProCommandCenter() {
         subtitle="Master administration panel for computer-based testing and live battles"
       />
 
-      <div className="px-4 md:px-8 pt-4 w-full ">
-        <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto no-scrollbar pb-px">
+      <div className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4 w-full">
+        <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto scrollbar-hide pb-px">
           {tabs.map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -47,9 +47,9 @@ export default function ExamsProCommandCenter() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-4 py-3 border-b-2 font-medium text-xs transition-colors whitespace-nowrap shrink-0 ${
+                className={`flex items-center space-x-2 px-3 sm:px-4 py-2 sm:py-3 border-b-2 font-medium text-xs transition-colors whitespace-nowrap shrink-0 ${
                   isActive 
-                    ? 'border-blue-600 text-blue-600' 
+                    ? 'border-blue-600 text-blue-600 font-bold' 
                     : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
                 }`}
               >
@@ -61,7 +61,7 @@ export default function ExamsProCommandCenter() {
         </div>
       </div>
 
-      <div className="p-8 w-full">
+      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 w-full">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'subjects' && <SubjectsTab />}
         {activeTab === 'questions' && <QuestionsTab />}

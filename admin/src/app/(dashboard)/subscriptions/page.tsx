@@ -180,8 +180,8 @@ export default function SubscriptionsCommandCenter() {
         subtitle="Manage standardized subscription tiers, quotas, and invoice ledgers across the suite"
       />
 
-      <div className="px-8 pt-4">
-        <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto pb-px">
+      <div className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4">
+        <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto pb-px scrollbar-hide">
           {tabs.map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -189,9 +189,9 @@ export default function SubscriptionsCommandCenter() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-4 py-3 border-b-2 font-medium text-xs transition-colors whitespace-nowrap ${
+                className={`flex items-center space-x-2 px-3 sm:px-4 py-2 sm:py-3 border-b-2 font-medium text-xs transition-colors whitespace-nowrap ${
                   isActive 
-                    ? 'border-blue-600 text-blue-600' 
+                    ? 'border-blue-600 text-blue-600 font-bold' 
                     : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
                 }`}
               >
@@ -203,7 +203,7 @@ export default function SubscriptionsCommandCenter() {
         </div>
       </div>
 
-      <div className="p-8 space-y-8">
+      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-6 sm:space-y-8">
         
         {activeTab === 'Invoices' ? (
           <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4">

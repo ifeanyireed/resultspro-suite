@@ -28,8 +28,8 @@ export default function ClassroomProAdminPage() {
         subtitle="Oversight of digital lesson handouts, interactive quizzes, and flashcards SRS"
       />
 
-      <div className="px-8 pt-4">
-        <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto pb-px">
+      <div className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4">
+        <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto pb-px scrollbar-hide">
           {tabs.map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -37,9 +37,9 @@ export default function ClassroomProAdminPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-4 py-3 border-b-2 font-medium text-xs transition-colors whitespace-nowrap ${
+                className={`flex items-center space-x-2 px-3 sm:px-4 py-2 sm:py-3 border-b-2 font-medium text-xs transition-colors whitespace-nowrap ${
                   isActive 
-                    ? 'border-emerald-600 text-emerald-600' 
+                    ? 'border-emerald-600 text-emerald-600 font-bold' 
                     : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
                 }`}
               >
@@ -51,7 +51,7 @@ export default function ClassroomProAdminPage() {
         </div>
       </div>
 
-      <div className="p-8 w-full">
+      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 w-full">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'notes' && <NotesTab />}
         {activeTab === 'quizzes' && <QuizzesTab />}

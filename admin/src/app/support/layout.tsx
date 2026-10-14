@@ -18,7 +18,10 @@ import {
 } from '@heroicons/react/24/outline';
 import { 
   Squares2X2Icon as Squares2X2Solid,
+  BookOpenIcon as BookOpenSolid,
+  Cog6ToothIcon as Cog6ToothSolid,
 } from '@heroicons/react/24/solid';
+import { MobileBottomNav, NavItem } from '@/components/layout/MobileBottomNav';
 
 export default function SupportLayout({
   children,
@@ -67,7 +70,7 @@ export default function SupportLayout({
       <div className="w-full flex flex-1 overflow-hidden h-screen">
         
         {/* Sidebar */}
-        <aside className="w-[280px] bg-white border-r border-gray-100 flex flex-col justify-between py-4 shrink-0 h-full overflow-y-auto">
+        <aside className="hidden md:flex w-[280px] bg-white border-r border-gray-100 flex-col justify-between py-4 shrink-0 h-full overflow-y-auto">
           <div>
             {/* Logo */}
             <div className="px-8 mb-6">
@@ -154,33 +157,38 @@ export default function SupportLayout({
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 flex flex-col h-full overflow-hidden">
+        <main className="flex-1 flex flex-col h-full overflow-hidden min-w-0 pb-20 md:pb-0">
           
           {/* Header */}
-          <header className="h-24 px-3 flex items-center justify-between shrink-0">
-            <div className="relative w-96">
-              <MagnifyingGlassIcon className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
+          <header className="h-16 sm:h-20 md:h-24 px-2.5 sm:px-6 flex items-center justify-between shrink-0 bg-[#f9fafc]/95 backdrop-blur-md z-30 border-b border-gray-100/80 md:border-b-0">
+            {/* Mobile Logo */}
+            <Link href="/support/dashboard" className="md:hidden flex items-center gap-2 mr-1 shrink-0">
+              <img src="/logo.png" alt="ResultsPRO" className="h-7 w-auto object-contain" />
+            </Link>
+
+            <div className="relative flex-1 max-w-[180px] xs:max-w-[240px] sm:max-w-xs md:max-w-none md:w-80 lg:w-96">
+              <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 absolute left-3 sm:left-4 top-1/2 -translate-y-1/2" />
               <input 
                 type="text" 
                 placeholder="Search tickets or schools..." 
-                className="w-full bg-white border border-white focus:border-gray-200 outline-none rounded-xl py-3 pl-12 pr-12 text-sm text-gray-700 shadow-sm transition-colors placeholder:text-gray-400"
+                className="w-full bg-white border border-gray-100 md:border-white focus:border-gray-200 outline-none rounded-xl py-2 sm:py-3 pl-8 sm:pl-12 pr-4 sm:pr-12 text-xs sm:text-sm text-gray-700 shadow-sm transition-colors placeholder:text-gray-400"
               />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-gray-100 rounded px-1.5 py-0.5 border border-gray-200">
+              <div className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 items-center gap-1 bg-gray-100 rounded px-1.5 py-0.5 border border-gray-200">
                 <span className="text-[10px] font-medium text-gray-500">⌘</span>
                 <span className="text-[10px] font-medium text-gray-500">F</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-500 shadow-sm hover:text-gray-900 transition-colors">
-                <EnvelopeIcon className="w-5 h-5" />
+            <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+              <button className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center text-gray-500 shadow-sm hover:text-gray-900 transition-colors">
+                <EnvelopeIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
-              <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-500 shadow-sm hover:text-gray-900 transition-colors relative">
-                <BellIcon className="w-5 h-5" />
-                <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+              <button className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center text-gray-500 shadow-sm hover:text-gray-900 transition-colors relative">
+                <BellIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="absolute top-1.5 sm:top-2.5 right-1.5 sm:right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
               </button>
-              <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
-                <div className="w-10 h-10 bg-gradient-to-tr from-green-200 to-green-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm text-gray-700 font-bold text-sm">
+              <div className="flex items-center gap-2 sm:gap-3 ml-1 sm:ml-2 border-l border-gray-200 pl-2 sm:pl-6">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-tr from-green-200 to-green-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm text-gray-700 font-bold text-xs sm:text-sm shrink-0">
                   {user?.avatar_url ? (
                     <img src={user.avatar_url} alt="Staff Avatar" className="w-full h-full object-cover" />
                   ) : (
@@ -195,13 +203,25 @@ export default function SupportLayout({
             </div>
           </header>
 
-          {/* Scrollable Dashboard Content */}
-          <div className="flex-1 overflow-y-auto px-3 pb-3">
+          {/* Scrollable Dashboard Content - Very Little Left/Right Padding on Mobile */}
+          <div className="flex-1 overflow-y-auto px-2.5 sm:px-6 pb-24 md:pb-6 min-w-0">
             {children}
           </div>
         </main>
 
       </div>
+
+      {/* Mobile Horizontally Scrollable Bottom Nav */}
+      <MobileBottomNav
+        items={[
+          { label: 'Overview', mobileLabel: 'Overview', href: '/support/dashboard', icon: Squares2X2Icon, activeIcon: Squares2X2Solid },
+          { label: 'All Tickets', mobileLabel: 'Tickets', href: '/support/tickets', icon: TicketIcon, activeIcon: TicketIcon, badge: openTickets > 0 ? String(openTickets) : undefined },
+          { label: 'Live Chat', mobileLabel: 'Live Chat', href: '/support/chat', icon: ChatBubbleLeftEllipsisIcon, activeIcon: ChatBubbleLeftEllipsisIcon },
+          { label: 'Knowledge Base', mobileLabel: 'KB', href: '/support/kb', icon: BookOpenIcon, activeIcon: BookOpenSolid },
+          { label: 'Settings', mobileLabel: 'Settings', href: '/support/settings', icon: Cog6ToothIcon, activeIcon: Cog6ToothSolid },
+          { label: 'Help', mobileLabel: 'Help', href: '/support/help', icon: QuestionMarkCircleIcon, activeIcon: QuestionMarkCircleIcon },
+        ]}
+      />
     </div>
   );
 }

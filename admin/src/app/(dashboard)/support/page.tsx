@@ -35,21 +35,21 @@ export default function SupportPage() {
         subtitle="Manage and resolve incoming support tickets from schools and agents"
       />
 
-      <div className="p-8 space-y-6 w-full">
+      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-4 sm:space-y-6 w-full">
         {/* Header Overview */}
-        <div className="flex items-center justify-between bg-blue-50/50 p-6 rounded-2xl border border-blue-100/50 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-blue-50/50 p-4 sm:p-6 rounded-2xl border border-blue-100/50 shadow-sm">
           <div>
-            <h2 className="text-lg font-bold text-slate-800">Support Overview</h2>
-            <p className="text-xs text-slate-500 mt-1">Manage and respond to school support requests</p>
+            <h2 className="text-base sm:text-lg font-bold text-slate-800">Support Overview</h2>
+            <p className="text-xs text-slate-500 mt-0.5 sm:mt-1">Manage and respond to school support requests</p>
           </div>
-          <div className="bg-white px-6 py-3 rounded-2xl border border-slate-200 shadow-sm text-center">
-            <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Avg Resolution</p>
-            <p className="text-2xl font-bold text-blue-600">{stats?.averageResolutionTimeHours} <span className="text-xs text-slate-400 font-normal">hrs</span></p>
+          <div className="bg-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl border border-slate-200 shadow-sm text-center shrink-0">
+            <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-0.5 sm:mb-1">Avg Resolution</p>
+            <p className="text-xl sm:text-2xl font-bold text-blue-600">{stats?.averageResolutionTimeHours} <span className="text-xs text-slate-400 font-normal">hrs</span></p>
           </div>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
           {[
             { label: 'Open', value: stats?.open, icon: AlertCircle, color: 'text-blue-500', bg: 'bg-blue-50 border-blue-100' },
             { label: 'Pending', value: stats?.pending, icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50 border-amber-100' },

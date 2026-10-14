@@ -67,7 +67,7 @@ export default function UsersPage() {
         subtitle="Manage master identity profiles, account statuses, and MFA settings"
       />
 
-      <div className="p-8 space-y-8 w-full">
+      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-4 sm:space-y-6 w-full">
         <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white shadow-sm shadow-slate-200/50 p-5 flex flex-col md:flex-row items-center justify-between gap-5 transition-all">
           <div className="relative w-full md:w-96 group">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><Search className="w-4 h-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" /></div>
