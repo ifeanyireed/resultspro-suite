@@ -15,7 +15,7 @@ api.interceptors.request.use((config) => {
 
 export default api;
 
-const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
 const RESULTS_API = process.env.NEXT_PUBLIC_RESULTS_API || '';
 const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || '';
 const CLASSROOM_API = process.env.NEXT_PUBLIC_CLASSROOM_API || '';

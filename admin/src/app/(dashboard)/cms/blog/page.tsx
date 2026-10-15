@@ -18,6 +18,8 @@ const TABS = [
   { id: 'subscribers', name: 'Subscribers', icon: Users },
 ];
 
+const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+
 export default function BlogCMSPage() {
   const [activeTab, setActiveTab] = useState('posts');
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -32,7 +34,6 @@ export default function BlogCMSPage() {
       setLoading(true);
       const data = await fetchBlogPosts();
       try {
-        const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
         const catRes = await fetch(`${USERS_API}/api/v1/cms/blog/categories`);
         if (catRes.ok) {
           setCategories(await catRes.json());
@@ -64,7 +65,6 @@ export default function BlogCMSPage() {
     const name = window.prompt("Enter category name:");
     if (!name) return;
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
       const res = await fetch(`${USERS_API}/api/v1/cms/blog/categories`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -85,7 +85,6 @@ export default function BlogCMSPage() {
   
   const handleUpdateCommentStatus = async (id: string, status: string) => {
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
       const res = await fetch(`${USERS_API}/api/v1/cms/blog/comments/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -105,7 +104,6 @@ export default function BlogCMSPage() {
   const handleDeleteComment = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this comment?")) return;
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
       const res = await fetch(`${USERS_API}/api/v1/cms/blog/comments/delete?id=${id}`, { method: "DELETE" });
       if (res.ok) {
         setComments(comments.filter((c: any) => c.id !== id));
@@ -121,7 +119,6 @@ export default function BlogCMSPage() {
   const handleDeleteSubscriber = async (id: string) => {
     if (!window.confirm("Are you sure you want to remove this subscriber?")) return;
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
       const res = await fetch(`${USERS_API}/api/v1/cms/blog/subscribe/delete?id=${id}`, { method: "DELETE" });
       if (res.ok) {
         setSubscribers(subscribers.filter((s: any) => s.id !== id));
@@ -138,7 +135,6 @@ export default function BlogCMSPage() {
     const name = window.prompt("Enter tag name:");
     if (!name) return;
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
       const res = await fetch(`${USERS_API}/api/v1/cms/blog/tags`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

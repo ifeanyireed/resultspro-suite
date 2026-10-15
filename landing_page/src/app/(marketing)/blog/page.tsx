@@ -8,15 +8,33 @@ export const metadata = {
   description: 'Latest insights, updates, and stories from the ResultsPRO team.',
 };
 
+async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 2, delay = 1000): Promise<Response> {
+  for (let i = 0; i <= retries; i++) {
+    try {
+      const res = await fetch(url, options);
+      if (res.ok || (res.status < 500 && res.status !== 408)) {
+        return res;
+      }
+      if (i < retries) {
+        await new Promise((r) => setTimeout(r, delay * (i + 1)));
+      }
+    } catch (err) {
+      if (i === retries) throw err;
+      await new Promise((r) => setTimeout(r, delay * (i + 1)));
+    }
+  }
+  return fetch(url, options);
+}
+
 async function getBlogPosts() {
   try {
-    const rawApi = process.env.NEXT_PUBLIC_USERS_API || '';
+    const rawApi = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
     const USERS_API = rawApi.trim().replace(/^["']|["']$/g, '');
     if (!USERS_API || !USERS_API.startsWith('http')) return [];
     
     const [postsRes, catRes] = await Promise.all([
-      fetch(`${USERS_API}/api/v1/cms/blog/posts`, { next: { revalidate: 60 } }),
-      fetch(`${USERS_API}/api/v1/cms/blog/categories`, { next: { revalidate: 60 } })
+      fetchWithRetry(`${USERS_API}/api/v1/cms/blog/posts`, { next: { revalidate: 60 } }),
+      fetchWithRetry(`${USERS_API}/api/v1/cms/blog/categories`, { next: { revalidate: 60 } })
     ]);
     
     let posts = [];
@@ -71,7 +89,7 @@ export default async function BlogPage() {
                     <div className="relative h-48 overflow-hidden bg-nets-light">
                       <img 
                         src={post.cover_image 
-                          ? (post.cover_image.includes('res.cloudinary.com') 
+                          ? (post.cover_image.startsWith('http://') || post.cover_image.startsWith('https://')
                               ? post.cover_image 
                               : `https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/${post.cover_image.split('/').pop()}`)
                           : 'https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg'} 

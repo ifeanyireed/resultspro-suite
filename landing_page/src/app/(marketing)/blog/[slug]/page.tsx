@@ -2,7 +2,25 @@ import BlogPostContent from '@/components/BlogPostContent';
 import { notFound } from 'next/navigation';
 
 export const revalidate = 60;
-export const dynamicParams = false;
+export const dynamicParams = true;
+
+async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 2, delay = 1000): Promise<Response> {
+  for (let i = 0; i <= retries; i++) {
+    try {
+      const res = await fetch(url, options);
+      if (res.ok || (res.status < 500 && res.status !== 408)) {
+        return res;
+      }
+      if (i < retries) {
+        await new Promise((r) => setTimeout(r, delay * (i + 1)));
+      }
+    } catch (err) {
+      if (i === retries) throw err;
+      await new Promise((r) => setTimeout(r, delay * (i + 1)));
+    }
+  }
+  return fetch(url, options);
+}
 
 export async function generateStaticParams() {
   const posts = await getBlogPosts();
@@ -22,10 +40,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 async function getBlogPosts() {
   try {
-    const rawApi = process.env.NEXT_PUBLIC_USERS_API || '';
+    const rawApi = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
     const USERS_API = rawApi.trim().replace(/^["']|["']$/g, '');
     if (!USERS_API || !USERS_API.startsWith('http')) return [];
-    const res = await fetch(`${USERS_API}/api/v1/cms/blog/posts`, { next: { revalidate: 60 } });
+    const res = await fetchWithRetry(`${USERS_API}/api/v1/cms/blog/posts`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     const posts = await res.json();
     if (!posts || !Array.isArray(posts)) return [];
