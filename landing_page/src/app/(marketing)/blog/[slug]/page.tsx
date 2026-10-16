@@ -1,7 +1,6 @@
-import BlogPostContent from '@/components/BlogPostContent';
-import { notFound } from 'next/navigation';
+import { BlogPostClientWrapper } from '@/components/BlogPostClientWrapper';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
 async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 2, delay = 1000): Promise<Response> {
@@ -22,19 +21,12 @@ async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 
   return fetch(url, options);
 }
 
-export async function generateStaticParams() {
-  const posts = await getBlogPosts();
-  return posts.map((p: any) => ({
-    slug: p.slug,
-  }));
-}
-
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
   const posts = await getBlogPosts();
   const post = posts.find((p: any) => p.slug === resolvedParams.slug);
   return {
-    title: post ? `${post.title} | ResultsPRO Suite` : 'Article Not Found',
+    title: post ? `${post.title} | ResultsPRO Suite` : 'Article | ResultsPRO Suite',
   };
 }
 
@@ -43,7 +35,7 @@ async function getBlogPosts() {
     const rawApi = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
     const USERS_API = rawApi.trim().replace(/^["']|["']$/g, '');
     if (!USERS_API || !USERS_API.startsWith('http')) return [];
-    const res = await fetchWithRetry(`${USERS_API}/api/v1/cms/blog/posts`, { next: { revalidate: 60 } });
+    const res = await fetchWithRetry(`${USERS_API}/api/v1/cms/blog/posts`, { cache: 'no-store' });
     if (!res.ok) return [];
     const posts = await res.json();
     if (!posts || !Array.isArray(posts)) return [];
@@ -59,16 +51,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const posts = await getBlogPosts();
   const post = posts.find((p: any) => p.slug === resolvedParams.slug);
   
-  if (!post) {
-    notFound();
-  }
-
-  // Map backend format to component format
-  const formattedPost = {
+  // Map backend format to component format if post was retrieved
+  const formattedPost = post ? {
     ...post,
-    author: "ResultsPRO Team", // In future map author_id to user
+    author: "ResultsPRO Team",
     date: new Date(post.published_at || post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-  };
+  } : null;
 
-  return <BlogPostContent post={formattedPost} />;
+  return <BlogPostClientWrapper initialPost={formattedPost} slug={resolvedParams.slug} />;
 }

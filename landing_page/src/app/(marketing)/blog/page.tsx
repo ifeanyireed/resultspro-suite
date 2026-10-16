@@ -1,7 +1,6 @@
-import Link from 'next/link';
-import { IconArrowRight } from '@tabler/icons-react';
+import { BlogList } from '@/components/BlogList';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Blog | ResultsPRO Suite',
@@ -33,8 +32,8 @@ async function getBlogPosts() {
     if (!USERS_API || !USERS_API.startsWith('http')) return [];
     
     const [postsRes, catRes] = await Promise.all([
-      fetchWithRetry(`${USERS_API}/api/v1/cms/blog/posts`, { next: { revalidate: 60 } }),
-      fetchWithRetry(`${USERS_API}/api/v1/cms/blog/categories`, { next: { revalidate: 60 } })
+      fetchWithRetry(`${USERS_API}/api/v1/cms/blog/posts`, { cache: 'no-store' }),
+      fetchWithRetry(`${USERS_API}/api/v1/cms/blog/categories`, { cache: 'no-store' })
     ]);
     
     let posts = [];
@@ -79,55 +78,7 @@ export default async function BlogPage() {
 
       <section className="section-py">
         <div className="container-nets">
-          {posts.length === 0 ? (
-            <div className="text-center text-muted py-12">No blog posts found.</div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.map((post: any) => {
-                return (
-                  <article key={post.id} className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-gray-200">
-                    <div className="relative h-48 overflow-hidden bg-nets-light">
-                      <img 
-                        src={post.cover_image 
-                          ? (post.cover_image.startsWith('http://') || post.cover_image.startsWith('https://')
-                              ? post.cover_image 
-                              : `https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/${post.cover_image.split('/').pop()}`)
-                          : 'https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg'} 
-                        alt={post.title} 
-                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                      />
-                      <div className="absolute top-4 left-4">
-                        <span className="bg-white/90 backdrop-blur-sm text-navy text-xs fw-600 px-3 py-1 rounded-sm">
-                          {post.category || 'Blog'}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="p-6 flex flex-col flex-1">
-                      <div className="flex items-center justify-between text-xs text-muted mb-3">
-                        <span>
-                          {new Date(post.published_at || post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                        </span>
-                        <span>ResultsPRO</span>
-                      </div>
-                      <h2 className="text-xl fw-600 mb-3 text-navy leading-tight line-clamp-2">
-                        {post.title}
-                      </h2>
-                      <p className="text-sm text-muted mb-6 flex-1 line-clamp-3">
-                        {post.excerpt}
-                      </p>
-                      
-                      <div className="mt-auto pt-4 border-t border-gray-200">
-                        <Link href={`/blog/${post.slug}`} className="flex items-center gap-2 text-sm fw-600 text-red hover:opacity-80 transition-opacity" style={{ color: 'var(--color-nets-red)' }}>
-                          Read Article <IconArrowRight size={16} />
-                        </Link>
-                      </div>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          )}
+          <BlogList initialPosts={posts} />
 
           <div className="mt-16 text-center">
             <button className="btn btn-outline-navy">
