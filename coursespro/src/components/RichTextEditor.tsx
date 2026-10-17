@@ -131,6 +131,19 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
   });
 
   React.useEffect(() => {
+    try {
+      const savedMode = localStorage.getItem('rich_text_editor_mode');
+      if (savedMode === 'markdown' || savedMode === 'wysiwyg') {
+        setMode(savedMode);
+        if (savedMode === 'markdown' && content) {
+          const turndownService = new TurndownService({ headingStyle: 'atx' });
+          setMarkdownContent(turndownService.turndown(content));
+        }
+      }
+    } catch (e) {}
+  }, []);
+
+  React.useEffect(() => {
     if (editor && content !== editor.getHTML() && mode === 'wysiwyg') {
       editor.commands.setContent(content);
     }
@@ -138,7 +151,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
 
   const handleModeSwitch = (newMode: 'wysiwyg' | 'markdown') => {
     if (newMode === 'markdown') {
-      const turndownService = new TurndownService();
+      const turndownService = new TurndownService({ headingStyle: 'atx' });
       setMarkdownContent(turndownService.turndown(content));
     } else {
       const html = marked.parse(markdownContent) as string;
@@ -148,6 +161,9 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
       }
     }
     setMode(newMode);
+    try {
+      localStorage.setItem('rich_text_editor_mode', newMode);
+    } catch (e) {}
   };
 
   const handleMarkdownChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
