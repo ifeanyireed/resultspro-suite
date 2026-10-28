@@ -68,7 +68,7 @@ func HandleTenantPaymentInitialize(w http.ResponseWriter, r *http.Request) {
 
 	// 1. Fetch Tenant
 	var tenant models.Tenant
-	if err := db.GormDB.Where("slug = ?", tenantSlug).First(&tenant).Error; err != nil {
+	if err := db.GormDB.Where("slug = ? OR custom_domain = ? OR default_subdomain = ?", tenantSlug, tenantSlug, tenantSlug).First(&tenant).Error; err != nil {
 		utils.JSONError(w, http.StatusNotFound, "Tenant not found")
 		return
 	}
@@ -232,7 +232,7 @@ func HandleTenantPaymentVerify(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var tenant models.Tenant
-	if err := db.GormDB.Where("slug = ?", tenantSlug).First(&tenant).Error; err != nil {
+	if err := db.GormDB.Where("slug = ? OR custom_domain = ? OR default_subdomain = ?", tenantSlug, tenantSlug, tenantSlug).First(&tenant).Error; err != nil {
 		utils.JSONError(w, http.StatusNotFound, "Tenant not found")
 		return
 	}

@@ -22,6 +22,15 @@ export default function LoginForm({ tenant }: { tenant: any }) {
   const token = useAuthStore((state) => state.token);
   const [showUnenrolledPopup, setShowUnenrolledPopup] = useState(false);
 
+  const resolvedTenantSlug = tenant?.slug || (params?.tenant as string) || '';
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined' && tenant?.slug) {
+      localStorage.setItem('tenant_slug', tenant.slug);
+      localStorage.setItem('tenant_slug_host', window.location.hostname);
+    }
+  }, [tenant?.slug]);
+
   React.useEffect(() => {
     if (user && token) {
       const Cookies = require('js-cookie');
@@ -53,9 +62,8 @@ export default function LoginForm({ tenant }: { tenant: any }) {
         const checkEnrollment = async () => {
           try {
             const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
-            const tenantSlug = params?.tenant as string;
             const res = await axios.get(`${COURSES_API}/api/v1/student/dashboard-summary`, {
-              headers: { 'Authorization': `Bearer ${token}`, 'X-Tenant-Domain': tenantSlug }
+              headers: { 'Authorization': `Bearer ${token}`, 'X-Tenant-Domain': resolvedTenantSlug }
             });
             if (res.data && res.data.has_enrollment === false) {
               setShowUnenrolledPopup(true);
@@ -67,7 +75,7 @@ export default function LoginForm({ tenant }: { tenant: any }) {
         checkEnrollment();
       }
     }
-  }, [user, token, router]);
+  }, [user, token, router, resolvedTenantSlug]);
   
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -89,12 +97,12 @@ export default function LoginForm({ tenant }: { tenant: any }) {
     setError('');
     try {
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-      const tenantSlug = params?.tenant;
       
       const res = await axios.post(`${USERS_API}/api/v1/auth/login`, { 
         email, 
         password,
-        tenant_slug: tenantSlug,
+        tenant_id: tenant?.id,
+        tenant_slug: resolvedTenantSlug,
         app_module: 'coursespro'
       });
       
@@ -123,9 +131,8 @@ export default function LoginForm({ tenant }: { tenant: any }) {
             } else {
               try {
                 const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
-                const tenantSlug = params?.tenant as string;
                 const summaryRes = await axios.get(`${COURSES_API}/api/v1/student/dashboard-summary`, {
-                  headers: { 'Authorization': `Bearer ${token}`, 'X-Tenant-Domain': tenantSlug }
+                  headers: { 'Authorization': `Bearer ${token}`, 'X-Tenant-Domain': resolvedTenantSlug }
                 });
                 if (summaryRes.data && summaryRes.data.has_enrollment === false) {
                   setShowUnenrolledPopup(true);
@@ -143,9 +150,8 @@ export default function LoginForm({ tenant }: { tenant: any }) {
           } else {
             try {
               const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
-              const tenantSlug = params?.tenant as string;
               const summaryRes = await axios.get(`${COURSES_API}/api/v1/student/dashboard-summary`, {
-                headers: { 'Authorization': `Bearer ${token}`, 'X-Tenant-Domain': tenantSlug }
+                headers: { 'Authorization': `Bearer ${token}`, 'X-Tenant-Domain': resolvedTenantSlug }
               });
               if (summaryRes.data && summaryRes.data.has_enrollment === false) {
                 setShowUnenrolledPopup(true);

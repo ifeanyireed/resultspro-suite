@@ -131,7 +131,7 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	if input.TenantSlug != "" || input.TenantID != "" {
 		tenantID := input.TenantID
 		if tenantID == "" && input.TenantSlug != "" {
-			db.DB.QueryRow("SELECT id, name, COALESCE(logo_url, '') FROM tenants WHERE slug = ?", input.TenantSlug).Scan(&tenantID, &tenantName, &tenantLogo)
+			db.DB.QueryRow("SELECT id, name, COALESCE(logo_url, '') FROM tenants WHERE slug = ? OR custom_domain = ? OR default_subdomain = ?", input.TenantSlug, input.TenantSlug, input.TenantSlug).Scan(&tenantID, &tenantName, &tenantLogo)
 		} else if tenantID != "" {
 			db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE id = ?", tenantID).Scan(&tenantName, &tenantLogo)
 		}
@@ -227,7 +227,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		if input.TenantSlug != "" || input.TenantID != "" {
 			tenantID := input.TenantID
 			if tenantID == "" && input.TenantSlug != "" {
-				db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE slug = ?", input.TenantSlug).Scan(&tenantName, &tenantLogo)
+				db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE slug = ? OR custom_domain = ? OR default_subdomain = ?", input.TenantSlug, input.TenantSlug, input.TenantSlug).Scan(&tenantName, &tenantLogo)
 			} else if tenantID != "" {
 				db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE id = ?", tenantID).Scan(&tenantName, &tenantLogo)
 			}
@@ -267,9 +267,9 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Resolve TenantID if TenantSlug is provided
+	// Resolve TenantID if TenantSlug is provided (supports slug, custom_domain, or default_subdomain)
 	if input.TenantID == "" && input.TenantSlug != "" {
-		err := db.DB.QueryRow("SELECT id FROM tenants WHERE slug = ?", input.TenantSlug).Scan(&input.TenantID)
+		err := db.DB.QueryRow("SELECT id FROM tenants WHERE slug = ? OR custom_domain = ? OR default_subdomain = ?", input.TenantSlug, input.TenantSlug, input.TenantSlug).Scan(&input.TenantID)
 		if err != nil {
 			utils.JSONError(w, http.StatusNotFound, "Tenant not found")
 			return
@@ -283,7 +283,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	tenantRolesMap := make(map[string]map[string]string)
 
 	query := `
-		SELECT ur.role, ur.tenant_id, t.slug 
+		SELECT ur.role, ur.tenant_id, t.slug, t.custom_domain 
 		FROM user_tenant_roles ur 
 		LEFT JOIN tenants t ON ur.tenant_id = t.id 
 		WHERE ur.user_id = ? AND ur.status = 'active'
@@ -295,7 +295,8 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 			var role string
 			var tID sql.NullString
 			var tSlug sql.NullString
-			if err := rows.Scan(&role, &tID, &tSlug); err == nil {
+			var tCustomDomain sql.NullString
+			if err := rows.Scan(&role, &tID, &tSlug, &tCustomDomain); err == nil {
 				roles = append(roles, role)
 				if tID.Valid && tID.String == input.TenantID {
 					hasTenantAccess = true
@@ -307,9 +308,13 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 					adminTenants = append(adminTenants, tSlug.String)
 				}
 				if tSlug.Valid && tID.Valid {
-					tenantRolesMap[tSlug.String] = map[string]string{
+					tenantEntry := map[string]string{
 						"id":   tID.String,
 						"role": role,
+					}
+					tenantRolesMap[tSlug.String] = tenantEntry
+					if tCustomDomain.Valid && tCustomDomain.String != "" {
+						tenantRolesMap[tCustomDomain.String] = tenantEntry
 					}
 				}
 			}

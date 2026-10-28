@@ -109,7 +109,7 @@ export default function CreatorOnboardingPage() {
                     value={academyName}
                     onChange={(e) => setAcademyName(e.target.value)}
                     className="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                    placeholder="e.g. Skill Up Academy"
+                    placeholder="e.g. Acme Academy"
                   />
                 </div>
 
@@ -122,10 +122,10 @@ export default function CreatorOnboardingPage() {
                       value={slug}
                       onChange={(e) => setSlug(e.target.value)}
                       className="block w-full px-4 py-3 bg-slate-50 border border-slate-200 border-r-0 rounded-l-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                      placeholder="skillup"
+                      placeholder="your-academy"
                     />
                     <div className="px-4 py-3 bg-slate-100 border border-slate-200 border-l-0 rounded-r-xl text-slate-500 font-medium">
-                      .resultspro.ng
+                      .{process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'ofia.shop'}
                     </div>
                   </div>
                 </div>

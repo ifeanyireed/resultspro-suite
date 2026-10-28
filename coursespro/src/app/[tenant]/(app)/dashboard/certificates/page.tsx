@@ -5,7 +5,7 @@ import { CheckBadgeIcon as CheckBadgeSolid } from '@heroicons/react/24/solid';
 
 export default function CertificatesPage() {
   const collected = [
-    { id: 1, title: 'Front-End Web Development', date: 'Oct 15, 2026', issuedBy: 'SkillUp Academy', image: 'https://images.unsplash.com/photo-1593021966270-e44849318b76?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' }
+    { id: 1, title: 'Front-End Web Development', date: 'Oct 15, 2026', issuedBy: 'Academy', image: 'https://images.unsplash.com/photo-1593021966270-e44849318b76?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' }
   ];
 
   const upcoming = [
