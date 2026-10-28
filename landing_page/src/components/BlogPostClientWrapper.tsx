@@ -47,6 +47,28 @@ export function BlogPostClientWrapper({ initialPost, slug }: { initialPost: any;
     loadPost();
   }, [initialPost, slug]);
 
+  // Track unique page view in session
+  useEffect(() => {
+    if (!slug) return;
+    const viewKey = `blog_view_${slug}`;
+    if (typeof window !== 'undefined' && !sessionStorage.getItem(viewKey)) {
+      sessionStorage.setItem(viewKey, '1');
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      fetch(`${USERS_API}/api/v1/cms/blog/posts/view`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && typeof data.view_count === 'number') {
+            setPost((prev: any) => (prev ? { ...prev, view_count: data.view_count } : prev));
+          }
+        })
+        .catch(() => {});
+    }
+  }, [slug]);
+
   if (loading) {
     return (
       <main className="min-h-screen bg-light flex flex-col items-center justify-center py-32" style={{ background: 'var(--color-nets-light, #f8fafc)' }}>

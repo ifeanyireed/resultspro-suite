@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Badge } from '@/components/Badge';
 import { StatCard } from '@/components/StatCard';
-import { FileText, CheckCircle2, File, Plus, Tag, MessageSquare, Folder, Users } from 'lucide-react';
+import { FileText, CheckCircle2, File, Plus, Tag, MessageSquare, Folder, Users, Eye } from 'lucide-react';
 import { fetchBlogPosts } from '@/lib/api';
 import { BlogPost } from '@/lib/types';
 import toast from 'react-hot-toast';
@@ -154,6 +154,7 @@ export default function BlogCMSPage() {
 
   const published = posts.filter(p => p.status === 'PUBLISHED').length;
   const drafts = posts.filter(p => p.status === 'DRAFT').length;
+  const totalViews = posts.reduce((sum, p) => sum + (Number(p.view_count) || 0), 0);
 
   return (
     <div className="w-full">
@@ -203,11 +204,12 @@ export default function BlogCMSPage() {
         {/* Tab Content */}
         {activeTab === 'posts' && (
           <div className="space-y-8 animate-in fade-in duration-300">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 { label: 'Total Posts', value: loading ? '...' : totalPosts, icon: FileText, color: 'text-blue-500', bg: 'bg-blue-50' },
                 { label: 'Published', value: loading ? '...' : published, icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50' },
                 { label: 'Drafts', value: loading ? '...' : drafts, icon: File, color: 'text-amber-500', bg: 'bg-amber-50' },
+                { label: 'Total Views', value: loading ? '...' : totalViews.toLocaleString(), icon: Eye, color: 'text-purple-500', bg: 'bg-purple-50' },
               ].map((stat, idx) => {
                 const Icon = stat.icon;
                 return (
@@ -240,6 +242,7 @@ export default function BlogCMSPage() {
                       <th className="px-6 py-4">Author</th>
                       <th className="px-6 py-4">Category</th>
                       <th className="px-6 py-4">Status</th>
+                      <th className="px-6 py-4">Views</th>
                       <th className="px-6 py-4">Date</th>
                       <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
@@ -247,23 +250,34 @@ export default function BlogCMSPage() {
                   <tbody className="divide-y divide-slate-100">
                     {loading ? (
                       <tr>
-                        <td colSpan={6} className="px-6 py-8 text-center text-slate-500">Loading posts...</td>
+                        <td colSpan={7} className="px-6 py-8 text-center text-slate-500">Loading posts...</td>
                       </tr>
                     ) : posts.length === 0 ? (
                       <tr>
-                        <td colSpan={6} className="px-6 py-8 text-center text-slate-500">No blog posts found. Create one to get started.</td>
+                        <td colSpan={7} className="px-6 py-8 text-center text-slate-500">No blog posts found. Create one to get started.</td>
                       </tr>
                     ) : (
                       posts.map((post) => (
                         <tr key={post.id} className="hover:bg-slate-50 transition-colors">
                           <td className="px-6 py-4">
                             <p className="font-medium text-slate-900">{post.title}</p>
-                            <p className="text-xs text-slate-500 mt-1 max-w-xs truncate">{post.excerpt}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <p className="text-xs text-slate-500 max-w-xs truncate">{post.excerpt}</p>
+                              {post.meta_title && (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] bg-blue-50 text-blue-600 font-semibold" title={`Meta Title: ${post.meta_title}`}>SEO</span>
+                              )}
+                            </div>
                           </td>
                           <td className="px-6 py-4">{typeof post.author === "string" ? post.author : (post.author?.full_name || "Admin")}</td>
                           <td className="px-6 py-4">{categories.find((c: any) => c.id === post.category_id)?.name || "-"}</td>
                           <td className="px-6 py-4">
                             <Badge status={post.status} />
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+                              <Eye className="w-3.5 h-3.5 text-slate-400" />
+                              {(Number(post.view_count) || 0).toLocaleString()}
+                            </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             {post.published_at 

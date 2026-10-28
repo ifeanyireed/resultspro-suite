@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { IconArrowRight } from '@tabler/icons-react';
+import { IconArrowRight, IconEye } from '@tabler/icons-react';
 
 export function BlogList({ initialPosts }: { initialPosts: any[] }) {
   const [posts, setPosts] = useState<any[]>(initialPosts || []);
@@ -88,7 +88,10 @@ export function BlogList({ initialPosts }: { initialPosts: any[] }) {
                 <span>
                   {new Date(post.published_at || post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </span>
-                <span>ResultsPRO</span>
+                <span className="flex items-center gap-1 font-medium text-slate-500">
+                  <IconEye size={14} className="text-slate-400" />
+                  {(Number(post.view_count) || 0).toLocaleString()}
+                </span>
               </div>
               <h2 className="text-xl fw-600 mb-3 text-navy leading-tight line-clamp-2">
                 {post.title}

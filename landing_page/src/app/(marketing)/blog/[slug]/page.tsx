@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { BlogPostClientWrapper } from '@/components/BlogPostClientWrapper';
 
 export const dynamic = 'force-dynamic';
@@ -21,12 +22,47 @@ async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 
   return fetch(url, options);
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
   const posts = await getBlogPosts();
   const post = posts.find((p: any) => p.slug === resolvedParams.slug);
+
+  if (!post) {
+    return {
+      title: 'Article Not Found | ResultsPRO Suite',
+      description: 'The requested article could not be found.',
+    };
+  }
+
+  const title = post.meta_title ? post.meta_title : `${post.title} | ResultsPRO Suite`;
+  const description = post.meta_description || post.excerpt || 'Read the latest insights and news from ResultsPRO Suite.';
+  const keywords = post.meta_keywords ? post.meta_keywords.split(',').map((k: string) => k.trim()) : undefined;
+  const coverImage = post.cover_image || 'https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg';
+
   return {
-    title: post ? `${post.title} | ResultsPRO Suite` : 'Article | ResultsPRO Suite',
+    title,
+    description,
+    keywords,
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      publishedTime: post.published_at || post.created_at,
+      images: [
+        {
+          url: coverImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [coverImage],
+    },
   };
 }
 

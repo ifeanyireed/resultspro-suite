@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { RichTextEditor } from '@/components/RichTextEditor';
 import { TagsInput } from '@/components/TagsInput';
-import { ArrowLeft, Save, Send } from 'lucide-react';
+import { ArrowLeft, Save, Send, Globe, Eye, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -42,6 +42,10 @@ function CreateBlogPostContent() {
             setCategory(post.category_id || '');
             setContent(post.content || '');
             setTags(post.tags || '');
+            setMetaTitle(post.meta_title || '');
+            setMetaDescription(post.meta_description || '');
+            setMetaKeywords(post.meta_keywords || '');
+            setViewCount(Number(post.view_count) || 0);
             let imgUrl = post.cover_image || '';
             if (imgUrl && imgUrl.startsWith('/')) imgUrl = 'https://resultspro.ng' + imgUrl;
             setCoverImage(imgUrl);
@@ -62,6 +66,10 @@ function CreateBlogPostContent() {
   const [tags, setTags] = useState('');
   const [content, setContent] = useState('');
   const [coverImage, setCoverImage] = useState('');
+  const [metaTitle, setMetaTitle] = useState('');
+  const [metaDescription, setMetaDescription] = useState('');
+  const [metaKeywords, setMetaKeywords] = useState('');
+  const [viewCount, setViewCount] = useState<number>(0);
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
@@ -119,17 +127,16 @@ function CreateBlogPostContent() {
         category_id: category || null,
         tags,
         status,
-        author_id
+        author_id,
+        meta_title: metaTitle,
+        meta_description: metaDescription,
+        meta_keywords: metaKeywords,
+        view_count: viewCount,
       };
 
       let url = `${USERS_API}/api/v1/cms/blog/posts`;
-      let method = 'POST';
 
       if (editId) {
-        // Assume PUT /api/v1/cms/blog/posts/:id exists or we just re-POST for now?
-        // Actually, backend might not have PUT yet. If it doesn't, we just POST it as a new post.
-        // Wait, I will just leave it as POST unless the backend supports PUT.
-        // I will add the ID to payload if editing.
         payload['id'] = editId;
       }
 
@@ -206,10 +213,110 @@ function CreateBlogPostContent() {
                 <RichTextEditor content={content} onChange={setContent} />
               </div>
             </div>
+
+            {/* SEO & Metadata Card */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-blue-600" />
+                  <h3 className="font-bold text-slate-800">SEO & Metadata</h3>
+                </div>
+                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Search Engine Optimization</span>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest">Meta Title</label>
+                  <span className={`text-xs ${metaTitle.length > 60 ? 'text-amber-500 font-semibold' : 'text-slate-400'}`}>
+                    {metaTitle.length} / 60 characters
+                  </span>
+                </div>
+                <input 
+                  type="text" 
+                  value={metaTitle}
+                  onChange={(e) => setMetaTitle(e.target.value)}
+                  placeholder={title ? `${title} | ResultsPRO` : "Custom search engine title..."}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-slate-800 text-sm"
+                />
+                <p className="text-xs text-slate-400 mt-1">If blank, defaults to the post title + brand suffix.</p>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest">Meta Description</label>
+                  <span className={`text-xs ${metaDescription.length > 160 ? 'text-amber-500 font-semibold' : 'text-slate-400'}`}>
+                    {metaDescription.length} / 160 characters
+                  </span>
+                </div>
+                <textarea 
+                  value={metaDescription}
+                  onChange={(e) => setMetaDescription(e.target.value)}
+                  placeholder={excerpt || "Concise summary for search engines and social media previews..."}
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm text-slate-700 resize-none"
+                />
+                <p className="text-xs text-slate-400 mt-1">If blank, search engines will use the excerpt.</p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">Meta Keywords</label>
+                <input 
+                  type="text" 
+                  value={metaKeywords}
+                  onChange={(e) => setMetaKeywords(e.target.value)}
+                  placeholder="edtech, school management, cbt, results, nigerian education"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm text-slate-800"
+                />
+                <p className="text-xs text-slate-400 mt-1">Comma-separated keywords for indexing.</p>
+              </div>
+
+              {/* SERP Preview */}
+              <div className="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium mb-1">
+                  <Search className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Google Search Preview</span>
+                </div>
+                <p className="text-sm font-semibold text-blue-800 hover:underline cursor-pointer truncate">
+                  {metaTitle || title || "Your Blog Post Title"} | ResultsPRO
+                </p>
+                <p className="text-xs text-emerald-700 truncate">
+                  https://resultspro.ng/blog/{(title ? title.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'article-slug')}
+                </p>
+                <p className="text-xs text-slate-600 line-clamp-2">
+                  {metaDescription || excerpt || "Write an engaging meta description to improve click-through rates from Google and social shares."}
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Sidebar Area */}
           <div className="space-y-6">
+            {/* View Count Metrics Card */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <Eye className="w-4 h-4 text-purple-600" />
+                  <h3 className="font-bold text-slate-800">Performance</h3>
+                </div>
+                <span className="text-[11px] font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">Analytics</span>
+              </div>
+              
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1">Total Views</label>
+                <div className="flex items-center gap-3">
+                  <input 
+                    type="number"
+                    min="0"
+                    value={viewCount}
+                    onChange={(e) => setViewCount(Math.max(0, parseInt(e.target.value) || 0))}
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all text-sm font-bold text-slate-800"
+                  />
+                  <span className="text-xs text-slate-400 font-medium">views</span>
+                </div>
+                <p className="text-[11px] text-slate-400 mt-1.5">View count auto-increments upon unique reader visits.</p>
+              </div>
+            </div>
+
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
               <h3 className="font-bold text-slate-800 border-b border-slate-100 pb-3">Post Settings</h3>
               

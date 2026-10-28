@@ -116,10 +116,16 @@ export interface BlogPost {
   slug: string;
   excerpt: string;
   content: string;
+  cover_image?: string;
   author: { full_name?: string } | string;
   category: string;
   category_id?: string;
   status: 'DRAFT' | 'PUBLISHED';
+  view_count?: number;
+  meta_title?: string;
+  meta_description?: string;
+  meta_keywords?: string;
+  tags?: string;
   published_at?: string;
   created_at: string;
 }

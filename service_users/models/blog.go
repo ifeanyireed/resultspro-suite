@@ -19,21 +19,25 @@ type BlogTag struct {
 }
 
 type BlogPost struct {
-	ID          string     `json:"id" gorm:"primaryKey"`
-	Title       string     `json:"title"`
-	Slug        string     `json:"slug" gorm:"uniqueIndex"`
-	Excerpt     string     `json:"excerpt"`
-	Content     string     `json:"content" gorm:"type:text"`
-	CoverImage  *string    `json:"cover_image"`
-	AuthorID    string     `json:"author_id" gorm:"type:varchar(191)"`
-	Author      *User      `json:"author" gorm:"foreignKey:AuthorID"`
-	CategoryID  *string    `json:"category_id" gorm:"type:varchar(191)"`
-	Status      string     `json:"status"` // DRAFT, PUBLISHED
-	PublishedAt *time.Time `json:"published_at"`
-	CreatedAt   time.Time  `json:"created_at"`
-	UpdatedAt   time.Time  `json:"updated_at"`
-	Tags        string     `json:"tags" gorm:"-"`
-	Comments    []BlogComment `json:"comments" gorm:"foreignKey:PostID"`
+	ID              string        `json:"id" gorm:"primaryKey"`
+	Title           string        `json:"title"`
+	Slug            string        `json:"slug" gorm:"uniqueIndex"`
+	Excerpt         string        `json:"excerpt"`
+	Content         string        `json:"content" gorm:"type:text"`
+	CoverImage      *string       `json:"cover_image"`
+	AuthorID        string        `json:"author_id" gorm:"type:varchar(191)"`
+	Author          *User         `json:"author" gorm:"foreignKey:AuthorID"`
+	CategoryID      *string       `json:"category_id" gorm:"type:varchar(191)"`
+	Status          string        `json:"status"` // DRAFT, PUBLISHED
+	ViewCount       int64         `json:"view_count" gorm:"column:view_count;default:0"`
+	MetaTitle       string        `json:"meta_title" gorm:"column:meta_title;type:varchar(255)"`
+	MetaDescription string        `json:"meta_description" gorm:"column:meta_description;type:text"`
+	MetaKeywords    string        `json:"meta_keywords" gorm:"column:meta_keywords;type:varchar(255)"`
+	PublishedAt     *time.Time    `json:"published_at"`
+	CreatedAt       time.Time     `json:"created_at"`
+	UpdatedAt       time.Time     `json:"updated_at"`
+	Tags            string        `json:"tags" gorm:"-"`
+	Comments        []BlogComment `json:"comments" gorm:"foreignKey:PostID"`
 }
 
 type BlogPostTag struct {

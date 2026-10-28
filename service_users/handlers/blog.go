@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"encoding/json"
 
+	"gorm.io/gorm"
 	"service_users.resultspro.ng/db"
 	"service_users.resultspro.ng/models"
 	"service_users.resultspro.ng/utils"
@@ -33,6 +34,7 @@ func HandleGetPosts(w http.ResponseWriter, r *http.Request) {
 		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
 	}
+	_ = db.GormDB.AutoMigrate(&models.BlogPost{})
 	var posts []models.BlogPost
 	if err := db.GormDB.Preload("Author").Preload("Comments").Order("created_at desc").Find(&posts).Error; err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to fetch posts")
@@ -49,16 +51,20 @@ func HandleUpdatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
-		ID         string  `json:"id"`
-		Title      string  `json:"title"`
-		Slug       string  `json:"slug"`
-		Excerpt    string  `json:"excerpt"`
-		Content    string  `json:"content"`
-		CoverImage *string `json:"cover_image"`
-		AuthorID   string  `json:"author_id"`
-		CategoryID *string `json:"category_id"`
-		Status     string  `json:"status"`
-		Tags       string  `json:"tags"`
+		ID              string  `json:"id"`
+		Title           string  `json:"title"`
+		Slug            string  `json:"slug"`
+		Excerpt         string  `json:"excerpt"`
+		Content         string  `json:"content"`
+		CoverImage      *string `json:"cover_image"`
+		AuthorID        string  `json:"author_id"`
+		CategoryID      *string `json:"category_id"`
+		Status          string  `json:"status"`
+		Tags            string  `json:"tags"`
+		MetaTitle       string  `json:"meta_title"`
+		MetaDescription string  `json:"meta_description"`
+		MetaKeywords    string  `json:"meta_keywords"`
+		ViewCount       *int64  `json:"view_count"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -82,6 +88,12 @@ func HandleUpdatePost(w http.ResponseWriter, r *http.Request) {
 	post.AuthorID = input.AuthorID
 	post.CategoryID = input.CategoryID
 	post.Status = input.Status
+	post.MetaTitle = input.MetaTitle
+	post.MetaDescription = input.MetaDescription
+	post.MetaKeywords = input.MetaKeywords
+	if input.ViewCount != nil {
+		post.ViewCount = *input.ViewCount
+	}
 
 	if err := db.GormDB.Save(&post).Error; err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to update post")
@@ -100,15 +112,18 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
-		Title      string  `json:"title"`
-		Slug       string  `json:"slug"`
-		Excerpt    string  `json:"excerpt"`
-		Content    string  `json:"content"`
-		CoverImage *string `json:"cover_image"`
-		AuthorID   string  `json:"author_id"`
-		CategoryID *string `json:"category_id"`
-		Status     string  `json:"status"`
-		Tags       string  `json:"tags"`
+		Title           string  `json:"title"`
+		Slug            string  `json:"slug"`
+		Excerpt         string  `json:"excerpt"`
+		Content         string  `json:"content"`
+		CoverImage      *string `json:"cover_image"`
+		AuthorID        string  `json:"author_id"`
+		CategoryID      *string `json:"category_id"`
+		Status          string  `json:"status"`
+		Tags            string  `json:"tags"`
+		MetaTitle       string  `json:"meta_title"`
+		MetaDescription string  `json:"meta_description"`
+		MetaKeywords    string  `json:"meta_keywords"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -122,15 +137,19 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	post := models.BlogPost{
-		ID:         generateID("post"),
-		Title:      input.Title,
-		Slug:       input.Slug,
-		Excerpt:    input.Excerpt,
-		Content:    input.Content,
-		CoverImage: input.CoverImage,
-		AuthorID:   input.AuthorID,
-		CategoryID: input.CategoryID,
-		Status:     input.Status,
+		ID:              generateID("post"),
+		Title:           input.Title,
+		Slug:            input.Slug,
+		Excerpt:         input.Excerpt,
+		Content:         input.Content,
+		CoverImage:      input.CoverImage,
+		AuthorID:        input.AuthorID,
+		CategoryID:      input.CategoryID,
+		Status:          input.Status,
+		MetaTitle:       input.MetaTitle,
+		MetaDescription: input.MetaDescription,
+		MetaKeywords:    input.MetaKeywords,
+		ViewCount:       0,
 	}
 
 	if post.Status == "PUBLISHED" {
@@ -146,6 +165,56 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 	syncTags(post.ID, input.Tags)
 	post.Tags = input.Tags
 	utils.JSONResponse(w, http.StatusCreated, post)
+}
+
+// HandleIncrementPostView increments view count for a blog post
+func HandleIncrementPostView(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var input struct {
+		ID   string `json:"id"`
+		Slug string `json:"slug"`
+	}
+	_ = json.NewDecoder(r.Body).Decode(&input)
+
+	identifier := strings.TrimSpace(input.ID)
+	if identifier == "" {
+		identifier = strings.TrimSpace(input.Slug)
+	}
+	if identifier == "" {
+		identifier = strings.TrimSpace(r.URL.Query().Get("id"))
+	}
+	if identifier == "" {
+		identifier = strings.TrimSpace(r.URL.Query().Get("slug"))
+	}
+
+	if identifier == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Post ID or slug is required")
+		return
+	}
+
+	var post models.BlogPost
+	if err := db.GormDB.Where("id = ? OR slug = ?", identifier, identifier).First(&post).Error; err != nil {
+		utils.JSONError(w, http.StatusNotFound, "Post not found")
+		return
+	}
+
+	if err := db.GormDB.Model(&post).UpdateColumn("view_count", gorm.Expr("COALESCE(view_count, 0) + 1")).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to increment view count")
+		return
+	}
+
+	db.GormDB.Select("id, slug, view_count").First(&post, "id = ?", post.ID)
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"id":         post.ID,
+		"slug":       post.Slug,
+		"view_count": post.ViewCount,
+		"message":    "View count incremented successfully",
+	})
 }
 
 // ----------------------------------------------------------------------------

@@ -3,7 +3,7 @@ import React from "react";
 
 import ScrollReveal from './ScrollReveal';
 import Link from 'next/link';
-import { IconArrowLeft, IconMessageCircle, IconBrandTwitter, IconBrandFacebook, IconBrandLinkedin, IconMail } from '@tabler/icons-react';
+import { IconArrowLeft, IconMessageCircle, IconBrandTwitter, IconBrandFacebook, IconBrandLinkedin, IconMail, IconEye } from '@tabler/icons-react';
 
 interface Comment {
   id: string | number;
@@ -24,6 +24,10 @@ interface BlogPost {
   cover_image?: string;
   published_at?: string;
   category?: string;
+  view_count?: number;
+  meta_title?: string;
+  meta_description?: string;
+  meta_keywords?: string;
 }
 
 
@@ -185,8 +189,13 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                     <p className="text-xs text-muted">on: {formattedDate}</p>
                   </div>
                 </div>
-                <div className="text-xs text-muted fw-600">
-                  5 minutes Read
+                <div className="flex items-center gap-3 text-xs text-muted fw-600">
+                  <span className="flex items-center gap-1 bg-gray-100 px-2.5 py-1 rounded-full text-navy">
+                    <IconEye size={14} className="text-gray-500" />
+                    {(Number(post.view_count) || 0).toLocaleString()} views
+                  </span>
+                  <span>•</span>
+                  <span>5 minutes Read</span>
                 </div>
               </div>
             </div>
