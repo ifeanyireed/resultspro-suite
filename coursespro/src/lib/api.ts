@@ -13,20 +13,36 @@ export const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'https://resultspr
  */
 export function getTenantSlug(): string {
   if (typeof window === 'undefined') return '';
+
+  // 1. If canonical tenant_slug was persisted during login or page load for this host, use it
+  const storedSlug = localStorage.getItem('tenant_slug');
+  const storedHost = localStorage.getItem('tenant_slug_host');
+  if (storedSlug && storedHost === window.location.hostname) {
+    return storedSlug;
+  }
   
   const hostname = window.location.hostname;
-  const parts = hostname.split('.');
-  const slug = parts[0];
+  const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
 
-  // If the first part is a real tenant slug (not localhost/coursespro/www), use it
-  if (slug && slug !== 'localhost' && slug !== 'coursespro' && slug !== 'resultspro-service-coursespro' && slug !== 'www') {
-    return slug;
+  // Check if it's the platform domain or internal host
+  const isPlatform = hostname === 'localhost' || 
+                     hostname === platformDomain || 
+                     hostname === `coursespro.${platformDomain}` || 
+                     hostname.includes('onrender.com') || 
+                     hostname === 'www';
+
+  if (isPlatform) {
+    return process.env.NEXT_PUBLIC_TENANT_SLUG || '';
   }
 
-  // Fall back to env variable for local dev (e.g. running on plain localhost:3001)
-  const finalSlug = process.env.NEXT_PUBLIC_TENANT_SLUG || slug;
-  console.log("Resolved Tenant Slug:", finalSlug);
-  return finalSlug;
+  // If it's a custom domain (e.g. learn.skilluplearningacademy.com), return full hostname
+  const isCustomDomain = !hostname.includes(platformDomain) && !hostname.includes('localhost');
+  if (isCustomDomain) {
+    return hostname;
+  }
+
+  // Otherwise, extract the subdomain (e.g. skillupacademy.resultspro.ng -> skillupacademy)
+  return hostname.split('.')[0];
 }
 
 const api = axios.create({

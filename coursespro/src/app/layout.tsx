@@ -7,12 +7,15 @@ import "./nets.css";
 export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
   const host = headersList.get('host') || '';
-  const slug = host.split('.')[0];
+  const hostname = host.split(':')[0];
+  const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+  const isCustomDomain = !hostname.includes(platformDomain) && !hostname.includes('localhost') && !hostname.includes('onrender.com');
+  const slug = isCustomDomain ? hostname : hostname.split('.')[0];
   
   let tenantName = 'CoursesPRO';
   let logoUrl = '';
   
-  if (slug && slug !== 'localhost' && slug !== 'coursespro') {
+  if (slug && slug !== 'localhost' && slug !== 'coursespro' && slug !== platformDomain) {
     const tenant = await getTenant(slug);
     if (tenant) {
       if (tenant.name) tenantName = tenant.name;
