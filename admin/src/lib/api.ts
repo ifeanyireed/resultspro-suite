@@ -57,7 +57,37 @@ export async function fetchSchools(): Promise<School[]> {
       cache: 'no-store'
     });
     const data = await res.json();
-    return Array.isArray(data) ? data : (data.tenants || []);
+    const list: School[] = Array.isArray(data) ? data : (data.tenants || []);
+
+    // Enrich tenants with custom_domain / default_subdomain if omitted by the list endpoint
+    const enriched = await Promise.all(
+      list.map(async (tenant) => {
+        if (tenant.custom_domain !== undefined || !tenant.slug) {
+          return tenant;
+        }
+        try {
+          const resolveRes = await fetch(
+            `${USERS_API}/api/public/tenant/resolve?domain=${encodeURIComponent(tenant.slug)}`,
+            { cache: 'no-store' }
+          );
+          if (resolveRes.ok) {
+            const resolved = await resolveRes.json();
+            if (resolved?.tenant) {
+              return {
+                ...tenant,
+                custom_domain: resolved.tenant.custom_domain || '',
+                default_subdomain: resolved.tenant.default_subdomain || tenant.default_subdomain,
+              };
+            }
+          }
+        } catch {
+          // Ignore enrichment error and return base tenant summary
+        }
+        return tenant;
+      })
+    );
+
+    return enriched;
   } catch {
     return [];
   }
@@ -70,7 +100,19 @@ export async function createTenant(payload: any): Promise<boolean> {
       headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
       body: JSON.stringify(payload),
     });
-    return res.ok;
+    if (!res.ok) return false;
+
+    const created = await res.json().catch(() => null);
+    if (created?.id && (payload.custom_domain || payload.secondary_color || payload.accent_color || payload.payment_mode || payload.platform_fee_percent !== undefined)) {
+      await updateTenant(created.id, {
+        custom_domain: payload.custom_domain || '',
+        secondary_color: payload.secondary_color || '',
+        accent_color: payload.accent_color || '',
+        payment_mode: payload.payment_mode || 'managed',
+        platform_fee_percent: payload.platform_fee_percent ?? 5.0,
+      });
+    }
+    return true;
   } catch {
     return false;
   }

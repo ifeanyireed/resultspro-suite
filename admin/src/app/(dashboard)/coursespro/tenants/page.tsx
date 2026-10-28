@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Badge } from '@/components/Badge';
-import { Building2, Search, Filter, ExternalLink, Plus, X } from 'lucide-react';
+import { Building2, Search, Filter, ExternalLink, Plus, X, Globe, ChevronDown, ChevronUp, RefreshCw, CheckCircle2, AlertTriangle, Clock } from 'lucide-react';
 import { fetchSchools, verifySchool, createTenant, updateTenant } from '@/lib/api';
 import { School } from '@/lib/types';
 
@@ -20,10 +20,35 @@ export default function CoursesProTenantManager() {
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
   const [isUploadingHero, setIsUploadingHero] = useState(false);
   const [editTenantData, setEditTenantData] = useState<any>(null);
+  const [dnsCheckLoading, setDnsCheckLoading] = useState(false);
+  const [dnsCheckResult, setDnsCheckResult] = useState<any>(null);
+
+  const checkDnsPropagation = async (domainToCheck: string) => {
+    const clean = (domainToCheck || '').trim().toLowerCase();
+    if (!clean) {
+      setDnsCheckResult(null);
+      return;
+    }
+    setDnsCheckLoading(true);
+    try {
+      const res = await fetch(`/api/vercel/domain?domain=${encodeURIComponent(clean)}`, { cache: 'no-store' });
+      const data = await res.json();
+      setDnsCheckResult(data);
+    } catch (err: any) {
+      setDnsCheckResult({
+        status: 'PENDING',
+        propagated: false,
+        message: err?.message || 'Unable to check DNS right now.',
+      });
+    } finally {
+      setDnsCheckLoading(false);
+    }
+  };
 
   const [newTenantData, setNewTenantData] = useState({
     name: '',
     slug: '',
+    custom_domain: '',
     contact_email: '',
     primary_color: '#2563eb',
     secondary_color: '',
@@ -58,10 +83,21 @@ export default function CoursesProTenantManager() {
       ...newTenantData,
       enabled_modules: JSON.stringify(newTenantData.enabled_modules)
     });
+    if (ok && newTenantData.custom_domain) {
+      try {
+        await fetch('/api/vercel/domain', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ domain: newTenantData.custom_domain })
+        });
+      } catch (err) {
+        console.warn("Failed to register domain on Vercel:", err);
+      }
+    }
     setCreating(false);
     if (ok) {
       setIsModalOpen(false);
-      setNewTenantData({ name: '', slug: '', contact_email: '', primary_color: '#2563eb', secondary_color: '', accent_color: '', payment_mode: 'managed', platform_fee_percent: 5.0, type: 'COURSESPRO', enabled_modules: ['coursepro'], logo_url: '', full_address: '', contact_phone: '', contact_person_name: '' });
+      setNewTenantData({ name: '', slug: '', custom_domain: '', contact_email: '', primary_color: '#2563eb', secondary_color: '', accent_color: '', payment_mode: 'managed', platform_fee_percent: 5.0, type: 'COURSESPRO', enabled_modules: ['coursepro'], logo_url: '', full_address: '', contact_phone: '', contact_person_name: '' });
       load();
     } else {
       alert("Failed to create tenant");
@@ -117,6 +153,21 @@ export default function CoursesProTenantManager() {
     if (!editTenantData || !editTenantData.id) return;
     setUpdating(true);
     const ok = await updateTenant(editTenantData.id, editTenantData);
+    if (ok && editTenantData.custom_domain) {
+      try {
+        const vRes = await fetch('/api/vercel/domain', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ domain: editTenantData.custom_domain })
+        });
+        const vData = await vRes.json();
+        if (!vRes.ok && vData.error) {
+          console.warn("Vercel domain warning:", vData.error);
+        }
+      } catch (err) {
+        console.error("Vercel domain registration error:", err);
+      }
+    }
     setUpdating(false);
     if (ok) {
       setIsEditModalOpen(false);
@@ -235,7 +286,15 @@ export default function CoursesProTenantManager() {
                       </div>
                       <div>
                         <p className="font-medium text-slate-800 text-xs">{school.name}</p>
-                        <p className="text-[10px] text-slate-400 font-normal mt-0.5">{school.slug}.ofia.shop</p>
+                        <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
+                          <span className="text-[10px] text-slate-400 font-normal">{school.slug}.ofia.shop</span>
+                          {school.custom_domain && (
+                            <span className="inline-flex items-center gap-1 text-[10px] text-blue-700 font-medium bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">
+                              <Globe className="w-2.5 h-2.5 text-blue-600" />
+                              {school.custom_domain}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500 font-normal">{school.contact_email || '—'}</td>
@@ -272,6 +331,7 @@ export default function CoursesProTenantManager() {
                               id: school.id,
                               name: school.name,
                               slug: school.slug,
+                              custom_domain: school.custom_domain || '',
                               contact_email: school.contact_email || '',
                               logo_url: school.logo_url || '',
                               full_address: school.full_address || '',
@@ -287,6 +347,10 @@ export default function CoursesProTenantManager() {
                               paystack_public_key: school.paystack_public_key || '',
                               paystack_secret_key: school.paystack_secret_key || ''
                             } as any);
+                            setDnsCheckResult(null);
+                            if (school.custom_domain) {
+                              checkDnsPropagation(school.custom_domain);
+                            }
                             setIsEditModalOpen(true);
                           }}
                           className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full font-medium text-[11px] hover:bg-blue-600 hover:text-white transition-all shadow-sm hover:shadow-blue-500/30"
@@ -294,7 +358,7 @@ export default function CoursesProTenantManager() {
                           Edit
                         </button>
                         <a
-                          href={`https://${school.slug}.ofia.shop`}
+                          href={school.custom_domain ? `https://${school.custom_domain}` : `https://${school.slug}.ofia.shop`}
                           target="_blank"
                           rel="noreferrer"
                           className="inline-flex items-center px-3 py-1 bg-slate-100 text-slate-600 rounded-full font-medium text-[11px] hover:bg-slate-200 transition-all shadow-sm"
@@ -362,6 +426,19 @@ export default function CoursesProTenantManager() {
                       <span className="text-[10px] text-slate-400 font-medium">.ofia.shop</span>
                     </div>
                   </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                    <Globe className="w-3.5 h-3.5 text-blue-600" /> Custom Domain (Optional)
+                  </label>
+                  <input 
+                    type="text"
+                    value={newTenantData.custom_domain}
+                    onChange={e => setNewTenantData({...newTenantData, custom_domain: e.target.value.trim().toLowerCase()})}
+                    placeholder="e.g. academy.client.com or client.com"
+                    className="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                  />
+                  <p className="text-[10px] text-slate-400">Can also be configured or changed later via Edit Tenant.</p>
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tenant Logo</label>
@@ -549,6 +626,134 @@ export default function CoursesProTenantManager() {
                     <span className="text-[10px] text-slate-400 font-medium">.ofia.shop</span>
                   </div>
                 </div>
+              </div>
+              <div className="space-y-1.5 pt-1">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                    <Globe className="w-3.5 h-3.5 text-blue-600" /> Custom Domain
+                  </label>
+                  {editTenantData.custom_domain && (
+                    <span className="text-[10px] font-medium text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+                      Configured
+                    </span>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <input 
+                    type="text"
+                    placeholder="e.g. academy.client.com or client.com"
+                    value={editTenantData.custom_domain || ''}
+                    onChange={e => {
+                      const val = e.target.value.trim().toLowerCase();
+                      setEditTenantData({ ...editTenantData, custom_domain: val });
+                      setDnsCheckResult(null);
+                    }}
+                    className="flex-1 px-4 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-slate-800"
+                  />
+                  {editTenantData.custom_domain && (
+                    <button
+                      type="button"
+                      onClick={() => checkDnsPropagation(editTenantData.custom_domain)}
+                      disabled={dnsCheckLoading}
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 font-semibold text-[11px] transition-colors disabled:opacity-50 shrink-0"
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 ${dnsCheckLoading ? 'animate-spin' : ''}`} />
+                      {dnsCheckLoading ? 'Checking...' : 'Check DNS'}
+                    </button>
+                  )}
+                </div>
+                <p className="text-[10px] text-slate-400">
+                  Leave blank to use the default subdomain ({editTenantData.slug || 'slug'}.ofia.shop).
+                </p>
+
+                {editTenantData.custom_domain && dnsCheckResult && (
+                  <div
+                    className={`p-3 rounded-xl border text-xs space-y-1.5 mt-2 ${
+                      dnsCheckResult.status === 'PROPAGATED'
+                        ? 'bg-emerald-50/80 border-emerald-200 text-emerald-900'
+                        : dnsCheckResult.status === 'INVALID_DOMAIN'
+                        ? 'bg-rose-50/80 border-rose-200 text-rose-900'
+                        : 'bg-amber-50/80 border-amber-200 text-amber-900'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-[11px] flex items-center gap-1.5">
+                        {dnsCheckResult.status === 'PROPAGATED' ? (
+                          <>
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                            DNS Propagated & Active
+                          </>
+                        ) : dnsCheckResult.status === 'INVALID_DOMAIN' ? (
+                          <>
+                            <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
+                            Invalid Domain Format
+                          </>
+                        ) : (
+                          <>
+                            <Clock className="w-3.5 h-3.5 text-amber-600" />
+                            {dnsCheckResult.status === 'MISCONFIGURED' ? 'DNS Record Mismatch' : 'Waiting for DNS Propagation'}
+                          </>
+                        )}
+                      </span>
+                      {dnsCheckResult.vercelVerified && (
+                        <span className="text-[10px] font-semibold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                          Vercel Verified
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10px] leading-relaxed opacity-90">{dnsCheckResult.message}</p>
+                    {dnsCheckResult.suggestedDomain && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditTenantData({ ...editTenantData, custom_domain: dnsCheckResult.suggestedDomain });
+                          checkDnsPropagation(dnsCheckResult.suggestedDomain);
+                        }}
+                        className="mt-1 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-rose-200 text-rose-700 font-semibold text-[10px] hover:bg-rose-100 transition-colors"
+                      >
+                        Fix to {dnsCheckResult.suggestedDomain}
+                      </button>
+                    )}
+                    {dnsCheckResult.detected && (dnsCheckResult.detected.cname?.length > 0 || dnsCheckResult.detected.a?.length > 0) && (
+                      <div className="pt-1 text-[10px] font-mono opacity-80">
+                        {dnsCheckResult.detected.cname?.length > 0 && (
+                          <div>Detected CNAME: {dnsCheckResult.detected.cname.join(', ')}</div>
+                        )}
+                        {dnsCheckResult.detected.a?.length > 0 && (
+                          <div>Detected A: {dnsCheckResult.detected.a.join(', ')}</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {editTenantData.custom_domain && (
+                  <div className="p-3 bg-blue-50/70 border border-blue-100 rounded-xl text-xs space-y-2 mt-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-blue-900 text-[11px]">DNS Configuration Required</span>
+                      <span className="text-[10px] text-blue-700 bg-white px-2 py-0.5 rounded border border-blue-200 font-mono">
+                        {editTenantData.custom_domain.split('.').length > 2 ? 'CNAME Record' : 'A Record'}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-blue-800 leading-relaxed">
+                      Instruct the tenant to add the following DNS record at their domain registrar (e.g. Cloudflare, Namecheap, GoDaddy):
+                    </p>
+                    <div className="bg-white p-2.5 rounded-lg border border-blue-100 font-mono text-[11px] text-slate-700 space-y-1">
+                      <div className="flex justify-between">
+                        <span className="text-slate-400 font-bold">Type:</span>
+                        <span className="font-semibold">{editTenantData.custom_domain.split('.').length > 2 ? 'CNAME' : 'A'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400 font-bold">Name / Host:</span>
+                        <span className="font-semibold">{editTenantData.custom_domain.split('.').length > 2 ? editTenantData.custom_domain.split('.')[0] : '@'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400 font-bold">Value / Points to:</span>
+                        <span className="font-semibold">{editTenantData.custom_domain.split('.').length > 2 ? 'cname.vercel-dns.com' : '76.76.21.21'}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Admin Contact Email</label>

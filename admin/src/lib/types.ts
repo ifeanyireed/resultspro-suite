@@ -16,6 +16,8 @@ export interface School {
   type?: string;
   name: string;
   slug: string;
+  custom_domain?: string;
+  default_subdomain?: string;
   school_code?: string;
   short_name?: string;
   motto?: string;

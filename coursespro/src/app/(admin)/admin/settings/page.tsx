@@ -11,7 +11,10 @@ import {
   PhotoIcon,
   BanknotesIcon,
   ChevronDownIcon,
-  ChevronUpIcon
+  ChevronUpIcon,
+  ArrowPathIcon,
+  ExclamationTriangleIcon,
+  ClockIcon
 } from '@heroicons/react/24/outline';
 
 export default function SettingsPage() {
@@ -65,6 +68,30 @@ export default function SettingsPage() {
   const [uploadingSlideshow, setUploadingSlideshow] = useState(false);
   const slideshowFileInputRef = useRef<HTMLInputElement>(null);
   const [showDnsConfig, setShowDnsConfig] = useState(false);
+  const [dnsCheckLoading, setDnsCheckLoading] = useState(false);
+  const [dnsCheckResult, setDnsCheckResult] = useState<any>(null);
+
+  const checkDnsPropagation = async (domainToCheck: string) => {
+    const clean = (domainToCheck || '').trim().toLowerCase();
+    if (!clean) {
+      setDnsCheckResult(null);
+      return;
+    }
+    setDnsCheckLoading(true);
+    try {
+      const res = await fetch(`/api/vercel/domain?domain=${encodeURIComponent(clean)}`, { cache: 'no-store' });
+      const data = await res.json();
+      setDnsCheckResult(data);
+    } catch (err: any) {
+      setDnsCheckResult({
+        status: 'PENDING',
+        propagated: false,
+        message: err?.message || 'Unable to check DNS right now.',
+      });
+    } finally {
+      setDnsCheckLoading(false);
+    }
+  };
 
   const [formData, setFormData] = useState({
     name: '',
@@ -296,7 +323,7 @@ const { data: tenantData, isLoading } = useQuery({
         full_address: formData.address,
         contact_person_name: formData.contactPerson,
         contact_phone: formData.phone,
-        custom_domain: formData.customDomainEnabled ? formData.customDomain : "",
+        custom_domain: formData.customDomain || "",
         primary_color: formData.primaryColor,
         secondary_color: formData.secondaryColor,
         accent_color: formData.accentColor,
@@ -317,18 +344,6 @@ const { data: tenantData, isLoading } = useQuery({
       
       // Save courses settings
       await coursesApi.put('/api/admin/settings', coursesSettings);
-      
-      if (formData.customDomainEnabled && formData.customDomain) {
-        try {
-          await fetch('/api/vercel/domain', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ domain: formData.customDomain })
-          });
-        } catch (e) {
-          console.error("Failed to register domain with Vercel", e);
-        }
-      }
 
       alert('Platform settings updated successfully!');
       if (formData.password) {
@@ -390,62 +405,125 @@ const { data: tenantData, isLoading } = useQuery({
                 </div>
               </div>
               <div className="pt-4 mt-4 border-t border-gray-100">
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between mb-2">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Custom Domain</label>
-                    <p className="text-xs text-gray-500">Use your own domain instead of .ofia.shop</p>
+                    <p className="text-xs text-gray-500">Custom domains are managed by Platform Administration.</p>
                   </div>
-                  <div 
-                    className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors ${formData.customDomainEnabled ? 'bg-[#146ef5]' : 'bg-gray-200'}`}
-                    onClick={() => setFormData({...formData, customDomainEnabled: !formData.customDomainEnabled})}
-                  >
-                    <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-transform ${formData.customDomainEnabled ? 'right-1' : 'left-1 shadow-sm'}`}></div>
-                  </div>
+                  {formData.customDomain ? (
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      Active
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                      Default Subdomain Only
+                    </span>
+                  )}
                 </div>
-                {formData.customDomainEnabled && (
-                  <div className="mt-3">
-                    <input 
-                      type="text" 
-                      name="customDomain" 
-                      placeholder="e.g., academy.com"
-                      value={formData.customDomain} 
-                      onChange={handleChange} 
-                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#146ef5] transition-colors" 
-                    />
-                    {formData.customDomain && (
-                      <div className="mt-3 p-4 bg-blue-50 border border-blue-100 rounded-xl">
-                        <div 
-                          className="flex items-center justify-between cursor-pointer"
-                          onClick={() => setShowDnsConfig(!showDnsConfig)}
-                        >
-                          <p className="text-sm font-semibold text-blue-900">DNS Configuration Required</p>
-                          {showDnsConfig ? (
-                            <ChevronUpIcon className="w-4 h-4 text-blue-900" />
-                          ) : (
-                            <ChevronDownIcon className="w-4 h-4 text-blue-900" />
+
+                {formData.customDomain ? (
+                  <div className="mt-3 space-y-3">
+                    <div className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5">
+                      <div>
+                        <span className="text-xs text-gray-500 font-medium mr-2">Domain:</span>
+                        <span className="font-mono text-sm font-semibold text-blue-600">{formData.customDomain}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => checkDnsPropagation(formData.customDomain)}
+                        disabled={dnsCheckLoading}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-gray-200 hover:bg-gray-100 text-xs font-semibold text-gray-700 transition-colors disabled:opacity-50"
+                      >
+                        <ArrowPathIcon className={`w-3.5 h-3.5 ${dnsCheckLoading ? 'animate-spin' : ''}`} />
+                        {dnsCheckLoading ? 'Checking...' : 'Check DNS'}
+                      </button>
+                    </div>
+
+                    {dnsCheckResult && (
+                      <div
+                        className={`p-3 rounded-xl border text-xs space-y-1.5 ${
+                          dnsCheckResult.status === 'PROPAGATED'
+                            ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                            : dnsCheckResult.status === 'INVALID_DOMAIN'
+                            ? 'bg-rose-50 border-rose-200 text-rose-900'
+                            : 'bg-amber-50 border-amber-200 text-amber-900'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold flex items-center gap-1.5">
+                            {dnsCheckResult.status === 'PROPAGATED' ? (
+                              <>
+                                <CheckCircleIcon className="w-4 h-4 text-emerald-600" />
+                                DNS Propagated & Active
+                              </>
+                            ) : dnsCheckResult.status === 'INVALID_DOMAIN' ? (
+                              <>
+                                <ExclamationTriangleIcon className="w-4 h-4 text-rose-600" />
+                                Invalid Domain Format
+                              </>
+                            ) : (
+                              <>
+                                <ClockIcon className="w-4 h-4 text-amber-600" />
+                                {dnsCheckResult.status === 'MISCONFIGURED' ? 'DNS Record Mismatch' : 'Waiting for DNS Propagation'}
+                              </>
+                            )}
+                          </span>
+                          {dnsCheckResult.vercelVerified && (
+                            <span className="text-[10px] font-semibold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                              Vercel Verified
+                            </span>
                           )}
                         </div>
-                        {showDnsConfig && (
-                          <div className="mt-2">
-                            <p className="text-xs text-blue-800 mb-3">To complete the setup, please add the following record to your domain's DNS settings at your registrar (e.g. Namecheap, GoDaddy):</p>
-                            <div className="bg-white p-3 rounded-lg border border-blue-100 font-mono text-xs text-slate-700 flex flex-col gap-2">
-                              <div className="flex gap-4">
-                                <span className="w-16 font-bold">Type:</span>
-                                <span>{formData.customDomain.split('.').length > 2 ? 'CNAME' : 'A'}</span>
-                              </div>
-                              <div className="flex gap-4">
-                                <span className="w-16 font-bold">Name:</span>
-                                <span>{formData.customDomain.split('.').length > 2 ? formData.customDomain.split('.')[0] : '@'}</span>
-                              </div>
-                              <div className="flex gap-4">
-                                <span className="w-16 font-bold">Value:</span>
-                                <span>{formData.customDomain.split('.').length > 2 ? 'cname.vercel-dns.com' : '76.76.21.21'}</span>
-                              </div>
-                            </div>
+                        <p className="text-xs leading-relaxed opacity-90">{dnsCheckResult.message}</p>
+                        {dnsCheckResult.detected && (dnsCheckResult.detected.cname?.length > 0 || dnsCheckResult.detected.a?.length > 0) && (
+                          <div className="pt-1 text-[11px] font-mono opacity-80">
+                            {dnsCheckResult.detected.cname?.length > 0 && (
+                              <div>Detected CNAME: {dnsCheckResult.detected.cname.join(', ')}</div>
+                            )}
+                            {dnsCheckResult.detected.a?.length > 0 && (
+                              <div>Detected A: {dnsCheckResult.detected.a.join(', ')}</div>
+                            )}
                           </div>
                         )}
                       </div>
                     )}
+
+                    <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl">
+                      <div 
+                        className="flex items-center justify-between cursor-pointer"
+                        onClick={() => setShowDnsConfig(!showDnsConfig)}
+                      >
+                        <p className="text-sm font-semibold text-blue-900">DNS Configuration Instructions</p>
+                        {showDnsConfig ? (
+                          <ChevronUpIcon className="w-4 h-4 text-blue-900" />
+                        ) : (
+                          <ChevronDownIcon className="w-4 h-4 text-blue-900" />
+                        )}
+                      </div>
+                      {showDnsConfig && (
+                        <div className="mt-2">
+                          <p className="text-xs text-blue-800 mb-3">Add the following DNS record in your domain registrar's DNS settings (e.g. Cloudflare, Namecheap, GoDaddy):</p>
+                          <div className="bg-white p-3 rounded-lg border border-blue-100 font-mono text-xs text-slate-700 flex flex-col gap-2">
+                            <div className="flex gap-4">
+                              <span className="w-20 font-bold text-gray-400">Type:</span>
+                              <span className="font-semibold">{formData.customDomain.split('.').length > 2 ? 'CNAME' : 'A'}</span>
+                            </div>
+                            <div className="flex gap-4">
+                              <span className="w-20 font-bold text-gray-400">Name:</span>
+                              <span className="font-semibold">{formData.customDomain.split('.').length > 2 ? formData.customDomain.split('.')[0] : '@'}</span>
+                            </div>
+                            <div className="flex gap-4">
+                              <span className="w-20 font-bold text-gray-400">Value:</span>
+                              <span className="font-semibold">{formData.customDomain.split('.').length > 2 ? 'cname.vercel-dns.com' : '76.76.21.21'}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-2 p-3 bg-gray-50 rounded-xl border border-gray-100 text-xs text-gray-500 leading-relaxed">
+                    Your platform is accessible on <span className="font-mono font-medium text-gray-800">{formData.slug ? `${formData.slug}.ofia.shop` : 'your subdomain'}</span>. To link your own branded custom domain (e.g. <code>academy.yourbrand.com</code>), please contact your Platform Administrator.
                   </div>
                 )}
               </div>

@@ -23,25 +23,30 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
-		ID                string `json:"id"`
-		Name              string `json:"name"`
-		Slug              string `json:"slug"`
-		TenantCode        string `json:"tenant_code"`
-		ShortName         string `json:"short_name"`
-		Motto             string `json:"motto"`
-		ContactEmail      string `json:"contact_email"`
-		ContactPhone      string `json:"contact_phone"`
-		ContactPersonName string `json:"contact_person_name"`
-		FullAddress       string `json:"full_address"`
-		State             string `json:"state"`
-		LGA               string `json:"lga"`
-		AgentID           string `json:"agent_id"` // referred_by_agent_id
-		SubscriptionTier  string `json:"subscription_tier"`
-		Type              string `json:"type"`
-		LogoUrl           string `json:"logo_url"`
-		PrimaryColor      string `json:"primary_color"`
-		EnabledModules    string `json:"enabled_modules"`
-		UserID            string `json:"user_id"` // Optional creator ID to automatically assign tenant-admin role
+		ID                 string  `json:"id"`
+		Name               string  `json:"name"`
+		Slug               string  `json:"slug"`
+		CustomDomain       string  `json:"custom_domain"`
+		TenantCode         string  `json:"tenant_code"`
+		ShortName          string  `json:"short_name"`
+		Motto              string  `json:"motto"`
+		ContactEmail       string  `json:"contact_email"`
+		ContactPhone       string  `json:"contact_phone"`
+		ContactPersonName  string  `json:"contact_person_name"`
+		FullAddress        string  `json:"full_address"`
+		State              string  `json:"state"`
+		LGA                string  `json:"lga"`
+		AgentID            string  `json:"agent_id"` // referred_by_agent_id
+		SubscriptionTier   string  `json:"subscription_tier"`
+		Type               string  `json:"type"`
+		LogoUrl            string  `json:"logo_url"`
+		PrimaryColor       string  `json:"primary_color"`
+		SecondaryColor     string  `json:"secondary_color"`
+		AccentColor        string  `json:"accent_color"`
+		PaymentMode        string  `json:"payment_mode"`
+		PlatformFeePercent float64 `json:"platform_fee_percent"`
+		EnabledModules     string  `json:"enabled_modules"`
+		UserID             string  `json:"user_id"` // Optional creator ID to automatically assign tenant-admin role
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -73,9 +78,18 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 
 	defaultSubdomain := input.Slug + ".ofia.shop"
 
+	paymentMode := input.PaymentMode
+	if paymentMode == "" {
+		paymentMode = "managed"
+	}
+	platformFee := input.PlatformFeePercent
+	if platformFee == 0 {
+		platformFee = 5.0
+	}
+
 	query := `
-		INSERT INTO tenants (id, type, name, slug, default_subdomain, tenant_code, short_name, motto, contact_email, contact_phone, contact_person_name, full_address, state, lga, primary_color, logo_url, enabled_modules, status, verification_status, referred_by_agent_id, subscription_tier, created_at, updated_at) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', 'PENDING_VERIFICATION', ?, ?, ?, ?)`
+		INSERT INTO tenants (id, type, name, slug, default_subdomain, custom_domain, tenant_code, short_name, motto, contact_email, contact_phone, contact_person_name, full_address, state, lga, primary_color, secondary_color, accent_color, logo_url, payment_mode, platform_fee_percent, enabled_modules, status, verification_status, referred_by_agent_id, subscription_tier, created_at, updated_at) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', 'PENDING_VERIFICATION', ?, ?, ?, ?)`
 
 	_, err := db.DB.Exec(query,
 		tenantID,
@@ -83,6 +97,7 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		input.Name,
 		input.Slug,
 		defaultSubdomain,
+		sql.NullString{String: input.CustomDomain, Valid: input.CustomDomain != ""},
 		sql.NullString{String: input.TenantCode, Valid: input.TenantCode != ""},
 		sql.NullString{String: input.ShortName, Valid: input.ShortName != ""},
 		sql.NullString{String: input.Motto, Valid: input.Motto != ""},
@@ -93,7 +108,11 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		sql.NullString{String: input.State, Valid: input.State != ""},
 		sql.NullString{String: input.LGA, Valid: input.LGA != ""},
 		sql.NullString{String: input.PrimaryColor, Valid: input.PrimaryColor != ""},
+		sql.NullString{String: input.SecondaryColor, Valid: input.SecondaryColor != ""},
+		sql.NullString{String: input.AccentColor, Valid: input.AccentColor != ""},
 		sql.NullString{String: input.LogoUrl, Valid: input.LogoUrl != ""},
+		paymentMode,
+		platformFee,
 		sql.NullString{String: input.EnabledModules, Valid: input.EnabledModules != ""},
 		sql.NullString{String: input.AgentID, Valid: input.AgentID != ""},
 		tier,
@@ -147,17 +166,17 @@ func HandleGetTenant(w http.ResponseWriter, r *http.Request) {
 	identifier := parts[len(parts)-1]
 
 	var s models.Tenant
-	var tenantCode, shortName, motto, logoURL, logoEmoji, primaryColor, secondaryColor, accentColor sql.NullString
+	var defaultSubdomain, customDomain, tenantCode, shortName, motto, logoURL, logoEmoji, primaryColor, secondaryColor, accentColor sql.NullString
 	var contactEmail, contactPhone, contactPerson, fullAddress, state, lga, agentID, subTier, subExpires, settings sql.NullString
 
 	var tenantType, enabledModules sql.NullString
 
 	query := `
-		SELECT id, type, name, slug, tenant_code, short_name, motto, logo_url, logo_emoji, primary_color, secondary_color, accent_color, contact_email, contact_phone, contact_person_name, full_address, state, lga, status, verification_status, referred_by_agent_id, subscription_tier, subscription_expires_at, enabled_modules, settings, created_at, updated_at 
+		SELECT id, type, name, slug, default_subdomain, custom_domain, tenant_code, short_name, motto, logo_url, logo_emoji, primary_color, secondary_color, accent_color, contact_email, contact_phone, contact_person_name, full_address, state, lga, status, verification_status, referred_by_agent_id, subscription_tier, subscription_expires_at, enabled_modules, settings, created_at, updated_at 
 		FROM tenants WHERE id = ? OR slug = ?`
 
 	err := db.DB.QueryRow(query, identifier, identifier).Scan(
-		&s.ID, &tenantType, &s.Name, &s.Slug, &tenantCode, &shortName, &motto, &logoURL, &logoEmoji, &primaryColor, &secondaryColor, &accentColor,
+		&s.ID, &tenantType, &s.Name, &s.Slug, &defaultSubdomain, &customDomain, &tenantCode, &shortName, &motto, &logoURL, &logoEmoji, &primaryColor, &secondaryColor, &accentColor,
 		&contactEmail, &contactPhone, &contactPerson, &fullAddress, &state, &lga, &s.Status, &s.VerificationStatus, &agentID,
 		&subTier, &subExpires, &enabledModules, &settings, &s.CreatedAt, &s.UpdatedAt,
 	)
@@ -168,6 +187,13 @@ func HandleGetTenant(w http.ResponseWriter, r *http.Request) {
 	} else if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
 		return
+	}
+
+	if defaultSubdomain.Valid {
+		s.DefaultSubdomain = defaultSubdomain.String
+	}
+	if customDomain.Valid {
+		s.CustomDomain = customDomain.String
 	}
 
 	if tenantCode.Valid {
@@ -519,7 +545,7 @@ func HandleUpdateTenantBranding(w http.ResponseWriter, r *http.Request) {
 
 // HandleListTenants returns a paginated/filtered list of tenants
 func HandleListTenants(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.DB.Query("SELECT id, type, name, slug, status, verification_status, state, lga, subscription_tier, created_at, contact_email, primary_color, secondary_color, accent_color, logo_url, contact_phone, contact_person_name, full_address, payment_mode, platform_fee_percent, dva_account_number, paystack_status, paystack_public_key, paystack_secret_key FROM tenants ORDER BY created_at DESC LIMIT 200")
+	rows, err := db.DB.Query("SELECT id, type, name, slug, default_subdomain, custom_domain, status, verification_status, state, lga, subscription_tier, created_at, contact_email, primary_color, secondary_color, accent_color, logo_url, contact_phone, contact_person_name, full_address, payment_mode, platform_fee_percent, dva_account_number, paystack_status, paystack_public_key, paystack_secret_key FROM tenants ORDER BY created_at DESC LIMIT 200")
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Database error")
 		return
@@ -531,6 +557,8 @@ func HandleListTenants(w http.ResponseWriter, r *http.Request) {
 		Type               string    `json:"type"`
 		Name               string    `json:"name"`
 		Slug               string    `json:"slug"`
+		DefaultSubdomain   string    `json:"default_subdomain,omitempty"`
+		CustomDomain       string    `json:"custom_domain,omitempty"`
 		Status             string    `json:"status"`
 		VerificationStatus string    `json:"verification_status"`
 		State              string    `json:"state,omitempty"`
@@ -556,9 +584,15 @@ func HandleListTenants(w http.ResponseWriter, r *http.Request) {
 	tenants := []TenantSummary{}
 	for rows.Next() {
 		var s TenantSummary
-		var state, lga, tier, tenantType, contactEmail, primaryColor, secondaryColor, accentColor, logoUrl, contactPhone, contactPersonName, fullAddress, paymentMode, dvaAcc, pStatus, paystackPub, paystackSec sql.NullString
+		var defaultSubdomain, customDomain, state, lga, tier, tenantType, contactEmail, primaryColor, secondaryColor, accentColor, logoUrl, contactPhone, contactPersonName, fullAddress, paymentMode, dvaAcc, pStatus, paystackPub, paystackSec sql.NullString
 		var pFee sql.NullFloat64
-		if err := rows.Scan(&s.ID, &tenantType, &s.Name, &s.Slug, &s.Status, &s.VerificationStatus, &state, &lga, &tier, &s.CreatedAt, &contactEmail, &primaryColor, &secondaryColor, &accentColor, &logoUrl, &contactPhone, &contactPersonName, &fullAddress, &paymentMode, &pFee, &dvaAcc, &pStatus, &paystackPub, &paystackSec); err == nil {
+		if err := rows.Scan(&s.ID, &tenantType, &s.Name, &s.Slug, &defaultSubdomain, &customDomain, &s.Status, &s.VerificationStatus, &state, &lga, &tier, &s.CreatedAt, &contactEmail, &primaryColor, &secondaryColor, &accentColor, &logoUrl, &contactPhone, &contactPersonName, &fullAddress, &paymentMode, &pFee, &dvaAcc, &pStatus, &paystackPub, &paystackSec); err == nil {
+			if defaultSubdomain.Valid {
+				s.DefaultSubdomain = defaultSubdomain.String
+			}
+			if customDomain.Valid {
+				s.CustomDomain = customDomain.String
+			}
 			if tenantType.Valid {
 				s.Type = tenantType.String
 			}
@@ -803,7 +837,9 @@ func HandleUpdateTenant(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if slug, ok := input["slug"].(string); ok {
-		input["default_subdomain"] = fmt.Sprintf("%s.resultspro.ng", slug)
+		if existingSub, hasSub := input["default_subdomain"].(string); !hasSub || existingSub == "" {
+			input["default_subdomain"] = fmt.Sprintf("%s.ofia.shop", slug)
+		}
 	}
 	
 	// Handle Admin Password update if provided
