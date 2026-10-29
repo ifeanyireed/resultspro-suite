@@ -79,12 +79,6 @@ export default async function BlogPage() {
       <section className="section-py">
         <div className="container-nets">
           <BlogList initialPosts={posts} />
-
-          <div className="mt-16 text-center">
-            <button className="btn btn-outline-navy">
-              Load More Articles
-            </button>
-          </div>
         </div>
       </section>
     </main>
