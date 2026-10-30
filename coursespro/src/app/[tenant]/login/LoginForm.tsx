@@ -77,6 +77,9 @@ export default function LoginForm({ tenant }: { tenant: any }) {
     }
   }, [user, token, router, resolvedTenantSlug]);
   
+  const [successMessage, setSuccessMessage] = useState('');
+  const [error, setError] = useState('');
+
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
@@ -84,17 +87,60 @@ export default function LoginForm({ tenant }: { tenant: any }) {
       if (emailParam) {
         setEmail(emailParam);
       }
+      const verifiedParam = urlParams.get('verified');
+      if (verifiedParam === 'true') {
+        setSuccessMessage('Email verified successfully! Please sign in with your password.');
+      }
     }
   }, []);
-  const [error, setError] = useState('');
-  const [showOTP, setShowOTP] = useState(false);
-  const [otp, setOtp] = useState('');
-  const [verificationLoading, setVerificationLoading] = useState(false);
+
+  const processLoginToken = async (authToken: string, authUser: any) => {
+    setAuth(authUser, authToken);
+    
+    try {
+      const base64Url = authToken.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      const payload = JSON.parse(jsonPayload);
+      const roles = payload.roles || [];
+      
+      if (roles.includes('tenant-admin') || roles.includes('superadmin') || roles.includes('platform-admin')) {
+        router.push('/admin');
+        return;
+      } else if (roles.includes('mentor')) {
+        router.push('/mentor');
+        return;
+      }
+    } catch (e) {
+      // ignore decode errors
+    }
+
+    const Cookies = require('js-cookie');
+    const selectedCohortId = Cookies.get('selected_cohort_id');
+    if (selectedCohortId) {
+      router.push('/onboarding/orientation');
+    } else {
+      try {
+        const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
+        const summaryRes = await axios.get(`${COURSES_API}/api/v1/student/dashboard-summary`, {
+          headers: { 'Authorization': `Bearer ${authToken}`, 'X-Tenant-Domain': resolvedTenantSlug }
+        });
+        if (summaryRes.data && summaryRes.data.has_enrollment === false) {
+          setShowUnenrolledPopup(true);
+          return;
+        }
+      } catch (e) {}
+      router.push('/dashboard');
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
+    setSuccessMessage('');
     try {
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
       
@@ -108,65 +154,19 @@ export default function LoginForm({ tenant }: { tenant: any }) {
       
       const token = res.data.access_token || res.data.token;
       if (token) {
-        setAuth(res.data.user, token);
-        
-        try {
-          const base64Url = token.split('.')[1];
-          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-          const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-          }).join(''));
-          const payload = JSON.parse(jsonPayload);
-          const roles = payload.roles || [];
-          
-          if (roles.includes('tenant-admin') || roles.includes('superadmin') || roles.includes('platform-admin')) {
-            router.push('/admin');
-          } else if (roles.includes('mentor')) {
-            router.push('/mentor');
-          } else {
-            const Cookies = require('js-cookie');
-            const selectedCohortId = Cookies.get('selected_cohort_id');
-            if (selectedCohortId) {
-              router.push('/onboarding/orientation');
-            } else {
-              try {
-                const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
-                const summaryRes = await axios.get(`${COURSES_API}/api/v1/student/dashboard-summary`, {
-                  headers: { 'Authorization': `Bearer ${token}`, 'X-Tenant-Domain': resolvedTenantSlug }
-                });
-                if (summaryRes.data && summaryRes.data.has_enrollment === false) {
-                  setShowUnenrolledPopup(true);
-                  return;
-                }
-              } catch (e) {}
-              router.push('/dashboard');
-            }
-          }
-        } catch (e) {
-          const Cookies = require('js-cookie');
-          const selectedCohortId = Cookies.get('selected_cohort_id');
-          if (selectedCohortId) {
-            router.push('/onboarding/orientation');
-          } else {
-            try {
-              const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
-              const summaryRes = await axios.get(`${COURSES_API}/api/v1/student/dashboard-summary`, {
-                headers: { 'Authorization': `Bearer ${token}`, 'X-Tenant-Domain': resolvedTenantSlug }
-              });
-              if (summaryRes.data && summaryRes.data.has_enrollment === false) {
-                setShowUnenrolledPopup(true);
-                return;
-              }
-            } catch (e) {}
-            router.push('/dashboard');
-          }
-        }
+        await processLoginToken(token, res.data.user);
       }
     } catch (err: any) {
       console.error("Login failed", err);
       if (err.response?.status === 403 && err.response?.data?.error === "unverified") {
-        setShowOTP(true);
-        setError('');
+        const unverifiedEmail = err.response?.data?.email || email;
+        try {
+          sessionStorage.setItem('auth_temp_email', unverifiedEmail);
+          sessionStorage.setItem('auth_temp_pass', password);
+        } catch (e) {}
+        // Redirect user to the email verification flow on coursespro
+        router.push(`/verify-email?email=${encodeURIComponent(unverifiedEmail)}`);
+        return;
       } else {
         setError(err.response?.data?.error || err.response?.data?.message || err.message || 'Login failed');
       }
@@ -248,6 +248,12 @@ export default function LoginForm({ tenant }: { tenant: any }) {
             <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Welcome Back</h2>
             <p className="text-slate-500 font-medium">Enter your credentials to access the hub.</p>
           </div>
+
+          {successMessage && (
+            <div className="mb-4 p-4 text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl">
+              {successMessage}
+            </div>
+          )}
 
           {error && <div className="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg">{error}</div>}
 

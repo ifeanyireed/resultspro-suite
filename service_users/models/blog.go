@@ -22,9 +22,9 @@ type BlogPost struct {
 	ID              string        `json:"id" gorm:"primaryKey"`
 	Title           string        `json:"title"`
 	Slug            string        `json:"slug" gorm:"uniqueIndex"`
-	Excerpt         string        `json:"excerpt"`
+	Excerpt         string        `json:"excerpt" gorm:"column:excerpt;type:text"`
 	Content         string        `json:"content" gorm:"type:text"`
-	CoverImage      *string       `json:"cover_image"`
+	CoverImage      *string       `json:"cover_image" gorm:"column:cover_image;type:text"`
 	AuthorID        string        `json:"author_id" gorm:"type:varchar(191)"`
 	Author          *User         `json:"author" gorm:"foreignKey:AuthorID"`
 	CategoryID      *string       `json:"category_id" gorm:"type:varchar(191)"`
@@ -33,6 +33,8 @@ type BlogPost struct {
 	MetaTitle       string        `json:"meta_title" gorm:"column:meta_title;type:varchar(255)"`
 	MetaDescription string        `json:"meta_description" gorm:"column:meta_description;type:text"`
 	MetaKeywords    string        `json:"meta_keywords" gorm:"column:meta_keywords;type:varchar(255)"`
+	CanonicalURL    string        `json:"canonical_url" gorm:"column:canonical_url;type:varchar(512)"`
+	OGImage         string        `json:"og_image" gorm:"column:og_image;type:varchar(512)"`
 	PublishedAt     *time.Time    `json:"published_at"`
 	CreatedAt       time.Time     `json:"created_at"`
 	UpdatedAt       time.Time     `json:"updated_at"`

@@ -239,7 +239,9 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 			uuid.New().String(), user.ID, otp, expiresAt.UTC().Format("2006-01-02 15:04:05"))
 		if err == nil {
 			go func() {
-				utils.SendVerificationEmail(user.Email, otp, tenantName, tenantLogo)
+				if err := utils.SendVerificationEmail(user.Email, otp, tenantName, tenantLogo); err != nil {
+					log.Printf("Failed to send verification email on login to %s: %v", user.Email, err)
+				}
 			}()
 		}
 
@@ -691,7 +693,9 @@ func HandleResendVerification(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
-		Email string `json:"email"`
+		Email      string `json:"email"`
+		TenantSlug string `json:"tenant_slug,omitempty"`
+		TenantID   string `json:"tenant_id,omitempty"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		utils.JSONError(w, http.StatusBadRequest, "Invalid request payload")
@@ -743,9 +747,19 @@ func HandleResendVerification(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var tenantName, tenantLogo string
+	if input.TenantSlug != "" || input.TenantID != "" {
+		tenantID := input.TenantID
+		if tenantID == "" && input.TenantSlug != "" {
+			db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE slug = ? OR custom_domain = ? OR default_subdomain = ?", input.TenantSlug, input.TenantSlug, input.TenantSlug).Scan(&tenantName, &tenantLogo)
+		} else if tenantID != "" {
+			db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE id = ?", tenantID).Scan(&tenantName, &tenantLogo)
+		}
+	}
+
 	go func() {
-		if err := utils.SendVerificationEmail(email, otp, "", ""); err != nil {
-			log.Printf("Failed to send verification email: %v", err)
+		if err := utils.SendVerificationEmail(email, otp, tenantName, tenantLogo); err != nil {
+			log.Printf("Failed to resend verification email: %v", err)
 		}
 	}()
 

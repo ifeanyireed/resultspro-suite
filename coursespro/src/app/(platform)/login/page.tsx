@@ -71,6 +71,15 @@ export default function LoginPage() {
       }
     } catch (err: any) {
       console.error("Login failed", err);
+      if (err.response?.status === 403 && err.response?.data?.error === "unverified") {
+        const unverifiedEmail = err.response?.data?.email || email;
+        try {
+          sessionStorage.setItem('auth_temp_email', unverifiedEmail);
+          sessionStorage.setItem('auth_temp_pass', password);
+        } catch (e) {}
+        router.push(`/verify-email?email=${encodeURIComponent(unverifiedEmail)}`);
+        return;
+      }
       setError(err.response?.data?.error || err.message || 'Login failed');
     } finally {
       setIsLoading(false);

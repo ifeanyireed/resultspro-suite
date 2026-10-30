@@ -8,12 +8,28 @@ import (
 	"time"
 	"math/rand"
 	"encoding/json"
+	"sync"
 
 	"gorm.io/gorm"
 	"service_users.resultspro.ng/db"
 	"service_users.resultspro.ng/models"
 	"service_users.resultspro.ng/utils"
 )
+
+var blogSchemaOnce sync.Once
+
+func ensureBlogSchema() {
+	blogSchemaOnce.Do(func() {
+		if db.GormDB != nil {
+			_ = db.GormDB.AutoMigrate(&models.BlogPost{}, &models.BlogCategory{}, &models.BlogTag{}, &models.BlogPostTag{}, &models.BlogComment{}, &models.NewsletterSubscriber{})
+			_ = db.GormDB.Exec("ALTER TABLE blog_posts ALTER COLUMN cover_image TYPE text")
+			_ = db.GormDB.Exec("ALTER TABLE blog_posts ALTER COLUMN excerpt TYPE text")
+			_ = db.GormDB.Exec("ALTER TABLE blog_posts ALTER COLUMN meta_description TYPE text")
+			_ = db.GormDB.Exec("ALTER TABLE blog_posts ALTER COLUMN og_image TYPE text")
+			_ = db.GormDB.Exec("ALTER TABLE blog_posts ALTER COLUMN canonical_url TYPE text")
+		}
+	})
+}
 
 // Helper for generating IDs
 func generateID(prefix string) string {
@@ -34,7 +50,27 @@ func HandleGetPosts(w http.ResponseWriter, r *http.Request) {
 		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
 	}
-	_ = db.GormDB.AutoMigrate(&models.BlogPost{})
+	ensureBlogSchema()
+
+	id := strings.TrimSpace(r.URL.Query().Get("id"))
+	slug := strings.TrimSpace(r.URL.Query().Get("slug"))
+	if id != "" || slug != "" {
+		var post models.BlogPost
+		query := db.GormDB.Preload("Author").Preload("Comments")
+		if id != "" {
+			query = query.Where("id = ?", id)
+		} else {
+			query = query.Where("slug = ?", slug)
+		}
+		if err := query.First(&post).Error; err != nil {
+			utils.JSONError(w, http.StatusNotFound, "Post not found")
+			return
+		}
+		singleList := loadTags([]models.BlogPost{post})
+		utils.JSONResponse(w, http.StatusOK, singleList[0])
+		return
+	}
+
 	var posts []models.BlogPost
 	if err := db.GormDB.Preload("Author").Preload("Comments").Order("created_at desc").Find(&posts).Error; err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to fetch posts")
@@ -50,6 +86,8 @@ func HandleUpdatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	ensureBlogSchema()
+
 	var input struct {
 		ID              string  `json:"id"`
 		Title           string  `json:"title"`
@@ -64,6 +102,8 @@ func HandleUpdatePost(w http.ResponseWriter, r *http.Request) {
 		MetaTitle       string  `json:"meta_title"`
 		MetaDescription string  `json:"meta_description"`
 		MetaKeywords    string  `json:"meta_keywords"`
+		CanonicalURL    string  `json:"canonical_url"`
+		OGImage         string  `json:"og_image"`
 		ViewCount       *int64  `json:"view_count"`
 	}
 
@@ -91,12 +131,19 @@ func HandleUpdatePost(w http.ResponseWriter, r *http.Request) {
 	post.MetaTitle = input.MetaTitle
 	post.MetaDescription = input.MetaDescription
 	post.MetaKeywords = input.MetaKeywords
+	post.CanonicalURL = input.CanonicalURL
+	post.OGImage = input.OGImage
 	if input.ViewCount != nil {
 		post.ViewCount = *input.ViewCount
 	}
 
+	if post.Status == "PUBLISHED" && post.PublishedAt == nil {
+		now := time.Now()
+		post.PublishedAt = &now
+	}
+
 	if err := db.GormDB.Save(&post).Error; err != nil {
-		utils.JSONError(w, http.StatusInternalServerError, "Failed to update post")
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to update post: "+err.Error())
 		return
 	}
 
@@ -111,6 +158,8 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	ensureBlogSchema()
+
 	var input struct {
 		Title           string  `json:"title"`
 		Slug            string  `json:"slug"`
@@ -124,6 +173,8 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 		MetaTitle       string  `json:"meta_title"`
 		MetaDescription string  `json:"meta_description"`
 		MetaKeywords    string  `json:"meta_keywords"`
+		CanonicalURL    string  `json:"canonical_url"`
+		OGImage         string  `json:"og_image"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -149,6 +200,8 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 		MetaTitle:       input.MetaTitle,
 		MetaDescription: input.MetaDescription,
 		MetaKeywords:    input.MetaKeywords,
+		CanonicalURL:    input.CanonicalURL,
+		OGImage:         input.OGImage,
 		ViewCount:       0,
 	}
 
@@ -158,7 +211,7 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := db.GormDB.Create(&post).Error; err != nil {
-		utils.JSONError(w, http.StatusInternalServerError, "Failed to create post")
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to create post: "+err.Error())
 		return
 	}
 
@@ -215,6 +268,29 @@ func HandleIncrementPostView(w http.ResponseWriter, r *http.Request) {
 		"view_count": post.ViewCount,
 		"message":    "View count incremented successfully",
 	})
+}
+
+func HandleDeletePost(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodDelete {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	id := strings.TrimSpace(r.URL.Query().Get("id"))
+	if id == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Post ID is required")
+		return
+	}
+
+	_ = db.GormDB.Exec("DELETE FROM blog_post_tags WHERE post_id = ?", id).Error
+	_ = db.GormDB.Exec("DELETE FROM blog_comments WHERE post_id = ?", id).Error
+
+	if err := db.GormDB.Where("id = ?", id).Delete(&models.BlogPost{}).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to delete post: "+err.Error())
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Post deleted successfully"})
 }
 
 // ----------------------------------------------------------------------------

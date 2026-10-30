@@ -1,15 +1,18 @@
 package utils
 
 import (
-	"os"
 	"bytes"
+	"crypto/tls"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"net/smtp"
+	"os"
 	"strings"
 	"time"
-
 )
 
 type EmailPayload struct {
@@ -21,10 +24,11 @@ type EmailPayload struct {
 	Text     string `json:"text"`
 }
 
-func SendEmail(to string, subject string, htmlBody string, textBody string, fromName string) error {
-	if fromName == "" {
-		fromName = "ResultsPRO"
-	}
+func toBase64(s string) string {
+	return base64.StdEncoding.EncodeToString([]byte(s))
+}
+
+func sendViaProxy(to, subject, htmlBody, textBody, fromName string) error {
 	payload := EmailPayload{
 		To:       to,
 		From:     "noreply@resultspro.ng",
@@ -36,36 +40,153 @@ func SendEmail(to string, subject string, htmlBody string, textBody string, from
 
 	jsonData, err := json.Marshal(payload)
 	if err != nil {
-		return fmt.Errorf("failed to marshal email payload: %v", err)
+		return fmt.Errorf("failed to marshal email payload: %w", err)
 	}
 
-	proxyURL := "https://mail.resultspro.ng/email_proxy/api/send-email.php"
+	proxyURL := os.Getenv("EMAIL_PROXY_URL")
+	if proxyURL == "" {
+		proxyURL = "https://mail.resultspro.ng/email_proxy/api/send-email.php"
+	}
+
 	req, err := http.NewRequest("POST", proxyURL, bytes.NewBuffer(jsonData))
 	if err != nil {
-		return fmt.Errorf("failed to create email request: %v", err)
+		return fmt.Errorf("failed to create email request: %w", err)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	// Use the API key extracted from the PHP config
 	apiKey := os.Getenv("EMAIL_API_KEY")
 	if apiKey == "" {
 		return fmt.Errorf("EMAIL_API_KEY environment variable is missing")
 	}
 	req.Header.Set("Authorization", "Bearer "+apiKey)
+	req.Header.Set("X-API-KEY", apiKey)
 
 	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Printf("Email proxy failed to %s: %v", to, err)
-		return err
+		return fmt.Errorf("proxy network request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
+	bodyBytes, _ := io.ReadAll(resp.Body)
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return fmt.Errorf("email proxy returned status %d", resp.StatusCode)
+		return fmt.Errorf("proxy returned status %d: %s", resp.StatusCode, string(bodyBytes))
 	}
-	
+
 	return nil
+}
+
+func sendDirectSMTP(to, subject, htmlBody, textBody, fromName string) error {
+	smtpHost := os.Getenv("SMTP_HOST")
+	if smtpHost == "" {
+		smtpHost = "smtp.hostinger.com"
+	}
+	smtpPort := os.Getenv("SMTP_PORT")
+	if smtpPort == "" {
+		smtpPort = "465"
+	}
+	smtpUser := os.Getenv("SMTP_USER")
+	if smtpUser == "" {
+		smtpUser = "noreply@resultspro.ng"
+	}
+	smtpPass := os.Getenv("SMTP_PASS")
+	if smtpPass == "" {
+		return fmt.Errorf("SMTP_PASS environment variable is missing")
+	}
+
+	from := smtpUser
+	addr := fmt.Sprintf("%s:%s", smtpHost, smtpPort)
+
+	boundary := fmt.Sprintf("bnd_%d", time.Now().UnixNano())
+	var msg bytes.Buffer
+	msg.WriteString(fmt.Sprintf("From: =?UTF-8?B?%s?= <%s>\r\n", toBase64(fromName), from))
+	msg.WriteString(fmt.Sprintf("To: %s\r\n", to))
+	msg.WriteString(fmt.Sprintf("Subject: =?UTF-8?B?%s?=\r\n", toBase64(subject)))
+	msg.WriteString("MIME-Version: 1.0\r\n")
+	msg.WriteString(fmt.Sprintf("Content-Type: multipart/alternative; boundary=\"%s\"\r\n\r\n", boundary))
+
+	if textBody != "" {
+		msg.WriteString(fmt.Sprintf("--%s\r\n", boundary))
+		msg.WriteString("Content-Type: text/plain; charset=\"UTF-8\"\r\n")
+		msg.WriteString("Content-Transfer-Encoding: base64\r\n\r\n")
+		msg.WriteString(toBase64(textBody) + "\r\n\r\n")
+	}
+
+	if htmlBody != "" {
+		msg.WriteString(fmt.Sprintf("--%s\r\n", boundary))
+		msg.WriteString("Content-Type: text/html; charset=\"UTF-8\"\r\n")
+		msg.WriteString("Content-Transfer-Encoding: base64\r\n\r\n")
+		msg.WriteString(toBase64(htmlBody) + "\r\n\r\n")
+	}
+	msg.WriteString(fmt.Sprintf("--%s--\r\n", boundary))
+
+	if smtpPort == "465" {
+		tlsConfig := &tls.Config{
+			ServerName: smtpHost,
+		}
+		conn, err := tls.Dial("tcp", addr, tlsConfig)
+		if err != nil {
+			return fmt.Errorf("failed to dial SMTP TLS at %s: %w", addr, err)
+		}
+		defer conn.Close()
+
+		c, err := smtp.NewClient(conn, smtpHost)
+		if err != nil {
+			return fmt.Errorf("failed to create SMTP client: %w", err)
+		}
+		defer c.Close()
+
+		auth := smtp.PlainAuth("", smtpUser, smtpPass, smtpHost)
+		if err = c.Auth(auth); err != nil {
+			return fmt.Errorf("SMTP auth failed: %w", err)
+		}
+
+		if err = c.Mail(from); err != nil {
+			return fmt.Errorf("SMTP MAIL command failed: %w", err)
+		}
+		if err = c.Rcpt(to); err != nil {
+			return fmt.Errorf("SMTP RCPT command failed: %w", err)
+		}
+
+		w, err := c.Data()
+		if err != nil {
+			return fmt.Errorf("SMTP DATA command failed: %w", err)
+		}
+		if _, err = w.Write(msg.Bytes()); err != nil {
+			return fmt.Errorf("SMTP write failed: %w", err)
+		}
+		if err = w.Close(); err != nil {
+			return fmt.Errorf("SMTP close data failed: %w", err)
+		}
+		return c.Quit()
+	}
+
+	auth := smtp.PlainAuth("", smtpUser, smtpPass, smtpHost)
+	return smtp.SendMail(addr, auth, from, []string{to}, msg.Bytes())
+}
+
+func SendEmail(to string, subject string, htmlBody string, textBody string, fromName string) error {
+	if fromName == "" {
+		fromName = "ResultsPRO"
+	}
+
+	// 1. First try the PHP HTTP mail proxy
+	proxyErr := sendViaProxy(to, subject, htmlBody, textBody, fromName)
+	if proxyErr == nil {
+		log.Printf("[Email] Successfully sent email to %s via proxy", to)
+		return nil
+	}
+	log.Printf("[Email] Proxy delivery failed to %s: %v. Attempting direct SMTP fallback...", to, proxyErr)
+
+	// 2. Direct SMTP fallback using Hostinger credentials
+	smtpErr := sendDirectSMTP(to, subject, htmlBody, textBody, fromName)
+	if smtpErr == nil {
+		log.Printf("[Email] Successfully sent email to %s via direct SMTP fallback", to)
+		return nil
+	}
+	log.Printf("[Email] Direct SMTP delivery also failed to %s: %v", to, smtpErr)
+
+	return fmt.Errorf("all email delivery methods failed: proxy: %v, smtp: %v", proxyErr, smtpErr)
 }
 
 func SendVerificationEmail(to string, otp string, tenantName string, tenantLogo string) error {

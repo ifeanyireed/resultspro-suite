@@ -17,10 +17,16 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
 
   React.useEffect(() => {
     let cohortId = Cookies.get('selected_cohort_id');
-    if (cohortId && tenant?.slug) {
+    if (cohortId && (tenant?.id || tenant?.slug)) {
       cohortId = cohortId.replace(/['"]+/g, '');
       const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
-      axios.get(`${COURSES_API}/api/public/cohorts/${cohortId}?tenant_id=${tenant.slug}`)
+      const tenantParam = tenant?.id || tenant?.slug;
+      axios.get(`${COURSES_API}/api/public/cohorts/${cohortId}?tenant_id=${tenantParam}`, {
+        headers: {
+          'X-Tenant-Domain': tenant?.slug || '',
+          'X-Tenant-ID': tenant?.id || ''
+        }
+      })
         .then(res => {
           if (res.data?.cohort) setCohort(res.data.cohort);
         })

@@ -16,9 +16,6 @@ export default function SignupForm({ tenant }: { tenant: any }) {
   const setAuth = useAuthStore((state) => state.setAuth);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [showOTP, setShowOTP] = useState(false);
-  const [otp, setOtp] = useState('');
-  const [verificationLoading, setVerificationLoading] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,6 +43,7 @@ export default function SignupForm({ tenant }: { tenant: any }) {
         email,
         password,
         full_name: name,
+        tenant_id: tenant?.id,
         tenant_slug: tenant?.slug,
         app_module: 'coursespro'
       });
@@ -60,7 +58,11 @@ export default function SignupForm({ tenant }: { tenant: any }) {
           router.push('/dashboard');
         }
       } else {
-        setShowOTP(true);
+        try {
+          sessionStorage.setItem('auth_temp_email', email);
+          sessionStorage.setItem('auth_temp_pass', password);
+        } catch (e) {}
+        router.push(`/verify-email?email=${encodeURIComponent(email)}`);
       }
     } catch (err: any) {
       setError(err.response?.data?.error || err.response?.data?.message || err.message || 'Signup failed');
@@ -138,96 +140,14 @@ export default function SignupForm({ tenant }: { tenant: any }) {
         </div>
 
         <div className="w-full max-w-md">
-          {showOTP ? (
-            <div className="w-full mx-auto">
-              <div className="text-center mb-10">
-                <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Mail className="w-8 h-8" />
-                </div>
-                <h2 className="text-3xl font-bold text-slate-900 mb-2 tracking-tight">Verify Your Email</h2>
-                <p className="text-slate-500 text-sm">
-                  We've sent a 6-digit verification code to <span className="font-semibold text-slate-700">{email}</span>.
-                </p>
-              </div>
-              
-              {error && <div className="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg">{error}</div>}
-              
-              <form onSubmit={async (e) => {
-                e.preventDefault();
-                setVerificationLoading(true);
-                setError('');
-                try {
-                  const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-                  await axios.post(`${USERS_API}/api/v1/auth/verify-email`, { token: otp });
-                  
-                  // Auto-login after verification
-                  try {
-                    const loginRes = await axios.post(`${USERS_API}/api/v1/auth/login`, {
-                      email,
-                      password,
-                      tenant_slug: tenant?.slug,
-                      app_module: 'coursespro'
-                    });
-                    const token = loginRes.data.access_token || loginRes.data.token;
-                    if (token) {
-                      setAuth(loginRes.data.user, token);
-                      const selectedCohortId = Cookies.get('selected_cohort_id');
-                      if (selectedCohortId) {
-                        router.push('/onboarding/orientation');
-                      } else {
-                        router.push('/dashboard');
-                      }
-                    } else {
-                      router.push('/login');
-                    }
-                  } catch (loginErr) {
-                    // Fallback if login fails
-                    router.push('/login');
-                  }
-                } catch (err: any) {
-                  setError(err.response?.data?.error || err.response?.data?.message || "Invalid OTP");
-                } finally {
-                  setVerificationLoading(false);
-                }
-              }} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Verification Code</label>
-                  <input 
-                    type="text" 
-                    value={otp} 
-                    onChange={(e) => setOtp(e.target.value)} 
-                    placeholder="000000"
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-center tracking-widest text-xl"
-                    maxLength={6}
-                    required
-                  />
-                </div>
+          <div className="mb-10 text-center lg:text-left">
+            <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Create Account</h2>
+            <p className="text-slate-500 font-medium">Enter your details to create an account and access the hub.</p>
+          </div>
 
-                <button
-                  type="submit"
-                  disabled={verificationLoading || otp.length < 5}
-                  className="w-full flex justify-center items-center py-3.5 px-4 rounded-xl shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed group"
-                >
-                  {verificationLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    <>
-                      Verify Email <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </>
-                  )}
-                </button>
-              </form>
-            </div>
-          ) : (
-            <>
-              <div className="mb-10 text-center lg:text-left">
-                <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Create Account</h2>
-                <p className="text-slate-500 font-medium">Enter your details to create an account and access the hub.</p>
-              </div>
+          {error && <div className="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg">{error}</div>}
 
-              {error && <div className="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg">{error}</div>}
-
-              <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-6">
                 <div className="space-y-1.5">
                   <label className="block text-sm font-semibold text-slate-700">Full Name</label>
                   <div className="relative">
@@ -317,8 +237,6 @@ export default function SignupForm({ tenant }: { tenant: any }) {
                   <a href="https://www.resultspro.ng/terms" className="text-slate-600 hover:underline">Terms of Service</a>.
                 </p>
               </div>
-            </>
-          )}
         </div>
       </div>
     </div>
