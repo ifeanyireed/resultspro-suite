@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"net/smtp"
 	"os"
@@ -79,22 +80,29 @@ func sendViaProxy(to, subject, htmlBody, textBody, fromName string) error {
 func sendDirectSMTP(to, subject, htmlBody, textBody, fromName string) error {
 	smtpHost := os.Getenv("SMTP_HOST")
 	if smtpHost == "" {
-		smtpHost = "smtp.hostinger.com"
+		smtpHost = "smtp-relay.brevo.com"
 	}
 	smtpPort := os.Getenv("SMTP_PORT")
 	if smtpPort == "" {
-		smtpPort = "465"
+		smtpPort = "587"
 	}
 	smtpUser := os.Getenv("SMTP_USER")
 	if smtpUser == "" {
-		smtpUser = "noreply@resultspro.ng"
+		smtpUser = "c0b9c6001@smtp-brevo.com"
 	}
 	smtpPass := os.Getenv("SMTP_PASS")
 	if smtpPass == "" {
 		return fmt.Errorf("SMTP_PASS environment variable is missing")
 	}
 
-	from := smtpUser
+	from := os.Getenv("SMTP_FROM")
+	if from == "" {
+		if strings.Contains(smtpUser, "@smtp-brevo.com") {
+			from = "noreply@resultspro.ng"
+		} else {
+			from = smtpUser
+		}
+	}
 	addr := fmt.Sprintf("%s:%s", smtpHost, smtpPort)
 
 	boundary := fmt.Sprintf("bnd_%d", time.Now().UnixNano())
@@ -121,10 +129,10 @@ func sendDirectSMTP(to, subject, htmlBody, textBody, fromName string) error {
 	msg.WriteString(fmt.Sprintf("--%s--\r\n", boundary))
 
 	if smtpPort == "465" {
-		tlsConfig := &tls.Config{
+		dialer := &net.Dialer{Timeout: 25 * time.Second}
+		conn, err := tls.DialWithDialer(dialer, "tcp", addr, &tls.Config{
 			ServerName: smtpHost,
-		}
-		conn, err := tls.Dial("tcp", addr, tlsConfig)
+		})
 		if err != nil {
 			return fmt.Errorf("failed to dial SMTP TLS at %s: %w", addr, err)
 		}
@@ -161,8 +169,49 @@ func sendDirectSMTP(to, subject, htmlBody, textBody, fromName string) error {
 		return c.Quit()
 	}
 
+	// Port 587 or standard SMTP with STARTTLS support
+	conn, err := net.DialTimeout("tcp", addr, 25*time.Second)
+	if err != nil {
+		return fmt.Errorf("failed to connect to SMTP at %s: %w", addr, err)
+	}
+	defer conn.Close()
+
+	c, err := smtp.NewClient(conn, smtpHost)
+	if err != nil {
+		return fmt.Errorf("failed to create SMTP client: %w", err)
+	}
+	defer c.Close()
+
+	if ok, _ := c.Extension("STARTTLS"); ok {
+		tlsConfig := &tls.Config{ServerName: smtpHost}
+		if err = c.StartTLS(tlsConfig); err != nil {
+			return fmt.Errorf("SMTP STARTTLS failed: %w", err)
+		}
+	}
+
 	auth := smtp.PlainAuth("", smtpUser, smtpPass, smtpHost)
-	return smtp.SendMail(addr, auth, from, []string{to}, msg.Bytes())
+	if err = c.Auth(auth); err != nil {
+		return fmt.Errorf("SMTP auth failed: %w", err)
+	}
+
+	if err = c.Mail(from); err != nil {
+		return fmt.Errorf("SMTP MAIL command failed: %w", err)
+	}
+	if err = c.Rcpt(to); err != nil {
+		return fmt.Errorf("SMTP RCPT command failed: %w", err)
+	}
+
+	w, err := c.Data()
+	if err != nil {
+		return fmt.Errorf("SMTP DATA command failed: %w", err)
+	}
+	if _, err = w.Write(msg.Bytes()); err != nil {
+		return fmt.Errorf("SMTP write failed: %w", err)
+	}
+	if err = w.Close(); err != nil {
+		return fmt.Errorf("SMTP close data failed: %w", err)
+	}
+	return c.Quit()
 }
 
 func SendEmail(to string, subject string, htmlBody string, textBody string, fromName string) error {
@@ -170,23 +219,23 @@ func SendEmail(to string, subject string, htmlBody string, textBody string, from
 		fromName = "ResultsPRO"
 	}
 
-	// 1. First try the PHP HTTP mail proxy
-	proxyErr := sendViaProxy(to, subject, htmlBody, textBody, fromName)
-	if proxyErr == nil {
-		log.Printf("[Email] Successfully sent email to %s via proxy", to)
-		return nil
-	}
-	log.Printf("[Email] Proxy delivery failed to %s: %v. Attempting direct SMTP fallback...", to, proxyErr)
-
-	// 2. Direct SMTP fallback using Hostinger credentials
+	// 1. Primary: Direct SMTP (Brevo)
 	smtpErr := sendDirectSMTP(to, subject, htmlBody, textBody, fromName)
 	if smtpErr == nil {
-		log.Printf("[Email] Successfully sent email to %s via direct SMTP fallback", to)
+		log.Printf("[Email] Successfully sent email to %s via SMTP", to)
 		return nil
 	}
-	log.Printf("[Email] Direct SMTP delivery also failed to %s: %v", to, smtpErr)
+	log.Printf("[Email] Primary SMTP failed to %s: %v. Attempting proxy fallback...", to, smtpErr)
 
-	return fmt.Errorf("all email delivery methods failed: proxy: %v, smtp: %v", proxyErr, smtpErr)
+	// 2. Secondary fallback: PHP HTTP mail proxy
+	proxyErr := sendViaProxy(to, subject, htmlBody, textBody, fromName)
+	if proxyErr == nil {
+		log.Printf("[Email] Successfully sent email to %s via proxy fallback", to)
+		return nil
+	}
+	log.Printf("[Email] Proxy delivery also failed to %s: %v", to, proxyErr)
+
+	return fmt.Errorf("all email delivery methods failed: smtp: %v, proxy: %v", smtpErr, proxyErr)
 }
 
 func SendVerificationEmail(to string, otp string, tenantName string, tenantLogo string) error {
