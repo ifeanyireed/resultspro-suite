@@ -232,16 +232,6 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		// Fallback to user's registered tenant role if not provided in the request payload
-		if tenantName == "" {
-			_ = db.DB.QueryRow(`
-				SELECT t.name, COALESCE(t.logo_url, '') 
-				FROM user_tenant_roles utr 
-				JOIN tenants t ON utr.tenant_id = t.id 
-				WHERE utr.user_id = ? 
-				ORDER BY utr.created_at DESC LIMIT 1`, user.ID).Scan(&tenantName, &tenantLogo)
-		}
-
 		otp := utils.GenerateOTP()
 		expiresAt := time.Now().Add(time.Hour * 24)
 		_, err = db.DB.Exec("INSERT INTO verification_tokens (id, user_id, token_hash, type, expires_at) VALUES (?, ?, ?, 'email_verify', ?)",
