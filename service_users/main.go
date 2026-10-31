@@ -80,6 +80,8 @@ func main() {
 	mux.HandleFunc("/api/v1/auth/introspect", handlers.HandleIntrospect)
 
 	// Account Management
+	mux.HandleFunc("/auth/test-email", handlers.HandleTestEmail)
+	mux.HandleFunc("/api/v1/auth/test-email", handlers.HandleTestEmail)
 	mux.HandleFunc("/auth/verify-email", handlers.HandleVerifyEmail)
 	mux.HandleFunc("/auth/resend-verification", handlers.HandleResendVerification)
 	mux.HandleFunc("/api/v1/auth/resend-verification", handlers.HandleResendVerification)

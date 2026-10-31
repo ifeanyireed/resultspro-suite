@@ -768,3 +768,65 @@ func HandleResendVerification(w http.ResponseWriter, r *http.Request) {
 		"message": "Verification code resent successfully.",
 	})
 }
+
+// HandleTestEmail synchronously tests sending an email and returns the delivery result and diagnostics
+func HandleTestEmail(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost && r.Method != http.MethodGet {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	target := strings.TrimSpace(r.URL.Query().Get("to"))
+	if r.Method == http.MethodPost && target == "" {
+		var input struct {
+			To string `json:"to"`
+		}
+		_ = json.NewDecoder(r.Body).Decode(&input)
+		target = strings.TrimSpace(input.To)
+	}
+
+	if target == "" {
+		target = "ifeanyireed@gmail.com"
+	}
+
+	otp := utils.GenerateOTP()
+	log.Printf("[TestEmail] Synchronously testing email dispatch to %s with OTP %s...", target, otp)
+
+	smtpHost := os.Getenv("SMTP_HOST")
+	smtpPort := os.Getenv("SMTP_PORT")
+	smtpUser := os.Getenv("SMTP_USER")
+	hasPass := os.Getenv("SMTP_PASS") != ""
+	smtpFrom := os.Getenv("SMTP_FROM")
+
+	err := utils.SendVerificationEmail(target, otp, "ResultsPRO", "https://resultspro.ng/logo.png")
+	if err != nil {
+		log.Printf("[TestEmail] Failed to send email to %s: %v", target, err)
+		utils.JSONResponse(w, http.StatusInternalServerError, map[string]interface{}{
+			"success": false,
+			"error":   err.Error(),
+			"diagnostics": map[string]interface{}{
+				"smtp_host":            smtpHost,
+				"smtp_port":            smtpPort,
+				"smtp_user":            smtpUser,
+				"smtp_pass_configured": hasPass,
+				"smtp_from":            smtpFrom,
+			},
+		})
+		return
+	}
+
+	log.Printf("[TestEmail] Successfully sent email to %s", target)
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"success": true,
+		"message": "Email sent successfully via SMTP relay",
+		"to":      target,
+		"otp":     otp,
+		"diagnostics": map[string]interface{}{
+			"smtp_host":            smtpHost,
+			"smtp_port":            smtpPort,
+			"smtp_user":            smtpUser,
+			"smtp_pass_configured": hasPass,
+			"smtp_from":            smtpFrom,
+		},
+	})
+}
