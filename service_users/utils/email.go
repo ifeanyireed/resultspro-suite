@@ -279,7 +279,12 @@ func SendVerificationEmail(to string, otp string, tenantName string, tenantLogo 
 		brandName = tenantName
 	}
 	if tenantLogo != "" {
-		brandLogo = tenantLogo
+		brandLogo = strings.TrimSpace(tenantLogo)
+		if strings.HasSuffix(brandLogo, ".avif") {
+			brandLogo = strings.TrimSuffix(brandLogo, ".avif") + ".png"
+		} else if strings.HasSuffix(brandLogo, ".webp") {
+			brandLogo = strings.TrimSuffix(brandLogo, ".webp") + ".png"
+		}
 	}
 
 	subject := otp + " is your " + brandName + " verification code"
