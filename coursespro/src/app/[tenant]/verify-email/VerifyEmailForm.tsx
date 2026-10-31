@@ -169,7 +169,9 @@ function VerifyEmailContent({ tenant }: { tenant: any }) {
       const res = await axios.post(`${USERS_API}/api/v1/auth/resend-verification`, {
         email: email.trim(),
         tenant_id: tenant?.id,
-        tenant_slug: resolvedTenantSlug
+        tenant_slug: resolvedTenantSlug,
+        tenant_name: tenant?.name,
+        tenant_logo: tenant?.logo_url || tenant?.dark_logo_url
       });
 
       if (res.data?.already_verified) {

@@ -35,6 +35,8 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		ReferralCode string `json:"referral_code"` // Added referral_code
 		TenantSlug   string `json:"tenant_slug"`
 		TenantID     string `json:"tenant_id"`
+		TenantName   string `json:"tenant_name,omitempty"`
+		TenantLogo   string `json:"tenant_logo,omitempty"`
 		AppModule    string `json:"app_module"`
 	}
 
@@ -128,13 +130,36 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var tenantName, tenantLogo string
+	if input.TenantName != "" {
+		tenantName = input.TenantName
+	}
+	if input.TenantLogo != "" {
+		tenantLogo = input.TenantLogo
+	}
+
 	// Assign tenant role if requested
 	if input.TenantSlug != "" || input.TenantID != "" {
 		tenantID := input.TenantID
 		if tenantID == "" && input.TenantSlug != "" {
-			db.DB.QueryRow("SELECT id, name, COALESCE(logo_url, '') FROM tenants WHERE slug = ? OR custom_domain = ? OR default_subdomain = ?", input.TenantSlug, input.TenantSlug, input.TenantSlug).Scan(&tenantID, &tenantName, &tenantLogo)
+			var fetchedName, fetchedLogo string
+			if err := db.DB.QueryRow("SELECT id, name, COALESCE(logo_url, COALESCE(dark_logo_url, '')) FROM tenants WHERE slug = ? OR custom_domain = ? OR default_subdomain = ?", input.TenantSlug, input.TenantSlug, input.TenantSlug).Scan(&tenantID, &fetchedName, &fetchedLogo); err == nil {
+				if tenantName == "" {
+					tenantName = fetchedName
+				}
+				if tenantLogo == "" {
+					tenantLogo = fetchedLogo
+				}
+			}
 		} else if tenantID != "" {
-			db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE id = ?", tenantID).Scan(&tenantName, &tenantLogo)
+			var fetchedName, fetchedLogo string
+			if err := db.DB.QueryRow("SELECT name, COALESCE(logo_url, COALESCE(dark_logo_url, '')) FROM tenants WHERE id = ?", tenantID).Scan(&fetchedName, &fetchedLogo); err == nil {
+				if tenantName == "" {
+					tenantName = fetchedName
+				}
+				if tenantLogo == "" {
+					tenantLogo = fetchedLogo
+				}
+			}
 		}
 
 		if tenantID != "" {
@@ -187,6 +212,8 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		Password   string `json:"password"`
 		TenantID   string `json:"tenant_id,omitempty"`
 		TenantSlug string `json:"tenant_slug,omitempty"`
+		TenantName string `json:"tenant_name,omitempty"`
+		TenantLogo string `json:"tenant_logo,omitempty"`
 		AppID      string `json:"app_id,omitempty"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -223,12 +250,54 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	if user.AccountStatus == "unverified" {
 		var tenantName, tenantLogo string
-		if input.TenantSlug != "" || input.TenantID != "" {
+		if input.TenantName != "" {
+			tenantName = input.TenantName
+		}
+		if input.TenantLogo != "" {
+			tenantLogo = input.TenantLogo
+		}
+
+		if (tenantName == "" || tenantLogo == "") && (input.TenantSlug != "" || input.TenantID != "") {
 			tenantID := input.TenantID
 			if tenantID == "" && input.TenantSlug != "" {
-				db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE slug = ? OR custom_domain = ? OR default_subdomain = ?", input.TenantSlug, input.TenantSlug, input.TenantSlug).Scan(&tenantName, &tenantLogo)
+				var fetchedName, fetchedLogo string
+				if err := db.DB.QueryRow("SELECT name, COALESCE(logo_url, COALESCE(dark_logo_url, '')) FROM tenants WHERE slug = ? OR custom_domain = ? OR default_subdomain = ?", input.TenantSlug, input.TenantSlug, input.TenantSlug).Scan(&fetchedName, &fetchedLogo); err == nil {
+					if tenantName == "" {
+						tenantName = fetchedName
+					}
+					if tenantLogo == "" {
+						tenantLogo = fetchedLogo
+					}
+				}
 			} else if tenantID != "" {
-				db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE id = ?", tenantID).Scan(&tenantName, &tenantLogo)
+				var fetchedName, fetchedLogo string
+				if err := db.DB.QueryRow("SELECT name, COALESCE(logo_url, COALESCE(dark_logo_url, '')) FROM tenants WHERE id = ?", tenantID).Scan(&fetchedName, &fetchedLogo); err == nil {
+					if tenantName == "" {
+						tenantName = fetchedName
+					}
+					if tenantLogo == "" {
+						tenantLogo = fetchedLogo
+					}
+				}
+			}
+		}
+
+		// Fallback to user's registered tenant role if not provided or missing
+		if tenantName == "" || tenantLogo == "" {
+			var fbName, fbLogo string
+			err := db.DB.QueryRow(`
+				SELECT t.name, COALESCE(t.logo_url, COALESCE(t.dark_logo_url, '')) 
+				FROM user_tenant_roles utr 
+				JOIN tenants t ON utr.tenant_id = t.id 
+				WHERE utr.user_id = ? 
+				ORDER BY utr.created_at DESC LIMIT 1`, user.ID).Scan(&fbName, &fbLogo)
+			if err == nil {
+				if tenantName == "" {
+					tenantName = fbName
+				}
+				if tenantLogo == "" {
+					tenantLogo = fbLogo
+				}
 			}
 		}
 
@@ -696,6 +765,8 @@ func HandleResendVerification(w http.ResponseWriter, r *http.Request) {
 		Email      string `json:"email"`
 		TenantSlug string `json:"tenant_slug,omitempty"`
 		TenantID   string `json:"tenant_id,omitempty"`
+		TenantName string `json:"tenant_name,omitempty"`
+		TenantLogo string `json:"tenant_logo,omitempty"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		utils.JSONError(w, http.StatusBadRequest, "Invalid request payload")
@@ -749,23 +820,55 @@ func HandleResendVerification(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var tenantName, tenantLogo string
-	if input.TenantSlug != "" || input.TenantID != "" {
+	if input.TenantName != "" {
+		tenantName = input.TenantName
+	}
+	if input.TenantLogo != "" {
+		tenantLogo = input.TenantLogo
+	}
+
+	if (tenantName == "" || tenantLogo == "") && (input.TenantSlug != "" || input.TenantID != "") {
 		tenantID := input.TenantID
 		if tenantID == "" && input.TenantSlug != "" {
-			db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE slug = ? OR custom_domain = ? OR default_subdomain = ?", input.TenantSlug, input.TenantSlug, input.TenantSlug).Scan(&tenantName, &tenantLogo)
+			var fetchedName, fetchedLogo string
+			if err := db.DB.QueryRow("SELECT name, COALESCE(logo_url, COALESCE(dark_logo_url, '')) FROM tenants WHERE slug = ? OR custom_domain = ? OR default_subdomain = ?", input.TenantSlug, input.TenantSlug, input.TenantSlug).Scan(&fetchedName, &fetchedLogo); err == nil {
+				if tenantName == "" {
+					tenantName = fetchedName
+				}
+				if tenantLogo == "" {
+					tenantLogo = fetchedLogo
+				}
+			}
 		} else if tenantID != "" {
-			db.DB.QueryRow("SELECT name, COALESCE(logo_url, '') FROM tenants WHERE id = ?", tenantID).Scan(&tenantName, &tenantLogo)
+			var fetchedName, fetchedLogo string
+			if err := db.DB.QueryRow("SELECT name, COALESCE(logo_url, COALESCE(dark_logo_url, '')) FROM tenants WHERE id = ?", tenantID).Scan(&fetchedName, &fetchedLogo); err == nil {
+				if tenantName == "" {
+					tenantName = fetchedName
+				}
+				if tenantLogo == "" {
+					tenantLogo = fetchedLogo
+				}
+			}
 		}
 	}
 
-	// Fallback to user's registered tenant role if not provided in the request payload
-	if tenantName == "" {
-		_ = db.DB.QueryRow(`
-			SELECT t.name, COALESCE(t.logo_url, '') 
+	// Fallback to user's registered tenant role if not provided in the request payload or missing logo
+	if tenantName == "" || tenantLogo == "" {
+		var fbName, fbLogo string
+		err := db.DB.QueryRow(`
+			SELECT t.name, COALESCE(t.logo_url, COALESCE(t.dark_logo_url, '')) 
 			FROM user_tenant_roles utr 
 			JOIN tenants t ON utr.tenant_id = t.id 
 			WHERE utr.user_id = ? 
-			ORDER BY utr.created_at DESC LIMIT 1`, user.ID).Scan(&tenantName, &tenantLogo)
+			ORDER BY utr.created_at DESC LIMIT 1`, user.ID).Scan(&fbName, &fbLogo)
+		if err == nil {
+			if tenantName == "" {
+				tenantName = fbName
+			}
+			if tenantLogo == "" {
+				tenantLogo = fbLogo
+			}
+		}
 	}
 
 	if err := utils.SendVerificationEmail(email, otp, tenantName, tenantLogo); err != nil {
