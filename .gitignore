@@ -94,3 +94,8 @@ config-update.php
 send-email-update.php
 test_email.go
 
+# Agent Intel & Documentation
+AGENT.md
+.agents/AGENT.md
+
+
