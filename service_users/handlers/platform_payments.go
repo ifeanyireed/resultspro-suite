@@ -231,7 +231,7 @@ func HandlePlatformPaystackWebhook(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status":"received"}`))
 }
 
-func dispatchToCoursesPro(userID, cohortID, status, authCode, planType string) {
+func dispatchToCoursesPro(userID, cohortID, status, authCode, planType string) error {
 	coursesURL := os.Getenv("COURSES_SERVICE_URL")
 	if coursesURL == "" {
 		coursesURL = "https://resultspro-service-coursespro.onrender.com"
@@ -241,29 +241,45 @@ func dispatchToCoursesPro(userID, cohortID, status, authCode, planType string) {
 	}
 
 	payload, _ := json.Marshal(map[string]string{
-		"user_id":   userID,
-		"cohort_id": cohortID,
-		"status":    status,
+		"user_id":            userID,
+		"cohort_id":          cohortID,
+		"status":             status,
 		"authorization_code": authCode,
-		"plan_type": planType,
+		"plan_type":          planType,
 	})
 
-	req, _ := http.NewRequest("POST", coursesURL+"/api/internal/enrollments/payment-callback", bytes.NewBuffer(payload))
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("X-Internal-Secret", "super_secret_internal_key_42")
+	client := &http.Client{Timeout: 35 * time.Second}
 
-	client := &http.Client{Timeout: 10 * time.Second}
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Printf("[Webhook Error] Failed to dispatch to courses service (%s): %v", coursesURL, err)
-		return
-	}
-	defer resp.Body.Close()
+	var lastErr error
+	for attempt := 1; attempt <= 3; attempt++ {
+		req, err := http.NewRequest("POST", coursesURL+"/api/internal/enrollments/payment-callback", bytes.NewBuffer(payload))
+		if err != nil {
+			return err
+		}
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("X-Internal-Secret", "super_secret_internal_key_42")
 
-	if resp.StatusCode >= 400 {
-		bodyBytes, _ := io.ReadAll(resp.Body)
-		log.Printf("[Webhook Error] Courses service returned status %d: %s", resp.StatusCode, string(bodyBytes))
-	} else {
+		resp, err := client.Do(req)
+		if err != nil {
+			lastErr = err
+			log.Printf("[Webhook Attempt %d Error] Failed to dispatch to courses service (%s): %v", attempt, coursesURL, err)
+			time.Sleep(1 * time.Second)
+			continue
+		}
+
+		if resp.StatusCode >= 400 {
+			bodyBytes, _ := io.ReadAll(resp.Body)
+			resp.Body.Close()
+			lastErr = fmt.Errorf("status %d: %s", resp.StatusCode, string(bodyBytes))
+			log.Printf("[Webhook Attempt %d Error] Courses service returned status %d: %s", attempt, resp.StatusCode, string(bodyBytes))
+			time.Sleep(1 * time.Second)
+			continue
+		}
+		resp.Body.Close()
+
 		log.Printf("[Webhook Success] Dispatched payment success to courses service for User %s, Cohort %s", userID, cohortID)
+		return nil
 	}
+
+	return lastErr
 }

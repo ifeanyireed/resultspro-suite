@@ -33,7 +33,7 @@ export default function WorkspacePage() {
     if (reference && token) {
       setVerifying(true);
       const tenantSlug = params?.tenant as string;
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "http://localhost:5001";
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "https://resultspro-service-users.onrender.com";
       
       fetch(`${USERS_API}/api/v1/payments/verify`, {
         method: 'POST',

@@ -86,15 +86,16 @@ export default function PlanSelectionPage() {
   }
 
   const basePrice = Number(cohort.price);
+  const isFree = basePrice <= 0;
   const durationWeeks = Number(cohort.duration_weeks) || 12;
   const divisor = Math.max(1, Math.floor(durationWeeks / 4));
   
   // The 'discount amount' from settings is now treated as an installment markup
-  const markup = enableUpfrontDiscount ? upfrontDiscountAmount : 0;
+  const markup = !isFree && enableUpfrontDiscount ? upfrontDiscountAmount : 0;
   
   const officialPrice = basePrice + markup;
   const upfrontPrice = basePrice;
-  const monthlyCost = Math.round(officialPrice / divisor);
+  const monthlyCost = isFree ? 0 : Math.round(officialPrice / divisor);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-NG', { style: 'currency', currency: cohort.currency || 'NGN', minimumFractionDigits: 0 }).format(amount);

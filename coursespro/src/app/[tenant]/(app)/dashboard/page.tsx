@@ -14,17 +14,22 @@ import {
   CodeBracketSquareIcon
 } from '@heroicons/react/24/outline';
 import { FireIcon as FireSolid, StarIcon } from '@heroicons/react/24/solid';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useEffect, useState } from 'react';
 import { coursesApi } from '@/lib/api';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 
 export default function LearnerDashboard() {
-const router = useRouter();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = useParams();
+  const queryClient = useQueryClient();
   const { user, token } = useAuthStore();
   const [mounted, setMounted] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -34,6 +39,38 @@ const router = useRouter();
       router.push('/login');
     }
   }, [user, router, mounted]);
+
+  // Payment Verification on Dashboard landing (Paystack or Free enrollment redirect)
+  useEffect(() => {
+    const reference = searchParams.get('reference') || searchParams.get('trxref');
+    if (reference && token) {
+      setVerifying(true);
+      const tenantSlug = (params?.tenant as string) || (typeof window !== 'undefined' ? window.location.hostname : '');
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "https://resultspro-service-users.onrender.com";
+      
+      fetch(`${USERS_API}/api/v1/payments/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Tenant-Domain': tenantSlug,
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ reference })
+      })
+      .then(res => res.json())
+      .then(data => {
+        Cookies.remove('selected_cohort_id');
+        queryClient.invalidateQueries({ queryKey: ['student-dashboard-summary', user?.id] });
+      })
+      .catch(err => console.error("Payment verify error:", err))
+      .finally(() => {
+        setVerifying(false);
+        if (typeof window !== 'undefined') {
+          window.history.replaceState(null, '', window.location.pathname);
+        }
+      });
+    }
+  }, [searchParams, token, user?.id, params?.tenant, queryClient]);
 
   const { data: dashboardData, isLoading: loading, error } = useQuery({
     queryKey: ['student-dashboard-summary', user?.id],
@@ -45,6 +82,8 @@ const router = useRouter();
   });
 
   useEffect(() => {
+    if (verifying) return; // Do not redirect while verifying payment callback
+
     if (dashboardData && dashboardData.has_enrollment === false) {
       if (token) {
         try {
@@ -71,11 +110,12 @@ const router = useRouter();
     } else if (dashboardData && dashboardData.has_enrollment === true) {
       Cookies.remove('selected_cohort_id');
     }
-  }, [dashboardData, router, token]);
+  }, [dashboardData, router, token, verifying]);
 
-  if (!mounted || !user || loading || !dashboardData || dashboardData.has_enrollment === false) return (
-    <div className="flex justify-center items-center h-64">
+  if (!mounted || !user || loading || verifying || !dashboardData || dashboardData.has_enrollment === false) return (
+    <div className="flex flex-col justify-center items-center h-64 gap-3">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        {verifying && <p className="text-sm font-medium text-slate-500">Confirming your enrollment...</p>}
     </div>
   );
 

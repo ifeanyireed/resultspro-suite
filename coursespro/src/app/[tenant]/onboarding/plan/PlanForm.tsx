@@ -89,15 +89,16 @@ export default function PlanForm({ tenant }: { tenant: any }) {
   }
 
   const basePrice = Number(cohort.price);
+  const isFree = basePrice <= 0;
   const durationWeeks = Number(cohort.duration_weeks) || 12;
   const divisor = Math.max(1, Math.floor(durationWeeks / 4));
   
-  // The 'discount amount' from settings is now treated as an installment markup
-  const markup = enableUpfrontDiscount ? upfrontDiscountAmount : 0;
+  // The 'discount amount' from settings is now treated as an installment markup (disabled for free cohorts)
+  const markup = !isFree && enableUpfrontDiscount ? upfrontDiscountAmount : 0;
   
   const officialPrice = basePrice + markup;
   const upfrontPrice = basePrice;
-  const monthlyCost = Math.round(officialPrice / divisor);
+  const monthlyCost = isFree ? 0 : Math.round(officialPrice / divisor);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-NG', { style: 'currency', currency: cohort.currency || 'NGN', minimumFractionDigits: 0 }).format(amount);
@@ -106,13 +107,15 @@ export default function PlanForm({ tenant }: { tenant: any }) {
   const handlePayment = async () => {
     setIsLoading(true);
     try {
-      const cohortId = Cookies.get('selected_cohort_id');
+      const cohortId = Cookies.get('selected_cohort_id') || cohort?.id;
       if (!cohortId) {
         router.push('/dashboard');
         return;
       }
       const token = Cookies.get('token');
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "https://resultspro-service-users.onrender.com";
+      const dashboardTarget = window.location.origin + (window.location.pathname.startsWith(`/${tenant.slug}`) ? `/${tenant.slug}` : '') + `/dashboard`;
+      
       const res = await fetch(`${USERS_API}/api/v1/payments/initialize`, {
         method: 'POST',
         headers: {
@@ -121,25 +124,32 @@ export default function PlanForm({ tenant }: { tenant: any }) {
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ 
-          amount: plan === 'upfront' ? upfrontPrice : monthlyCost,
+          amount: isFree || plan === 'upfront' ? 0 : monthlyCost,
           purpose: 'cohort_enrollment',
-          plan_type: plan,
-          force_card: plan === 'monthly' ? requireCardForInstallments : false,
+          plan_type: isFree ? 'upfront' : plan,
+          force_card: (!isFree && plan === 'monthly') ? requireCardForInstallments : false,
           reference_id: cohortId,
-          callback_url: window.location.origin + (window.location.pathname.startsWith(`/${tenant.slug}`) ? `/${tenant.slug}` : '') + `/dashboard/workspace?verify=true`
+          callback_url: dashboardTarget
         })
       });
       
       const data = await res.json();
-      if (res.ok && data.authorization_url) {
+      if (res.ok) {
         Cookies.remove('selected_cohort_id');
-        window.location.href = data.authorization_url;
+        if (isFree || data.access_code === 'free') {
+          window.location.href = data.authorization_url || dashboardTarget;
+          return;
+        }
+        if (data.authorization_url) {
+          window.location.href = data.authorization_url;
+        }
       } else {
         console.error("Payment failed", data);
         alert(data.error || "Payment initialization failed");
         setIsLoading(false);
       }
     } catch (err) {
+      console.error("Payment error", err);
       setIsLoading(false);
     }
   };
@@ -161,19 +171,21 @@ export default function PlanForm({ tenant }: { tenant: any }) {
           <div className="max-w-xl">
             <div className="inline-flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
               <CheckCircle2 className="w-4 h-4" />
-              <span>Accepted into {cohort ? cohort.title : 'Cohort'}</span>
+              <span>{isFree ? '100% Free Admission' : `Accepted into ${cohort ? cohort.title : 'Cohort'}`}</span>
             </div>
             <h2 className="text-4xl font-bold text-white leading-[1.1] tracking-tight mb-4">
-              Choose your commitment
+              {isFree ? 'Begin your journey' : 'Choose your commitment'}
             </h2>
             <p className="text-slate-400 text-base leading-relaxed mb-10">
-              Select how you'd like to fund your transformation. Pay upfront to save, or split it across {divisor === 1 ? '1 month' : divisor + ' months'}.
+              {isFree
+                ? `You have been granted full access to ${cohort?.title || 'this cohort'}. Confirm your registration below to enter your student dashboard.`
+                : `Select how you'd like to fund your transformation. Pay upfront to save, or split it across ${divisor === 1 ? '1 month' : divisor + ' months'}.`}
             </p>
           </div>
 
           <div className="flex items-center space-x-2 text-slate-500 text-sm font-medium">
             <ShieldCheck className="w-5 h-5 text-emerald-500" />
-            <span>Secured by Paystack</span>
+            <span>{isFree ? 'Instant Activation' : 'Secured by Paystack'}</span>
           </div>
         </div>
       </div>
@@ -184,51 +196,78 @@ export default function PlanForm({ tenant }: { tenant: any }) {
           
           {/* Plan Selection */}
           <div className="flex-1">
-            <h3 className="text-xl font-bold text-slate-900 tracking-tight mb-6">Select a plan</h3>
+            <h3 className="text-xl font-bold text-slate-900 tracking-tight mb-6">{isFree ? 'Enrollment Overview' : 'Select a plan'}</h3>
             <div className="space-y-4">
               
-              {/* Upfront Plan */}
-              <label className={`relative flex flex-col bg-white border-2 rounded-2xl p-6 cursor-pointer transition-all shadow-sm ${plan === 'upfront' ? 'border-blue-600 ring-4 ring-blue-600/10' : 'border-slate-200 hover:border-blue-300'}`}>
-                <div className="absolute -top-3 right-6 bg-blue-600 text-white font-bold text-[10px] px-3 py-1 rounded-full tracking-widest uppercase shadow-sm">
-                  Recommended
+              {isFree ? (
+                <div className="relative flex flex-col bg-white border-2 border-emerald-500 ring-4 ring-emerald-500/10 rounded-2xl p-6 shadow-sm">
+                  <div className="absolute -top-3 right-6 bg-emerald-600 text-white font-bold text-[10px] px-3 py-1 rounded-full tracking-widest uppercase shadow-sm">
+                    Full Scholarship
+                  </div>
+                  <span className="font-bold text-xs uppercase tracking-widest text-emerald-600 mb-2 block">{cohort ? cohort.title : 'Full Cohort'}</span>
+                  <div className="mb-1">
+                    <span className="text-3xl font-bold text-slate-900">Free</span>
+                  </div>
+                  <p className="text-sm text-slate-500 mb-5">Zero tuition fee • Full access granted</p>
+                  
+                  <ul className="space-y-2.5 mb-2">
+                    <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5" /> Full access to live webinars & recordings
+                    </li>
+                    <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5" /> Interactive workspace & project submissions
+                    </li>
+                    <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5" /> Peer community & coworking rooms
+                    </li>
+                  </ul>
                 </div>
-                <input type="radio" name="plan" value="upfront" checked={plan === 'upfront'} onChange={() => setPlan('upfront')} className="absolute top-6 right-6 w-5 h-5 text-blue-600 border-slate-300 focus:ring-blue-600" />
-                <span className="font-bold text-xs uppercase tracking-widest text-blue-600 mb-2 block">{cohort ? cohort.title : 'Full Cohort'} (Upfront)</span>
-                <div className="mb-1">
-                  <span className="text-3xl font-bold text-slate-900">{formatCurrency(upfrontPrice)}</span>
-                </div>
-                {markup > 0 && <p className="text-sm text-slate-400 mb-5 line-through">{formatCurrency(officialPrice)}</p>}
-                
-                <ul className="space-y-2.5 mb-2">
-                  {markup > 0 && (
-                  <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
-                    <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Save {formatCurrency(markup)} immediately
-                  </li>
-                  )}
-                  <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
-                    <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> 1-on-1 portfolio review session
-                  </li>
-                </ul>
-              </label>
+              ) : (
+                <>
+                  {/* Upfront Plan */}
+                  <label className={`relative flex flex-col bg-white border-2 rounded-2xl p-6 cursor-pointer transition-all shadow-sm ${plan === 'upfront' ? 'border-blue-600 ring-4 ring-blue-600/10' : 'border-slate-200 hover:border-blue-300'}`}>
+                    <div className="absolute -top-3 right-6 bg-blue-600 text-white font-bold text-[10px] px-3 py-1 rounded-full tracking-widest uppercase shadow-sm">
+                      Recommended
+                    </div>
+                    <input type="radio" name="plan" value="upfront" checked={plan === 'upfront'} onChange={() => setPlan('upfront')} className="absolute top-6 right-6 w-5 h-5 text-blue-600 border-slate-300 focus:ring-blue-600" />
+                    <span className="font-bold text-xs uppercase tracking-widest text-blue-600 mb-2 block">{cohort ? cohort.title : 'Full Cohort'} (Upfront)</span>
+                    <div className="mb-1">
+                      <span className="text-3xl font-bold text-slate-900">{formatCurrency(upfrontPrice)}</span>
+                    </div>
+                    {markup > 0 && <p className="text-sm text-slate-400 mb-5 line-through">{formatCurrency(officialPrice)}</p>}
+                    
+                    <ul className="space-y-2.5 mb-2">
+                      {markup > 0 && (
+                      <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
+                        <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Save {formatCurrency(markup)} immediately
+                      </li>
+                      )}
+                      <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
+                        <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> 1-on-1 portfolio review session
+                      </li>
+                    </ul>
+                  </label>
 
-              {/* Monthly Plan */}
-              {enableInstallments && divisor > 1 && (
-              <label className={`relative flex flex-col bg-white border-2 rounded-2xl p-6 cursor-pointer transition-all shadow-sm ${plan === 'monthly' ? 'border-blue-600 ring-4 ring-blue-600/10' : 'border-slate-200 hover:border-blue-300'}`}>
-                <input type="radio" name="plan" value="monthly" checked={plan === 'monthly'} onChange={() => setPlan('monthly')} className="absolute top-6 right-6 w-5 h-5 text-blue-600 border-slate-300 focus:ring-blue-600" />
-                <span className="font-bold text-xs uppercase tracking-widest text-slate-500 mb-2 block">Monthly Installment</span>
-                <div className="mb-5">
-                  <span className="text-3xl font-bold text-slate-900">{formatCurrency(monthlyCost)}</span>
-                  <span className="text-slate-500 text-sm font-medium">/mo</span>
-                </div>
-                <ul className="space-y-2.5 mb-2">
-                  <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
-                    <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Billed every 4 weeks
-                  </li>
-                  <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
-                    <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Cancel anytime
-                  </li>
-                </ul>
-              </label>
+                  {/* Monthly Plan */}
+                  {enableInstallments && divisor > 1 && (
+                  <label className={`relative flex flex-col bg-white border-2 rounded-2xl p-6 cursor-pointer transition-all shadow-sm ${plan === 'monthly' ? 'border-blue-600 ring-4 ring-blue-600/10' : 'border-slate-200 hover:border-blue-300'}`}>
+                    <input type="radio" name="plan" value="monthly" checked={plan === 'monthly'} onChange={() => setPlan('monthly')} className="absolute top-6 right-6 w-5 h-5 text-blue-600 border-slate-300 focus:ring-blue-600" />
+                    <span className="font-bold text-xs uppercase tracking-widest text-slate-500 mb-2 block">Monthly Installment</span>
+                    <div className="mb-5">
+                      <span className="text-3xl font-bold text-slate-900">{formatCurrency(monthlyCost)}</span>
+                      <span className="text-slate-500 text-sm font-medium">/mo</span>
+                    </div>
+                    <ul className="space-y-2.5 mb-2">
+                      <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
+                        <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Billed every 4 weeks
+                      </li>
+                      <li className="flex items-start gap-2.5 text-sm font-medium text-slate-600">
+                        <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5" /> Cancel anytime
+                      </li>
+                    </ul>
+                  </label>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -238,10 +277,10 @@ export default function PlanForm({ tenant }: { tenant: any }) {
             <h3 className="text-xl font-bold text-slate-900 tracking-tight mb-6">Order Summary</h3>
             <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm mb-6">
               <div className="flex justify-between mb-4">
-                <span className="text-sm font-semibold text-slate-700">{plan === 'upfront' ? `${cohort ? cohort.title : 'Full Cohort'} (Upfront)` : 'Monthly Installment'}</span>
-                <span className="text-sm font-bold text-slate-900">{plan === 'upfront' ? formatCurrency(officialPrice) : formatCurrency(monthlyCost)}</span>
+                <span className="text-sm font-semibold text-slate-700">{isFree ? (cohort?.title || 'Full Cohort') : (plan === 'upfront' ? `${cohort ? cohort.title : 'Full Cohort'} (Upfront)` : 'Monthly Installment')}</span>
+                <span className="text-sm font-bold text-slate-900">{isFree ? 'Free' : (plan === 'upfront' ? formatCurrency(officialPrice) : formatCurrency(monthlyCost))}</span>
               </div>
-              {plan === 'upfront' && markup > 0 && (
+              {!isFree && plan === 'upfront' && markup > 0 && (
                 <div className="flex justify-between mb-4 text-emerald-600">
                   <span className="text-sm font-semibold">Upfront Discount</span>
                   <span className="text-sm font-bold">-{formatCurrency(markup)}</span>
@@ -249,34 +288,51 @@ export default function PlanForm({ tenant }: { tenant: any }) {
               )}
               <div className="border-t border-slate-100 pt-4 flex justify-between items-center">
                 <span className="font-bold text-slate-900">Total Due Today</span>
-                <span className="text-2xl font-bold text-blue-600">{plan === 'upfront' ? formatCurrency(upfrontPrice) : formatCurrency(monthlyCost)}</span>
+                <span className={`text-2xl font-bold ${isFree ? 'text-emerald-600' : 'text-blue-600'}`}>{isFree ? 'Free' : (plan === 'upfront' ? formatCurrency(upfrontPrice) : formatCurrency(monthlyCost))}</span>
               </div>
             </div>
 
             <div className="mb-6">
               <label className="block text-sm font-semibold text-slate-700 mb-2">Payment Method</label>
-              <div className="bg-white border-2 border-blue-600 ring-4 ring-blue-600/10 rounded-xl p-4 flex items-center justify-between shadow-sm cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-7 bg-slate-100 rounded border border-slate-200 flex items-center justify-center">
-                    <CreditCard className="w-4 h-4 text-slate-600" />
+              {isFree ? (
+                <div className="bg-white border-2 border-emerald-500 ring-4 ring-emerald-500/10 rounded-xl p-4 flex items-center justify-between shadow-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-7 bg-emerald-50 rounded border border-emerald-200 flex items-center justify-center">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-900">Free Admission</p>
+                      <p className="text-xs font-medium text-slate-500">No payment card required</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-bold text-slate-900">Paystack Secure</p>
-                    <p className="text-xs font-medium text-slate-500">Cards, Bank Transfer</p>
+                  <div className="w-5 h-5 rounded-full border-2 border-emerald-600 flex items-center justify-center">
+                    <div className="w-2.5 h-2.5 bg-emerald-600 rounded-full"></div>
                   </div>
                 </div>
-                <div className="w-5 h-5 rounded-full border-2 border-blue-600 flex items-center justify-center">
-                  <div className="w-2.5 h-2.5 bg-blue-600 rounded-full"></div>
+              ) : (
+                <div className="bg-white border-2 border-blue-600 ring-4 ring-blue-600/10 rounded-xl p-4 flex items-center justify-between shadow-sm cursor-pointer">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-7 bg-slate-100 rounded border border-slate-200 flex items-center justify-center">
+                      <CreditCard className="w-4 h-4 text-slate-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-900">Paystack Secure</p>
+                      <p className="text-xs font-medium text-slate-500">Cards, Bank Transfer</p>
+                    </div>
+                  </div>
+                  <div className="w-5 h-5 rounded-full border-2 border-blue-600 flex items-center justify-center">
+                    <div className="w-2.5 h-2.5 bg-blue-600 rounded-full"></div>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
-            <button onClick={handlePayment} disabled={isLoading} className="w-full flex justify-center items-center py-4 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed group">
+            <button onClick={handlePayment} disabled={isLoading} className={`w-full flex justify-center items-center py-4 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white transition-all disabled:opacity-70 disabled:cursor-not-allowed group ${isFree ? 'bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-600' : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600'}`}>
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  Pay {plan === 'upfront' ? formatCurrency(upfrontPrice) : formatCurrency(monthlyCost)} securely
+                  {isFree ? 'Complete Free Enrollment' : `Pay ${plan === 'upfront' ? formatCurrency(upfrontPrice) : formatCurrency(monthlyCost)} securely`}
                   <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}

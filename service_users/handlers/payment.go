@@ -59,6 +59,9 @@ func HandleTenantPaymentInitialize(w http.ResponseWriter, r *http.Request) {
 		utils.JSONError(w, http.StatusBadRequest, "X-Tenant-Domain header required")
 		return
 	}
+	tenantSlug = strings.TrimPrefix(tenantSlug, "http://")
+	tenantSlug = strings.TrimPrefix(tenantSlug, "https://")
+	tenantSlug = strings.Split(tenantSlug, ":")[0]
 
 	var req InitPaymentRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -70,6 +73,55 @@ func HandleTenantPaymentInitialize(w http.ResponseWriter, r *http.Request) {
 	var tenant models.Tenant
 	if err := db.GormDB.Where("slug = ? OR custom_domain = ? OR default_subdomain = ?", tenantSlug, tenantSlug, tenantSlug).First(&tenant).Error; err != nil {
 		utils.JSONError(w, http.StatusNotFound, "Tenant not found")
+		return
+	}
+
+	// Amount is usually required in kobo for Paystack
+	amountInKobo := int(req.Amount * 100)
+	paymentRef := fmt.Sprintf("txn_%d", time.Now().UnixNano())
+
+	if amountInKobo <= 0 {
+		// Bypass Paystack for free plans
+		payment := models.PlatformPayment{
+			ID:            paymentRef,
+			TenantID:      tenant.ID,
+			StudentID:     user.ID,
+			EnrollmentID:  req.ReferenceID,
+			Amount:        0,
+			Status:        "paid",
+			Reference:     paymentRef,
+			PaymentMethod: "free",
+			PlatformFee:   0,
+			TenantAmount:  0,
+		}
+
+		if err := db.GormDB.Create(&payment).Error; err != nil {
+			log.Printf("Failed to create free payment record: %v", err)
+			utils.JSONError(w, http.StatusInternalServerError, "Failed to create free payment record")
+			return
+		}
+
+		// Dispatch synchronously so enrollment is created before client redirects
+		if err := dispatchToCoursesPro(user.ID, req.ReferenceID, "SUCCESS", "", req.PlanType); err != nil {
+			log.Printf("[Free Enrollment Warning] dispatchToCoursesPro error: %v", err)
+		}
+
+		authURL := req.CallbackURL
+		if authURL == "" {
+			authURL = "/dashboard"
+		} else {
+			if strings.Contains(authURL, "?") {
+				authURL += "&reference=" + paymentRef
+			} else {
+				authURL += "?reference=" + paymentRef
+			}
+		}
+
+		utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+			"authorization_url": authURL,
+			"access_code":       "free",
+			"reference":         paymentRef,
+		})
 		return
 	}
 
@@ -100,49 +152,6 @@ func HandleTenantPaymentInitialize(w http.ResponseWriter, r *http.Request) {
 
 	// 3. Initialize Paystack Client
 	paystack := services.NewPaystackClient(secretKey)
-
-	// Amount is usually required in kobo for Paystack
-	amountInKobo := int(req.Amount * 100)
-	paymentRef := fmt.Sprintf("txn_%d", time.Now().UnixNano())
-
-	if amountInKobo <= 0 {
-		// Bypass Paystack for free plans
-		payment := models.PlatformPayment{
-			ID:            paymentRef,
-			TenantID:      tenant.ID,
-			StudentID:     user.ID,
-			EnrollmentID:  req.ReferenceID,
-			Amount:        0,
-			Status:        "paid",
-			Reference:     paymentRef,
-			PaymentMethod: "free",
-			PlatformFee:   0,
-			TenantAmount:  0,
-		}
-
-		if err := db.GormDB.Create(&payment).Error; err != nil {
-			log.Printf("Failed to create free payment record: %v", err)
-			utils.JSONError(w, http.StatusInternalServerError, "Failed to create free payment record")
-			return
-		}
-
-		// Dispatch immediately
-		go dispatchToCoursesPro(user.ID, req.ReferenceID, "SUCCESS", "", req.PlanType)
-
-		authURL := req.CallbackURL
-		if strings.Contains(authURL, "?") {
-			authURL += "&reference=" + paymentRef
-		} else {
-			authURL += "?reference=" + paymentRef
-		}
-
-		utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
-			"authorization_url": authURL,
-			"access_code":       "free",
-			"reference":         paymentRef,
-		})
-		return
-	}
 
 	meta := map[string]interface{}{
 		"user_id":   user.ID,
@@ -222,6 +231,9 @@ func HandleTenantPaymentVerify(w http.ResponseWriter, r *http.Request) {
 		utils.JSONError(w, http.StatusBadRequest, "X-Tenant-Domain header required")
 		return
 	}
+	tenantSlug = strings.TrimPrefix(tenantSlug, "http://")
+	tenantSlug = strings.TrimPrefix(tenantSlug, "https://")
+	tenantSlug = strings.Split(tenantSlug, ":")[0]
 
 	var req struct {
 		Reference string `json:"reference"`
@@ -231,22 +243,32 @@ func HandleTenantPaymentVerify(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// 1. Fetch Payment first if possible to reliably get Tenant context
+	var payment models.PlatformPayment
+	_ = db.GormDB.Where("reference = ?", req.Reference).First(&payment).Error
+
 	var tenant models.Tenant
-	if err := db.GormDB.Where("slug = ? OR custom_domain = ? OR default_subdomain = ?", tenantSlug, tenantSlug, tenantSlug).First(&tenant).Error; err != nil {
+	if payment.TenantID != "" {
+		_ = db.GormDB.Where("id = ?", payment.TenantID).First(&tenant).Error
+	}
+	if tenant.ID == "" && tenantSlug != "" {
+		_ = db.GormDB.Where("slug = ? OR custom_domain = ? OR default_subdomain = ?", tenantSlug, tenantSlug, tenantSlug).First(&tenant).Error
+	}
+	if tenant.ID == "" {
 		utils.JSONError(w, http.StatusNotFound, "Tenant not found")
 		return
 	}
 
 	// Check if this is a free payment bypass
-	var payment models.PlatformPayment
-	if err := db.GormDB.Where("reference = ?", req.Reference).First(&payment).Error; err == nil {
-		if payment.PaymentMethod == "free" {
-			utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
-				"status": "success",
-				"data":   map[string]interface{}{"status": "success"},
-			})
-			return
+	if payment.ID != "" && payment.PaymentMethod == "free" {
+		if err := dispatchToCoursesPro(payment.StudentID, payment.EnrollmentID, "SUCCESS", "", ""); err != nil {
+			log.Printf("[Verify Warning] Failed to dispatch free payment to courses service: %v", err)
 		}
+		utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+			"status": "success",
+			"data":   map[string]interface{}{"status": "success"},
+		})
+		return
 	}
 
 	var secretKey string
@@ -269,9 +291,10 @@ func HandleTenantPaymentVerify(w http.ResponseWriter, r *http.Request) {
 	if payment.ID != "" {
 		if status == "success" {
 			payment.Status = "paid"
-			// Dispatch to courses service to finalize enrollment
-			// Ideally we could get auth code here if Paystack returned it, but for manual verify we might just rely on the webhook
-			go dispatchToCoursesPro(payment.StudentID, payment.EnrollmentID, "SUCCESS", "", "")
+			// Dispatch to courses service synchronously to finalize enrollment before responding
+			if err := dispatchToCoursesPro(payment.StudentID, payment.EnrollmentID, "SUCCESS", "", ""); err != nil {
+				log.Printf("[Verify Warning] Failed to dispatch payment to courses service: %v", err)
+			}
 		} else {
 			payment.Status = "failed"
 		}
