@@ -164,11 +164,9 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Failed to create verification token: %v", err)
 	}
 
-	go func() {
-		if err := utils.SendVerificationEmail(email, otp, tenantName, tenantLogo); err != nil {
-			log.Printf("Failed to send verification email: %v", err)
-		}
-	}()
+	if err := utils.SendVerificationEmail(email, otp, tenantName, tenantLogo); err != nil {
+		log.Printf("Failed to send verification email to %s: %v", email, err)
+	}
 
 	utils.JSONResponse(w, http.StatusCreated, map[string]interface{}{
 		"message": "User created. Please check your email for the verification code.",
@@ -726,9 +724,10 @@ func HandleResendVerification(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if user.AccountStatus != "unverified" {
+	if user.AccountStatus == "active" {
 		utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
-			"message": "If the email exists, a verification code has been sent.",
+			"message": "This account is already verified. You can sign in directly.",
+			"already_verified": true,
 		})
 		return
 	}
@@ -759,14 +758,27 @@ func HandleResendVerification(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	go func() {
-		if err := utils.SendVerificationEmail(email, otp, tenantName, tenantLogo); err != nil {
-			log.Printf("Failed to resend verification email: %v", err)
-		}
-	}()
+	// Fallback to user's registered tenant role if not provided in the request payload
+	if tenantName == "" {
+		_ = db.DB.QueryRow(`
+			SELECT t.name, COALESCE(t.logo_url, '') 
+			FROM user_tenant_roles utr 
+			JOIN tenants t ON utr.tenant_id = t.id 
+			WHERE utr.user_id = ? 
+			ORDER BY utr.created_at DESC LIMIT 1`, user.ID).Scan(&tenantName, &tenantLogo)
+	}
+
+	if err := utils.SendVerificationEmail(email, otp, tenantName, tenantLogo); err != nil {
+		log.Printf("Failed to resend verification email to %s: %v", email, err)
+		utils.JSONResponse(w, http.StatusInternalServerError, map[string]interface{}{
+			"error": "Failed to send verification email: " + err.Error(),
+		})
+		return
+	}
 
 	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
 		"message": "Verification code resent successfully.",
+		"email":   email,
 	})
 }
 

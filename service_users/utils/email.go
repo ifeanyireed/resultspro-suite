@@ -30,9 +30,14 @@ func toBase64(s string) string {
 }
 
 func sendViaProxy(to, subject, htmlBody, textBody, fromName string) error {
+	from := os.Getenv("SMTP_FROM")
+	if from == "" {
+		from = "hello@resultspro.ng"
+	}
+
 	payload := EmailPayload{
 		To:       to,
-		From:     "noreply@resultspro.ng",
+		From:     from,
 		FromName: fromName,
 		Subject:  subject,
 		HTML:     htmlBody,
@@ -99,7 +104,7 @@ func sendDirectSMTP(to, subject, htmlBody, textBody, fromName string) error {
 	from := os.Getenv("SMTP_FROM")
 	if from == "" {
 		if strings.Contains(smtpUser, "@smtp-brevo.com") {
-			from = "noreply@resultspro.ng"
+			from = "hello@resultspro.ng"
 		} else {
 			from = smtpUser
 		}
@@ -109,6 +114,7 @@ func sendDirectSMTP(to, subject, htmlBody, textBody, fromName string) error {
 	boundary := fmt.Sprintf("bnd_%d", time.Now().UnixNano())
 	var msg bytes.Buffer
 	msg.WriteString(fmt.Sprintf("From: =?UTF-8?B?%s?= <%s>\r\n", toBase64(fromName), from))
+	msg.WriteString(fmt.Sprintf("Reply-To: %s\r\n", from))
 	msg.WriteString(fmt.Sprintf("To: %s\r\n", to))
 	msg.WriteString(fmt.Sprintf("Subject: =?UTF-8?B?%s?=\r\n", toBase64(subject)))
 	msg.WriteString("MIME-Version: 1.0\r\n")

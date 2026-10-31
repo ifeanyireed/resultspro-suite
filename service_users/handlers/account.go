@@ -120,11 +120,9 @@ func HandleForgotPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	go func() {
-		if err := utils.SendPasswordResetEmail(email, token, input.RedirectURL); err != nil {
-			log.Printf("Failed to send password reset email: %v", err)
-		}
-	}()
+	if err := utils.SendPasswordResetEmail(email, token, input.RedirectURL); err != nil {
+		log.Printf("Failed to send password reset email: %v", err)
+	}
 
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "If an account exists, a password reset link has been sent."})
 }
