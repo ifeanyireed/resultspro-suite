@@ -55,8 +55,6 @@ export default function SignupForm({ tenant }: { tenant: any }) {
         full_name: name,
         tenant_id: tenant?.id,
         tenant_slug: tenant?.slug,
-        tenant_name: tenant?.name,
-        tenant_logo: tenant?.logo_url || tenant?.dark_logo_url,
         app_module: 'coursespro'
       });
       

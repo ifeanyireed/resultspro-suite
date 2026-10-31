@@ -156,8 +156,6 @@ export default function LoginForm({ tenant }: { tenant: any }) {
         password,
         tenant_id: tenant?.id,
         tenant_slug: resolvedTenantSlug,
-        tenant_name: tenant?.name,
-        tenant_logo: tenant?.logo_url || tenant?.dark_logo_url,
         app_module: 'coursespro'
       });
       

@@ -273,53 +273,22 @@ func SendEmail(to string, subject string, htmlBody string, textBody string, from
 
 func SendVerificationEmail(to string, otp string, tenantName string, tenantLogo string) error {
 	brandName := "ResultsPRO"
+	brandLogo := "https://resultspro.ng/logo.png"
+
 	if tenantName != "" {
 		brandName = tenantName
 	}
-
-	brandLogo := strings.TrimSpace(tenantLogo)
-	// Convert Cloudinary .avif or .webp formats to .png for 100% email client compatibility
-	if strings.Contains(brandLogo, "res.cloudinary.com") {
-		if strings.HasSuffix(brandLogo, ".avif") {
-			brandLogo = strings.TrimSuffix(brandLogo, ".avif") + ".png"
-		} else if strings.HasSuffix(brandLogo, ".webp") {
-			brandLogo = strings.TrimSuffix(brandLogo, ".webp") + ".png"
-		}
-	}
-
-	// Only fallback to ResultsPRO default logo if this is truly generic ResultsPRO platform email.
-	// For dedicated tenants without an uploaded image, display an elegant stylized typography header
-	// instead of showing the wrong company's logo.
-	hasImageLogo := brandLogo != ""
-	if !hasImageLogo && (tenantName == "" || tenantName == "ResultsPRO") {
-		brandLogo = "https://resultspro.ng/logo.png"
-		hasImageLogo = true
+	if tenantLogo != "" {
+		brandLogo = tenantLogo
 	}
 
 	subject := otp + " is your " + brandName + " verification code"
 	textBody := fmt.Sprintf("Your %s verification code is: %s. This code will expire in 24 hours.", brandName, otp)
-
-	var logoHeaderHTML string
-	if hasImageLogo {
-		logoHeaderHTML = fmt.Sprintf(`
-		<div style="margin-bottom: 24px;">
-			<img src="%s" alt="%s" height="42" style="height: 42px; max-height: 48px; max-width: 220px; width: auto; object-fit: contain; display: block; border: 0;" />
-		</div>`, brandLogo, brandName)
-	} else {
-		logoHeaderHTML = fmt.Sprintf(`
-		<div style="margin-bottom: 24px;">
-			<h1 style="font-size: 24px; font-weight: 700; color: #0f172a; margin: 0; letter-spacing: -0.5px;">%s</h1>
-		</div>`, brandName)
-	}
-
-	footerText := fmt.Sprintf("%s &bull; Learning Platform", brandName)
-	if brandName == "ResultsPRO" {
-		footerText = "ResultsPRO &bull; Centralized Identity &amp; Academics Platform"
-	}
-
 	htmlBody := fmt.Sprintf(`
 <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; padding: 40px; margin: 0; color: #1e293b; border: 1px solid #e2e8f0; border-radius: 12px; max-width: 580px;">
-  %s
+  <div style="margin-bottom: 24px; display: flex; align-items: center;">
+    <img src="%s" alt="%s" style="height: 40px; width: auto; object-fit: contain;" />
+  </div>
   <h2 style="font-size: 20px; font-weight: 600; color: #0f172a; margin-top: 0; margin-bottom: 16px;">Verify your email address</h2>
   <p style="font-size: 14px; line-height: 22px; color: #475569; margin-bottom: 24px;">
     Welcome to %s. Use the 6-digit code below to complete your registration:
@@ -332,9 +301,9 @@ func SendVerificationEmail(to string, otp string, tenantName string, tenantLogo 
   </p>
   <hr style="border: none; border-top: 1px solid #e2e8f0; margin-bottom: 20px;">
   <p style="font-size: 11px; color: #94a3b8; line-height: 16px;">
-    %s
+    %s &bull; Centralized Identity &amp; Academics Platform
   </p>
-</div>`, logoHeaderHTML, brandName, otp, footerText)
+</div>`, brandLogo, brandName, brandName, otp, brandName)
 	return SendEmail(to, subject, htmlBody, textBody, brandName)
 }
 
