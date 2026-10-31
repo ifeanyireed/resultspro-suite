@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Mail, Lock, ArrowRight, Loader2, Sparkles, Building2, Users, ShieldCheck, User, Eye, EyeOff } from 'lucide-react';
@@ -13,6 +13,7 @@ import TenantLogo from '@/components/TenantLogo';
 
 export default function SignupForm({ tenant }: { tenant: any }) {
   const router = useRouter();
+  const params = useParams();
   const setAuth = useAuthStore((state) => state.setAuth);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -21,6 +22,15 @@ export default function SignupForm({ tenant }: { tenant: any }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const user = useAuthStore((state) => state.user);
+
+  const resolvedTenantSlug = tenant?.slug || (params?.tenant as string) || '';
+  const [legalPrefix, setLegalPrefix] = useState('');
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined' && resolvedTenantSlug && window.location.pathname.startsWith(`/${resolvedTenantSlug}`)) {
+      setLegalPrefix(`/${resolvedTenantSlug}`);
+    }
+  }, [resolvedTenantSlug]);
 
   React.useEffect(() => {
     if (user) {
@@ -229,12 +239,12 @@ export default function SignupForm({ tenant }: { tenant: any }) {
 
               <div className="mt-8 text-center flex flex-col gap-4">
                 <p className="text-sm font-medium text-slate-600">
-                  Already have an account? <Link href="/login" className="text-blue-600 hover:underline">Log in</Link>
+                  Already have an account? <Link href={legalPrefix ? `${legalPrefix}/login` : "/login"} className="text-blue-600 hover:underline">Log in</Link>
                 </p>
                 <p className="text-xs text-slate-400 font-medium">
                   Protected by reCAPTCHA and subject to the {tenant?.name || "Tenant"}{' '}
-                  <a href="https://www.resultspro.ng/privacy" className="text-slate-600 hover:underline">Privacy Policy</a> and{' '}
-                  <a href="https://www.resultspro.ng/terms" className="text-slate-600 hover:underline">Terms of Service</a>.
+                  <Link href={`${legalPrefix}/privacy`} target="_blank" className="text-slate-600 hover:underline">Privacy Policy</Link> and{' '}
+                  <Link href={`${legalPrefix}/terms`} target="_blank" className="text-slate-600 hover:underline">Terms of Service</Link>.
                 </p>
               </div>
         </div>

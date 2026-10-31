@@ -23,6 +23,13 @@ export default function LoginForm({ tenant }: { tenant: any }) {
   const [showUnenrolledPopup, setShowUnenrolledPopup] = useState(false);
 
   const resolvedTenantSlug = tenant?.slug || (params?.tenant as string) || '';
+  const [legalPrefix, setLegalPrefix] = useState('');
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined' && resolvedTenantSlug && window.location.pathname.startsWith(`/${resolvedTenantSlug}`)) {
+      setLegalPrefix(`/${resolvedTenantSlug}`);
+    }
+  }, [resolvedTenantSlug]);
 
   React.useEffect(() => {
     if (typeof window !== 'undefined' && tenant?.slug) {
@@ -327,12 +334,12 @@ export default function LoginForm({ tenant }: { tenant: any }) {
 
           <div className="mt-8 text-center flex flex-col gap-4">
             <p className="text-sm font-medium text-slate-600">
-              Don't have an account? <Link href="/signup" className="text-blue-600 hover:underline">Sign up</Link>
+              Don't have an account? <Link href={legalPrefix ? `${legalPrefix}/signup` : "/signup"} className="text-blue-600 hover:underline">Sign up</Link>
             </p>
             <p className="text-xs text-slate-400 font-medium">
               Protected by reCAPTCHA and subject to the {tenant?.name || "Tenant"}{' '}
-              <a href="https://www.resultspro.ng/privacy" className="text-slate-600 hover:underline">Privacy Policy</a> and{' '}
-              <a href="https://www.resultspro.ng/terms" className="text-slate-600 hover:underline">Terms of Service</a>.
+              <Link href={`${legalPrefix}/privacy`} target="_blank" className="text-slate-600 hover:underline">Privacy Policy</Link> and{' '}
+              <Link href={`${legalPrefix}/terms`} target="_blank" className="text-slate-600 hover:underline">Terms of Service</Link>.
             </p>
           </div>
         </div>

@@ -172,8 +172,8 @@ export default function PlatformSignupPage() {
             </p>
             <p className="text-xs text-slate-400 font-medium">
               By creating an account you agree to our{' '}
-              <a href="https://www.resultspro.ng/privacy" className="text-slate-600 hover:underline">Privacy Policy</a> and{' '}
-              <a href="https://www.resultspro.ng/terms" className="text-slate-600 hover:underline">Terms of Service</a>.
+              <Link href="/privacy" target="_blank" className="text-slate-600 hover:underline">Privacy Policy</Link> and{' '}
+              <Link href="/terms" target="_blank" className="text-slate-600 hover:underline">Terms of Service</Link>.
             </p>
           </div>
         </div>
