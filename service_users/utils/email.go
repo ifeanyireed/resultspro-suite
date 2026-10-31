@@ -79,20 +79,21 @@ func sendViaProxy(to, subject, htmlBody, textBody, fromName string) error {
 
 func sendDirectSMTP(to, subject, htmlBody, textBody, fromName string) error {
 	smtpHost := os.Getenv("SMTP_HOST")
+	smtpPort := os.Getenv("SMTP_PORT")
+	smtpUser := os.Getenv("SMTP_USER")
+	smtpPass := os.Getenv("SMTP_PASS")
+
+	if smtpPass == "" {
+		return fmt.Errorf("SMTP_PASS environment variable is missing")
+	}
+	if smtpUser == "" {
+		return fmt.Errorf("SMTP_USER environment variable is missing")
+	}
 	if smtpHost == "" {
 		smtpHost = "smtp-relay.brevo.com"
 	}
-	smtpPort := os.Getenv("SMTP_PORT")
 	if smtpPort == "" {
 		smtpPort = "587"
-	}
-	smtpUser := os.Getenv("SMTP_USER")
-	if smtpUser == "" {
-		smtpUser = "c0b9c6001@smtp-brevo.com"
-	}
-	smtpPass := os.Getenv("SMTP_PASS")
-	if smtpPass == "" {
-		return fmt.Errorf("SMTP_PASS environment variable is missing")
 	}
 
 	from := os.Getenv("SMTP_FROM")

@@ -247,6 +247,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 		utils.JSONResponse(w, http.StatusForbidden, map[string]interface{}{
 			"error":   "unverified",
+			"code":    "EMAIL_NOT_VERIFIED",
 			"message": "Please verify your email address. A new code has been sent.",
 			"email":   user.Email,
 		})

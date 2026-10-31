@@ -74,6 +74,7 @@ const VerifyEmail: React.FC = () => {
     try {
       const response = await axios.post(`${API_BASE}/auth/verify-email`, {
         email,
+        token: otpCode,
         otp: otpCode,
       });
 
@@ -109,7 +110,7 @@ const VerifyEmail: React.FC = () => {
       // Start countdown immediately after successful request
       setResendCountdown(60);
       setOtp(['', '', '', '', '', '']);
-      setSuccess('✓ Verification code sent! Check your email.');
+      setSuccess('✓ OTP sent! Check your email.');
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Failed to resend OTP. Please try again.';
       setError(errorMessage);
@@ -134,10 +135,10 @@ const VerifyEmail: React.FC = () => {
 
         <div className="relative z-10 max-w-md mx-auto text-center w-full">
           <h1 className="text-5xl md:text-5xl font-bold mb-2 tracking-tight leading-tight text-white">
-            Verify Email
+            Verify OTP
           </h1>
           <p className="text-gray-400 text-sm mb-2">
-            We sent a 6-digit code to:
+            We sent a 6-digit OTP to:
           </p>
           <p className="text-blue-400 text-sm mb-12 font-semibold">
             {email}
@@ -188,35 +189,35 @@ const VerifyEmail: React.FC = () => {
                   </>
                 ) : (
                   <>
-                    Verify Email
+                    Verify OTP
                     <ArrowRight01 className="w-5 h-5" />
                   </>
                 )}
               </button>
 
               {/* Resend Button */}
-              <div className="text-center">
-                <p className="text-gray-400 text-sm mb-3">Didn't receive the code?</p>
+              <div className="pt-2 border-t border-white/10 text-center space-y-2">
+                <p className="text-gray-400 text-xs">Didn't receive the OTP? Check your spam folder or</p>
                 <button
                   type="button"
                   onClick={handleResend}
                   disabled={resendLoading || resendCountdown > 0}
-                  className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors disabled:text-gray-500 disabled:cursor-not-allowed text-sm font-semibold"
+                  className="w-full py-3 rounded-[12px] font-semibold text-sm transition-all flex items-center justify-center gap-2 border bg-white/5 border-white/10 hover:bg-white/10 text-blue-400 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {resendLoading ? (
                     <>
-                      <Loading01 className="w-4 h-4 animate-spin" />
-                      Sending...
+                      <InlineLoadingSpinner size="sm" />
+                      <span>Sending new OTP...</span>
                     </>
                   ) : resendCountdown > 0 ? (
                     <>
                       <RotateCcw className="w-4 h-4" />
-                      Resend in {resendCountdown}s
+                      <span>Resend OTP in {resendCountdown}s</span>
                     </>
                   ) : (
                     <>
                       <RotateCcw className="w-4 h-4" />
-                      Resend Code
+                      <span>Resend OTP</span>
                     </>
                   )}
                 </button>

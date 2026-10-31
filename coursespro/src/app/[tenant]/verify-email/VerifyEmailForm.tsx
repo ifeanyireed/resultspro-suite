@@ -102,7 +102,10 @@ function VerifyEmailContent({ tenant }: { tenant: any }) {
 
     try {
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-      await axios.post(`${USERS_API}/api/v1/auth/verify-email`, { token: otp.trim() });
+      await axios.post(`${USERS_API}/api/v1/auth/verify-email`, {
+        token: otp.trim(),
+        otp: otp.trim()
+      });
 
       // Check if we have cached credentials for seamless auto-login
       let tempPass = '';
@@ -169,10 +172,10 @@ function VerifyEmailContent({ tenant }: { tenant: any }) {
         tenant_slug: resolvedTenantSlug
       });
 
-      setSuccess(`A new 6-digit verification code has been sent to ${email}.`);
+      setSuccess(`A new OTP has been sent to ${email}.`);
       setCountdown(60);
     } catch (err: any) {
-      setError(err.response?.data?.message || err.response?.data?.error || 'Failed to resend verification code');
+      setError(err.response?.data?.message || err.response?.data?.error || 'Failed to resend OTP');
     } finally {
       setResendLoading(false);
     }
@@ -274,9 +277,9 @@ function VerifyEmailContent({ tenant }: { tenant: any }) {
             <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
               <Mail className="w-8 h-8" />
             </div>
-            <h2 className="text-3xl font-bold text-slate-900 mb-2 tracking-tight">Verify Your Email</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2 tracking-tight">Verify with OTP</h2>
             <p className="text-slate-500 text-sm">
-              We've sent a 6-digit verification code to{' '}
+              We've sent a 6-digit OTP to{' '}
               {email ? (
                 <span className="font-semibold text-slate-800 break-all">{email}</span>
               ) : (
@@ -345,7 +348,7 @@ function VerifyEmailContent({ tenant }: { tenant: any }) {
           <form onSubmit={handleVerify} className="space-y-6">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                6-Digit Verification Code
+                6-Digit OTP
               </label>
               <input
                 type="text"
@@ -368,37 +371,47 @@ function VerifyEmailContent({ tenant }: { tenant: any }) {
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  Verify & Sign In <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  Verify OTP <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
             </button>
 
-            <div className="flex flex-col items-center gap-3 pt-2">
+            <div className="pt-2 border-t border-slate-100 mt-6 space-y-3">
+              <div className="text-center">
+                <span className="text-xs font-medium text-slate-500">Didn't receive the OTP? Check your spam folder or</span>
+              </div>
               <button
                 type="button"
                 onClick={handleResend}
                 disabled={resendLoading || countdown > 0}
-                className="text-sm font-semibold text-blue-600 hover:text-blue-700 disabled:opacity-50 inline-flex items-center gap-1.5 transition-colors"
+                className="w-full flex justify-center items-center py-3 px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed gap-2 shadow-sm"
               >
                 {resendLoading ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" /> Sending new code...
+                    <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                    <span>Sending new OTP...</span>
                   </>
                 ) : countdown > 0 ? (
-                  `Resend code in ${countdown}s`
+                  <>
+                    <RefreshCw className="w-4 h-4 text-slate-400" />
+                    <span>Resend OTP in {countdown}s</span>
+                  </>
                 ) : (
                   <>
-                    <RefreshCw className="w-3.5 h-3.5" /> Didn't receive the code? Resend
+                    <RefreshCw className="w-4 h-4 text-blue-600" />
+                    <span>Resend OTP</span>
                   </>
                 )}
               </button>
 
-              <Link
-                href="/login"
-                className="text-xs text-slate-500 hover:text-slate-800 underline transition-colors"
-              >
-                Back to login
-              </Link>
+              <div className="text-center pt-1">
+                <Link
+                  href="/login"
+                  className="text-xs text-slate-500 hover:text-slate-800 underline transition-colors"
+                >
+                  Back to login
+                </Link>
+              </div>
             </div>
           </form>
 

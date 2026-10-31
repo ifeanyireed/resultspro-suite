@@ -21,26 +21,35 @@ func HandleVerifyEmail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
+		OTP   string `json:"otp"`
 		Token string `json:"token"`
 	}
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.Token == "" {
-		utils.JSONError(w, http.StatusBadRequest, "Token is required")
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+	otp := strings.TrimSpace(input.OTP)
+	if otp == "" {
+		otp = strings.TrimSpace(input.Token)
+	}
+	if otp == "" {
+		utils.JSONError(w, http.StatusBadRequest, "OTP is required")
 		return
 	}
 
 	var userID string
 	var expiresAt string
 	var used bool
-	err := db.DB.QueryRow("SELECT user_id, expires_at, used FROM verification_tokens WHERE token_hash = ? AND type = 'email_verify'", input.Token).
+	err := db.DB.QueryRow("SELECT user_id, expires_at, used FROM verification_tokens WHERE token_hash = ? AND type = 'email_verify'", otp).
 		Scan(&userID, &expiresAt, &used)
 	if err != nil {
-		utils.JSONError(w, http.StatusUnauthorized, "Invalid verification code")
+		utils.JSONError(w, http.StatusUnauthorized, "Invalid OTP code")
 		return
 	}
 
 	expTime, _ := time.Parse("2006-01-02 15:04:05", expiresAt)
 	if used || (!expTime.IsZero() && time.Now().After(expTime)) {
-		utils.JSONError(w, http.StatusUnauthorized, "Code has expired or has already been used")
+		utils.JSONError(w, http.StatusUnauthorized, "OTP has expired or has already been used")
 		return
 	}
 
@@ -58,7 +67,7 @@ func HandleVerifyEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = tx.Exec(db.Rebind("UPDATE verification_tokens SET used = true WHERE token_hash = ?"), input.Token)
+	_, err = tx.Exec(db.Rebind("UPDATE verification_tokens SET used = true WHERE token_hash = ?"), otp)
 	if err != nil {
 		tx.Rollback()
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to update verification status")

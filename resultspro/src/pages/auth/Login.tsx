@@ -70,7 +70,7 @@ const Login: React.FC = () => {
       handleAuthResponse(response.data.data);
     } catch (err: any) {
       const errorCode = err.response?.data?.code;
-      if (errorCode === 'EMAIL_NOT_VERIFIED') {
+      if (errorCode === 'EMAIL_NOT_VERIFIED' || err.response?.data?.error === 'unverified') {
         return navigate('/auth/verify-email', { state: { email, fromLogin: true } });
       }
       setError(err.response?.data?.message || 'Invalid email or password');
