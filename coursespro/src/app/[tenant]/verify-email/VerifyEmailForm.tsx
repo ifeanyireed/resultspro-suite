@@ -166,11 +166,19 @@ function VerifyEmailContent({ tenant }: { tenant: any }) {
 
     try {
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-      await axios.post(`${USERS_API}/api/v1/auth/resend-verification`, {
+      const res = await axios.post(`${USERS_API}/api/v1/auth/resend-verification`, {
         email: email.trim(),
         tenant_id: tenant?.id,
         tenant_slug: resolvedTenantSlug
       });
+
+      if (res.data?.already_verified) {
+        setSuccess('Your account is already verified! Redirecting to login...');
+        setTimeout(() => {
+          router.push(`/login?email=${encodeURIComponent(email.trim())}&verified=true`);
+        }, 1500);
+        return;
+      }
 
       setSuccess(`A new OTP has been sent to ${email}.`);
       setCountdown(60);
