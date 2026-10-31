@@ -82,33 +82,7 @@ func sendViaProxy(to, subject, htmlBody, textBody, fromName string) error {
 	return nil
 }
 
-func sendDirectSMTP(to, subject, htmlBody, textBody, fromName string) error {
-	smtpHost := os.Getenv("SMTP_HOST")
-	smtpPort := os.Getenv("SMTP_PORT")
-	smtpUser := os.Getenv("SMTP_USER")
-	smtpPass := os.Getenv("SMTP_PASS")
-
-	if smtpPass == "" {
-		return fmt.Errorf("SMTP_PASS environment variable is missing")
-	}
-	if smtpUser == "" {
-		return fmt.Errorf("SMTP_USER environment variable is missing")
-	}
-	if smtpHost == "" {
-		smtpHost = "smtp-relay.brevo.com"
-	}
-	if smtpPort == "" {
-		smtpPort = "587"
-	}
-
-	from := os.Getenv("SMTP_FROM")
-	if from == "" {
-		if strings.Contains(smtpUser, "@smtp-brevo.com") {
-			from = "hello@resultspro.ng"
-		} else {
-			from = smtpUser
-		}
-	}
+func sendSMTPOnPort(smtpHost, smtpPort, smtpUser, smtpPass, from, fromName, to, subject, htmlBody, textBody string) error {
 	addr := fmt.Sprintf("%s:%s", smtpHost, smtpPort)
 
 	boundary := fmt.Sprintf("bnd_%d", time.Now().UnixNano())
@@ -136,7 +110,7 @@ func sendDirectSMTP(to, subject, htmlBody, textBody, fromName string) error {
 	msg.WriteString(fmt.Sprintf("--%s--\r\n", boundary))
 
 	if smtpPort == "465" {
-		dialer := &net.Dialer{Timeout: 25 * time.Second}
+		dialer := &net.Dialer{Timeout: 10 * time.Second}
 		conn, err := tls.DialWithDialer(dialer, "tcp", addr, &tls.Config{
 			ServerName: smtpHost,
 		})
@@ -176,8 +150,8 @@ func sendDirectSMTP(to, subject, htmlBody, textBody, fromName string) error {
 		return c.Quit()
 	}
 
-	// Port 587 or standard SMTP with STARTTLS support
-	conn, err := net.DialTimeout("tcp", addr, 25*time.Second)
+	// Port 587 or 2525 standard SMTP with STARTTLS support
+	conn, err := net.DialTimeout("tcp", addr, 10*time.Second)
 	if err != nil {
 		return fmt.Errorf("failed to connect to SMTP at %s: %w", addr, err)
 	}
@@ -219,6 +193,58 @@ func sendDirectSMTP(to, subject, htmlBody, textBody, fromName string) error {
 		return fmt.Errorf("SMTP close data failed: %w", err)
 	}
 	return c.Quit()
+}
+
+func sendDirectSMTP(to, subject, htmlBody, textBody, fromName string) error {
+	smtpHost := os.Getenv("SMTP_HOST")
+	smtpPort := os.Getenv("SMTP_PORT")
+	smtpUser := os.Getenv("SMTP_USER")
+	smtpPass := os.Getenv("SMTP_PASS")
+
+	if smtpPass == "" {
+		return fmt.Errorf("SMTP_PASS environment variable is missing")
+	}
+	if smtpUser == "" {
+		return fmt.Errorf("SMTP_USER environment variable is missing")
+	}
+	if smtpHost == "" {
+		smtpHost = "smtp-relay.brevo.com"
+	}
+	if smtpPort == "" {
+		smtpPort = "465"
+	}
+
+	from := os.Getenv("SMTP_FROM")
+	if from == "" {
+		if strings.Contains(smtpUser, "@smtp-brevo.com") {
+			from = "hello@resultspro.ng"
+		} else {
+			from = smtpUser
+		}
+	}
+
+	// Try configured port first, then robust fallback ports (465, 2525, 587)
+	portsToTry := []string{smtpPort}
+	for _, fallback := range []string{"465", "2525", "587"} {
+		if fallback != smtpPort {
+			portsToTry = append(portsToTry, fallback)
+		}
+	}
+
+	var lastErr error
+	for _, p := range portsToTry {
+		err := sendSMTPOnPort(smtpHost, p, smtpUser, smtpPass, from, fromName, to, subject, htmlBody, textBody)
+		if err == nil {
+			if p != smtpPort {
+				log.Printf("[Email] Successfully sent email on fallback port %s (configured was %s)", p, smtpPort)
+			}
+			return nil
+		}
+		lastErr = err
+		log.Printf("[Email] SMTP delivery failed on port %s: %v. Retrying next port if available...", p, err)
+	}
+
+	return lastErr
 }
 
 func SendEmail(to string, subject string, htmlBody string, textBody string, fromName string) error {
