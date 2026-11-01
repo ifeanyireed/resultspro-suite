@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -29,6 +31,7 @@ func main() {
 	}
 	log.Printf("Connecting to database...")
 	db.InitDB(config.DatabaseURL)
+	db.InitPuzzleSchema()
 
 	mux := http.NewServeMux()
 
@@ -85,14 +88,42 @@ func main() {
 	mux.HandleFunc("/auth/verify-email", handlers.HandleVerifyEmail)
 	mux.HandleFunc("/auth/resend-verification", handlers.HandleResendVerification)
 	mux.HandleFunc("/api/v1/auth/resend-verification", handlers.HandleResendVerification)
+	mux.HandleFunc("/api/v1/auth/send-verification", handlers.HandlePlayerSendVerification)
 
-	mux.HandleFunc("/api/v1/auth/verify-email", handlers.HandleVerifyEmail)
+	mux.HandleFunc("/api/v1/auth/verify-email", func(w http.ResponseWriter, r *http.Request) {
+		bodyBytes, err := io.ReadAll(r.Body)
+		if err == nil {
+			r.Body = io.NopCloser(bytes.NewReader(bodyBytes))
+			if strings.Contains(string(bodyBytes), `"code"`) {
+				handlers.HandlePlayerVerifyEmail(w, r)
+				return
+			}
+		}
+		handlers.HandleVerifyEmail(w, r)
+	})
 
 	mux.HandleFunc("/auth/forgot-password", handlers.HandleForgotPassword)
-	mux.HandleFunc("/api/v1/auth/forgot-password", handlers.HandleForgotPassword)
+	mux.HandleFunc("/api/v1/auth/forgot-password", func(w http.ResponseWriter, r *http.Request) {
+		origin := r.Header.Get("Origin")
+		if strings.Contains(origin, "puzzle") || r.URL.Query().Get("puzzle") != "" {
+			handlers.HandlePlayerForgotPassword(w, r)
+			return
+		}
+		handlers.HandleForgotPassword(w, r)
+	})
 
 	mux.HandleFunc("/auth/reset-password", handlers.HandleResetPassword)
-	mux.HandleFunc("/api/v1/auth/reset-password", handlers.HandleResetPassword)
+	mux.HandleFunc("/api/v1/auth/reset-password", func(w http.ResponseWriter, r *http.Request) {
+		bodyBytes, err := io.ReadAll(r.Body)
+		if err == nil {
+			r.Body = io.NopCloser(bytes.NewReader(bodyBytes))
+			if strings.Contains(string(bodyBytes), `"code"`) {
+				handlers.HandlePlayerResetPassword(w, r)
+				return
+			}
+		}
+		handlers.HandleResetPassword(w, r)
+	})
 
 	mux.HandleFunc("/auth/update-profile", handlers.HandleUpdateProfile)
 	mux.HandleFunc("/api/v1/auth/update-profile", handlers.HandleUpdateProfile)
@@ -122,7 +153,14 @@ func main() {
 	// --- 2. Universal Handshake, Discovery & Profiles ---
 	mux.HandleFunc("/intelligence/profile/", handlers.HandleGetProfile)
 	mux.HandleFunc("/user/profiles", handlers.HandleGetBulkProfiles)
-	mux.HandleFunc("/api/v1/users", handlers.HandleListAllUsers)
+	mux.HandleFunc("/api/v1/users", func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		if q.Get("organisation_id") != "" || q.Get("group_id") != "" || q.Get("centre_id") != "" || q.Get("puzzle") != "" || r.Method == http.MethodPost || r.Method == http.MethodPut || (r.Method == http.MethodDelete && q.Get("id") != "") {
+			handlers.HandlePlayerUsersAdmin(w, r)
+			return
+		}
+		handlers.HandleListAllUsers(w, r)
+	})
 	mux.HandleFunc("/api/v1/users/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodDelete {
 			middleware.RequireRole("admin")(handlers.HandleDeleteUser).ServeHTTP(w, r)
@@ -361,7 +399,26 @@ func main() {
 
 	// --- 6. Subscriptions & Billing Management ---
 	mux.HandleFunc("/intelligence/subscription", handlers.HandleUpdateSubscription)
-	mux.HandleFunc("/api/v1/subscriptions", handlers.HandleUpdateSubscription)
+	mux.HandleFunc("/api/v1/subscriptions", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			handlers.HandlePlayerSubscriptions(w, r)
+			return
+		}
+		if r.Method == http.MethodPost || r.Method == http.MethodPatch || r.Method == http.MethodPut {
+			bodyBytes, err := io.ReadAll(r.Body)
+			if err == nil {
+				r.Body = io.NopCloser(bytes.NewReader(bodyBytes))
+				bodyStr := string(bodyBytes)
+				if strings.Contains(bodyStr, "target_type") || strings.Contains(bodyStr, "target_id") {
+					handlers.HandleUpdateSubscription(w, r)
+					return
+				}
+			}
+			handlers.HandlePlayerSubscriptions(w, r)
+			return
+		}
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+	})
 	mux.HandleFunc("/api/v1/subscriptions/tenant/", handlers.HandleGetTenantSubscription)
 	mux.HandleFunc("/api/v1/subscriptions/user/", handlers.HandleGetUserSubscription)
 	mux.HandleFunc("/api/v1/subscriptions/limits", handlers.HandleCheckSubscriptionLimits)
@@ -494,6 +551,71 @@ func main() {
 		}
 	}))
 
+	// =========================================================
+	// --- 7. PuzzlePro (Player Service, Tenancy & Sessions) ---
+	// =========================================================
+	// Player Authentication & Sessions
+	mux.HandleFunc("/api/v1/player/handshake", handlers.HandlePlayerHandshake)
+	mux.HandleFunc("/api/v1/player/code-login", handlers.HandlePlayerCodeLogin)
+	mux.HandleFunc("/api/v1/player/verify-session", handlers.HandlePlayerVerifySession)
+
+	// Engine aliases for handshake/code-login/verify-session
+	mux.HandleFunc("/api/v1/engine/handshake", handlers.HandlePlayerHandshake)
+	mux.HandleFunc("/api/v1/engine/code-login", handlers.HandlePlayerCodeLogin)
+	mux.HandleFunc("/api/v1/engine/verify-session", handlers.HandlePlayerVerifySession)
+
+	// Player Progression & Leaderboard (proxies to service_puzzlepro)
+	mux.HandleFunc("/api/v1/player/events", handlers.HandlePlayerProgressionProxy)
+	mux.HandleFunc("/api/v1/player/progress", handlers.HandlePlayerProgressionProxy)
+	mux.HandleFunc("/api/v1/player/leaderboard", handlers.HandlePlayerProgressionProxy)
+	mux.HandleFunc("/api/v1/engine/events", handlers.HandlePlayerProgressionProxy)
+	mux.HandleFunc("/api/v1/engine/progress", handlers.HandlePlayerProgressionProxy)
+	mux.HandleFunc("/api/v1/leaderboard", handlers.HandlePlayerProgressionProxy)
+
+	// Organisations / Schools & Families Portal
+	mux.HandleFunc("/api/v1/organisations", handlers.HandlePlayerOrganisations)
+	mux.HandleFunc("/api/v1/organisations/google-ads", handlers.HandlePlayerToggleGoogleAds)
+	mux.HandleFunc("/api/v1/organisations/profile", handlers.HandlePlayerUpdateProfile)
+	mux.HandleFunc("/api/v1/organisations/password", handlers.HandlePlayerUpdatePassword)
+	mux.HandleFunc("/api/v1/player/organisations", handlers.HandlePlayerOrganisations)
+
+	// Centres & Groups
+	mux.HandleFunc("/api/v1/centres", handlers.HandlePlayerCentres)
+	mux.HandleFunc("/api/v1/groups", handlers.HandlePlayerGroups)
+	mux.HandleFunc("/api/v1/group/students", handlers.HandlePlayerGroupStudents)
+	mux.HandleFunc("/api/v1/player/centres", handlers.HandlePlayerCentres)
+	mux.HandleFunc("/api/v1/player/groups", handlers.HandlePlayerGroups)
+	mux.HandleFunc("/api/v1/player/group/students", handlers.HandlePlayerGroupStudents)
+
+	// Player Users & Admin
+	mux.HandleFunc("/api/v1/player/users", handlers.HandlePlayerUsersAdmin)
+	mux.HandleFunc("/api/v1/player/users/world", handlers.HandlePlayerAssignWorld)
+	mux.HandleFunc("/api/v1/player/users/batch", handlers.HandlePlayerBatchSaveUsers)
+	mux.HandleFunc("/api/v1/users/world", handlers.HandlePlayerAssignWorld)
+	mux.HandleFunc("/api/v1/users/batch", handlers.HandlePlayerBatchSaveUsers)
+
+	// Subscriptions
+	mux.HandleFunc("/api/v1/player/subscriptions", handlers.HandlePlayerSubscriptions)
+
+	// Auth & Verification
+	mux.HandleFunc("/api/v1/player/auth/send-verification", handlers.HandlePlayerSendVerification)
+	mux.HandleFunc("/api/v1/player/auth/verify-email", handlers.HandlePlayerVerifyEmail)
+	mux.HandleFunc("/api/v1/player/auth/forgot-password", handlers.HandlePlayerForgotPassword)
+	mux.HandleFunc("/api/v1/player/auth/reset-password", handlers.HandlePlayerResetPassword)
+
+	// Embed Tokens
+	mux.HandleFunc("/api/v1/embed/verify", handlers.HandlePlayerVerifyEmbedToken)
+	mux.HandleFunc("/api/v1/embed/handshake", handlers.HandlePlayerVerifyEmbedToken)
+	mux.HandleFunc("/api/v1/embed/generate-token", handlers.HandlePlayerGenerateEmbedToken)
+	mux.HandleFunc("/api/v1/player/embed/verify", handlers.HandlePlayerVerifyEmbedToken)
+	mux.HandleFunc("/api/v1/player/embed/handshake", handlers.HandlePlayerVerifyEmbedToken)
+	mux.HandleFunc("/api/v1/player/embed/generate-token", handlers.HandlePlayerGenerateEmbedToken)
+
+	// Email & Contact
+	mux.HandleFunc("/api/v1/email/send", handlers.HandlePlayerSendEmail)
+	mux.HandleFunc("/api/v1/contact/send", handlers.HandlePlayerSendContactForm)
+	mux.HandleFunc("/api/v1/player/email/send", handlers.HandlePlayerSendEmail)
+	mux.HandleFunc("/api/v1/player/contact/send", handlers.HandlePlayerSendContactForm)
 
 	// Wrap entire handler tree with CORS middleware
 	handler := middleware.EnableCORS(mux)

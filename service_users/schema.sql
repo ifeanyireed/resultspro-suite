@@ -614,3 +614,92 @@ CREATE TABLE IF NOT EXISTS payout_requests (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- =========================================================
+-- 41. PuzzlePro Engine (Player Service, Tenancy & Sessions)
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS puzzle_organisations (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(50) NOT NULL DEFAULT 'school',
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    phone VARCHAR(50),
+    address TEXT,
+    logo_url VARCHAR(500),
+    brand_color VARCHAR(50) DEFAULT '#4F46E5',
+    google_ads_enabled BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS puzzle_centres (
+    id SERIAL PRIMARY KEY,
+    organisation_id INT NOT NULL REFERENCES puzzle_organisations(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    address TEXT,
+    phone VARCHAR(50),
+    contact_email VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS puzzle_groups (
+    id SERIAL PRIMARY KEY,
+    organisation_id INT NOT NULL REFERENCES puzzle_organisations(id) ON DELETE CASCADE,
+    centre_id INT REFERENCES puzzle_centres(id) ON DELETE SET NULL,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(50) UNIQUE NOT NULL,
+    world_id INT DEFAULT 1,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS puzzle_users (
+    id SERIAL PRIMARY KEY,
+    organisation_id INT REFERENCES puzzle_organisations(id) ON DELETE SET NULL,
+    centre_id INT REFERENCES puzzle_centres(id) ON DELETE SET NULL,
+    group_id INT REFERENCES puzzle_groups(id) ON DELETE SET NULL,
+    username VARCHAR(100) NOT NULL,
+    access_code VARCHAR(50) UNIQUE NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'student',
+    status VARCHAR(50) NOT NULL DEFAULT 'active',
+    assigned_world_id INT DEFAULT 1,
+    avatar VARCHAR(255) DEFAULT 'default.png',
+    total_xp INT DEFAULT 0,
+    total_stars INT DEFAULT 0,
+    last_login_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS puzzle_subscriptions (
+    id SERIAL PRIMARY KEY,
+    organisation_id INT REFERENCES puzzle_organisations(id) ON DELETE CASCADE,
+    plan_name VARCHAR(100) NOT NULL DEFAULT 'Free Tier',
+    seats INT NOT NULL DEFAULT 50,
+    price INT NOT NULL DEFAULT 0,
+    billing_cycle VARCHAR(50) NOT NULL DEFAULT 'yearly',
+    status VARCHAR(50) NOT NULL DEFAULT 'active',
+    current_period_end TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS puzzle_verification_codes (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    code VARCHAR(10) NOT NULL,
+    type VARCHAR(50) NOT NULL DEFAULT 'email_verification',
+    expires_at TIMESTAMPTZ NOT NULL,
+    used BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_puzzle_groups_code ON puzzle_groups(code);
+CREATE INDEX IF NOT EXISTS idx_puzzle_users_access_code ON puzzle_users(access_code);
+CREATE INDEX IF NOT EXISTS idx_puzzle_users_group_id ON puzzle_users(group_id);
+CREATE INDEX IF NOT EXISTS idx_puzzle_users_org_id ON puzzle_users(organisation_id);
+CREATE INDEX IF NOT EXISTS idx_puzzle_centres_org_id ON puzzle_centres(organisation_id);
+CREATE INDEX IF NOT EXISTS idx_puzzle_verif_email ON puzzle_verification_codes(email, code);
