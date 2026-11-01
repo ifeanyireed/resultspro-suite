@@ -91,7 +91,7 @@ class SettingsModals {
               child: const Icon(Icons.email_outlined, color: AppColors.skyBlue, size: 20),
             ),
             title: const Text('Contact Support', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.darkBlue)),
-            subtitle: Text('support@scholars_ng.com', style: TextStyle(color: AppColors.darkBlue.withOpacity(0.5), fontSize: 12)),
+            subtitle: Text('support@scholarsng.com', style: TextStyle(color: AppColors.darkBlue.withOpacity(0.5), fontSize: 12)),
           ),
           const SizedBox(height: 12),
           ListTile(

@@ -91,7 +91,7 @@ export default function Navbar() {
       name: 'Products', 
       path: '#',
       subItems: [
-        { name: 'scholars_ng', path: '/scholars_ng' },
+        { name: 'ScholarsNG', path: '/scholars_ng' },
         { name: 'ExamsPRO', path: '/examspro' },
         { name: 'ClassroomPRO', path: '/classroompro' },
         { name: 'ResultsPRO', path: '/resultspro' },

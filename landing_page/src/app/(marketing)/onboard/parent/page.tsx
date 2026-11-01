@@ -1070,7 +1070,7 @@ export default function ParentOnboarding() {
                 <span className="text-[10px] font-extrabold text-[#146ef5] tracking-[0.25em] uppercase block mb-2">Onboarding Completed</span>
                 <h2 className="text-3xl font-black text-slate-800 leading-tight mb-4">Profile Activated!</h2>
                 <p className="text-sm text-slate-500 max-w-md mx-auto mb-8 leading-relaxed">
-                  Welcome to the scholars_ng Ecosystem, <b>{formData.parentName}</b>. Your relationship ledger matches have been verified and synced downstream.
+                  Welcome to the ScholarsNG Ecosystem, <b>{formData.parentName}</b>. Your relationship ledger matches have been verified and synced downstream.
                 </p>
 
                 {/* Summary Box */}
@@ -1110,7 +1110,7 @@ export default function ParentOnboarding() {
                     href="https://scholars_ng.resultspro.ng"
                     className="px-8 py-4 bg-[#146ef5] hover:bg-[#146ef5]/90 text-white rounded-full font-bold text-xs uppercase tracking-widest shadow-md hover:-translate-y-0.5 transition-all text-center"
                   >
-                    Launch scholars_ng Portal
+                    Launch ScholarsNG Portal
                   </a>
                   <button
                     type="button"

@@ -37,7 +37,7 @@ class SubscriptionBillingPage extends StatelessWidget {
                 children: [
                   const Text('Active Product', style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
-                  const Text('scholars_ng Enterprise', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+                  const Text('ScholarsNG Enterprise', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

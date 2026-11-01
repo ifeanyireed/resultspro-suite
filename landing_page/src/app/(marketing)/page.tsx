@@ -20,7 +20,7 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {[
-              { id: 'scholars_ng', title: 'scholars_ng', desc: 'Mobile-First Digital Campus experience.', icon: IconSchool, href: '/scholars_ng' },
+              { id: 'scholars_ng', title: 'ScholarsNG', desc: 'Mobile-First Digital Campus experience.', icon: IconSchool, href: '/scholars_ng' },
               { id: 'examspro', title: 'ExamsPRO', desc: 'Gamified CBT preparation for external exams.', icon: IconTrophy, href: '/examspro' },
               { id: 'classroompro', title: 'ClassroomPRO', desc: 'Offline-first digital classroom resources.', icon: IconDeviceLaptop, href: '/classroompro' },
               { id: 'resultspro', title: 'ResultsPRO', desc: 'AI-powered results processing and insights.', icon: IconChartBar, href: '/resultspro' },

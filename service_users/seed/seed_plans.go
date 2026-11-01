@@ -52,10 +52,10 @@ func main() {
 		// PricingSection.tsx
 		// -------------------------
 		// School
-		{"FREE", "scholars_ng", "School", 0, "forever", []string{"Up to 100 Students & 15 Teachers", "scholars_ng Mobile Apps", "ResultsPRO (Basic)", "ExamsPRO (Free)", "2GB Storage"}, "Get Started Free", false, "PREMIUM"},
-		{"STARTER", "scholars_ng", "School", 15000, "per month", []string{"Up to 500 Students & 50 Teachers", "scholars_ng Mobile Apps", "ResultsPRO (Full)", "ExamsPRO (Standard CBT)", "ClassroomPRO", "15GB Storage"}, "Start with Starter", false, "PREMIUM"},
-		{"PRO", "scholars_ng", "School", 35000, "per month", []string{"Up to 2,000 Students & 300 Teachers", "scholars_ng Mobile Apps", "ResultsPRO & ExamsPRO", "ClassroomPRO", "PuzzlePRO", "50GB Storage"}, "Upgrade to Pro", true, "PREMIUM"},
-		{"ENTERPRISE", "scholars_ng", "School", 80000, "per month", []string{"Unlimited Students & Teachers", "scholars_ng Mobile Apps", "ResultsPRO & ExamsPRO", "ClassroomPRO", "Access to All Suite Products", "Custom Domain & White-labeling", "500GB Storage"}, "Contact Sales", false, "PREMIUM"},
+		{"FREE", "scholars_ng", "School", 0, "forever", []string{"Up to 100 Students & 15 Teachers", "ScholarsNG Mobile Apps", "ResultsPRO (Basic)", "ExamsPRO (Free)", "2GB Storage"}, "Get Started Free", false, "PREMIUM"},
+		{"STARTER", "scholars_ng", "School", 15000, "per month", []string{"Up to 500 Students & 50 Teachers", "ScholarsNG Mobile Apps", "ResultsPRO (Full)", "ExamsPRO (Standard CBT)", "ClassroomPRO", "15GB Storage"}, "Start with Starter", false, "PREMIUM"},
+		{"PRO", "scholars_ng", "School", 35000, "per month", []string{"Up to 2,000 Students & 300 Teachers", "ScholarsNG Mobile Apps", "ResultsPRO & ExamsPRO", "ClassroomPRO", "PuzzlePRO", "50GB Storage"}, "Upgrade to Pro", true, "PREMIUM"},
+		{"ENTERPRISE", "scholars_ng", "School", 80000, "per month", []string{"Unlimited Students & Teachers", "ScholarsNG Mobile Apps", "ResultsPRO & ExamsPRO", "ClassroomPRO", "Access to All Suite Products", "Custom Domain & White-labeling", "500GB Storage"}, "Contact Sales", false, "PREMIUM"},
 
 		// Family
 		{"FREE", "FamilyHub", "Family", 0, "forever", []string{"1 Student Profile", "ResultsPRO Parent Portal", "Community Access", "Mobile App"}, "Join Free", false, "PREMIUM"},

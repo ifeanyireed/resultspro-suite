@@ -23,7 +23,7 @@ export default function ScholarsNgPage() {
   return (
     <div className="w-full">
       <Header
-        title="scholars_ng (Tenants)"
+        title="ScholarsNG (Tenants)"
         subtitle="Manage multi-tenant institutions, verification pipelines, and white-label branding"
       />
 

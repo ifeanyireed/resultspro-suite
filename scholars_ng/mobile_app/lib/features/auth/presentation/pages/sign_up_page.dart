@@ -89,7 +89,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ScrollReveal(
                     delay: const Duration(milliseconds: 200),
                     child: Text(
-                      'Join the scholars_ng community today.',
+                      'Join the ScholarsNG community today.',
                       style: TextStyle(
                         fontSize: 16,
                         color: AppColors.darkBlue.withOpacity(0.7),

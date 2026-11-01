@@ -235,7 +235,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           const ScrollReveal(
             delay: Duration(milliseconds: 200),
             child: Text(
-              'Welcome to scholars_ng',
+              'Welcome to ScholarsNG',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 34,

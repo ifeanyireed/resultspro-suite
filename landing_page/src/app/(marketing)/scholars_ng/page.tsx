@@ -11,7 +11,7 @@ import {
 } from '@tabler/icons-react';
 
 export const metadata = {
-  title: 'scholars_ng | ResultsPro Edu Suite',
+  title: 'ScholarsNG | ResultsPro Edu Suite',
   description: 'The complete operating system for modern African schools. Manage finance, HR, admissions, and more in one unified platform.',
 };
 
@@ -56,18 +56,18 @@ export default function ScholarsNgPage() {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-sm fw-600 mb-6 backdrop-blur-sm text-blue-300">
               <IconSchool size={16} />
-              <span>ResultsPro scholars_ng</span>
+              <span>ResultsPro ScholarsNG</span>
             </div>
             <h1 className="fw-300 tracking-tight" style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
               The operating system for <span style={{ fontWeight: 700, color: 'white' }}>modern schools.</span>
             </h1>
             <p className="text-body-lg text-white/70 mt-6 max-w-2xl">
-              Eliminate paper trails and disjointed software. scholars_ng unifies your admissions, finance, human resources, and daily operations into one powerful, mobile-first command center.
+              Eliminate paper trails and disjointed software. ScholarsNG unifies your admissions, finance, human resources, and daily operations into one powerful, mobile-first command center.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-10">
               <Link href="/onboard/school" className="btn w-full sm:w-auto" style={{ backgroundColor: 'var(--color-nets-red)', color: 'white', padding: '1rem 2rem', fontSize: '1rem' }}>
-                Deploy scholars_ng
+                Deploy ScholarsNG
               </Link>
               <Link href="#features" className="btn btn-outline-white w-full sm:w-auto text-center" style={{ padding: '1rem 2rem', fontSize: '1rem' }}>
                 Explore Features
@@ -87,7 +87,7 @@ export default function ScholarsNgPage() {
                 Run your school like a modern enterprise.
               </h2>
               <p className="text-muted text-lg mb-8 leading-relaxed">
-                Most schools in Africa lose up to 15% of their potential revenue to inefficiencies, manual receipt tracking, and undocumented expenses. scholars_ng plugs the leaks by bringing bank-grade financial technology directly into your administrative office.
+                Most schools in Africa lose up to 15% of their potential revenue to inefficiencies, manual receipt tracking, and undocumented expenses. ScholarsNG plugs the leaks by bringing bank-grade financial technology directly into your administrative office.
               </p>
               <ul className="space-y-4">
                 {[
@@ -108,7 +108,7 @@ export default function ScholarsNgPage() {
             <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
               <img 
                 src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250561/landing_page/photo12.jpg" 
-                alt="School Administrator using scholars_ng" 
+                alt="School Administrator using ScholarsNG" 
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </div>

@@ -7,7 +7,7 @@ const footerSections = [
   {
     title: 'Products',
     links: [
-      { label: 'scholars_ng',             href: '/scholars_ng' },
+      { label: 'ScholarsNG',             href: '/scholars_ng' },
       { label: 'ExamsPRO',              href: '/examspro' },
       { label: 'ClassroomPRO',          href: '/classroompro' },
       { label: 'ResultsPRO',            href: '/resultspro' },

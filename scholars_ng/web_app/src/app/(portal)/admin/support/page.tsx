@@ -73,7 +73,7 @@ export default function SupportPage() {
             transition={{ delay: 0.1 }}
             style={{ fontSize: '1.1rem', opacity: 0.9, lineHeight: 1.5 }}
           >
-            Welcome to scholars_ng Support. Find answers to common questions or reach out to our dedicated team of education experts.
+            Welcome to ScholarsNG Support. Find answers to common questions or reach out to our dedicated team of education experts.
           </motion.p>
           
           <motion.div 

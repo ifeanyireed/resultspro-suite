@@ -16,7 +16,7 @@ graph TD
         E["tutorspro (Port 3003) - Marketplace"]
         F["coursespro (Port 3006) - Cohort Learning"]
         G["landing_page (Port 3000) - Gateway"]
-        H["scholars_ng (Port 3004) - White-Label"]
+        H["ScholarsNG (Port 3004) - White-Label"]
     end
 
     subgraph Go Microservices
@@ -77,7 +77,7 @@ resultspro_suite/
 ├── examspro/              # examsPRO CBT & Multiplayer Battle Arena (Next.js)
 ├── tutorspro/             # TutorsPRO Private Tutoring Marketplace (Next.js)
 ├── landing_page/          # Main Suite Portal & Marketing Gateway (Next.js)
-├── scholars_ng/             # scholars_ng White-Label Portal & Flutter Mobile App
+├── scholars_ng/           # ScholarsNG White-Label Portal & Flutter Mobile App
 ├── coursespro/            # Courses & Professional Training Platform
 │
 ├── service_users/         # ⚙️ Go 1.23 Microservice (Identity, Academics & Subscriptions)
@@ -110,7 +110,7 @@ All microservices write to the single, centrally managed remote MySQL instance:
 ### 1. [`service_users`](./service_users) (Port 7000)
 * **Identity & Auth**: Multi-tenant authentication, email OTP verification, Google/Microsoft OAuth 2.0, JWT token rotation, TOTP MFA, and server-to-server token introspection (`POST /auth/introspect`).
 * **Institutional Roles**: Multi-role assignment (`student`, `teacher`, `parent`, `school-admin`, `super-admin`, `agent`).
-* **White-Label Branding**: Dynamic skinning endpoints for scholars_ng (`logo_url`, `logo_emoji`, theme colors, motto, layout settings).
+* **White-Label Branding**: Dynamic skinning endpoints for ScholarsNG (`logo_url`, `logo_emoji`, theme colors, motto, layout settings).
 * **Family Graph**: Parent-child relationship linking and instant validation (`GET /intelligence/verify-relation`).
 * **Academics Graph Engine**: Academic sessions (`2025/2026`), terms, class hierarchy, sections, standard subjects, weekly syllabus topics, and national exam standards (WAEC/JAMB).
 * **Subscriptions & Invoicing**: Centralized plan limits (`Free`, `Pro`, `Enterprise`), dynamic term boundaries, quota enforcement, and institutional invoices.
@@ -163,7 +163,7 @@ The Master Control Centre for super-administrators:
 * [`examspro`](./examspro): High-stakes examination simulator and battle arena.
 * [`tutorspro`](./tutorspro): Tutor discovery and booking marketplace.
 * [`landing_page`](./landing_page): Main public gateway and single sign-on portal.
-* [`scholars_ng`](./scholars_ng): White-label branded school portals and mobile app.
+* [`ScholarsNG`](./scholars_ng): White-label branded school portals and mobile app.
 
 ---
 

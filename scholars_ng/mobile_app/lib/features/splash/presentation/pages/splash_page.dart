@@ -111,7 +111,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                     const ScrollReveal(
                       delay: Duration(milliseconds: 200),
                       child: Text(
-                        'scholars_ng',
+                        'ScholarsNG',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 72, 

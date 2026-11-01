@@ -3,9 +3,9 @@ import SharedLoginPage from '@/components/auth/SharedLoginPage';
 export default function PortalPage() {
   return (
     <SharedLoginPage 
-      brandTitle="scholars_ng"
+      brandTitle="ScholarsNG"
       brandSubtitle="RESULTSPRO EDU SUITE"
-      appName="scholars_ng"
+      appName="ScholarsNG"
       appDescription="The Unified Portal for Students, Parents, Teachers, and Admins"
       redirectPath="/portal/dashboard"
     />

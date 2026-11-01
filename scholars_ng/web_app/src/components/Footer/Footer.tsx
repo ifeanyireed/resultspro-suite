@@ -47,7 +47,7 @@ export default function Footer() {
             </div>
           </div>
           <p className={styles.copyrightText}>
-            &copy; {new Date().getFullYear()} Loral International Schools. Powered by scholars_ng.
+            &copy; {new Date().getFullYear()} Loral International Schools. Powered by ScholarsNG.
           </p>
         </ScrollReveal>
       </div>

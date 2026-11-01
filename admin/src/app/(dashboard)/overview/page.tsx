@@ -190,7 +190,7 @@ export default function OverviewPage() {
                 </WidgetCard>
               </div>
               <div className="h-full">
-                <WidgetCard title="scholars_ng Pulse">
+                <WidgetCard title="ScholarsNG Pulse">
                   <div className="flex flex-col items-center justify-center py-6 h-full text-center">
                     <Building size={40} className="text-indigo-600 mb-4" />
                     <div className="text-5xl font-bold text-gray-900">{(stats?.totalSchools ?? 0).toLocaleString()}</div>

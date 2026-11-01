@@ -164,7 +164,7 @@ const Hero = () => {
               <div>
                 <label className="field-label-dark">Select Core Need</label>
                 <select className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }}>
-                  <option value="scholars_ng">Digital Campus (scholars_ng)</option>
+                  <option value="scholars_ng">Digital Campus (ScholarsNG)</option>
                   <option value="examspro">CBT & Practice (ExamsPRO)</option>
                   <option value="classroompro">LMS (ClassroomPRO)</option>
                   <option value="resultspro">Results Processing (ResultsPRO)</option>

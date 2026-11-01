@@ -20,7 +20,7 @@ export default function TermsOfService() {
             
             <h2 className="text-2xl font-bold text-navy mt-10 mb-4">1. Acceptance of Terms</h2>
             <p className="mb-6 leading-relaxed">
-              By accessing and using the ResultsPro Edu Suite (including scholars_ng, ExamsPRO, ClassroomPRO, ResultsPRO, TutorsPRO, and PuzzlePRO), you accept and agree to be bound by the terms and provision of this agreement.
+              By accessing and using the ResultsPro Edu Suite (including ScholarsNG, ExamsPRO, ClassroomPRO, ResultsPRO, TutorsPRO, and PuzzlePRO), you accept and agree to be bound by the terms and provision of this agreement.
             </p>
             
             <h2 className="text-2xl font-bold text-navy mt-10 mb-4">2. Use License</h2>

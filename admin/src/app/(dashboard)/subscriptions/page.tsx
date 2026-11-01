@@ -54,7 +54,7 @@ export default function SubscriptionsCommandCenter() {
   const [newFeature, setNewFeature] = useState('');
 
   const tabs = [
-    { id: 'scholars_ng', label: 'scholars_ng', icon: School },
+    { id: 'scholars_ng', label: 'ScholarsNG', icon: School },
     { id: 'ResultsPRO', label: 'ResultsPRO', icon: LayoutDashboard },
     { id: 'ExamsPRO', label: 'ExamsPRO', icon: Edit },
     { id: 'ClassroomPRO', label: 'ClassroomPRO', icon: Users },
