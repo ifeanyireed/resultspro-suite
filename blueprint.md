@@ -367,46 +367,41 @@ The agent should map the permissions and data access required by each role.
 
 ---
 
-## 7. Navigation and Application Structure
+## 7. Navigation and Application Structure: Horizontal Subtab Architecture
 
-Scholars.ng should use a shared application shell.
+Scholars.ng implements a shared, role-sensitive application shell modeled directly after the **`admin` modular apps architecture** (`admin/src/app/(dashboard)/`).
 
-The proposed interface consists of:
+### 7.1 Single-Tab Lateral Feel with Horizontal Subtabs
+To prevent the user interface from feeling fragmented or cluttered, the navigation collapses complex specialist applications into **single primary items on the left sidebar**, while internal workflows are organized as **horizontal subtabs across the top**:
 
-**Left Sidebar:**
-- Dashboard.
-- Tutors Pro.
-- Results Pro.
-- Classroom Pro.
-- Puzzle Pro.
-- Other administrative sections where applicable.
+- **Left Sidebar (Primary Navigation):**
+  - **Dashboard / Pulse**: Institutional overview.
+  - **ResultsPRO** (Single sidebar tab).
+  - **ClassroomPRO** (Single sidebar tab).
+  - **TutorsPRO** (Single sidebar tab).
+  - **PuzzlePRO** (Single sidebar tab).
+  - **Institutional Settings / Profile**.
 
-Each application appears as a distinct navigation item.
+- **Top Horizontal Subtabs (Secondary Workflow Navigation):**
+  When a user selects an application on the left sidebar, the page renders a persistent horizontal tab bar across the top. The subtabs shown are **dynamically filtered according to the active user's role** (Admin, Teacher, Parent, Student), displaying only the views relevant to their responsibilities:
 
-When a user enters an application, its internal functions should appear as horizontal tabs or secondary navigation.
-
-For example:
-
-Results Pro:
-- Overview.
-- Students.
-- Classes.
-- Subjects.
-- Assessments.
-- Gradebooks.
-- Reports.
-
-The exact sub-navigation should follow the existing standalone application capabilities.
+#### Role-Filtered Subtab Matrix:
+| Application | School Admin / Owner Subtabs | Teacher Subtabs | Parent Subtabs | Student Subtabs |
+| :--- | :--- | :--- | :--- | :--- |
+| **ResultsPRO** | `Overview`, `Marksheet Upload`, `Gradebooks`, `Broadsheets`, `Scratch Cards`, `Report Cards Batch` | `My Classes`, `Marks Entry`, `Class Broadsheet`, `Psychomotor Domain` | `Child Term Report`, `Report Card PDF`, `Performance Trends` | `My Report Card`, `Subject Grades`, `Ranking Snapshot` |
+| **ClassroomPRO** | `Curriculum Coverage`, `Handouts Registry`, `Teacher Compliance` | `Lesson Handouts`, `Quiz Manager`, `Student SRS Stats` | `Assigned Handouts`, `Homework Calendar`, `Study Streaks` | `Class Handouts`, `Practice Quizzes`, `Flashcards SRS Deck` |
+| **TutorsPRO** | `Tutoring Network`, `Assigned Students`, `Session Logs` | `My Tutor Profile`, `Scheduled Sessions`, `Session Notes` | `Find Tutors`, `Upcoming Sessions`, `Payment History` | `My Tutors`, `Join Session`, `Lesson Library` |
+| **PuzzlePRO** | `Class Coding Progress`, `Stage Leaderboards`, `Curriculum Waypoints` | `Class Progress`, `Waypoint Editor`, `Badge Awards` | `Child Progress`, `Coding Portfolio`, `Badges Earned` | `Play Adventure`, `Blockly Coding Canvas`, `My Badges & Stars` |
 
 ### Critical navigation rule
 
-Only applications the user is authorised to access should appear in their navigation.
+Only applications the tenant is subscribed to AND that the user is authorised to access should appear in their navigation.
 
 The interface must respect:
 
 - Tenant configuration.
-- Product subscriptions.
-- User roles.
+- Product subscriptions (`tenant.enabled_modules`).
+- User roles (Admin, Teacher, Parent, Student).
 - Individual permissions.
 - Application entitlements.
 
@@ -676,7 +671,205 @@ An inspection of the current `scholars_ng/` directory reveals the following curr
 - [ ] **Phase 1: Shell Middleware**: Move and enhance `proxy.ts` to `scholars_ng/web_app/src/middleware.ts`. Support apex detection, wildcard subdomains, and custom domains.
 - [ ] **Phase 2: Product Landing Page**: Build a modern, high-converting product landing page in `scholars_ng/web_app/src/app/(platform)/page.tsx` featuring the 4 specialist apps, role previews, and the 4 pricing tiers.
 - [ ] **Phase 3: Tenant Workspace Restructuring**: Organize tenant workspaces under `/[tenant]` with dynamic branding resolution from `service_users` without hardcoded fallbacks.
-- [ ] **Phase 4: Entitlement Hardening**: Connect `hasModule` checks to all sidebar navigation items and route guards across ResultsPRO, ClassroomPRO, TutorsPRO, and PuzzlePRO.
+- [ ] **Phase 4: Shared Feature Slices & Horizontal Subtabs**: Refactor specialist screens into shared presentational feature slices, configure monorepo transpilation, and implement horizontal subtabs matching the `admin` app layout.
+- [ ] **Phase 5: Entitlement Hardening**: Connect `hasModule` checks to all sidebar navigation items and route guards across ResultsPRO, ClassroomPRO, TutorsPRO, and PuzzlePRO.
+
+---
+
+## 15. Single Codebase Monorepo Architecture: Standalone Apps & ScholarsNG Embedded Extension
+
+### 15.1 Architectural Objectives & Core Dilemma
+The platform faces a fundamental architectural requirement:
+1. **Independent Front Doors**: Each specialist product (`ResultsPRO`, `ClassroomPRO`, `TutorsPRO`, `PuzzlePRO`) must exist as an independent, standalone web application accessible via its own brand domain (e.g. `resultspro.ng`, `classroompro.ng`, `tutorspro.ng`, `puzzlepro.ng`).
+2. **Unified Institutional Workspace**: When a school tenant accesses their branded workspace on ScholarsNG (`<school>.scholars.ng` or custom domain `portal.school.com`), they need these specialist tools seamlessly integrated directly inside their school portal.
+3. **The Duplication Trap**: Duplicating or copying screen code between standalone apps and `scholars_ng/web_app` creates massive technical debt, divergence of business logic, doubled testing burden, and inevitable synchronization bugs.
+
+**Solution**: A **Single Codebase Monorepo Architecture** leveraging Next.js 16 transpilation, Presentational Feature Slices, and Host-Aware Adapters. Standalone apps and ScholarsNG consume the **exact same code components** with zero duplication.
+
+---
+
+### 15.2 Tenant Workspace Layout & Navigation: The `admin` Horizontal Subtabs Pattern
+To maintain a clean, focused user experience, ScholarsNG does not overwhelm the left sidebar with dozens of nested links for each specialist tool. Instead, it adopts the **Modular Horizontal Subtabs** architecture proven in the `admin` app (`admin/src/app/(dashboard)/classroompro/page.tsx`):
+
+1. **School Public Front Door (`/`)**:
+   - For an unauthenticated visitor, `<school>.scholars.ng` displays the school's public website, admissions drive, curriculum overview, facilities showcase, announcements, and an "Apply for Admission" call-to-action.
+2. **Protected Role Portals (Behind Login Wall)**:
+   - Dedicated role-based portals: `/admin/*`, `/teacher/*`, `/parent/*`, `/student/*`.
+   - Access is guarded by authentication and role verification. Unauthenticated requests redirect to `/login?redirect=...`.
+3. **Smart Specialist Application Redirectors (`/resultspro`, `/classroompro`, etc.)**:
+   - When a user accesses a root application link (e.g., clicking on ClassroomPRO or entering `/classroompro` on the tenant workspace), an auth-aware redirector automatically routes the user to their role-specific view:
+     - School Owner / Admin $\rightarrow$ `/admin/classroompro`
+     - Teacher $\rightarrow$ `/teacher/classroompro`
+     - Parent $\rightarrow$ `/parent/classroompro`
+     - Student $\rightarrow$ `/student/classroompro`
+4. **Unified Single Sidebar Tab with Role-Filtered Horizontal Subtabs**:
+   - In the left sidebar, each specialist app occupies a **single lateral entry** (e.g. `ClassroomPRO`).
+   - Clicking it opens a unified workspace page featuring a horizontal subtab navigation bar at the top, rendering only the views relevant to the user's role:
+     - **Admin Views**:
+       - `ResultsPRO`: `Score Sheets` | `Grade Configuration` | `Scratch Cards / Access PINs` | `Report Card Batch Export`
+       - `ClassroomPRO`: `Curriculum Management` | `Subject Oversight` | `Content Moderation` | `Analytics & Usage`
+       - `TutorsPRO`: `Teacher Allocation` | `Lesson Schedules` | `Coverage Reports` | `Substitute Roster`
+       - `PuzzlePRO`: `School Roster` | `Class Leaderboards` | `Curriculum Integration` | `Tournaments`
+     - **Teacher Views**:
+       - `ResultsPRO`: `Assessment Entry` | `Continuous Assessment (CA)` | `Remark Generator` | `Class Broadsheets`
+       - `ClassroomPRO`: `Lesson Notes & Handouts` | `Interactive Quizzes` | `Flashcards Deck` | `Submissions & Grading`
+       - `TutorsPRO`: `My Tutoring Schedule` | `Session Logs` | `Student Progress Notes` | `Assigned Mentees`
+       - `PuzzlePRO`: `Class Assignments` | `Student Solves Tracker` | `Coding Challenge Creator`
+     - **Parent Views**:
+       - `ResultsPRO`: `Term Report Cards` | `Continuous Assessment Tracking` | `Scratch Card PIN Verification` | `Transcript PDF`
+       - `ClassroomPRO`: `Enrolled Subjects` | `Weekly Study Material` | `Homework Tracker` | `Mastery Analytics`
+       - `TutorsPRO`: `Request Curriculum Tutor` | `Active Sessions` | `Tutor Feedback` | `Session Billing`
+       - `PuzzlePRO`: `Child Coding Progress` | `Badges & Streaks` | `Weekly Skill Growth Report`
+     - **Student Views**:
+       - `ResultsPRO`: `My Term Results` | `Performance Breakdown` | `PIN Scratch Pad`
+       - `ClassroomPRO`: `Digital Handouts` | `Practice Quizzes` | `SRS Flashcards Deck` | `Study Streaks`
+       - `TutorsPRO`: `Upcoming Sessions` | `Homework Help Room` | `Tutor Chat`
+       - `PuzzlePRO`: `636 Coding Adventures` | `Daily Coding Quest` | `Battle Arena` | `My Skill Badges`
+
+---
+
+### 15.3 The Monorepo Presentational Feature Slice Pattern
+To share these views between standalone applications and ScholarsNG without code duplication:
+
+#### A. Component Architecture Separation
+Each specialist application separates its codebase into two layers:
+1. **Presentational Feature Slices (`src/features/*` or `src/components/modules/*`)**:
+   - Pure UI and domain logic encapsulated into self-contained components (e.g. `NotesList`, `QuizRunner`, `FlashcardDeck`, `GradebookTable`, `PuzzleIDE`).
+   - Components receive an `AppHostContext` or standard props:
+     ```typescript
+     export interface EmbeddedAppProps {
+       tenantId?: string;
+       user: { id: string; role: 'admin' | 'teacher' | 'parent' | 'student'; name: string };
+       standalone: boolean; // false when embedded in ScholarsNG, true when accessed directly
+       apiBaseUrl?: string;
+       onNavigate?: (route: string) => void;
+     }
+     ```
+   - When `standalone === true`, the feature renders standalone controls (e.g., public signup links, standalone pricing badges).
+   - When `standalone === false`, the feature renders in institutional mode (scoped to `tenantId`, school branding, institutional grade scales).
+2. **Host App Wrappers / Route Pages**:
+   - In standalone apps (e.g. `classroompro/src/app/notes/page.tsx`): The route page mounts the feature slice with `standalone: true`.
+   - In ScholarsNG (`scholars_ng/web_app/src/app/(portal)/teacher/classroompro/page.tsx`): The route page mounts the feature slice inside the horizontal subtab container with `standalone: false`.
+
+#### B. Path Aliases & Next.js Module Transpilation
+In `scholars_ng/web_app/tsconfig.json`:
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@classroompro/*": ["../../classroompro/src/*"],
+      "@resultspro/*": ["../../resultspro/src/*"],
+      "@tutorspro/*": ["../../tutorspro/src/*"],
+      "@puzzlepro/*": ["../../puzzlepro/src/*"]
+    }
+  }
+}
+```
+
+In `scholars_ng/web_app/next.config.ts`:
+```typescript
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  transpilePackages: [
+    "@classroompro",
+    "@resultspro",
+    "@tutorspro",
+    "@puzzlepro"
+  ],
+  // Enable modern React 19 / Next.js 16 monorepo resolution
+  experimental: {
+    externalDir: true, // Allows Next.js to import TypeScript source files from outside the app root
+  }
+};
+
+export default nextConfig;
+```
+
+#### C. Unified Subtab Container Pattern (`SpecialistAppContainer.tsx`)
+In `scholars_ng/web_app`, create a reusable container matching the `admin` layout:
+```tsx
+'use client';
+
+import React, { useState } from 'react';
+import { LucideIcon } from 'lucide-react';
+
+export interface AppTab {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  component: React.ComponentType<any>;
+}
+
+interface SpecialistAppContainerProps {
+  appTitle: string;
+  appSubtitle: string;
+  tabs: AppTab[];
+  contextProps: any;
+}
+
+export function SpecialistAppContainer({
+  appTitle,
+  appSubtitle,
+  tabs,
+  contextProps,
+}: SpecialistAppContainerProps) {
+  const [activeTab, setActiveTab] = useState(tabs[0]?.id || '');
+  const ActiveComponent = tabs.find(t => t.id === activeTab)?.component;
+
+  return (
+    <div className="w-full">
+      {/* App Header */}
+      <div className="border-b border-slate-200 bg-white px-6 py-4">
+        <h1 className="text-xl font-bold text-slate-900">{appTitle}</h1>
+        <p className="text-xs text-slate-500">{appSubtitle}</p>
+      </div>
+
+      {/* Horizontal Subtabs Bar (Admin Pattern) */}
+      <div className="px-6 pt-4 bg-white border-b border-slate-200">
+        <div className="flex space-x-2 overflow-x-auto pb-px scrollbar-hide">
+          {tabs.map(tab => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center space-x-2 px-4 py-3 border-b-2 font-medium text-xs transition-colors whitespace-nowrap ${
+                  isActive
+                    ? 'border-emerald-600 text-emerald-600 font-bold'
+                    : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
+                }`}
+              >
+                <Icon className="w-4 h-4 stroke-2" />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Mounted Feature View */}
+      <div className="p-6">
+        {ActiveComponent ? <ActiveComponent {...contextProps} /> : null}
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+### 15.4 Comparison: Duplication vs Monorepo Feature Slices
+
+| Dimension | Code Duplication (Anti-Pattern) | Monorepo Feature Slices (Target Architecture) |
+| :--- | :--- | :--- |
+| **Code Duplication** | 100% duplicate screen files in `scholars_ng/` | **0% duplication**; single source of truth |
+| **Bug Fix Lifecycle** | Must patch bug in standalone app AND copy to ScholarsNG | **Single patch** fixes standalone app and all school tenants instantly |
+| **Feature Velocity** | Slower; features diverge and fall out of sync | **Instant parity**; new features in ClassroomPRO appear in ScholarsNG immediately |
+| **Build & Bundle** | Bloated bundles; duplicate dependencies | Efficient; Next.js transpiles only imported feature slices with shared React 19 tree |
+| **Brand Customization** | Hardcoded per copy | Controlled via `standalone: false` and CSS theme variables |
 
 ---
 
