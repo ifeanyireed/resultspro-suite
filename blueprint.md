@@ -601,7 +601,7 @@ flowchart TD
     MW --> EXTRACT["Extract Host Header (strip port)"]
     EXTRACT --> CHECK{"Domain Type"}
 
-    CHECK -- "Root / Apex Domain<br>(scholars.ng, www, localhost)" --> APEX["Render ScholarsNG Product Landing Page<br>(src/app/(platform)/...)"]
+    CHECK -- "Root / Apex Domain<br>(scholars.ng, www, localhost)" --> APEX["Render ScholarsNG Product Landing Page<br>(src/app/(scholars_ng)/...)"]
     
     CHECK -- "Wildcard Subdomain<br>(e.g. greenfield.scholars.ng)" --> SUBDOMAIN["Extract Tenant Slug ('greenfield')"]
     CHECK -- "Custom Domain<br>(e.g. portal.greenfield.com)" --> CUSTOM["Query by Full Custom Domain"]
@@ -612,25 +612,26 @@ flowchart TD
     RESOLVE --> FOUND{"Tenant Found?"}
     FOUND -- No --> NOTFOUND["Render Custom Tenant Not Found Page"]
     FOUND -- Yes --> INJECT["Inject Request Headers<br>x-tenant-slug, x-tenant-id, x-tenant-name"]
-    INJECT --> REWRITE["Next.js Internal Route Rewrite<br>Rewrite to /[tenant]/... (Tenant Workspace)"]
+    INJECT --> REWRITE["Next.js Internal Route Rewrite<br>Rewrite to /(scholars_workspace)/[tenant]/... (*_scholars_workspace)"]
     
-    REWRITE --> WORKSPACE["Render Branded Tenant Workspace<br>- Dynamic Theme (--primary, --accent)<br>- School Public Website<br>- Role-Based Portal (Admin, Teacher, Parent, Student)<br>- Gated Module Access (hasModule)"]
+    REWRITE --> WORKSPACE["Render Branded Tenant Workspace (scholars_workspace)<br>- Title: [School Name] | Scholars Workspace<br>- Dynamic Theme (--primary, --accent)<br>- School Public Website & Admissions Portal<br>- Role-Based Portal (Admin, Teacher, Parent, Student)<br>- Gated Module Access (hasModule)"]
 ```
 
 ### 13.2 Next.js Shell Middleware Specification
 The shell middleware (`scholars_ng/web_app/src/middleware.ts`) must enforce:
 1. **Definitive Host Resolution**: Always extract domain from `req.headers.get('host')`.
-2. **Platform Domain Matching**: Read `process.env.NEXT_PUBLIC_PLATFORM_DOMAIN` (defaulting to `scholars.ng` or `localhost:3004`). If `hostname === platformDomain || hostname === 'www.' + platformDomain || hostname === 'localhost'`, serve the **Product Landing Page** without rewriting.
+2. **Platform Domain Matching**: Read `process.env.NEXT_PUBLIC_PLATFORM_DOMAIN` (defaulting to `scholars.ng` or `localhost:3004`). If `hostname === platformDomain || hostname === 'www.' + platformDomain || hostname === 'localhost'`, serve the **Product Landing Page** (`src/app/(scholars_ng)`) without rewriting.
 3. **Tenant Slug Extraction**:
    - For subdomains (`greenfield.scholars.ng` or `greenfield.localhost:3004`): slug is `hostname.split('.')[0]`.
    - For custom domains (`portal.greenfieldacademy.com`): slug is the full domain.
 4. **Header Propagation**: Pass `x-tenant-slug` and `x-tenant-domain` to Server Components.
-5. **Path Rewriting**: Rewrite `url.pathname === '/'` $\rightarrow$ `/${tenantSlug}` and `url.pathname === '/admin/pulse'` $\rightarrow$ `/${tenantSlug}/admin/pulse`.
+5. **Path Rewriting**: Rewrite `url.pathname === '/'` $\rightarrow$ `/${tenantSlug}` and `url.pathname === '/admin/pulse'` $\rightarrow$ `/${tenantSlug}/admin/pulse` (mapping internally to `(scholars_workspace)/[tenant]`).
 
-### 13.3 Tenant Workspace Capabilities
-When a request is rewritten into the Tenant Workspace (`[tenant]`):
+### 13.3 Tenant Workspace Capabilities (`scholars_workspace`)
+When a request is rewritten into the Tenant Workspace (`(scholars_workspace)/[tenant]`, wildcard identity `*_scholars_workspace`):
 1. **Dynamic Theme & Brand Skinning**:
    - Injects tenant's `--primary`, `--secondary`, and `--accent` colors into CSS variables.
+   - Sets document title to `${tenant.name} | Scholars Workspace`.
    - Loads tenant's `logo_url` and favicon dynamically in metadata.
 2. **Public School Front Door**:
    - Displays the school's public website, history, admissions application form, school calendar, and contact information.
@@ -665,12 +666,12 @@ An inspection of the current `scholars_ng/` directory reveals the following curr
 1. **Missing ScholarsNG Product Landing Page**: The current `scholars_ng/web_app/src/app/page.tsx` is an outdated demo for "My School Academy", not a commercial product page for ScholarsNG.
 2. **Missing Edge Middleware**: `scholars_ng/web_app/src/proxy.ts` exists as an orphaned helper but is not configured as `middleware.ts` in the root of `web_app/`.
 3. **Hardcoded Domain in Layout**: `layout.tsx` hardcodes `reedbreed.resultspro.ng` whenever `localhost` is encountered, which breaks local multi-tenant testing and prevents loading the product landing page on localhost.
-4. **Missing Route Separation**: No clear separation between `(platform)` (for ScholarsNG marketing & pricing) and `[tenant]` (for tenant workspaces).
+4. **Missing Route Separation**: No clear separation between `(scholars_ng)` (for ScholarsNG marketing & pricing) and `(scholars_workspace)/[tenant]` (for tenant workspaces).
 
 ### 14.3 Implementation Roadmap
 - [ ] **Phase 1: Shell Middleware**: Move and enhance `proxy.ts` to `scholars_ng/web_app/src/middleware.ts`. Support apex detection, wildcard subdomains, and custom domains.
-- [ ] **Phase 2: Product Landing Page**: Build a modern, high-converting product landing page in `scholars_ng/web_app/src/app/(platform)/page.tsx` featuring the 4 specialist apps, role previews, and the 4 pricing tiers.
-- [ ] **Phase 3: Tenant Workspace Restructuring**: Organize tenant workspaces under `/[tenant]` with dynamic branding resolution from `service_users` without hardcoded fallbacks.
+- [ ] **Phase 2: Product Landing Page**: Build a modern, high-converting product landing page in `scholars_ng/web_app/src/app/(scholars_ng)/page.tsx` featuring the 4 specialist apps, role previews, and the 4 pricing tiers.
+- [ ] **Phase 3: Tenant Workspace Restructuring**: Organize tenant workspaces under `/(scholars_workspace)/[tenant]` with dynamic branding resolution from `service_users` without hardcoded fallbacks.
 - [ ] **Phase 4: Shared Feature Slices & Horizontal Subtabs**: Refactor specialist screens into shared presentational feature slices, configure monorepo transpilation, and implement horizontal subtabs matching the `admin` app layout.
 - [ ] **Phase 5: Entitlement Hardening**: Connect `hasModule` checks to all sidebar navigation items and route guards across ResultsPRO, ClassroomPRO, TutorsPRO, and PuzzlePRO.
 
