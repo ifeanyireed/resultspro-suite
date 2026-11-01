@@ -1,8 +1,8 @@
-If I walked into ResultsPRO, ExamsPRO, ClassroomPRO, TutorsPRO, and ScholarsNG today, I would want each to feel like a **specialist tool**, while SchoolHub feels like the **operating system**.
+If I walked into ResultsPRO, ExamsPRO, ClassroomPRO, TutorsPRO, and ScholarsNG today, I would want each to feel like a **specialist tool**, while scholars_ng feels like the **operating system**.
 
 Think:
 
-* SchoolHub = macOS
+* scholars_ng = macOS
 * ResultsPRO = Excel
 * ExamsPRO = Google Forms + CBT Engine + International Exams Past Pappers
 * ClassroomPRO = Google Classroom
@@ -366,11 +366,11 @@ Like:
 
 ---
 
-# SchoolHub
+# scholars_ng
 
 Now compare all of the above.
 
-SchoolHub should NOT compete with them.
+scholars_ng should NOT compete with them.
 
 ---
 
@@ -441,7 +441,7 @@ Like:
 
 # The Most Important Rule
 
-When someone is inside SchoolHub:
+When someone is inside scholars_ng:
 
 ```text
 I am running my school.

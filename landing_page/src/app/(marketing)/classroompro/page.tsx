@@ -87,7 +87,7 @@ export default function ClassroomProPage() {
                 {[
                   'Zero data costs for home study',
                   'Interactive assignments and tests',
-                  'Seamless integration with SchoolHub',
+                  'Seamless integration with scholars_ng',
                   'Parental oversight tools'
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">

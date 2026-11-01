@@ -51,7 +51,7 @@ export const DEFAULT_SUITE_NAV_ITEMS: NavItem[] = [
   { label: 'Subscriptions & Plans', mobileLabel: 'Plans', href: '/subscriptions', icon: CreditCardIcon, activeIcon: CreditCardSolid },
   { label: 'Invoices & Billing', mobileLabel: 'Invoices', href: '/invoices', icon: DocumentTextIcon, activeIcon: DocumentTextSolid },
   { label: 'Agent Network', mobileLabel: 'Agents', href: '/agents', icon: BriefcaseIcon, activeIcon: BriefcaseSolid },
-  { label: 'SchoolHUB (Tenants)', mobileLabel: 'SchoolHUB', href: '/schoolhub', icon: BuildingOfficeIcon, activeIcon: BuildingOfficeSolid },
+  { label: 'scholars_ng (Tenants)', mobileLabel: 'scholars_ng', href: '/scholars_ng', icon: BuildingOfficeIcon, activeIcon: BuildingOfficeSolid },
   { label: 'ResultPRO', mobileLabel: 'ResultPRO', href: '/resultspro', icon: DocumentCheckIcon, activeIcon: DocumentCheckSolid },
   { label: 'ExamsPRO', mobileLabel: 'ExamsPRO', href: '/exampro', icon: SparklesIcon, activeIcon: SparklesSolid },
   { label: 'ClassroomPRO', mobileLabel: 'Classroom', href: '/classroompro', icon: BookOpenIcon, activeIcon: BookOpenSolid },

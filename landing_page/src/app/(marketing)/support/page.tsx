@@ -3,7 +3,7 @@ import { IconHelp, IconBook, IconMessageCircle, IconArrowRight, IconSearch } fro
 
 export const metadata = {
   title: 'Help Center | ResultsPro Edu Suite',
-  description: 'Get help with SchoolHub, ExamsPRO, and all ResultsPro products.',
+  description: 'Get help with scholars_ng, ExamsPRO, and all ResultsPro products.',
 };
 
 export default function SupportPage() {
@@ -59,7 +59,7 @@ export default function SupportPage() {
                 Knowledge Base
                 <IconArrowRight size={20} className="text-slate-300 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-muted">Browse step-by-step documentation for deploying SchoolHub.</p>
+              <p className="text-muted">Browse step-by-step documentation for deploying scholars_ng.</p>
             </div>
           </div>
         </div>

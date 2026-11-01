@@ -103,7 +103,7 @@ export default function InvoicesPage() {
     let baseUrl = 'https://resultspro.ng';
     if (appModule) {
       const moduleLower = appModule.toLowerCase();
-      if (['examspro', 'coursespro', 'classroompro', 'schoolhub', 'tutorspro'].includes(moduleLower)) {
+      if (['examspro', 'coursespro', 'classroompro', 'scholars_ng', 'tutorspro'].includes(moduleLower)) {
         baseUrl = `https://${moduleLower}.resultspro.ng`;
       }
     }

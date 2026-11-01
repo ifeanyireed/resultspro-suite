@@ -53,7 +53,7 @@ type SubscriptionCheckResponse struct {
 type Plan struct {
 	ID                string    `json:"id"`
 	Name              string    `json:"name"` // Free, Pro, Enterprise
-	AppModule         string    `json:"app_module"` // SchoolHub, Family, Agent, ExamsPRO
+	AppModule         string    `json:"app_module"` // scholars_ng, Family, Agent, ExamsPRO
 	Category          string    `json:"category"` // For landing page grouping (School, Family, Agent)
 	MonthlyPrice      float64   `json:"monthly_price"`
 	AnnualPrice       float64   `json:"annual_price"`

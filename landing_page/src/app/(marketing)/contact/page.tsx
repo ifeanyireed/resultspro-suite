@@ -126,7 +126,7 @@ export default function ContactPage() {
                   <select 
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   >
-                    <option>SchoolHub Deployment</option>
+                    <option>scholars_ng Deployment</option>
                     <option>ExamsPRO Partnership</option>
                     <option>General Inquiry</option>
                     <option>Technical Support</option>

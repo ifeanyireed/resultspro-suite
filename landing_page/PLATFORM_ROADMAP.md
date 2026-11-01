@@ -14,7 +14,7 @@ This document outlines the architectural plan for user onboarding, agent managem
 * **Trigger:** After auth, the user is redirected back to the main portal. The portal calls `acad_service/intelligence/profile`. If the user has no roles, they hit this screen.
 * **Screen Content:** "Welcome! How do you want to use ResultPRO?"
   * **Card 1: "I am a Parent / Student"**
-    * **Action:** Redirects to SchoolHub to link their account to a child using a school-provided code.
+    * **Action:** Redirects to scholars_ng to link their account to a child using a school-provided code.
   * **Card 2: "I want to register my School"**
     * **Action:** Launches the School Setup Wizard.
   * **Card 3: "I am an Agent / Partner"**
@@ -43,7 +43,7 @@ An Agent gets an `AGENT` tier in the `user_subscriptions` table. When they onboa
    * **Columns:** School Name, Verification Status, Subscription Tier, Active Students, Agent Access.
    * **Action:** "Login as Admin" (Allows the agent to securely SSO into the school's dashboard using their agent role to help the school configure settings).
 3. **Wallet & Payouts (`/agent/wallet`)**
-   * **Content:** Ledger of earnings. Every time a parent pays for a Scratch Card or Tuition via SchoolHub for a school in their portfolio, a percentage is recorded here.
+   * **Content:** Ledger of earnings. Every time a parent pays for a Scratch Card or Tuition via scholars_ng for a school in their portfolio, a percentage is recorded here.
    * **Action:** "Request Payout" (Updates status to pending approval by Global Admin).
 4. **Agent Profile (`/agent/settings`)**
    * **Content:** Bank account details for payouts, custom agent branding (if they operate as an agency).

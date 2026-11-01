@@ -12,7 +12,7 @@ export default function AppDownload() {
               <span className="caption">Mobile Experience</span>
             </ScrollReveal>
             <ScrollReveal animation="fade-up" delay={200}>
-              <h2 className={styles.title}>SchoolHub in Your Pocket</h2>
+              <h2 className={styles.title}>scholars_ng in Your Pocket</h2>
             </ScrollReveal>
             <ScrollReveal animation="fade-up" delay={400}>
               <p className={styles.description}>

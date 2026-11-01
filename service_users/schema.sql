@@ -382,7 +382,7 @@ CREATE TABLE IF NOT EXISTS payout_requests (
 CREATE TABLE IF NOT EXISTS plans (
     id VARCHAR(191) PRIMARY KEY,
     name VARCHAR(191) NOT NULL, -- Free, Pro, Enterprise
-    app_module VARCHAR(191) DEFAULT 'SchoolHub', -- SchoolHub, Family, Agent, ExamsPRO
+    app_module VARCHAR(191) DEFAULT 'scholars_ng', -- scholars_ng, Family, Agent, ExamsPRO
     category VARCHAR(191) DEFAULT 'School', -- For landing page grouping
     monthly_price FLOAT DEFAULT 0.0,
     annual_price FLOAT DEFAULT 0.0,

@@ -72,7 +72,7 @@ export function Sidebar() {
     {
       title: 'MODULAR SUITE CONTROLS',
       links: [
-        { label: 'SchoolHUB (Tenants)', href: '/schoolhub', icon: BuildingOfficeIcon, activeIcon: BuildingOfficeSolid },
+        { label: 'scholars_ng (Tenants)', href: '/scholars_ng', icon: BuildingOfficeIcon, activeIcon: BuildingOfficeSolid },
         { label: 'ResultPRO', href: '/resultspro', icon: DocumentCheckIcon, activeIcon: DocumentCheckSolid },
         { label: 'ExamsPRO', href: '/exampro', icon: SparklesIcon, activeIcon: SparklesSolid },
         { label: 'ClassroomPRO', href: '/classroompro', icon: BookOpenIcon, activeIcon: BookOpenSolid },

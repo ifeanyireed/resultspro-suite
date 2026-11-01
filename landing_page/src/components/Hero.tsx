@@ -111,7 +111,7 @@ const Hero = () => {
             <Link href="/onboard" className="btn btn-red btn-lg">
               Get Started
             </Link>
-            <Link href="#schoolhub" className="btn btn-outline-white btn-lg">
+            <Link href="#scholars_ng" className="btn btn-outline-white btn-lg">
               Explore Products
             </Link>
           </motion.div>
@@ -164,7 +164,7 @@ const Hero = () => {
               <div>
                 <label className="field-label-dark">Select Core Need</label>
                 <select className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }}>
-                  <option value="schoolhub">Digital Campus (SchoolHub)</option>
+                  <option value="scholars_ng">Digital Campus (scholars_ng)</option>
                   <option value="examspro">CBT & Practice (ExamsPRO)</option>
                   <option value="classroompro">LMS (ClassroomPRO)</option>
                   <option value="resultspro">Results Processing (ResultsPRO)</option>

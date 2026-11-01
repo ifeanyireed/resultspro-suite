@@ -24,7 +24,7 @@ async function fetchInvoices() {
 }
 
 export default function SubscriptionsCommandCenter() {
-  const [activeTab, setActiveTab] = useState('SchoolHub');
+  const [activeTab, setActiveTab] = useState('scholars_ng');
   const [plans, setPlans] = useState<any[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -54,7 +54,7 @@ export default function SubscriptionsCommandCenter() {
   const [newFeature, setNewFeature] = useState('');
 
   const tabs = [
-    { id: 'SchoolHub', label: 'SchoolHub', icon: School },
+    { id: 'scholars_ng', label: 'scholars_ng', icon: School },
     { id: 'ResultsPRO', label: 'ResultsPRO', icon: LayoutDashboard },
     { id: 'ExamsPRO', label: 'ExamsPRO', icon: Edit },
     { id: 'ClassroomPRO', label: 'ClassroomPRO', icon: Users },
@@ -171,7 +171,7 @@ export default function SubscriptionsCommandCenter() {
     }
   };
 
-  const filteredPlans = plans.filter(p => (p.app_module || p.category) === activeTab || p.app_module === activeTab || (p.category === 'School' && activeTab === 'SchoolHub') || (p.category === 'Family' && activeTab === 'FamilyHub') || (p.category === 'Agent' && activeTab === 'AgentNetwork') || (p.category === 'ICAN' && activeTab === 'ExamsPRO'));
+  const filteredPlans = plans.filter(p => (p.app_module || p.category) === activeTab || p.app_module === activeTab || (p.category === 'School' && activeTab === 'scholars_ng') || (p.category === 'Family' && activeTab === 'FamilyHub') || (p.category === 'Agent' && activeTab === 'AgentNetwork') || (p.category === 'ICAN' && activeTab === 'ExamsPRO'));
 
   return (
     <div className="w-full relative">
