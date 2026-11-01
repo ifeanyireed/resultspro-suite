@@ -873,6 +873,74 @@ export function SpecialistAppContainer({
 
 ---
 
+### 15.5 Required Codebase Modifications to Enable Direct Page Reuse (Universal Host Pattern)
+
+To allow `@scholars_workspace` (`scholars_ng/web_app`) to mount **almost entire pages** directly from `@classroompro`, `@resultspro`, `@tutorspro`, and `@puzzlepro` without modifying business logic or breaking standalone operation, 5 focused modifications are required:
+
+#### 1. Mod 1: Host Shell Separation (`standalone` Prop / Thin Route Wrappers)
+- **The Issue**: Standalone pages currently embed outer layout chrome (e.g., `NoteDetailClient.tsx` renders `<Navbar />` and `<Footer />`; `NotesListPage` expects `DashboardLayout`). Mounting these directly in ScholarsNG would result in nested navbars and duplicate footers.
+- **The Mod**: Adopt the **Thin Route Wrapper** pattern:
+  - In each standalone app, extract the full-page inner content into a clean exported component (e.g. `NotesPageView.tsx`, `QuizPlayerView.tsx`, `ResultCheckerView.tsx`, `FindTutorView.tsx`, `PuzzleStudioView.tsx`).
+  - The standalone route (`page.tsx`) renders: `<Navbar /><NotesPageView standalone={true} /><Footer />`.
+  - When mounted inside ScholarsNG horizontal subtabs, it renders: `<NotesPageView standalone={false} />`.
+  - When `standalone === false`, standalone navigation bars, standalone footers, and redundant "Back to Home" buttons are suppressed.
+
+#### 2. Mod 2: Navigation & Route Translation (`HostNavigationProvider`)
+- **The Issue**: Standalone pages contain hardcoded internal links (e.g. `<Link href="/dashboard/notes/123">`, `router.push('/dashboard')`, or `useNavigate()` in ResultsPRO).
+- **The Mod**:
+  - Provide a `HostNavigationProvider` and `useAppNavigate()` hook:
+    - In standalone mode: Resolves native route paths (`/dashboard/notes/123`).
+    - In ScholarsNG embedded mode: Automatically maps internal routes to ScholarsNG tenant workspace subtabs (e.g. `/[tenant]/student/classroompro?subtab=notes&id=123` or updates active subtab state).
+  - In `resultspro`: Decouple `react-router-dom` from reusable views (provide a lightweight compatibility shim or standard React navigation props).
+
+#### 3. Mod 3: Unified Auth & Tenant Context Bridge (`AppHostContext`)
+- **The Issue**: Standalone apps query different `localStorage` keys for tokens (`accessToken`, `token`, `authToken`, `puzzlepro_student_user`) and different Zustand stores.
+- **The Mod**:
+  - Implement `<AppHostProvider>` in `scholars_ng/web_app` that supplies:
+    ```typescript
+    interface AppHostContextValue {
+      tenant: { id: string; slug: string; name: string };
+      user: { id: string; role: 'admin' | 'teacher' | 'parent' | 'student'; name: string };
+      token: string;
+      standalone: boolean;
+    }
+    ```
+  - Update `useAuthStore` in each standalone app to check `AppHostContext` first. If present, it initializes the session from the host without requiring separate user logins.
+  - On login in ScholarsNG, synchronize the session token across `localStorage` keys (`accessToken`, `token`, `authToken`) for backwards compatibility with legacy API interceptors.
+
+#### 4. Mod 4: API Client Tenant Interceptor (`x-tenant-id` Injection)
+- **The Issue**: Standalone Axios instances in `src/lib/api.ts` make requests without institutional tenant headers.
+- **The Mod**:
+  - Update the Axios request interceptors across all 4 apps:
+    ```typescript
+    api.interceptors.request.use((config) => {
+      const token = getActiveToken();
+      if (token) config.headers.Authorization = `Bearer ${token}`;
+      
+      const tenantId = getActiveTenantId();
+      if (tenantId) config.headers['x-tenant-id'] = tenantId;
+      
+      return config;
+    });
+    ```
+  - This ensures that when ClassroomPRO or ResultsPRO queries data, the backend automatically enforces school-level data isolation.
+
+#### 5. Mod 5: Monorepo Package Transpilation & Exports (`transpilePackages`)
+- **The Issue**: Next.js in `scholars_ng/web_app` will refuse to import TypeScript code from outside its project root unless transpilation is enabled.
+- **The Mod**:
+  - In `scholars_ng/web_app/next.config.ts`:
+    ```typescript
+    const nextConfig: NextConfig = {
+      transpilePackages: ['@classroompro', '@resultspro', '@tutorspro', '@puzzlepro'],
+      experimental: { externalDir: true }
+    };
+    ```
+  - In `scholars_ng/web_app/tsconfig.json`:
+    Configure path aliases mapping to each standalone app's `src/` directory.
+  - In each standalone app, create a clean entry barrel (`src/modules.ts`) exporting its reusable full-page views.
+
+---
+
 ### Final Instruction to the Agent
 
 Think of ResultPro as an ecosystem of independent but interconnected educational products.
