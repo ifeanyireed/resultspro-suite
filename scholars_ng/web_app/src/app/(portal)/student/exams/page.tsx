@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { 
   Quiz01Icon, 
   Calendar03Icon, 
-  HistoryIcon, 
+  Clock01Icon as HistoryIcon, 
   Clock01Icon, 
   AnalyticsUpIcon,
   AlertCircleIcon,

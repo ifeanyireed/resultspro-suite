@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search01Icon, FilterIcon, Mail01Icon, PhoneIcon, MoreHorizontalIcon } from 'hugeicons-react';
+import { Search01Icon, FilterIcon, Mail01Icon, CallIcon as PhoneIcon, MoreHorizontalIcon } from 'hugeicons-react';
 import api from '@/lib/api';
 
 export default function AdmissionsInquiriesPage() {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

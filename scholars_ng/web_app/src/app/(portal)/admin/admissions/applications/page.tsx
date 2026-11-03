@@ -6,7 +6,7 @@ import { FolderCheckIcon, Search01Icon, FilterIcon, MoreHorizontalIcon } from 'h
 import api from '@/lib/api';
 
 export default function AdmissionsApplicationsPage() {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

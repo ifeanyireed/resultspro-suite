@@ -33,7 +33,15 @@ import {
   Squares2X2Icon as Squares2X2Solid
 } from '@heroicons/react/24/solid';
 
-const studentMenu = [
+type MenuItem = {
+  name: string;
+  icon: any;
+  activeIcon: any;
+  slug: string;
+  section?: string;
+};
+
+const studentMenu: MenuItem[] = [
   { name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/student/dashboard' },
   { name: 'Classroom', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/student/classroom' },
   { name: 'Timetable', icon: CalendarIcon, activeIcon: CalendarIcon, slug: '/student/timetable' },
@@ -45,7 +53,7 @@ const studentMenu = [
   { name: 'Future Skills', icon: ComputerDesktopIcon, activeIcon: ComputerDesktopIcon, slug: '/student/future-skills' },
 ];
 
-const teacherMenu = [
+const teacherMenu: MenuItem[] = [
   { name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/teacher/dashboard' },
   { name: 'Classroom', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/teacher/classroom' },
   { name: 'My Classes', icon: BookOpenIcon, activeIcon: BookOpenIcon, slug: '/teacher/classes' },
@@ -53,7 +61,7 @@ const teacherMenu = [
   { name: 'Assessments', icon: ChartBarIcon, activeIcon: ChartBarIcon, slug: '/teacher/assessments' },
 ];
 
-const parentMenu = [
+const parentMenu: MenuItem[] = [
   { name: 'Dashboard', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/parent/dashboard' },
   { name: 'Future Skills', icon: ComputerDesktopIcon, activeIcon: ComputerDesktopIcon, slug: '/parent/future-skills' },
   { name: 'Results', icon: ChartPieIcon, activeIcon: ChartPieIcon, slug: '/parent/results' },
@@ -64,7 +72,7 @@ const parentMenu = [
   { name: 'Tutors', icon: UserGroupIcon, activeIcon: UserGroupIcon, slug: '/parent/tutors' },
 ];
 
-const adminMenu = [
+const adminMenu: MenuItem[] = [
   { section: 'Dashboard', name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/admin/pulse' },
   { section: 'Modular Suite', name: 'ClassroomPRO', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/admin/classrooms' },
   { name: 'TutorsPRO', icon: UserGroupIcon, activeIcon: UserGroupIcon, slug: '/admin/tutors' },
@@ -82,7 +90,7 @@ const adminMenu = [
   { name: 'Operations Controls', icon: Cog6ToothIcon, activeIcon: Cog6ToothIcon, slug: '/admin/operations' },
 ];
 
-const admissionsMenu = [
+const admissionsMenu: MenuItem[] = [
   { name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/admin/admissions' },
   { name: 'Inquiries', icon: EnvelopeIcon, activeIcon: EnvelopeIcon, slug: '/admin/admissions/inquiries' },
   { name: 'Applications', icon: FolderOpenIcon, activeIcon: FolderOpenIcon, slug: '/admin/admissions/applications' },
@@ -118,7 +126,16 @@ export default function PortalSidebar() {
     return studentMenu;
   };
 
-  const menuItems = getActiveMenu();
+  const isModuleEnabled = (slug: string) => {
+    if (!tenant || !tenant.enabled_modules) return true;
+    if (slug.includes('classroom')) return hasModule('classroompro');
+    if (slug.includes('tutors')) return hasModule('tutorspro');
+    if (slug.includes('results')) return hasModule('resultspro');
+    if (slug.includes('future-skills')) return hasModule('puzzlepro');
+    return true;
+  };
+
+  const menuItems = getActiveMenu().filter(item => isModuleEnabled(item.slug));
 
   return (
     <>
@@ -126,8 +143,8 @@ export default function PortalSidebar() {
         {/* Logo */}
         <div className="px-8 mb-6">
           <Image 
-            src="/logo.png" 
-            alt="ResultsPRO" 
+            src={tenant?.logo_url || "/logo.png"} 
+            alt={tenant?.name || "ResultsPRO"} 
             width={300} 
             height={80} 
             className="w-auto h-20 object-contain" 
@@ -202,10 +219,10 @@ export default function PortalSidebar() {
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
           
           <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
-            {mounted && <Image src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+            {mounted && <Image src={(user as any)?.avatarUrl || (user as any)?.avatar_url || `/avatars/character${ (String(user?.id || (user as any)?.name || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
             {!mounted && <Image src="/avatars/character1.jpg" alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
           </div>
-          <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? (user?.name || 'Loading...') : 'Loading...'}</h4>
+          <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">{mounted ? ((user as any)?.full_name || (user as any)?.name || 'Loading...') : 'Loading...'}</h4>
           <p className="text-[10px] text-gray-300 mb-6 relative z-10">{mounted ? (user?.email || 'Loading...') : 'Loading...'}</p>
           
           <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] transition-colors text-white text-xs font-semibold py-3 rounded-full relative z-10 shadow-md">

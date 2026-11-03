@@ -5,16 +5,21 @@ import {
   AcademicCapIcon,
   VideoCameraIcon
 } from '@heroicons/react/24/outline';
+import { Book02Icon, HelpCircleIcon } from 'hugeicons-react';
+import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
+import { NotesListView, QuizzesListView } from '@classroompro/modules';
 
-export default function ParentClassroomPage() {
+function ParentClassesDirectory() {
   return (
-    <>
-      <div className="flex items-end justify-between mb-8 mt-2">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Classes & Teachers</h1>
-          <p className="text-sm text-gray-500 mt-1">Alex's current curriculum and teacher directory.</p>
-        </div>
-      </div>
+    <div style={{ maxWidth: '1200px', padding: '1rem 0 4rem 0' }}>
+      <header style={{ marginBottom: '2rem' }}>
+        <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.25rem', letterSpacing: '-0.02em' }}>
+          Classes & Teacher Directory
+        </h2>
+        <p style={{ color: '#64748b', fontSize: '0.95rem', fontWeight: '500' }}>
+          Monitor your ward&apos;s current subjects, lesson plans, and teacher contacts.
+        </p>
+      </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {[
@@ -40,6 +45,40 @@ export default function ParentClassroomPage() {
           </div>
         ))}
       </div>
-    </>
+    </div>
+  );
+}
+
+export default function ParentClassroomHub() {
+  const tabs: AppSubtab[] = [
+    {
+      id: 'classes',
+      label: 'Classes & Instructors',
+      icon: AcademicCapIcon,
+      component: ParentClassesDirectory,
+    },
+    {
+      id: 'handouts',
+      label: 'Subject Notes & Handouts',
+      icon: Book02Icon,
+      component: NotesListView,
+    },
+    {
+      id: 'quizzes',
+      label: 'Quizzes & Practice',
+      icon: HelpCircleIcon,
+      component: QuizzesListView,
+    },
+  ];
+
+  return (
+    <SpecialistAppContainer
+      appTitle="Parent Classroom Portal"
+      appSubtitle="Curriculum visibility, classroom handouts, syllabus progress, and teacher direct messaging."
+      appBadge="ClassroomPRO"
+      accentColor="#146ef5"
+      tabs={tabs}
+      defaultTabId="classes"
+    />
   );
 }

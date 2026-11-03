@@ -1,18 +1,34 @@
 import axios from 'axios';
 
 // Create axios instance with defaults
-const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.VITE_API_URL || '');
+const getApiUrl = () => {
+  if (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  try {
+    return import.meta.env.VITE_API_URL || '';
+  } catch (e) {
+    return '';
+  }
+};
+const apiUrl = getApiUrl();
 export const axiosInstance = axios.create({
   baseURL: apiUrl.endsWith('/') ? apiUrl : `${apiUrl}/`,
   timeout: 30000,
 });
 
-// Add request interceptor to include auth token
+// Add request interceptor to include auth token and tenant id
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken') || localStorage.getItem('accessToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('authToken') || localStorage.getItem('accessToken') || localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      const tenantId = localStorage.getItem('tenantId') || localStorage.getItem('x-tenant-id');
+      if (tenantId) {
+        config.headers['x-tenant-id'] = tenantId;
+      }
     }
     return config;
   },

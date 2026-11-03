@@ -44,7 +44,7 @@ export default function SharedLoginPage({
       const res = await api.post(loginEndpoint, { email, password });
       const token = res.data.token || res.data.access_token;
       if (token) {
-        setAuth(res.data.user, token);
+        setAuth(res.data.user, token, res.data.refreshToken || res.data.refresh_token || '');
         
         // Option B: Store session slug securely in a cookie for the Next.js proxy to read
         // In reality, this would be set as HttpOnly by the backend, but we'll simulate it here

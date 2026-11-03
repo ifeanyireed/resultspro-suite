@@ -19,7 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@classroompro/*": ["../../classroompro/src/*"],
+      "@resultspro/*": ["../../resultspro/src/*"],
+      "@tutorspro/*": ["../../tutorspro/src/*"],
+      "@puzzlepro/*": ["../../puzzlepro/src/*"]
     }
   },
   "include": [

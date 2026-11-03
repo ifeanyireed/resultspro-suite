@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft01Icon, UserGroupIcon, Trophy01Icon, Message01Icon } from 'hugeicons-react';
+import { ArrowLeft01Icon, UserGroupIcon, Award01Icon as Trophy01Icon, Message01Icon } from 'hugeicons-react';
 import api from '@/lib/api';
 
 export default function PeersDirectory({ params }: { params: Promise<{ cohortId: string }> }) {

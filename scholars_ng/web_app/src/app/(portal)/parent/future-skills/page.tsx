@@ -9,14 +9,17 @@ import {
   CodeBracketIcon
 } from '@heroicons/react/24/outline';
 import { SparklesIcon } from '@heroicons/react/24/solid';
+import { CodeCircle01Icon, Trophy01Icon } from 'hugeicons-react';
+import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
+import { CustomizerLeaderboard } from '@puzzlepro/modules';
 
-export default function ParentFutureSkillsPage() {
+function ParentFutureSkillsJourney() {
   return (
-    <>
+    <div style={{ maxWidth: '1200px', padding: '1rem 0 4rem 0' }}>
       <div className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Future Skills Journey</h1>
-          <p className="text-sm text-gray-500 mt-1">Track Alex's progress in coding, AI, and Courses projects.</p>
+          <p className="text-sm text-gray-500 mt-1">Track your ward&apos;s progress in coding, AI, and robotics projects.</p>
         </div>
         <div className="flex items-center gap-3">
           <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
@@ -26,18 +29,16 @@ export default function ParentFutureSkillsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-6">
-        
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
         {/* Main Journey Flow */}
         <div className="lg:col-span-8 flex flex-col gap-3">
           <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
             <div className="flex items-center justify-between mb-8">
-              <h3 className="text-xl font-normal text-gray-900">Level 2: Web Development</h3>
+              <h3 className="text-xl font-normal text-gray-900">Level 2: Web Development & Logic</h3>
               <span className="px-3 py-1 bg-[#146ef5]/10 text-[#146ef5] font-bold text-xs rounded-full">Current Pathway</span>
             </div>
             
             <div className="relative pl-8 border-l-2 border-gray-100 space-y-10 ml-4">
-              
               {/* Completed Module */}
               <div className="relative">
                 <div className="absolute -left-[43px] w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center border-4 border-white shadow-sm text-white">
@@ -57,9 +58,9 @@ export default function ParentFutureSkillsPage() {
                     <h4 className="text-lg font-medium text-[#146ef5]">Module 2: CSS Styling</h4>
                     <span className="text-xs font-bold text-gray-400">40% Done</span>
                   </div>
-                  <p className="text-sm text-gray-600 mb-4">Alex is currently learning how to style web pages and make them look beautiful.</p>
+                  <p className="text-sm text-gray-600 mb-4">Learning how to style web pages, layout algorithms, and responsive design.</p>
                   <button className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-blue-50 text-xs font-bold px-4 py-2 rounded-full transition-colors flex items-center gap-2">
-                    <PlayIcon className="w-4 h-4" /> Resume Learning
+                    <PlayIcon className="w-4 h-4" /> Review Progress
                   </button>
                 </div>
               </div>
@@ -69,21 +70,19 @@ export default function ParentFutureSkillsPage() {
                 <div className="absolute -left-[43px] w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center border-4 border-white shadow-sm text-gray-500">
                   <LockClosedIcon className="w-3 h-3" />
                 </div>
-                <h4 className="text-lg font-medium text-gray-900">Module 3: Javascript Intro</h4>
+                <h4 className="text-lg font-medium text-gray-900">Module 3: JavaScript Algorithms</h4>
                 <p className="text-sm text-gray-500 mt-1">Unlocks after Module 2</p>
               </div>
-
             </div>
           </div>
         </div>
 
         {/* Portfolio & Badges Sidebar */}
-        <div className="lg:col-span-4 flex flex-col gap-3">
-          
+        <div className="lg:col-span-4 flex flex-col gap-6">
           <div className="w-full bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col text-white relative overflow-hidden group">
             <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
             <div className="relative z-10 flex justify-between items-start mb-6">
-              <h3 className="text-xl font-normal">Alex's Portfolio</h3>
+              <h3 className="text-xl font-normal">Ward&apos;s Portfolio</h3>
               <CodeBracketIcon className="w-6 h-6 text-white/50" />
             </div>
             <div className="relative z-10 flex-1 flex flex-col justify-center">
@@ -115,9 +114,44 @@ export default function ParentFutureSkillsPage() {
               ))}
             </div>
           </div>
-
         </div>
       </div>
-    </>
+    </div>
+  );
+}
+
+function ParentLeaderboardView() {
+  return (
+    <div style={{ maxWidth: '900px', margin: '1rem auto 4rem auto' }}>
+      <CustomizerLeaderboard onClose={() => {}} />
+    </div>
+  );
+}
+
+export default function ParentFutureSkillsPage() {
+  const tabs: AppSubtab[] = [
+    {
+      id: 'journey',
+      label: 'Learning Pathway',
+      icon: CodeCircle01Icon,
+      component: ParentFutureSkillsJourney,
+    },
+    {
+      id: 'leaderboard',
+      label: 'School Leaderboard',
+      icon: Trophy01Icon,
+      component: ParentLeaderboardView,
+    },
+  ];
+
+  return (
+    <SpecialistAppContainer
+      appTitle="Future Skills & Coding Tracker"
+      appSubtitle="Algorithmic problem solving, visual programming milestones, and child badge showcase."
+      appBadge="PuzzlePRO"
+      accentColor="#f59e0b"
+      tabs={tabs}
+      defaultTabId="journey"
+    />
   );
 }

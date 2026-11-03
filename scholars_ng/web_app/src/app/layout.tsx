@@ -15,15 +15,45 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
 });
 
-async function getTenant(host: string) {
-  const searchDomain = host.includes('localhost') ? 'reedbreed.resultspro.ng' : host;
+async function getTenant(host: string, slugHeader?: string | null) {
+  const hostname = host.split(':')[0].toLowerCase();
+  const platformDomain = (process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'scholars.ng').toLowerCase();
+  
+  // Apex platform has no school tenant (serves commercial ScholarsNG landing)
+  if (
+    hostname === platformDomain ||
+    hostname === `www.${platformDomain}` ||
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname === 'scholars.local'
+  ) {
+    return null;
+  }
+
+  // Determine lookup key from slug header or hostname
+  let searchDomain = slugHeader || '';
+  if (!searchDomain) {
+    if (hostname.endsWith('.localhost')) {
+      searchDomain = hostname.replace('.localhost', '');
+    } else if (hostname.endsWith(`.${platformDomain}`)) {
+      searchDomain = hostname.replace(`.${platformDomain}`, '');
+    } else if (hostname.endsWith('.resultspro.ng')) {
+      searchDomain = hostname.replace('.resultspro.ng', '');
+    } else {
+      searchDomain = hostname;
+    }
+  }
+
+  if (!searchDomain) return null;
+
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_USERS_API + '/api'}/public/tenant/resolve?domain=${searchDomain}`, { 
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com'}/api`;
+    const res = await fetch(`${apiUrl}/public/tenant/resolve?domain=${encodeURIComponent(searchDomain)}`, { 
       next: { revalidate: 60 }
     });
     if (!res.ok) return null;
     const data = await res.json();
-    return data.tenant;
+    return data.tenant || null;
   } catch (err) {
     console.error("Failed to resolve tenant:", err);
     return null;
@@ -33,21 +63,26 @@ async function getTenant(host: string) {
 export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
   const host = headersList.get('host') || '';
-  const tenant = await getTenant(host);
+  const tenantSlug = headersList.get('x-tenant-slug');
+  const tenant = await getTenant(host, tenantSlug);
 
   if (!tenant) {
     return {
-      title: "School Portal | Powered by ResultsPro",
-      description: "A comprehensive modular school management portal.",
+      title: "ScholarsNG — The Digital Campus Operating System",
+      description: "Institutional infrastructure and unified learning portal connecting schools, teachers, parents, and students.",
+      icons: {
+        icon: '/icon.png',
+        apple: '/icon.png',
+      }
     };
   }
 
   return {
-    title: `${tenant.name} | Portal`,
-    description: `Official portal for ${tenant.name}.`,
+    title: `${tenant.name} | Scholars Workspace`,
+    description: `Official institutional workspace and admission portal for ${tenant.name}.`,
     icons: {
-      icon: tenant.logo_url || '/logo.png',
-      apple: tenant.logo_url || '/logo.png',
+      icon: tenant.logo_url || '/icon.png',
+      apple: tenant.logo_url || '/icon.png',
     }
   };
 }
@@ -59,7 +94,8 @@ export default async function RootLayout({
 }>) {
   const headersList = await headers();
   const host = headersList.get('host') || '';
-  const tenant = await getTenant(host);
+  const tenantSlug = headersList.get('x-tenant-slug');
+  const tenant = await getTenant(host, tenantSlug);
 
   const themeVars = tenant ? {
     '--primary': tenant.primary_color || '#2563eb',
@@ -70,7 +106,7 @@ export default async function RootLayout({
   return (
     <html lang="en" style={themeVars} suppressHydrationWarning>
       <head>
-        <link rel="icon" href={tenant?.logo_url || "/logo.png"} />
+        <link rel="icon" href={tenant?.logo_url || "/icon.png"} />
       </head>
       <body suppressHydrationWarning className={`${spaceGrotesk.variable} ${dmSans.variable} antialiased`}>
         <TenantProvider tenant={tenant}>

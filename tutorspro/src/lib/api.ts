@@ -14,12 +14,18 @@ const api = axios.create({
   },
 });
 
-// Add a request interceptor to include the auth token
+// Add a request interceptor to include the auth token and tenant id
 api.interceptors.request.use(
   (config) => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token') || localStorage.getItem('accessToken') || localStorage.getItem('authToken');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      const tenantId = localStorage.getItem('tenantId') || localStorage.getItem('x-tenant-id');
+      if (tenantId) {
+        config.headers['x-tenant-id'] = tenantId;
+      }
     }
     return config;
   },

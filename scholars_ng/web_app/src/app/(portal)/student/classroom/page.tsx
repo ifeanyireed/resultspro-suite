@@ -5,12 +5,17 @@ import {
   Clock01Icon, 
   Task01Icon, 
   Megaphone01Icon, 
-  Message01Icon,
-  Activity04Icon
+  Message01Icon, 
+  Activity04Icon,
+  Book02Icon,
+  HelpCircleIcon,
+  Folder01Icon
 } from 'hugeicons-react';
 import api from '@/lib/api';
+import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
+import { NotesListView, QuizzesListView, FlashcardsListView } from '@classroompro/modules';
 
-export default function StudentClassroomDashboard() {
+function StudentClassroomSnapshot() {
   const [classroomData, setClassroomData] = useState<any>(null);
 
   useEffect(() => {
@@ -20,21 +25,18 @@ export default function StudentClassroomDashboard() {
   }, []);
 
   if (!classroomData) {
-    return <div style={{ color: 'white', padding: '2rem' }}>Loading Classroom...</div>;
+    return <div style={{ color: '#64748b', padding: '2rem' }}>Loading Classroom Snapshot...</div>;
   }
 
   const { today_lessons, upcoming_homework, insights, announcements } = classroomData;
 
   return (
-    <div style={{ maxWidth: '1200px', paddingBottom: '4rem' }}>
-      <header style={{ marginBottom: '2.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#146ef5', background: '#eff6ff', padding: '0.25rem 0.75rem', borderRadius: '2rem' }}>ClassroomPRO</span>
-        </div>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
-          Classroom Snapshot
-        </h1>
-        <p style={{ color: '#64748b', fontSize: '1.1rem', fontWeight: '500' }}>
+    <div style={{ maxWidth: '1200px', padding: '1rem 0 4rem 0' }}>
+      <header style={{ marginBottom: '2rem' }}>
+        <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.25rem', letterSpacing: '-0.02em' }}>
+          Daily Learning Stream
+        </h2>
+        <p style={{ color: '#64748b', fontSize: '0.95rem', fontWeight: '500' }}>
           Real-time daily learning activity, attendance streaks, and classroom announcements.
         </p>
       </header>
@@ -43,16 +45,16 @@ export default function StudentClassroomDashboard() {
         {/* Main Feed */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {/* Today's Lessons */}
-          <div style={{ background: 'white', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Clock01Icon size={24} color="#146ef5" />
+          <div style={{ background: 'white', borderRadius: '1.5rem', border: '1px solid #f1f5f9', padding: '1.75rem' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <Clock01Icon size={22} color="#146ef5" />
               Today&apos;s Lessons
-            </h2>
+            </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {today_lessons.map((lesson: any) => (
-                <div key={lesson.id} style={{ padding: '1.25rem', borderRadius: '1.5rem', background: '#f8fafc', border: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div key={lesson.id} style={{ padding: '1.25rem', borderRadius: '1.25rem', background: '#f8fafc', border: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
-                    <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b', margin: 0 }}>{lesson.subject}</h3>
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#1e293b', margin: 0 }}>{lesson.subject}</h4>
                     <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.25rem 0', fontWeight: '600' }}>Topic: {lesson.topic}</p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#94a3b8', fontSize: '0.75rem', fontWeight: '700' }}>
                        <Clock01Icon size={14} /> {lesson.time}
@@ -67,11 +69,11 @@ export default function StudentClassroomDashboard() {
           </div>
 
           {/* Homework deadlines */}
-          <div style={{ background: 'white', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Task01Icon size={24} color="#f59e0b" />
+          <div style={{ background: 'white', borderRadius: '1.5rem', border: '1px solid #f1f5f9', padding: '1.75rem' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <Task01Icon size={22} color="#f59e0b" />
               Upcoming Deadlines
-            </h2>
+            </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                {upcoming_homework.map((hw: any) => (
                  <div key={hw.id}>
@@ -94,7 +96,7 @@ export default function StudentClassroomDashboard() {
         {/* Sidebar Insights */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {/* Attendance Streak */}
-          <div style={{ background: 'linear-gradient(135deg, #146ef5 0%, #0ea5e9 100%)', borderRadius: '2rem', padding: '2rem', color: 'white' }}>
+          <div style={{ background: 'linear-gradient(135deg, #146ef5 0%, #0ea5e9 100%)', borderRadius: '1.5rem', padding: '1.75rem', color: 'white' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
                <Activity04Icon size={24} />
                <h3 style={{ fontSize: '1.1rem', fontWeight: '800' }}>Attendance Streak</h3>
@@ -104,14 +106,14 @@ export default function StudentClassroomDashboard() {
           </div>
 
           {/* Announcements */}
-          <div style={{ background: '#f8fafc', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem' }}>
-             <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{ background: '#f8fafc', borderRadius: '1.5rem', border: '1px solid #f1f5f9', padding: '1.75rem' }}>
+             <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <Megaphone01Icon size={20} color="#6366f1" />
                 Announcements
              </h3>
              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 {announcements.map((ann: any) => (
-                  <div key={ann.id} style={{ padding: '1rem', background: 'white', borderRadius: '1.25rem', border: '1px solid #f1f5f9' }}>
+                  <div key={ann.id} style={{ padding: '1rem', background: 'white', borderRadius: '1rem', border: '1px solid #f1f5f9' }}>
                     <p style={{ fontSize: '0.85rem', color: '#1e293b', fontWeight: '700', marginBottom: '0.4rem' }}>{ann.teacher}</p>
                     <p style={{ fontSize: '0.8rem', color: '#64748b', lineHeight: 1.5, margin: 0 }}>{ann.content}</p>
                   </div>
@@ -125,5 +127,45 @@ export default function StudentClassroomDashboard() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function StudentClassroomHub() {
+  const tabs: AppSubtab[] = [
+    {
+      id: 'feed',
+      label: 'Classroom Feed',
+      icon: Clock01Icon,
+      component: StudentClassroomSnapshot,
+    },
+    {
+      id: 'notes',
+      label: 'Curriculum Notes',
+      icon: Book02Icon,
+      component: NotesListView,
+    },
+    {
+      id: 'quizzes',
+      label: 'Quizzes & Practice',
+      icon: HelpCircleIcon,
+      component: QuizzesListView,
+    },
+    {
+      id: 'flashcards',
+      label: 'Flashcard Decks',
+      icon: Folder01Icon,
+      component: FlashcardsListView,
+    },
+  ];
+
+  return (
+    <SpecialistAppContainer
+      appTitle="Classroom Hub"
+      appSubtitle="Centralized learning stream, curriculum notes, quizzes, and spaced-repetition flashcards."
+      appBadge="ClassroomPRO"
+      accentColor="#146ef5"
+      tabs={tabs}
+      defaultTabId="feed"
+    />
   );
 }

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { 
-  VideoCameraIcon, 
+  Video01Icon as VideoCameraIcon, 
   PlayCircle02Icon, 
   Download01Icon, 
   Tick02Icon

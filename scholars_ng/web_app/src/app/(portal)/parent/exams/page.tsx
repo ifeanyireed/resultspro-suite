@@ -82,7 +82,7 @@ export default function ParentExamInsights() {
              style={{ background: 'white', padding: '1.5rem', borderRadius: '1.75rem', border: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '1.25rem' }}
            >
              <div style={{ width: '56px', height: '56px', borderRadius: '1.25rem', background: stat.bg, color: stat.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {React.cloneElement(stat.icon as React.ReactElement, { size: 28 })}
+                {React.cloneElement(stat.icon as React.ReactElement<any>, { size: 28 })}
              </div>
              <div>
                <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.label}</div>
