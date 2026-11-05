@@ -32,6 +32,7 @@ func main() {
 	log.Printf("Connecting to database...")
 	db.InitDB(config.DatabaseURL)
 	db.InitPuzzleSchema()
+	handlers.EnsureBlogSchema()
 
 	mux := http.NewServeMux()
 

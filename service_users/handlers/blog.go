@@ -18,17 +18,36 @@ import (
 
 var blogSchemaOnce sync.Once
 
-func ensureBlogSchema() {
+func EnsureBlogSchema() {
 	blogSchemaOnce.Do(func() {
 		if db.GormDB != nil {
-			_ = db.GormDB.AutoMigrate(&models.BlogPost{}, &models.BlogCategory{}, &models.BlogTag{}, &models.BlogPostTag{}, &models.BlogComment{}, &models.NewsletterSubscriber{})
-			_ = db.GormDB.Exec("ALTER TABLE blog_posts ALTER COLUMN cover_image TYPE text")
-			_ = db.GormDB.Exec("ALTER TABLE blog_posts ALTER COLUMN excerpt TYPE text")
-			_ = db.GormDB.Exec("ALTER TABLE blog_posts ALTER COLUMN meta_description TYPE text")
-			_ = db.GormDB.Exec("ALTER TABLE blog_posts ALTER COLUMN og_image TYPE text")
-			_ = db.GormDB.Exec("ALTER TABLE blog_posts ALTER COLUMN canonical_url TYPE text")
+			_ = db.GormDB.AutoMigrate(&models.BlogCategory{}, &models.BlogTag{}, &models.BlogPostTag{}, &models.BlogComment{}, &models.NewsletterSubscriber{})
+			
+			stmts := []string{
+				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS canonical_url text",
+				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS og_image text",
+				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS meta_title varchar(255)",
+				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS meta_description text",
+				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS meta_keywords varchar(255)",
+				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS cover_image text",
+				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS excerpt text",
+				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS status varchar(50) DEFAULT 'DRAFT'",
+				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS view_count bigint DEFAULT 0",
+				"ALTER TABLE blog_posts ALTER COLUMN cover_image TYPE text",
+				"ALTER TABLE blog_posts ALTER COLUMN excerpt TYPE text",
+				"ALTER TABLE blog_posts ALTER COLUMN meta_description TYPE text",
+				"ALTER TABLE blog_posts ALTER COLUMN og_image TYPE text",
+				"ALTER TABLE blog_posts ALTER COLUMN canonical_url TYPE text",
+			}
+			for _, stmt := range stmts {
+				_ = db.GormDB.Exec(stmt)
+			}
 		}
 	})
+}
+
+func ensureBlogSchema() {
+	EnsureBlogSchema()
 }
 
 // Helper for generating IDs
@@ -125,7 +144,9 @@ func HandleUpdatePost(w http.ResponseWriter, r *http.Request) {
 	post.Excerpt = input.Excerpt
 	post.Content = input.Content
 	post.CoverImage = input.CoverImage
-	post.AuthorID = input.AuthorID
+	if input.AuthorID != "" {
+		post.AuthorID = input.AuthorID
+	}
 	post.CategoryID = input.CategoryID
 	post.Status = input.Status
 	post.MetaTitle = input.MetaTitle
