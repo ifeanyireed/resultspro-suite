@@ -29,6 +29,25 @@ func (h *Handler) SubmitProject(c *gin.Context) {
 		return
 	}
 
+	// Check if a submission already exists for this stage & project to support resubmission
+	var existing models.ProjectSubmission
+	if err := db.WithTenant(c).Where("cohort_id = ? AND stage_number = ? AND user_id = ? AND project_title = ?",
+		input.CohortID, input.StageNumber, userID.(string), input.ProjectTitle).First(&existing).Error; err == nil {
+		existing.RepoURL = input.RepoURL
+		existing.FigmaURL = input.FigmaURL
+		existing.LiveDemoURL = input.LiveDemoURL
+		existing.Notes = input.Notes
+		existing.Status = "MENTOR_REVIEW"
+		existing.SubmittedAt = time.Now()
+		existing.UpdatedAt = time.Now()
+		if err := db.WithTenant(c).Save(&existing).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update project submission"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"submission": existing})
+		return
+	}
+
 	sub := models.ProjectSubmission{
 		TenantID:     tenantID.(string),
 		ID:           uuid.New().String(),

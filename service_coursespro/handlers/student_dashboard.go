@@ -431,13 +431,15 @@ func (h *Handler) GetStudentProjects(c *gin.Context) {
 	}
 
 	type ProjectOutput struct {
-		ID       string `json:"id"`
-		Title    string `json:"title"`
-		Desc     string `json:"desc"`
-		Status   string `json:"status"`
-		Due      string `json:"due"`
-		StageID  string `json:"stage_id"`
-		ModuleID string `json:"module_id"` // Same as stage_id for frontend journey link
+		ID          string `json:"id"`
+		Title       string `json:"title"`
+		Desc        string `json:"desc"`
+		Status      string `json:"status"`
+		Due         string `json:"due"`
+		StageID     string `json:"stage_id"`
+		StageNumber int    `json:"stage_number"`
+		Type        string `json:"type"`
+		ModuleID    string `json:"module_id"` // Same as stage_id for frontend journey link
 	}
 
 	var output []ProjectOutput
@@ -493,13 +495,15 @@ func (h *Handler) GetStudentProjects(c *gin.Context) {
 				}
 
 				output = append(output, ProjectOutput{
-					ID:       fmt.Sprintf("%s-%s", stage.ID, title),
-					Title:    title,
-					Desc:     desc,
-					Status:   status,
-					Due:      dueDate,
-					StageID:  stage.ID,
-					ModuleID: stage.ID,
+					ID:          fmt.Sprintf("%s-%s", stage.ID, title),
+					Title:       title,
+					Desc:        desc,
+					Status:      status,
+					Due:         dueDate,
+					StageID:     stage.ID,
+					StageNumber: stage.StageNumber,
+					Type:        itemType,
+					ModuleID:    stage.ID,
 				})
 			}
 		}
