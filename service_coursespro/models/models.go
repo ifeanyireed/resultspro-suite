@@ -220,8 +220,12 @@ type PublicPortfolio struct {
 	TenantID           string    `gorm:"size:191;index;not null" json:"tenant_id"`
 	UserID             string    `gorm:"size:64;unique;not null" json:"user_id"`
 	Username           string    `gorm:"size:64;unique;not null" json:"username"`
+	FullName           string    `gorm:"size:255" json:"full_name"`
+	AvatarURL          string    `gorm:"size:512" json:"avatar_url"`
 	Headline           string    `gorm:"size:255" json:"headline"`
 	Bio                string    `gorm:"type:text" json:"bio"`
+	SkillsJSON         string    `gorm:"type:text;default:'[]'" json:"skills_json"`
+	SocialsJSON        string    `gorm:"type:text;default:'{}'" json:"socials_json"`
 	CaseStudiesJSON    string    `gorm:"type:text" json:"case_studies_json"`
 	MentorEndorsement  string    `gorm:"type:text" json:"mentor_endorsement"`
 	IsAvailableForHire bool      `gorm:"default:true" json:"is_available_for_hire"`

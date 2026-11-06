@@ -66,6 +66,7 @@ func main() {
 		// Workspace
 		protected.GET("/workspace/tasks", h.GetWorkspaceTasks)
 		protected.POST("/workspace/tasks", h.CreateWorkspaceTask)
+		protected.PUT("/workspace/tasks/:id", h.UpdateWorkspaceTask)
 		protected.PUT("/workspace/tasks/:id/status", h.UpdateWorkspaceTaskStatus)
 		protected.DELETE("/workspace/tasks/:id", h.DeleteWorkspaceTask)
 

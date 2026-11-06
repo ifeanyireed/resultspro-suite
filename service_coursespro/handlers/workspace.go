@@ -108,6 +108,47 @@ func (h *Handler) UpdateWorkspaceTaskStatus(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"task": task})
 }
 
+// UpdateWorkspaceTask updates title, tags, or status
+func (h *Handler) UpdateWorkspaceTask(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	userID, _ := c.Get("user_id")
+	taskID := c.Param("id")
+
+	var input struct {
+		Title  string `json:"title"`
+		Tags   string `json:"tags"`
+		Status string `json:"status"`
+	}
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var task models.WorkspaceTask
+	if err := db.WithTenant(c).Where("id = ? AND tenant_id = ? AND user_id = ?", taskID, tenantID, userID).First(&task).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Task not found"})
+		return
+	}
+
+	if input.Title != "" {
+		task.Title = input.Title
+	}
+	if input.Tags != "" {
+		task.Tags = input.Tags
+	}
+	if input.Status != "" {
+		task.Status = input.Status
+	}
+	task.UpdatedAt = time.Now()
+
+	if err := db.WithTenant(c).Save(&task).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update task"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"task": task})
+}
+
 // DeleteWorkspaceTask deletes a task
 func (h *Handler) DeleteWorkspaceTask(c *gin.Context) {
 	tenantID, _ := c.Get("tenant_id")

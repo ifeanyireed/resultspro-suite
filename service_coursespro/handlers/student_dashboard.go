@@ -516,16 +516,83 @@ func (h *Handler) GetStudentResources(c *gin.Context) {
 	userID, _ := c.Get("user_id")
 	tenantID, _ := c.Get("tenant_id")
 
-	var enrollment models.Enrollment
-	if err := db.DB.Where("tenant_id = ? AND user_id = ?", tenantID, userID).First(&enrollment).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Enrollment not found"})
+	if userID == nil || tenantID == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
 
-	var resources []models.CohortResource
-	db.DB.Where("tenant_id = ? AND cohort_id = ? AND is_published = ?", tenantID, enrollment.CohortID, true).Order("created_at DESC").Find(&resources)
+	cohortFilter := c.Query("cohort_id")
 
-	c.JSON(http.StatusOK, resources)
+	// 1. Get all enrollments for this student
+	var enrollments []models.Enrollment
+	db.WithTenant(c).Where("user_id = ? AND status = ?", userID.(string), "ACTIVE").Find(&enrollments)
+	if len(enrollments) == 0 {
+		db.WithTenant(c).Where("user_id = ?", userID.(string)).Find(&enrollments)
+	}
+
+	if len(enrollments) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"resources": []interface{}{},
+			"cohorts":   []interface{}{},
+		})
+		return
+	}
+
+	var cohortIDs []string
+	cohortMap := make(map[string]string)
+	for _, e := range enrollments {
+		cohortIDs = append(cohortIDs, e.CohortID)
+	}
+
+	// 2. Fetch cohort titles for quick mapping
+	var cohorts []models.Cohort
+	db.WithTenant(c).Where("id IN ?", cohortIDs).Find(&cohorts)
+	var cohortSummaries []gin.H
+	for _, ch := range cohorts {
+		cohortMap[ch.ID] = ch.Title
+		cohortSummaries = append(cohortSummaries, gin.H{
+			"id":    ch.ID,
+			"title": ch.Title,
+			"slug":  ch.Slug,
+		})
+	}
+
+	// 3. Query published resources
+	query := db.DB.Where("is_published = ?", true)
+	if tenantIDStr, ok := tenantID.(string); ok && tenantIDStr != "" {
+		query = query.Where("(tenant_id = ? OR tenant_id IS NULL)", tenantIDStr)
+	}
+
+	if cohortFilter != "" {
+		query = query.Where("cohort_id = ?", cohortFilter)
+	} else if len(cohortIDs) > 0 {
+		query = query.Where("cohort_id IN ?", cohortIDs)
+	}
+
+	var rawResources []models.CohortResource
+	query.Order("created_at DESC").Find(&rawResources)
+
+	type EnrichedResource struct {
+		models.CohortResource
+		CohortTitle string `json:"cohortTitle"`
+	}
+
+	var enriched []EnrichedResource
+	for _, r := range rawResources {
+		title := cohortMap[r.CohortID]
+		if title == "" {
+			title = "Cohort Resource"
+		}
+		enriched = append(enriched, EnrichedResource{
+			CohortResource: r,
+			CohortTitle:    title,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"resources": enriched,
+		"cohorts":   cohortSummaries,
+	})
 }
 
 func (h *Handler) GetStudentEvents(c *gin.Context) {
