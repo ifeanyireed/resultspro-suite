@@ -157,12 +157,12 @@ func (h *Handler) GenerateQuizPreview(c *gin.Context) {
 ]`, optionsArr)
 	}
 
-	prompt := fmt.Sprintf(`You are an expert educator. Read the following lesson markdown and generate a %%d-question %%s quiz.
+	prompt := fmt.Sprintf(`You are an expert educator. Read the following lesson markdown and generate a %d-question %s quiz.
 Return ONLY a JSON array of objects with the following schema:
-%%s
+%s
 
 Lesson Content:
-%%s`, req.NumQuestions, req.QuestionType, schemaDesc, req.Content)
+%s`, req.NumQuestions, req.QuestionType, schemaDesc, req.Content)
 
 	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {

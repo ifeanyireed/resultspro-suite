@@ -70,6 +70,7 @@ func InitDB() {
 		&models.Achievement{},
 		&models.UserAchievement{},
 		&models.MentorApplication{},
+		&models.MentorPayoutRequest{},
 	)
 
 	log.Println("CoursesPRO connected to MySQL with GORM successfully")

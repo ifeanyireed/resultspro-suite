@@ -306,6 +306,23 @@ type MentorProfile struct {
 
 func (MentorProfile) TableName() string { return "crs_mentor_profiles" }
 
+// MentorPayoutRequest represents a withdrawal request by a mentor
+type MentorPayoutRequest struct {
+	ID            string     `gorm:"primaryKey;size:64" json:"id"`
+	TenantID      string     `gorm:"size:191;index;not null" json:"tenant_id"`
+	MentorID      string     `gorm:"size:64;index;not null" json:"mentor_id"`
+	Amount        float64    `gorm:"type:decimal(10,2);not null" json:"amount"`
+	Currency      string     `gorm:"size:10;default:'NGN'" json:"currency"`
+	BankName      string     `gorm:"size:128;not null" json:"bank_name"`
+	AccountNumber string     `gorm:"size:32;not null" json:"account_number"`
+	AccountName   string     `gorm:"size:128;not null" json:"account_name"`
+	Status        string     `gorm:"size:32;default:'PENDING'" json:"status"` // PENDING, PROCESSING, PAID, REJECTED
+	RequestedAt   time.Time  `json:"requested_at"`
+	ProcessedAt   *time.Time `json:"processed_at"`
+}
+
+func (MentorPayoutRequest) TableName() string { return "crs_mentor_payout_requests" }
+
 type StoreProduct struct {
 	ID          string    `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
 	TenantID    string    `gorm:"type:uuid;not null;index" json:"tenant_id"`

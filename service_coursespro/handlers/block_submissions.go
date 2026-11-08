@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -70,7 +71,71 @@ func (h *Handler) GetMyBlockSubmissions(c *gin.Context) {
 func (h *Handler) GetPendingBlockSubmissions(c *gin.Context) {
 	var submissions []models.BlockSubmission
 	db.WithTenant(c).Where("status = ?", "PENDING").Order("submitted_at ASC").Find(&submissions)
-	c.JSON(http.StatusOK, gin.H{"submissions": submissions})
+
+	var userIDs []string
+	var moduleIDs []string
+	for _, s := range submissions {
+		userIDs = append(userIDs, s.UserID)
+		moduleIDs = append(moduleIDs, s.ModuleID)
+	}
+
+	type SharedUser struct {
+		ID        string `gorm:"column:id"`
+		FullName  string `gorm:"column:full_name"`
+		AvatarURL string `gorm:"column:avatar_url"`
+		Email     string `gorm:"column:email"`
+	}
+	var users []SharedUser
+	if len(userIDs) > 0 {
+		db.DB.Table("users").Where("id IN ?", userIDs).Find(&users)
+	}
+	userMap := make(map[string]SharedUser)
+	for _, u := range users {
+		userMap[u.ID] = u
+	}
+
+	var stages []models.JourneyStage
+	if len(moduleIDs) > 0 {
+		db.WithTenant(c).Where("id IN ?", moduleIDs).Find(&stages)
+	}
+	stageMap := make(map[string]string)
+	for _, st := range stages {
+		stageMap[st.ID] = st.Title
+	}
+
+	var enriched []map[string]interface{}
+	for _, s := range submissions {
+		u := userMap[s.UserID]
+		studentName := u.FullName
+		if studentName == "" {
+			studentName = u.Email
+		}
+		if studentName == "" {
+			studentName = "Student Builder"
+		}
+		avatar := u.AvatarURL
+		if avatar == "" {
+			avatar = fmt.Sprintf("https://ui-avatars.com/api/?name=%s&background=146ef5&color=fff", studentName)
+		}
+
+		enriched = append(enriched, map[string]interface{}{
+			"id":              s.ID,
+			"user_id":         s.UserID,
+			"student_name":    studentName,
+			"student_avatar":  avatar,
+			"module_id":       s.ModuleID,
+			"module_title":    stageMap[s.ModuleID],
+			"block_id":        s.BlockID,
+			"block_type":      s.BlockType,
+			"submission_type": s.SubmissionType,
+			"content":         s.Content,
+			"score":           s.Score,
+			"status":          s.Status,
+			"submitted_at":    s.SubmittedAt,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"submissions": enriched})
 }
 
 // ReviewBlockSubmission allows a mentor to review and grade a block submission

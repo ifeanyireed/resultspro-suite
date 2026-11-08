@@ -11,6 +11,32 @@ import (
 	"service_coursespro/models"
 )
 
+// GetPublicShowcase returns published portfolios & verified capstones for public showcase
+func (h *Handler) GetPublicShowcase(c *gin.Context) {
+	tenantID := c.Query("tenant_id")
+	if tenantID == "" {
+		tenantID = c.GetHeader("X-Tenant-ID")
+	}
+	if tenantID == "" {
+		tenantID = c.GetHeader("x-tenant")
+	}
+	if tenantID == "" {
+		tenantID = c.GetHeader("X-Tenant-Domain")
+	}
+
+	query := db.DB.Where("is_published = ?", true)
+	if tenantID != "" && tenantID != "default_platform" {
+		query = query.Where("tenant_id = ?", tenantID)
+	}
+
+	var portfolios []models.PublicPortfolio
+	query.Order("created_at DESC").Limit(12).Find(&portfolios)
+
+	c.JSON(http.StatusOK, gin.H{
+		"showcase": portfolios,
+	})
+}
+
 func (h *Handler) GetPublicPortfolio(c *gin.Context) {
 	username := strings.ToLower(strings.TrimSpace(c.Param("username")))
 	var portfolio models.PublicPortfolio

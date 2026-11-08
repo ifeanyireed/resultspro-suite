@@ -31,7 +31,7 @@ func main() {
 	r.Use(cors.New(cors.Config{
 		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "X-App-ID", "X-App-Secret", "X-Tenant-Domain"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "X-App-ID", "X-App-Secret", "X-Tenant-Domain", "X-Tenant-ID", "X-Tenant", "x-tenant", "X-Tenant-Slug"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
@@ -46,6 +46,7 @@ func main() {
 		public.GET("/cohorts", h.GetPublicCohorts)
 		public.GET("/cohorts/:id", h.GetCohortDetail)
 		public.GET("/portfolio/:username", h.GetPublicPortfolio)
+		public.GET("/showcase", h.GetPublicShowcase)
 		public.POST("/mentor/apply", h.ApplyForMentor)
 
 		// Store
@@ -78,11 +79,15 @@ func main() {
 
 		// Mentor Console
 		protected.GET("/mentor/profile", h.GetMentorProfile)
+		protected.PUT("/mentor/profile", h.UpdateMentorProfile)
+		protected.GET("/mentor/cohorts", h.GetMentorCohorts)
 		protected.GET("/mentor/sessions", h.GetMentorSessions)
 		protected.GET("/mentor/submissions", h.GetPendingSubmissions)
 		protected.POST("/mentor/submissions/:id/review", h.ReviewSubmission)
 		protected.GET("/mentor/submissions/blocks", h.GetPendingBlockSubmissions)
 		protected.POST("/mentor/submissions/blocks/:id/review", h.ReviewBlockSubmission)
+		protected.GET("/mentor/earnings", h.GetMentorEarnings)
+		protected.POST("/mentor/payouts/request", h.RequestMentorPayout)
 
 		// Classroom & Peers
 		protected.GET("/classroom/presence", h.GetPresence)
@@ -177,6 +182,8 @@ func main() {
 		protected.GET("/student/resources", h.GetStudentResources)
 		protected.GET("/student/events", h.GetStudentEvents)
 		protected.POST("/student/events/:id/rsvp", h.RSVPEvent)
+		protected.GET("/student/certificates", h.GetStudentCertificates)
+		protected.GET("/student/store", h.StudentGetStoreProducts)
 
 		// Portfolio
 		protected.GET("/portfolio", h.GetMyPortfolio)

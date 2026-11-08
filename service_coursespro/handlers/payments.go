@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"io"
 	"log"
-	"time"
 	"net/http"
 	"os"
+	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -162,26 +163,65 @@ func (h *Handler) GetBillingSubscriptions(c *gin.Context) {
 	tenantID, _ := c.Get("tenant_id")
 	userID, _ := c.Get("user_id")
 
+	if tenantID == nil || userID == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	var enrollments []models.Enrollment
-	db.DB.Where("tenant_id = ? AND user_id = ? AND billing_cycle != ?", tenantID, userID, "one-time").Find(&enrollments)
+	db.WithTenant(c).Where("user_id = ?", userID).Find(&enrollments)
 
 	var response []map[string]interface{}
 	for _, e := range enrollments {
 		var cohort models.Cohort
 		db.DB.Where("id = ?", e.CohortID).Preload("Program").First(&cohort)
-		
-		planName := "Subscription"
-		if cohort.Program != nil {
+
+		planName := "Curriculum Access"
+		if cohort.Program != nil && cohort.Program.Title != "" {
 			planName = cohort.Program.Title
+		} else if cohort.Title != "" {
+			planName = cohort.Title
 		}
 
+		interval := e.BillingCycle
+		if interval == "" || interval == "one-time" || interval == "once" {
+			interval = "Full Tuition"
+		} else if interval == "monthly" {
+			interval = "Monthly Installment"
+		}
+
+		status := "active"
+		if e.Status == "CANCELED" {
+			status = "canceled"
+		} else if e.LastPaymentFailed {
+			status = "past_due"
+		} else if e.PaymentStatus == "PENDING" {
+			status = "pending"
+		}
+
+		price := cohort.Price
+		if price <= 0 && cohort.Program != nil {
+			price = cohort.Program.BasePrice
+		}
+
+		currency := cohort.Currency
+		if currency == "" {
+			currency = "NGN"
+		}
+
+		isRecurring := e.BillingCycle == "monthly" || e.BillingCycle == "installments"
+
 		response = append(response, map[string]interface{}{
-			"id": e.ID,
-			"planName": planName,
-			"status": "active", // simplified for now
-			"amount": cohort.Price,
-			"interval": e.BillingCycle,
+			"id":              e.ID,
+			"planName":        planName,
+			"cohortTitle":     cohort.Title,
+			"status":          status,
+			"amount":          price,
+			"currency":        currency,
+			"interval":        interval,
+			"is_recurring":    isRecurring,
 			"nextBillingDate": e.NextBillingDate,
+			"enrolledAt":      e.EnrolledAt,
 		})
 	}
 
@@ -203,7 +243,7 @@ func (h *Handler) CancelBillingSubscription(c *gin.Context) {
 	enrollment.BillingCycle = "one-time"
 	db.DB.Save(&enrollment)
 
-	c.JSON(http.StatusOK, gin.H{"message": "Subscription canceled"})
+	c.JSON(http.StatusOK, gin.H{"message": "Subscription canceled successfully"})
 }
 
 func (h *Handler) GetBillingHistory(c *gin.Context) {
@@ -216,12 +256,39 @@ func (h *Handler) GetBillingHistory(c *gin.Context) {
 	var response []map[string]interface{}
 	for _, t := range transactions {
 		response = append(response, map[string]interface{}{
-			"id": t.Reference,
-			"description": "Payment for " + t.Gateway,
-			"date": t.CreatedAt.Format("Jan 02, 2006"),
-			"amount": t.Amount,
-			"status": t.Status,
+			"id":          t.Reference,
+			"description": "Tuition Payment (" + strings.ToUpper(t.Gateway) + ")",
+			"date":        t.CreatedAt.Format("Jan 02, 2006"),
+			"amount":      t.Amount,
+			"currency":    t.Currency,
+			"status":      t.Status,
 		})
+	}
+
+	// If no transactions recorded directly in crs_transactions, synthesize from active enrollments
+	if len(response) == 0 {
+		var enrollments []models.Enrollment
+		db.WithTenant(c).Where("user_id = ? AND payment_status = ?", userID, "PAID").Find(&enrollments)
+		for _, e := range enrollments {
+			var cohort models.Cohort
+			db.DB.Where("id = ?", e.CohortID).First(&cohort)
+			desc := "Tuition Enrollment"
+			if cohort.Title != "" {
+				desc = "Tuition Enrollment - " + cohort.Title
+			}
+			dateStr := e.EnrolledAt.Format("Jan 02, 2006")
+			if e.EnrolledAt.IsZero() {
+				dateStr = time.Now().Format("Jan 02, 2006")
+			}
+			response = append(response, map[string]interface{}{
+				"id":          "REC-" + e.ID[:8],
+				"description": desc,
+				"date":        dateStr,
+				"amount":      cohort.Price,
+				"currency":    cohort.Currency,
+				"status":      "PAID",
+			})
+		}
 	}
 
 	c.JSON(http.StatusOK, response)

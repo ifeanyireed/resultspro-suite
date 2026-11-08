@@ -87,12 +87,27 @@ func (h *Handler) AdminDeleteStoreProduct(c *gin.Context) {
 func (h *Handler) PublicGetStoreProducts(c *gin.Context) {
 	tenantID := c.Query("tenant_id") // Pass tenant_id in query for public endpoints
 	if tenantID == "" {
+		if t, exists := c.Get("tenant_id"); exists && t != nil {
+			tenantID = t.(string)
+		}
+	}
+	if tenantID == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing tenant_id"})
 		return
 	}
 
 	var products []models.StoreProduct
 	if err := db.DB.Where("tenant_id = ? AND is_published = ?", tenantID, true).Order("created_at desc").Find(&products).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch store products"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"products": products})
+}
+
+// StudentGetStoreProducts returns published digital products for authenticated students
+func (h *Handler) StudentGetStoreProducts(c *gin.Context) {
+	var products []models.StoreProduct
+	if err := db.WithTenant(c).Where("is_published = ?", true).Order("created_at desc").Find(&products).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch store products"})
 		return
 	}
