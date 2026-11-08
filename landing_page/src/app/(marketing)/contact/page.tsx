@@ -147,7 +147,7 @@ export default function ContactPage() {
                   type="submit" 
                   disabled={isSubmitting}
                   className="btn w-full flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed" 
-                  style={{ backgroundColor: 'var(--color-nets-red)', color: 'white', padding: '1rem', fontSize: '1rem' }}
+                  style={{ backgroundColor: 'var(--color-nets-red)', color: '#0D1060', fontWeight: 700, padding: '1rem', fontSize: '1rem' }}
                 >
                   {isSubmitting ? 'Sending...' : 'Send Message'}
                   {!isSubmitting && <IconSend size={18} />}

@@ -14,7 +14,7 @@ export function ResultsProPageHeader({ title, subtitle, onReset }: Props) {
       {onReset && (
         <button 
           onClick={onReset}
-          className="text-[10.5px] font-bold text-gray-400 hover:text-red-500 tracking-[0.15em] uppercase transition-colors"
+          className="text-[10.5px] font-bold text-gray-400 hover:text-[#FBBC04] tracking-[0.15em] uppercase transition-colors"
         >
           RESET PROGRESS & START OVER
         </button>

@@ -59,7 +59,7 @@ export default function CoursesProPage() {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-10">
-              <Link href="/onboard/agent" className="btn w-full sm:w-auto" style={{ backgroundColor: 'var(--color-nets-red)', color: 'white', padding: '1rem 2rem', fontSize: '1rem' }}>
+              <Link href="/onboard/agent" className="btn w-full sm:w-auto" style={{ backgroundColor: 'var(--color-nets-red)', color: '#0D1060', fontWeight: 700, padding: '1rem 2rem', fontSize: '1rem' }}>
                 Explore Catalog
               </Link>
               <Link href="#features" className="btn btn-outline-white w-full sm:w-auto text-center" style={{ padding: '1rem 2rem', fontSize: '1rem' }}>
@@ -137,7 +137,7 @@ export default function CoursesProPage() {
         <div className="container-nets relative z-10 text-center max-w-3xl mx-auto">
           <h2 className="text-4xl fw-600 mb-6">Ready to expand your knowledge?</h2>
           <p className="text-xl text-white/70 mb-10">Start your journey today and earn certificates that matter.</p>
-          <Link href="/onboard/agent" className="btn inline-flex items-center gap-2" style={{ backgroundColor: 'var(--color-nets-red)', color: 'white', padding: '1rem 2.5rem', fontSize: '1.125rem' }}>
+          <Link href="/onboard/agent" className="btn inline-flex items-center gap-2" style={{ backgroundColor: 'var(--color-nets-red)', color: '#0D1060', fontWeight: 700, padding: '1rem 2.5rem', fontSize: '1.125rem' }}>
             Browse Courses <IconArrowRight size={20} />
           </Link>
         </div>

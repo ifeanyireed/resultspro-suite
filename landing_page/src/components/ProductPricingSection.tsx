@@ -98,7 +98,7 @@ export default function ProductPricingSection() {
               <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isAnnual ? 'translate-x-7' : 'translate-x-1'}`} />
             </button>
             <span className={`text-sm font-semibold ${isAnnual ? 'text-navy' : 'text-slate-400'}`}>
-              Annually <span className="text-xs text-red-500 font-bold ml-1">(Save 8%)</span>
+              Annually <span className="text-xs text-[#FBBC04] font-bold ml-1">(Save 8%)</span>
             </span>
           </div>
         </ScrollReveal>

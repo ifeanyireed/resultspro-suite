@@ -37,7 +37,7 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-8 rounded-2xl bg-slate-50 border border-gray-200">
-              <div className="w-12 h-12 bg-red-50 text-red-600 rounded-xl flex items-center justify-center mb-6">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style={{ backgroundColor: 'rgba(251, 188, 4, 0.12)', color: '#FBBC04' }}>
                 <IconTarget size={24} />
               </div>
               <h3 className="text-xl fw-600 text-navy mb-3">Impact First</h3>

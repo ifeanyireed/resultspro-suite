@@ -129,7 +129,7 @@ export default function OnboardPage() {
           <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-base font-medium mb-4">Follow the steps to precisely categorize your business.</p>
           <button
             onClick={() => setSelectedRole(null)}
-            className="text-[10.5px] font-bold text-gray-400 hover:text-red-500 tracking-[0.15em] uppercase transition-colors"
+            className="text-[10.5px] font-bold text-gray-400 hover:text-[#FBBC04] tracking-[0.15em] uppercase transition-colors"
           >
             RESET PROGRESS & START OVER
           </button>

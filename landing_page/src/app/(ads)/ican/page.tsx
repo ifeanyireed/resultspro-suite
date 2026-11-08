@@ -174,10 +174,10 @@ export default function IcanLandingPage() {
           <div className="flex flex-col md:flex-row items-center gap-12 mb-32">
             <div className="w-full md:w-1/2">
               <ScrollReveal>
-                <div className="aspect-square md:aspect-[4/3] rounded-3xl bg-gradient-to-br from-red-500 to-red-700 p-8 shadow-2xl relative overflow-hidden">
-                  <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-red-400 via-transparent to-transparent"></div>
+                <div className="aspect-square md:aspect-[4/3] rounded-3xl bg-gradient-to-br from-[#FBBC04] to-amber-600 p-8 shadow-2xl relative overflow-hidden">
+                  <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-yellow-300 via-transparent to-transparent"></div>
                   <div className="h-full flex flex-col gap-4">
-                    <div className="self-end max-w-[80%] bg-red-800 text-white p-4 rounded-2xl rounded-tr-sm text-sm border border-red-600 shadow-lg">
+                    <div className="self-end max-w-[80%] bg-amber-700 text-white p-4 rounded-2xl rounded-tr-sm text-sm border border-[#FBBC04] shadow-lg">
                       I don't understand why the fixed overhead volume variance is adverse here.
                     </div>
                     <div className="self-start max-w-[90%] bg-white text-slate-800 p-4 rounded-2xl rounded-tl-sm text-sm shadow-xl relative">
@@ -191,7 +191,7 @@ export default function IcanLandingPage() {
             </div>
             <div className="w-full md:w-1/2">
               <ScrollReveal delay={0.2}>
-                <div className="w-16 h-16 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mb-6">
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ backgroundColor: 'rgba(251, 188, 4, 0.15)', color: '#FBBC04' }}>
                   <BrainCircuit className="w-8 h-8" />
                 </div>
                 <h3 className="text-3xl font-black text-slate-900 mb-4">"What if your practice could learn from you?"</h3>
