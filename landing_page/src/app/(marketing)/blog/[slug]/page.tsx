@@ -22,10 +22,39 @@ async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 
   return fetch(url, options);
 }
 
+function normalizeSlug(s: string): string {
+  try {
+    s = decodeURIComponent(s);
+  } catch (_) {}
+  return s.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function findPost(posts: any[], requestedSlug: string) {
+  if (!requestedSlug || !Array.isArray(posts)) return null;
+
+  // 1. Exact match
+  let found = posts.find((p: any) => p.slug === requestedSlug);
+  if (found) return found;
+
+  // 2. Decoded URI match
+  try {
+    const decoded = decodeURIComponent(requestedSlug);
+    found = posts.find((p: any) => p.slug === decoded);
+    if (found) return found;
+  } catch (_) {}
+
+  // 3. Normalized match (handles punctuation, colons, quotes differences)
+  const targetNorm = normalizeSlug(requestedSlug);
+  found = posts.find((p: any) => normalizeSlug(p.slug) === targetNorm);
+  if (found) return found;
+
+  return null;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
   const posts = await getBlogPosts();
-  const post = posts.find((p: any) => p.slug === resolvedParams.slug);
+  const post = findPost(posts, resolvedParams.slug);
 
   if (!post) {
     return {
@@ -85,7 +114,7 @@ async function getBlogPosts() {
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
   const posts = await getBlogPosts();
-  const post = posts.find((p: any) => p.slug === resolvedParams.slug);
+  const post = findPost(posts, resolvedParams.slug);
   
   // Map backend format to component format if post was retrieved
   const formattedPost = post ? {
@@ -94,5 +123,5 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     date: new Date(post.published_at || post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   } : null;
 
-  return <BlogPostClientWrapper initialPost={formattedPost} slug={resolvedParams.slug} />;
+  return <BlogPostClientWrapper initialPost={formattedPost} slug={post?.slug || resolvedParams.slug} />;
 }

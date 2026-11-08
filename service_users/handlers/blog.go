@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"fmt"
 	"strings"
+	"regexp"
 	"github.com/google/uuid"
 	"time"
 	"math/rand"
@@ -99,6 +100,17 @@ func HandleGetPosts(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusOK, posts)
 }
 
+func sanitizeBlogSlug(text string) string {
+	text = strings.ToLower(text)
+	text = strings.ReplaceAll(text, "₦", "n")
+	text = strings.ReplaceAll(text, "&", "and")
+	text = strings.ReplaceAll(text, "'", "")
+	text = strings.ReplaceAll(text, "\"", "")
+	reg := regexp.MustCompile("[^a-z0-9]+")
+	slug := reg.ReplaceAllString(text, "-")
+	return strings.Trim(slug, "-")
+}
+
 func HandleUpdatePost(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
 		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
@@ -139,7 +151,7 @@ func HandleUpdatePost(w http.ResponseWriter, r *http.Request) {
 
 	post.Title = input.Title
 	if input.Slug != "" {
-		post.Slug = input.Slug
+		post.Slug = sanitizeBlogSlug(input.Slug)
 	}
 	post.Excerpt = input.Excerpt
 	post.Content = input.Content
@@ -203,9 +215,11 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Auto-generate slug if empty
+	// Auto-generate slug if empty, or sanitize if provided
 	if input.Slug == "" {
-		input.Slug = strings.ToLower(strings.ReplaceAll(input.Title, " ", "-")) + "-" + generateID("")[1:]
+		input.Slug = sanitizeBlogSlug(input.Title) + "-" + generateID("")[1:]
+	} else {
+		input.Slug = sanitizeBlogSlug(input.Slug)
 	}
 
 	post := models.BlogPost{

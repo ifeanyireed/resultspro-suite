@@ -5,6 +5,35 @@ import Link from 'next/link';
 import { IconArrowLeft } from '@tabler/icons-react';
 import BlogPostContent from '@/components/BlogPostContent';
 
+function normalizeSlug(s: string): string {
+  try {
+    s = decodeURIComponent(s);
+  } catch (_) {}
+  return s.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function findPost(posts: any[], requestedSlug: string) {
+  if (!requestedSlug || !Array.isArray(posts)) return null;
+
+  // 1. Exact match
+  let found = posts.find((p: any) => p.slug === requestedSlug);
+  if (found) return found;
+
+  // 2. Decoded URI match
+  try {
+    const decoded = decodeURIComponent(requestedSlug);
+    found = posts.find((p: any) => p.slug === decoded);
+    if (found) return found;
+  } catch (_) {}
+
+  // 3. Normalized match
+  const targetNorm = normalizeSlug(requestedSlug);
+  found = posts.find((p: any) => normalizeSlug(p.slug) === targetNorm);
+  if (found) return found;
+
+  return null;
+}
+
 export function BlogPostClientWrapper({ initialPost, slug }: { initialPost: any; slug: string }) {
   const [post, setPost] = useState<any>(initialPost);
   const [loading, setLoading] = useState<boolean>(!initialPost);
@@ -24,8 +53,8 @@ export function BlogPostClientWrapper({ initialPost, slug }: { initialPost: any;
         if (res.ok) {
           const posts = await res.json();
           if (Array.isArray(posts)) {
-            const found = posts.find((p: any) => p.slug === slug && p.status === 'PUBLISHED');
-            if (found) {
+            const found = findPost(posts, slug);
+            if (found && found.status === 'PUBLISHED') {
               setPost({
                 ...found,
                 author: "ResultsPRO Team",

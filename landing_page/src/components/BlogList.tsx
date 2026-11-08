@@ -218,7 +218,7 @@ export function BlogList({ initialPosts }: { initialPosts: any[] }) {
                 </p>
                 
                 <div className="mt-auto pt-4 border-t border-gray-200">
-                  <Link href={`/blog/${post.slug}`} className="flex items-center gap-2 text-sm fw-600 text-red hover:opacity-80 transition-opacity" style={{ color: 'var(--color-nets-red)' }}>
+                  <Link href={`/blog/${encodeURIComponent(post.slug)}`} className="flex items-center gap-2 text-sm fw-600 text-red hover:opacity-80 transition-opacity" style={{ color: 'var(--color-nets-red)' }}>
                     Read Article <IconArrowRight size={16} />
                   </Link>
                 </div>
