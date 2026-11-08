@@ -55,6 +55,17 @@ export default function AppLayout({
     enabled: mounted && !!user
   });
 
+  const { data: blockSubmissions = [] } = useQuery({
+    queryKey: ['mentor-block-submissions'],
+    queryFn: async () => {
+      const res = await coursesApi.get('/api/mentor/submissions/blocks');
+      return res.data.submissions || [];
+    },
+    enabled: mounted && !!user
+  });
+
+  const totalPendingReviews = submissions.length + blockSubmissions.length;
+
   const { data: mentorProfile } = useQuery({
     queryKey: ['mentor-profile'],
     queryFn: async () => {
@@ -166,9 +177,9 @@ export default function AppLayout({
                   <DocumentDuplicateIcon className="w-6 h-6" />
                   Reviews
                 </div>
-                {submissions.length > 0 && (
+                {totalPendingReviews > 0 && (
                   <span className="bg-amber-100 text-amber-600 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                    {submissions.length} Pending
+                    {totalPendingReviews} Pending
                   </span>
                 )}
               </Link>

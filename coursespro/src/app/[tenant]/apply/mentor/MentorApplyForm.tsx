@@ -25,7 +25,9 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
     try {
       await coursesApi.post('/api/public/mentor/apply', formData, {
         headers: {
-          'x-tenant': tenant.id
+          'x-tenant': tenant.id,
+          'X-Tenant-ID': tenant.id,
+          'X-Tenant-Domain': tenant.slug || tenant.id
         }
       });
       toast.success('Application submitted successfully!');
