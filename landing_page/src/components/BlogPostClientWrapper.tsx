@@ -61,26 +61,41 @@ export function BlogPostClientWrapper({
     async function loadPost() {
       try {
         const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-        const res = await fetch(`${USERS_API}/api/v1/cms/blog/posts`);
-        if (res.ok) {
-          const posts = await res.json();
+        const [postsRes, catRes] = await Promise.all([
+          fetch(`${USERS_API}/api/v1/cms/blog/posts`),
+          fetch(`${USERS_API}/api/v1/cms/blog/categories`)
+        ]);
+
+        if (postsRes.ok) {
+          const posts = await postsRes.json();
           if (Array.isArray(posts)) {
-            const found = findPost(posts, slug);
+            const published = posts.filter((p: any) => p.status === 'PUBLISHED');
+
+            if (catRes.ok) {
+              const categories = await catRes.json();
+              published.forEach((p: any) => {
+                const cat = categories.find((c: any) => c.id === p.category_id);
+                if (cat) p.category = cat.name?.trim();
+              });
+            }
+
+            const found = findPost(published, slug);
             if (found && found.status === 'PUBLISHED') {
               setPost({
                 ...found,
+                category: found.category || 'Blog',
                 author: "ResultsPRO Team",
                 date: new Date(found.published_at || found.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
               });
 
               // Dynamic related posts calculation (excluding active post)
-              const activeCategory = found.category_id || found.category?.name || '';
-              const otherPosts = posts.filter((p: any) => p.slug !== found.slug && p.id !== found.id && p.status === 'PUBLISHED');
+              const activeCategory = found.category_id || found.category || '';
+              const otherPosts = published.filter((p: any) => p.slug !== found.slug && p.id !== found.id);
               const sameCategoryPosts = otherPosts.filter((p: any) => 
-                activeCategory && (p.category_id === activeCategory || p.category?.name === activeCategory)
+                activeCategory && (p.category_id === activeCategory || p.category === activeCategory)
               );
               const otherCategoryPosts = otherPosts.filter((p: any) => 
-                !activeCategory || (p.category_id !== activeCategory && p.category?.name !== activeCategory)
+                !activeCategory || (p.category_id !== activeCategory && p.category !== activeCategory)
               );
               setRelatedPosts([...sameCategoryPosts, ...otherCategoryPosts].slice(0, 3));
 

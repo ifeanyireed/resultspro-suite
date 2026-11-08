@@ -100,11 +100,27 @@ async function getBlogPosts() {
     const rawApi = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
     const USERS_API = rawApi.trim().replace(/^["']|["']$/g, '');
     if (!USERS_API || !USERS_API.startsWith('http')) return [];
-    const res = await fetchWithRetry(`${USERS_API}/api/v1/cms/blog/posts`, { cache: 'no-store' });
-    if (!res.ok) return [];
-    const posts = await res.json();
+    
+    const [postsRes, catRes] = await Promise.all([
+      fetchWithRetry(`${USERS_API}/api/v1/cms/blog/posts`, { cache: 'no-store' }),
+      fetchWithRetry(`${USERS_API}/api/v1/cms/blog/categories`, { cache: 'no-store' })
+    ]);
+
+    let posts = [];
+    if (postsRes.ok) posts = await postsRes.json();
     if (!posts || !Array.isArray(posts)) return [];
-    return posts.filter((p: any) => p.status === 'PUBLISHED');
+    
+    const published = posts.filter((p: any) => p.status === 'PUBLISHED');
+
+    if (catRes.ok) {
+      const categories = await catRes.json();
+      published.forEach((p: any) => {
+        const cat = categories.find((c: any) => c.id === p.category_id);
+        if (cat) p.category = cat.name?.trim();
+      });
+    }
+
+    return published;
   } catch (error) {
     console.error('Failed to fetch blog posts', error);
     return [];

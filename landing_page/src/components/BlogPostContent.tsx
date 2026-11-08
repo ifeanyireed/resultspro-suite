@@ -206,7 +206,7 @@ export default function BlogPostContent({ post, relatedPosts = [] }: { post: Blo
             {/* Card 1: Meta Header */}
             <div className="bg-white shadow-xl w-full p-8 md:p-16 mb-8">
               <span className="text-xs fw-700 tracking-widest uppercase text-muted mb-6 block">
-                {post.category || 'Educational Governance & Tech'}
+                {post.category || 'Blog'}
               </span>
               
               <h1 className="text-3xl md:text-5xl fw-700 text-navy mb-6 leading-tight">
@@ -419,7 +419,7 @@ export default function BlogPostContent({ post, relatedPosts = [] }: { post: Blo
                   <h3 className="text-2xl fw-700 text-navy mb-6 text-center">Related Posts</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {relatedPosts.map((rel: any) => {
-                      const categoryName = (typeof rel.category === 'object' ? rel.category?.name : rel.category) || (rel.tags ? rel.tags.split(',')[0].trim() : 'Blog');
+                      const categoryName = (typeof rel.category === 'object' ? rel.category?.name : rel.category) || 'Blog';
                       const coverImg = rel.cover_image || 'https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg';
                       const formattedRelDate = new Date(rel.published_at || rel.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                       const relSlug = encodeURIComponent(rel.slug);
@@ -436,7 +436,7 @@ export default function BlogPostContent({ post, relatedPosts = [] }: { post: Blo
                               referrerPolicy="no-referrer"
                               className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                             />
-                            <div className="absolute top-3 left-3">
+                            <div className="absolute top-4 left-4">
                               <span className="bg-white/90 backdrop-blur-sm text-navy text-xs fw-600 px-3 py-1 rounded-sm">
                                 {categoryName}
                               </span>
