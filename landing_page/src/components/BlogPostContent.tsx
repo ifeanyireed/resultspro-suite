@@ -52,7 +52,7 @@ const renderCommentContent = (text: string) => {
   });
 };
 
-export default function BlogPostContent({ post }: { post: BlogPost }) {
+export default function BlogPostContent({ post, relatedPosts = [] }: { post: BlogPost; relatedPosts?: any[] }) {
   const [commentFirstName, setCommentFirstName] = React.useState('');
   const [commentLastName, setCommentLastName] = React.useState('');
   const [commentEmail, setCommentEmail] = React.useState('');
@@ -413,53 +413,52 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                 </div>
               </div>
 
-              {/* Card 7: Related Posts */}
-              <div className="w-full mt-8">
-                <h3 className="text-2xl fw-700 text-navy mb-6 text-center">Related Posts</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {/* Dummy Related Post 1 */}
-                  <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200 flex flex-col">
-                    <div className="h-32 bg-gray-200">
-                      <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250545/landing_page/photo04.jpg" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="p-5 flex-1 flex flex-col">
-                      <span className="text-[10px] fw-700 text-muted uppercase tracking-widest mb-2">Education</span>
-                      <h4 className="text-sm fw-700 text-navy leading-snug mb-3">Bridging the gap with Edge-Sync Learning</h4>
-                      <div className="mt-auto">
-                        <span className="text-xs fw-600 text-red" style={{ color: "var(--color-nets-red)" }}>Read full article</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Dummy Related Post 2 */}
-                  <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200 flex flex-col">
-                    <div className="h-32 bg-gray-200">
-                      <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="p-5 flex-1 flex flex-col">
-                      <span className="text-[10px] fw-700 text-muted uppercase tracking-widest mb-2">Product</span>
-                      <h4 className="text-sm fw-700 text-navy leading-snug mb-3">How we built ExamsPRO for offline CBT</h4>
-                      <div className="mt-auto">
-                        <span className="text-xs fw-600 text-red" style={{ color: "var(--color-nets-red)" }}>Read full article</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Dummy Related Post 3 */}
-                  <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200 flex flex-col">
-                    <div className="h-32 bg-gray-200">
-                      <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250555/landing_page/photo08.jpg" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="p-5 flex-1 flex flex-col">
-                      <span className="text-[10px] fw-700 text-muted uppercase tracking-widest mb-2">Marketing</span>
-                      <h4 className="text-sm fw-700 text-navy leading-snug mb-3">5 Ways to increase school admissions in 2026</h4>
-                      <div className="mt-auto">
-                        <span className="text-xs fw-600 text-red" style={{ color: "var(--color-nets-red)" }}>Read full article</span>
-                      </div>
-                    </div>
+              {/* Card 7: Dynamic Related Posts */}
+              {relatedPosts && relatedPosts.length > 0 && (
+                <div className="w-full mt-10">
+                  <h3 className="text-2xl fw-700 text-navy mb-6 text-center">Related Posts</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {relatedPosts.map((rel: any) => {
+                      const categoryName = (typeof rel.category === 'object' ? rel.category?.name : rel.category) || (rel.tags ? rel.tags.split(',')[0].trim() : 'EdTech & Governance');
+                      const coverImg = rel.cover_image || 'https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg';
+                      return (
+                        <div
+                          key={rel.id || rel.slug}
+                          className="bg-white shadow-lg rounded-2xl overflow-hidden border border-slate-200 flex flex-col hover:shadow-xl transition-all duration-300 group"
+                        >
+                          <div className="h-36 bg-slate-100 overflow-hidden relative">
+                            <img
+                              src={coverImg}
+                              alt={rel.title}
+                              referrerPolicy="no-referrer"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                          <div className="p-5 flex-1 flex flex-col">
+                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block">
+                              {categoryName}
+                            </span>
+                            <h4 className="text-sm font-bold text-navy leading-snug mb-3 line-clamp-2">
+                              <Link href={`/blog/${rel.slug}`} className="hover:text-blue-600 transition-colors">
+                                {rel.title}
+                              </Link>
+                            </h4>
+                            <div className="mt-auto pt-2">
+                              <Link
+                                href={`/blog/${rel.slug}`}
+                                className="text-xs font-semibold inline-flex items-center gap-1 hover:underline"
+                                style={{ color: "var(--color-nets-red)" }}
+                              >
+                                Read full article &rarr;
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
-              </div>
+              )}
           </ScrollReveal>
         </div>
       </div>

@@ -34,14 +34,26 @@ function findPost(posts: any[], requestedSlug: string) {
   return null;
 }
 
-export function BlogPostClientWrapper({ initialPost, slug }: { initialPost: any; slug: string }) {
+export function BlogPostClientWrapper({ 
+  initialPost, 
+  initialRelatedPosts = [], 
+  slug 
+}: { 
+  initialPost: any; 
+  initialRelatedPosts?: any[]; 
+  slug: string 
+}) {
   const [post, setPost] = useState<any>(initialPost);
+  const [relatedPosts, setRelatedPosts] = useState<any[]>(initialRelatedPosts);
   const [loading, setLoading] = useState<boolean>(!initialPost);
   const [notFoundState, setNotFoundState] = useState<boolean>(false);
 
   useEffect(() => {
     if (initialPost) {
       setPost(initialPost);
+      if (initialRelatedPosts && initialRelatedPosts.length > 0) {
+        setRelatedPosts(initialRelatedPosts);
+      }
       setLoading(false);
       return;
     }
@@ -60,6 +72,18 @@ export function BlogPostClientWrapper({ initialPost, slug }: { initialPost: any;
                 author: "ResultsPRO Team",
                 date: new Date(found.published_at || found.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
               });
+
+              // Dynamic related posts calculation (excluding active post)
+              const activeCategory = found.category_id || found.category?.name || '';
+              const otherPosts = posts.filter((p: any) => p.slug !== found.slug && p.id !== found.id && p.status === 'PUBLISHED');
+              const sameCategoryPosts = otherPosts.filter((p: any) => 
+                activeCategory && (p.category_id === activeCategory || p.category?.name === activeCategory)
+              );
+              const otherCategoryPosts = otherPosts.filter((p: any) => 
+                !activeCategory || (p.category_id !== activeCategory && p.category?.name !== activeCategory)
+              );
+              setRelatedPosts([...sameCategoryPosts, ...otherCategoryPosts].slice(0, 3));
+
               setLoading(false);
               return;
             }
@@ -74,7 +98,7 @@ export function BlogPostClientWrapper({ initialPost, slug }: { initialPost: any;
     }
 
     loadPost();
-  }, [initialPost, slug]);
+  }, [initialPost, initialRelatedPosts, slug]);
 
   // Track unique page view in session
   useEffect(() => {
@@ -121,5 +145,5 @@ export function BlogPostClientWrapper({ initialPost, slug }: { initialPost: any;
     );
   }
 
-  return <BlogPostContent post={post} />;
+  return <BlogPostContent post={post} relatedPosts={relatedPosts} />;
 }

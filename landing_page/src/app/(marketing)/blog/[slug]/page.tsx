@@ -115,6 +115,20 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const resolvedParams = await params;
   const posts = await getBlogPosts();
   const post = findPost(posts, resolvedParams.slug);
+
+  // Dynamic related posts calculation (excluding current post)
+  let relatedPosts: any[] = [];
+  if (post && Array.isArray(posts)) {
+    const activeCategory = post.category_id || post.category?.name || '';
+    const otherPosts = posts.filter((p: any) => p.slug !== post.slug && p.id !== post.id);
+    const sameCategoryPosts = otherPosts.filter((p: any) => 
+      activeCategory && (p.category_id === activeCategory || p.category?.name === activeCategory)
+    );
+    const otherCategoryPosts = otherPosts.filter((p: any) => 
+      !activeCategory || (p.category_id !== activeCategory && p.category?.name !== activeCategory)
+    );
+    relatedPosts = [...sameCategoryPosts, ...otherCategoryPosts].slice(0, 3);
+  }
   
   // Map backend format to component format if post was retrieved
   const formattedPost = post ? {
@@ -123,5 +137,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     date: new Date(post.published_at || post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   } : null;
 
-  return <BlogPostClientWrapper initialPost={formattedPost} slug={post?.slug || resolvedParams.slug} />;
+  return (
+    <BlogPostClientWrapper 
+      initialPost={formattedPost} 
+      initialRelatedPosts={relatedPosts} 
+      slug={post?.slug || resolvedParams.slug} 
+    />
+  );
 }
