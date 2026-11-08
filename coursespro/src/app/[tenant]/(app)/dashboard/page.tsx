@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react';
 import { coursesApi } from '@/lib/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
+import UnenrolledDashboardView from './UnenrolledDashboardView';
 
 export default function LearnerDashboard() {
   const router = useRouter();
@@ -106,18 +107,23 @@ export default function LearnerDashboard() {
           // Ignore
         }
       }
-      router.push('/');
+      // Regular learners stay on /dashboard to view the in-dashboard cohort selection view
     } else if (dashboardData && dashboardData.has_enrollment === true) {
       Cookies.remove('selected_cohort_id');
     }
   }, [dashboardData, router, token, verifying]);
 
-  if (!mounted || !user || loading || verifying || !dashboardData || dashboardData.has_enrollment === false) return (
+  if (!mounted || !user || loading || verifying || !dashboardData) return (
     <div className="flex flex-col justify-center items-center h-64 gap-3">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         {verifying && <p className="text-sm font-medium text-slate-500">Confirming your enrollment...</p>}
     </div>
   );
+
+  // If student is not yet enrolled in any cohort, render the in-dashboard cohort selector
+  if (dashboardData.has_enrollment === false) {
+    return <UnenrolledDashboardView user={user} tenantSlug={params?.tenant as string} />;
+  }
 
   return (
     <>
@@ -128,7 +134,10 @@ export default function LearnerDashboard() {
           <p className="text-sm text-gray-500 mt-1">{dashboardData.cohort_name || 'No Cohort'} • Stage {dashboardData.enrollment?.current_stage || 1}: {dashboardData.current_module?.title || 'Overview'}</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <button className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
+          <button 
+            onClick={() => router.push('/dashboard/classroom')}
+            className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2"
+          >
             <VideoCameraIcon className="w-4 h-4 text-emerald-500" strokeWidth={2} />
             Join Coworking Room
           </button>
@@ -314,7 +323,12 @@ export default function LearnerDashboard() {
                       <p className="text-xs text-blue-600 font-medium">{peer.action}</p>
                     </div>
                   </div>
-                  <button className="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors">Join</button>
+                  <button 
+                    onClick={() => router.push('/dashboard/classroom')}
+                    className="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors"
+                  >
+                    Join
+                  </button>
                 </div>
               )) : (
                 <div className="text-sm text-gray-500 italic py-4">No other peers online right now.</div>
@@ -344,7 +358,10 @@ export default function LearnerDashboard() {
               )}
             </div>
             
-            <button className="w-full mt-4 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors py-2 text-center">
+            <button 
+              onClick={() => router.push('/dashboard/leaderboard')}
+              className="w-full mt-4 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors py-2 text-center"
+            >
               View Full Leaderboard
             </button>
           </div>

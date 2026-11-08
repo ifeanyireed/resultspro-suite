@@ -1,7 +1,13 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
-import { IconBook, IconBrain, IconTrophy, IconUserPlus } from '@tabler/icons-react';
+import { 
+  IconBrain, 
+  IconCode, 
+  IconBriefcase, 
+  IconPalette, 
+  IconCpu 
+} from '@tabler/icons-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTenant } from '@/lib/tenant';
@@ -29,16 +35,48 @@ export default async function TenantHome({ params }: { params: Promise<{ tenant:
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[{ title: 'Tech Skills', exams: 'Coding, Data, Design' }, { title: 'Business', exams: 'Marketing, Finance, Ops' }, { title: 'Creative', exams: 'Writing, Video, Audio' }, { title: 'Productivity', exams: 'Tools, Automation, AI' }].map((cat, i) => (
+            {[
+              { title: 'Tech Skills', desc: 'Coding, Data, Design', icon: IconCode },
+              { title: 'Business', desc: 'Marketing, Finance, Ops', icon: IconBriefcase },
+              { title: 'Creative', desc: 'Writing, Video, Audio', icon: IconPalette },
+              { title: 'Productivity', desc: 'Tools, Automation, AI', icon: IconCpu }
+            ].map((cat, i) => (
               <div key={i} className="card p-8">
-                <IconBook className="w-8 h-8 text-red mb-6" />
+                <cat.icon className="w-8 h-8 text-red mb-6" />
                 <h3 className="text-xl fw-600 mb-2">{cat.title}</h3>
-                <p className="text-muted text-sm mb-6">{cat.exams}</p>
-                <Link href="/practice" className="nav-link text-navy" style={{ color: 'var(--color-nets-navy)' }}>
+                <p className="text-muted text-sm mb-6">{cat.desc}</p>
+                <Link href="/cohorts" className="nav-link text-navy" style={{ color: 'var(--color-nets-navy)' }}>
                   Explore program &rarr;
                 </Link>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* The Standard Manifesto & Pedagogy Callout */}
+      <section className="py-20 bg-[#0B1021] text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="container-nets relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center space-x-2 bg-white/10 border border-white/15 px-3.5 py-1 rounded-full text-blue-400 text-xs font-mono font-bold uppercase tracking-wider mb-5">
+              <span>Our Learning Pedagogy</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-4 leading-tight">
+              We Don't Sell Video Playlists.<br />We Engineer Practitioners.
+            </h2>
+            <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
+              Explore our anti-lecture manifesto, 4-stage learning operating system, 48-hour mentor feedback SLA, and verified student proof-of-work.
+            </p>
+          </div>
+          <div className="shrink-0">
+            <Link 
+              href="/the-standard" 
+              className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-8 py-4 rounded-full shadow-lg shadow-blue-600/25 transition-all group"
+            >
+              <span>Explore The Standard</span>
+              <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+            </Link>
           </div>
         </div>
       </section>
@@ -75,7 +113,7 @@ export default async function TenantHome({ params }: { params: Promise<{ tenant:
             <div className="relative w-full h-full min-h-[400px] lg:aspect-square">
               <div className="w-full h-full bg-light border border-nets-border flex items-center justify-center relative overflow-hidden rounded-none shadow-sm">
                 <img 
-                  src={tenant.preview_image_url || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"} 
+                  src={tenant.preview_image_url || tenant.hero_bg_url || "/assets/images/dashboard-preview.svg"} 
                   alt={`${tenant.name} Preview`}
                   className="absolute inset-0 w-full h-full object-cover rounded-none"
                 />
@@ -93,7 +131,7 @@ export default async function TenantHome({ params }: { params: Promise<{ tenant:
             Join the next cohort and transform your skill set with {tenant.name}.
           </p>
           <div className="flex justify-center gap-4">
-            <Link href="/signup" className="btn btn-red btn-lg px-8">
+            <Link href="/apply" className="btn btn-red btn-lg px-8">
               Apply Now
             </Link>
             <Link href="/cohorts" className="btn btn-light btn-lg px-8" style={{ background: 'rgba(255,255,255,0.1)', color: '#fff' }}>

@@ -18,7 +18,7 @@ const getFooterSections = (hideInstructorLink: boolean, isPlatform: boolean) => 
       {
         title: 'Company',
         links: [
-          { label: 'About Us',                  href: '/about' },
+          { label: 'The Standard',              href: '/the-standard' },
         ],
       },
       {
@@ -43,7 +43,7 @@ const getFooterSections = (hideInstructorLink: boolean, isPlatform: boolean) => 
     {
       title: 'Company',
       links: [
-        { label: 'About Us',                  href: '/about' },
+        { label: 'The Standard',              href: '/the-standard' },
         ...(hideInstructorLink ? [] : [{ label: 'Become an Instructor', href: '/apply/mentor' }]),
       ],
     },

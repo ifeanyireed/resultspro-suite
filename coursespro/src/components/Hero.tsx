@@ -47,8 +47,8 @@ const Hero = ({
   description = "Join live, interactive cohorts and learn high-income skills from industry professionals.",
   ctaPrimaryText = "Browse Cohorts",
   ctaPrimaryLink = "/cohorts",
-  ctaSecondaryText = "Learn More",
-  ctaSecondaryLink = "/about",
+  ctaSecondaryText = "The Standard",
+  ctaSecondaryLink = "/the-standard",
   features = ["Industry Experts", "Live Cohorts", "Project-based Learning"]
 }: HeroProps) => {
   return (

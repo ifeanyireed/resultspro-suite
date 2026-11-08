@@ -20,8 +20,8 @@ export default async function PlatformLandingPage() {
         description="Launch a premium academy for courses, live sessions, e-books and printed books. Take payments, issue certificates, and track every outcome."
         ctaPrimaryText="Start free forever"
         ctaPrimaryLink="/signup"
-        ctaSecondaryText="See how it works"
-        ctaSecondaryLink="#features"
+        ctaSecondaryText="The Standard"
+        ctaSecondaryLink="/the-standard"
         features={["No credit card", "Setup in minutes", "Upgrade anytime"]}
       />
 
@@ -53,6 +53,33 @@ export default async function PlatformLandingPage() {
                 </Link>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* The Standard Manifesto & Pedagogy Callout */}
+      <section className="py-20 bg-[#0B1021] text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="container-nets relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center space-x-2 bg-white/10 border border-white/15 px-3.5 py-1 rounded-full text-blue-400 text-xs font-mono font-bold uppercase tracking-wider mb-5">
+              <span>The CoursesPRO Standard</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-4 leading-tight">
+              We Don't Sell Video Playlists.<br />We Engineer Practitioners.
+            </h2>
+            <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
+              Explore our anti-lecture manifesto, 4-stage learning operating system, 48-hour mentor feedback SLA, and verified student proof-of-work.
+            </p>
+          </div>
+          <div className="shrink-0">
+            <Link 
+              href="/the-standard" 
+              className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-8 py-4 rounded-full shadow-lg shadow-blue-600/25 transition-all group"
+            >
+              <span>Explore The Standard</span>
+              <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+            </Link>
           </div>
         </div>
       </section>
@@ -89,7 +116,7 @@ export default async function PlatformLandingPage() {
             <div className="relative w-full h-full min-h-[400px] lg:aspect-square">
               <div className="w-full h-full bg-light border border-nets-border flex items-center justify-center relative overflow-hidden rounded-none shadow-sm">
                 <img 
-                  src={tenant?.preview_image_url || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"} 
+                  src={tenant?.preview_image_url || "/assets/images/dashboard-preview.svg"} 
                   alt="Platform Preview"
                   className="absolute inset-0 w-full h-full object-cover rounded-none"
                 />
@@ -107,7 +134,7 @@ export default async function PlatformLandingPage() {
             <div className="relative order-2 lg:order-1 w-full h-full min-h-[400px] lg:aspect-square">
               <div className="w-full h-full bg-light border border-nets-border flex items-center justify-center relative overflow-hidden rounded-none shadow-sm">
                 <img 
-                  src={tenant?.learner_image_url || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"} 
+                  src={tenant?.learner_image_url || "/assets/images/learning-preview.svg"} 
                   alt="Learner Portal Preview"
                   className="absolute inset-0 w-full h-full object-cover rounded-none"
                 />

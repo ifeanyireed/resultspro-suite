@@ -76,10 +76,12 @@ export default function Navbar({ hideInstructorLink = false, isPlatform = false,
   };
 
   const navItems = isPlatform ? [
+    { label: 'The Standard', href: '/the-standard', enabled: true },
     { label: 'Features', href: '/#features', enabled: true },
     { label: 'Pricing', href: '/pricing', enabled: true },
     { label: 'Store', href: '/store', enabled: true },
   ].filter(i => i.enabled) : [
+    { label: 'The Standard', href: '/the-standard', enabled: true },
     { label: 'Cohorts', href: '/cohorts', enabled: true },
     { label: 'Store', href: '/store', enabled: true },
     { label: 'Become an Instructor', href: '/apply/mentor', enabled: !hideInstructorLink },

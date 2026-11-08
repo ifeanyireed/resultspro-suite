@@ -100,7 +100,7 @@ export default function JourneyPage() {
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Link
-              href="/dashboard/courses"
+              href="/dashboard"
               className="w-full sm:w-auto bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-6 py-3 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center justify-center gap-2"
             >
               <BookOpenIcon className="w-4 h-4" />
