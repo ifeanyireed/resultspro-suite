@@ -3,7 +3,7 @@ import React from "react";
 
 import ScrollReveal from './ScrollReveal';
 import Link from 'next/link';
-import { IconArrowLeft, IconMessageCircle, IconBrandTwitter, IconBrandFacebook, IconBrandLinkedin, IconBrandWhatsapp, IconMail, IconEye } from '@tabler/icons-react';
+import { IconArrowLeft, IconArrowRight, IconMessageCircle, IconBrandTwitter, IconBrandFacebook, IconBrandLinkedin, IconBrandWhatsapp, IconMail, IconEye } from '@tabler/icons-react';
 import { renderMarkdownAndMath } from '@/lib/markdown';
 import { loadKaTeX } from '@/lib/math-renderer';
 
@@ -213,9 +213,9 @@ export default function BlogPostContent({ post, relatedPosts = [] }: { post: Blo
                 {post.title}
               </h1>
 
-              {(post.meta_description || post.excerpt) && (
-                <p className="text-base sm:text-lg text-slate-600 mb-8 leading-relaxed border-l-4 border-[#0D1060] pl-4 py-1 italic font-medium">
-                  {post.meta_description || post.excerpt}
+              {(post.excerpt || post.meta_description) && (
+                <p className="text-base sm:text-lg text-muted mb-8 leading-relaxed">
+                  {post.excerpt || post.meta_description}
                 </p>
               )}
               
@@ -419,41 +419,60 @@ export default function BlogPostContent({ post, relatedPosts = [] }: { post: Blo
                   <h3 className="text-2xl fw-700 text-navy mb-6 text-center">Related Posts</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {relatedPosts.map((rel: any) => {
-                      const categoryName = (typeof rel.category === 'object' ? rel.category?.name : rel.category) || (rel.tags ? rel.tags.split(',')[0].trim() : 'EdTech & Governance');
+                      const categoryName = (typeof rel.category === 'object' ? rel.category?.name : rel.category) || (rel.tags ? rel.tags.split(',')[0].trim() : 'Blog');
                       const coverImg = rel.cover_image || 'https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg';
+                      const formattedRelDate = new Date(rel.published_at || rel.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                      const relSlug = encodeURIComponent(rel.slug);
+
                       return (
-                        <div
+                        <article
                           key={rel.id || rel.slug}
-                          className="bg-white shadow-lg rounded-2xl overflow-hidden border border-slate-200 flex flex-col hover:shadow-xl transition-all duration-300 group"
+                          className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-gray-200"
                         >
-                          <div className="h-36 bg-slate-100 overflow-hidden relative">
+                          <div className="relative h-44 overflow-hidden bg-nets-light">
                             <img
                               src={coverImg}
                               alt={rel.title}
                               referrerPolicy="no-referrer"
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                             />
+                            <div className="absolute top-3 left-3">
+                              <span className="bg-white/90 backdrop-blur-sm text-navy text-xs fw-600 px-3 py-1 rounded-sm">
+                                {categoryName}
+                              </span>
+                            </div>
                           </div>
-                          <div className="p-5 flex-1 flex flex-col">
-                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block">
-                              {categoryName}
-                            </span>
-                            <h4 className="text-sm font-bold text-navy leading-snug mb-3 line-clamp-2">
-                              <Link href={`/blog/${rel.slug}`} className="hover:text-blue-600 transition-colors">
+
+                          <div className="p-6 flex flex-col flex-1">
+                            <div className="flex items-center justify-between text-xs text-muted mb-3">
+                              <span>{formattedRelDate}</span>
+                              <span className="flex items-center gap-1 font-medium text-slate-500">
+                                <IconEye size={14} className="text-slate-400" />
+                                {(Number(rel.view_count) || 0).toLocaleString()}
+                              </span>
+                            </div>
+
+                            <h4 className="text-lg fw-600 mb-3 text-navy leading-tight line-clamp-2">
+                              <Link href={`/blog/${relSlug}`} className="hover:opacity-80 transition-opacity">
                                 {rel.title}
                               </Link>
                             </h4>
-                            <div className="mt-auto pt-2">
+
+                            <p className="text-sm text-muted mb-6 flex-1 line-clamp-3 leading-relaxed">
+                              {rel.excerpt}
+                            </p>
+
+                            <div className="mt-auto pt-4 border-t border-gray-200">
                               <Link
-                                href={`/blog/${rel.slug}`}
-                                className="text-xs font-semibold inline-flex items-center gap-1 hover:underline"
-                                style={{ color: "var(--color-nets-red)" }}
+                                href={`/blog/${relSlug}`}
+                                className="flex items-center gap-2 text-sm fw-600 text-red hover:opacity-80 transition-opacity"
+                                style={{ color: 'var(--color-nets-red)' }}
                               >
-                                Read full article &rarr;
+                                Read Article <IconArrowRight size={16} />
                               </Link>
                             </div>
                           </div>
-                        </div>
+                        </article>
                       );
                     })}
                   </div>
