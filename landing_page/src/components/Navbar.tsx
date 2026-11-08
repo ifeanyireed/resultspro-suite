@@ -83,6 +83,7 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
+    { name: 'Book Demo', path: '/demo' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
     { name: 'Pricing', path: '/pricing' },
