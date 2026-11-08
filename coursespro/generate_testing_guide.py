@@ -1,0 +1,1254 @@
+import os
+import subprocess
+
+def create_guide():
+    html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CoursesPRO - Full Enterprise Testing & Quality Assurance Guide</title>
+<style>
+  @page {
+    size: A4;
+    margin: 16mm 14mm 16mm 14mm;
+    @bottom-right {
+      content: counter(page);
+      font-size: 9px;
+      color: #64748b;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #0f172a;
+    line-height: 1.5;
+    font-size: 11px;
+    background: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cover-page {
+    page-break-after: always;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  }
+
+  .cover-header {
+    border-bottom: 3px solid #146ef5;
+    padding-bottom: 24px;
+  }
+
+  .brand-badge {
+    display: inline-block;
+    background: #146ef5;
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .cover-title {
+    font-size: 32px;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+  }
+
+  .cover-subtitle {
+    font-size: 14px;
+    color: #475569;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .cover-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 40px 0;
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .meta-item {
+    font-size: 11px;
+  }
+  .meta-item strong {
+    color: #0f172a;
+    display: block;
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+  .meta-item span {
+    color: #64748b;
+  }
+
+  .cover-footer {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 16px;
+    font-size: 10px;
+    color: #64748b;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  h1, h2, h3, h4 {
+    color: #0f172a;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    page-break-after: avoid;
+  }
+
+  h1 {
+    font-size: 20px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+    margin-top: 28px;
+    margin-bottom: 14px;
+    color: #146ef5;
+  }
+
+  h2 {
+    font-size: 15px;
+    margin-top: 22px;
+    margin-bottom: 10px;
+    border-left: 4px solid #146ef5;
+    padding-left: 8px;
+  }
+
+  h3 {
+    font-size: 13px;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    color: #1e293b;
+  }
+
+  p {
+    margin: 0 0 8px 0;
+    color: #334155;
+  }
+
+  ul, ol {
+    margin: 0 0 10px 0;
+    padding-left: 20px;
+  }
+
+  li {
+    margin-bottom: 4px;
+    color: #334155;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px 0;
+    font-size: 10px;
+    page-break-inside: avoid;
+  }
+
+  th, td {
+    padding: 6px 10px;
+    border: 1px solid #e2e8f0;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background: #f1f5f9;
+    font-weight: 700;
+    color: #1e293b;
+    text-transform: uppercase;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+  }
+
+  tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .badge-get { background: #e0f2fe; color: #0369a1; }
+  .badge-post { background: #dcfce7; color: #15803d; }
+  .badge-put { background: #fef3c7; color: #b45309; }
+  .badge-delete { background: #fee2e2; color: #b91c1c; }
+  .badge-crit { background: #fee2e2; color: #991b1b; }
+  .badge-high { background: #ffedd5; color: #c2410c; }
+  .badge-med { background: #fef9c3; color: #854d0e; }
+  .badge-active { background: #dcfce7; color: #166534; }
+
+  .callout {
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 10px 0;
+    font-size: 10.5px;
+    page-break-inside: avoid;
+  }
+  .callout-info { background: #eff6ff; border-left: 4px solid #3b82f6; color: #1e40af; }
+  .callout-warn { background: #fffbeb; border-left: 4px solid #f59e0b; color: #92400e; }
+  .callout-success { background: #f0fdf4; border-left: 4px solid #22c55e; color: #166534; }
+
+  .screen-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 14px;
+    background: #ffffff;
+    page-break-inside: avoid;
+  }
+  .screen-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+  }
+  .screen-title {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #0f172a;
+  }
+  .screen-url {
+    font-family: monospace;
+    font-size: 10px;
+    color: #146ef5;
+    background: #eff6ff;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .step-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin: 6px 0;
+  }
+  .step-num {
+    font-weight: 800;
+    color: #146ef5;
+    margin-right: 6px;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 9.5px;
+    background: #f1f5f9;
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: #0f172a;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover-page">
+  <div class="cover-header">
+    <div class="brand-badge">ResultsPRO Ecosystem &bull; BuilderOS</div>
+    <h1 class="cover-title">CoursesPRO &bull; Enterprise Testing & Quality Assurance Specification</h1>
+    <p class="cover-subtitle">Complete Verification Handbook Across All 40 Next.js Screens, Go Microservice Endpoints, WebRTC Live Video, and Multi-Tenant Subdomains</p>
+  </div>
+
+  <div class="cover-meta-grid">
+    <div class="meta-item">
+      <strong>Target Application</strong>
+      <span>CoursesPRO (BuilderOS LMS & Peer Learning Platform)</span>
+    </div>
+    <div class="meta-item">
+      <strong>Frontend Architecture</strong>
+      <span>Next.js 15 (React 19), TanStack Query v5, Tailwind CSS, Framer Motion</span>
+    </div>
+    <div class="meta-item">
+      <strong>Backend Service</strong>
+      <span>service_coursespro (Go 1.23, Gin, GORM, Postgres / Neon)</span>
+    </div>
+    <div class="meta-item">
+      <strong>Identity & Authentication</strong>
+      <span>service_users (JWT Bearer Token, X-Tenant-Domain resolution)</span>
+    </div>
+    <div class="meta-item">
+      <strong>Live Video & Coworking</strong>
+      <span>Daily.co WebRTC Video Call Engine with Custom Grid Layout</span>
+    </div>
+    <div class="meta-item">
+      <strong>Document Version & Date</strong>
+      <span>v2.4.0 &bull; November 2026 Edition</span>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <strong>Audience & Scope:</strong> This testing specification is formulated for Quality Assurance (QA) engineers, full-stack developers, security auditors, and release leads responsible for certifying the multi-tenant CoursesPRO platform prior to production deployment.
+  </div>
+
+  <div class="cover-footer">
+    <span>&copy; 2026 ResultsPRO Suite &bull; ReedBreed Creative Capital</span>
+    <span>Confidential &bull; Internal QA Standards</span>
+  </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="page-break"></div>
+<h1>📋 Table of Contents</h1>
+<table>
+  <thead>
+    <tr>
+      <th style="width: 10%;">Section</th>
+      <th style="width: 35%;">Module / Focus Area</th>
+      <th style="width: 35%;">Key Architectural Components</th>
+      <th style="width: 20%;">Target Roles</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1.0</strong></td>
+      <td><strong>System Architecture & Multi-Tenancy</strong></td>
+      <td>Subdomain routing, Tenant context, JWT auth cookies, CORS</td>
+      <td>All / Platform Engineers</td>
+    </tr>
+    <tr>
+      <td><strong>2.0</strong></td>
+      <td><strong>Test Personas & Seed Credentials Matrix</strong></td>
+      <td>Seeded students, mentors, school admins, superadmins</td>
+      <td>QA Engineers</td>
+    </tr>
+    <tr>
+      <td><strong>3.0</strong></td>
+      <td><strong>Public Campus & Admissions Funnel (7 Screens)</strong></td>
+      <td>Showcase, Cohort catalog, Student/Mentor application funnels, Store, Auth</td>
+      <td>Prospective Students & Mentors</td>
+    </tr>
+    <tr>
+      <td><strong>4.0</strong></td>
+      <td><strong>Student Learning Portal & Builder OS (15 Screens)</strong></td>
+      <td>Journey modules, Compiler tasks, Capstones, Kanban, Daily.co video</td>
+      <td>Enrolled Students / Builders</td>
+    </tr>
+    <tr>
+      <td><strong>5.0</strong></td>
+      <td><strong>Mentor Studio & Evaluation Console (6 Screens)</strong></td>
+      <td>Reviews queue, Cohort supervisions, Office hours, NGN Payout ledger</td>
+      <td>Technical Instructors / Mentors</td>
+    </tr>
+    <tr>
+      <td><strong>6.0</strong></td>
+      <td><strong>Academy Admin & Curriculum Builder (10 Screens)</strong></td>
+      <td>Visual program builder, AI quiz generator, Admissions, Payments, Gamification</td>
+      <td>School & Academy Admins</td>
+    </tr>
+    <tr>
+      <td><strong>7.0</strong></td>
+      <td><strong>Platform SuperAdmin & Operations (2 Screens)</strong></td>
+      <td>Tenant provisioning, platform subscriptions, multi-app linking</td>
+      <td>Platform SuperAdmins</td>
+    </tr>
+    <tr>
+      <td><strong>8.0</strong></td>
+      <td><strong>End-to-End Core User Journeys</strong></td>
+      <td>Step-by-step lifecycles: Enrollment &rarr; Learning &rarr; Review &rarr; Graduation</td>
+      <td>E2E Automation & Manual QA</td>
+    </tr>
+    <tr>
+      <td><strong>9.0</strong></td>
+      <td><strong>Complete API Endpoints Verification Matrix</strong></td>
+      <td>Full matrix of 30+ Go backend endpoints with request/response specs</td>
+      <td>Backend QA & Integration</td>
+    </tr>
+    <tr>
+      <td><strong>10.0</strong></td>
+      <td><strong>Security, Multi-Tenant Isolation & Chaos QA</strong></td>
+      <td>SQL injection, cross-tenant data leakage, token hijacking, concurrency</td>
+      <td>Security Auditors & DevOps</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warn">
+  <strong>Testing Pre-requisites:</strong> Ensure local services are running on their designated ports:
+  <ul>
+    <li>Frontend Webapp: <code>http://localhost:3006</code> (e.g. <code>http://skillupacademy.localhost:3006</code>)</li>
+    <li>Backend Microservice (<code>service_coursespro</code>): <code>http://localhost:8080</code></li>
+    <li>Identity Service (<code>service_users</code>): <code>http://localhost:8081</code></li>
+    <li>Database: Neon PostgreSQL with seeded tenant <code>skillupacademy</code> and <code>greenwood-high</code></li>
+  </ul>
+</div>
+
+<!-- SECTION 1 -->
+<h1>1.0 System Architecture & Multi-Tenancy QA</h1>
+<p>CoursesPRO is a multi-tenant application that dynamically resolves institutional brand identities based on the request domain. Correct multi-tenant resolution is essential before running any UI or API test.</p>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">1.1 Tenant Resolution Architecture</span>
+    <span class="screen-url">lib/api.ts &rarr; getTenantSlug()</span>
+  </div>
+  <p>The frontend extracts the tenant identifier from the hostname:</p>
+  <ul>
+    <li><strong>Production Subdomains:</strong> <code>skillupacademy.resultspro.ng</code> &rarr; Tenant: <code>skillupacademy</code></li>
+    <li><strong>Local Development Subdomains:</strong> <code>skillupacademy.localhost:3006</code> &rarr; Tenant: <code>skillupacademy</code></li>
+    <li><strong>Plain Localhost / Platform Root:</strong> <code>localhost:3006</code> &rarr; Falls back to <code>NEXT_PUBLIC_TENANT_SLUG</code></li>
+    <li><strong>Custom Domains:</strong> <code>learn.skilluplearningacademy.com</code> &rarr; Full canonical host mapped in tenant registry</li>
+  </ul>
+  <div class="callout callout-info">
+    <strong>Header Injection:</strong> Every HTTP call generated by Axios includes the <code>X-Tenant-Domain</code> request header. The Go backend middleware reads this header, resolves the <code>tenant_id</code> from the database, and injects <code>db.WithTenant(c)</code> into all GORM queries.
+  </div>
+</div>
+
+<!-- SECTION 2 -->
+<h1>2.0 Test Personas & Seed Credentials Matrix</h1>
+<p>Use the following pre-seeded test accounts to validate role-based permissions and access control:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Persona Role</th>
+      <th>Email Address</th>
+      <th>Password</th>
+      <th>Tenant Domain</th>
+      <th>Primary Permissions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Platform SuperAdmin</strong></td>
+      <td><code>superadmin@resultspro.ng</code></td>
+      <td><code>Password123!</code></td>
+      <td>Root / Platform</td>
+      <td>All tenant configurations, billing, global analytics</td>
+    </tr>
+    <tr>
+      <td><strong>Academy Admin</strong></td>
+      <td><code>tenant-admin@example.edu</code></td>
+      <td><code>Password123!</code></td>
+      <td><code>skillupacademy</code></td>
+      <td>Curriculum builder, cohorts, student approvals, earnings</td>
+    </tr>
+    <tr>
+      <td><strong>Lead Mentor / Instructor</strong></td>
+      <td><code>usr_mentor_001@example.com</code></td>
+      <td><code>Password123!</code></td>
+      <td><code>skillupacademy</code></td>
+      <td>Project code reviews, grading, live classroom, payout requests</td>
+    </tr>
+    <tr>
+      <td><strong>Associate Mentor</strong></td>
+      <td><code>usr_mentor_002@example.com</code></td>
+      <td><code>Password123!</code></td>
+      <td><code>skillupacademy</code></td>
+      <td>Assigned cohort reviews, 1:1 office hours booking link</td>
+    </tr>
+    <tr>
+      <td><strong>Enrolled Student (Active)</strong></td>
+      <td><code>student@example.com</code></td>
+      <td><code>Password123!</code></td>
+      <td><code>skillupacademy</code></td>
+      <td>Stage 1–3 lessons, compiler challenges, capstone submissions</td>
+    </tr>
+    <tr>
+      <td><strong>Prospective Applicant</strong></td>
+      <td><code>newstudent@test.com</code></td>
+      <td><code>Password123!</code></td>
+      <td><code>skillupacademy</code></td>
+      <td>Public catalog, admissions application, tuition payment</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- SECTION 3 -->
+<div class="page-break"></div>
+<h1>3.0 Public Campus & Admissions Funnel (Screens 1 – 7)</h1>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 01 &bull; Tenant Campus Home</span>
+    <span class="screen-url">/[tenant] &bull; Public</span>
+  </div>
+  <p><strong>Purpose:</strong> Brand landing page displaying active tracks, academy statistics, student testimonials, and tuition fees.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Branding:</strong> Verify logo, academy colors, and motto match tenant settings in <code>crs_tenant_settings</code>.</li>
+    <li><input type="checkbox"> <strong>Hero Action:</strong> Click "Explore Tracks" &rarr; smooth scrolls or navigates to <code>/[tenant]/cohorts</code>.</li>
+    <li><input type="checkbox"> <strong>Testimonials:</strong> Validate builder project showcases and testimonials render without layout distortion.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 02 &bull; Cohort Selection & Catalog</span>
+    <span class="screen-url">/[tenant]/cohorts &bull; Public</span>
+  </div>
+  <p><strong>Purpose:</strong> Displays active batches with start dates, meeting days, difficulty ratings, and enrollment status.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Data Grid:</strong> Verify only cohorts with <code>status = 'ACTIVE'</code> are displayed.</li>
+    <li><input type="checkbox"> <strong>Enroll CTA:</strong> Clicking "Apply Now" passes the selected <code>cohort_id</code> query param to <code>/[tenant]/apply?cohort={id}</code>.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 03 &bull; Student Application Funnel</span>
+    <span class="screen-url">/[tenant]/apply &bull; Public / Guest</span>
+  </div>
+  <p><strong>Purpose:</strong> Admissions application form collecting background, track preference, technical experience, and goals.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Validation:</strong> Submit empty form &rarr; ensure required field errors appear on name, email, and goals.</li>
+    <li><input type="checkbox"> <strong>Submission:</strong> Fill valid applicant info &rarr; verify record creation in <code>crs_enrollments</code> with status <code>APPLIED</code>.</li>
+    <li><input type="checkbox"> <strong>Redirection:</strong> Ensure user is routed to <code>/[tenant]/onboarding/plan</code> upon successful submission.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 04 &bull; Mentor Application Funnel</span>
+    <span class="screen-url">/[tenant]/apply/mentor &bull; Public</span>
+  </div>
+  <p><strong>Purpose:</strong> Instructor application form collecting GitHub, LinkedIn, technical specialization, and sample code review links.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Submission:</strong> Submit mentor application &rarr; check record inserted into <code>crs_mentor_applications</code> with status <code>PENDING_REVIEW</code>.</li>
+    <li><input type="checkbox"> <strong>Admin Notification:</strong> Verify application shows in <code>/admin/mentors</code> under Pending Applicants.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 05 &bull; Public Campus Store</span>
+    <span class="screen-url">/[tenant]/store &bull; Public</span>
+  </div>
+  <p><strong>Purpose:</strong> Public catalog of academy merchandise, hoodies, textbooks, and workshop tickets.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Currency Display:</strong> Confirm prices display properly in Nigerian Naira (<code>₦</code>) with thousand separators.</li>
+    <li><input type="checkbox"> <strong>Inventory Check:</strong> Out-of-stock items should display a disabled "Sold Out" state.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 06 &bull; Public Student Portfolio Showcase</span>
+    <span class="screen-url">/[tenant]/portfolio/[username] &bull; Public</span>
+  </div>
+  <p><strong>Purpose:</strong> Verified proof-of-work portfolio displaying student capstones, verified certificates, and GitHub links.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Live Rendering:</strong> Navigate to <code>/skillupacademy/portfolio/janedoe</code> &rarr; verify profile bio, achievements, and approved projects render.</li>
+    <li><input type="checkbox"> <strong>Security:</strong> Verify unapproved drafts or private notes are NOT exposed in the public view.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 07 &bull; Authentication & Onboarding</span>
+    <span class="screen-url">/[tenant]/login, /signup, /onboarding/* &bull; Auth</span>
+  </div>
+  <p><strong>Purpose:</strong> User sign-in, account registration, email verification, plan selection, and campus orientation.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>JWT Auth Cookie:</strong> Upon login, check browser cookies for <code>token</code> scoped to the platform domain.</li>
+    <li><input type="checkbox"> <strong>Role Redirect:</strong> Mentors redirect to <code>/mentor</code>, Admins to <code>/admin</code>, Students to <code>/dashboard</code>.</li>
+  </ul>
+</div>
+
+<!-- SECTION 4 -->
+<div class="page-break"></div>
+<h1>4.0 Student Learning Portal & Builder OS (Screens 8 – 22)</h1>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 08 &bull; Student Dashboard Overview</span>
+    <span class="screen-url">/[tenant]/dashboard &bull; Student Role</span>
+  </div>
+  <p><strong>Purpose:</strong> Home view showing current milestone stage, daily streak, XP balance, next live class, and recent submissions.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>KPI Cards:</strong> Validate XP count, Current Stage number, Streak counter, and Completed Modules count.</li>
+    <li><input type="checkbox"> <strong>Quick Action:</strong> Click "Continue Journey" &rarr; navigates to active module in <code>/dashboard/journey</code>.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 09 &bull; Interactive Journey Stages</span>
+    <span class="screen-url">/[tenant]/dashboard/journey &bull; Student Role</span>
+  </div>
+  <p><strong>Purpose:</strong> Visual roadmap of program stages (e.g. Stage 1: Fundamentals, Stage 2: React, Stage 3: Fullstack Backend).</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Milestone Locking:</strong> Stages higher than <code>current_stage_number</code> should display locked with requirements.</li>
+    <li><input type="checkbox"> <strong>Progress Rings:</strong> Percentage progress recalculates dynamically as module blocks are checked off.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 10 &bull; Interactive Lesson & Module Workspace</span>
+    <span class="screen-url">/[tenant]/dashboard/journey/[moduleId] &bull; Student Role</span>
+  </div>
+  <p><strong>Purpose:</strong> Core learning workspace containing lesson markdown, video lectures, coding compiler, quizzes, and reflection blocks.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Video Player:</strong> Embeds YouTube/Vimeo/Cloudinary video player with time tracking.</li>
+    <li><input type="checkbox"> <strong>Code Compiler:</strong> Execute Javascript/Go/Python snippet &rarr; verify stdout renders in terminal pane.</li>
+    <li><input type="checkbox"> <strong>Quiz Validation:</strong> Complete multiple-choice quiz &rarr; score calculates instantly; passing marks module progress.</li>
+    <li><input type="checkbox"> <strong>Block Submission:</strong> Submit assignment block (code or text) &rarr; verify <code>POST /api/submissions/blocks</code> returns <code>201 Created</code>.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 11 &bull; Capstone Projects Studio</span>
+    <span class="screen-url">/[tenant]/dashboard/projects &bull; Student Role</span>
+  </div>
+  <p><strong>Purpose:</strong> Submitting end-of-stage capstone projects with GitHub repo, live demo URL, and student architectural notes.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Submission Form:</strong> Enter GitHub repo URL, Figma URL, demo URL &rarr; submit via <code>POST /api/projects/submit</code>.</li>
+    <li><input type="checkbox"> <strong>Status Indicator:</strong> Project status shifts to <code>MENTOR_REVIEW</code> badge.</li>
+    <li><input type="checkbox"> <strong>Feedback Drawer:</strong> After review, instructor rating (1–5 stars), written critique, and Loom video URL render.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 12 &bull; Live Coworking & Classroom Studio</span>
+    <span class="screen-url">/[tenant]/dashboard/classroom &bull; Student & Mentor</span>
+  </div>
+  <p><strong>Purpose:</strong> Integrated Daily.co WebRTC live video room for sprint kickoff, workshops, and office hours.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>WebRTC Connection:</strong> Room joins without token failure; camera and microphone toggles respond smoothly.</li>
+    <li><input type="checkbox"> <strong>Screen Share:</strong> Share screen &rarr; video feeds adjust to presentation grid.</li>
+    <li><input type="checkbox"> <strong>Presence Heartbeat:</strong> Verify <code>POST /api/classroom/heartbeat</code> fires every 30s to update presence in <code>crs_presence_sessions</code>.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 13 &bull; Student Kanban Workspace</span>
+    <span class="screen-url">/[tenant]/dashboard/workspace &bull; Student Role</span>
+  </div>
+  <p><strong>Purpose:</strong> Drag-and-drop task management board for planning capstone sprints and feature deliverables.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Task Creation:</strong> Click "+ New Task", fill title, due date & priority &rarr; task card appears in "Backlog" column.</li>
+    <li><input type="checkbox"> <strong>Drag & Drop:</strong> Move task from "In Progress" to "Completed" &rarr; <code>PUT /api/workspace/tasks/:id/status</code> updates state.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screens 14 – 22 &bull; Social, Gamification & Campus Utilities</span>
+    <span class="screen-url">/[tenant]/dashboard/(peers, messages, leaderboard, achievements, certificates, store, billing, portfolio, mentor, resources)</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Screen / Route</th>
+        <th>Primary Action</th>
+        <th>Validation Criteria</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/dashboard/peers</code></td>
+        <td>Pair programming roster</td>
+        <td>Displays active cohort peers with status badges (Online/Offline)</td>
+      </tr>
+      <tr>
+        <td><code>/dashboard/messages</code></td>
+        <td>1:1 Direct Chat</td>
+        <td>Send direct message &rarr; delivered in real time via <code>POST /api/messages/conversations/:id</code></td>
+      </tr>
+      <tr>
+        <td><code>/dashboard/leaderboard</code></td>
+        <td>Weekly XP ranking</td>
+        <td>Sorts students by <code>current_xp</code> with gold, silver, and bronze trophies</td>
+      </tr>
+      <tr>
+        <td><code>/dashboard/achievements</code></td>
+        <td>Badges & unlocks</td>
+        <td>Displays earned badges (e.g. <code>FIRST_PROJECT_APPROVED</code>) with unlock timestamps</td>
+      </tr>
+      <tr>
+        <td><code>/dashboard/certificates</code></td>
+        <td>Verified graduation certs</td>
+        <td>Generates verifiable PDF/PNG credential with unique credential ID and verification link</td>
+      </tr>
+      <tr>
+        <td><code>/dashboard/store</code></td>
+        <td>XP redemption & merch</td>
+        <td>Allows redeeming campus swag using accumulated XP; deducts coins from balance</td>
+      </tr>
+      <tr>
+        <td><code>/dashboard/billing</code></td>
+        <td>Tuition & Paystack gateway</td>
+        <td>Initiates payment intent, opens Paystack popup, verifies webhook enrollment</td>
+      </tr>
+      <tr>
+        <td><code>/dashboard/portfolio</code></td>
+        <td>Portfolio CMS</td>
+        <td>Custom bio, featured project toggles, custom social handles update in <code>crs_public_portfolios</code></td>
+      </tr>
+      <tr>
+        <td><code>/dashboard/mentor</code></td>
+        <td>Book 1:1 office hours</td>
+        <td>Direct link opens instructor's Calendly/Cal.com booking modal</td>
+      </tr>
+      <tr>
+        <td><code>/dashboard/resources</code></td>
+        <td>Curated technical library</td>
+        <td>Searchable cheat sheets, starter templates, and design system kits</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 5 -->
+<div class="page-break"></div>
+<h1>5.0 Mentor Studio & Evaluation Console (Screens 23 – 28)</h1>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 23 &bull; Mentor Overview Dashboard</span>
+    <span class="screen-url">/mentor &bull; Mentor Role</span>
+  </div>
+  <p><strong>Purpose:</strong> Mission control showing pending review count, upcoming live sessions, assigned cohorts, and quick grade action.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Queue Card:</strong> Verifies dynamic pending review count matches backend <code>GET /api/mentor/submissions</code>.</li>
+    <li><input type="checkbox"> <strong>"Grade Now" CTA:</strong> Routes directly to <code>/mentor/reviews</code>.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 24 &bull; Code Review Evaluation Studio</span>
+    <span class="screen-url">/mentor/reviews &bull; Mentor Role &bull; ZERO MOCKS CERTIFIED</span>
+  </div>
+  <p><strong>Purpose:</strong> Comprehensive grading studio with dual tabs for Capstone Projects and Module Block Tasks.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Tab Switching:</strong> Toggle between "Capstone Projects" and "Module Assignments & Tasks"; badges reflect accurate counts.</li>
+    <li><input type="checkbox"> <strong>GitHub & Demo Inspection:</strong> Click GitHub / Demo buttons &rarr; opens student repos and preview apps in new tabs.</li>
+    <li><input type="checkbox"> <strong>Rating & Video URL:</strong> Select 1–5 stars; provide written critique; optionally add Loom review link.</li>
+    <li><input type="checkbox"> <strong>Revision Flow:</strong> Click "Request Revision" &rarr; submission status changes to <code>REVISION_REQUESTED</code>.</li>
+    <li><input type="checkbox"> <strong>Approval Flow:</strong> Click "Approve & Award XP" &rarr; student advances stage, awards +500 XP, updates mentor rating.</li>
+    <li><input type="checkbox"> <strong>Block Grading:</strong> Select Module Task &rarr; enter score (0–100), feedback &rarr; submits to <code>POST /api/mentor/submissions/blocks/:id/review</code>.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 25 &bull; Assigned Cohorts & Mentee Supervision</span>
+    <span class="screen-url">/mentor/cohorts &bull; Mentor Role &bull; ZERO MOCKS CERTIFIED</span>
+  </div>
+  <p><strong>Purpose:</strong> Manage assigned student batches, inspect progress milestones, and launch live coworking studios.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Search Filtering:</strong> Real-time search filters cohorts and student rosters by title, program, or student name/email.</li>
+    <li><input type="checkbox"> <strong>Expandable Roster:</strong> Click "View Mentees" &rarr; displays enrolled students with avatars, stage, XP, and streak.</li>
+    <li><input type="checkbox"> <strong>Direct Message Button:</strong> Click "Direct Message" &rarr; routes directly to <code>/dashboard/messages?user={student.id}</code>.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 26 &bull; Live Sessions, Workshops & Office Hours</span>
+    <span class="screen-url">/mentor/sessions &bull; Mentor Role &bull; ZERO MOCKS CERTIFIED</span>
+  </div>
+  <p><strong>Purpose:</strong> Host live classes, review recurring schedules, and share 1:1 Cal.com / Calendly booking links.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Clipboard Copy:</strong> Click "Copy Booking Link" &rarr; copies Cal.com URL; animates "Copied to Clipboard!" checkmark.</li>
+    <li><input type="checkbox"> <strong>Temporal Tabs:</strong> Validate "Scheduled Workshops" lists upcoming sessions; "Past Sessions" filters historical dates.</li>
+    <li><input type="checkbox"> <strong>Studio Join CTA:</strong> Click "Open Live Classroom Studio" &rarr; routes to Daily.co room in <code>/dashboard/classroom</code>.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 27 &bull; Mentor Compensation & Escrow Ledger</span>
+    <span class="screen-url">/mentor/earnings &bull; Mentor Role &bull; ZERO MOCKS CERTIFIED</span>
+  </div>
+  <p><strong>Purpose:</strong> Financial ledger tracking evaluation bounties (₦15,000/review), base stipends, pending escrow, and NGN bank withdrawals.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Escrow & Balance:</strong> Verify Cleared Balance reflects Gross Earnings minus Withdrawals; Pending Escrow tracks unreviewed projects.</li>
+    <li><input type="checkbox"> <strong>Withdrawal Modal:</strong> Click "Withdraw Funds" &rarr; select Nigerian bank (GTBank, Access, Zenith, OPay, Moniepoint, etc.).</li>
+    <li><input type="checkbox"> <strong>NUBAN Validation:</strong> Enter 10-digit account number &rarr; rejects inputs under 10 digits or amount below ₦5,000.</li>
+    <li><input type="checkbox"> <strong>Payout Mutation:</strong> Submit &rarr; calls <code>POST /api/mentor/payouts/request</code>; updates ledger with status <code>PENDING</code>.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 28 &bull; Mentor Settings & Showcase</span>
+    <span class="screen-url">/mentor/settings &bull; Mentor Role &bull; ZERO MOCKS CERTIFIED</span>
+  </div>
+  <p><strong>Purpose:</strong> Configure professional identity, avatar, domain specialization, and personal booking URL.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Profile Update:</strong> Modify specialization or avatar URL &rarr; submit &rarr; calls <code>PUT /api/mentor/profile</code> &rarr; shows success toast.</li>
+    <li><input type="checkbox"> <strong>Booking URL Test:</strong> Enter Cal.com link &rarr; "Test Your Booking Page" link opens external booking site correctly.</li>
+  </ul>
+</div>
+
+<!-- SECTION 6 -->
+<div class="page-break"></div>
+<h1>6.0 Academy Admin & Curriculum Builder (Screens 29 – 38)</h1>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 29 &bull; Academy Admin Dashboard</span>
+    <span class="screen-url">/admin &bull; SchoolAdmin Role</span>
+  </div>
+  <p><strong>Purpose:</strong> High-level institutional metrics: Active Cohorts, Enrolled Builders, Course Completion Rate, Gross Tuition Collected.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Metrics Accuracy:</strong> Verify counters match active database records across cohorts, enrollments, and transactions.</li>
+    <li><input type="checkbox"> <strong>Quick Navigation:</strong> Verify links to Program Builder, Cohorts, and Student Roster operate correctly.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screens 30 & 31 &bull; Visual Program & Curriculum Builder</span>
+    <span class="screen-url">/admin/program-builder & /admin/program-builder/[id] &bull; Admin</span>
+  </div>
+  <p><strong>Purpose:</strong> Authoring studio for creating multi-stage curriculums, modules, lessons, coding challenges, and AI-generated quizzes.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Program CRUD:</strong> Create new program with title, description, base tuition fee & duration in weeks.</li>
+    <li><input type="checkbox"> <strong>Stage Drag & Drop:</strong> Add stages (Order index 1, 2, 3) &rarr; rearrange order &rarr; verify order persisted in <code>crs_journey_stages</code>.</li>
+    <li><input type="checkbox"> <strong>Module Editor:</strong> Add video lectures, rich markdown content, and attach compiler coding challenges.</li>
+    <li><input type="checkbox"> <strong>AI Quiz Generator:</strong> Input lesson text &rarr; trigger Gemini AI quiz generation &rarr; generates 5 Bloom-taxonomy multiple-choice questions automatically into <code>crs_quizzes</code>.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screens 32 – 38 &bull; Academy Operations & Management</span>
+    <span class="screen-url">/admin/(cohorts, students, mentors, payments, store, achievements, reports, settings)</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Admin Screen</th>
+        <th>Key Features & Actions</th>
+        <th>Expected QA Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/admin/cohorts</code></td>
+        <td>Cohort creation, date scheduling, meeting days, capacity limits</td>
+        <td>New cohort appears in student enrollment catalog</td>
+      </tr>
+      <tr>
+        <td><code>/admin/students</code></td>
+        <td>Student enrollment roster, manual stage advancement, expulsion/status toggle</td>
+        <td>Updates <code>crs_enrollments</code> status (<code>ACTIVE</code>, <code>PAUSED</code>, <code>GRADUATED</code>)</td>
+      </tr>
+      <tr>
+        <td><code>/admin/mentors</code></td>
+        <td>Mentor application review, cohort mentor assignments (Lead/Associate)</td>
+        <td>Assigns mentor to cohort in <code>crs_cohort_mentors</code></td>
+      </tr>
+      <tr>
+        <td><code>/admin/payments</code></td>
+        <td>Tuition reconciliation, transaction auditing, refund management</td>
+        <td>Displays Paystack references, amounts, and settlement statuses</td>
+      </tr>
+      <tr>
+        <td><code>/admin/store</code></td>
+        <td>Manage campus merchandise, stock inventory, XP pricing</td>
+        <td>Item updates reflect in student store catalog</td>
+      </tr>
+      <tr>
+        <td><code>/admin/achievements</code></td>
+        <td>Badge builder, code name triggers (e.g. <code>SPEED_DEMON</code>, <code>PERFECT_STREAK</code>)</td>
+        <td>Badges register in <code>crs_achievements</code> rule evaluation engine</td>
+      </tr>
+      <tr>
+        <td><code>/admin/reports</code></td>
+        <td>Completion rates, stage dropoff analytics, mentor SLA compliance</td>
+        <td>Generates cohort performance charts and exportable CSVs</td>
+      </tr>
+      <tr>
+        <td><code>/admin/settings</code></td>
+        <td>Tenant logo, branding colors, payout model (<code>BASE_PLUS_SLA</code>)</td>
+        <td>Updates reflect in <code>crs_tenant_settings</code> and student navbar</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 7 -->
+<div class="page-break"></div>
+<h1>7.0 Platform SuperAdmin & Operations (Screens 39 – 40)</h1>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 39 &bull; Platform Tenants Directory</span>
+    <span class="screen-url">/platform-admin/tenants &bull; SuperAdmin Role</span>
+  </div>
+  <p><strong>Purpose:</strong> Central directory of all institutions, coding academies, and university faculties hosted on the CoursesPRO cluster.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Tenant Provisioning:</strong> Create new tenant with subdomain slug &rarr; provisions tenant schema and default settings.</li>
+    <li><input type="checkbox"> <strong>Status Toggle:</strong> Suspend or activate tenant &rarr; invalidates unauthorized traffic instantly with 403 Forbidden.</li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Screen 40 &bull; Tenant Subscription Billing & Gateways</span>
+    <span class="screen-url">/platform-admin/tenants/[id]/payments &bull; SuperAdmin Role</span>
+  </div>
+  <p><strong>Purpose:</strong> Institutional SaaS subscription management, Paystack / Stripe recurring billings, and revenue share tracking.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Subscription Tier:</strong> Upgrade tenant tier (PRO, ENTERPRISE) &rarr; unlocks expanded cohort seats and custom domain SSL.</li>
+  </ul>
+</div>
+
+<!-- SECTION 8 -->
+<h1>8.0 End-to-End Core User Journeys</h1>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Journey 1: Student End-to-End Lifecycle</span>
+    <span class="badge badge-active">E2E Flow</span>
+  </div>
+  <div class="step-box"><span class="step-num">Step 1:</span> Guest visits <code>/skillupacademy/cohorts</code>, chooses "Fullstack Mastery Fall 2026", and completes admissions form at <code>/apply</code>.</div>
+  <div class="step-box"><span class="step-num">Step 2:</span> Logs in with seeded credentials, views <code>/dashboard</code>, and enters active module in <code>/dashboard/journey/stage_001</code>.</div>
+  <div class="step-box"><span class="step-num">Step 3:</span> Reads lesson markdown, runs code in compiler, answers interactive quiz questions, and earns +50 XP.</div>
+  <div class="step-box"><span class="step-num">Step 4:</span> Builds Stage 1 Capstone (Personal Portfolio), pushes to GitHub, and submits at <code>/dashboard/projects</code> with demo link.</div>
+  <div class="step-box"><span class="step-num">Step 5:</span> Waits for review &bull; receives notification &bull; views 5-star rating and Loom review feedback in project history.</div>
+  <div class="step-box"><span class="step-num">Step 6:</span> Milestone unlocks Stage 2 automatically; XP updates on the weekly leaderboard at <code>/dashboard/leaderboard</code>.</div>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">Journey 2: Mentor Evaluation & Payout Lifecycle</span>
+    <span class="badge badge-active">E2E Flow</span>
+  </div>
+  <div class="step-box"><span class="step-num">Step 1:</span> Mentor logs in &rarr; redirected to <code>/mentor</code>; pending badge displays <code>3 Pending</code>.</div>
+  <div class="step-box"><span class="step-num">Step 2:</span> Navigates to <code>/mentor/reviews</code> &bull; inspects "Capstone Projects" backlog &bull; clicks on student submission.</div>
+  <div class="step-box"><span class="step-num">Step 3:</span> Reviews live GitHub repository & demo link &bull; enters 5 stars &bull; provides written code critique &bull; clicks "Approve & Award XP".</div>
+  <div class="step-box"><span class="step-num">Step 4:</span> Switches to "Module Assignments & Tasks" tab &bull; grades Javascript compiler challenge &bull; assigns 95/100 points.</div>
+  <div class="step-box"><span class="step-num">Step 5:</span> Opens <code>/mentor/earnings</code> &bull; verifies ₦15,000 bounty credited to Cleared Balance.</div>
+  <div class="step-box"><span class="step-num">Step 6:</span> Clicks "Withdraw Funds" &bull; selects GTBank &bull; enters 10-digit NUBAN &bull; confirms ₦50,000 withdrawal request.</div>
+</div>
+
+<!-- SECTION 9 -->
+<div class="page-break"></div>
+<h1>9.0 Complete API Endpoints Verification Matrix</h1>
+<p>All endpoints are implemented in <code>service_coursespro</code> (Go 1.23, Gin framework) and authenticated with Bearer tokens:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>HTTP Method</th>
+      <th>Endpoint Route</th>
+      <th>Go Handler</th>
+      <th>Database Table</th>
+      <th>Success Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/cohorts/:id/journey</code></td>
+      <td><code>h.GetCohortJourney</code></td>
+      <td><code>crs_journey_stages</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-post">POST</span></td>
+      <td><code>/api/modules/:id/progress</code></td>
+      <td><code>h.UpdateModuleProgress</code></td>
+      <td><code>crs_module_progress</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-post">POST</span></td>
+      <td><code>/api/projects/submit</code></td>
+      <td><code>h.SubmitProject</code></td>
+      <td><code>crs_project_submissions</code></td>
+      <td>201 Created</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/projects/my-submissions</code></td>
+      <td><code>h.GetMySubmissions</code></td>
+      <td><code>crs_project_submissions</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-post">POST</span></td>
+      <td><code>/api/submissions/blocks</code></td>
+      <td><code>h.SubmitBlock</code></td>
+      <td><code>crs_block_submissions</code></td>
+      <td>201 Created</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/submissions/blocks</code></td>
+      <td><code>h.GetMyBlockSubmissions</code></td>
+      <td><code>crs_block_submissions</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/mentor/profile</code></td>
+      <td><code>h.GetMentorProfile</code></td>
+      <td><code>crs_mentor_profiles</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-put">PUT</span></td>
+      <td><code>/api/mentor/profile</code></td>
+      <td><code>h.UpdateMentorProfile</code></td>
+      <td><code>crs_mentor_profiles</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/mentor/cohorts</code></td>
+      <td><code>h.GetMentorCohorts</code></td>
+      <td><code>crs_cohorts, crs_enrollments</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/mentor/sessions</code></td>
+      <td><code>h.GetMentorSessions</code></td>
+      <td><code>crs_cohort_events</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/mentor/submissions</code></td>
+      <td><code>h.GetPendingSubmissions</code></td>
+      <td><code>crs_project_submissions</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-post">POST</span></td>
+      <td><code>/api/mentor/submissions/:id/review</code></td>
+      <td><code>h.ReviewSubmission</code></td>
+      <td><code>crs_project_submissions</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/mentor/submissions/blocks</code></td>
+      <td><code>h.GetPendingBlockSubmissions</code></td>
+      <td><code>crs_block_submissions</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-post">POST</span></td>
+      <td><code>/api/mentor/submissions/blocks/:id/review</code></td>
+      <td><code>h.ReviewBlockSubmission</code></td>
+      <td><code>crs_block_submissions</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/mentor/earnings</code></td>
+      <td><code>h.GetMentorEarnings</code></td>
+      <td><code>crs_mentor_payout_requests</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-post">POST</span></td>
+      <td><code>/api/mentor/payouts/request</code></td>
+      <td><code>h.RequestMentorPayout</code></td>
+      <td><code>crs_mentor_payout_requests</code></td>
+      <td>201 Created</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/classroom/presence</code></td>
+      <td><code>h.GetPresence</code></td>
+      <td><code>crs_presence_sessions</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-post">POST</span></td>
+      <td><code>/api/classroom/heartbeat</code></td>
+      <td><code>h.PresenceHeartbeat</code></td>
+      <td><code>crs_presence_sessions</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/peers/roster</code></td>
+      <td><code>h.GetPeers</code></td>
+      <td><code>crs_enrollments</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/leaderboard</code></td>
+      <td><code>h.GetLeaderboard</code></td>
+      <td><code>crs_enrollments</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/workspace/tasks</code></td>
+      <td><code>h.GetWorkspaceTasks</code></td>
+      <td><code>crs_workspace_tasks</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-post">POST</span></td>
+      <td><code>/api/workspace/tasks</code></td>
+      <td><code>h.CreateWorkspaceTask</code></td>
+      <td><code>crs_workspace_tasks</code></td>
+      <td>201 Created</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-put">PUT</span></td>
+      <td><code>/api/workspace/tasks/:id/status</code></td>
+      <td><code>h.UpdateWorkspaceTaskStatus</code></td>
+      <td><code>crs_workspace_tasks</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-delete">DELETE</span></td>
+      <td><code>/api/workspace/tasks/:id</code></td>
+      <td><code>h.DeleteWorkspaceTask</code></td>
+      <td><code>crs_workspace_tasks</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/messages/conversations</code></td>
+      <td><code>h.GetConversations</code></td>
+      <td><code>crs_conversations</code></td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-post">POST</span></td>
+      <td><code>/api/messages/conversations/:id</code></td>
+      <td><code>h.SendMessage</code></td>
+      <td><code>crs_messages</code></td>
+      <td>201 Created</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-get">GET</span></td>
+      <td><code>/api/achievements</code></td>
+      <td><code>h.GetMyAchievements</code></td>
+      <td><code>crs_user_achievements</code></td>
+      <td>200 OK</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- SECTION 10 -->
+<div class="page-break"></div>
+<h1>10.0 Security, Multi-Tenant Isolation & Chaos QA</h1>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">10.1 Multi-Tenant Data Isolation Audit</span>
+    <span class="badge badge-crit">P0 CRITICAL</span>
+  </div>
+  <p><strong>Threat Model:</strong> A malicious student or mentor on tenant <code>skillupacademy</code> attempting to access cohorts, project repos, or financial earnings belonging to tenant <code>greenwood-high</code>.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Cross-Tenant ID Spoofing:</strong> Send a <code>GET /api/mentor/submissions</code> with <code>X-Tenant-Domain: skillupacademy</code> while passing a submission ID belonging to <code>greenwood-high</code>.
+      <br>&rarr; <strong>Pass Criteria:</strong> GORM <code>db.WithTenant(c)</code> query returns <code>404 Not Found</code> or empty array. No data leakage occurs.
+    </li>
+    <li><input type="checkbox"> <strong>Missing Tenant Header:</strong> Send API call with no <code>X-Tenant-Domain</code> header.
+      <br>&rarr; <strong>Pass Criteria:</strong> Middleware executes fallback <code>WHERE 1 = 0</code>; zero database records returned.
+    </li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">10.2 Role-Based Access Control (RBAC) Integrity</span>
+    <span class="badge badge-high">P1 SECURITY</span>
+  </div>
+  <p><strong>Threat Model:</strong> Enrolled students attempting to evaluate their own capstones or withdraw instructor funds.</p>
+  <ul>
+    <li><input type="checkbox"> <strong>Student Access to Review Mutations:</strong> Log in as <code>student@example.com</code>; attempt to send <code>POST /api/mentor/submissions/{id}/review</code> with status <code>APPROVED</code>.
+      <br>&rarr; <strong>Pass Criteria:</strong> Server rejects request or rejects grading unassigned milestones.
+    </li>
+    <li><input type="checkbox"> <strong>Student Access to Payouts:</strong> Student sends <code>POST /api/mentor/payouts/request</code>.
+      <br>&rarr; <strong>Pass Criteria:</strong> Fails with 400 Bad Request or rejects because cleared balance is zero.
+    </li>
+  </ul>
+</div>
+
+<div class="screen-card">
+  <div class="screen-header">
+    <span class="screen-title">10.3 Concurrency & Chaos Testing</span>
+    <span class="badge badge-med">P2 STABILITY</span>
+  </div>
+  <ul>
+    <li><input type="checkbox"> <strong>Concurrent Payout Requests:</strong> Send 5 simultaneous withdrawal requests of ₦50,000 against a ₦60,000 balance.
+      <br>&rarr; <strong>Pass Criteria:</strong> Only 1 request succeeds; subsequent requests fail with insufficient funds.
+    </li>
+    <li><input type="checkbox"> <strong>Websocket / Presence Load:</strong> Simulate 100 students sending heartbeat pings simultaneously to <code>/api/classroom/heartbeat</code>.
+      <br>&rarr; <strong>Pass Criteria:</strong> Go Gin server maintains &lt;50ms response latency without database connection pool exhaustion.
+    </li>
+  </ul>
+</div>
+
+<div class="callout callout-success">
+  <strong>Sign-off Certification:</strong> Upon successful execution of all checklists in Sections 3.0 through 10.0 with zero P0/P1 defects, sign off below to certify the CoursesPRO release build for deployment.
+  <br><br>
+  <strong>QA Lead Signature:</strong> ___________________________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Date:</strong> ___________________
+</div>
+
+</body>
+</html>
+"""
+    # Write HTML file
+    html_path = '/Volumes/ReedBreedCC/resultspro-suite/coursespro/COURSESPRO_TESTING_GUIDE.html'
+    with open(html_path, 'w', encoding='utf-8') as f:
+        f.write(html)
+    print(f"HTML guide written to {html_path}")
+
+    # Generate PDF via Chrome
+    pdf_path_1 = '/Volumes/ReedBreedCC/resultspro-suite/coursespro/COURSESPRO_TESTING_GUIDE.pdf'
+    pdf_path_2 = '/Volumes/ReedBreedCC/resultspro-suite/COURSESPRO_TESTING_GUIDE.pdf'
+    
+    cmd = [
+        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+        '--headless=new',
+        '--disable-gpu',
+        '--no-pdf-header-footer',
+        f'--print-to-pdf={pdf_path_1}',
+        html_path
+    ]
+    
+    res = subprocess.run(cmd, capture_output=True, text=True)
+    if res.returncode == 0:
+        print(f"PDF generated successfully at {pdf_path_1}")
+        # Copy to root directory as well
+        with open(pdf_path_1, 'rb') as src, open(pdf_path_2, 'wb') as dst:
+            dst.write(src.read())
+        print(f"PDF copied to {pdf_path_2}")
+    else:
+        print("Chrome error:", res.stderr)
+
+if __name__ == '__main__':
+    create_guide()
