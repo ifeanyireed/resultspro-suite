@@ -115,37 +115,234 @@ h1, h2, h3, h4, h5, h6 {
 
 
 /* Blog Content Styles */
-.prose-nets p {
-  margin-bottom: 1.5em;
+.prose-nets,
+.prose {
   color: var(--color-nets-navy);
 }
-.prose-nets h2 {
+
+.prose-nets p,
+.prose p {
+  margin-bottom: 1.5em;
+  color: var(--color-nets-navy);
+  line-height: 1.8;
+}
+
+.prose-nets h1,
+.prose h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  color: var(--color-nets-navy-dark);
+}
+
+.prose-nets h2,
+.prose h2 {
   font-size: 2.25rem;
   font-weight: 700;
   margin-top: 2em;
   margin-bottom: 1em;
   color: var(--color-nets-navy-dark);
 }
-.prose-nets h3 {
+
+.prose-nets h3,
+.prose h3 {
   font-size: 1.75rem;
   font-weight: 600;
   margin-top: 1.5em;
   margin-bottom: 0.75em;
   color: var(--color-nets-navy);
 }
-.prose-nets ul, .prose-nets ol {
-  margin-bottom: 1.5em;
-  padding-left: 1.5em;
-}
-.prose-nets li {
+
+.prose-nets h4,
+.prose h4 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-top: 1.25em;
   margin-bottom: 0.5em;
+  color: var(--color-nets-navy);
 }
-.prose-nets img {
+
+.prose-nets ul,
+.prose ul {
+  list-style-type: disc;
+  margin-top: 1.2em;
+  margin-bottom: 1.2em;
+  padding-left: 1.6em;
+}
+
+.prose-nets ol,
+.prose ol {
+  list-style-type: decimal;
+  margin-top: 1.2em;
+  margin-bottom: 1.2em;
+  padding-left: 1.6em;
+}
+
+.prose-nets li,
+.prose li {
+  margin-top: 0.45em;
+  margin-bottom: 0.45em;
+  padding-left: 0.35em;
+  line-height: 1.75;
+}
+
+.prose-nets strong,
+.prose strong {
+  font-weight: 700;
+  color: var(--color-nets-navy-dark);
+}
+
+.prose-nets blockquote,
+.prose blockquote {
+  font-style: italic;
+  color: #475569;
+  border-left: 4px solid var(--color-nets-navy);
+  background-color: #f8faff;
+  margin-top: 1.6em;
+  margin-bottom: 1.6em;
+  padding: 0.85em 1.25em;
+  border-radius: 0 0.75rem 0.75rem 0;
+}
+
+.prose-nets blockquote p,
+.prose blockquote p {
+  margin: 0;
+}
+
+.prose-nets pre,
+.prose pre {
+  background-color: #0f172a;
+  color: #f8fafc;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  padding: 1.25em 1.5em;
+  border-radius: 1rem;
+  overflow-x: auto;
+  margin-top: 1.6em;
+  margin-bottom: 1.6em;
+  border: 1px solid #1e293b;
+}
+
+.prose-nets code,
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: var(--color-nets-navy);
+  background-color: #f1f5f9;
+  font-size: 0.875em;
+  font-weight: 600;
+  padding: 0.2em 0.4em;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.prose-nets pre code,
+.prose pre code {
+  color: inherit;
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  font-size: inherit;
+}
+
+.prose-nets hr,
+.prose hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e2e8f0, transparent);
+  margin-top: 2.5em;
+  margin-bottom: 2.5em;
+}
+
+.prose-nets table,
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  font-size: 0.95rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.prose-nets thead,
+.prose thead {
+  background-color: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.prose-nets th,
+.prose th {
+  padding: 0.85em 1.1em;
+  font-weight: 700;
+  color: #0f172a;
+  text-align: left;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.prose-nets td,
+.prose td {
+  padding: 0.85em 1.1em;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: top;
+}
+
+.prose-nets tbody tr:hover,
+.prose tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.prose-nets img,
+.prose img {
   border-radius: 1rem;
   margin: 2em 0;
   width: 100%;
+  max-width: 100%;
+  height: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  display: block;
 }
-.prose-nets a {
-  color: var(--color-nets-red);
+
+.prose-nets a,
+.prose a {
+  color: var(--color-nets-navy);
+  font-weight: 600;
   text-decoration: underline;
+}
+
+.prose-nets a:hover,
+.prose a:hover {
+  opacity: 0.85;
+}
+
+/* KATEX MATH FORMULA STYLING */
+.katex-math-display {
+  display: block;
+  margin: 1.75em 0;
+  padding: 1.25em 1.5em;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  text-align: center;
+  overflow-x: auto;
+  color: #0f172a;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.katex-math-display .katex-display {
+  margin: 0.5em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25em 0;
+}
+
+.katex-math-inline {
+  display: inline-block;
+  padding: 0 0.2em;
 }

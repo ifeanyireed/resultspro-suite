@@ -3,7 +3,9 @@ import React from "react";
 
 import ScrollReveal from './ScrollReveal';
 import Link from 'next/link';
-import { IconArrowLeft, IconMessageCircle, IconBrandTwitter, IconBrandFacebook, IconBrandLinkedin, IconMail, IconEye } from '@tabler/icons-react';
+import { IconArrowLeft, IconMessageCircle, IconBrandTwitter, IconBrandFacebook, IconBrandLinkedin, IconBrandWhatsapp, IconMail, IconEye } from '@tabler/icons-react';
+import { renderMarkdownAndMath } from '@/lib/markdown';
+import { loadKaTeX } from '@/lib/math-renderer';
 
 interface Comment {
   id: string | number;
@@ -19,6 +21,10 @@ interface BlogPost {
   slug: string;
   content: string;
   author: any;
+  author_name?: string;
+  author_role?: string;
+  author_avatar?: string;
+  author_bio?: string;
   user_name?: string;
   comments?: Comment[];
   cover_image?: string;
@@ -28,6 +34,11 @@ interface BlogPost {
   meta_title?: string;
   meta_description?: string;
   meta_keywords?: string;
+  canonical_url?: string;
+  og_image?: string;
+  tags?: string;
+  reading_time?: number;
+  excerpt?: string;
 }
 
 
@@ -42,7 +53,7 @@ const renderCommentContent = (text: string) => {
 };
 
 export default function BlogPostContent({ post }: { post: BlogPost }) {
-    const [commentFirstName, setCommentFirstName] = React.useState('');
+  const [commentFirstName, setCommentFirstName] = React.useState('');
   const [commentLastName, setCommentLastName] = React.useState('');
   const [commentEmail, setCommentEmail] = React.useState('');
   const [commentContent, setCommentContent] = React.useState('');
@@ -52,6 +63,21 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
 
   const [subEmail, setSubEmail] = React.useState('');
   const [subLoading, setSubLoading] = React.useState(false);
+
+  const [renderedHtml, setRenderedHtml] = React.useState<string>(() => renderMarkdownAndMath(post.content || ''));
+
+  // Process Markdown and render LaTeX math formulas with KaTeX
+  React.useEffect(() => {
+    // 1. Initial Markdown and math parsing pass
+    setRenderedHtml(renderMarkdownAndMath(post.content || ''));
+
+    // 2. Load KaTeX CDN runtime asynchronously and upgrade formulas to full vector math
+    loadKaTeX().then((katex) => {
+      if (katex) {
+        setRenderedHtml(renderMarkdownAndMath(post.content || ''));
+      }
+    });
+  }, [post.content]);
 
   const handleCommentSubmit = async () => {
     if (!commentFirstName || !commentContent) {
@@ -85,12 +111,15 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
     }
   };
 
-  const handleShare = (platform: 'facebook' | 'twitter' | 'linkedin' | 'email') => {
-    const url = encodeURIComponent(window.location.href);
+  const handleShare = (platform: 'facebook' | 'twitter' | 'linkedin' | 'email' | 'whatsapp') => {
+    const url = encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '');
     const title = encodeURIComponent(post.title || "Check out this post from ResultsPRO");
     let shareUrl = "";
 
-    if (platform === 'facebook') {
+    if (platform === 'whatsapp') {
+      window.open(`https://api.whatsapp.com/send?text=${title}%20${url}`, '_blank');
+      return;
+    } else if (platform === 'facebook') {
       shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
     } else if (platform === 'twitter') {
       shareUrl = `https://twitter.com/intent/tweet?text=${title}&url=${url}`;
@@ -145,7 +174,12 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
   };
 
   const formattedDate = new Date(post.published_at || post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-  
+  const authorName = post.author_name || (typeof post.author === "string" ? post.author : (post.author?.full_name || "ResultsPRO Editorial Team"));
+  const authorRole = post.author_role || "Author";
+  const authorAvatar = post.author_avatar || "https://res.cloudinary.com/qsdwzejd/image/upload/v1789250545/landing_page/photo04.jpg";
+  const authorBio = post.author_bio || "ResultsPRO's dedicated editorial and engineering team bridging the gap between cutting edge ed-tech, institutional analytics, and practical classroom implementation.";
+  const readingTime = post.reading_time || Math.max(1, Math.ceil((post.content || '').replace(/<[^>]*>/g, ' ').trim().split(/\s+/).filter(Boolean).length / 200));
+
   return (
     <main className="min-h-screen bg-nets-light relative pb-24">
       {/* Back Button Floating */}
@@ -164,7 +198,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
         <div className="absolute inset-0 bg-black/10"></div>
       </div>
 
-            {/* Content Container Overlapping Image */}
+      {/* Content Container Overlapping Image */}
       <div className="container-nets relative z-10" style={{ marginTop: '-25vh' }}>
         <div className="max-w-[1100px] mx-auto">
           
@@ -172,81 +206,115 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
             {/* Card 1: Meta Header */}
             <div className="bg-white shadow-xl w-full p-8 md:p-16 mb-8">
               <span className="text-xs fw-700 tracking-widest uppercase text-muted mb-6 block">
-                {post.category || 'Marketing'}
+                {post.category || 'Educational Governance & Tech'}
               </span>
               
-              <h1 className="text-3xl md:text-5xl fw-700 text-navy mb-10 leading-tight">
+              <h1 className="text-3xl md:text-5xl fw-700 text-navy mb-6 leading-tight">
                 {post.title}
               </h1>
+
+              {(post.meta_description || post.excerpt) && (
+                <p className="text-base sm:text-lg text-slate-600 mb-8 leading-relaxed border-l-4 border-[#0D1060] pl-4 py-1 italic font-medium">
+                  {post.meta_description || post.excerpt}
+                </p>
+              )}
               
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-slate-100 pt-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
-                    <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250545/landing_page/photo04.jpg" className="w-full h-full object-cover" alt={typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")} />
+                  <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                    <img src={authorAvatar} className="w-full h-full object-cover" alt={authorName} />
                   </div>
                   <div>
-                    <p className="text-sm fw-600 text-navy mb-0.5">by: {typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")}</p>
-                    <p className="text-xs text-muted">on: {formattedDate}</p>
+                    <p className="text-sm fw-600 text-navy mb-0.5">by: {authorName}</p>
+                    <time dateTime={post.published_at || post.created_at} className="text-xs text-muted block">on: {formattedDate}</time>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-xs text-muted fw-600">
-                  <span className="flex items-center gap-1 bg-gray-100 px-2.5 py-1 rounded-full text-navy">
+                  <span className="flex items-center gap-1.5 bg-gray-100 px-3 py-1 rounded-full text-navy font-semibold">
                     <IconEye size={14} className="text-gray-500" />
                     {(Number(post.view_count) || 0).toLocaleString()} views
                   </span>
                   <span>•</span>
-                  <span>5 minutes Read</span>
+                  <span>~{readingTime} min read</span>
                 </div>
               </div>
             </div>
 
-                            {/* Card 2: Main Prose Content */}
-              <div className="bg-white shadow-xl w-full p-8 md:p-16 mb-8 relative">
-                {/* Floating Share Side-Nav */}
+            {/* Card 2: Main Prose Content */}
+            <div className="bg-white shadow-xl w-full p-8 md:p-16 mb-8 relative">
+              {/* Floating Share Side-Nav */}
               <div className="hidden lg:flex flex-col items-center gap-4 w-12 absolute top-8 -left-20">
                 <span className="text-xs text-muted fw-600 mb-2">share</span>
-                <button onClick={() => handleShare('facebook')} className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors">
+                <button onClick={() => handleShare('whatsapp')} className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-emerald-600 hover:bg-emerald-50 transition-colors" title="Share via WhatsApp">
+                  <IconBrandWhatsapp size={18} />
+                </button>
+                <button onClick={() => handleShare('facebook')} className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors" title="Share via Facebook">
                   <IconBrandFacebook size={18} />
                 </button>
-                <button onClick={() => handleShare('twitter')} className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors">
+                <button onClick={() => handleShare('twitter')} className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors" title="Share via Twitter / X">
                   <IconBrandTwitter size={18} />
                 </button>
-                <button onClick={() => handleShare('linkedin')} className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors">
+                <button onClick={() => handleShare('linkedin')} className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors" title="Share via LinkedIn">
                   <IconBrandLinkedin size={18} />
                 </button>
-                <button onClick={() => handleShare('email')} className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors">
+                <button onClick={() => handleShare('email')} className="w-8 h-8 flex items-center justify-center rounded-full text-muted hover:text-navy hover:bg-gray-200 transition-colors" title="Share via Email">
                   <IconMail size={18} />
                 </button>
               </div>
-                <div 
-                  className="prose prose-lg prose-nets max-w-none"
-                  dangerouslySetInnerHTML={{ __html: post.content }} 
-                />
-              </div>
 
-              {/* Card 3: Author Bio */}
-              <div className="bg-white shadow-xl w-full p-8 md:p-12 mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start text-center md:text-left">
-                <div className="w-24 h-24 rounded-full bg-gray-200 shrink-0 overflow-hidden">
-                  <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250545/landing_page/photo04.jpg" className="w-full h-full object-cover" alt={typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")} />
+              <article 
+                className="prose prose-lg prose-nets max-w-none"
+                dangerouslySetInnerHTML={{ __html: renderedHtml }} 
+              />
+
+              {/* Tag Pills */}
+              {post.tags && (
+                <div className="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center gap-2">
+                  <span className="text-xs uppercase tracking-wider font-bold text-slate-400 mr-1">Tags:</span>
+                  {post.tags.split(',').map((t, idx) => {
+                    const tag = t.trim();
+                    if (!tag) return null;
+                    return (
+                      <span key={idx} className="text-xs font-semibold px-3 py-1 bg-slate-100 text-slate-700 rounded-full hover:bg-yellow-50 hover:text-amber-800 transition-colors">
+                        #{tag}
+                      </span>
+                    );
+                  })}
                 </div>
-                <div>
-                  <h3 className="text-xl fw-700 text-navy mb-2">{typeof post.author === "string" ? post.author : ((post.author as any)?.full_name || "Admin")} - Author</h3>
-                  <p className="text-sm text-muted mb-4 leading-relaxed">
-                    ResultsPRO's dedicated content team bridging the gap between cutting edge ed-tech and practical classroom implementation.
-                  </p>
-                  <div className="flex items-center justify-center md:justify-start gap-4">
-                    <button className="w-8 h-8 flex items-center justify-center rounded-full bg-nets-light text-navy hover:bg-gray-200 transition-colors">
-                      <IconBrandFacebook size={16} />
-                    </button>
-                    <button className="w-8 h-8 flex items-center justify-center rounded-full bg-nets-light text-navy hover:bg-gray-200 transition-colors">
-                      <IconBrandTwitter size={16} />
-                    </button>
-                    <button className="w-8 h-8 flex items-center justify-center rounded-full bg-nets-light text-navy hover:bg-gray-200 transition-colors">
-                      <IconBrandLinkedin size={16} />
-                    </button>
-                  </div>
+              )}
+            </div>
+
+            {/* Card 3: Author Bio */}
+            <div className="bg-white shadow-xl w-full p-8 md:p-12 mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start text-center md:text-left">
+              <div className="w-24 h-24 rounded-full bg-gray-200 shrink-0 overflow-hidden">
+                <img src={authorAvatar} className="w-full h-full object-cover" alt={authorName} />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl fw-700 text-navy mb-1">
+                  {authorName}
+                  <span className="text-sm font-normal text-muted ml-2">
+                    — {authorRole}
+                  </span>
+                </h3>
+                <p className="text-sm text-muted mb-4 leading-relaxed">
+                  {authorBio}
+                </p>
+                <div className="flex items-center justify-center md:justify-start gap-4">
+                  <button onClick={() => handleShare('whatsapp')} className="w-8 h-8 flex items-center justify-center rounded-full bg-nets-light text-navy hover:text-emerald-600 hover:bg-emerald-50 transition-colors" title="WhatsApp">
+                    <IconBrandWhatsapp size={16} />
+                  </button>
+                  <button onClick={() => handleShare('facebook')} className="w-8 h-8 flex items-center justify-center rounded-full bg-nets-light text-navy hover:bg-gray-200 transition-colors" title="Facebook">
+                    <IconBrandFacebook size={16} />
+                  </button>
+                  <button onClick={() => handleShare('twitter')} className="w-8 h-8 flex items-center justify-center rounded-full bg-nets-light text-navy hover:bg-gray-200 transition-colors" title="Twitter / X">
+                    <IconBrandTwitter size={16} />
+                  </button>
+                  <button onClick={() => handleShare('linkedin')} className="w-8 h-8 flex items-center justify-center rounded-full bg-nets-light text-navy hover:bg-gray-200 transition-colors" title="LinkedIn">
+                    <IconBrandLinkedin size={16} />
+                  </button>
                 </div>
               </div>
+            </div>
 
               {/* Card 4: Comments List */}
               <div className="bg-white shadow-xl w-full p-8 md:p-12 mb-8">
