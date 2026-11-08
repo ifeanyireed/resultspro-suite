@@ -64,22 +64,34 @@ export async function POST(request: Request) {
       createdAt: new Date().toISOString(),
     };
 
-    // Non-blocking forward to service_users or webhook if configured
+    // Non-blocking forward to service_users enterprise demo booking receiver & email dispatcher
     const usersApi = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
 
-    fetch(`${usersApi}/api/v1/support/tickets`, {
+    fetch(`${usersApi}/api/v1/public/demo-booking`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal: controller.signal,
       body: JSON.stringify({
-        subject: `New Enterprise Demo Request: ${institutionName} (${fullName})`,
-        category: 'DEMO_REQUEST',
-        priority: 'HIGH',
-        message: JSON.stringify(bookingRecord, null, 2),
-        user_email: email,
-        user_name: fullName,
+        referenceCode,
+        organizationType,
+        painPoints,
+        studentCount,
+        campusCount,
+        infrastructure,
+        migrationNeed,
+        timeline,
+        selectedSolutions,
+        demoFormat,
+        preferredDate,
+        preferredTime,
+        fullName,
+        email,
+        phone,
+        institutionName,
+        role,
+        notes,
       }),
     })
       .then(() => clearTimeout(timeoutId))

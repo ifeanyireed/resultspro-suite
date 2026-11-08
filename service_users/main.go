@@ -33,6 +33,7 @@ func main() {
 	db.InitDB(config.DatabaseURL)
 	db.InitPuzzleSchema()
 	handlers.EnsureBlogSchema()
+	handlers.EnsureDemoSchema()
 
 	mux := http.NewServeMux()
 
@@ -617,6 +618,12 @@ func main() {
 	mux.HandleFunc("/api/v1/contact/send", handlers.HandlePlayerSendContactForm)
 	mux.HandleFunc("/api/v1/player/email/send", handlers.HandlePlayerSendEmail)
 	mux.HandleFunc("/api/v1/player/contact/send", handlers.HandlePlayerSendContactForm)
+
+	// Enterprise Demo Bookings & Pipeline
+	mux.HandleFunc("/api/v1/public/demo-booking", handlers.HandlePublicDemoBooking)
+	mux.HandleFunc("/api/v1/demo/booking", handlers.HandlePublicDemoBooking)
+	mux.HandleFunc("/api/v1/admin/demo-bookings", middleware.RequireAuth(handlers.HandleAdminDemoBookings))
+	mux.HandleFunc("/api/v1/admin/demo-bookings/", middleware.RequireAuth(handlers.HandleAdminDemoBookingSubroutes))
 
 	// Wrap entire handler tree with CORS middleware
 	handler := middleware.EnableCORS(mux)

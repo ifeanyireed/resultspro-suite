@@ -791,3 +791,32 @@ export async function fetchSupportTickets(): Promise<any[]> {
     return [];
   }
 }
+
+export async function fetchDemoBookings(): Promise<any[]> {
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/admin/demo-bookings`, { headers: getAuthHeader(), cache: 'no-store' });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data || [];
+  } catch (err) {
+    console.error("Error fetching demo bookings:", err);
+    return [];
+  }
+}
+
+export async function updateDemoBookingStatus(id: string, status: string, adminNotes?: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${USERS_API}/api/v1/admin/demo-bookings/${id}/status`, {
+      method: 'PUT',
+      headers: {
+        ...getAuthHeader(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status, admin_notes: adminNotes }),
+    });
+    return res.ok;
+  } catch (err) {
+    console.error("Error updating demo booking status:", err);
+    return false;
+  }
+}
