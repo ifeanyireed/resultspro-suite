@@ -31,6 +31,7 @@ import {
   IconHelpCircle,
   IconListCheck,
   IconPlayerPlay,
+  IconLock,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 
@@ -583,11 +584,11 @@ export default function DemoBookingFlow() {
 
                         <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold">
                           <span className={isSelected ? 'text-[#0D1060] font-bold' : 'text-slate-400'}>
-                            {isSelected ? '✓ Selected' : 'Select'}
+                            {isSelected ? 'Selected' : 'Select'}
                           </span>
                           {isSelected && (
-                            <span className="w-5 h-5 rounded-full bg-[#0D1060] text-white flex items-center justify-center text-[10px]">
-                              ✓
+                            <span className="w-5 h-5 rounded-full bg-[#0D1060] text-white flex items-center justify-center">
+                              <IconCheck size={12} stroke={2.5} />
                             </span>
                           )}
                         </div>
@@ -844,13 +845,20 @@ export default function DemoBookingFlow() {
                         <div className="shrink-0">
                           <button
                             type="button"
-                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 ${
                               isSelected
                                 ? 'bg-[#0D1060] text-white'
                                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                             }`}
                           >
-                            {isSelected ? '✓ In Demo' : '+ Add'}
+                            {isSelected ? (
+                              <>
+                                <IconCheck size={13} stroke={2.5} />
+                                <span>In Demo</span>
+                              </>
+                            ) : (
+                              '+ Add'
+                            )}
                           </button>
                         </div>
                       </div>
@@ -1215,8 +1223,14 @@ export default function DemoBookingFlow() {
                 Every demo includes our proprietary <strong>Sub-Saharan Offline Failover Simulation</strong>, demonstrating zero exam disruption even if your facility loses power and internet mid-session.
               </p>
               <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-semibold">
-                <span>⚡ 100% Zero Obligation</span>
-                <span>🔒 Confidential NDA</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <IconShieldCheck size={14} className="text-[#0D1060]" />
+                  <span>Zero Obligation</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <IconLock size={14} className="text-slate-400" />
+                  <span>Confidential NDA</span>
+                </span>
               </div>
             </div>
           </div>
