@@ -27,6 +27,10 @@ type BlogPost struct {
 	CoverImage      *string       `json:"cover_image" gorm:"column:cover_image;type:text"`
 	AuthorID        string        `json:"author_id" gorm:"type:varchar(191)"`
 	Author          *User         `json:"author" gorm:"foreignKey:AuthorID"`
+	AuthorName      string        `json:"author_name" gorm:"column:author_name;type:varchar(191)"`
+	AuthorRole      string        `json:"author_role" gorm:"column:author_role;type:varchar(191)"`
+	AuthorAvatar    string        `json:"author_avatar" gorm:"column:author_avatar;type:text"`
+	AuthorBio       string        `json:"author_bio" gorm:"column:author_bio;type:text"`
 	CategoryID      *string       `json:"category_id" gorm:"type:varchar(191)"`
 	Status          string        `json:"status"` // DRAFT, PUBLISHED
 	ViewCount       int64         `json:"view_count" gorm:"column:view_count;default:0"`

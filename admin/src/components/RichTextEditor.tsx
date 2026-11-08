@@ -8,6 +8,23 @@ import Image from '@tiptap/extension-image';
 import toast from 'react-hot-toast';
 import TurndownService from 'turndown';
 import { marked } from 'marked';
+import { loadKaTeX, renderLatexInHtml } from '@/lib/math-renderer';
+
+const SigmaIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    width="16" 
+    height="16" 
+    stroke="currentColor" 
+    strokeWidth="2.2" 
+    fill="none" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M18 7V4H6l6 8-6 8h12v-3" />
+  </svg>
+);
 import { 
   Bold, Italic, Strikethrough, Code, List, ListOrdered, 
   Quote, Undo, Redo, Heading1, Heading2, Link as LinkIcon, ImageIcon,
@@ -41,7 +58,8 @@ function htmlToMarkdown(html: string): string {
 
 function markdownToHtml(md: string): string {
   if (!md || !md.trim()) return '';
-  return marked.parse(md, { async: false }) as string;
+  const parsed = marked.parse(md, { async: false }) as string;
+  return renderLatexInHtml(parsed);
 }
 
 const WYSIWYGMenuBar = ({ editor }: { editor: any }) => {
@@ -63,6 +81,25 @@ const WYSIWYGMenuBar = ({ editor }: { editor: any }) => {
     }
     
     editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+  };
+
+  const addMath = () => {
+    const formula = window.prompt(
+      'Enter LaTeX math formula (e.g. E = mc^2, \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}, \\int_0^1 x^2 dx):',
+      'E = mc^2'
+    );
+    if (!formula || !formula.trim()) return;
+
+    const isBlock = window.confirm(
+      'Insert as Display / Block formula ($$)?\n\nClick OK for centered Block ($$...$$)\nClick Cancel for Inline formula ($...$)'
+    );
+
+    const clean = formula.trim();
+    if (isBlock) {
+      editor.chain().focus().insertContent(`<p>$$${clean}$$</p>`).run();
+    } else {
+      editor.chain().focus().insertContent(` $${clean}$ `).run();
+    }
   };
 
   const addImage = () => {
@@ -112,6 +149,7 @@ const WYSIWYGMenuBar = ({ editor }: { editor: any }) => {
     { icon: ListOrdered, action: () => editor.chain().focus().toggleOrderedList().run(), isActive: editor.isActive('orderedList'), title: 'Numbered List' },
     { icon: Quote, action: () => editor.chain().focus().toggleBlockquote().run(), isActive: editor.isActive('blockquote'), title: 'Quote' },
     { icon: LinkIcon, action: toggleLink, isActive: editor.isActive('link'), title: 'Link' },
+    { icon: SigmaIcon, action: addMath, isActive: false, title: 'Insert LaTeX Math ($$...$$)' },
     { icon: ImageIcon, action: addImage, isActive: false, title: 'Upload Image' },
     { icon: Undo, action: () => editor.chain().focus().undo().run(), isActive: false, title: 'Undo' },
     { icon: Redo, action: () => editor.chain().focus().redo().run(), isActive: false, title: 'Redo' },
@@ -164,6 +202,26 @@ const MarkdownToolbar = ({ onInsert, onUploadImage, markdownView, setMarkdownVie
     { icon: Quote, action: () => onInsert('> ', '', 'Quote'), title: 'Quote (>)' },
     { icon: LinkIcon, action: insertLink, title: 'Insert Link' },
     { icon: ImageIcon, action: onUploadImage, title: 'Upload & Insert Image' },
+    {
+      icon: SigmaIcon,
+      action: () => {
+        const formula = window.prompt(
+          'Enter LaTeX math formula (e.g. E = mc^2, \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}):',
+          'E = mc^2'
+        );
+        if (!formula || !formula.trim()) return;
+        const isBlock = window.confirm(
+          'Insert as Block formula ($$)?\n\nClick OK for Block ($$...$$)\nClick Cancel for Inline formula ($...$)'
+        );
+        const clean = formula.trim();
+        if (isBlock) {
+          onInsert('\n$$\n', '\n$$\n', clean);
+        } else {
+          onInsert('$', '$', clean);
+        }
+      },
+      title: 'Insert LaTeX Math ($$...$$)'
+    },
   ];
 
   return (

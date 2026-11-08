@@ -25,6 +25,10 @@ func EnsureBlogSchema() {
 			_ = db.GormDB.AutoMigrate(&models.BlogCategory{}, &models.BlogTag{}, &models.BlogPostTag{}, &models.BlogComment{}, &models.NewsletterSubscriber{})
 			
 			stmts := []string{
+				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS author_name varchar(191) DEFAULT 'ResultsPRO Editorial Team'",
+				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS author_role varchar(191) DEFAULT 'Author'",
+				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS author_avatar text DEFAULT ''",
+				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS author_bio text DEFAULT ''",
 				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS canonical_url text",
 				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS og_image text",
 				"ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS meta_title varchar(255)",
@@ -127,6 +131,10 @@ func HandleUpdatePost(w http.ResponseWriter, r *http.Request) {
 		Content         string  `json:"content"`
 		CoverImage      *string `json:"cover_image"`
 		AuthorID        string  `json:"author_id"`
+		AuthorName      string  `json:"author_name"`
+		AuthorRole      string  `json:"author_role"`
+		AuthorAvatar    string  `json:"author_avatar"`
+		AuthorBio       string  `json:"author_bio"`
 		CategoryID      *string `json:"category_id"`
 		Status          string  `json:"status"`
 		Tags            string  `json:"tags"`
@@ -158,6 +166,18 @@ func HandleUpdatePost(w http.ResponseWriter, r *http.Request) {
 	post.CoverImage = input.CoverImage
 	if input.AuthorID != "" {
 		post.AuthorID = input.AuthorID
+	}
+	if input.AuthorName != "" {
+		post.AuthorName = input.AuthorName
+	}
+	if input.AuthorRole != "" {
+		post.AuthorRole = input.AuthorRole
+	}
+	if input.AuthorAvatar != "" {
+		post.AuthorAvatar = input.AuthorAvatar
+	}
+	if input.AuthorBio != "" {
+		post.AuthorBio = input.AuthorBio
 	}
 	post.CategoryID = input.CategoryID
 	post.Status = input.Status
@@ -200,6 +220,10 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 		Content         string  `json:"content"`
 		CoverImage      *string `json:"cover_image"`
 		AuthorID        string  `json:"author_id"`
+		AuthorName      string  `json:"author_name"`
+		AuthorRole      string  `json:"author_role"`
+		AuthorAvatar    string  `json:"author_avatar"`
+		AuthorBio       string  `json:"author_bio"`
 		CategoryID      *string `json:"category_id"`
 		Status          string  `json:"status"`
 		Tags            string  `json:"tags"`
@@ -222,6 +246,15 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 		input.Slug = sanitizeBlogSlug(input.Slug)
 	}
 
+	authorName := input.AuthorName
+	if authorName == "" {
+		authorName = "ResultsPRO Editorial Team"
+	}
+	authorRole := input.AuthorRole
+	if authorRole == "" {
+		authorRole = "Author"
+	}
+
 	post := models.BlogPost{
 		ID:              generateID("post"),
 		Title:           input.Title,
@@ -230,6 +263,10 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 		Content:         input.Content,
 		CoverImage:      input.CoverImage,
 		AuthorID:        input.AuthorID,
+		AuthorName:      authorName,
+		AuthorRole:      authorRole,
+		AuthorAvatar:    input.AuthorAvatar,
+		AuthorBio:       input.AuthorBio,
 		CategoryID:      input.CategoryID,
 		Status:          input.Status,
 		MetaTitle:       input.MetaTitle,

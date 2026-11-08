@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Header } from '@/components/Header';
 import { RichTextEditor } from '@/components/RichTextEditor';
 import { TagsInput } from '@/components/TagsInput';
-import { ArrowLeft, Save, Send, Globe, Eye, Search } from 'lucide-react';
+import { ArrowLeft, Save, Send, Globe, Eye, Search, User, Upload } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -46,6 +46,10 @@ function CreateBlogPostContent() {
             setMetaDescription(post.meta_description || '');
             setMetaKeywords(post.meta_keywords || '');
             setViewCount(Number(post.view_count) || 0);
+            setAuthorName(post.author_name || (typeof post.author === 'string' ? post.author : post.author?.full_name) || 'ResultsPRO Editorial Team');
+            setAuthorRole(post.author_role || (typeof post.author === 'object' ? post.author?.role : '') || 'Author');
+            setAuthorAvatar(post.author_avatar || (typeof post.author === 'object' ? post.author?.avatar : '') || '');
+            setAuthorBio(post.author_bio || (typeof post.author === 'object' ? post.author?.bio : '') || '');
             let imgUrl = post.cover_image || '';
             if (imgUrl && imgUrl.startsWith('/')) imgUrl = 'https://resultspro.ng' + imgUrl;
             setCoverImage(imgUrl);
@@ -70,9 +74,44 @@ function CreateBlogPostContent() {
   const [metaDescription, setMetaDescription] = useState('');
   const [metaKeywords, setMetaKeywords] = useState('');
   const [viewCount, setViewCount] = useState<number>(0);
+  const [authorName, setAuthorName] = useState('ResultsPRO Editorial Team');
+  const [authorRole, setAuthorRole] = useState('Author');
+  const [authorAvatar, setAuthorAvatar] = useState('');
+  const [authorBio, setAuthorBio] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
+
+  const avatarFileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingAvatar(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('target_path', 'blog/avatars');
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setAuthorAvatar(data.url);
+        toast.success('Author photo uploaded!');
+      } else {
+        toast.error(data.error || 'Upload failed');
+      }
+    } catch (err) {
+      toast.error('Something went wrong');
+    } finally {
+      setIsUploadingAvatar(false);
+    }
+  };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -128,6 +167,10 @@ function CreateBlogPostContent() {
         tags,
         status,
         author_id,
+        author_name: authorName,
+        author_role: authorRole,
+        author_avatar: authorAvatar,
+        author_bio: authorBio,
         meta_title: metaTitle,
         meta_description: metaDescription,
         meta_keywords: metaKeywords,
@@ -371,6 +414,108 @@ function CreateBlogPostContent() {
                     Remove Image
                   </button>
                 )}
+              </div>
+            </div>
+
+            {/* Author & Byline Profile Card */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                    <User className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-800 text-sm sm:text-base">Author Profile</h3>
+                    <p className="text-xs text-slate-500">Configure byline name, title, avatar, and bio</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">
+                  Author Name
+                </label>
+                <input
+                  type="text"
+                  value={authorName}
+                  onChange={(e) => setAuthorName(e.target.value)}
+                  placeholder="e.g. Ifeanyi Felix, ResultsPRO Editorial Team"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm font-medium text-slate-800"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">
+                  Role / Title
+                </label>
+                <input
+                  type="text"
+                  value={authorRole}
+                  onChange={(e) => setAuthorRole(e.target.value)}
+                  placeholder="e.g. Lead EdTech Architect, Editor, Author"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm font-medium text-slate-800"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5 flex items-center justify-between">
+                  <span>Author Avatar Photo</span>
+                  <span className="text-[10px] text-slate-400 font-normal">PNG, JPG up to 5MB</span>
+                </label>
+                <div className="flex items-center gap-3">
+                  <div className="w-14 h-14 rounded-full bg-slate-100 border border-slate-200 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                    {authorAvatar ? (
+                      <img src={authorAvatar} alt={authorName} className="w-full h-full object-cover" />
+                    ) : (
+                      <User className="w-6 h-6 text-slate-400" />
+                    )}
+                  </div>
+                  <div className="flex-1 space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <label className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer flex items-center gap-1.5 transition-colors border border-slate-200">
+                        <Upload className="w-3.5 h-3.5" />
+                        <span>{isUploadingAvatar ? 'Uploading...' : 'Upload Photo'}</span>
+                        <input
+                          ref={avatarFileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleAvatarUpload}
+                          disabled={isUploadingAvatar}
+                          className="hidden"
+                        />
+                      </label>
+                      {authorAvatar && (
+                        <button
+                          type="button"
+                          onClick={() => setAuthorAvatar('')}
+                          className="px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors border border-rose-200"
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                    <input
+                      type="url"
+                      placeholder="Or paste direct image URL (https://...)"
+                      value={authorAvatar}
+                      onChange={(e) => setAuthorAvatar(e.target.value)}
+                      className="w-full px-2.5 py-1 text-[11px] font-mono rounded-lg border border-slate-200 outline-none focus:border-blue-500 text-slate-800 bg-slate-50"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">
+                  Author Bio / Summary
+                </label>
+                <textarea
+                  value={authorBio}
+                  onChange={(e) => setAuthorBio(e.target.value)}
+                  placeholder="A short biography displayed on the public article page..."
+                  rows={3}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-xs text-slate-700 resize-none leading-relaxed"
+                />
               </div>
             </div>
           </div>
