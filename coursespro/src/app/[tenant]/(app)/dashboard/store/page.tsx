@@ -23,6 +23,7 @@ interface Product {
   description: string;
   product_type: 'BOOK' | 'DOWNLOADABLE_COURSE' | 'TEMPLATE' | string;
   price: number;
+  stock?: number | null;
   cover_image?: string;
   file_url?: string;
   is_published: boolean;
@@ -185,66 +186,89 @@ export default function DashboardStorePage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredProducts.map((prod) => (
-            <div 
-              key={prod.id} 
-              className="bg-white border border-gray-100 rounded-[2rem] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col group hover:-translate-y-1"
-            >
-              {/* Product Cover Artwork */}
-              <div className="w-full h-44 bg-gradient-to-tr from-slate-100 via-gray-50 to-blue-50/40 relative flex items-center justify-center border-b border-gray-100 overflow-hidden">
-                {prod.cover_image ? (
-                  <img 
-                    src={prod.cover_image} 
-                    alt={prod.title} 
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                  />
-                ) : (
-                  <div className="w-16 h-16 rounded-2xl bg-white shadow-xs border border-gray-200/80 flex items-center justify-center">
-                    {getIconForType(prod.product_type)}
-                  </div>
-                )}
-                <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs text-gray-800 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-2xs border border-gray-200/60">
-                  {prod.product_type.replace('_', ' ')}
-                </span>
-              </div>
+          {filteredProducts.map((prod) => {
+            const isBookOutOfStock = prod.product_type === 'BOOK' && typeof prod.stock === 'number' && prod.stock <= 0;
+            const hasStock = prod.product_type === 'BOOK' && typeof prod.stock === 'number';
 
-              {/* Product Info */}
-              <div className="p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-base font-bold text-gray-900 mb-1 leading-snug line-clamp-1">
-                    {prod.title}
-                  </h3>
-                  <p className="text-gray-500 text-xs line-clamp-2 leading-relaxed mb-4">
-                    {prod.description}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Price</p>
-                    <span className="text-base font-black text-gray-900">
-                      {formatPrice(prod.price)}
-                    </span>
-                  </div>
-                  <button 
-                    onClick={() => handlePurchase(prod)}
-                    className="bg-[#146ef5] text-white hover:bg-[#105bd1] px-4 py-2 rounded-xl text-xs font-bold transition-colors shadow-xs shadow-[#146ef5]/20 flex items-center gap-1.5"
-                  >
-                    {prod.price <= 0 ? (
-                      <>
-                        <ArrowDownTrayIcon className="w-3.5 h-3.5" /> Download
-                      </>
+            return (
+              <div 
+                key={prod.id} 
+                className="bg-white border border-gray-100 rounded-[2rem] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col group hover:-translate-y-1"
+              >
+                {/* Product Cover Artwork */}
+                <div className="w-full h-44 bg-gradient-to-tr from-slate-100 via-gray-50 to-blue-50/40 relative flex items-center justify-center border-b border-gray-100 overflow-hidden">
+                  {prod.cover_image ? (
+                    <img 
+                      src={prod.cover_image} 
+                      alt={prod.title} 
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                    />
+                  ) : (
+                    <div className="w-16 h-16 rounded-2xl bg-white shadow-xs border border-gray-200/80 flex items-center justify-center">
+                      {getIconForType(prod.product_type)}
+                    </div>
+                  )}
+                  <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs text-gray-800 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-2xs border border-gray-200/60">
+                    {prod.product_type.replace('_', ' ')}
+                  </span>
+                  {hasStock && (
+                    !isBookOutOfStock ? (
+                      <span className="absolute top-3 right-3 bg-emerald-600/90 backdrop-blur-xs text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-2xs">
+                        {prod.stock} left
+                      </span>
                     ) : (
-                      <>
-                        <ShoppingBagIcon className="w-3.5 h-3.5" /> Buy Now
-                      </>
-                    )}
-                  </button>
+                      <span className="absolute top-3 right-3 bg-red-600/90 backdrop-blur-xs text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-2xs">
+                        Sold Out
+                      </span>
+                    )
+                  )}
+                </div>
+
+                {/* Product Info */}
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-base font-bold text-gray-900 mb-1 leading-snug line-clamp-1">
+                      {prod.title}
+                    </h3>
+                    <p className="text-gray-500 text-xs line-clamp-2 leading-relaxed mb-4">
+                      {prod.description}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Price</p>
+                      <span className="text-base font-black text-gray-900">
+                        {formatPrice(prod.price)}
+                      </span>
+                    </div>
+                    <button 
+                      onClick={() => handlePurchase(prod)}
+                      disabled={isBookOutOfStock}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors shadow-xs flex items-center gap-1.5 ${
+                        isBookOutOfStock
+                          ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                          : 'bg-[#146ef5] text-white hover:bg-[#105bd1] shadow-[#146ef5]/20'
+                      }`}
+                    >
+                      {isBookOutOfStock ? (
+                        'Sold Out'
+                      ) : prod.price <= 0 ? (
+                        <>
+                          <ArrowDownTrayIcon className="w-3.5 h-3.5" /> Download
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingBagIcon className="w-3.5 h-3.5" /> Buy Now
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

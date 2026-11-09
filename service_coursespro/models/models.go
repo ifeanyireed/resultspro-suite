@@ -333,6 +333,7 @@ type StoreProduct struct {
 	CoverImage  string    `gorm:"type:text" json:"cover_image"`
 	FileUrl     string    `gorm:"type:text" json:"file_url"`
 	IsPublished bool      `gorm:"default:false" json:"is_published"`
+	Stock       *int      `gorm:"default:null" json:"stock"`
 	CreatedAt   time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt   time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }

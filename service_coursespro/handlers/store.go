@@ -64,6 +64,7 @@ func (h *Handler) AdminUpdateStoreProduct(c *gin.Context) {
 	product.CoverImage = req.CoverImage
 	product.FileUrl = req.FileUrl
 	product.IsPublished = req.IsPublished
+	product.Stock = req.Stock
 
 	if err := db.DB.Save(&product).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update product"})

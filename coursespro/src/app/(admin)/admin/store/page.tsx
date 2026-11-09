@@ -87,6 +87,7 @@ export default function StoreManagementPage() {
                   <th className="px-6 py-4 font-medium">Product</th>
                   <th className="px-6 py-4 font-medium">Type</th>
                   <th className="px-6 py-4 font-medium">Price</th>
+                  <th className="px-6 py-4 font-medium">Stock</th>
                   <th className="px-6 py-4 font-medium">Status</th>
                   <th className="px-6 py-4 font-medium text-right">Actions</th>
                 </tr>
@@ -116,7 +117,27 @@ export default function StoreManagementPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 font-medium text-gray-900">
-                      ${prod.price.toFixed(2)}
+                      {prod.price <= 0 ? 'Free' : `₦${Number(prod.price).toLocaleString()}`}
+                    </td>
+                    <td className="px-6 py-4">
+                      {prod.product_type === 'BOOK' ? (
+                        prod.stock !== null && prod.stock !== undefined ? (
+                          prod.stock > 0 ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                              {prod.stock} in stock
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-red-50 text-red-700">
+                              Out of Stock
+                            </span>
+                          )
+                        ) : (
+                          <span className="text-xs text-gray-400">Not tracked</span>
+                        )
+                      ) : (
+                        <span className="text-xs text-gray-400">Digital / Unlimited</span>
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase ${

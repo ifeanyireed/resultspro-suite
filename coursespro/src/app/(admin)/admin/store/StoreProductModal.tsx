@@ -11,11 +11,21 @@ interface StoreProductModalProps {
 }
 
 export default function StoreProductModal({ isOpen, onClose, onSaved, product }: StoreProductModalProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    description: string;
+    product_type: string;
+    price: number;
+    stock: number | null;
+    cover_image: string;
+    file_url: string;
+    is_published: boolean;
+  }>({
     title: '',
     description: '',
     product_type: 'BOOK',
     price: 0,
+    stock: 20,
     cover_image: '',
     file_url: '',
     is_published: false
@@ -29,6 +39,7 @@ export default function StoreProductModal({ isOpen, onClose, onSaved, product }:
         description: product.description || '',
         product_type: product.product_type || 'BOOK',
         price: product.price || 0,
+        stock: product.stock !== undefined ? product.stock : (product.product_type === 'BOOK' ? 20 : null),
         cover_image: product.cover_image || '',
         file_url: product.file_url || '',
         is_published: product.is_published || false
@@ -39,6 +50,7 @@ export default function StoreProductModal({ isOpen, onClose, onSaved, product }:
         description: '',
         product_type: 'BOOK',
         price: 0,
+        stock: 20,
         cover_image: '',
         file_url: '',
         is_published: false
@@ -52,7 +64,10 @@ export default function StoreProductModal({ isOpen, onClose, onSaved, product }:
     try {
       const payload = {
         ...formData,
-        price: parseFloat(formData.price as any)
+        price: parseFloat(formData.price as any),
+        stock: formData.product_type === 'BOOK'
+          ? (formData.stock !== null && formData.stock !== undefined ? parseInt(formData.stock as any, 10) : 0)
+          : null
       };
       
       if (product) {
@@ -104,16 +119,35 @@ export default function StoreProductModal({ isOpen, onClose, onSaved, product }:
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Product Type</label>
                   <select className="w-full border-gray-300 rounded-xl shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" value={formData.product_type} onChange={e => setFormData({...formData, product_type: e.target.value})}>
-                    <option value="BOOK">E-Book</option>
+                    <option value="BOOK">Book / E-Book</option>
                     <option value="DOWNLOADABLE_COURSE">Downloadable Course / Asset</option>
                     <option value="TEMPLATE">Template</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
-                  <input required type="number" min="0" step="0.01" className="w-full border-gray-300 rounded-xl shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" value={formData.price} onChange={e => setFormData({...formData, price: parseFloat(e.target.value) || 0})} />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Price (₦)</label>
+                  <input required type="number" min="0" step="1" className="w-full border-gray-300 rounded-xl shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" value={formData.price} onChange={e => setFormData({...formData, price: parseFloat(e.target.value) || 0})} placeholder="e.g. 15000" />
                 </div>
               </div>
+
+              {formData.product_type === 'BOOK' && (
+                <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-4">
+                  <div className="flex justify-between items-center mb-1.5">
+                    <label className="block text-sm font-semibold text-gray-900">Number Left in Stock</label>
+                    <span className="text-[10px] font-bold tracking-wider uppercase text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">Book Inventory</span>
+                  </div>
+                  <input 
+                    type="number" 
+                    min="0" 
+                    step="1" 
+                    className="w-full border-gray-300 rounded-xl shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm bg-white" 
+                    value={formData.stock ?? ''} 
+                    onChange={e => setFormData({...formData, stock: e.target.value === '' ? null : parseInt(e.target.value, 10)})} 
+                    placeholder="e.g. 25" 
+                  />
+                  <p className="text-[11px] text-gray-500 mt-1.5">Copies available in inventory. When 0, displays as Sold Out.</p>
+                </div>
+              )}
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>

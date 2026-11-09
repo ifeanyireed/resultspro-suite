@@ -58,34 +58,59 @@ export default async function StorePage({ params }: { params: Promise<{ tenant: 
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {products.map((prod: any) => (
-                <div key={prod.id} className="card bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
-                  {prod.cover_image ? (
-                    <img src={prod.cover_image} alt={prod.title} className="w-full h-48 object-cover border-b border-slate-100" />
-                  ) : (
-                    <div className="w-full h-48 bg-slate-50 flex items-center justify-center border-b border-slate-100">
-                      {getIconForType(prod.product_type)}
-                    </div>
-                  )}
-                  
-                  <div className="p-6 flex-1 flex flex-col">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-700">
+              {products.map((prod: any) => {
+                const isBookOutOfStock = prod.product_type === 'BOOK' && typeof prod.stock === 'number' && prod.stock <= 0;
+                const hasStock = prod.product_type === 'BOOK' && typeof prod.stock === 'number';
+
+                return (
+                  <div key={prod.id} className="card bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+                    {prod.cover_image ? (
+                      <img src={prod.cover_image} alt={prod.title} className="w-full h-48 object-cover border-b border-slate-100" />
+                    ) : (
+                      <div className="w-full h-48 bg-slate-50 flex items-center justify-center border-b border-slate-100">
                         {getIconForType(prod.product_type)}
-                        {prod.product_type.replace('_', ' ')}
-                      </span>
-                    </div>
+                      </div>
+                    )}
                     
-                    <h3 className="text-xl fw-600 mb-2">{prod.title}</h3>
-                    <p className="text-muted text-sm flex-1 mb-6">{prod.description}</p>
-                    
-                    <div className="flex items-center justify-between mt-auto">
-                      <span className="text-2xl fw-700 text-navy">${Number(prod.price).toFixed(2)}</span>
-                      <button className="btn btn-outline-navy py-2 px-5 text-sm">Buy Now</button>
+                    <div className="p-6 flex-1 flex flex-col">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-700">
+                          {getIconForType(prod.product_type)}
+                          {prod.product_type.replace('_', ' ')}
+                        </span>
+                        {hasStock && (
+                          !isBookOutOfStock ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                              {prod.stock} left in stock
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-rose-50 text-rose-700 border border-rose-100">
+                              Out of Stock
+                            </span>
+                          )
+                        )}
+                      </div>
+                      
+                      <h3 className="text-xl fw-600 mb-2">{prod.title}</h3>
+                      <p className="text-muted text-sm flex-1 mb-6">{prod.description}</p>
+                      
+                      <div className="flex items-center justify-between mt-auto">
+                        <span className="text-2xl fw-700 text-navy">
+                          {Number(prod.price) <= 0 ? 'Free' : `₦${Number(prod.price).toLocaleString()}`}
+                        </span>
+                        {isBookOutOfStock ? (
+                          <button disabled className="btn btn-outline-secondary py-2 px-5 text-sm opacity-50 cursor-not-allowed">
+                            Sold Out
+                          </button>
+                        ) : (
+                          <button className="btn btn-outline-navy py-2 px-5 text-sm">Buy Now</button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
