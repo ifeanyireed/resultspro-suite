@@ -223,8 +223,12 @@ export default function LearnerDashboard() {
             </div>
           </div>
           <div className="z-10">
-            <h4 className="text-xl font-bold text-white mb-1">{dashboardData.upcoming_milestone?.title || "No Upcoming Milestones"}</h4>
-            <p className="text-sm text-slate-400 mb-4">{dashboardData.upcoming_milestone?.description || "Check back later."}</p>
+            <h4 className="text-xl font-bold text-white mb-1">
+              {(dashboardData.upcoming_milestone?.title || "No Upcoming Milestones").replace(/LIVE_CLASS/g, 'LIVE CLASS')}
+            </h4>
+            <p className="text-sm text-slate-400 mb-4">
+              {(dashboardData.upcoming_milestone?.description || "Check back later.").replace(/LIVE_CLASS/g, 'LIVE CLASS')}
+            </p>
             <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/30 text-blue-300 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider">
               <ClockIcon className="w-4 h-4" strokeWidth={2} />
               {dashboardData.upcoming_milestone?.time || 'TBD'}
@@ -250,9 +254,11 @@ export default function LearnerDashboard() {
               )}
             </div>
             
-            <h2 className="text-2xl font-bold text-gray-900 mb-3 tracking-tight">{dashboardData.current_module?.title || "Next Module Pending"}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3 tracking-tight">
+              {(dashboardData.current_module?.title || "Next Module Pending").replace(/LIVE_CLASS/g, 'LIVE CLASS')}
+            </h2>
             <p className="text-gray-600 leading-relaxed mb-8 whitespace-pre-line">
-              {dashboardData.current_module?.description || "No description available for the next module."}
+              {(dashboardData.current_module?.description || "No description available for the next module.").replace(/LIVE_CLASS/g, 'LIVE CLASS')}
             </p>
             
 

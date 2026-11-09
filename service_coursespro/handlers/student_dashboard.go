@@ -132,9 +132,9 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 				item := items[activeIndex]
 				contentTitle := "Content Item"
 				if t, ok := item["title"].(string); ok && t != "" {
-					contentTitle = t
+					contentTitle = strings.ReplaceAll(t, "LIVE_CLASS", "LIVE CLASS")
 				} else if typ, ok := item["type"].(string); ok && typ != "" {
-					contentTitle = typ
+					contentTitle = strings.ReplaceAll(typ, "_", " ")
 				}
 
 				contentDesc := "Continue your learning journey."
@@ -315,9 +315,9 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 	if nextMilestoneItem != nil {
 		mTitle := "Milestone"
 		if t, ok := nextMilestoneItem["title"].(string); ok && t != "" {
-			mTitle = t
+			mTitle = strings.ReplaceAll(t, "LIVE_CLASS", "LIVE CLASS")
 		} else if typ, ok := nextMilestoneItem["type"].(string); ok && typ != "" {
-			mTitle = typ
+			mTitle = strings.ReplaceAll(typ, "_", " ")
 		}
 		
 		mDesc := "Complete this milestone to progress."

@@ -557,13 +557,13 @@ export default function JourneyPage() {
                                     {itemIdx + 1}.
                                   </span>
                                   <span className={`truncate ${isItemCompleted ? 'line-through text-gray-400' : 'font-medium text-gray-800'}`}>
-                                    {item.title || item.type || `Activity ${itemIdx + 1}`}
+                                    {(item.title || (item.type === 'LIVE_CLASS' ? 'LIVE CLASS' : item.type) || `Activity ${itemIdx + 1}`).replace(/LIVE_CLASS/g, 'LIVE CLASS')}
                                   </span>
                                 </div>
 
                                 <div className="flex items-center gap-2 shrink-0">
                                   <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">
-                                    {item.type}
+                                    {item.type === 'LIVE_CLASS' ? 'LIVE CLASS' : item.type}
                                   </span>
                                   {isItemCompleted && (
                                     <span className="text-[11px] font-semibold text-emerald-600">

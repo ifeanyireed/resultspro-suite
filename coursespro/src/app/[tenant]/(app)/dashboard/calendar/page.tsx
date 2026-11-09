@@ -163,7 +163,7 @@ export default function CalendarPage() {
   const getTypeBadge = (type: string) => {
     const t = (type || '').toLowerCase();
     if (t.includes('class') || t.includes('lecture')) {
-      return <span className="bg-blue-50 text-blue-700 border border-blue-200/60 px-2.5 py-0.5 rounded-full text-xs font-semibold">Live Class</span>;
+      return <span className="bg-blue-50 text-blue-700 border border-blue-200/60 px-2.5 py-0.5 rounded-full text-xs font-semibold">LIVE CLASS</span>;
     }
     if (t.includes('mentor') || t.includes('sync')) {
       return <span className="bg-purple-50 text-purple-700 border border-purple-200/60 px-2.5 py-0.5 rounded-full text-xs font-semibold">Mentor Sync</span>;
@@ -171,7 +171,7 @@ export default function CalendarPage() {
     if (t.includes('deadline') || t.includes('project')) {
       return <span className="bg-rose-50 text-rose-700 border border-rose-200/60 px-2.5 py-0.5 rounded-full text-xs font-semibold">Milestone Deadline</span>;
     }
-    return <span className="bg-slate-100 text-slate-700 border border-slate-200/60 px-2.5 py-0.5 rounded-full text-xs font-semibold">{type || 'Event'}</span>;
+    return <span className="bg-slate-100 text-slate-700 border border-slate-200/60 px-2.5 py-0.5 rounded-full text-xs font-semibold">{type?.replace(/LIVE_CLASS/g, 'LIVE CLASS')?.replace(/_/g, ' ') || 'Event'}</span>;
   };
 
   // Google Calendar URL generator
