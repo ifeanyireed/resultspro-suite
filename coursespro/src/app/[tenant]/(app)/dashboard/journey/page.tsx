@@ -420,12 +420,12 @@ export default function JourneyPage() {
                       </div>
 
                       <h3 className="text-lg font-bold text-gray-900 tracking-tight leading-snug">
-                        {stage.title}
+                        {(stage.title || '').replace(/LIVE_CLASS/gi, 'LIVE CLASS')}
                       </h3>
 
                       {stage.description && (
                         <p className="text-sm text-gray-500 mt-1 line-clamp-2 leading-relaxed">
-                          {stage.description}
+                          {stage.description.replace(/LIVE_CLASS/gi, 'LIVE CLASS')}
                         </p>
                       )}
 
@@ -467,7 +467,7 @@ export default function JourneyPage() {
                         {liveCount > 0 && (
                           <span className="font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-1 rounded-lg flex items-center gap-1">
                             <VideoCameraIcon className="w-3.5 h-3.5 text-emerald-500" />
-                            Live Session
+                            LIVE CLASS
                           </span>
                         )}
                       </div>
@@ -557,13 +557,13 @@ export default function JourneyPage() {
                                     {itemIdx + 1}.
                                   </span>
                                   <span className={`truncate ${isItemCompleted ? 'line-through text-gray-400' : 'font-medium text-gray-800'}`}>
-                                    {(item.title || (item.type === 'LIVE_CLASS' ? 'LIVE CLASS' : item.type) || `Activity ${itemIdx + 1}`).replace(/LIVE_CLASS/g, 'LIVE CLASS')}
+                                    {(item.title || (String(item.type).toUpperCase() === 'LIVE_CLASS' ? 'LIVE CLASS' : item.type) || `Activity ${itemIdx + 1}`).replace(/LIVE_CLASS/gi, 'LIVE CLASS')}
                                   </span>
                                 </div>
 
                                 <div className="flex items-center gap-2 shrink-0">
                                   <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">
-                                    {item.type === 'LIVE_CLASS' ? 'LIVE CLASS' : item.type}
+                                    {String(item.type).toUpperCase() === 'LIVE_CLASS' ? 'LIVE CLASS' : (item.type || '').replace(/_/g, ' ')}
                                   </span>
                                   {isItemCompleted && (
                                     <span className="text-[11px] font-semibold text-emerald-600">
@@ -634,7 +634,7 @@ export default function JourneyPage() {
                   <div className="min-w-0 pr-2">
                     <p className="text-[11px] text-blue-200 uppercase tracking-wide font-medium">Up Next</p>
                     <p className="text-xs text-white font-semibold truncate">
-                      {activeResumeStage.title || `Module ${activeResumeStage.stage_number}`}
+                      {(activeResumeStage.title || `Module ${activeResumeStage.stage_number}`).replace(/LIVE_CLASS/gi, 'LIVE CLASS')}
                     </p>
                   </div>
                   <Link
@@ -708,10 +708,10 @@ export default function JourneyPage() {
               </div>
 
               <h4 className="text-base font-bold text-gray-900 mb-1">
-                {dashboardData.upcoming_milestone.title}
+                {(dashboardData.upcoming_milestone.title || '').replace(/LIVE_CLASS/gi, 'LIVE CLASS')}
               </h4>
               <p className="text-xs text-gray-500 leading-relaxed mb-4 line-clamp-3">
-                {dashboardData.upcoming_milestone.description}
+                {(dashboardData.upcoming_milestone.description || '').replace(/LIVE_CLASS/gi, 'LIVE CLASS')}
               </p>
 
               {dashboardData.upcoming_milestone.title?.toLowerCase().includes('project') ? (
