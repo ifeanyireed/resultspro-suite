@@ -1,10 +1,13 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"service_coursespro/db"
 	"service_coursespro/models"
 )
@@ -250,7 +253,7 @@ func (h *Handler) AdminGetMentorApplications(c *gin.Context) {
 	c.JSON(http.StatusOK, apps)
 }
 
-// AdminApproveMentorApplication approves a mentor application and provisions a user if necessary
+// AdminApproveMentorApplication approves a mentor application, ensures a user record, and creates a mentor profile
 func (h *Handler) AdminApproveMentorApplication(c *gin.Context) {
 	id := c.Param("id")
 
@@ -260,25 +263,76 @@ func (h *Handler) AdminApproveMentorApplication(c *gin.Context) {
 		return
 	}
 
-	if app.Status != "PENDING" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Application is not pending"})
-		return
+	fullName := strings.TrimSpace(app.FirstName + " " + app.LastName)
+	if fullName == "" {
+		fullName = app.Email
 	}
 
-	// In a real app, this is where we would automatically create a `users` table record in `service_users`
-	// Since this is service_coursespro, we can instruct the admin to invite the user via AdminInviteMentor, 
-	// OR we can just mark it as approved for now.
-	// We'll just mark it as APPROVED here. For a fully seamless flow we'd hit service_users to create an account,
-	// but the simplest path is marking it approved here.
-	
+	now := time.Now()
+
+	// 1. Check if user exists in the users table
+	var user struct {
+		ID    string
+		Email string
+	}
+	err := db.DB.Table("users").Where("email = ?", app.Email).First(&user).Error
+	userID := user.ID
+
+	if err != nil || userID == "" {
+		// Provision user record
+		userID = uuid.New().String()
+		newUser := map[string]interface{}{
+			"id":             userID,
+			"email":          app.Email,
+			"full_name":      fullName,
+			"name":           fullName,
+			"role":           "MENTOR",
+			"tenant_id":      app.TenantID,
+			"auth_provider":  "email",
+			"account_status": "active",
+			"created_at":     now,
+			"updated_at":     now,
+		}
+		if insertErr := db.DB.Table("users").Create(&newUser).Error; insertErr != nil {
+			log.Printf("[AdminApproveMentorApplication] Warning: failed to insert user: %v", insertErr)
+		}
+	}
+
+	// 2. Create or update MentorProfile in crs_mentor_profiles
+	if userID != "" {
+		var profile models.MentorProfile
+		if findErr := db.WithTenant(c).Where("user_id = ?", userID).First(&profile).Error; findErr != nil {
+			newProfile := models.MentorProfile{
+				UserID:         userID,
+				TenantID:       app.TenantID,
+				FullName:       fullName,
+				Specialization: app.Expertise,
+				AvgRating:      5.0,
+				CreatedAt:      now,
+				UpdatedAt:      now,
+			}
+			if createErr := db.WithTenant(c).Create(&newProfile).Error; createErr != nil {
+				log.Printf("[AdminApproveMentorApplication] Failed to create mentor profile: %v", createErr)
+			}
+		} else {
+			if profile.Specialization == "" && app.Expertise != "" {
+				db.WithTenant(c).Model(&profile).Update("specialization", app.Expertise)
+			}
+		}
+	}
+
 	app.Status = "APPROVED"
-	app.UpdatedAt = time.Now()
+	app.UpdatedAt = now
 	if err := db.WithTenant(c).Save(&app).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update application"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Application approved", "application": app})
+	c.JSON(http.StatusOK, gin.H{
+		"message":     "Application approved and mentor added successfully",
+		"application": app,
+		"user_id":     userID,
+	})
 }
 
 // AdminRejectMentorApplication rejects an application

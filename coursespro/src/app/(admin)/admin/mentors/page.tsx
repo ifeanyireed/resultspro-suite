@@ -97,7 +97,10 @@ export default function MentorsPage() {
       <MentorApplicationsSection />
 
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Top Performers</h3>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-lg font-medium text-gray-900">Active Mentors</h3>
+          <span className="text-xs text-gray-500 font-medium">{mentors.length} total</span>
+        </div>
         
         {loading ? (
           <div className="text-sm text-gray-500 py-8 text-center bg-white rounded-2xl border border-gray-100">
