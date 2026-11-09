@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 	"time"
 
@@ -76,7 +77,8 @@ func (h *Handler) ApplyForMentor(c *gin.Context) {
 	}
 
 	if err := db.DB.Create(&app).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to submit application"})
+		log.Printf("[MentorApplication] Failed to insert application for %s: %v", input.Email, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to submit application", "details": err.Error()})
 		return
 	}
 
