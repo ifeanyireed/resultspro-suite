@@ -96,7 +96,7 @@ export default function StudentsPage() {
   const handleDeleteStudent = async () => {
     if (!managingStudent) return;
     
-    if (!confirm(`Are you sure you want to completely delete ${managingStudent.user?.full_name || 'this student'} from this tenant? This action cannot be undone.`)) return;
+    if (!confirm(`Are you sure you want to completely delete ${managingStudent.user?.full_name || 'this student'} from your institution? This action cannot be undone.`)) return;
 
     setIsDeleting(true);
     try {
@@ -250,7 +250,7 @@ export default function StudentsPage() {
               onChange={(e) => setSelectedCohortId(e.target.value)}
               className="px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#146ef5] bg-white text-gray-900 shadow-sm font-medium min-w-[250px]"
             >
-              <option value="all">All Students (Tenant)</option>
+              <option value="all">All Students</option>
               <option value="" disabled>--- Cohorts ---</option>
               {cohorts.map((c: any) => (
                 <option key={c.id} value={c.id}>
@@ -443,7 +443,7 @@ export default function StudentsPage() {
                   onClick={handleDeleteStudent}
                   disabled={isDeleting || isAssigning}
                   className="px-4 py-2.5 rounded-xl whitespace-nowrap w-fit border border-red-200 text-red-600 font-bold text-xs hover:bg-red-50 disabled:opacity-50"
-                  title="Delete student from tenant completely"
+                  title="Delete student completely"
                 >
                   {isDeleting ? 'Deleting...' : 'Delete Student'}
                 </button>

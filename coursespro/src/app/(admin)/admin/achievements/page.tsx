@@ -92,7 +92,7 @@ export default function AdminAchievementsPage() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Achievements</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage badges and certificates for your tenant.</p>
+          <p className="text-sm text-gray-500 mt-1">Manage badges and certificates for your students and courses.</p>
         </div>
         <button
           onClick={openNewModal}

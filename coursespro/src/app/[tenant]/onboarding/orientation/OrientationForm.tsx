@@ -50,7 +50,7 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
         {/* Brand Header */}
         <div className="flex items-center space-x-3 mb-12">
           <TenantLogo theme="dark" height={40} logoUrl={tenant?.logo_url} darkLogoUrl={tenant?.dark_logo_url} flattenLogo={tenant?.flatten_logo} tenantName={tenant?.name} />
-          <h1 className="font-bold text-white text-2xl tracking-tight">{tenant?.name || "Tenant"}</h1>
+          <h1 className="font-bold text-white text-2xl tracking-tight">{tenant?.name || "Academy"}</h1>
         </div>
 
         {/* Progress Dots */}

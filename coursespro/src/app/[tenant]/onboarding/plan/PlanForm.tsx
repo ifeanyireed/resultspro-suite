@@ -164,7 +164,7 @@ export default function PlanForm({ tenant }: { tenant: any }) {
           <div className="flex items-center space-x-3">
             <TenantLogo theme="dark" height={40} logoUrl={tenant?.logo_url} darkLogoUrl={tenant?.dark_logo_url} flattenLogo={tenant?.flatten_logo} tenantName={tenant?.name} />
             <div>
-              <h1 className="font-bold text-white text-xl tracking-tight">{tenant?.name || "Tenant"}</h1>
+              <h1 className="font-bold text-white text-xl tracking-tight">{tenant?.name || "Academy"}</h1>
             </div>
           </div>
 

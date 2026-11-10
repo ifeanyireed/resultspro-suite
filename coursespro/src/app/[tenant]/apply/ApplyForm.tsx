@@ -31,7 +31,7 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
           <div className="flex items-center space-x-3">
             <TenantLogo theme="dark" height={40} logoUrl={tenant?.logo_url} darkLogoUrl={tenant?.dark_logo_url} flattenLogo={tenant?.flatten_logo} tenantName={tenant?.name} />
             <div>
-              <h1 className="font-bold text-white text-3xl tracking-tight">{tenant?.name || "Tenant"}</h1>
+              <h1 className="font-bold text-white text-3xl tracking-tight">{tenant?.name || "Academy"}</h1>
               <p className="text-blue-400 font-semibold text-xs uppercase tracking-widest">COHORT APPLICATION</p>
             </div>
           </div>
@@ -82,7 +82,7 @@ export default function ApplyForm({ tenant }: { tenant: any }) {
         <div className="lg:hidden flex items-center justify-center mb-10 w-full absolute top-8 left-0 right-0 z-10 bg-white/80 backdrop-blur-md py-4 border-b border-slate-100">
           <div className="flex items-center space-x-2">
             <TenantLogo theme="light" height={32} logoUrl={tenant?.logo_url} darkLogoUrl={tenant?.dark_logo_url} flattenLogo={tenant?.flatten_logo} tenantName={tenant?.name} />
-            <span className="font-bold text-slate-900 text-xl tracking-tight">{tenant?.name || "Tenant"}</span>
+            <span className="font-bold text-slate-900 text-xl tracking-tight">{tenant?.name || "Academy"}</span>
           </div>
         </div>
 

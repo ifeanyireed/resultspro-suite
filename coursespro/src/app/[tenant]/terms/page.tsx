@@ -80,7 +80,7 @@ export default async function TenantTermsPage({ params }: { params: Promise<{ te
           <div className="container-nets max-w-4xl mx-auto px-4 sm:px-6">
             <div className="prose prose-slate max-w-none text-slate-700 space-y-8">
               <div className="flex items-center justify-between pb-6 border-b border-slate-100 text-xs sm:text-sm text-slate-500">
-                <span>Tenant: <strong className="text-slate-900">{tenantName}</strong></span>
+                <span>Institution: <strong className="text-slate-900">{tenantName}</strong></span>
                 <span>Effective Date: <strong>{new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</strong></span>
               </div>
 

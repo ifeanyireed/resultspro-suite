@@ -94,7 +94,7 @@ export default function SignupForm({ tenant }: { tenant: any }) {
           <div className="flex items-center space-x-3">
             <TenantLogo theme="dark" height={40} logoUrl={tenant?.logo_url} darkLogoUrl={tenant?.dark_logo_url} flattenLogo={tenant?.flatten_logo} tenantName={tenant?.name} />
             <div>
-              <h1 className="font-bold text-white text-3xl tracking-tight">{tenant?.name || "Tenant"}</h1>
+              <h1 className="font-bold text-white text-3xl tracking-tight">{tenant?.name || "Academy"}</h1>
               <p className="text-blue-400 font-semibold text-xs uppercase tracking-widest">Learning Management System</p>
             </div>
           </div>
@@ -242,7 +242,7 @@ export default function SignupForm({ tenant }: { tenant: any }) {
                   Already have an account? <Link href={legalPrefix ? `${legalPrefix}/login` : "/login"} className="text-blue-600 hover:underline">Log in</Link>
                 </p>
                 <p className="text-xs text-slate-400 font-medium">
-                  Protected by reCAPTCHA and subject to the {tenant?.name || "Tenant"}{' '}
+                  Protected by reCAPTCHA and subject to the {tenant?.name || "Academy"}{' '}
                   <Link href={`${legalPrefix}/privacy`} target="_blank" className="text-slate-600 hover:underline">Privacy Policy</Link> and{' '}
                   <Link href={`${legalPrefix}/terms`} target="_blank" className="text-slate-600 hover:underline">Terms of Service</Link>.
                 </p>

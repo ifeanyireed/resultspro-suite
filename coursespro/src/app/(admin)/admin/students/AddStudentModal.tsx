@@ -80,7 +80,7 @@ export default function AddStudentModal({ isOpen, onClose, onSaved, cohorts }: A
               </div>
               <div>
                 <h3 className="text-lg font-bold text-gray-900">Add New Student</h3>
-                <p className="text-xs text-gray-500">Register and enroll a student into this tenant.</p>
+                <p className="text-xs text-gray-500">Register and enroll a student into your academy.</p>
               </div>
             </div>
             <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
