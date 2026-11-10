@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api, { coursesApi, getTenantSlug } from '@/lib/api';
-import { UserGroupIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { UserGroupIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/outline';
+import AddStudentModal from './AddStudentModal';
 
 const getDeterministicAvatar = (id: string) => {
   if (!id) return '/avatars/character1.jpg';
@@ -16,6 +17,7 @@ const getDeterministicAvatar = (id: string) => {
 };
 
 export default function StudentsPage() {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedCohortId, setSelectedCohortId] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [managingStudent, setManagingStudent] = useState<any>(null);
@@ -231,6 +233,13 @@ export default function StudentsPage() {
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Student Management</h2>
           <p className="text-sm text-gray-500 mt-1">View and manage enrolled students across your cohorts.</p>
         </div>
+        <button
+          onClick={() => setIsAddModalOpen(true)}
+          className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2"
+        >
+          <PlusIcon className="w-4 h-4" />
+          Add Student
+        </button>
       </div>
 
       <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden mb-8">
@@ -460,6 +469,13 @@ export default function StudentsPage() {
           </div>
         </div>
       )}
+
+      <AddStudentModal 
+        isOpen={isAddModalOpen} 
+        onClose={() => setIsAddModalOpen(false)} 
+        onSaved={() => refetch()} 
+        cohorts={cohorts} 
+      />
     </>
   );
 }

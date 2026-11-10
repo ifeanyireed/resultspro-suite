@@ -133,6 +133,7 @@ func main() {
 		protected.POST("/admin/enrollments/:id/reset", h.AdminResetStudentProgress)
 
 		protected.GET("/admin/enrollments", h.AdminGetEnrollments)
+		protected.POST("/admin/students", h.AdminCreateStudent)
 
 		// Admin Mentors
 		protected.GET("/admin/mentors/stats", h.AdminGetMentorsStats)
