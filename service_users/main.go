@@ -478,6 +478,8 @@ func main() {
 			handlers.HandleGetCategories(w, r)
 		} else if r.Method == http.MethodPost {
 			handlers.HandleCreateCategory(w, r)
+		} else if r.Method == http.MethodDelete {
+			handlers.HandleDeleteCategory(w, r)
 		} else {
 			utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		}
@@ -488,6 +490,8 @@ func main() {
 			handlers.HandleGetTags(w, r)
 		} else if r.Method == http.MethodPost {
 			handlers.HandleCreateTag(w, r)
+		} else if r.Method == http.MethodDelete {
+			handlers.HandleDeleteTag(w, r)
 		} else {
 			utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		}

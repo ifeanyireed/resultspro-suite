@@ -350,6 +350,13 @@ func HandleDeletePost(w http.ResponseWriter, r *http.Request) {
 
 	id := strings.TrimSpace(r.URL.Query().Get("id"))
 	if id == "" {
+		var input struct {
+			ID string `json:"id"`
+		}
+		_ = json.NewDecoder(r.Body).Decode(&input)
+		id = strings.TrimSpace(input.ID)
+	}
+	if id == "" {
 		utils.JSONError(w, http.StatusBadRequest, "Post ID is required")
 		return
 	}
@@ -416,6 +423,36 @@ func HandleCreateCategory(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusCreated, category)
 }
 
+func HandleDeleteCategory(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodDelete {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	id := strings.TrimSpace(r.URL.Query().Get("id"))
+	if id == "" {
+		var input struct {
+			ID string `json:"id"`
+		}
+		_ = json.NewDecoder(r.Body).Decode(&input)
+		id = strings.TrimSpace(input.ID)
+	}
+	if id == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Category ID is required")
+		return
+	}
+
+	// Detach category from posts using it to prevent broken relationships
+	_ = db.GormDB.Model(&models.BlogPost{}).Where("category_id = ?", id).Update("category_id", nil).Error
+
+	if err := db.GormDB.Where("id = ?", id).Delete(&models.BlogCategory{}).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to delete category: "+err.Error())
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Category deleted successfully"})
+}
+
 // ----------------------------------------------------------------------------
 // TAGS
 // ----------------------------------------------------------------------------
@@ -465,6 +502,35 @@ func HandleCreateTag(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.JSONResponse(w, http.StatusCreated, tag)
+}
+
+func HandleDeleteTag(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodDelete {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	id := strings.TrimSpace(r.URL.Query().Get("id"))
+	if id == "" {
+		var input struct {
+			ID string `json:"id"`
+		}
+		_ = json.NewDecoder(r.Body).Decode(&input)
+		id = strings.TrimSpace(input.ID)
+	}
+	if id == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Tag ID is required")
+		return
+	}
+
+	_ = db.GormDB.Exec("DELETE FROM blog_post_tags WHERE tag_id = ?", id).Error
+
+	if err := db.GormDB.Where("id = ?", id).Delete(&models.BlogTag{}).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to delete tag: "+err.Error())
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Tag deleted successfully"})
 }
 
 // ----------------------------------------------------------------------------

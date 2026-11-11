@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Header } from '@/components/Header';
 import { RichTextEditor } from '@/components/RichTextEditor';
 import { TagsInput } from '@/components/TagsInput';
-import { ArrowLeft, Save, Send, Globe, Eye, Search, User, Upload } from 'lucide-react';
+import { ArrowLeft, Save, Send, Globe, Eye, Search, User, Upload, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -202,6 +202,28 @@ function CreateBlogPostContent() {
     }
   };
 
+  const handleDelete = async () => {
+    if (!editId) return;
+    if (!window.confirm("Are you sure you want to delete this article? This action cannot be undone.")) return;
+    setIsSaving(true);
+    try {
+      const res = await fetch(`${USERS_API}/api/v1/cms/blog/posts?id=${editId}`, {
+        method: "DELETE"
+      });
+      if (res.ok) {
+        toast.success("Post deleted successfully!");
+        router.push("/cms/blog");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error || "Failed to delete post");
+      }
+    } catch (e) {
+      toast.error("Error deleting post");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="w-full">
       <Header
@@ -217,6 +239,17 @@ function CreateBlogPostContent() {
             Back to Posts
           </Link>
           <div className="flex items-center gap-3">
+            {editId && (
+              <button 
+                type="button"
+                onClick={handleDelete}
+                disabled={isSaving}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg bg-rose-50 border border-rose-200 text-rose-600 font-semibold text-sm transition-colors shadow-sm ${isSaving ? 'opacity-50 cursor-not-allowed' : 'hover:bg-rose-100'}`}
+              >
+                <Trash2 className="w-4 h-4" />
+                Delete
+              </button>
+            )}
             <button 
               onClick={() => handleSave('DRAFT')}
               disabled={isSaving}

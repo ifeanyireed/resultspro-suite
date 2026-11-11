@@ -116,6 +116,60 @@ export default function BlogCMSPage() {
     }
   };
 
+  const handleDeletePost = async (id: string, title: string) => {
+    if (!window.confirm(`Are you sure you want to delete "${title}"? This cannot be undone.`)) return;
+    try {
+      const res = await fetch(`${USERS_API}/api/v1/cms/blog/posts?id=${id}`, {
+        method: "DELETE"
+      });
+      if (res.ok) {
+        setPosts(posts.filter(p => p.id !== id));
+        toast.success("Post deleted successfully!");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error || "Failed to delete post");
+      }
+    } catch (e) {
+      toast.error("Error deleting post");
+    }
+  };
+
+  const handleDeleteCategory = async (id: string, name: string) => {
+    if (!window.confirm(`Are you sure you want to delete category "${name}"?`)) return;
+    try {
+      const res = await fetch(`${USERS_API}/api/v1/cms/blog/categories?id=${id}`, {
+        method: "DELETE"
+      });
+      if (res.ok) {
+        setCategories(categories.filter(c => c.id !== id));
+        toast.success("Category deleted!");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error || "Failed to delete category");
+      }
+    } catch (e) {
+      toast.error("Error deleting category");
+    }
+  };
+
+  const handleDeleteTag = async (id: string, name: string) => {
+    if (!window.confirm(`Are you sure you want to delete tag "${name}"?`)) return;
+    try {
+      const res = await fetch(`${USERS_API}/api/v1/cms/blog/tags?id=${id}`, {
+        method: "DELETE"
+      });
+      if (res.ok) {
+        setTagsList(tagsList.filter(t => t.id !== id));
+        toast.success("Tag deleted!");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error || "Failed to delete tag");
+      }
+    } catch (e) {
+      toast.error("Error deleting tag");
+    }
+  };
+
   const handleDeleteSubscriber = async (id: string) => {
     if (!window.confirm("Are you sure you want to remove this subscriber?")) return;
     try {
@@ -286,7 +340,7 @@ export default function BlogCMSPage() {
                           </td>
                           <td className="px-6 py-4 text-right">
                             <Link href={`/cms/blog/create?edit=${post.id}`} className="text-blue-600 hover:text-blue-800 text-sm font-medium mr-3">Edit</Link>
-                            <button className="text-rose-600 hover:text-rose-800 text-sm font-medium">Delete</button>
+                            <button onClick={() => handleDeletePost(post.id, post.title)} className="text-rose-600 hover:text-rose-800 text-sm font-medium">Delete</button>
                           </td>
                         </tr>
                       ))
@@ -323,7 +377,7 @@ export default function BlogCMSPage() {
                       <td className="px-6 py-4 text-slate-500">{cat.slug}</td>
                       <td className="px-6 py-4 text-slate-500">{posts.filter((p: any) => p.category_id === cat.id).length}</td>
                       <td className="px-6 py-4 text-right">
-                        <button className="text-rose-600 hover:text-rose-800 text-sm font-medium">Delete</button>
+                        <button onClick={() => handleDeleteCategory(cat.id, cat.name)} className="text-rose-600 hover:text-rose-800 text-sm font-medium">Delete</button>
                       </td>
                     </tr>
                   ))
@@ -360,7 +414,7 @@ export default function BlogCMSPage() {
                         {posts.filter((p: any) => p.tags && p.tags.includes(tag.name)).length}
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <button className="text-rose-600 hover:text-rose-800 text-sm font-medium">Delete</button>
+                        <button onClick={() => handleDeleteTag(tag.id, tag.name)} className="text-rose-600 hover:text-rose-800 text-sm font-medium">Delete</button>
                       </td>
                     </tr>
                   ))
