@@ -1,5 +1,5 @@
 import React from 'react';
-import { SchoolResult } from '@/lib/schoolData';
+import { SchoolResult } from '../../lib/schoolData';
 
 interface AffectiveDomainProps {
   result: SchoolResult;

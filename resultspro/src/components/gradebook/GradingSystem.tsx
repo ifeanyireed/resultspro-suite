@@ -1,5 +1,5 @@
 import React from 'react';
-import { GradebookTemplate } from '@/lib/schoolData';
+import { GradebookTemplate } from '../../lib/schoolData';
 
 interface GradingSystemProps {
   template: GradebookTemplate;

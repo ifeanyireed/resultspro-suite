@@ -1,6 +1,6 @@
 import React from 'react';
-import { Call02Icon, Message01Icon } from '@hugeicons/core-free-icons';
-import { School } from '@/lib/schoolData';
+import { IconPhone as Call02Icon, IconMail as Message01Icon } from '@tabler/icons-react';
+import { School } from '../../lib/schoolData';
 
 interface SchoolHeaderProps {
   school: School;
