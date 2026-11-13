@@ -115,7 +115,7 @@ export default function PricingPage() {
                <article key={i} className={`p-8 rounded-sm bg-white border transition-all hover:shadow-card-lg flex flex-col ${plan.featured ? 'border-nets-red shadow-md scale-[1.02]' : 'border-gray-200 shadow-sm'}`} style={{ borderColor: plan.featured ? 'var(--primary)' : '' }}>
                  {plan.featured && (
                     <div className="mb-6">
-                      <span className="text-[10px] fw-700 text-white uppercase tracking-widest px-3 py-1 rounded-sm" style={{ background: 'var(--primary)' }}>
+                      <span className="text-[10px] fw-700 text-[#0D1060] uppercase tracking-widest px-3 py-1 rounded-sm" style={{ background: 'var(--primary)' }}>
                         Most Popular
                       </span>
                     </div>

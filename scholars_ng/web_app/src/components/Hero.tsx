@@ -1,8 +1,12 @@
 "use client";
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { IconCheck, IconPlayerPlay as IconPlay, IconBook, IconBrain } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
+import { IconCheck } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+import { useTenant } from '@/components/TenantProvider';
+import { useLandingConfig } from '@/lib/landingConfig';
 
 const staggerContainer = {
   hidden: { opacity: 0 },
@@ -23,10 +27,23 @@ const slideInRight = {
 };
 
 const Hero = () => {
+  const { tenant } = useTenant();
+  const { config } = useLandingConfig();
+  const router = useRouter();
+  const schoolName = tenant?.name || config.schoolName || 'Greenwood High Academy';
+  const [selectedRole, setSelectedRole] = useState<'student' | 'parent' | 'teacher' | 'admin'>('student');
+
+  const roleRoutes = {
+    student: '/student/dashboard',
+    parent: '/parent/dashboard',
+    teacher: '/teacher/dashboard',
+    admin: '/admin/pulse',
+  };
+
   return (
     <section
       id="hero"
-      aria-label="Hero — My School Academy"
+      aria-label={`Hero — ${schoolName}`}
       style={{
         position: 'relative',
         minHeight: '100vh',
@@ -34,14 +51,14 @@ const Hero = () => {
         flexDirection: 'column',
         overflow: 'hidden',
         background: 'var(--color-nets-navy-dark)',
-        marginTop: '-72px' // to offset navbar height exactly
+        marginTop: '-72px'
       }}
     >
       {/* ── Full-bleed background photo ── */}
       <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <img
-          src="/images/Students2.jpeg"
-          alt=""
+          src={config.heroImage || '/photo07.jpeg'}
+          alt={`${schoolName} Campus`}
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
           loading="eager"
         />
@@ -51,7 +68,7 @@ const Hero = () => {
           background: 'linear-gradient(105deg, rgba(13,16,96,0.95) 0%, rgba(13,16,96,0.7) 45%, rgba(13,16,96,0) 100%)',
         }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(13,16,96,0.6) 0%, transparent 40%)' }} />
-        {/* Red accent — thin left rule */}
+        {/* Accent — thin left rule */}
         <div aria-hidden style={{
           position: 'absolute', left: 0, top: 0, bottom: 0, width: '4px',
           background: 'var(--color-nets-red)',
@@ -84,7 +101,7 @@ const Hero = () => {
           {/* Overline */}
           <motion.div variants={staggerItem} style={{ marginBottom: '1.5rem' }}>
             <span className="overline-dark">
-              Excellence in Education
+              {config.heroOverline} · {schoolName}
             </span>
           </motion.div>
 
@@ -97,31 +114,31 @@ const Hero = () => {
             letterSpacing: '-0.02em',
             whiteSpace: 'nowrap'
           }}>
-            Premium Exam
+            {config.heroTitleTop}
             <br />
-            <em style={{ fontStyle: 'normal', fontWeight: 700, color: '#fff' }}>Preparation</em>
+            <em style={{ fontStyle: 'normal', fontWeight: 700, color: '#fff' }}>{config.heroTitleHighlight}</em>
             <br />
-            <span style={{ color: 'rgba(255,255,255,0.6)' }}>for Every Student.</span>
+            <span style={{ color: 'rgba(255,255,255,0.6)' }}>{config.heroTitleBottom}</span>
           </motion.h1>
 
           {/* Body */}
           <motion.p variants={staggerItem} style={{ 
-            maxWidth: '460px', 
+            maxWidth: '480px', 
             marginBottom: '2rem', 
             fontSize: '1.125rem', 
             color: 'rgba(255,255,255,0.7)',
             lineHeight: '1.5'
           }}>
-            Welcome to My School Academy's official portal. Access resources, track performance, and stay connected.
+            Welcome to {schoolName}. {config.heroDescription}
           </motion.p>
 
           {/* CTAs */}
           <motion.div variants={staggerItem} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem', alignItems: 'center' }}>
-            <Link href="/school/login" className="btn btn-red btn-lg">
-              Portal Login
+            <Link href="#admissions" className="btn btn-red btn-lg">
+              Apply for Admission
             </Link>
-            <Link href="/admissions" className="btn btn-outline-white btn-lg">
-              Apply Now
+            <Link href="#facilities" className="btn btn-outline-white btn-lg">
+              Explore Facilities
             </Link>
           </motion.div>
 
@@ -129,20 +146,20 @@ const Hero = () => {
           <motion.div variants={staggerItem} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>Certified Teachers</span>
+              <span>WAEC & NECO Accredited</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>Modern Facilities</span>
+              <span>STEM & Coding Labs</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>Holistic Curriculum</span>
+              <span>24/7 Parent & Student Portal</span>
             </div>
           </motion.div>
         </motion.div>
 
-        {/* ── Right — Quick Practice card ── */}
+        {/* ── Right — Quick Dashboard Auth Card ── */}
         <motion.div
           style={{ gridColumn: 'span 12', display: 'flex' }}
           className="lg:col-span-5 lg:col-start-8 lg:justify-end justify-center"
@@ -155,7 +172,7 @@ const Hero = () => {
             style={{
               width: '100%',
               maxWidth: '420px',
-              background: 'rgba(13,16,96,0.85)',
+              background: 'rgba(13,16,96,0.88)',
               border: '1px solid rgba(255,255,255,0.15)',
               borderRadius: '4px',
               padding: '1.5rem',
@@ -164,27 +181,88 @@ const Hero = () => {
               marginTop: '1.5rem'
             }}
           >
-            <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1.25rem' }}>
-              <div className="overline-dark" style={{ marginBottom: '0.5rem' }}>Parent Portal</div>
+            <div style={{ marginBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1rem' }}>
+              <div className="overline-dark" style={{ marginBottom: '0.35rem' }}>Dashboard Access</div>
               <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', letterSpacing: '-0.01em' }}>
-                Sign in to your account
+                Sign in to Campus Portal
               </h2>
             </div>
 
-            <form aria-label="Portal Login" style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+            {/* Role Selector Tabs */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.35rem', marginBottom: '1rem' }}>
+              {(['student', 'parent', 'teacher', 'admin'] as const).map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => setSelectedRole(r)}
+                  style={{
+                    padding: '0.45rem 0.25rem',
+                    fontSize: '0.7rem',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    borderRadius: '2px',
+                    cursor: 'pointer',
+                    border: selectedRole === r ? '1px solid var(--color-nets-red)' : '1px solid rgba(255,255,255,0.15)',
+                    background: selectedRole === r ? 'var(--color-nets-red)' : 'rgba(255,255,255,0.06)',
+                    color: selectedRole === r ? '#0D1060' : 'rgba(255,255,255,0.8)',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
+
+            <form
+              aria-label="Portal Login"
+              onSubmit={(e) => {
+                e.preventDefault();
+                router.push(roleRoutes[selectedRole]);
+              }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}
+            >
               <div>
-                <label className="field-label-dark">Email or Phone</label>
-                <input type="text" placeholder="Enter your credentials" className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }} />
+                <label className="field-label-dark">
+                  {selectedRole === 'student' ? 'Student Admission No. or Email' : 'Email or Phone Number'}
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder={selectedRole === 'student' ? 'e.g. GHA/2026/0142' : 'name@school.edu.ng'}
+                  className="input-dark"
+                  style={{ padding: '0.625rem 1rem', width: '100%' }}
+                />
               </div>
               
               <div>
-                <label className="field-label-dark">Password</label>
-                <input type="password" placeholder="••••••••" className="input-dark" style={{ padding: '0.625rem 1rem', width: '100%' }} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <label className="field-label-dark">Password / PIN</label>
+                  <Link href="/forgot-password" style={{ fontSize: '0.7rem', color: 'var(--color-nets-red)', textDecoration: 'none', marginBottom: '0.5rem' }}>
+                    Forgot PIN?
+                  </Link>
+                </div>
+                <input
+                  type="password"
+                  required
+                  placeholder="••••••••"
+                  className="input-dark"
+                  style={{ padding: '0.625rem 1rem', width: '100%' }}
+                />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.75rem', marginTop: '1rem' }}>
-                <Link href="/school/login" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
-                  Secure Login
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.5rem', marginTop: '0.5rem' }}>
+                <button type="submit" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
+                  Enter {selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)} Dashboard &rarr;
+                </button>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.25rem', fontSize: '0.75rem' }}>
+                <Link href={`/login?role=${selectedRole}`} style={{ color: 'rgba(255,255,255,0.65)', textDecoration: 'none' }}>
+                  Full Login Page &rarr;
+                </Link>
+                <Link href="/register" style={{ color: 'var(--color-nets-red)', fontWeight: 700, textDecoration: 'none' }}>
+                  Activate Account
                 </Link>
               </div>
             </form>

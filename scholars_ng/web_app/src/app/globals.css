@@ -1,13 +1,23 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Dropa';
+  src: url('/fonts/Dropa-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-navy: #0D1B2A;
-  --color-green: #00C853;
+  --color-green: #FBBC04;
   --color-blue: #1565C0;
-  --color-amber: #FF6F00;
+  --color-amber: #1e3a8a;
   
-  --font-display: var(--font-space-grotesk);
-  --font-body: var(--font-dm-sans);
+  --font-display: 'Dropa';
+  --font-body: 'Dropa';
+  --font-sans: 'Dropa';
+  --font-mono: 'Dropa';
   
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -35,7 +45,7 @@
 
   --color-nets-navy:        #1A1FA8;
   --color-nets-navy-dark:   #0D1060;
-  --color-nets-red:         #C0272D;
+  --color-nets-red:         #FBBC04;
   --color-nets-white:       #FFFFFF;
   --color-nets-light:       #F8F9FC;
   --color-nets-text:        #111827;
@@ -46,12 +56,12 @@
 
   --color-nets-navy-10:     rgba(26, 31, 168, 0.08);
   --color-nets-navy-15:     rgba(26, 31, 168, 0.15);
-  --color-nets-red-10:      rgba(192, 39, 45, 0.08);
+  --color-nets-red-10:      rgba(251, 188, 4, 0.12);
   --color-nets-dark-85:     rgba(13, 16, 96, 0.85);
   --color-nets-dark-70:     rgba(13, 16, 96, 0.70);
   --color-nets-dark-50:     rgba(13, 16, 96, 0.50);
 
-  --font-sans:  'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans:  'Dropa';
 
   --radius-xs:  1px;
   --radius-sm:  2px;
@@ -69,13 +79,13 @@
   --background: #0D1B2A;
   --foreground: #ffffff;
   
-  --primary: #00C853;
-  --primary-foreground: #ffffff;
+  --primary: #FBBC04;
+  --primary-foreground: #0D1060;
   
-  --secondary: #1565C0;
+  --secondary: #1e3a8a;
   --secondary-foreground: #ffffff;
   
-  --accent: #FF6F00;
+  --accent: #1e3a8a;
   --accent-foreground: #ffffff;
   
   --muted: #1F2937;
@@ -86,7 +96,7 @@
   
   --border: #E5E7EB;
   --input: #E5E7EB;
-  --ring: #00C853;
+  --ring: #FBBC04;
 }
 
 body {
@@ -242,14 +252,15 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-red {
   background: var(--color-nets-red);
-  color: #fff;
+  color: #0D1060;
   border-color: var(--color-nets-red);
 }
 .btn-red:hover {
-  background: #A0202A;
-  border-color: #A0202A;
+  background: #E5A800;
+  border-color: #E5A800;
+  color: #0D1060;
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(192,39,45,0.30);
+  box-shadow: 0 6px 20px rgba(251, 188, 4, 0.35);
 }
 
 .btn-navy {

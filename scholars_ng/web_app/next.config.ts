@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname, "../../"),
   },
+  experimental: {
+    externalDir: true,
+  },
 };
 
 export default nextConfig;

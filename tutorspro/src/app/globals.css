@@ -2,14 +2,24 @@
 
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Dropa';
+  src: url('/fonts/Dropa-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-navy: #0D1B2A;
-  --color-green: #00C853;
+  --color-green: #FBBC04;
   --color-blue: #1565C0;
-  --color-amber: #FF6F00;
+  --color-amber: #1e3a8a;
   
-  --font-display: var(--font-space-grotesk);
-  --font-body: var(--font-dm-sans);
+  --font-display: 'Dropa';
+  --font-body: 'Dropa';
+  --font-sans: 'Dropa';
+  --font-mono: 'Dropa';
   
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -38,13 +48,13 @@
   --background: #0D1B2A;
   --foreground: #ffffff;
   
-  --primary: #00C853;
-  --primary-foreground: #ffffff;
+  --primary: #FBBC04;
+  --primary-foreground: #0D1060;
   
-  --secondary: #1565C0;
+  --secondary: #1e3a8a;
   --secondary-foreground: #ffffff;
   
-  --accent: #FF6F00;
+  --accent: #1e3a8a;
   --accent-foreground: #ffffff;
   
   --muted: #1F2937;
@@ -55,10 +65,17 @@
   
   --border: #E5E7EB;
   --input: #E5E7EB;
-  --ring: #00C853;
+  --ring: #FBBC04;
 }
 
 
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  @apply antialiased;
+}
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);

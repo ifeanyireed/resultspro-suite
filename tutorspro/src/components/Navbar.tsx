@@ -140,7 +140,7 @@ export default function Navbar() {
                 <Link href="/notifications" style={{ position: 'relative', color: 'rgba(255,255,255,0.6)', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = 'white'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}>
                   <Bell style={{ width: '20px', height: '20px' }} />
                   {unreadCount > 0 && (
-                    <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', background: 'var(--color-nets-red)', color: 'white', fontSize: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>
+                    <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', background: 'var(--color-nets-red)', color: '#0D1060', fontSize: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}

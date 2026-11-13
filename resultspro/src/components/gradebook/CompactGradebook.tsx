@@ -1,5 +1,5 @@
 import React from 'react';
-import { SchoolResult, School, GradebookTemplate } from '@/lib/schoolData';
+import { SchoolResult, School, GradebookTemplate } from '../../lib/schoolData';
 
 interface ExamComponent {
   name: string;

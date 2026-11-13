@@ -71,7 +71,7 @@ export default function HowItWorksPage() {
         </div>
 
         <div className="mt-20 text-center">
-          <a href="/tutors" className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-[var(--color-nets-red)] hover:bg-red-700 rounded-full shadow-lg transition-transform hover:scale-105">
+          <a href="/tutors" className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-[#0D1060] bg-[var(--color-nets-red)] hover:bg-[#E5A800] rounded-full shadow-lg shadow-[#FBBC04]/20 transition-transform hover:scale-105">
             Find a Tutor Now
           </a>
         </div>
