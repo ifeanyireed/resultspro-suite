@@ -49,13 +49,13 @@ func main() {
 
 	plans := []SeedPlan{
 		// -------------------------
-		// PricingSection.tsx
+		// PricingSection.tsx (ScholarsNG Suite Bundles)
 		// -------------------------
-		// School
-		{"FREE", "scholars_ng", "School", 0, "forever", []string{"Up to 100 Students & 15 Teachers", "ScholarsNG Mobile Apps", "ResultsPRO (Basic)", "ExamsPRO (Free)", "2GB Storage"}, "Get Started Free", false, "PREMIUM"},
-		{"STARTER", "scholars_ng", "School", 15000, "per month", []string{"Up to 500 Students & 50 Teachers", "ScholarsNG Mobile Apps", "ResultsPRO (Full)", "ExamsPRO (Standard CBT)", "ClassroomPRO", "15GB Storage"}, "Start with Starter", false, "PREMIUM"},
-		{"PRO", "scholars_ng", "School", 35000, "per month", []string{"Up to 2,000 Students & 300 Teachers", "ScholarsNG Mobile Apps", "ResultsPRO & ExamsPRO", "ClassroomPRO", "PuzzlePRO", "50GB Storage"}, "Upgrade to Pro", true, "PREMIUM"},
-		{"ENTERPRISE", "scholars_ng", "School", 80000, "per month", []string{"Unlimited Students & Teachers", "ScholarsNG Mobile Apps", "ResultsPRO & ExamsPRO", "ClassroomPRO", "Access to All Suite Products", "Custom Domain & White-labeling", "500GB Storage"}, "Contact Sales", false, "PREMIUM"},
+		// School (ScholarsNG)
+		{"SANDBOX PILOT", "scholars_ng", "School", 0, "first term", []string{"Up to 50 Active Students", "ResultsPRO Automated CA1/CA2 & Broadsheets", "CampusPRO Lite (Student & Class Directory)", "50 Encrypted Result Scratch Card PINs", "Instant Subdomain (school.scholars.ng)", "PuzzlePRO Coding Preview (First 20 Quests)"}, "Start 1-Term Free Pilot", false, "PREMIUM"},
+		{"GROWTH ACADEMY", "scholars_ng", "School", 65000, "per term", []string{"Up to 250 Active Students (~₦260/student/term)", "ResultsPRO + ClassroomPRO + PuzzlePRO Starter", "CampusPRO Core (Admissions, Attendance & Website CMS)", "250 Encrypted Scratch Card PINs per Term", "Custom School Crest, Theme & Principal Signature", "Parent SMS/WhatsApp Alerts & Paystack Fee Collection"}, "Deploy Growth Academy", false, "PREMIUM"},
+		{"DIGITAL CAMPUS PRO", "scholars_ng", "School", 135000, "per term", []string{"Up to 750 Active Students (~₦180/student/term)", "All 5 Specialist Apps Unlocked (ResultsPRO, ClassroomPRO, TutorsPRO, PuzzlePRO & CampusPRO)", "Full CampusPRO ERP (Bursary, HR/Payroll, Timetable, Library, Inventory & Transport)", "Custom Institutional Domain (portal.school.edu.ng)", "Unlimited Encrypted Scratch Card PIN Batches", "Dedicated 24/7 WhatsApp & Phone Priority SLA"}, "Deploy Pro Campus", true, "PREMIUM"},
+		{"INSTITUTIONAL", "scholars_ng", "School", 350000, "per term", []string{"Unlimited Students & Multi-Campus Groups", "Multi-Campus CampusPRO Command & Cross-Branch Analytics", "All 5 Specialist Apps with Unlimited Student Seats", "White-Label iOS & Android Mobile Apps under School Brand", "Biometric Attendance & SUBEB/Ministry Compliance Exports", "White-Glove Historical Migration & Dedicated Account Manager"}, "Book Institutional Briefing", false, "PREMIUM"},
 
 		// Family
 		{"FREE", "FamilyHub", "Family", 0, "forever", []string{"1 Student Profile", "ResultsPRO Parent Portal", "Community Access", "Mobile App"}, "Join Free", false, "PREMIUM"},
@@ -69,8 +69,18 @@ func main() {
 		{"PREMIUM", "AgentNetwork", "Agent", 100000, "per month", []string{"Unlimited Schools", "Master Agent Status", "Team Management", "Direct Executive Support"}, "Master Plan", false, "PREMIUM"},
 
 		// -------------------------
-		// ProductPricingSection.tsx
+		// ProductPricingSection.tsx (Standalone Apps)
 		// -------------------------
+		// ResultsPRO
+		{"PILOT", "ResultsPRO", "ResultsPRO", 0, "first term", []string{"Up to 50 Active Students", "Automated CA1/CA2 & Terminal Exam Math", "50 Encrypted Scratch Card PINs", "Standard PDF Report Card Templates", "Email Support"}, "Start ResultsPRO Free", false, "PREMIUM"},
+		{"SCHOOL STARTER", "ResultsPRO", "ResultsPRO", 35000, "per term", []string{"Up to 250 Active Students (~₦140/student/term)", "Full CA/Exam Weighting & Position Ranking", "250 Encrypted Scratch Card PINs / Term", "Custom School Crest & Principal Signature", "Parent SMS/WhatsApp Result Notifications"}, "Deploy ResultsPRO Starter", true, "PREMIUM"},
+		{"SCHOOL PRO", "ResultsPRO", "ResultsPRO", 65000, "per term", []string{"Up to 1,000 Active Students (~₦65/student/term)", "Unlimited Scratch Card PIN Batch Generation", "AI Subject Mastery & Teacher Analytics", "WAEC, NECO, IGCSE & Custom Grading Scales", "Priority WhatsApp & Phone Support"}, "Deploy ResultsPRO Pro", false, "PREMIUM"},
+
+		// CampusPRO
+		{"CAMPUS CORE", "CampusPRO", "CampusPRO", 40000, "per term", []string{"Up to 250 Active Students", "Digital Admissions Funnel & Enrollment CRM", "Public School Website CMS (Notices, News & Events)", "Student & Staff Attendance Tracking", "Parent Circular & SMS/WhatsApp Broadcast Hub"}, "Deploy CampusPRO Core", false, "PREMIUM"},
+		{"FULL CAMPUS ERP", "CampusPRO", "CampusPRO", 75000, "per term", []string{"Up to 750 Active Students", "Bursary Invoicing, Paystack Reconciliation & Debtors", "Staff HR Records, Allowances & Automated Payroll", "Clash-Free Master Timetable & Room Allocation", "Library Catalog, Store Inventory & Transport Fleet"}, "Deploy Full CampusPRO", true, "PREMIUM"},
+		{"MULTI-CAMPUS GROUP", "CampusPRO", "CampusPRO", 180000, "per term", []string{"Unlimited Students & Multi-Branch Campuses", "Consolidated Multi-Branch Revenue & Expense Telemetry", "Biometric Staff & Student Clock-In Integration", "Custom Approval Workflows & Audit Trails", "Dedicated Technical Account Manager"}, "Contact Institutional Sales", false, "PREMIUM"},
+
 		// ICAN (ExamsPRO)
 		{"SINGLE PAPER", "ExamsPRO", "ICAN", 3000, "per month", []string{"Access to 1 ICAN Paper", "Past Questions Access", "AI Tutor Guidance", "Email Support"}, "Buy Single Paper", false, "ICAN_SINGLE"},
 		{"COMPLETE LEVEL", "ExamsPRO", "ICAN", 7000, "per month", []string{"Access to 1 Complete Level", "All Papers in Level", "AI Tutor Guidance", "Priority Support"}, "Buy Complete Level", true, "ICAN_GROUP"},

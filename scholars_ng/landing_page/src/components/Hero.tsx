@@ -112,7 +112,7 @@ const Hero = () => {
             color: 'rgba(255,255,255,0.7)',
             lineHeight: '1.5'
           }}>
-            ScholarsNG integrates ResultsPRO, ClassroomPRO, TutorsPRO, and PuzzlePRO into a single white-labeled institutional workspace under your school&apos;s own domain.
+            ScholarsNG integrates ResultsPRO, ClassroomPRO, TutorsPRO, PuzzlePRO, and CampusPRO into a single white-labeled institutional workspace under your school&apos;s own domain.
           </motion.p>
 
           {/* CTAs */}
@@ -129,7 +129,7 @@ const Hero = () => {
           <motion.div variants={staggerItem} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>4 Specialist Apps in One</span>
+              <span>5 Specialist Apps in One</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
               <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />

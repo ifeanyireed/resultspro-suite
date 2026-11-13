@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from '@/app/(marketing)/pricing/Pricing.module.css';
 import ScrollReveal from '@/components/ScrollReveal';
 import Link from 'next/link';
@@ -11,35 +11,71 @@ const parsePrice = (priceStr: string) => parseInt(priceStr.replace(/[^0-9]/g, ''
 const plans = {
   School: [
     {
-      name: 'FREE',
+      name: 'SANDBOX PILOT',
       price: '₦0',
-      period: 'forever',
-      features: ['Up to 100 Students & 15 Teachers', 'ScholarsNG Mobile Apps', 'ResultsPRO (Basic)', 'ExamsPRO (Free)', '2GB Storage'],
-      cta: 'Get Started Free',
+      monthly_price: 0,
+      annual_price: 0,
+      period: 'first term',
+      features: [
+        'Up to 50 Active Students',
+        'ResultsPRO Automated CA1/CA2 & Broadsheets',
+        'CampusPRO Lite (Student & Class Directory)',
+        '50 Encrypted Result Scratch Card PINs',
+        'Instant Subdomain (school.scholars.ng)',
+        'PuzzlePRO Coding Preview (First 20 Quests)'
+      ],
+      cta: 'Start 1-Term Free Pilot',
       highlight: false
     },
     {
-      name: 'STARTER',
-      price: '₦15,000',
-      period: 'per month',
-      features: ['Up to 500 Students & 50 Teachers', 'ScholarsNG Mobile Apps', 'ResultsPRO (Full)', 'ExamsPRO (Standard CBT)', 'ClassroomPRO', '15GB Storage'],
-      cta: 'Start with Starter',
+      name: 'GROWTH ACADEMY',
+      price: '₦65,000',
+      monthly_price: 65000,
+      annual_price: 156000,
+      period: 'per term',
+      features: [
+        'Up to 250 Active Students (~₦260/student/term)',
+        'ResultsPRO + ClassroomPRO + PuzzlePRO Starter',
+        'CampusPRO Core (Admissions, Attendance & Website CMS)',
+        '250 Encrypted Scratch Card PINs per Term',
+        'Custom School Crest, Theme & Principal Signature',
+        'Parent SMS/WhatsApp Alerts & Paystack Fee Collection'
+      ],
+      cta: 'Deploy Growth Academy',
       highlight: false
     },
     {
-      name: 'PRO',
-      price: '₦35,000',
-      period: 'per month',
-      features: ['Up to 2,000 Students & 300 Teachers', 'ScholarsNG Mobile Apps', 'ResultsPRO & ExamsPRO', 'ClassroomPRO', 'PuzzlePRO', '50GB Storage'],
-      cta: 'Upgrade to Pro',
+      name: 'DIGITAL CAMPUS PRO',
+      price: '₦135,000',
+      monthly_price: 135000,
+      annual_price: 324000,
+      period: 'per term',
+      features: [
+        'Up to 750 Active Students (~₦180/student/term)',
+        'All 5 Specialist Apps Unlocked (ResultsPRO, ClassroomPRO, TutorsPRO, PuzzlePRO & CampusPRO)',
+        'Full CampusPRO ERP (Bursary, HR/Payroll, Timetable, Library, Inventory & Transport)',
+        'Custom Institutional Domain (portal.school.edu.ng)',
+        'Unlimited Encrypted Scratch Card PIN Batches',
+        'Dedicated 24/7 WhatsApp & Phone Priority SLA'
+      ],
+      cta: 'Deploy Pro Campus',
       highlight: true
     },
     {
-      name: 'ENTERPRISE',
-      price: '₦80,000',
-      period: 'per month',
-      features: ['Unlimited Students & Teachers', 'ScholarsNG Mobile Apps', 'ResultsPRO & ExamsPRO', 'ClassroomPRO', 'Access to All Suite Products', 'Custom Domain & White-labeling', '500GB Storage'],
-      cta: 'Contact Sales',
+      name: 'INSTITUTIONAL',
+      price: '₦350,000',
+      monthly_price: 350000,
+      annual_price: 840000,
+      period: 'per term',
+      features: [
+        'Unlimited Students & Multi-Campus Groups',
+        'Multi-Campus CampusPRO Command & Cross-Branch Analytics',
+        'All 5 Specialist Apps with Unlimited Student Seats',
+        'White-Label iOS & Android Mobile Apps under School Brand',
+        'Biometric Attendance & SUBEB/Ministry Compliance Exports',
+        'White-Glove Historical Migration & Dedicated Account Manager'
+      ],
+      cta: 'Book Institutional Briefing',
       highlight: false
     }
   ],
@@ -105,12 +141,10 @@ const plans = {
   ]
 };
 
-import { useEffect } from 'react';
-
 export default function PricingSection({ initialTab = 'School' }: { initialTab?: string }) {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [dbPlans, setDbPlans] = useState<Record<string, any[]>>(plans);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [isAnnual, setIsAnnual] = useState(false);
 
   useEffect(() => {
@@ -122,25 +156,38 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
           const responseData = await res.json();
           const data = responseData.plans || responseData || [];
           if (Array.isArray(data) && data.length > 0) {
-            // Group by category
             const grouped: Record<string, any[]> = { School: [], Family: [], Agent: [] };
             data.forEach((p: any) => {
               const cat = p.category || 'School';
-              if (!grouped[cat]) grouped[cat] = [];
-              grouped[cat].push({
-                name: p.name,
-                monthly_price: p.monthly_price || p.price || 0,
-                annual_price: p.annual_price || ((p.monthly_price || p.price || 0) * 11),
-                currency: p.currency === 'USD' ? '$' : '₦',
-                period: p.period || 'per month',
-                features: (typeof p.features === 'string' && p.features.startsWith('[')) ? JSON.parse(p.features) : (p.features || []),
-                cta: p.ctaText || 'Get Started',
-                highlight: p.highlight,
-                redirectUrl: p.redirect_url
-              });
+              if (grouped[cat] !== undefined) {
+                const isTermPlan = (p.period || '').toLowerCase().includes('term');
+                const basePrice = p.monthly_price || p.price || 0;
+                grouped[cat].push({
+                  name: p.name,
+                  monthly_price: basePrice,
+                  annual_price: p.annual_price || (isTermPlan ? Math.round(basePrice * 3 * 0.8) : basePrice * 11),
+                  currency: p.currency === 'USD' ? '$' : '₦',
+                  period: p.period || 'per month',
+                  features:
+                    typeof p.features === 'string' && p.features.startsWith('[')
+                      ? JSON.parse(p.features)
+                      : p.features || [],
+                  cta: p.ctaText || 'Get Started',
+                  highlight: p.highlight,
+                  redirectUrl: p.redirect_url
+                });
+              }
             });
-            // Merge with defaults if empty
-            if (grouped['School'].length > 0) setDbPlans(grouped);
+            setDbPlans((prev) => ({
+              // Keep our updated School (ScholarsNG) term-aligned plans unless the backend explicitly returns term-aligned plans
+              School:
+                grouped['School'].length > 0 &&
+                grouped['School'].some((p) => String(p.period).toLowerCase().includes('term'))
+                  ? grouped['School']
+                  : prev.School,
+              Family: grouped['Family'].length > 0 ? grouped['Family'] : prev.Family,
+              Agent: grouped['Agent'].length > 0 ? grouped['Agent'] : prev.Agent
+            }));
           }
         }
       } catch (err) {
@@ -152,14 +199,19 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
     fetchPlans();
   }, []);
 
+  const isSchoolTab = activeTab === 'School';
+
   return (
     <section className="section section-white pt-24 md:pt-32 pb-24 md:pb-32">
       <div className="w-full px-6 md:px-16 lg:px-24 mx-auto">
         <ScrollReveal animation="fade-up">
-
-                    <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-nets-navy)] mb-4">Suite Bundle Plans</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">Unlock the full potential of the ecosystem. Choose a comprehensive bundle plan tailored to your exact requirements.</p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-nets-navy)] mb-4">
+              ScholarsNG Suite &amp; Ecosystem Bundle Plans
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Unlock all 5 specialist applications—ResultsPRO, ClassroomPRO, TutorsPRO, PuzzlePRO, and CampusPRO—under a unified subscription tailored to schools, families, and agents.
+            </p>
           </div>
           <div className={styles.tabs}>
             {planTypes.map((type) => (
@@ -168,21 +220,30 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
                 className={`${styles.tab} ${activeTab === type ? styles.active : ''}`}
                 onClick={() => setActiveTab(type)}
               >
-                {type} Plans
+                {type === 'School' ? 'ScholarsNG School Plans' : `${type} Plans`}
               </button>
             ))}
           </div>
 
           <div className="flex justify-center items-center mt-8 mb-4 space-x-4">
-            <span className={`text-sm font-semibold ${!isAnnual ? 'text-navy' : 'text-slate-400'}`}>Monthly</span>
-            <button 
+            <span className={`text-sm font-semibold ${!isAnnual ? 'text-navy' : 'text-slate-400'}`}>
+              {isSchoolTab ? 'Per Term (4 Months)' : 'Monthly'}
+            </span>
+            <button
               onClick={() => setIsAnnual(!isAnnual)}
               className="relative inline-flex h-6 w-12 items-center rounded-full bg-navy transition-colors focus:outline-none"
             >
-              <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isAnnual ? 'translate-x-7' : 'translate-x-1'}`} />
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  isAnnual ? 'translate-x-7' : 'translate-x-1'
+                }`}
+              />
             </button>
             <span className={`text-sm font-semibold ${isAnnual ? 'text-navy' : 'text-slate-400'}`}>
-              Annually <span className="text-xs text-[#FBBC04] font-bold ml-1">(Save 8%)</span>
+              {isSchoolTab ? 'Full Session (3 Terms)' : 'Annually'}{' '}
+              <span className="text-xs text-[#FBBC04] font-bold ml-1">
+                {isSchoolTab ? '(Save 20%)' : '(Save 8%)'}
+              </span>
             </span>
           </div>
         </ScrollReveal>
@@ -193,43 +254,101 @@ export default function PricingSection({ initialTab = 'School' }: { initialTab?:
               <div className="w-8 h-8 border-4 border-blue border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
-          {!loading && dbPlans[activeTab as keyof typeof plans] && dbPlans[activeTab as keyof typeof plans].map((plan, i) => {
-            const rawMonthly = plan.monthly_price !== undefined ? plan.monthly_price : parsePrice(plan.price || '0');
-            const rawAnnual = plan.annual_price !== undefined ? plan.annual_price : rawMonthly * 11;
-            const currency = plan.currency || '₦';
-            const displayPrice = isAnnual ? `${currency}${rawAnnual.toLocaleString()}` : `${currency}${rawMonthly.toLocaleString()}`;
-            const displayPeriod = plan.period === 'forever' ? 'forever' : (plan.period === 'per diet' ? 'per diet (6 months)' : (isAnnual ? 'per year' : 'per month'));
-            
-            return (
-            <ScrollReveal key={plan.name} animation="fade-up" delay={i * 100} className={styles.revealWrapper}>
-              <div className={`${styles.card} ${plan.highlight ? styles.highlight : ''}`}>
-                {plan.highlight && <div className={styles.badge}>Most Popular</div>}
-                <div className={styles.planHeader}>
-                  <div className={styles.planName}>{plan.name}</div>
-                  <div className={styles.planPrice}>
-                    {displayPrice}
-                    {displayPeriod !== 'forever' && <span className={styles.period}> / {displayPeriod}</span>}
-                  </div>
-                </div>
-                <ul className={styles.featureList}>
-                  {plan.features.map((feature: string, idx: number) => (
-                    <li key={idx} className={styles.featureItem}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={styles.check}>
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <Link 
-                  href={plan.redirectUrl || (activeTab === 'School' ? '/onboard/school' : activeTab === 'Family' ? '/onboard/family' : '/onboard/agent')}
-                  className={`btn ${plan.highlight ? 'btn-primary' : 'btn-outline'} w-full mt-auto`}
+          {!loading &&
+            dbPlans[activeTab as keyof typeof plans] &&
+            dbPlans[activeTab as keyof typeof plans].map((plan, i) => {
+              const rawMonthly =
+                plan.monthly_price !== undefined ? plan.monthly_price : parsePrice(plan.price || '0');
+              const isTermPlan = String(plan.period || '').toLowerCase().includes('term');
+              const discountedTermPrice = Math.round(rawMonthly * 0.8);
+              const rawAnnual =
+                plan.annual_price !== undefined
+                  ? plan.annual_price
+                  : isTermPlan
+                  ? discountedTermPrice * 3
+                  : rawMonthly * 11;
+              const currency = plan.currency || '₦';
+
+              const displayPrice = isTermPlan
+                ? isAnnual
+                  ? `${currency}${discountedTermPrice.toLocaleString()}`
+                  : `${currency}${rawMonthly.toLocaleString()}`
+                : isAnnual
+                ? `${currency}${rawAnnual.toLocaleString()}`
+                : `${currency}${rawMonthly.toLocaleString()}`;
+
+              const displayPeriod =
+                plan.period === 'forever' || plan.period === 'first term'
+                  ? plan.period
+                  : plan.period === 'per diet'
+                  ? 'per diet (6 months)'
+                  : isTermPlan
+                  ? 'per term'
+                  : isAnnual
+                  ? 'per year'
+                  : 'per month';
+
+              return (
+                <ScrollReveal
+                  key={plan.name}
+                  animation="fade-up"
+                  delay={i * 100}
+                  className={styles.revealWrapper}
                 >
-                  {plan.cta}
-                </Link>
-              </div>
-            </ScrollReveal>
-          );})}
+                  <div className={`${styles.card} ${plan.highlight ? styles.highlight : ''}`}>
+                    {plan.highlight && <div className={styles.badge}>Most Popular</div>}
+                    <div className={styles.planHeader}>
+                      <div className={styles.planName}>{plan.name}</div>
+                      <div className={styles.planPrice}>
+                        {displayPrice}
+                        {displayPeriod !== 'forever' && (
+                          <span className={styles.period}> / {displayPeriod}</span>
+                        )}
+                      </div>
+                      {isTermPlan && isAnnual && rawMonthly > 0 && (
+                        <div className="text-xs font-semibold text-emerald-600 mt-2">
+                          Billed {currency}
+                          {rawAnnual.toLocaleString()} per 3-term session
+                        </div>
+                      )}
+                    </div>
+                    <ul className={styles.featureList}>
+                      {plan.features.map((feature: string, idx: number) => (
+                        <li key={idx} className={styles.featureItem}>
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className={styles.check}
+                          >
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <Link
+                      href={
+                        plan.redirectUrl ||
+                        (activeTab === 'School'
+                          ? '/onboard/school'
+                          : activeTab === 'Family'
+                          ? '/onboard/family'
+                          : '/onboard/agent')
+                      }
+                      className={`btn ${plan.highlight ? 'btn-primary' : 'btn-outline'} w-full mt-auto`}
+                    >
+                      {plan.cta}
+                    </Link>
+                  </div>
+                </ScrollReveal>
+              );
+            })}
         </div>
       </div>
     </section>

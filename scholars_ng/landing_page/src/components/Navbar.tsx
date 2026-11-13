@@ -27,6 +27,7 @@ export default function Navbar() {
     { label: 'Specialist Apps', href: '/#apps' },
     { label: 'Why ScholarsNG', href: '/#why-us' },
     { label: 'Role Workspaces', href: '/#roles' },
+    { label: 'Mobile App', href: '/#mobile-app' },
     { label: 'Pricing', href: '/#pricing' },
   ];
 

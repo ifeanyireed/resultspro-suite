@@ -10,6 +10,7 @@ const footerSections = [
       { label: 'ClassroomPRO Curriculum LMS',   href: 'https://classroompro.ng' },
       { label: 'TutorsPRO 1-on-1 Mentorship',  href: 'https://tutorspro.ng' },
       { label: 'PuzzlePRO Coding Adventures',   href: 'https://puzzlepro.ng' },
+      { label: 'CampusPRO Institutional ERP',   href: '/admin/campus-os' },
     ],
   },
   {
@@ -18,6 +19,7 @@ const footerSections = [
       { label: 'The Engine (#apps)',           href: '/#apps' },
       { label: 'Institutional Power (#why-us)',href: '/#why-us' },
       { label: 'Role Workspaces (#roles)',     href: '/#roles' },
+      { label: 'Campus Mobile App (#mobile-app)', href: '/#mobile-app' },
       { label: 'Subscription Plans (#pricing)',href: '/#pricing' },
     ],
   },
@@ -46,7 +48,7 @@ export default function Footer() {
               <img src="/logo.png" alt="ScholarsNG Logo" style={{ height: '60px', width: 'auto', objectFit: 'contain' }} />
             </Link>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '2rem' }}>
-              The Unified African Digital Campus Operating System. Orchestrating ResultsPRO, ClassroomPRO, TutorsPRO, and PuzzlePRO into a single white-labeled institutional workspace under your school&apos;s own domain.
+              The Unified African Digital Campus Operating System. Orchestrating ResultsPRO, ClassroomPRO, TutorsPRO, PuzzlePRO, and CampusPRO into a single white-labeled institutional workspace under your school&apos;s own domain.
             </p>
 
             {/* Contact quick */}
