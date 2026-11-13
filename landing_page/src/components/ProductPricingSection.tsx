@@ -95,7 +95,7 @@ const defaultProductPlans: Record<string, any[]> = {
       period: 'per term',
       features: [
         'Up to 750 Active Students',
-        'Assigned Campus Mobile App (Role-Scoped App IDs for Parents, Teachers, Drivers & Admins)',
+        'Campus Mobile App (Parents, Teachers, Drivers & Admins)',
         'Bursary Invoicing, Paystack Reconciliation & Debtors',
         'Staff HR Records, Allowances & Automated Payroll',
         'Clash-Free Master Timetable, Library, Inventory & Transport'
