@@ -27,7 +27,8 @@ import {
   QuestionMarkCircleIcon,
   ArrowRightOnRectangleIcon,
   ComputerDesktopIcon,
-  PuzzlePieceIcon
+  PuzzlePieceIcon,
+  ChatBubbleLeftRightIcon
 } from '@heroicons/react/24/outline';
 import { 
   Squares2X2Icon as Squares2X2Solid
@@ -74,21 +75,12 @@ const parentMenu: MenuItem[] = [
 
 const adminMenu: MenuItem[] = [
   { section: 'Dashboard', name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/admin/pulse' },
-  { name: 'Landing Page CMS', icon: ComputerDesktopIcon, activeIcon: ComputerDesktopIcon, slug: '/admin/website' },
+  { name: 'Website CMS', icon: ComputerDesktopIcon, activeIcon: ComputerDesktopIcon, slug: '/admin/website' },
   { section: 'Modular Suite', name: 'ClassroomPRO', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/admin/classrooms' },
   { name: 'TutorsPRO', icon: UserGroupIcon, activeIcon: UserGroupIcon, slug: '/admin/tutors' },
   { name: 'PuzzlePRO', icon: PuzzlePieceIcon, activeIcon: PuzzlePieceIcon, slug: '/admin/puzzlepro' },
   { name: 'ResultsPRO', icon: ChartPieIcon, activeIcon: ChartPieIcon, slug: '/admin/results' },
-  { section: 'Operations', name: 'Insights Hub', icon: ChartBarIcon, activeIcon: ChartBarIcon, slug: '/admin/insights' },
-  { name: 'Class Timetable', icon: CalendarIcon, activeIcon: CalendarIcon, slug: '/admin/timetable' },
-  { name: 'Fees', icon: BanknotesIcon, activeIcon: BanknotesIcon, slug: '/admin/fees' },
-  { name: 'Enrollment', icon: UserGroupIcon, activeIcon: UserGroupIcon, slug: '/admin/enrollment' },
-  { name: 'Transport', icon: TruckIcon, activeIcon: TruckIcon, slug: '/admin/transport' },
-  { name: 'Procurement', icon: ShoppingCartIcon, activeIcon: ShoppingCartIcon, slug: '/admin/procurement' },
-  { name: 'Library', icon: BookOpenIcon, activeIcon: BookOpenIcon, slug: '/admin/library' },
-  { name: 'Hostel', icon: HomeModernIcon, activeIcon: HomeModernIcon, slug: '/admin/hostel' },
-  { name: 'Performance', icon: ChartBarIcon, activeIcon: ChartBarIcon, slug: '/admin/performance' },
-  { name: 'Operations Controls', icon: Cog6ToothIcon, activeIcon: Cog6ToothIcon, slug: '/admin/operations' },
+  { section: 'Operations', name: 'CampusPRO', icon: HomeModernIcon, activeIcon: HomeModernIcon, slug: '/admin/campus-os' },
 ];
 
 const admissionsMenu: MenuItem[] = [

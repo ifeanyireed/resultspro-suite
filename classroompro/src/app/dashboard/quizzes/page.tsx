@@ -1,21 +1,21 @@
 "use client";
 
 import { IconBrain as BrainCircuit, IconClock as Clock, IconTrophy as Trophy, IconSearch as Search, IconPlayerPlay as Play, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconActivity as Activity, IconCircleCheck as CheckCircle, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn } from "../../../lib/utils";
 import React, { useEffect, useState, useMemo } from "react";
-import api from "@/lib/api";
-import { useAuthStore } from "@/store/useAuthStore";
+import api from "../../../lib/api";
+import { useAuthStore } from "../../../store/useAuthStore";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
+} from "../../../components/ui/select";
+import { Skeleton } from "../../../components/ui/skeleton";
 
 export default function QuizzesPage() {
   const user = useAuthStore((state) => state.user);

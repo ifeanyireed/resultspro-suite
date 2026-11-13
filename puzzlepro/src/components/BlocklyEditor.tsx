@@ -41,8 +41,8 @@ import {
   IconBrandJavascript,
   IconBrandPython
 } from '@tabler/icons-react';
-import { soundManager } from '@/utils/sound';
-import { animateBlockSnap, animateButtonPress } from '@/utils/gsapAnimations';
+import { soundManager } from '../utils/sound';
+import { animateBlockSnap, animateButtonPress } from '../utils/gsapAnimations';
 import { PureCSSBlock } from './PureCSSBlock';
 import { PureCSSLoopBlock, isLoopBlockType } from './PureCSSLoopBlock';
 

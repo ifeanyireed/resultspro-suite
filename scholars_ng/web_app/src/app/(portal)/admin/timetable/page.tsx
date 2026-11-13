@@ -22,8 +22,8 @@ export default function TimetableDashboard() {
     <>
       <div className="flex items-end justify-between mb-8 mt-2">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Class Timetable</h1>
-          <p className="text-sm text-gray-500 mt-1">Master schedule and room allocation.</p>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Academic Overview</h1>
+          <p className="text-sm text-gray-500 mt-1">Institutional curriculum health, room utilization, and academic operations.</p>
         </div>
         <div className="flex items-center gap-3">
           <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">

@@ -2,13 +2,13 @@
 
 import { IconArrowLeft as ArrowLeft, IconRotate as RotateCcw, IconCircleCheck as CheckCircle, IconCircleX as XCircle, IconHelpCircle as HelpCircle, IconStack2 as Layers, IconLoader2 as Loader2, IconTrophy as Trophy, IconBolt as Zap } from '@tabler/icons-react';
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../../../components/ui/button";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import api from "@/lib/api";
-import toast from "react-hot-toast";
-import { cn } from "@/lib/utils";
+import api from "../../../../lib/api";
+import toast from "../../../../lib/toast";
+import { cn } from "../../../../lib/utils";
 
 export default function FlashcardStudyClient() {
   const { id } = useParams();

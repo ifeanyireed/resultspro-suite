@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import {
   useLandingConfig,
@@ -29,6 +29,48 @@ export default function AdminLandingCmsPage() {
   const { config, setConfig, saveConfig, resetConfig } = useLandingConfig();
   const [activeTab, setActiveTab] = useState<CmsTab>('hero');
   const [savedToast, setSavedToast] = useState(false);
+  const tabsScrollRef = useRef<HTMLDivElement>(null);
+  const scrollHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [scrollMetrics, setScrollMetrics] = useState({ thumbWidth: 100, thumbLeft: 0, hasOverflow: false });
+  const [isScrollActive, setIsScrollActive] = useState(false);
+
+  const triggerScrollbarActivity = useCallback(() => {
+    setIsScrollActive(true);
+    if (scrollHideTimerRef.current) {
+      clearTimeout(scrollHideTimerRef.current);
+    }
+    scrollHideTimerRef.current = setTimeout(() => {
+      setIsScrollActive(false);
+    }, 1000);
+  }, []);
+
+  const updateScrollMetrics = useCallback(() => {
+    const el = tabsScrollRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    if (scrollWidth <= clientWidth + 1) {
+      setScrollMetrics({ thumbWidth: 100, thumbLeft: 0, hasOverflow: false });
+      return;
+    }
+    const widthPct = Math.max((clientWidth / scrollWidth) * 100, 15);
+    const maxScroll = scrollWidth - clientWidth;
+    const leftPct = maxScroll > 0 ? (scrollLeft / maxScroll) * (100 - widthPct) : 0;
+    setScrollMetrics({ thumbWidth: widthPct, thumbLeft: leftPct, hasOverflow: true });
+  }, []);
+
+  const handleTabsScroll = useCallback(() => {
+    updateScrollMetrics();
+    triggerScrollbarActivity();
+  }, [updateScrollMetrics, triggerScrollbarActivity]);
+
+  useEffect(() => {
+    updateScrollMetrics();
+    window.addEventListener('resize', updateScrollMetrics);
+    return () => {
+      window.removeEventListener('resize', updateScrollMetrics);
+      if (scrollHideTimerRef.current) clearTimeout(scrollHideTimerRef.current);
+    };
+  }, [updateScrollMetrics]);
 
   const handleSave = () => {
     saveConfig(config);
@@ -149,11 +191,11 @@ export default function AdminLandingCmsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-w-0 w-full max-w-full">
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-2">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Landing Page CMS</h1>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Website CMS</h1>
           <p className="text-sm text-gray-500 mt-1">
             Configure the public school website (`/`): Hero, Notice Board, Facilities, News &amp; Events, Leadership Team, and Admissions.
           </p>
@@ -192,36 +234,76 @@ export default function AdminLandingCmsPage() {
         </div>
       </div>
 
-      {/* Horizontal Subtabs Bar */}
-      <div className="bg-white rounded-[1.5rem] p-2 shadow-sm border border-gray-100 flex flex-wrap gap-1.5">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                isActive
-                  ? 'bg-[#146ef5] text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
+      {/* Horizontal Subtabs Bar — Sticky Outer Pill Container with Auto-Hiding 2px Scrollbar Underneath */}
+      <div
+        onMouseEnter={triggerScrollbarActivity}
+        onMouseMove={triggerScrollbarActivity}
+        onTouchStart={triggerScrollbarActivity}
+        className="sticky top-24 z-20 w-full min-w-0 max-w-full"
+      >
+        <div className="w-full min-w-0 max-w-full bg-white/95 backdrop-blur-md rounded-full p-1.5 shadow-sm border border-gray-200/80 overflow-hidden">
+          <div className="w-full rounded-full overflow-hidden [clip-path:inset(0_round_9999px)]">
+            <div
+              ref={tabsScrollRef}
+              onScroll={handleTabsScroll}
+              className="w-full flex items-center gap-1.5 overflow-x-auto rounded-full [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             >
-              <Icon className="w-4 h-4" />
-              <span>{tab.label}</span>
-              {typeof tab.count === 'number' && (
-                <span
-                  className={`text-xs px-2 py-0.5 rounded-full ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-600'
-                  }`}
-                >
-                  {tab.count}
-                </span>
-              )}
-            </button>
-          );
-        })}
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap shrink-0 transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-[#146ef5] text-white shadow-sm shadow-[#146ef5]/25'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4 shrink-0" />
+                    <span>{tab.label}</span>
+                    {typeof tab.count === 'number' && (
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded-full ${
+                          isActive ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-600'
+                        }`}
+                      >
+                        {tab.count}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* 2px Auto-Hiding Scrollbar Positioned Just Under the Toggle Container */}
+        <div
+          onClick={(e) => {
+            const el = tabsScrollRef.current;
+            if (!el) return;
+            const rect = e.currentTarget.getBoundingClientRect();
+            const clickRatio = (e.clientX - rect.left) / rect.width;
+            el.scrollTo({ left: clickRatio * (el.scrollWidth - el.clientWidth), behavior: 'smooth' });
+            triggerScrollbarActivity();
+          }}
+          className={`mt-1.5 mx-6 h-[2px] bg-gray-200/80 rounded-full relative overflow-hidden cursor-pointer transition-opacity duration-300 ${
+            isScrollActive && scrollMetrics.hasOverflow
+              ? 'opacity-100'
+              : 'opacity-0 pointer-events-none'
+          }`}
+        >
+          <div
+            className="absolute top-0 bottom-0 h-[2px] bg-gray-400 hover:bg-[#146ef5] rounded-full transition-all duration-75"
+            style={{
+              width: `${scrollMetrics.thumbWidth}%`,
+              left: `${scrollMetrics.thumbLeft}%`,
+            }}
+          />
+        </div>
       </div>
 
       {/* ── TAB 1: HERO & ABOUT ── */}

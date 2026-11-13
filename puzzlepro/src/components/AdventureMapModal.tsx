@@ -3,10 +3,10 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Lock, Star, ArrowLeft } from 'lucide-react';
-import { soundManager } from '@/utils/sound';
-import { ALL_ADVENTURES, ALL_WORLDS } from '@/utils/levels';
-import { getCdnUrl } from '@/utils/cdn';
+import { IconX as X, IconLock as Lock, IconStar as Star, IconArrowLeft as ArrowLeft } from '@tabler/icons-react';
+import { soundManager } from '../utils/sound';
+import { ALL_ADVENTURES, ALL_WORLDS } from '../utils/levels';
+import { getCdnUrl } from '../utils/cdn';
 
 export interface LevelProgress {
   levelNumber: number;

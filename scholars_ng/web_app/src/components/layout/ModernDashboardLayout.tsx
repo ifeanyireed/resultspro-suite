@@ -207,7 +207,7 @@ export function ModernDashboardLayout({ sidebarContent, headerContent, children 
           )}
 
           {/* Dashboard Content */}
-          <div className="flex-1 px-6 pb-20">
+          <div className="flex-1 px-6 pb-20 min-w-0 max-w-full">
             {children}
           </div>
         </main>

@@ -1,4 +1,4 @@
-import { LevelConfig, PathWaypoint, AdventureConfig, WorldConfig } from '@/types/game';
+import { LevelConfig, PathWaypoint, AdventureConfig, WorldConfig } from '../types/game';
 
 // Level 1 specific track waypoints (4-tile straight vertical axis in center of Level 1 SVG, FINISH on tile 4)
 export const LEVEL_1_WAYPOINTS: PathWaypoint[] = [

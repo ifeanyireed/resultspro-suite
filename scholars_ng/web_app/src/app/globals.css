@@ -454,3 +454,25 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-card);
 }
+
+.custom-scrollbar::-webkit-scrollbar,
+.thin-h-scrollbar::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track,
+.thin-h-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb,
+.thin-h-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.4);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+.thin-h-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(20, 110, 245, 0.6);
+}

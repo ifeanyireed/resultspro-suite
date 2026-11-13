@@ -1,21 +1,21 @@
 "use client";
 
 import { IconBook as BookOpen, IconSearch as Search, IconFilter as Filter, IconChevronRight as ChevronRight, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconClock as Clock, IconCircleCheck as CheckCircle, IconActivity as Activity, IconStack2 as Layers } from '@tabler/icons-react';
-import { Input } from "@/components/ui/input";
+import { Input } from "../../../components/ui/input";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import api from "@/lib/api";
-import { useAuthStore } from "@/store/useAuthStore";
-import { cn } from "@/lib/utils";
+import api from "../../../lib/api";
+import { useAuthStore } from "../../../store/useAuthStore";
+import { cn } from "../../../lib/utils";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+} from "../../../components/ui/select";
+import { Button } from "../../../components/ui/button";
+import { Skeleton } from "../../../components/ui/skeleton";
 
 export default function NotesListPage() {
   const user = useAuthStore((state) => state.user);

@@ -7,9 +7,9 @@ import {
   IconTrophy, 
   IconX
 } from '@tabler/icons-react';
-import { soundManager } from '@/utils/sound';
-import { PLAYER_SERVICE_API_URL } from '@/utils/api';
-import { getCdnUrl } from '@/utils/cdn';
+import { soundManager } from '../utils/sound';
+import { PLAYER_SERVICE_API_URL } from '../utils/api';
+import { getCdnUrl } from '../utils/cdn';
 
 interface CustomizerLeaderboardProps {
   onClose: () => void;

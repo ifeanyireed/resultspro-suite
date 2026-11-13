@@ -2,9 +2,9 @@
 
 import { IconCalendar as Calendar, IconClock as Clock, IconUser as User, IconChevronRight as ChevronRight, IconCircleCheck as CheckCircle2, IconWallet as Wallet, IconPlus as Plus, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
-import { useAuthStore } from '@/store/useAuthStore';
-import { RoleGate } from '@/components/RoleGate';
-import api from '@/lib/api';
+import { useAuthStore } from '../../../store/useAuthStore';
+import { RoleGate } from '../../../components/RoleGate';
+import api from '../../../lib/api';
 
 export default function Bookings() {
   const { user } = useAuthStore();

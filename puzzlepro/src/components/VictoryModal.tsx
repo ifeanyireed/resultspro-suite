@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import confetti from 'canvas-confetti';
-import { X } from 'lucide-react';
-import { soundManager } from '@/utils/sound';
+import { IconX as X } from '@tabler/icons-react';
+import { soundManager } from '../utils/sound';
 
 interface VictoryModalProps {
   levelTitle?: string;
@@ -44,13 +43,6 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
 }) => {
   useEffect(() => {
     soundManager.playEquip();
-
-    // Launch Confetti Explosion
-    confetti({
-      particleCount: 90,
-      spread: 80,
-      origin: { y: 0.6 },
-    });
   }, []);
 
   const handleNext = () => {

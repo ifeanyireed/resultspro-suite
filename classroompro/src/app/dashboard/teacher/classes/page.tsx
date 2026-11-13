@@ -1,11 +1,11 @@
 "use client";
 
 import { IconUsers as Users, IconSearch as Search, IconPlus as Plus, IconChartBar as BarChart3 } from '@tabler/icons-react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "../../../../components/ui/button";
+import { Input } from "../../../../components/ui/input";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "../../../../components/ui/skeleton";
 
 const classesData = [
   { id: 1, name: "SS3 Biology", students: 42, performance: "82%", term: "1st Term" },

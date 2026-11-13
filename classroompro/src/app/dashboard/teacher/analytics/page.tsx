@@ -1,10 +1,10 @@
 "use client";
 
 import { IconChartBar as BarChart3, IconTrendingUp as TrendingUp, IconUsers as Users, IconBook as BookOpen, IconBrain as BrainCircuit, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconCalendar as Calendar, IconFilter as Filter } from '@tabler/icons-react';
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Button } from "../../../../components/ui/button";
+import { cn } from "../../../../lib/utils";
 import { useState, useEffect } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "../../../../components/ui/skeleton";
 
 const stats = [
   { label: "Content Engagement", value: "84%", trend: "+5.2%", positive: true, icon: <BookOpen className="w-5 h-5" />, color: "text-emerald-600", bg: "bg-emerald-50" },

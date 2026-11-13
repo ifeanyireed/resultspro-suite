@@ -1,22 +1,22 @@
 "use client";
 
 import { IconStack2 as Layers, IconSearch as Search, IconLockOpen as Unlock, IconPlus as Plus, IconTrendingUp as TrendingUp, IconBrain as Brain, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconClock as Clock, IconBolt as Zap } from '@tabler/icons-react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn } from "../../../lib/utils";
 import React, { useEffect, useState, useMemo } from "react";
-import api from "@/lib/api";
-import { useAuthStore } from "@/store/useAuthStore";
+import api from "../../../lib/api";
+import { useAuthStore } from "../../../store/useAuthStore";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "../../../components/ui/select";
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "../../../components/ui/skeleton";
 
 export default function FlashcardsPage() {
   const user = useAuthStore((state) => state.user);

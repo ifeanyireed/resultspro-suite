@@ -2,12 +2,12 @@
 
 import { IconArrowLeft as ArrowLeft, IconClock as Clock, IconChevronRight as ChevronRight, IconChevronLeft as ChevronLeft, IconFlag as Flag, IconSend as Send, IconLoader2 as Loader2, IconCircleCheck as CheckCircle2, IconBrain as BrainCircuit, IconBookmark as Bookmark, IconBookmark as BookmarkCheck } from '@tabler/icons-react';
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../../../components/ui/button";
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import api from "@/lib/api";
-import { cn } from "@/lib/utils";
-import toast from "react-hot-toast";
+import api from "../../../../lib/api";
+import { cn } from "../../../../lib/utils";
+import toast from "../../../../lib/toast";
 
 export default function QuizPlayerClient() {
   const { id } = useParams();

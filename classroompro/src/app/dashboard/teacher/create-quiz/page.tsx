@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { IconPlus as Plus, IconTrash as Trash2, IconSettings as Settings, IconEye as Eye, IconDeviceFloppy as Save, IconChevronLeft as ChevronLeft, IconClock as Clock, IconLayout as Layout } from '@tabler/icons-react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "../../../../components/ui/button";
+import { Input } from "../../../../components/ui/input";
+import { Label } from "../../../../components/ui/label";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn } from "../../../../lib/utils";
 
 interface Question {
   id: number;
@@ -15,7 +15,7 @@ interface Question {
   correctAnswer: number;
 }
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "../../../../components/ui/skeleton";
 
 export default function CreateQuizPage() {
   const [loading, setLoading] = useState(true);

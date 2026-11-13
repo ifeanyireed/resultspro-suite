@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { IconPlus as Plus, IconTrash as Trash2, IconDeviceFloppy as Save, IconChevronLeft as ChevronLeft, IconBook as BookOpen, IconSparkles as Sparkles, IconFileText as FileText } from '@tabler/icons-react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "../../../../components/ui/button";
+import { Input } from "../../../../components/ui/input";
+import { Label } from "../../../../components/ui/label";
 import Link from "next/link";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "../../../../components/ui/skeleton";
 
 export default function CreateNotePage() {
   const [loading, setLoading] = useState(true);

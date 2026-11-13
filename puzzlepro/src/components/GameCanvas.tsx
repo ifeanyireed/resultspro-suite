@@ -19,11 +19,11 @@ import {
   IconCoin,
   IconFlag
 } from '@tabler/icons-react';
-import { LevelConfig, PathWaypoint } from '@/types/game';
-import { BoardCharacterSprite } from '@/components/BoardCharacterSprite';
-import { soundManager } from '@/utils/sound';
-import { GAME_ENGINE_API_URL } from '@/utils/api';
-import { getCdnUrl, preloadNextLevelImage } from '@/utils/cdn';
+import { LevelConfig, PathWaypoint } from '../types/game';
+import { BoardCharacterSprite } from './BoardCharacterSprite';
+import { soundManager } from '../utils/sound';
+import { GAME_ENGINE_API_URL } from '../utils/api';
+import { getCdnUrl, preloadNextLevelImage } from '../utils/cdn';
 
 const HTML_BLOCK_CONFIGS: Record<string, { color: string; label: string; border: string }> = {
   doctype: { color: '#7E22CE', label: '<!doctype html>', border: '#6B21A8' },
