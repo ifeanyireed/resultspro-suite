@@ -33,7 +33,7 @@ export const CompactGradebook: React.FC<CompactGradebookProps> = ({
   const percentage = Math.round((totalObtained / totalObtainable) * 100);
   
   let overallGrade = 'F';
-  const gradingSystem = template.gradingSystem;
+  const gradingSystem = template.gradingSystem || {};
   for (const [grade, range] of Object.entries(gradingSystem)) {
     if (percentage >= (range as any).min && percentage <= (range as any).max) {
       overallGrade = grade;
@@ -233,7 +233,7 @@ export const CompactGradebook: React.FC<CompactGradebookProps> = ({
           <div style={{ border: '1px solid #000', padding: '1mm', minHeight: '15mm', width: '100%' }}>
             <h4 style={{ fontSize: '8px', fontWeight: 'bold', margin: '0 0 0.3mm 0' }}>CLASS TEACHER'S COMMENT</h4>
             <p style={{ fontSize: '8px', margin: 0, lineHeight: '1.2', maxHeight: '13mm', overflow: 'hidden' }}>
-              {result.classTeacherComments || result.teacherComments?.classTeacher || ' '}
+              {(result as any).classTeacherComments || result.teacherComments?.classTeacher || ' '}
             </p>
           </div>
           <div style={{ marginTop: '0.5mm', fontSize: '8px', width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '2mm' }}>
@@ -254,7 +254,7 @@ export const CompactGradebook: React.FC<CompactGradebookProps> = ({
           <div style={{ border: '1px solid #000', padding: '1mm', minHeight: '15mm', width: '100%' }}>
             <h4 style={{ fontSize: '8px', fontWeight: 'bold', margin: '0 0 0.3mm 0' }}>PRINCIPAL'S COMMENT</h4>
             <p style={{ fontSize: '8px', margin: 0, lineHeight: '1.2', maxHeight: '13mm', overflow: 'hidden' }}>
-              {result.principalComments || result.teacherComments?.principal || ' '}
+              {(result as any).principalComments || result.teacherComments?.principal || ' '}
             </p>
           </div>
           <div style={{ marginTop: '0.5mm', fontSize: '8px', width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '2mm' }}>

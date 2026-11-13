@@ -34,7 +34,7 @@ export default function Bookings() {
     );
   }
 
-  const walletBalance = user?.coinBalance || 12500; // Fallback or use real field
+  const walletBalance = (user as any)?.coinBalance || 12500; // Fallback or use real field
 
   return (
     <RoleGate allowedRoles={['STUDENT', 'PARENT', 'SUPERADMIN']}>

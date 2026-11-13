@@ -89,7 +89,7 @@ function PuzzleStudioEmbed() {
     <div style={{ maxWidth: '1200px', margin: '1rem auto 4rem auto' }}>
       <div style={{ background: 'white', borderRadius: '1.5rem', padding: '2rem', border: '1px solid #f1f5f9', textAlign: 'center' }}>
         <div style={{ width: '64px', height: '64px', background: '#fffbeb', borderRadius: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto', color: '#f59e0b' }}>
-          <Gamepad01Icon size={32} />
+          <GameIcon size={32} />
         </div>
         <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.5rem' }}>636 Blockly Coding Adventures</h3>
         <p style={{ color: '#64748b', fontSize: '0.95rem', maxWidth: '600px', margin: '0 auto 1.5rem auto' }}>

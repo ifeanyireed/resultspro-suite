@@ -6,7 +6,7 @@
  */
 
 export { CustomizerLeaderboard } from './components/CustomizerLeaderboard';
-export { default as AdventureMapModal } from './components/AdventureMapModal';
-export { default as VictoryModal } from './components/VictoryModal';
-export { default as GameCanvas } from './components/GameCanvas';
-export { default as BlocklyEditor } from './components/BlocklyEditor';
+export { AdventureMapModal } from './components/AdventureMapModal';
+export { VictoryModal } from './components/VictoryModal';
+export { GameCanvas } from './components/GameCanvas';
+export { BlocklyEditor } from './components/BlocklyEditor';

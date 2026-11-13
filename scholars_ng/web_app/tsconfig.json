@@ -23,7 +23,20 @@
       "@classroompro/*": ["../../classroompro/src/*"],
       "@resultspro/*": ["../../resultspro/src/*"],
       "@tutorspro/*": ["../../tutorspro/src/*"],
-      "@puzzlepro/*": ["../../puzzlepro/src/*"]
+      "@puzzlepro/*": ["../../puzzlepro/src/*"],
+      "react": ["./node_modules/@types/react"],
+      "react/*": ["./node_modules/@types/react/*"],
+      "react-dom": ["./node_modules/@types/react-dom"],
+      "react-dom/*": ["./node_modules/@types/react-dom/*"],
+      "next": ["./node_modules/next"],
+      "next/*": ["./node_modules/next/*"],
+      "framer-motion": ["./node_modules/framer-motion"],
+      "@tabler/icons-react": ["./node_modules/@tabler/icons-react"],
+      "gsap": ["./node_modules/gsap"],
+      "axios": ["./node_modules/axios"],
+      "zustand": ["./node_modules/zustand"],
+      "@heroicons/react/*": ["./node_modules/@heroicons/react/*"],
+      "hugeicons-react": ["./node_modules/hugeicons-react"]
     }
   },
   "include": [

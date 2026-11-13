@@ -47,6 +47,9 @@ export interface SchoolResult {
     ca?: number;
     ca1?: number;
     ca2?: number;
+    ca_1?: number;
+    ca_2?: number;
+    mid_term?: number;
     project?: number;
     exam?: number;
     grade: 'A' | 'B' | 'C' | 'D' | 'F';
