@@ -1,7 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
-import { IconSchool, IconBrain, IconBook, IconTrophy, IconUserPlus, IconChartBar, IconDeviceLaptop, IconChalkboard, IconCertificate, IconPuzzle } from '@tabler/icons-react';
+import { IconSchool, IconBuildingCommunity, IconBrain, IconBook, IconTrophy, IconUserPlus, IconChartBar, IconDeviceLaptop, IconChalkboard, IconCertificate, IconPuzzle } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function Home() {
@@ -18,9 +18,10 @@ export default function Home() {
             <h2 className="text-d4 fw-400">Comprehensive educational infrastructure.</h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { id: 'scholars_ng', title: 'ScholarsNG', desc: 'Mobile-First Digital Campus experience.', icon: IconSchool, href: '/scholars_ng' },
+              { id: 'campuspro', title: 'CampusPRO', desc: 'Campus ERP, bursary billing, fleet GPS & mobile app.', icon: IconBuildingCommunity, href: '/campuspro' },
               { id: 'examspro', title: 'ExamsPRO', desc: 'Gamified CBT preparation for external exams.', icon: IconTrophy, href: '/examspro' },
               { id: 'classroompro', title: 'ClassroomPRO', desc: 'Offline-first digital classroom resources.', icon: IconDeviceLaptop, href: '/classroompro' },
               { id: 'resultspro', title: 'ResultsPRO', desc: 'AI-powered results processing and insights.', icon: IconChartBar, href: '/resultspro' },

@@ -9,7 +9,7 @@ import {
   CodeBracketIcon
 } from '@heroicons/react/24/outline';
 import { SparklesIcon } from '@heroicons/react/24/solid';
-import { CodeCircle01Icon, Trophy01Icon } from 'hugeicons-react';
+import { CodeCircleIcon, Award01Icon } from 'hugeicons-react';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
 import { CustomizerLeaderboard } from '@puzzlepro/modules';
 
@@ -133,13 +133,13 @@ export default function ParentFutureSkillsPage() {
     {
       id: 'journey',
       label: 'Learning Pathway',
-      icon: CodeCircle01Icon,
+      icon: CodeCircleIcon,
       component: ParentFutureSkillsJourney,
     },
     {
       id: 'leaderboard',
       label: 'School Leaderboard',
-      icon: Trophy01Icon,
+      icon: Award01Icon,
       component: ParentLeaderboardView,
     },
   ];

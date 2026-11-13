@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { toast } from 'react-hot-toast';
+import { toast } from './toast';
 
 const getApiUrl = () => {
   return process.env.NEXT_PUBLIC_API_URL;

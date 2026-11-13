@@ -7,9 +7,8 @@ import {
   PlayCircle02Icon, 
   StarIcon, 
   CheckmarkCircle02Icon,
-  CodeCircle01Icon,
-  Gamepad01Icon,
-  Trophy01Icon
+  CodeCircleIcon,
+  GameIcon
 } from 'hugeicons-react';
 import api from '@/lib/api';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
@@ -124,19 +123,19 @@ export default function StudentFutureSkillsHub() {
     {
       id: 'tracks',
       label: 'Learning Tracks',
-      icon: CodeCircle01Icon,
+      icon: CodeCircleIcon,
       component: FutureSkillsTracks,
     },
     {
       id: 'puzzle-studio',
       label: 'PuzzlePRO Adventures',
-      icon: Gamepad01Icon,
+      icon: GameIcon,
       component: PuzzleStudioEmbed,
     },
     {
       id: 'leaderboard',
       label: 'School XP Leaderboard',
-      icon: Trophy01Icon,
+      icon: Award01Icon,
       component: FutureSkillsLeaderboardView,
     },
   ];

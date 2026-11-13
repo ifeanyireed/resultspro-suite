@@ -174,6 +174,13 @@ const SOLUTION_MODULES: SolutionModule[] = [
     icon: IconFileText,
   },
   {
+    id: 'campuspro',
+    name: 'CampusPRO',
+    tagline: 'Campus ERP, Bursary Billing, Fleet GPS & Mobile App',
+    highlight: 'Automated tuition invoicing, live school bus GPS tracking, biometric attendance, and campus social feeds.',
+    icon: IconBuilding,
+  },
+  {
     id: 'examspro',
     name: 'ExamsPRO',
     tagline: 'Anti-Cheat Offline & Cloud CBT Engine',
