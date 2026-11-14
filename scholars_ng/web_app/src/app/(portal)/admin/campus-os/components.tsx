@@ -42,6 +42,7 @@ import TransportDashboard from '../transport/page';
 import AdmissionsDashboard, { type AdmissionSubtab } from '@/components/Dashboard/AdmissionsDashboard';
 import api from '@/lib/api';
 import AcademicSessionManager from './AcademicSessionManager';
+import ClassManager from './ClassManager';
 import SubjectManager from './SubjectManager';
 import TimetableManager from './TimetableManager';
 import TutorAssignmentManager from './TutorAssignmentManager';
@@ -150,65 +151,8 @@ export function AcademicOperationsHub() {
       {/* 1. ACADEMIC SESSION (Tenant-Isolated & Persistent Database Hub) */}
       {subtab === 'session' && <AcademicSessionManager />}
 
-      {/* 2. CLASSES */}
-      {subtab === 'classes' && (
-        <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Classes &amp; Class Arms</h2>
-              <p className="text-sm text-gray-500 mt-1">
-                Manage class arms, form teachers, classroom blocks, and student enrollment capacity.
-              </p>
-            </div>
-            <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2 self-start sm:self-auto">
-              <PlusIcon className="w-4 h-4" />
-              Create Class Arm
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              { arm: 'JSS 1 Gold', level: 'Junior Secondary 1', formTeacher: 'Mrs. Funke Adebayo', room: 'Block A · Room 101', students: 34, capacity: 35, subjects: 14 },
-              { arm: 'JSS 1 Diamond', level: 'Junior Secondary 1', formTeacher: 'Mr. Tunde Bakare', room: 'Block A · Room 102', students: 32, capacity: 35, subjects: 14 },
-              { arm: 'JSS 2 Gold', level: 'Junior Secondary 2', formTeacher: 'Ms. Zainab Lawal', room: 'Block A · Room 201', students: 35, capacity: 35, subjects: 14 },
-              { arm: 'JSS 3 Emerald', level: 'Junior Secondary 3 (BECE)', formTeacher: 'Mr. Emeka Okafor', room: 'Block B · Room 104', students: 33, capacity: 35, subjects: 15 },
-              { arm: 'SS 1 Science', level: 'Senior Secondary 1', formTeacher: 'Dr. Samuel Eze', room: 'Science Wing · S1', students: 30, capacity: 32, subjects: 11 },
-              { arm: 'SS 2 Commercial', level: 'Senior Secondary 2', formTeacher: 'Mrs. Ngozi Obi', room: 'Block C · Room 202', students: 28, capacity: 32, subjects: 10 },
-              { arm: 'SS 3 Science (WAEC)', level: 'Senior Secondary 3', formTeacher: 'Mr. David Jenkins', room: 'Exam Wing · E1', students: 31, capacity: 32, subjects: 9 },
-              { arm: 'SS 3 Humanities', level: 'Senior Secondary 3', formTeacher: 'Mrs. Halima Bello', room: 'Exam Wing · E2', students: 27, capacity: 30, subjects: 9 },
-            ].map((c, i) => (
-              <div key={i} className="bg-white rounded-[1.5rem] p-6 border border-gray-100 shadow-sm flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold text-[#146ef5] bg-blue-50 px-3 py-1 rounded-full">{c.room}</span>
-                    <span className="text-xs font-semibold text-gray-400">{c.subjects} Subjects</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900">{c.arm}</h3>
-                  <p className="text-xs text-gray-500 mt-0.5 mb-4">{c.level}</p>
-                  <div className="text-xs text-gray-600 space-y-1.5">
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Form Teacher:</span>
-                      <span className="font-semibold text-gray-800">{c.formTeacher}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Enrollment:</span>
-                      <span className="font-semibold text-emerald-600">{c.students} / {c.capacity} Students</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-5 pt-3 border-t border-gray-100">
-                  <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-[#146ef5] rounded-full"
-                      style={{ width: `${Math.round((c.students / c.capacity) * 100)}%` }}
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* 2. CLASSES (Tenant-Isolated & Persistent Database Hub) */}
+      {subtab === 'classes' && <ClassManager />}
 
       {/* 3. SUBJECTS (Tenant-Isolated & Persistent Database Hub) */}
       {subtab === 'subjects' && (

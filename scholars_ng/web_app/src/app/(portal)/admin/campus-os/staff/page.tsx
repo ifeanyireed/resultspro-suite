@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import PerformanceDashboard from '../../performance/page';
+import StaffManager from '../StaffManager';
 
 export default function CampusOSStaffPage() {
-  return <PerformanceDashboard />;
+  return <StaffManager />;
 }

@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import EnrollmentDashboard from '../../enrollment/page';
+import StudentManager from '../StudentManager';
 
 export default function CampusOSStudentsPage() {
-  return <EnrollmentDashboard />;
+  return <StudentManager />;
 }
