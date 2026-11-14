@@ -32,10 +32,12 @@ func main() {
 	} else {
 		log.Printf("Connecting to database...")
 		db.InitDB(config.DatabaseURL)
-		db.InitPuzzleSchema()
-		db.InitTenantIsolationSchema()
-		handlers.EnsureBlogSchema()
-		handlers.EnsureDemoSchema()
+		go func() {
+			db.InitPuzzleSchema()
+			db.InitTenantIsolationSchema()
+			handlers.EnsureBlogSchema()
+			handlers.EnsureDemoSchema()
+		}()
 	}
 
 	mux := http.NewServeMux()
@@ -221,7 +223,6 @@ func main() {
 
 	// Direct REST Tenant endpoints
 	mux.HandleFunc("/api/public/tenant/resolve", handlers.HandleResolveTenant)
-	mux.HandleFunc("/api/public/campus/website-config", middleware.RequireTenantScope(handlers.HandleCampusWebsiteConfig))
 
 	// Admin Global Telemetry
 	mux.HandleFunc("/api/v1/admin/stats", middleware.RequireRole("super-admin", "platform-admin")(handlers.HandleGetSuiteStats))
