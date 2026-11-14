@@ -11,9 +11,21 @@ export default function StudentHomeworkPage() {
   const columns = ['To Do', 'On Review', 'Completed'];
 
   useEffect(() => {
-    api.get('/student/homework')
-      .then(res => setHomeworkTasks(res.data.tasks || []))
-      .catch(err => console.error('Failed to load homework:', err))
+    api.get('/v1/campus/homework')
+      .then(res => {
+        const rows = Array.isArray(res.data) ? res.data : (res.data?.tasks || []);
+        const colors = ['#146ef5', '#10b981', '#8b5cf6', '#f59e0b'];
+        const mapped = rows.map((r: any, idx: number) => ({
+          id: r.id,
+          title: r.title,
+          subject: r.subject_name || r.subject || 'General',
+          deadline: r.due_date || r.deadline || 'Due Soon',
+          status: r.status === 'COMPLETED' ? 'Completed' : r.status === 'ON_REVIEW' ? 'On Review' : 'To Do',
+          color: colors[idx % colors.length]
+        }));
+        setHomeworkTasks(mapped);
+      })
+      .catch(err => console.error('Failed to load tenant student homework:', err))
       .finally(() => setLoading(false));
   }, []);
 

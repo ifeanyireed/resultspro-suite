@@ -1,12 +1,25 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   CalendarIcon,
   MapPinIcon
 } from '@heroicons/react/24/outline';
+import api from '@/lib/api';
 
 export default function ParentEventsPage() {
+  const [events, setEvents] = useState<any[]>([]);
+
+  useEffect(() => {
+    api.get('/v1/campus/notices')
+      .then((res) => {
+        if (Array.isArray(res.data)) {
+          setEvents(res.data);
+        }
+      })
+      .catch((err) => console.error('Failed to load tenant events:', err));
+  }, []);
+
   return (
     <>
       <div className="flex items-end justify-between mb-8 mt-2">
@@ -18,25 +31,22 @@ export default function ParentEventsPage() {
 
       <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-6 border-b border-gray-100">
-          <h3 className="text-lg font-medium text-gray-900">This Month</h3>
+          <h3 className="text-lg font-medium text-gray-900">Campus Notices & Scheduled Events</h3>
         </div>
         <div className="divide-y divide-gray-100">
-          {[
-            { title: 'Inter-House Sports', date: 'Oct 15', time: '9:00 AM - 3:00 PM', location: 'Main Field', type: 'Sports' },
-            { title: 'PTA General Meeting', date: 'Oct 20', time: '10:00 AM - 12:00 PM', location: 'School Hall', type: 'Meeting' },
-            { title: 'Mid-Term Break Begins', date: 'Oct 25', time: 'All Day', location: 'N/A', type: 'Holiday' },
-          ].map((e, i) => (
-            <div key={i} className="p-6 flex items-center justify-between hover:bg-gray-50 transition-colors">
+          {events.map((e, i) => (
+            <div key={e.id || i} className="p-6 flex items-center justify-between hover:bg-gray-50 transition-colors">
               <div className="flex items-start gap-6">
                 <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 flex flex-col items-center justify-center text-[#146ef5] shrink-0">
-                  <span className="text-xs font-bold uppercase">{e.date.split(' ')[0]}</span>
-                  <span className="text-xl font-bold">{e.date.split(' ')[1]}</span>
+                  <span className="text-[10px] font-bold uppercase">{e.category?.slice(0, 6) || 'EVENT'}</span>
+                  <span className="text-xs font-bold mt-0.5">{e.event_date || 'TBA'}</span>
                 </div>
                 <div>
                   <h4 className="text-lg font-medium text-gray-900 mb-1">{e.title}</h4>
+                  <p className="text-xs text-gray-600 mb-2">{e.content}</p>
                   <div className="flex items-center gap-4 text-xs text-gray-500">
-                    <span className="flex items-center gap-1"><CalendarIcon className="w-4 h-4" /> {e.time}</span>
-                    <span className="flex items-center gap-1"><MapPinIcon className="w-4 h-4" /> {e.location}</span>
+                    <span className="flex items-center gap-1"><CalendarIcon className="w-4 h-4" /> {e.event_time || '09:00 AM'}</span>
+                    <span className="flex items-center gap-1"><MapPinIcon className="w-4 h-4" /> {e.location || 'Main Campus'}</span>
                   </div>
                 </div>
               </div>

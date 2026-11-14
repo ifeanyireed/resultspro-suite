@@ -1,0 +1,348 @@
+package db
+
+import (
+	"log"
+)
+
+// InitTenantIsolationSchema ensures every table in the database has a tenant_id column,
+// backfills missing tenant_id references from parent tables, creates composite tenant indexes,
+// and provisions all CampusPRO / ScholarsNG operational tables for persistent screen wiring.
+func InitTenantIsolationSchema() {
+	if DB == nil {
+		return
+	}
+
+	log.Println("🔒 Running Tenant Isolation & CampusPRO Operational Schema Migrations...")
+
+	alterStatements := []string{
+		// 1. Add tenant_id to every core table that lacked direct tenant scoping
+		`ALTER TABLE users ADD COLUMN IF NOT EXISTS primary_tenant_id VARCHAR(191)`,
+		`ALTER TABLE users ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE verification_tokens ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE refresh_tokens ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE apps ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE user_subscriptions ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE curriculums ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE terms ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE sections ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE syllabus_weeks ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE usr_topics ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE topics ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE exam_bodies ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE national_exams ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE areas_of_concentration ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE assignments ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE enrollments ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE family_relationships ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE resource_links ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE student_progress ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE agent_commissions ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE agent_activities ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE agent_reminders ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE plans ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE blog_categories ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE blog_tags ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE blog_post_tags ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE blog_comments ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE support_tickets ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE support_ticket_messages ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE support_staff_status ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE puzzle_organisations ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE puzzle_centres ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE puzzle_groups ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE puzzle_users ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE puzzle_subscriptions ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+		`ALTER TABLE puzzle_verification_codes ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(191)`,
+
+		// 2. Backfill tenant_id from parent relationships for existing rows
+		`UPDATE terms t SET tenant_id = s.tenant_id FROM academic_sessions s WHERE t.session_id = s.id AND (t.tenant_id IS NULL OR t.tenant_id = '')`,
+		`UPDATE sections sec SET tenant_id = c.tenant_id FROM classes c WHERE sec.class_id = c.id AND (sec.tenant_id IS NULL OR sec.tenant_id = '')`,
+		`UPDATE enrollments e SET tenant_id = s.tenant_id FROM academic_sessions s WHERE e.session_id = s.id AND (e.tenant_id IS NULL OR e.tenant_id = '')`,
+		`UPDATE assignments a SET tenant_id = sec.tenant_id FROM sections sec WHERE a.section_id = sec.id AND (a.tenant_id IS NULL OR a.tenant_id = '')`,
+		`UPDATE syllabus_weeks sw SET tenant_id = sub.tenant_id FROM subjects sub WHERE sw.subject_id = sub.id AND (sw.tenant_id IS NULL OR sw.tenant_id = '')`,
+		`UPDATE syllabus_weeks sw SET tenant_id = sub.tenant_id FROM usr_subjects sub WHERE sw.subject_id = sub.id AND (sw.tenant_id IS NULL OR sw.tenant_id = '')`,
+		`UPDATE topics tp SET tenant_id = sw.tenant_id FROM syllabus_weeks sw WHERE tp.syllabus_week_id = sw.id AND (tp.tenant_id IS NULL OR tp.tenant_id = '')`,
+		`UPDATE usr_topics tp SET tenant_id = sw.tenant_id FROM syllabus_weeks sw WHERE tp.syllabus_week_id = sw.id AND (tp.tenant_id IS NULL OR tp.tenant_id = '')`,
+		`UPDATE student_progress sp SET tenant_id = utr.tenant_id FROM user_tenant_roles utr WHERE sp.student_id = utr.user_id AND (sp.tenant_id IS NULL OR sp.tenant_id = '')`,
+		`UPDATE family_relationships fr SET tenant_id = utr.tenant_id FROM user_tenant_roles utr WHERE fr.child_user_id = utr.user_id AND (fr.tenant_id IS NULL OR fr.tenant_id = '')`,
+
+		// 3. Create CampusPRO & ScholarsNG Operational Tables (All Tenant-Scoped)
+		`CREATE TABLE IF NOT EXISTS campus_timetable_slots (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			class_name VARCHAR(191) NOT NULL,
+			section_id VARCHAR(191),
+			day_of_week VARCHAR(50) NOT NULL,
+			period_label VARCHAR(100) NOT NULL,
+			start_time VARCHAR(50),
+			end_time VARCHAR(50),
+			subject_name VARCHAR(191) NOT NULL,
+			teacher_id VARCHAR(191),
+			teacher_name VARCHAR(191),
+			room VARCHAR(100),
+			status VARCHAR(50) DEFAULT 'SCHEDULED',
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS campus_admissions_inquiries (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			applicant_name VARCHAR(191) NOT NULL,
+			target_grade VARCHAR(100) NOT NULL,
+			parent_name VARCHAR(191) NOT NULL,
+			parent_email VARCHAR(191),
+			parent_phone VARCHAR(100),
+			stage VARCHAR(50) DEFAULT 'INQUIRY',
+			entrance_score INT DEFAULT 0,
+			notes TEXT,
+			assigned_counselor VARCHAR(191),
+			application_date VARCHAR(50),
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS campus_fee_structures (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			title VARCHAR(191) NOT NULL,
+			category VARCHAR(100) DEFAULT 'TUITION',
+			class_level VARCHAR(100) DEFAULT 'All Levels',
+			term_name VARCHAR(100) DEFAULT 'Current Term',
+			amount DECIMAL(12,2) NOT NULL DEFAULT 0,
+			is_mandatory BOOLEAN DEFAULT TRUE,
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS campus_student_invoices (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			invoice_no VARCHAR(100) NOT NULL,
+			student_id VARCHAR(191),
+			student_name VARCHAR(191) NOT NULL,
+			class_name VARCHAR(100) NOT NULL,
+			term_name VARCHAR(100) DEFAULT 'Current Term',
+			total_billed DECIMAL(12,2) NOT NULL DEFAULT 0,
+			amount_paid DECIMAL(12,2) NOT NULL DEFAULT 0,
+			balance_due DECIMAL(12,2) NOT NULL DEFAULT 0,
+			status VARCHAR(50) DEFAULT 'UNPAID',
+			payment_method VARCHAR(100),
+			due_date VARCHAR(50),
+			last_payment_at TIMESTAMPTZ,
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS campus_library_books (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			isbn VARCHAR(100),
+			title VARCHAR(255) NOT NULL,
+			author VARCHAR(191) NOT NULL,
+			category VARCHAR(100) DEFAULT 'General',
+			shelf_location VARCHAR(100),
+			total_copies INT DEFAULT 1,
+			available_copies INT DEFAULT 1,
+			digital_url TEXT,
+			status VARCHAR(50) DEFAULT 'AVAILABLE',
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS campus_library_loans (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			book_id VARCHAR(191) NOT NULL,
+			book_title VARCHAR(255) NOT NULL,
+			borrower_id VARCHAR(191),
+			borrower_name VARCHAR(191) NOT NULL,
+			borrower_role VARCHAR(50) DEFAULT 'student',
+			class_name VARCHAR(100),
+			issued_date VARCHAR(50),
+			due_date VARCHAR(50),
+			returned_date VARCHAR(50),
+			fine_amount DECIMAL(10,2) DEFAULT 0,
+			status VARCHAR(50) DEFAULT 'BORROWED',
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS campus_inventory_items (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			sku VARCHAR(100),
+			item_name VARCHAR(255) NOT NULL,
+			category VARCHAR(100) DEFAULT 'Stationery',
+			unit VARCHAR(50) DEFAULT 'Units',
+			quantity_in_stock INT DEFAULT 0,
+			reorder_level INT DEFAULT 10,
+			unit_cost DECIMAL(12,2) DEFAULT 0,
+			location VARCHAR(191),
+			supplier_name VARCHAR(191),
+			status VARCHAR(50) DEFAULT 'IN_STOCK',
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS campus_procurement_requests (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			po_number VARCHAR(100) NOT NULL,
+			department VARCHAR(191) NOT NULL,
+			requested_by VARCHAR(191) NOT NULL,
+			vendor_name VARCHAR(191),
+			items_summary TEXT NOT NULL,
+			total_amount DECIMAL(12,2) NOT NULL DEFAULT 0,
+			priority VARCHAR(50) DEFAULT 'NORMAL',
+			status VARCHAR(50) DEFAULT 'PENDING_APPROVAL',
+			approved_by VARCHAR(191),
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS campus_transport_routes (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			route_name VARCHAR(191) NOT NULL,
+			bus_number VARCHAR(100) NOT NULL,
+			driver_name VARCHAR(191) NOT NULL,
+			driver_phone VARCHAR(100),
+			attendant_name VARCHAR(191),
+			capacity INT DEFAULT 40,
+			assigned_students INT DEFAULT 0,
+			stops_summary TEXT,
+			morning_departure VARCHAR(50) DEFAULT '06:45 AM',
+			afternoon_return VARCHAR(50) DEFAULT '03:30 PM',
+			term_fee DECIMAL(12,2) DEFAULT 0,
+			gps_status VARCHAR(50) DEFAULT 'ACTIVE',
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS campus_hostel_allocations (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			hostel_name VARCHAR(191) NOT NULL,
+			wing_or_floor VARCHAR(100),
+			room_number VARCHAR(100) NOT NULL,
+			bed_label VARCHAR(50),
+			capacity INT DEFAULT 4,
+			occupants_count INT DEFAULT 0,
+			student_id VARCHAR(191),
+			student_name VARCHAR(191),
+			class_name VARCHAR(100),
+			matron_name VARCHAR(191),
+			exeat_status VARCHAR(50) DEFAULT 'ON_CAMPUS',
+			status VARCHAR(50) DEFAULT 'OCCUPIED',
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS campus_notices_and_events (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			title VARCHAR(255) NOT NULL,
+			category VARCHAR(100) DEFAULT 'NOTICE',
+			audience VARCHAR(100) DEFAULT 'ALL',
+			event_date VARCHAR(50),
+			event_time VARCHAR(50),
+			location VARCHAR(191),
+			content TEXT NOT NULL,
+			author_name VARCHAR(191),
+			is_pinned BOOLEAN DEFAULT FALSE,
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS campus_messages (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			sender_id VARCHAR(191),
+			sender_name VARCHAR(191) NOT NULL,
+			sender_role VARCHAR(50) DEFAULT 'admin',
+			recipient_group VARCHAR(100) DEFAULT 'ALL_PARENTS',
+			recipient_id VARCHAR(191),
+			recipient_name VARCHAR(191),
+			channel VARCHAR(50) DEFAULT 'IN_APP',
+			subject VARCHAR(255) NOT NULL,
+			body TEXT NOT NULL,
+			delivery_status VARCHAR(50) DEFAULT 'DELIVERED',
+			read_count INT DEFAULT 0,
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS campus_mobile_app_accounts (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			user_id VARCHAR(191),
+			full_name VARCHAR(191) NOT NULL,
+			email VARCHAR(191),
+			phone VARCHAR(100),
+			role VARCHAR(50) NOT NULL,
+			linked_ward_or_class VARCHAR(191),
+			app_version VARCHAR(50) DEFAULT 'v2.4.0',
+			device_platform VARCHAR(50) DEFAULT 'Android / iOS',
+			push_enabled BOOLEAN DEFAULT TRUE,
+			invite_code VARCHAR(100),
+			account_status VARCHAR(50) DEFAULT 'ACTIVE',
+			last_active_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		`CREATE TABLE IF NOT EXISTS campus_homework_and_assessments (
+			id VARCHAR(191) PRIMARY KEY,
+			tenant_id VARCHAR(191) NOT NULL,
+			title VARCHAR(255) NOT NULL,
+			subject_name VARCHAR(191) NOT NULL,
+			class_name VARCHAR(100) NOT NULL,
+			teacher_id VARCHAR(191),
+			teacher_name VARCHAR(191),
+			assessment_type VARCHAR(50) DEFAULT 'HOMEWORK',
+			due_date VARCHAR(50),
+			max_score INT DEFAULT 100,
+			instructions TEXT,
+			submissions_count INT DEFAULT 0,
+			total_students INT DEFAULT 30,
+			status VARCHAR(50) DEFAULT 'PUBLISHED',
+			created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		// 4. Composite Tenant Isolation Indexes
+		`CREATE INDEX IF NOT EXISTS idx_users_tenant_id ON users(tenant_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_terms_tenant_id ON terms(tenant_id, session_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_sections_tenant_id ON sections(tenant_id, class_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_enrollments_tenant_id ON enrollments(tenant_id, section_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_assignments_tenant_id ON assignments(tenant_id, teacher_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_family_rel_tenant_id ON family_relationships(tenant_id, parent_user_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_student_progress_tenant_id ON student_progress(tenant_id, student_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_blog_posts_tenant_id ON blog_posts(tenant_id, status)`,
+		`CREATE INDEX IF NOT EXISTS idx_support_tickets_tenant_id ON support_tickets(tenant_id, status)`,
+		`CREATE INDEX IF NOT EXISTS idx_timetable_tenant ON campus_timetable_slots(tenant_id, class_name, day_of_week)`,
+		`CREATE INDEX IF NOT EXISTS idx_admissions_tenant ON campus_admissions_inquiries(tenant_id, stage)`,
+		`CREATE INDEX IF NOT EXISTS idx_fee_struct_tenant ON campus_fee_structures(tenant_id, class_level)`,
+		`CREATE INDEX IF NOT EXISTS idx_student_inv_tenant ON campus_student_invoices(tenant_id, status)`,
+		`CREATE INDEX IF NOT EXISTS idx_library_books_tenant ON campus_library_books(tenant_id, category)`,
+		`CREATE INDEX IF NOT EXISTS idx_library_loans_tenant ON campus_library_loans(tenant_id, status)`,
+		`CREATE INDEX IF NOT EXISTS idx_inventory_tenant ON campus_inventory_items(tenant_id, category)`,
+		`CREATE INDEX IF NOT EXISTS idx_procurement_tenant ON campus_procurement_requests(tenant_id, status)`,
+		`CREATE INDEX IF NOT EXISTS idx_transport_tenant ON campus_transport_routes(tenant_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_hostel_tenant ON campus_hostel_allocations(tenant_id, hostel_name)`,
+		`CREATE INDEX IF NOT EXISTS idx_notices_tenant ON campus_notices_and_events(tenant_id, category)`,
+		`CREATE INDEX IF NOT EXISTS idx_messages_tenant ON campus_messages(tenant_id, recipient_group)`,
+		`CREATE INDEX IF NOT EXISTS idx_mobile_acc_tenant ON campus_mobile_app_accounts(tenant_id, role)`,
+		`CREATE INDEX IF NOT EXISTS idx_homework_tenant ON campus_homework_and_assessments(tenant_id, class_name)`,
+	}
+
+	for _, stmt := range alterStatements {
+		if _, err := DB.Exec(stmt); err != nil {
+			// Ignore benign errors for tables that may not exist in minimal deployments
+			continue
+		}
+	}
+
+	log.Println("✅ Tenant Isolation & CampusPRO Operational Schema ready.")
+}

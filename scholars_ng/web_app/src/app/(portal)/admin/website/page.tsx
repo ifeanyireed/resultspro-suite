@@ -26,7 +26,7 @@ import {
 type CmsTab = 'hero' | 'notices' | 'facilities' | 'news' | 'team' | 'admissions';
 
 export default function AdminLandingCmsPage() {
-  const { config, setConfig, saveConfig, resetConfig } = useLandingConfig();
+  const { config, setConfig, saveConfig, resetConfig, saving } = useLandingConfig();
   const [activeTab, setActiveTab] = useState<CmsTab>('hero');
   const [savedToast, setSavedToast] = useState(false);
   const tabsScrollRef = useRef<HTMLDivElement>(null);
@@ -72,8 +72,8 @@ export default function AdminLandingCmsPage() {
     };
   }, [updateScrollMetrics]);
 
-  const handleSave = () => {
-    saveConfig(config);
+  const handleSave = async () => {
+    await saveConfig(config);
     setSavedToast(true);
     setTimeout(() => setSavedToast(false), 3000);
   };
@@ -226,10 +226,11 @@ export default function AdminLandingCmsPage() {
           <button
             type="button"
             onClick={handleSave}
-            className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-6 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2 cursor-pointer"
+            disabled={saving}
+            className="bg-[#146ef5] hover:bg-[#105bd1] disabled:opacity-60 text-white text-sm font-semibold px-6 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2 cursor-pointer"
           >
             <CheckCircleIcon className="w-4 h-4" />
-            Save &amp; Publish Changes
+            {saving ? 'Saving to Database...' : 'Save & Publish Changes'}
           </button>
         </div>
       </div>
@@ -484,6 +485,44 @@ export default function AdminLandingCmsPage() {
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-900"
                 />
               </div>
+            </div>
+
+            <div className="pt-4 border-t border-gray-100 space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-gray-900">Tenant Domain &amp; Custom Domain Routing</h3>
+                <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#146ef5]">
+                  Edge Isolated
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">
+                    Default Scholars Subdomain
+                  </label>
+                  <input
+                    type="text"
+                    readOnly
+                    value={config.defaultSubdomain || 'greenwoodhigh.scholars.ng'}
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-600 font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">
+                    Custom School Domain
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="portal.greenwoodhigh.edu.ng"
+                    value={config.customDomain || ''}
+                    onChange={(e) => setConfig({ ...config, customDomain: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-900 font-mono"
+                  />
+                </div>
+              </div>
+              <p className="text-xs text-gray-500">
+                Point your DNS <code className="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-800">CNAME</code> record to{' '}
+                <code className="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-[#146ef5]">cname.scholars.ng</code> to serve this school portal on your custom domain with strict tenant data isolation.
+              </p>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
-import AdmissionsDashboard from '@/components/Dashboard/AdmissionsDashboard';
+import { redirect } from 'next/navigation';
 
-export default function AdminAdmissionsPage() {
-  return <AdmissionsDashboard />;
+export default function AdminAdmissionsRedirect() {
+  redirect('/admin/campus-os?tab=admission&subtab=overview');
 }

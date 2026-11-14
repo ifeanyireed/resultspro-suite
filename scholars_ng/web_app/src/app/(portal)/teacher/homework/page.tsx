@@ -9,20 +9,79 @@ import api from '@/lib/api';
 export default function TeacherHomeworkPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newTask, setNewTask] = useState({
+    title: '',
+    subject_name: 'Mathematics',
+    class_name: 'SS 2 Science',
+    due_date: '2026-11-25',
+    max_score: 20,
+    instructions: ''
+  });
+
+  const fetchData = async () => {
+    try {
+      const response = await api.get('/v1/campus/homework');
+      const rows = Array.isArray(response.data) ? response.data : [];
+      const colors = ['#146ef5', '#10b981', '#8b5cf6', '#f59e0b'];
+      setData({
+        stats: [
+          { label: 'Active Homework', value: String(rows.length), bg: '#eff6ff', color: '#146ef5' },
+          {
+            label: 'Total Submissions',
+            value: String(rows.reduce((acc: number, r: any) => acc + Number(r.submissions_count || 0), 0)),
+            bg: '#ecfdf5',
+            color: '#10b981'
+          },
+          {
+            label: 'Classes Covered',
+            value: String(new Set(rows.map((r: any) => r.class_name)).size || 1),
+            bg: '#fffbeb',
+            color: '#f59e0b'
+          }
+        ],
+        assignments: rows.map((r: any, idx: number) => ({
+          id: r.id,
+          title: `${r.subject_name}: ${r.title}`,
+          status: r.status === 'PUBLISHED' ? 'Active' : r.status || 'Needs Grading',
+          class: r.class_name,
+          deadline: r.due_date || 'Upcoming',
+          submissions: `${r.submissions_count || 0}/${r.total_students || 28}`,
+          color: colors[idx % colors.length]
+        }))
+      });
+    } catch (error) {
+      console.error('Failed to fetch tenant teacher homework data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get('/teacher/homework');
-        setData(response.data);
-      } catch (error) {
-        console.error('Failed to fetch teacher homework data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
+
+  const handleCreateHomework = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await api.post('/v1/campus/homework', {
+        ...newTask,
+        max_score: Number(newTask.max_score)
+      });
+      setShowCreateModal(false);
+      setNewTask({
+        title: '',
+        subject_name: 'Mathematics',
+        class_name: 'SS 2 Science',
+        due_date: '2026-11-25',
+        max_score: 20,
+        instructions: ''
+      });
+      await fetchData();
+    } catch (err) {
+      console.error('Failed to create homework:', err);
+    }
+  };
 
   if (loading) return <div style={{ padding: '2rem' }}>Loading Homework...</div>;
   if (!data) return <div style={{ padding: '2rem' }}>Failed to load homework data.</div>;
@@ -38,11 +97,67 @@ export default function TeacherHomeworkPage() {
             Assign, track, and grade student homework across all your classes.
           </p>
         </div>
-        <button style={{ background: '#146ef5', color: 'white', border: 'none', padding: '1rem 1.5rem', borderRadius: '1.25rem', fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(20, 110, 245, 0.25)' }}>
+        <button
+          onClick={() => setShowCreateModal(true)}
+          style={{ background: '#146ef5', color: 'white', border: 'none', padding: '1rem 1.5rem', borderRadius: '1.25rem', fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(20, 110, 245, 0.25)' }}
+        >
           <PlusIcon style={{ width: 20, height: 20 }} />
           Create Assignment
         </button>
       </header>
+
+      {showCreateModal && (
+        <form
+          onSubmit={handleCreateHomework}
+          style={{ background: 'white', padding: '1.5rem', borderRadius: '1.5rem', border: '1px solid #dbeafe', marginBottom: '2rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}
+        >
+          <input
+            type="text"
+            required
+            placeholder="Assignment Title"
+            value={newTask.title}
+            onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+            style={{ padding: '0.75rem 1rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0' }}
+          />
+          <input
+            type="text"
+            required
+            placeholder="Subject Name"
+            value={newTask.subject_name}
+            onChange={(e) => setNewTask({ ...newTask, subject_name: e.target.value })}
+            style={{ padding: '0.75rem 1rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0' }}
+          />
+          <input
+            type="text"
+            required
+            placeholder="Target Class (e.g. SS 2 Science)"
+            value={newTask.class_name}
+            onChange={(e) => setNewTask({ ...newTask, class_name: e.target.value })}
+            style={{ padding: '0.75rem 1rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0' }}
+          />
+          <input
+            type="date"
+            value={newTask.due_date}
+            onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value })}
+            style={{ padding: '0.75rem 1rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0' }}
+          />
+          <input
+            type="text"
+            placeholder="Instructions"
+            value={newTask.instructions}
+            onChange={(e) => setNewTask({ ...newTask, instructions: e.target.value })}
+            style={{ padding: '0.75rem 1rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0' }}
+          />
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button type="submit" style={{ background: '#146ef5', color: 'white', border: 'none', padding: '0.75rem 1.25rem', borderRadius: '0.75rem', fontWeight: '700', cursor: 'pointer' }}>
+              Publish to Class
+            </button>
+            <button type="button" onClick={() => setShowCreateModal(false)} style={{ background: '#f1f5f9', color: '#475569', border: 'none', padding: '0.75rem 1rem', borderRadius: '0.75rem', fontWeight: '700', cursor: 'pointer' }}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
 
       {/* Stats Hub */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '3rem' }}>

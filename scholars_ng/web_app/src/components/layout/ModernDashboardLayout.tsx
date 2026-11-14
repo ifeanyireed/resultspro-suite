@@ -82,17 +82,6 @@ const ROLE_PROFILES: RoleProfile[] = [
     slug: '/admin/pulse',
     accentColor: '#f59e0b',
   },
-  {
-    id: 'profile-admissions',
-    role: 'admin',
-    portalName: 'Admissions CRM',
-    fullName: 'Mrs. Amina Bello-Yusuf',
-    subtitle: 'Admissions Registrar & VP',
-    email: 'admissions@greenwood.scholars.ng',
-    avatar: '/avatars/character5.jpg',
-    slug: '/admin/admissions',
-    accentColor: '#ec4899',
-  },
 ];
 
 interface ModernDashboardLayoutProps {
@@ -130,7 +119,6 @@ export function ModernDashboardLayout({ sidebarContent, headerContent, children 
   };
 
   const getActiveProfile = (): RoleProfile => {
-    if (pathname.startsWith('/admin/admissions')) return ROLE_PROFILES[4];
     if (pathname.startsWith('/admin')) return ROLE_PROFILES[3];
     if (pathname.startsWith('/teacher')) return ROLE_PROFILES[1];
     if (pathname.startsWith('/parent')) return ROLE_PROFILES[2];
@@ -223,7 +211,7 @@ export function ModernDashboardLayout({ sidebarContent, headerContent, children 
                   <span className="text-xs font-bold uppercase tracking-widest">Switch Role Profile</span>
                 </div>
                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/15 text-white/90">
-                  5 Profiles
+                  {ROLE_PROFILES.length} Profiles
                 </span>
               </div>
 

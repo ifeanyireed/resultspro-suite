@@ -83,13 +83,6 @@ const adminMenu: MenuItem[] = [
   { section: 'Operations', name: 'CampusPRO', icon: HomeModernIcon, activeIcon: HomeModernIcon, slug: '/admin/campus-os' },
 ];
 
-const admissionsMenu: MenuItem[] = [
-  { name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/admin/admissions' },
-  { name: 'Inquiries', icon: EnvelopeIcon, activeIcon: EnvelopeIcon, slug: '/admin/admissions/inquiries' },
-  { name: 'Applications', icon: FolderOpenIcon, activeIcon: FolderOpenIcon, slug: '/admin/admissions/applications' },
-  { name: 'Pipeline', icon: ChartBarIcon, activeIcon: ChartBarIcon, slug: '/admin/admissions/pipeline' },
-];
-
 export default function PortalSidebar() {
   const pathname = usePathname();
   const { tenant, hasModule } = useTenant();
@@ -106,7 +99,6 @@ export default function PortalSidebar() {
     if (pathname.startsWith('/teacher')) return teacherMenu;
     if (pathname.startsWith('/parent')) return parentMenu;
     if (pathname.startsWith('/admin')) {
-      if (pathname.includes('/admissions')) return admissionsMenu;
       return adminMenu;
     }
     return studentMenu;

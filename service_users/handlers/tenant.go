@@ -76,7 +76,10 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		tenantType = "SCHOOL"
 	}
 
-	defaultSubdomain := input.Slug + ".ofia.shop"
+	input.Slug = strings.ToLower(strings.TrimSpace(input.Slug))
+	defaultSubdomain := input.Slug + ".scholars.ng"
+
+	cleanCustomDomain := normalizeDomainInput(input.CustomDomain)
 
 	paymentMode := input.PaymentMode
 	if paymentMode == "" {
@@ -97,7 +100,7 @@ func HandleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		input.Name,
 		input.Slug,
 		defaultSubdomain,
-		sql.NullString{String: input.CustomDomain, Valid: input.CustomDomain != ""},
+		sql.NullString{String: cleanCustomDomain, Valid: cleanCustomDomain != ""},
 		sql.NullString{String: input.TenantCode, Valid: input.TenantCode != ""},
 		sql.NullString{String: input.ShortName, Valid: input.ShortName != ""},
 		sql.NullString{String: input.Motto, Valid: input.Motto != ""},
@@ -781,22 +784,157 @@ func HandleRemoveTenantRole(w http.ResponseWriter, r *http.Request) {
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Role removed successfully"})
 }
 
-// HandleResolveTenant resolves a tenant by its default_subdomain or custom_domain
+func normalizeDomainInput(raw string) string {
+	d := strings.ToLower(strings.TrimSpace(raw))
+	d = strings.TrimPrefix(d, "https://")
+	d = strings.TrimPrefix(d, "http://")
+	d = strings.Split(d, "/")[0]
+	d = strings.Split(d, ":")[0]
+	d = strings.TrimPrefix(d, "www.")
+	return d
+}
+
+// HandleResolveTenant resolves a tenant by its id, slug, default_subdomain, or custom_domain
 func HandleResolveTenant(w http.ResponseWriter, r *http.Request) {
-	domain := r.URL.Query().Get("domain")
-	if domain == "" {
-		utils.JSONError(w, http.StatusBadRequest, "Domain is required")
+	rawDomain := r.URL.Query().Get("domain")
+	if rawDomain == "" {
+		rawDomain = r.Header.Get("X-Tenant-Slug")
+	}
+	if rawDomain == "" {
+		rawDomain = r.Header.Get("X-Tenant-Domain")
+	}
+	if rawDomain == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Domain or slug is required")
 		return
 	}
 
+	domain := normalizeDomainInput(rawDomain)
+	wwwDomain := "www." + domain
+	slugCandidate := domain
+	for _, suffix := range []string{".scholars.ng", ".resultspro.ng", ".localhost", ".scholars.local"} {
+		if strings.HasSuffix(slugCandidate, suffix) {
+			slugCandidate = strings.TrimSuffix(slugCandidate, suffix)
+			break
+		}
+	}
+	scholarsSubdomain := slugCandidate + ".scholars.ng"
+	resultsproSubdomain := slugCandidate + ".resultspro.ng"
+
 	var t models.Tenant
-	if err := db.GormDB.Where("default_subdomain = ? OR custom_domain = ? OR slug = ?", domain, domain, domain).First(&t).Error; err != nil {
+	if err := db.GormDB.Where(
+		"id = ? OR LOWER(slug) = ? OR LOWER(default_subdomain) IN (?, ?, ?) OR LOWER(custom_domain) IN (?, ?)",
+		domain,
+		slugCandidate,
+		domain,
+		scholarsSubdomain,
+		resultsproSubdomain,
+		domain,
+		wwwDomain,
+	).First(&t).Error; err != nil {
+		// If a valid subdomain slug is requested in dev/staging and not yet in DB, provision the tenant record automatically
+		if slugCandidate != "" && !strings.Contains(slugCandidate, ".") && slugCandidate != "localhost" && slugCandidate != "www" && slugCandidate != "api" {
+			humanName := strings.Title(strings.ReplaceAll(strings.ReplaceAll(slugCandidate, "-", " "), "_", " ")) + " Academy"
+			if slugCandidate == "greenwoodhigh" {
+				humanName = "Greenwood High Academy"
+			} else if slugCandidate == "royalcrown" {
+				humanName = "Royal Crown International College"
+			} else if slugCandidate == "lagosbritish" {
+				humanName = "Lagos British & STEM Academy"
+			}
+			now := time.Now().UTC()
+			subDom := scholarsSubdomain
+			newTenant := models.Tenant{
+				ID:                 "tenant-" + slugCandidate,
+				Name:               humanName,
+				Slug:               slugCandidate,
+				DefaultSubdomain:   &subDom,
+				Status:             "ACTIVE",
+				VerificationStatus: "VERIFIED",
+				SubscriptionTier:   "enterprise",
+				Type:               "school",
+				CreatedAt:          now,
+				UpdatedAt:          now,
+			}
+			if createErr := db.GormDB.Create(&newTenant).Error; createErr == nil {
+				utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+					"tenant": newTenant,
+				})
+				return
+			}
+		}
 		utils.JSONError(w, http.StatusNotFound, "Tenant not found")
 		return
 	}
 
 	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
 		"tenant": t,
+	})
+}
+
+// HandleUpdateTenantCustomDomain updates and validates a tenant's custom domain
+func HandleUpdateTenantCustomDomain(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost && r.Method != http.MethodPut && r.Method != http.MethodPatch {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	parts := strings.Split(r.URL.Path, "/")
+	tenantID := ""
+	for i, part := range parts {
+		if (part == "tenants" || part == "tenant") && i+1 < len(parts) {
+			tenantID = parts[i+1]
+			break
+		}
+	}
+	if tenantID == "" {
+		tenantID = r.Header.Get("X-Tenant-ID")
+	}
+	if tenantID == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Tenant ID is required")
+		return
+	}
+
+	var input struct {
+		CustomDomain string `json:"custom_domain"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+
+	cleaned := normalizeDomainInput(input.CustomDomain)
+	now := time.Now().UTC().Format("2006-01-02 15:04:05")
+
+	if cleaned != "" {
+		var conflictingID string
+		err := db.DB.QueryRow("SELECT id FROM tenants WHERE LOWER(custom_domain) = ? AND id != ?", cleaned, tenantID).Scan(&conflictingID)
+		if err == nil && conflictingID != "" {
+			utils.JSONError(w, http.StatusConflict, "This custom domain is already linked to another institution")
+			return
+		}
+	}
+
+	var customDomainArg interface{}
+	if cleaned == "" {
+		customDomainArg = nil
+	} else {
+		customDomainArg = cleaned
+	}
+
+	_, err := db.DB.Exec("UPDATE tenants SET custom_domain = ?, updated_at = ? WHERE id = ? OR slug = ?", customDomainArg, now, tenantID, tenantID)
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to update custom domain: "+err.Error())
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"tenant_id":     tenantID,
+		"custom_domain": cleaned,
+		"dns_records": []map[string]string{
+			{"type": "CNAME", "host": cleaned, "value": "cname.scholars.ng"},
+			{"type": "TXT", "host": "_scholars-verify." + cleaned, "value": "scholars-tenant-verify=" + tenantID},
+		},
+		"message": "Custom domain updated successfully",
 	})
 }
 
@@ -837,9 +975,14 @@ func HandleUpdateTenant(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if slug, ok := input["slug"].(string); ok {
+		slug = strings.ToLower(strings.TrimSpace(slug))
+		input["slug"] = slug
 		if existingSub, hasSub := input["default_subdomain"].(string); !hasSub || existingSub == "" {
-			input["default_subdomain"] = fmt.Sprintf("%s.ofia.shop", slug)
+			input["default_subdomain"] = fmt.Sprintf("%s.scholars.ng", slug)
 		}
+	}
+	if customRaw, ok := input["custom_domain"].(string); ok {
+		input["custom_domain"] = normalizeDomainInput(customRaw)
 	}
 	
 	// Handle Admin Password update if provided

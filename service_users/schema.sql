@@ -6,6 +6,8 @@
 -- 1. Identity: Users Table
 CREATE TABLE IF NOT EXISTS users (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
+    primary_tenant_id VARCHAR(191),
     email VARCHAR(191) UNIQUE NOT NULL,
     password_hash TEXT,
     google_id VARCHAR(191) UNIQUE,
@@ -28,12 +30,14 @@ CREATE TABLE IF NOT EXISTS users (
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     INDEX idx_user_email (email),
+    INDEX idx_user_tenant (tenant_id),
     INDEX idx_user_status (account_status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 2. Identity: Verification Tokens (OTPs & Password Resets)
 CREATE TABLE IF NOT EXISTS verification_tokens (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     user_id VARCHAR(191) NOT NULL,
     token_hash VARCHAR(191) NOT NULL,
     type VARCHAR(191) NOT NULL, -- email_verify, password_reset
@@ -41,12 +45,14 @@ CREATE TABLE IF NOT EXISTS verification_tokens (
     used BOOLEAN DEFAULT FALSE,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     INDEX idx_verif_token_hash (token_hash),
+    INDEX idx_verif_token_tenant (tenant_id),
     CONSTRAINT fk_verif_token_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 3. Security: Applications (Server-to-Server App Registry)
 CREATE TABLE IF NOT EXISTS apps (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     name VARCHAR(191) NOT NULL,
     secret_key VARCHAR(191) NOT NULL,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3)
@@ -55,6 +61,7 @@ CREATE TABLE IF NOT EXISTS apps (
 -- 4. Identity: Refresh Tokens (Session Management)
 CREATE TABLE IF NOT EXISTS refresh_tokens (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     user_id VARCHAR(191) NOT NULL,
     token_hash VARCHAR(191) NOT NULL,
     device_info TEXT,
@@ -62,15 +69,18 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (
     revoked BOOLEAN DEFAULT FALSE,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     INDEX idx_refresh_token_hash (token_hash),
+    INDEX idx_refresh_token_tenant (tenant_id),
     CONSTRAINT fk_refresh_token_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 5. Academics: Curriculums
 CREATE TABLE IF NOT EXISTS curriculums (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     name VARCHAR(191) NOT NULL,
     country VARCHAR(191) DEFAULT 'Nigeria',
-    created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3)
+    created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
+    INDEX idx_curriculum_tenant (tenant_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 6. Institutions: Tenants / Organizations
@@ -114,6 +124,7 @@ CREATE TABLE IF NOT EXISTS tenants (
 -- 7. Subscriptions: Personal Subscriptions (Family & Agent)
 CREATE TABLE IF NOT EXISTS user_subscriptions (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     user_id VARCHAR(191) NOT NULL,
     type VARCHAR(191) NOT NULL, -- FAMILY, AGENT
     tier VARCHAR(191) DEFAULT 'BASIC', -- BASIC, PRO, PREMIUM
@@ -122,6 +133,7 @@ CREATE TABLE IF NOT EXISTS user_subscriptions (
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     UNIQUE KEY user_sub_unique (user_id, type),
+    INDEX idx_user_sub_tenant (tenant_id),
     CONSTRAINT fk_user_sub_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -157,12 +169,14 @@ CREATE TABLE IF NOT EXISTS academic_sessions (
 -- 10. Academics: Terms
 CREATE TABLE IF NOT EXISTS terms (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
     session_id VARCHAR(191) NOT NULL,
     name VARCHAR(191) NOT NULL, -- e.g. "First Term", "Second Term", "Third Term"
     is_current BOOLEAN DEFAULT FALSE,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     INDEX idx_term_session (session_id, is_current),
+    INDEX idx_term_tenant (tenant_id, session_id),
     CONSTRAINT fk_term_session FOREIGN KEY (session_id) REFERENCES academic_sessions(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -183,12 +197,14 @@ CREATE TABLE IF NOT EXISTS classes (
 -- 12. Academics: Sections / Arms
 CREATE TABLE IF NOT EXISTS sections (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
     class_id VARCHAR(191) NOT NULL,
     name VARCHAR(191) NOT NULL, -- e.g. "10A", "Gold", "Diamond"
     room_number VARCHAR(191),
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     INDEX idx_section_class (class_id),
+    INDEX idx_section_tenant (tenant_id, class_id),
     CONSTRAINT fk_section_class FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -207,35 +223,41 @@ CREATE TABLE IF NOT EXISTS usr_subjects (
 -- 14. Academics: Syllabus Weeks
 CREATE TABLE IF NOT EXISTS syllabus_weeks (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
     subject_id VARCHAR(191) NOT NULL,
     week_number INT NOT NULL,
     term INT DEFAULT 1,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     INDEX idx_syllabus_subject (subject_id, term, week_number),
+    INDEX idx_syllabus_tenant (tenant_id, subject_id),
     CONSTRAINT fk_syllabus_week_subject FOREIGN KEY (subject_id) REFERENCES usr_subjects(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 15. Academics: Syllabus Topics
 CREATE TABLE IF NOT EXISTS usr_topics (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
     syllabus_week_id VARCHAR(191) NOT NULL,
     name VARCHAR(191) NOT NULL,
     description TEXT,
     `order` INT DEFAULT 0,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    INDEX idx_topic_tenant (tenant_id, syllabus_week_id),
     CONSTRAINT fk_topic_syllabus_week FOREIGN KEY (syllabus_week_id) REFERENCES syllabus_weeks(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 16. Academics: Exam Bodies & National Exams
 CREATE TABLE IF NOT EXISTS exam_bodies (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     name VARCHAR(191) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS national_exams (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     exam_body_id VARCHAR(191) NOT NULL,
     name VARCHAR(191) NOT NULL,
     CONSTRAINT fk_national_exam_body FOREIGN KEY (exam_body_id) REFERENCES exam_bodies(id) ON DELETE CASCADE
@@ -243,6 +265,7 @@ CREATE TABLE IF NOT EXISTS national_exams (
 
 CREATE TABLE IF NOT EXISTS areas_of_concentration (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     national_exam_id VARCHAR(191) NOT NULL,
     subject_name VARCHAR(191) NOT NULL,
     syllabus_data TEXT, -- JSON topic outlines
@@ -253,6 +276,7 @@ CREATE TABLE IF NOT EXISTS areas_of_concentration (
 -- 17. Academics: Teaching Assignments
 CREATE TABLE IF NOT EXISTS assignments (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
     section_id VARCHAR(191) NOT NULL,
     subject_id VARCHAR(191) NOT NULL,
     teacher_id VARCHAR(191) NOT NULL,
@@ -261,6 +285,7 @@ CREATE TABLE IF NOT EXISTS assignments (
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     INDEX idx_assignment_teacher (teacher_id),
     INDEX idx_assignment_section (section_id),
+    INDEX idx_assignment_tenant (tenant_id, teacher_id),
     CONSTRAINT fk_assignment_section FOREIGN KEY (section_id) REFERENCES sections(id) ON DELETE CASCADE,
     CONSTRAINT fk_assignment_subject FOREIGN KEY (subject_id) REFERENCES usr_subjects(id) ON DELETE CASCADE,
     CONSTRAINT fk_assignment_teacher FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -270,6 +295,7 @@ CREATE TABLE IF NOT EXISTS assignments (
 -- 18. Academics: Student Enrollments
 CREATE TABLE IF NOT EXISTS enrollments (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
     student_id VARCHAR(191) NOT NULL,
     section_id VARCHAR(191) NOT NULL,
     session_id VARCHAR(191) NOT NULL,
@@ -278,6 +304,7 @@ CREATE TABLE IF NOT EXISTS enrollments (
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     INDEX idx_enrollment_student (student_id),
     INDEX idx_enrollment_section (section_id),
+    INDEX idx_enrollment_tenant (tenant_id, section_id),
     CONSTRAINT fk_enrollment_student FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT fk_enrollment_section FOREIGN KEY (section_id) REFERENCES sections(id) ON DELETE CASCADE,
     CONSTRAINT fk_enrollment_session FOREIGN KEY (session_id) REFERENCES academic_sessions(id) ON DELETE CASCADE
@@ -286,6 +313,7 @@ CREATE TABLE IF NOT EXISTS enrollments (
 -- 19. Family Relationships (Parent - Student)
 CREATE TABLE IF NOT EXISTS family_relationships (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
     parent_user_id VARCHAR(191) NOT NULL,
     child_user_id VARCHAR(191) NOT NULL,
     relationship_type VARCHAR(191) DEFAULT 'guardian', -- father, mother, guardian, sponsor
@@ -295,6 +323,7 @@ CREATE TABLE IF NOT EXISTS family_relationships (
     UNIQUE KEY family_rel_unique (parent_user_id, child_user_id),
     INDEX idx_family_parent (parent_user_id),
     INDEX idx_family_child (child_user_id),
+    INDEX idx_family_tenant (tenant_id, parent_user_id),
     CONSTRAINT fk_fam_parent FOREIGN KEY (parent_user_id) REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT fk_fam_child FOREIGN KEY (child_user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -302,6 +331,7 @@ CREATE TABLE IF NOT EXISTS family_relationships (
 -- 20. Learning Ecosystem: Resource Links
 CREATE TABLE IF NOT EXISTS resource_links (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
     topic_id VARCHAR(191) NOT NULL,
     app_id VARCHAR(191) NOT NULL, -- ClassroomPRO, ExamsPRO, TutorsPRO
     resource_type VARCHAR(191) NOT NULL, -- flashcard, note, quiz, video
@@ -310,12 +340,14 @@ CREATE TABLE IF NOT EXISTS resource_links (
     url TEXT,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     INDEX idx_resource_topic (topic_id),
+    INDEX idx_resource_tenant (tenant_id, topic_id),
     CONSTRAINT fk_resource_topic FOREIGN KEY (topic_id) REFERENCES usr_topics(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 21. Learning Ecosystem: Student Progress
 CREATE TABLE IF NOT EXISTS student_progress (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
     student_id VARCHAR(191) NOT NULL,
     topic_id VARCHAR(191) NOT NULL,
     status VARCHAR(191) DEFAULT 'NOT_STARTED', -- NOT_STARTED, IN_PROGRESS, COMPLETED
@@ -324,6 +356,7 @@ CREATE TABLE IF NOT EXISTS student_progress (
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     UNIQUE KEY student_topic_unique (student_id, topic_id),
     INDEX idx_student_prog (student_id),
+    INDEX idx_student_prog_tenant (tenant_id, student_id),
     CONSTRAINT fk_prog_student FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT fk_prog_topic FOREIGN KEY (topic_id) REFERENCES usr_topics(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -343,6 +376,7 @@ CREATE TABLE IF NOT EXISTS engagement_metrics (
 -- 23. Agent Network: Commissions & Earnings
 CREATE TABLE IF NOT EXISTS agent_commissions (
     agent_id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     default_rate FLOAT DEFAULT 10.0, -- Percentage (e.g. 10.0%)
     bank_name VARCHAR(191),
     account_number VARCHAR(191),
@@ -369,6 +403,7 @@ CREATE TABLE IF NOT EXISTS agent_earnings (
 
 CREATE TABLE IF NOT EXISTS payout_requests (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     agent_id VARCHAR(191) NOT NULL,
     amount FLOAT NOT NULL,
     status VARCHAR(191) DEFAULT 'PENDING', -- PENDING, APPROVED, PAID, REJECTED
@@ -381,6 +416,7 @@ CREATE TABLE IF NOT EXISTS payout_requests (
 -- 24. Billing & Subscription Plans
 CREATE TABLE IF NOT EXISTS plans (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     name VARCHAR(191) NOT NULL, -- Free, Pro, Enterprise
     app_module VARCHAR(191) DEFAULT 'scholars_ng', -- scholars_ng, Family, Agent, ExamsPRO
     category VARCHAR(191) DEFAULT 'School', -- For landing page grouping
@@ -443,6 +479,7 @@ ADD COLUMN monthly_target FLOAT DEFAULT 1000000.00;
 -- Create Agent Activities Table (For the 'Recent Activity' widget)
 CREATE TABLE IF NOT EXISTS agent_activities (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     agent_id VARCHAR(191) NOT NULL,
     activity_type VARCHAR(191) NOT NULL, -- BOUNTY_CREDITED, LEAD_ADDED, PIN_PURCHASED
     title VARCHAR(191) NOT NULL,
@@ -455,6 +492,7 @@ CREATE TABLE IF NOT EXISTS agent_activities (
 -- Create Agent Reminders Table (For the 'Reminders' widget)
 CREATE TABLE IF NOT EXISTS agent_reminders (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     agent_id VARCHAR(191) NOT NULL,
     title VARCHAR(191) NOT NULL,
     time_window VARCHAR(191), -- e.g. "02.00 pm - 04.00 pm"
@@ -466,22 +504,27 @@ CREATE TABLE IF NOT EXISTS agent_reminders (
 -- 9. CMS: Blog Posts, Categories, Tags, Comments
 CREATE TABLE IF NOT EXISTS blog_categories (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     name VARCHAR(191) NOT NULL,
     slug VARCHAR(191) UNIQUE NOT NULL,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
-    updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+    updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    INDEX idx_blog_cat_tenant (tenant_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS blog_tags (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     name VARCHAR(191) NOT NULL,
     slug VARCHAR(191) UNIQUE NOT NULL,
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
-    updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+    updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    INDEX idx_blog_tag_tenant (tenant_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS blog_posts (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     title VARCHAR(191) NOT NULL,
     slug VARCHAR(191) UNIQUE NOT NULL,
     excerpt TEXT,
@@ -495,10 +538,12 @@ CREATE TABLE IF NOT EXISTS blog_posts (
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     FOREIGN KEY (category_id) REFERENCES blog_categories(id) ON DELETE SET NULL,
     FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_blog_status (status)
+    INDEX idx_blog_status (status),
+    INDEX idx_blog_post_tenant (tenant_id, status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS blog_post_tags (
+    tenant_id VARCHAR(191),
     post_id VARCHAR(191),
     tag_id VARCHAR(191),
     PRIMARY KEY (post_id, tag_id),
@@ -508,6 +553,7 @@ CREATE TABLE IF NOT EXISTS blog_post_tags (
 
 CREATE TABLE IF NOT EXISTS blog_comments (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     post_id VARCHAR(191) NOT NULL,
     author_id VARCHAR(191) NOT NULL,
     content TEXT,
@@ -515,12 +561,14 @@ CREATE TABLE IF NOT EXISTS blog_comments (
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     FOREIGN KEY (post_id) REFERENCES blog_posts(id) ON DELETE CASCADE,
-    FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_blog_comment_tenant (tenant_id, post_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 40. Support Tickets
 CREATE TABLE IF NOT EXISTS support_tickets (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     user_id VARCHAR(191) NOT NULL,
     assigned_to VARCHAR(191),
     subject VARCHAR(255) NOT NULL,
@@ -535,6 +583,7 @@ CREATE TABLE IF NOT EXISTS support_tickets (
 
 CREATE TABLE IF NOT EXISTS support_ticket_messages (
     id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     ticket_id VARCHAR(191) NOT NULL,
     sender_id VARCHAR(191) NOT NULL,
     sender_type VARCHAR(50) NOT NULL, -- user, support_staff, system
@@ -544,6 +593,7 @@ CREATE TABLE IF NOT EXISTS support_ticket_messages (
 
 CREATE TABLE IF NOT EXISTS support_staff_status (
     user_id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191),
     is_active BOOLEAN DEFAULT false,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -621,6 +671,7 @@ CREATE TABLE IF NOT EXISTS payout_requests (
 
 CREATE TABLE IF NOT EXISTS puzzle_organisations (
     id SERIAL PRIMARY KEY,
+    tenant_id VARCHAR(191),
     name VARCHAR(255) NOT NULL,
     type VARCHAR(50) NOT NULL DEFAULT 'school',
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -636,6 +687,7 @@ CREATE TABLE IF NOT EXISTS puzzle_organisations (
 
 CREATE TABLE IF NOT EXISTS puzzle_centres (
     id SERIAL PRIMARY KEY,
+    tenant_id VARCHAR(191),
     organisation_id INT NOT NULL REFERENCES puzzle_organisations(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     address TEXT,
@@ -647,6 +699,7 @@ CREATE TABLE IF NOT EXISTS puzzle_centres (
 
 CREATE TABLE IF NOT EXISTS puzzle_groups (
     id SERIAL PRIMARY KEY,
+    tenant_id VARCHAR(191),
     organisation_id INT NOT NULL REFERENCES puzzle_organisations(id) ON DELETE CASCADE,
     centre_id INT REFERENCES puzzle_centres(id) ON DELETE SET NULL,
     name VARCHAR(255) NOT NULL,
@@ -658,6 +711,7 @@ CREATE TABLE IF NOT EXISTS puzzle_groups (
 
 CREATE TABLE IF NOT EXISTS puzzle_users (
     id SERIAL PRIMARY KEY,
+    tenant_id VARCHAR(191),
     organisation_id INT REFERENCES puzzle_organisations(id) ON DELETE SET NULL,
     centre_id INT REFERENCES puzzle_centres(id) ON DELETE SET NULL,
     group_id INT REFERENCES puzzle_groups(id) ON DELETE SET NULL,
@@ -676,6 +730,7 @@ CREATE TABLE IF NOT EXISTS puzzle_users (
 
 CREATE TABLE IF NOT EXISTS puzzle_subscriptions (
     id SERIAL PRIMARY KEY,
+    tenant_id VARCHAR(191),
     organisation_id INT REFERENCES puzzle_organisations(id) ON DELETE CASCADE,
     plan_name VARCHAR(100) NOT NULL DEFAULT 'Free Tier',
     seats INT NOT NULL DEFAULT 50,
@@ -689,6 +744,7 @@ CREATE TABLE IF NOT EXISTS puzzle_subscriptions (
 
 CREATE TABLE IF NOT EXISTS puzzle_verification_codes (
     id SERIAL PRIMARY KEY,
+    tenant_id VARCHAR(191),
     email VARCHAR(255) NOT NULL,
     code VARCHAR(10) NOT NULL,
     type VARCHAR(50) NOT NULL DEFAULT 'email_verification',
@@ -703,3 +759,250 @@ CREATE INDEX IF NOT EXISTS idx_puzzle_users_group_id ON puzzle_users(group_id);
 CREATE INDEX IF NOT EXISTS idx_puzzle_users_org_id ON puzzle_users(organisation_id);
 CREATE INDEX IF NOT EXISTS idx_puzzle_centres_org_id ON puzzle_centres(organisation_id);
 CREATE INDEX IF NOT EXISTS idx_puzzle_verif_email ON puzzle_verification_codes(email, code);
+
+-- =========================================================
+-- 42. CampusPRO & ScholarsNG Operational Modules (Strict Tenant Isolation)
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS campus_timetable_slots (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    class_name VARCHAR(191) NOT NULL,
+    section_id VARCHAR(191),
+    day_of_week VARCHAR(50) NOT NULL,
+    period_label VARCHAR(100) NOT NULL,
+    start_time VARCHAR(50),
+    end_time VARCHAR(50),
+    subject_name VARCHAR(191) NOT NULL,
+    teacher_id VARCHAR(191),
+    teacher_name VARCHAR(191),
+    room VARCHAR(100),
+    status VARCHAR(50) DEFAULT 'SCHEDULED',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS campus_admissions_inquiries (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    applicant_name VARCHAR(191) NOT NULL,
+    target_grade VARCHAR(100) NOT NULL,
+    parent_name VARCHAR(191) NOT NULL,
+    parent_email VARCHAR(191),
+    parent_phone VARCHAR(100),
+    stage VARCHAR(50) DEFAULT 'INQUIRY',
+    entrance_score INT DEFAULT 0,
+    notes TEXT,
+    assigned_counselor VARCHAR(191),
+    application_date VARCHAR(50),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS campus_fee_structures (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    title VARCHAR(191) NOT NULL,
+    category VARCHAR(100) DEFAULT 'TUITION',
+    class_level VARCHAR(100) DEFAULT 'All Levels',
+    term_name VARCHAR(100) DEFAULT 'Current Term',
+    amount DECIMAL(12,2) NOT NULL DEFAULT 0,
+    is_mandatory BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS campus_student_invoices (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    invoice_no VARCHAR(100) NOT NULL,
+    student_id VARCHAR(191),
+    student_name VARCHAR(191) NOT NULL,
+    class_name VARCHAR(100) NOT NULL,
+    term_name VARCHAR(100) DEFAULT 'Current Term',
+    total_billed DECIMAL(12,2) NOT NULL DEFAULT 0,
+    amount_paid DECIMAL(12,2) NOT NULL DEFAULT 0,
+    balance_due DECIMAL(12,2) NOT NULL DEFAULT 0,
+    status VARCHAR(50) DEFAULT 'UNPAID',
+    payment_method VARCHAR(100),
+    due_date VARCHAR(50),
+    last_payment_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS campus_library_books (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    isbn VARCHAR(100),
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(191) NOT NULL,
+    category VARCHAR(100) DEFAULT 'General',
+    shelf_location VARCHAR(100),
+    total_copies INT DEFAULT 1,
+    available_copies INT DEFAULT 1,
+    digital_url TEXT,
+    status VARCHAR(50) DEFAULT 'AVAILABLE',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS campus_library_loans (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    book_id VARCHAR(191) NOT NULL,
+    book_title VARCHAR(255) NOT NULL,
+    borrower_id VARCHAR(191),
+    borrower_name VARCHAR(191) NOT NULL,
+    borrower_role VARCHAR(50) DEFAULT 'student',
+    class_name VARCHAR(100),
+    issued_date VARCHAR(50),
+    due_date VARCHAR(50),
+    returned_date VARCHAR(50),
+    fine_amount DECIMAL(10,2) DEFAULT 0,
+    status VARCHAR(50) DEFAULT 'BORROWED',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS campus_inventory_items (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    sku VARCHAR(100),
+    item_name VARCHAR(255) NOT NULL,
+    category VARCHAR(100) DEFAULT 'Stationery',
+    unit VARCHAR(50) DEFAULT 'Units',
+    quantity_in_stock INT DEFAULT 0,
+    reorder_level INT DEFAULT 10,
+    unit_cost DECIMAL(12,2) DEFAULT 0,
+    location VARCHAR(191),
+    supplier_name VARCHAR(191),
+    status VARCHAR(50) DEFAULT 'IN_STOCK',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS campus_procurement_requests (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    po_number VARCHAR(100) NOT NULL,
+    department VARCHAR(191) NOT NULL,
+    requested_by VARCHAR(191) NOT NULL,
+    vendor_name VARCHAR(191),
+    items_summary TEXT NOT NULL,
+    total_amount DECIMAL(12,2) NOT NULL DEFAULT 0,
+    priority VARCHAR(50) DEFAULT 'NORMAL',
+    status VARCHAR(50) DEFAULT 'PENDING_APPROVAL',
+    approved_by VARCHAR(191),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS campus_transport_routes (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    route_name VARCHAR(191) NOT NULL,
+    bus_number VARCHAR(100) NOT NULL,
+    driver_name VARCHAR(191) NOT NULL,
+    driver_phone VARCHAR(100),
+    attendant_name VARCHAR(191),
+    capacity INT DEFAULT 40,
+    assigned_students INT DEFAULT 0,
+    stops_summary TEXT,
+    morning_departure VARCHAR(50) DEFAULT '06:45 AM',
+    afternoon_return VARCHAR(50) DEFAULT '03:30 PM',
+    term_fee DECIMAL(12,2) DEFAULT 0,
+    gps_status VARCHAR(50) DEFAULT 'ACTIVE',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS campus_hostel_allocations (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    hostel_name VARCHAR(191) NOT NULL,
+    wing_or_floor VARCHAR(100),
+    room_number VARCHAR(100) NOT NULL,
+    bed_label VARCHAR(50),
+    capacity INT DEFAULT 4,
+    occupants_count INT DEFAULT 0,
+    student_id VARCHAR(191),
+    student_name VARCHAR(191),
+    class_name VARCHAR(100),
+    matron_name VARCHAR(191),
+    exeat_status VARCHAR(50) DEFAULT 'ON_CAMPUS',
+    status VARCHAR(50) DEFAULT 'OCCUPIED',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS campus_notices_and_events (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    category VARCHAR(100) DEFAULT 'NOTICE',
+    audience VARCHAR(100) DEFAULT 'ALL',
+    event_date VARCHAR(50),
+    event_time VARCHAR(50),
+    location VARCHAR(191),
+    content TEXT NOT NULL,
+    author_name VARCHAR(191),
+    is_pinned BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS campus_messages (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    sender_id VARCHAR(191),
+    sender_name VARCHAR(191) NOT NULL,
+    sender_role VARCHAR(50) DEFAULT 'admin',
+    recipient_group VARCHAR(100) DEFAULT 'ALL_PARENTS',
+    recipient_id VARCHAR(191),
+    recipient_name VARCHAR(191),
+    channel VARCHAR(50) DEFAULT 'IN_APP',
+    subject VARCHAR(255) NOT NULL,
+    body TEXT NOT NULL,
+    delivery_status VARCHAR(50) DEFAULT 'DELIVERED',
+    read_count INT DEFAULT 0,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS campus_mobile_app_accounts (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    user_id VARCHAR(191),
+    full_name VARCHAR(191) NOT NULL,
+    email VARCHAR(191),
+    phone VARCHAR(100),
+    role VARCHAR(50) NOT NULL,
+    linked_ward_or_class VARCHAR(191),
+    app_version VARCHAR(50) DEFAULT 'v2.4.0',
+    device_platform VARCHAR(50) DEFAULT 'Android / iOS',
+    push_enabled BOOLEAN DEFAULT TRUE,
+    invite_code VARCHAR(100),
+    account_status VARCHAR(50) DEFAULT 'ACTIVE',
+    last_active_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS campus_homework_and_assessments (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(191) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    subject_name VARCHAR(191) NOT NULL,
+    class_name VARCHAR(100) NOT NULL,
+    teacher_id VARCHAR(191),
+    teacher_name VARCHAR(191),
+    assessment_type VARCHAR(50) DEFAULT 'HOMEWORK',
+    due_date VARCHAR(50),
+    max_score INT DEFAULT 100,
+    instructions TEXT,
+    submissions_count INT DEFAULT 0,
+    total_students INT DEFAULT 30,
+    status VARCHAR(50) DEFAULT 'PUBLISHED',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);

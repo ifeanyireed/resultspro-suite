@@ -38,7 +38,8 @@ import FeesDashboard from '../fees/page';
 import LibraryDashboard from '../library/page';
 import ProcurementDashboard from '../procurement/page';
 import TransportDashboard from '../transport/page';
-import AdmissionsDashboard from '@/components/Dashboard/AdmissionsDashboard';
+import AdmissionsDashboard, { type AdmissionSubtab } from '@/components/Dashboard/AdmissionsDashboard';
+import api from '@/lib/api';
 
 export type CampusOSTab =
   | 'academic'
@@ -747,6 +748,22 @@ export function MessagingDashboard() {
   const [subject, setSubject] = useState('');
   const [messageText, setMessageText] = useState('');
   const [sentNotice, setSentNotice] = useState(false);
+  const [dbMessages, setDbMessages] = useState<any[]>([]);
+
+  const loadMessages = useCallback(async () => {
+    try {
+      const res = await api.get('/v1/campus/messages');
+      if (Array.isArray(res.data)) {
+        setDbMessages(res.data);
+      }
+    } catch (err) {
+      console.error('Failed to load tenant broadcast messages:', err);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadMessages();
+  }, [loadMessages]);
 
   const threads = [
     {
@@ -789,9 +806,22 @@ export function MessagingDashboard() {
     },
   ];
 
-  const handleBroadcast = (e: React.FormEvent) => {
+  const handleBroadcast = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!messageText.trim()) return;
+    try {
+      await api.post('/v1/campus/messages', {
+        sender_name: 'School Administration',
+        sender_role: 'admin',
+        recipient_group: audience,
+        channel: channel === 'all' ? 'SMS_AND_EMAIL' : channel.toUpperCase(),
+        subject: subject || 'Campus Broadcast Notice',
+        body: messageText,
+      });
+      await loadMessages();
+    } catch (err) {
+      console.error('Failed to persist broadcast message:', err);
+    }
     setSentNotice(true);
     setSubject('');
     setMessageText('');
@@ -1257,13 +1287,67 @@ function MobileAppDashboard({ selectedCampus }: { selectedCampus: string }) {
     setTimeout(() => setCopiedId(null), 2200);
   };
 
-  const handleSendInvite = (e: React.FormEvent) => {
+  useEffect(() => {
+    api
+      .get('/v1/campus/mobile-accounts')
+      .then((res) => {
+        if (Array.isArray(res.data) && res.data.length > 0) {
+          const mapped: MobileAppAccount[] = res.data.map((row: any) => {
+            const normRole = (row.role || 'parent').toLowerCase();
+            const roleCap: MobileRoleType =
+              normRole === 'teacher'
+                ? 'Teacher'
+                : normRole === 'driver'
+                ? 'Driver'
+                : normRole === 'admin'
+                ? 'Admin'
+                : 'Parent';
+            const uid = row.invite_code || `${ROLE_CONFIG[roleCap].prefix}-${String(row.id || '').slice(0, 5).toUpperCase()}`;
+            return {
+              id: String(row.id),
+              mobileUserId: uid,
+              name: row.full_name,
+              contact: [row.phone, row.email].filter(Boolean).join(' · '),
+              role: roleCap,
+              campus: selectedCampus === 'All Campuses (Multi-Campus)' ? 'Main Campus · Lekki Phase 1' : selectedCampus,
+              scopeDetail: row.linked_ward_or_class || `${roleCap} Account`,
+              permissionsSummary: ROLE_CONFIG[roleCap].permissionsSummary,
+              deviceStatus: row.device_platform || 'iOS / Android',
+              status: row.account_status === 'INVITE_SENT' ? 'Invite Sent' : 'Active',
+              inviteLink: `https://app.scholars.ng/invite/CMP-LK01?role=${roleCap.toLowerCase()}&uid=${uid}`,
+            };
+          });
+          setAccounts(mapped);
+        }
+      })
+      .catch((err) => console.error('Failed to load mobile app accounts:', err));
+  }, [selectedCampus]);
+
+  const handleSendInvite = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!recipientName.trim() || !recipientContact.trim()) return;
 
+    let finalCode = previewMobileUserId;
+    try {
+      const res = await api.post('/v1/campus/mobile-accounts', {
+        full_name: recipientName.trim(),
+        email: recipientContact.includes('@') ? recipientContact.trim() : '',
+        phone: !recipientContact.includes('@') ? recipientContact.trim() : '',
+        role: inviteRole.toLowerCase(),
+        linked_ward_or_class:
+          recipientScope.trim() || `${inviteRole} Account · Scoped to ${inviteCampus}`,
+        device_platform: 'Invite Dispatched · Awaiting Login',
+      });
+      if (res.data?.invite_code) {
+        finalCode = res.data.invite_code;
+      }
+    } catch (err) {
+      console.error('Failed to persist mobile app account invite:', err);
+    }
+
     const newEntry: MobileAppAccount = {
       id: String(Date.now()),
-      mobileUserId: previewMobileUserId,
+      mobileUserId: finalCode,
       name: recipientName.trim(),
       contact: recipientContact.trim(),
       role: inviteRole,
@@ -1274,12 +1358,12 @@ function MobileAppDashboard({ selectedCampus }: { selectedCampus: string }) {
       permissionsSummary: previewRoleMeta.permissionsSummary,
       deviceStatus: 'Invite Dispatched · Awaiting Login',
       status: 'Invite Sent',
-      inviteLink: previewInviteLink,
+      inviteLink: `${inviteCampusMeta.deepLinkPrefix}?role=${inviteRole.toLowerCase()}&uid=${finalCode}`,
     };
 
     setAccounts([newEntry, ...accounts]);
     setInviteSentBanner(
-      `Assigned ${previewMobileUserId} to ${recipientName.trim()} (${inviteRole}) and dispatched role-scoped invite link!`
+      `Assigned ${finalCode} to ${recipientName.trim()} (${inviteRole}) and persisted role-scoped invite in database!`
     );
     setRecipientName('');
     setRecipientContact('');
@@ -1607,11 +1691,43 @@ function MobileAppDashboard({ selectedCampus }: { selectedCampus: string }) {
 
 export default function AdminCampusOSPage() {
   const [activeTab, setActiveTab] = useState<CampusOSTab>('academic');
+  const [admissionSubtab, setAdmissionSubtab] = useState<AdmissionSubtab>('overview');
   const [selectedCampus, setSelectedCampus] = useState('All Campuses (Multi-Campus)');
   const tabsScrollRef = useRef<HTMLDivElement>(null);
   const scrollHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [scrollMetrics, setScrollMetrics] = useState({ thumbWidth: 100, thumbLeft: 0, hasOverflow: false });
   const [isScrollActive, setIsScrollActive] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get('tab') as CampusOSTab | null;
+    const subtabParam = params.get('subtab') as AdmissionSubtab | null;
+    if (
+      tabParam &&
+      [
+        'academic',
+        'staff',
+        'students',
+        'parents',
+        'financials',
+        'library',
+        'inventory',
+        'transportation',
+        'admission',
+        'messaging',
+        'mobile-app',
+      ].includes(tabParam)
+    ) {
+      setActiveTab(tabParam);
+    }
+    if (
+      subtabParam &&
+      ['overview', 'inquiries', 'applications', 'pipeline'].includes(subtabParam)
+    ) {
+      setAdmissionSubtab(subtabParam);
+    }
+  }, []);
 
   const tabs: { id: CampusOSTab; label: string; icon: any; badge?: string }[] = [
     { id: 'academic', label: 'Academic', icon: AcademicCapIcon, badge: 'Timetable' },
@@ -1780,7 +1896,7 @@ export default function AdminCampusOSPage() {
         {activeTab === 'library' && <LibraryDashboard />}
         {activeTab === 'inventory' && <ProcurementDashboard />}
         {activeTab === 'transportation' && <TransportDashboard />}
-        {activeTab === 'admission' && <AdmissionsDashboard />}
+        {activeTab === 'admission' && <AdmissionsDashboard initialSubtab={admissionSubtab} />}
         {activeTab === 'messaging' && <MessagingDashboard />}
         {activeTab === 'mobile-app' && <MobileAppDashboard selectedCampus={selectedCampus} />}
       </div>

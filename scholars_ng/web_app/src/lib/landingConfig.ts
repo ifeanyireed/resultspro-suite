@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import api, { getActiveTenantContext } from '@/lib/api';
 
 export interface NoticeItem {
   id: string;
@@ -58,6 +59,8 @@ export interface SchoolLandingConfig {
   aboutImage: string;
   contactEmail: string;
   campusLocation: string;
+  customDomain?: string;
+  defaultSubdomain?: string;
   notices: NoticeItem[];
   facilities: FacilityItem[];
   newsAndEvents: NewsEventItem[];
@@ -251,15 +254,25 @@ export const DEFAULT_LANDING_CONFIG: SchoolLandingConfig = {
   ]
 };
 
-const STORAGE_KEY = 'scholars_ng_landing_cms_v1';
+const STORAGE_KEY_PREFIX = 'scholars_ng_landing_cms_v1';
+
+function getTenantStorageKey(): string {
+  const ctx = getActiveTenantContext();
+  const suffix = ctx.tenantSlug || ctx.tenantId || ctx.tenantDomain || 'default';
+  return `${STORAGE_KEY_PREFIX}_${suffix}`;
+}
 
 export function useLandingConfig() {
   const [config, setConfig] = useState<SchoolLandingConfig>(DEFAULT_LANDING_CONFIG);
   const [loaded, setLoaded] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+    const storageKey = getTenantStorageKey();
+
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(storageKey);
       if (raw) {
         const parsed = JSON.parse(raw);
         setConfig({ ...DEFAULT_LANDING_CONFIG, ...parsed });
@@ -267,10 +280,39 @@ export function useLandingConfig() {
     } catch {
       // ignore storage errors
     }
-    setLoaded(true);
+
+    // Load tenant-isolated website CMS config from database (public endpoint works for both guests and admins)
+    api
+      .get('/public/campus/website-config')
+      .then((res) => {
+        if (cancelled) return;
+        const payload = res.data || {};
+        const remoteConfig = payload.config && typeof payload.config === 'object' ? payload.config : {};
+        const merged: SchoolLandingConfig = {
+          ...DEFAULT_LANDING_CONFIG,
+          ...(payload.name ? { schoolName: payload.name } : {}),
+          ...(payload.contact_email ? { contactEmail: payload.contact_email } : {}),
+          ...(payload.full_address ? { campusLocation: payload.full_address } : {}),
+          ...(payload.custom_domain !== undefined ? { customDomain: payload.custom_domain || '' } : {}),
+          ...(payload.default_subdomain ? { defaultSubdomain: payload.default_subdomain } : {}),
+          ...remoteConfig
+        };
+        setConfig(merged);
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(merged));
+        } catch {
+          // ignore
+        }
+      })
+      .catch(() => {
+        // Fallback to tenant-scoped localStorage or defaults
+      })
+      .finally(() => {
+        if (!cancelled) setLoaded(true);
+      });
 
     const handleStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY && e.newValue) {
+      if (e.key === storageKey && e.newValue) {
         try {
           setConfig({ ...DEFAULT_LANDING_CONFIG, ...JSON.parse(e.newValue) });
         } catch {
@@ -279,26 +321,55 @@ export function useLandingConfig() {
       }
     };
     window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('storage', handleStorage);
+    };
   }, []);
 
-  const saveConfig = useCallback((nextConfig: SchoolLandingConfig) => {
+  const saveConfig = useCallback(async (nextConfig: SchoolLandingConfig) => {
     setConfig(nextConfig);
+    const storageKey = getTenantStorageKey();
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextConfig));
+      localStorage.setItem(storageKey, JSON.stringify(nextConfig));
     } catch {
       // ignore
     }
+    setSaving(true);
+    try {
+      await api.put('/v1/campus/website-config', {
+        name: nextConfig.schoolName,
+        contact_email: nextConfig.contactEmail,
+        full_address: nextConfig.campusLocation,
+        custom_domain: nextConfig.customDomain || '',
+        config: nextConfig
+      });
+    } catch {
+      // Local storage already updated as fallback
+    } finally {
+      setSaving(false);
+    }
   }, []);
 
-  const resetConfig = useCallback(() => {
+  const resetConfig = useCallback(async () => {
     setConfig(DEFAULT_LANDING_CONFIG);
+    const storageKey = getTenantStorageKey();
     try {
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(storageKey);
+    } catch {
+      // ignore
+    }
+    try {
+      await api.put('/v1/campus/website-config', {
+        name: DEFAULT_LANDING_CONFIG.schoolName,
+        contact_email: DEFAULT_LANDING_CONFIG.contactEmail,
+        full_address: DEFAULT_LANDING_CONFIG.campusLocation,
+        config: DEFAULT_LANDING_CONFIG
+      });
     } catch {
       // ignore
     }
   }, []);
 
-  return { config, setConfig, saveConfig, resetConfig, loaded };
+  return { config, setConfig, saveConfig, resetConfig, loaded, saving };
 }

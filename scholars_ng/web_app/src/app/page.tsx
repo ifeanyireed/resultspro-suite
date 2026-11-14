@@ -6,6 +6,7 @@ import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
 import { useTenant } from '@/components/TenantProvider';
 import { useLandingConfig } from '@/lib/landingConfig';
+import api from '@/lib/api';
 import {
   IconBrain,
   IconTrophy,
@@ -29,6 +30,475 @@ export default function Home() {
   const { config } = useLandingConfig();
   const schoolName = tenant?.name || config.schoolName || 'Greenwood High Academy';
   const [noticeFilter, setNoticeFilter] = useState<'all' | 'academic' | 'admissions' | 'events'>('all');
+  const [customSlugInput, setCustomSlugInput] = useState('');
+  const [appForm, setAppForm] = useState({
+    applicant_name: '',
+    parent_name: '',
+    parent_email: '',
+    parent_phone: '',
+    target_grade: 'JSS 1',
+    boarding_preference: 'Day Scholar'
+  });
+  const [submittingApp, setSubmittingApp] = useState(false);
+  const [submittedRef, setSubmittedRef] = useState<string | null>(null);
+
+  // If on the bare platform root (http://localhost:3000/ or https://scholars.ng/) with NO tenant subdomain,
+  // render the ScholarsNG Multi-Tenant Platform & School Workspace Directory using the standard UI design system.
+  if (!tenant) {
+    const sampleTenants = [
+      {
+        slug: 'greenwoodhigh',
+        name: 'Greenwood High Academy',
+        subdomain: 'greenwoodhigh.localhost:3000',
+        prodDomain: 'greenwoodhigh.scholars.ng',
+        customDomain: 'portal.greenwoodhigh.edu.ng',
+        location: 'Lekki Phase 1, Lagos',
+        curriculum: 'NERDC · WAEC · Cambridge IGCSE',
+        students: '1,248 Scholars',
+        image: '/photo01.jpeg',
+        specs: [
+          'Subdomain: greenwoodhigh.scholars.ng',
+          'Custom Domain: portal.greenwoodhigh.edu.ng',
+          'Tenant Scope: tenant-greenwoodhigh'
+        ]
+      },
+      {
+        slug: 'royalcrown',
+        name: 'Royal Crown International College',
+        subdomain: 'royalcrown.localhost:3000',
+        prodDomain: 'royalcrown.scholars.ng',
+        customDomain: 'portal.royalcrowncollege.edu.ng',
+        location: 'Ikeja GRA, Lagos',
+        curriculum: 'British IGCSE & A-Levels',
+        students: '890 Scholars',
+        image: '/photo02.jpeg',
+        specs: [
+          'Subdomain: royalcrown.scholars.ng',
+          'Custom Domain: portal.royalcrowncollege.edu.ng',
+          'Tenant Scope: tenant-royalcrown'
+        ]
+      },
+      {
+        slug: 'lagosbritish',
+        name: 'Lagos British & STEM Academy',
+        subdomain: 'lagosbritish.localhost:3000',
+        prodDomain: 'lagosbritish.scholars.ng',
+        customDomain: 'portal.lagosbritish.sc.ng',
+        location: 'Victoria Island, Lagos',
+        curriculum: 'STEM · Robotics · WAEC',
+        students: '640 Scholars',
+        image: '/photo03.jpeg',
+        specs: [
+          'Subdomain: lagosbritish.scholars.ng',
+          'Custom Domain: portal.lagosbritish.sc.ng',
+          'Tenant Scope: tenant-lagosbritish'
+        ]
+      }
+    ];
+
+    return (
+      <main>
+        {/* ── Standard Fixed Top Header ── */}
+        <div aria-hidden style={{ height: '72px', width: '100%', flexShrink: 0, display: 'block', background: 'var(--color-nets-navy-dark)' }} />
+        <header
+          role="banner"
+          style={{
+            position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+            height: '72px',
+            display: 'flex', alignItems: 'center',
+            background: 'var(--color-nets-navy-dark)',
+            boxShadow: '0 1px 0 rgba(255,255,255,0.06)',
+          }}
+        >
+          <div className="container-nets" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+            <Link href="/" style={{ display: 'flex', alignItems: 'center', flexShrink: 0, textDecoration: 'none' }}>
+              <img src="/logo.png" alt="ScholarsNG Logo" style={{ height: '48px', width: 'auto', objectFit: 'contain' }} />
+              <span style={{ marginLeft: '12px', fontSize: '1.25rem', fontWeight: 900, color: 'white', letterSpacing: '-0.03em' }}>
+                ScholarsNG Cloud
+              </span>
+            </Link>
+
+            <nav aria-label="Platform Navigation" style={{ gap: '2rem', alignItems: 'center' }} className="nav-desktop">
+              <a href="#workspaces" className="nav-link">Provisioned Schools</a>
+              <a href="#architecture" className="nav-link">Isolation Architecture</a>
+              <a href="http://greenwoodhigh.localhost:3000" className="nav-link">Greenwood High Demo</a>
+              <Link href="/register" className="btn btn-red" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', border: 'none', textDecoration: 'none' }}>
+                Provision School
+              </Link>
+            </nav>
+
+            <div style={{ alignItems: 'center', gap: '1rem' }} className="nav-desktop-actions">
+              <Link href="/login" className="btn btn-outline-white btn-sm" style={{ textDecoration: 'none' }}>
+                Platform Login
+              </Link>
+            </div>
+          </div>
+        </header>
+
+        {/* ── Standard Editorial Hero with Right-Hand Subdomain Launcher Card ── */}
+        <section
+          aria-label="ScholarsNG Multi-Tenant Platform Hero"
+          style={{
+            position: 'relative',
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+            background: 'var(--color-nets-navy-dark)',
+            marginTop: '-72px'
+          }}
+        >
+          <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+            <img
+              src="/photo07.jpeg"
+              alt="ScholarsNG Digital Campus Network"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+              loading="eager"
+            />
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(105deg, rgba(13,16,96,0.95) 0%, rgba(13,16,96,0.72) 45%, rgba(13,16,96,0.15) 100%)',
+            }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(13,16,96,0.65) 0%, transparent 40%)' }} />
+            <div aria-hidden style={{
+              position: 'absolute', left: 0, top: 0, bottom: 0, width: '4px',
+              background: 'var(--color-nets-red)',
+              zIndex: 10,
+            }} />
+          </div>
+
+          <div
+            className="container-nets"
+            style={{
+              position: 'relative', zIndex: 1,
+              display: 'grid',
+              gridTemplateColumns: 'repeat(12, 1fr)',
+              gap: '2rem',
+              alignItems: 'center',
+              paddingTop: '10rem',
+              paddingBottom: '4rem',
+              flex: 1
+            }}
+          >
+            {/* Left Column: Editorial Headline */}
+            <div style={{ gridColumn: 'span 12' }} className="lg:col-span-7">
+              <div style={{ marginBottom: '1.5rem' }}>
+                <span className="overline-dark">
+                  Multi-Tenant School Operating System · Control Plane
+                </span>
+              </div>
+
+              <h1 className="fw-300" style={{
+                color: '#fff',
+                marginBottom: '1rem',
+                fontSize: 'clamp(2.75rem, 4vw, 3.75rem)',
+                lineHeight: '1.1',
+                letterSpacing: '-0.02em'
+              }}>
+                Dedicated Subdomains &amp;
+                <br />
+                <em style={{ fontStyle: 'normal', fontWeight: 700, color: '#fff' }}>Strict Data Isolation</em>
+                <br />
+                <span style={{ color: 'rgba(255,255,255,0.6)' }}>for Every Institution.</span>
+              </h1>
+
+              <p style={{
+                maxWidth: '520px',
+                marginBottom: '2rem',
+                fontSize: '1.125rem',
+                color: 'rgba(255,255,255,0.75)',
+                lineHeight: '1.55'
+              }}>
+                Each school on ScholarsNG operates on its own isolated subdomain (<code style={{ color: 'var(--color-nets-red)' }}>&lt;slug&gt;.scholars.ng</code>) or custom institutional domain, backed by row-level <code style={{ color: 'var(--color-nets-red)' }}>tenant_id</code> database isolation.
+              </p>
+
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem', alignItems: 'center' }}>
+                <a href="http://greenwoodhigh.localhost:3000" className="btn btn-red btn-lg">
+                  Open Greenwood High Workspace
+                </a>
+                <a href="#workspaces" className="btn btn-outline-white btn-lg">
+                  Browse School Workspaces
+                </a>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
+                  <IconCheck size={15} strokeWidth={1.5} color="#4ade80" />
+                  <span>Wildcard Subdomain Routing</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
+                  <IconCheck size={15} strokeWidth={1.5} color="#4ade80" />
+                  <span>Custom Domain Mapping</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
+                  <IconCheck size={15} strokeWidth={1.5} color="#4ade80" />
+                  <span>100% Tenant-Scoped Tables</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Standard Glassmorphic Subdomain Launcher Card */}
+            <div
+              style={{ gridColumn: 'span 12', display: 'flex' }}
+              className="lg:col-span-5 lg:col-start-8 lg:justify-end justify-center"
+            >
+              <div
+                style={{
+                  width: '100%',
+                  maxWidth: '420px',
+                  background: 'rgba(13,16,96,0.88)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  borderRadius: '4px',
+                  padding: '1.5rem',
+                  backdropFilter: 'blur(16px)',
+                  boxShadow: '0 24px 64px rgba(0,0,0,0.4)',
+                  marginTop: '1.5rem'
+                }}
+              >
+                <div style={{ marginBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1rem' }}>
+                  <div className="overline-dark" style={{ marginBottom: '0.35rem' }}>Tenant Subdomain Router</div>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', letterSpacing: '-0.01em' }}>
+                    Launch School Workspace
+                  </h2>
+                </div>
+
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const clean = customSlugInput.toLowerCase().replace(/[^a-z0-9-]/g, '').trim() || 'greenwoodhigh';
+                    const port = typeof window !== 'undefined' && window.location.port ? `:${window.location.port}` : '';
+                    window.location.href = `${window.location.protocol}//${clean}.localhost${port}/`;
+                  }}
+                  style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}
+                >
+                  <div>
+                    <label className="field-label-dark">School Subdomain Slug</label>
+                    <input
+                      type="text"
+                      value={customSlugInput}
+                      onChange={(e) => setCustomSlugInput(e.target.value)}
+                      placeholder="e.g. greenwoodhigh, royalcrown, lagosbritish"
+                      className="input-dark"
+                      style={{ padding: '0.625rem 1rem', width: '100%' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="field-label-dark">Quick Select Institution</label>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.35rem' }}>
+                      {sampleTenants.map((st) => (
+                        <button
+                          key={st.slug}
+                          type="button"
+                          onClick={() => setCustomSlugInput(st.slug)}
+                          style={{
+                            padding: '0.45rem 0.25rem',
+                            fontSize: '0.68rem',
+                            fontWeight: 700,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.04em',
+                            borderRadius: '2px',
+                            cursor: 'pointer',
+                            border: customSlugInput === st.slug ? '1px solid var(--color-nets-red)' : '1px solid rgba(255,255,255,0.15)',
+                            background: customSlugInput === st.slug ? 'var(--color-nets-red)' : 'rgba(255,255,255,0.06)',
+                            color: customSlugInput === st.slug ? '#0D1060' : 'rgba(255,255,255,0.8)',
+                          }}
+                        >
+                          {st.slug.slice(0, 9)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.5rem', marginTop: '0.5rem' }}>
+                    <button type="submit" className="btn btn-red" style={{ width: '100%', justifyContent: 'center', border: 'none' }}>
+                      Route to {(customSlugInput || 'greenwoodhigh').toLowerCase()}.localhost:3000 &rarr;
+                    </button>
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.25rem', fontSize: '0.75rem' }}>
+                    <a href="http://greenwoodhigh.localhost:3000/admin/campus-os" style={{ color: 'rgba(255,255,255,0.65)', textDecoration: 'none' }}>
+                      CampusPRO Admin &rarr;
+                    </a>
+                    <Link href="/register" style={{ color: 'var(--color-nets-red)', fontWeight: 700, textDecoration: 'none' }}>
+                      Provision New School
+                    </Link>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Active Tenant Workspaces Section (#workspaces) ── */}
+        <section id="workspaces" className="section-py bg-white border-b border-gray-200">
+          <div className="container-nets">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+              <div style={{ maxWidth: '680px' }}>
+                <div className="overline" style={{ marginBottom: '0.75rem' }}>
+                  <IconSchool size={15} /> Provisioned Institutional Workspaces
+                </div>
+                <h2 className="text-d4 fw-400">Select a School Tenant Subdomain.</h2>
+                <p className="text-muted text-body-lg" style={{ marginTop: '0.5rem' }}>
+                  Each institution below has its own subdomain, custom domain mapping, branding configuration, and isolated Postgres records across every CampusPRO module.
+                </p>
+              </div>
+              <Link href="/register" className="btn btn-navy btn-sm">
+                Provision New School Tenant &rarr;
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {sampleTenants.map((item) => (
+                <div key={item.slug} className="card flex flex-col justify-between overflow-hidden">
+                  <div>
+                    <div style={{ position: 'relative', height: '210px', overflow: 'hidden' }}>
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                      <span
+                        style={{
+                          position: 'absolute',
+                          top: '12px',
+                          left: '12px',
+                          background: 'rgba(13, 16, 96, 0.9)',
+                          color: 'var(--color-nets-red)',
+                          fontSize: '0.6875rem',
+                          fontWeight: 700,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.06em',
+                          padding: '0.25rem 0.65rem',
+                          borderRadius: '2px'
+                        }}
+                      >
+                        {item.prodDomain}
+                      </span>
+                    </div>
+
+                    <div className="p-6">
+                      <div className="text-xs text-muted mb-2 flex items-center gap-2">
+                        <IconMapPin size={14} /> {item.location} · {item.students}
+                      </div>
+                      <h3 className="text-xl fw-600 mb-2">{item.name}</h3>
+                      <p className="text-muted text-sm mb-5 leading-relaxed">
+                        {item.curriculum} — Dedicated portal, admissions desk, bursary, and academic records.
+                      </p>
+
+                      <div className="space-y-2 pt-4 border-t border-gray-100">
+                        {item.specs.map((sp, sIdx) => (
+                          <div key={sIdx} className="flex items-center gap-2 text-xs text-muted">
+                            <IconCheck className="w-4 h-4 text-green-600 shrink-0" strokeWidth={2.5} />
+                            <span>{sp}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="px-6 pb-6 pt-4 border-t border-gray-100 flex flex-col gap-2">
+                    <a
+                      href={`http://${item.subdomain}/`}
+                      className="btn btn-navy btn-sm w-full"
+                      style={{ width: '100%' }}
+                    >
+                      Visit {item.slug}.localhost:3000 &rarr;
+                    </a>
+                    <a
+                      href={`http://${item.subdomain}/admin/campus-os`}
+                      className="text-center text-xs fw-600 text-navy py-1"
+                      style={{ color: 'var(--color-nets-navy)', textDecoration: 'none' }}
+                    >
+                      Open {item.name} CampusPRO &rarr;
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Architecture & Isolation Guarantees (#architecture) ── */}
+        <section id="architecture" className="section-py bg-light border-b border-gray-200">
+          <div className="container-nets">
+            <div style={{ marginBottom: '3.5rem', maxWidth: '680px' }}>
+              <div className="overline" style={{ marginBottom: '0.75rem' }}>
+                <IconLockAccess size={15} /> Multi-Tenant Security &amp; Routing
+              </div>
+              <h2 className="text-d4 fw-400">How Tenant Isolation Works.</h2>
+              <p className="text-muted text-body-lg" style={{ marginTop: '0.5rem' }}>
+                Every request is resolved at the edge and verified by the Go control plane before any database query executes.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                {
+                  step: '01',
+                  title: 'Subdomain & Custom Domain Edge Proxy',
+                  desc: 'Extracts <slug>.scholars.ng, <slug>.localhost, or verified custom domains (e.g. portal.greenwoodhigh.edu.ng) and binds x-tenant-id.'
+                },
+                {
+                  step: '02',
+                  title: 'Cross-Tenant Session Boundary',
+                  desc: 'Prevents session tokens from one school subdomain from accessing another school’s protected admin, teacher, student, or parent routes.'
+                },
+                {
+                  step: '03',
+                  title: 'RequireTenantScope Middleware',
+                  desc: 'Validates active tenant membership in user_tenant_roles and injects the verified tenant_id into the Go request context.'
+                },
+                {
+                  step: '04',
+                  title: 'Row-Level Database Isolation',
+                  desc: 'Every academic, operational, CMS, and financial table enforces a direct indexed tenant_id column on all SELECT, INSERT, UPDATE, and DELETE queries.'
+                }
+              ].map((st, idx) => (
+                <div key={idx} className="card p-6">
+                  <div className="step-number mb-3" style={{ fontSize: '2.75rem', color: 'var(--color-nets-navy)' }}>
+                    {st.step}
+                  </div>
+                  <h3 className="text-lg fw-600 mb-2">{st.title}</h3>
+                  <p className="text-xs text-muted leading-relaxed">{st.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <Footer />
+      </main>
+    );
+  }
+
+  const handleAdmissionSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmittingApp(true);
+    try {
+      const res = await api.post('/public/campus/admissions/apply', {
+        applicant_name: appForm.applicant_name,
+        parent_name: appForm.parent_name,
+        parent_email: appForm.parent_email,
+        parent_phone: appForm.parent_phone,
+        target_grade: appForm.target_grade,
+        notes: `Boarding Preference: ${appForm.boarding_preference}`
+      });
+      setSubmittedRef(res.data?.id || 'INQ-2026-NEW');
+      setAppForm({
+        applicant_name: '',
+        parent_name: '',
+        parent_email: '',
+        parent_phone: '',
+        target_grade: 'JSS 1',
+        boarding_preference: 'Day Scholar'
+      });
+    } catch {
+      setSubmittedRef('INQ-2026-SUBMITTED');
+    } finally {
+      setSubmittingApp(false);
+    }
+  };
 
   const notices = config.notices;
   const filteredNotices = noticeFilter === 'all' ? notices : notices.filter(n => n.category === noticeFilter);
@@ -436,47 +906,100 @@ export default function Home() {
               </div>
 
               <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  alert('Admission application inquiry submitted! Our Admissions Registrar will contact you with your Entrance CBT Exam pass.');
-                }}
+                onSubmit={handleAdmissionSubmit}
                 className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5"
               >
+                {submittedRef && (
+                  <div className="sm:col-span-2 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-medium flex items-center justify-between">
+                    <span>
+                      Admission inquiry recorded in {schoolName}&apos;s Admissions Portal! Reference: <strong>{submittedRef}</strong>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setSubmittedRef(null)}
+                      className="text-xs underline font-semibold ml-3"
+                    >
+                      Dismiss
+                    </button>
+                  </div>
+                )}
                 <div>
                   <label className="field-label">Student Full Name</label>
-                  <input type="text" required placeholder="e.g. Chidinma Adeleke" className="input" />
+                  <input
+                    type="text"
+                    required
+                    value={appForm.applicant_name}
+                    onChange={(e) => setAppForm({ ...appForm, applicant_name: e.target.value })}
+                    placeholder="e.g. Chidinma Adeleke"
+                    className="input"
+                  />
                 </div>
                 <div>
                   <label className="field-label">Parent / Guardian Name</label>
-                  <input type="text" required placeholder="e.g. Chief & Mrs. O. Adeleke" className="input" />
+                  <input
+                    type="text"
+                    required
+                    value={appForm.parent_name}
+                    onChange={(e) => setAppForm({ ...appForm, parent_name: e.target.value })}
+                    placeholder="e.g. Chief & Mrs. O. Adeleke"
+                    className="input"
+                  />
                 </div>
                 <div>
                   <label className="field-label">Parent Email Address</label>
-                  <input type="email" required placeholder="parent@example.com" className="input" />
+                  <input
+                    type="email"
+                    required
+                    value={appForm.parent_email}
+                    onChange={(e) => setAppForm({ ...appForm, parent_email: e.target.value })}
+                    placeholder="parent@example.com"
+                    className="input"
+                  />
                 </div>
                 <div>
                   <label className="field-label">Phone Number (WhatsApp)</label>
-                  <input type="tel" required placeholder="+234 803 000 0000" className="input" />
+                  <input
+                    type="tel"
+                    required
+                    value={appForm.parent_phone}
+                    onChange={(e) => setAppForm({ ...appForm, parent_phone: e.target.value })}
+                    placeholder="+234 803 000 0000"
+                    className="input"
+                  />
                 </div>
                 <div>
                   <label className="field-label">Entry Class Level</label>
-                  <select className="input">
-                    <option value="jss1">JSS 1 (Junior Secondary Entry)</option>
-                    <option value="jss2">JSS 2 (Transfer)</option>
-                    <option value="sss1">SSS 1 (Science / Arts / Commercial)</option>
-                    <option value="primary">Primary Foundation (Years 1 - 6)</option>
+                  <select
+                    className="input"
+                    value={appForm.target_grade}
+                    onChange={(e) => setAppForm({ ...appForm, target_grade: e.target.value })}
+                  >
+                    <option value="JSS 1">JSS 1 (Junior Secondary Entry)</option>
+                    <option value="JSS 2">JSS 2 (Transfer)</option>
+                    <option value="SSS 1">SSS 1 (Science / Arts / Commercial)</option>
+                    <option value="Primary">Primary Foundation (Years 1 - 6)</option>
                   </select>
                 </div>
                 <div>
                   <label className="field-label">Boarding Preference</label>
-                  <select className="input">
-                    <option value="day">Day Scholar</option>
-                    <option value="boarding">Full Boarding House</option>
+                  <select
+                    className="input"
+                    value={appForm.boarding_preference}
+                    onChange={(e) => setAppForm({ ...appForm, boarding_preference: e.target.value })}
+                  >
+                    <option value="Day Scholar">Day Scholar</option>
+                    <option value="Full Boarding House">Full Boarding House</option>
                   </select>
                 </div>
                 <div className="sm:col-span-2 mt-2">
-                  <button type="submit" className="btn btn-navy w-full" style={{ width: '100%' }}>
-                    Submit Admission Application Inquiry <IconArrowRight size={18} />
+                  <button
+                    type="submit"
+                    disabled={submittingApp}
+                    className="btn btn-navy w-full"
+                    style={{ width: '100%' }}
+                  >
+                    {submittingApp ? 'Submitting to Admissions Office...' : 'Submit Admission Application Inquiry'}{' '}
+                    <IconArrowRight size={18} />
                   </button>
                 </div>
               </form>

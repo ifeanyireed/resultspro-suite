@@ -10,6 +10,7 @@ import (
 
 	"github.com/google/uuid"
 	"service_users.resultspro.ng/db"
+	"service_users.resultspro.ng/middleware"
 	"service_users.resultspro.ng/models"
 	"service_users.resultspro.ng/utils"
 )
@@ -68,6 +69,9 @@ func HandleGetSessions(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+	if tenantID == "" {
+		tenantID = middleware.GetTenantID(r)
+	}
 
 	query := "SELECT id, tenant_id, name, start_date, end_date, is_current, created_at FROM academic_sessions WHERE 1=1"
 	args := []interface{}{}
@@ -111,6 +115,7 @@ func HandleCreateTerm(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
+		TenantID  string `json:"tenant_id"`
 		SessionID string `json:"session_id"`
 		Name      string `json:"name"`
 		IsCurrent bool   `json:"is_current"`
@@ -121,24 +126,33 @@ func HandleCreateTerm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tenantID := input.TenantID
+	if tenantID == "" {
+		_ = db.DB.QueryRow("SELECT tenant_id FROM academic_sessions WHERE id = ?", input.SessionID).Scan(&tenantID)
+	}
+	if tenantID == "" {
+		tenantID = middleware.GetTenantID(r)
+	}
+
 	termID := uuid.New().String()
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
 
 	if input.IsCurrent {
-		db.DB.Exec("UPDATE terms SET is_current = 0 WHERE session_id = ?", input.SessionID)
+		db.DB.Exec("UPDATE terms SET is_current = false WHERE session_id = ?", input.SessionID)
 	}
 
-	query := `INSERT INTO terms (id, session_id, name, is_current, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)`
-	_, err := db.DB.Exec(query, termID, input.SessionID, input.Name, input.IsCurrent, now, now)
+	query := `INSERT INTO terms (id, tenant_id, session_id, name, is_current, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)`
+	_, err := db.DB.Exec(query, termID, tenantID, input.SessionID, input.Name, input.IsCurrent, now, now)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to create term")
 		return
 	}
 
 	utils.JSONResponse(w, http.StatusCreated, map[string]interface{}{
-		"id":      termID,
-		"name":    input.Name,
-		"message": "Term created successfully",
+		"id":        termID,
+		"tenant_id": tenantID,
+		"name":      input.Name,
+		"message":   "Term created successfully",
 	})
 }
 
@@ -153,12 +167,17 @@ func HandleGetTerms(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+	tenantID := middleware.GetTenantID(r)
 
 	query := "SELECT id, session_id, name, is_current, created_at FROM terms WHERE 1=1"
 	args := []interface{}{}
 	if sessionID != "" {
 		query += " AND session_id = ?"
 		args = append(args, sessionID)
+	}
+	if tenantID != "" {
+		query += " AND (tenant_id = ? OR tenant_id IS NULL)"
+		args = append(args, tenantID)
 	}
 
 	rows, err := db.DB.Query(query, args...)
@@ -227,6 +246,9 @@ func HandleGetClasses(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+	if tenantID == "" {
+		tenantID = middleware.GetTenantID(r)
+	}
 
 	query := "SELECT id, tenant_id, curriculum_id, name, level, created_at FROM classes WHERE 1=1"
 	args := []interface{}{}
@@ -265,6 +287,7 @@ func HandleCreateSection(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var input struct {
+		TenantID   string `json:"tenant_id"`
 		ClassID    string `json:"class_id"`
 		Name       string `json:"name"`
 		RoomNumber string `json:"room_number"`
@@ -275,20 +298,29 @@ func HandleCreateSection(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tenantID := input.TenantID
+	if tenantID == "" {
+		_ = db.DB.QueryRow("SELECT tenant_id FROM classes WHERE id = ?", input.ClassID).Scan(&tenantID)
+	}
+	if tenantID == "" {
+		tenantID = middleware.GetTenantID(r)
+	}
+
 	sectionID := uuid.New().String()
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
 
-	query := `INSERT INTO sections (id, class_id, name, room_number, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)`
-	_, err := db.DB.Exec(query, sectionID, input.ClassID, input.Name, sql.NullString{String: input.RoomNumber, Valid: input.RoomNumber != ""}, now, now)
+	query := `INSERT INTO sections (id, tenant_id, class_id, name, room_number, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)`
+	_, err := db.DB.Exec(query, sectionID, tenantID, input.ClassID, input.Name, sql.NullString{String: input.RoomNumber, Valid: input.RoomNumber != ""}, now, now)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to create section")
 		return
 	}
 
 	utils.JSONResponse(w, http.StatusCreated, map[string]interface{}{
-		"id":      sectionID,
-		"name":    input.Name,
-		"message": "Section created successfully",
+		"id":        sectionID,
+		"tenant_id": tenantID,
+		"name":      input.Name,
+		"message":   "Section created successfully",
 	})
 }
 
@@ -303,12 +335,17 @@ func HandleGetSections(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+	tenantID := middleware.GetTenantID(r)
 
 	query := "SELECT id, class_id, name, room_number, created_at FROM sections WHERE 1=1"
 	args := []interface{}{}
 	if classID != "" {
 		query += " AND class_id = ?"
 		args = append(args, classID)
+	}
+	if tenantID != "" {
+		query += " AND (tenant_id = ? OR tenant_id IS NULL)"
+		args = append(args, tenantID)
 	}
 
 	rows, err := db.DB.Query(query, args...)
@@ -380,6 +417,9 @@ func HandleGetSubjects(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 		}
+	}
+	if tenantID == "" {
+		tenantID = middleware.GetTenantID(r)
 	}
 
 	query := "SELECT id, tenant_id, name, code, created_at FROM subjects WHERE 1=1"
@@ -789,9 +829,13 @@ func HandleEnrollStudent(w http.ResponseWriter, r *http.Request) {
 
 	enrollID := uuid.New().String()
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
+	tenantID := middleware.GetTenantID(r)
+	if tenantID == "" {
+		_ = db.DB.QueryRow("SELECT tenant_id FROM academic_sessions WHERE id = ?", input.SessionID).Scan(&tenantID)
+	}
 
-	query := `INSERT INTO enrollments (id, student_id, section_id, session_id, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)`
-	_, err := db.DB.Exec(query, enrollID, input.StudentID, input.SectionID, input.SessionID, status, now, now)
+	query := `INSERT INTO enrollments (id, tenant_id, student_id, section_id, session_id, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+	_, err := db.DB.Exec(query, enrollID, tenantID, input.StudentID, input.SectionID, input.SessionID, status, now, now)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to enroll student")
 		return
@@ -875,9 +919,13 @@ func HandleAssignTeacher(w http.ResponseWriter, r *http.Request) {
 
 	assignID := uuid.New().String()
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
+	tenantID := middleware.GetTenantID(r)
+	if tenantID == "" {
+		_ = db.DB.QueryRow("SELECT tenant_id FROM sections WHERE id = ?", input.SectionID).Scan(&tenantID)
+	}
 
-	query := `INSERT INTO assignments (id, section_id, subject_id, teacher_id, term_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)`
-	_, err := db.DB.Exec(query, assignID, input.SectionID, input.SubjectID, input.TeacherID, input.TermID, now, now)
+	query := `INSERT INTO assignments (id, tenant_id, section_id, subject_id, teacher_id, term_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+	_, err := db.DB.Exec(query, assignID, tenantID, input.SectionID, input.SubjectID, input.TeacherID, input.TermID, now, now)
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to assign teacher")
 		return

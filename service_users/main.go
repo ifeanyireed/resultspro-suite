@@ -32,6 +32,7 @@ func main() {
 	log.Printf("Connecting to database...")
 	db.InitDB(config.DatabaseURL)
 	db.InitPuzzleSchema()
+	db.InitTenantIsolationSchema()
 	handlers.EnsureBlogSchema()
 	handlers.EnsureDemoSchema()
 
@@ -218,6 +219,7 @@ func main() {
 
 	// Direct REST Tenant endpoints
 	mux.HandleFunc("/api/public/tenant/resolve", handlers.HandleResolveTenant)
+	mux.HandleFunc("/api/public/campus/website-config", middleware.RequireTenantScope(handlers.HandleCampusWebsiteConfig))
 
 	// Admin Global Telemetry
 	mux.HandleFunc("/api/v1/admin/stats", middleware.RequireRole("super-admin", "platform-admin")(handlers.HandleGetSuiteStats))
@@ -258,6 +260,8 @@ func main() {
 				} else {
 					handlers.HandleUpdateTenantBranding(w, r)
 				}
+			case "custom-domain":
+				handlers.HandleUpdateTenantCustomDomain(w, r)
 			case "verify":
 				handlers.HandleVerifyTenant(w, r)
 			case "roles":
@@ -628,6 +632,40 @@ func main() {
 	mux.HandleFunc("/api/v1/demo/booking", handlers.HandlePublicDemoBooking)
 	mux.HandleFunc("/api/v1/admin/demo-bookings", middleware.RequireAuth(handlers.HandleAdminDemoBookings))
 	mux.HandleFunc("/api/v1/admin/demo-bookings/", middleware.RequireAuth(handlers.HandleAdminDemoBookingSubroutes))
+
+	// =========================================================
+	// --- 9. CampusPRO & ScholarsNG Tenant-Isolated Endpoints ---
+	// =========================================================
+	mux.HandleFunc("/api/public/campus/website-config", middleware.RequireTenantScope(handlers.HandleCampusWebsiteConfig))
+	mux.HandleFunc("/api/v1/campus/website-config", middleware.RequireTenantScope(handlers.HandleCampusWebsiteConfig))
+	mux.HandleFunc("/api/v1/campus/summary", middleware.RequireTenantScope(handlers.HandleCampusSummary))
+	mux.HandleFunc("/api/v1/campus/timetable", middleware.RequireTenantScope(handlers.HandleCampusTimetable))
+	mux.HandleFunc("/api/v1/campus/admissions", middleware.RequireTenantScope(handlers.HandleCampusAdmissions))
+	mux.HandleFunc("/api/public/campus/admissions/apply", middleware.RequireTenantScope(handlers.HandleCampusAdmissions))
+	mux.HandleFunc("/api/v1/campus/fees", middleware.RequireTenantScope(handlers.HandleCampusFees))
+	mux.HandleFunc("/api/v1/campus/library", middleware.RequireTenantScope(handlers.HandleCampusLibrary))
+	mux.HandleFunc("/api/v1/campus/procurement", middleware.RequireTenantScope(handlers.HandleCampusProcurement))
+	mux.HandleFunc("/api/v1/campus/transport", middleware.RequireTenantScope(handlers.HandleCampusTransport))
+	mux.HandleFunc("/api/v1/campus/hostel", middleware.RequireTenantScope(handlers.HandleCampusHostel))
+	mux.HandleFunc("/api/v1/campus/notices", middleware.RequireTenantScope(handlers.HandleCampusNotices))
+	mux.HandleFunc("/api/v1/campus/messages", middleware.RequireTenantScope(handlers.HandleCampusMessages))
+	mux.HandleFunc("/api/v1/campus/mobile-accounts", middleware.RequireTenantScope(handlers.HandleCampusMobileAccounts))
+	mux.HandleFunc("/api/v1/campus/homework", middleware.RequireTenantScope(handlers.HandleCampusHomework))
+
+	// Mirror routes with /api prefix when NEXT_PUBLIC_API_URL ends with /api
+	mux.HandleFunc("/api/campus/website-config", middleware.RequireTenantScope(handlers.HandleCampusWebsiteConfig))
+	mux.HandleFunc("/api/campus/summary", middleware.RequireTenantScope(handlers.HandleCampusSummary))
+	mux.HandleFunc("/api/campus/timetable", middleware.RequireTenantScope(handlers.HandleCampusTimetable))
+	mux.HandleFunc("/api/campus/admissions", middleware.RequireTenantScope(handlers.HandleCampusAdmissions))
+	mux.HandleFunc("/api/campus/fees", middleware.RequireTenantScope(handlers.HandleCampusFees))
+	mux.HandleFunc("/api/campus/library", middleware.RequireTenantScope(handlers.HandleCampusLibrary))
+	mux.HandleFunc("/api/campus/procurement", middleware.RequireTenantScope(handlers.HandleCampusProcurement))
+	mux.HandleFunc("/api/campus/transport", middleware.RequireTenantScope(handlers.HandleCampusTransport))
+	mux.HandleFunc("/api/campus/hostel", middleware.RequireTenantScope(handlers.HandleCampusHostel))
+	mux.HandleFunc("/api/campus/notices", middleware.RequireTenantScope(handlers.HandleCampusNotices))
+	mux.HandleFunc("/api/campus/messages", middleware.RequireTenantScope(handlers.HandleCampusMessages))
+	mux.HandleFunc("/api/campus/mobile-accounts", middleware.RequireTenantScope(handlers.HandleCampusMobileAccounts))
+	mux.HandleFunc("/api/campus/homework", middleware.RequireTenantScope(handlers.HandleCampusHomework))
 
 	// Wrap entire handler tree with CORS middleware
 	handler := middleware.EnableCORS(mux)

@@ -1,2 +1,5 @@
-import Home from '../page';
-export default Home;
+import { redirect } from 'next/navigation';
+
+export default function AdmissionsRouteRedirect() {
+  redirect('/#admissions');
+}

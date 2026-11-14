@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   BellAlertIcon,
   CalendarDaysIcon,
@@ -8,8 +8,37 @@ import {
   DocumentTextIcon,
   ChevronDownIcon
 } from '@heroicons/react/24/outline';
+import api from '@/lib/api';
 
 export default function ParentDashboardPage() {
+  const [notices, setNotices] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<any[]>([]);
+  const [outstandingFee, setOutstandingFee] = useState<number>(45000);
+
+  useEffect(() => {
+    api.get('/v1/campus/notices')
+      .then((res) => {
+        if (Array.isArray(res.data)) setNotices(res.data);
+      })
+      .catch(() => {});
+
+    api.get('/v1/campus/homework')
+      .then((res) => {
+        if (Array.isArray(res.data)) setTasks(res.data);
+      })
+      .catch(() => {});
+
+    api.get('/v1/campus/fees')
+      .then((res) => {
+        const invs = res.data?.invoices || [];
+        if (invs.length > 0) {
+          const totalBal = invs.reduce((acc: number, i: any) => acc + Number(i.balance_due || 0), 0);
+          setOutstandingFee(totalBal);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <>
       <div className="flex items-end justify-between mb-8 mt-2">
@@ -88,9 +117,9 @@ export default function ParentDashboardPage() {
             </div>
           </div>
           <div>
-            <h2 className="text-2xl font-medium tracking-tight text-gray-900 mb-2">₦45,000</h2>
+            <h2 className="text-2xl font-medium tracking-tight text-gray-900 mb-2">₦{outstandingFee.toLocaleString()}</h2>
             <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <span className="text-orange-500 font-bold">Due in 5 days</span>
+              <span className="text-orange-500 font-bold">Live Bursary Balance</span>
             </div>
           </div>
         </div>
@@ -104,35 +133,28 @@ export default function ParentDashboardPage() {
             <h3 className="text-lg font-medium text-gray-900 mb-6">School Notices & Feed</h3>
             
             <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 border border-blue-100">
-                  <CalendarDaysIcon className="w-6 h-6 text-[#146ef5]" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h4 className="font-medium text-gray-900">Inter-House Sports Meeting</h4>
-                    <span className="text-[10px] text-gray-400">2 hours ago</span>
+              {(notices.length > 0 ? notices : [
+                {
+                  title: 'Inter-House Sports Meeting',
+                  event_date: 'This Week',
+                  content: 'Dear Parents, please be reminded that the annual Inter-House Sports meeting will hold this Friday.'
+                }
+              ]).map((n: any, idx: number) => (
+                <div key={n.id || idx} className="flex gap-4">
+                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 border border-blue-100">
+                    <CalendarDaysIcon className="w-6 h-6 text-[#146ef5]" />
                   </div>
-                  <p className="text-sm text-gray-600 bg-gray-50 p-4 rounded-xl border border-gray-100">
-                    Dear Parents, please be reminded that the annual Inter-House Sports meeting will hold this Friday. Ensure Alex comes in their sportswear (Blue House).
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="w-12 h-12 rounded-full bg-gray-100 overflow-hidden shrink-0 border border-gray-200">
-                  <img src="/avatars/character2.jpg" alt="Teacher" className="w-full h-full object-cover" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h4 className="font-medium text-gray-900">Mr. Davies (Science)</h4>
-                    <span className="text-[10px] text-gray-400">Yesterday</span>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-medium text-gray-900">{n.title}</h4>
+                      <span className="text-[10px] text-gray-400">{n.event_date || 'Pinned'}</span>
+                    </div>
+                    <p className="text-sm text-gray-600 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                      {n.content}
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-600 bg-gray-50 p-4 rounded-xl border border-gray-100 italic">
-                    "Alex showed great improvement in the recent Chemistry practicals. Very attentive!"
-                  </p>
                 </div>
-              </div>
+              ))}
             </div>
             
           </div>
@@ -144,21 +166,17 @@ export default function ParentDashboardPage() {
             <h3 className="text-lg font-medium text-gray-900 mb-6">Upcoming Tasks</h3>
             
             <div className="flex-1 flex flex-col gap-4">
-              <div className="p-4 rounded-xl border border-gray-100 hover:border-[#146ef5] transition-colors cursor-pointer group">
-                <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-medium text-gray-900 group-hover:text-[#146ef5] transition-colors">Math Assignment</h4>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-50 text-orange-600">Tomorrow</span>
+              {(tasks.length > 0 ? tasks : [
+                { title: 'Math Assignment', due_date: 'Tomorrow', subject_name: 'Algebra Chapter 4 exercises' }
+              ]).map((t: any, idx: number) => (
+                <div key={t.id || idx} className="p-4 rounded-xl border border-gray-100 hover:border-[#146ef5] transition-colors cursor-pointer group">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-medium text-gray-900 group-hover:text-[#146ef5] transition-colors">{t.title}</h4>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-50 text-orange-600">{t.due_date || 'Upcoming'}</span>
+                  </div>
+                  <p className="text-xs text-gray-500">{t.subject_name}</p>
                 </div>
-                <p className="text-xs text-gray-500">Algebra Chapter 4 exercises</p>
-              </div>
-
-              <div className="p-4 rounded-xl border border-gray-100 hover:border-[#146ef5] transition-colors cursor-pointer group">
-                <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-medium text-gray-900 group-hover:text-[#146ef5] transition-colors">Courses Project</h4>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-[#146ef5]">Friday</span>
-                </div>
-                <p className="text-xs text-gray-500">Submit CSS styled webpage</p>
-              </div>
+              ))}
             </div>
 
             <button className="w-full mt-4 bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm font-semibold py-2.5 rounded-full transition-colors border border-gray-200">
