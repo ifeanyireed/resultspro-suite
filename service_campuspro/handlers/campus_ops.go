@@ -67,20 +67,28 @@ func seedTenantOperationalDataIfEmpty(tenantID string) {
 
 	// 3. Seed Fee Structures & Student Invoices
 	_, _ = db.DB.Exec(`
-		INSERT INTO campus_fee_structures (id, tenant_id, title, category, class_level, term_name, amount, is_mandatory)
+		INSERT INTO campus_fee_structures (
+			id, tenant_id, title, category, class_level, term_name, amount,
+			tuition_fee, development_levy, ict_stem_fee, exam_materials_fee, total_due,
+			is_mandatory, due_date
+		)
 		VALUES
-		(?, ?, 'Termly Tuition & Academic Levy', 'TUITION', 'Junior Secondary (JSS 1-3)', 'First Term', 185000, true),
-		(?, ?, 'Senior Secondary Science & Lab Fee', 'TUITION', 'Senior Secondary (SS 1-3)', 'First Term', 225000, true),
-		(?, ?, 'STEM Robotics & Digital Learning Levy', 'ICT_LEVY', 'All Levels', 'First Term', 25000, true),
-		(?, ?, 'Campus Shuttle Bus Service (Optional)', 'TRANSPORT', 'All Levels', 'First Term', 65000, false)
+		(?, ?, 'Termly Tuition & Academic Levy', 'TUITION', 'Junior Secondary (JSS 1-3)', 'First Term', 185000, 135000, 25000, 15000, 10000, 185000, true, '2026-12-01'),
+		(?, ?, 'Senior Secondary Science & Lab Fee', 'TUITION', 'Senior Secondary (SS 1-3)', 'First Term', 225000, 165000, 30000, 18000, 12000, 225000, true, '2026-12-01'),
+		(?, ?, 'STEM Robotics & Digital Learning Levy', 'ICT_LEVY', 'All Levels', 'First Term', 25000, 0, 0, 25000, 0, 25000, true, '2026-12-01'),
+		(?, ?, 'Campus Shuttle Bus Service (Optional)', 'TRANSPORT', 'All Levels', 'First Term', 65000, 0, 0, 0, 0, 65000, false, '2026-12-01')
 	`, uuid.New().String(), tenantID, uuid.New().String(), tenantID, uuid.New().String(), tenantID, uuid.New().String(), tenantID)
 
 	_, _ = db.DB.Exec(`
-		INSERT INTO campus_student_invoices (id, tenant_id, invoice_no, student_name, class_name, term_name, total_billed, amount_paid, balance_due, status, payment_method, due_date)
+		INSERT INTO campus_student_invoices (
+			id, tenant_id, invoice_no, student_name, class_name, term_name,
+			tuition_fee, development_levy, ict_stem_fee, exam_materials_fee,
+			total_billed, amount_paid, balance_due, status, payment_method, due_date
+		)
 		VALUES
-		(?, ?, 'INV-2026-001', 'Chizaram Okafor', 'SS 2 Science', 'First Term', 250000, 250000, 0, 'PAID', 'Paystack DVA', '2026-10-01'),
-		(?, ?, 'INV-2026-002', 'Ayomide Balogun', 'JSS 2 Gold', 'First Term', 210000, 140000, 70000, 'PARTIAL', 'Bank Transfer', '2026-10-15'),
-		(?, ?, 'INV-2026-003', 'Zainab Danjuma', 'SS 1 Arts', 'First Term', 225000, 0, 225000, 'UNPAID', 'Pending', '2026-11-15')
+		(?, ?, 'INV-2026-001', 'Chizaram Okafor', 'SS 2 Science', 'First Term', 180000, 30000, 25000, 15000, 250000, 250000, 0, 'PAID', 'Paystack DVA', '2026-10-01'),
+		(?, ?, 'INV-2026-002', 'Ayomide Balogun', 'JSS 2 Gold', 'First Term', 150000, 25000, 20000, 15000, 210000, 140000, 70000, 'PARTIAL', 'Bank Transfer', '2026-10-15'),
+		(?, ?, 'INV-2026-003', 'Zainab Danjuma', 'SS 1 Arts', 'First Term', 165000, 30000, 18000, 12000, 225000, 0, 225000, 'UNPAID', 'Pending', '2026-11-15')
 	`, uuid.New().String(), tenantID, uuid.New().String(), tenantID, uuid.New().String(), tenantID)
 
 	// 4. Seed Library Books & Loans
@@ -890,267 +898,8 @@ func HandleCampusLibrary(w http.ResponseWriter, r *http.Request) {
 }
 
 // ============================================================================
-// 7. INVENTORY & PROCUREMENT (campus_inventory_items & campus_procurement_requests)
+// 7. INVENTORY & PROCUREMENT -> see inventory.go for full implementation
 // ============================================================================
-
-func HandleCampusProcurement(w http.ResponseWriter, r *http.Request) {
-	tenantID := resolveHandlerTenantID(r)
-	if tenantID == "" {
-		JSONError(w, http.StatusBadRequest, "Tenant context required")
-		return
-	}
-	seedTenantOperationalDataIfEmpty(tenantID)
-
-	switch r.Method {
-	case http.MethodGet:
-		iRows, _ := db.DB.Query(`
-			SELECT id, tenant_id, COALESCE(sku, ''), item_name, COALESCE(category, 'General'), COALESCE(unit, 'Units'), quantity_in_stock, reorder_level, unit_cost, COALESCE(location, ''), COALESCE(supplier_name, ''), COALESCE(status, 'IN_STOCK')
-			FROM campus_inventory_items WHERE tenant_id = ? ORDER BY item_name ASC`, tenantID)
-		inventory := []map[string]interface{}{}
-		if iRows != nil {
-			defer iRows.Close()
-			for iRows.Next() {
-				var id, tID, sku, name, cat, unit, loc, sup, status string
-				var qty, reorder int
-				var cost float64
-				if err := iRows.Scan(&id, &tID, &sku, &name, &cat, &unit, &qty, &reorder, &cost, &loc, &sup, &status); err == nil {
-					inventory = append(inventory, map[string]interface{}{
-						"id":                id,
-						"tenant_id":         tID,
-						"sku":               sku,
-						"item_name":         name,
-						"category":          cat,
-						"unit":              unit,
-						"quantity_in_stock": qty,
-						"reorder_level":     reorder,
-						"unit_cost":         cost,
-						"location":          loc,
-						"supplier_name":     sup,
-						"status":            status,
-					})
-				}
-			}
-		}
-
-		pRows, _ := db.DB.Query(`
-			SELECT id, tenant_id, po_number, department, requested_by, COALESCE(vendor_name, ''), items_summary, total_amount, COALESCE(priority, 'NORMAL'), COALESCE(status, 'PENDING_APPROVAL')
-			FROM campus_procurement_requests WHERE tenant_id = ? ORDER BY created_at DESC`, tenantID)
-		requests := []map[string]interface{}{}
-		if pRows != nil {
-			defer pRows.Close()
-			for pRows.Next() {
-				var id, tID, po, dept, reqBy, vendor, summary, prio, status string
-				var total float64
-				if err := pRows.Scan(&id, &tID, &po, &dept, &reqBy, &vendor, &summary, &total, &prio, &status); err == nil {
-					requests = append(requests, map[string]interface{}{
-						"id":            id,
-						"tenant_id":     tID,
-						"po_number":     po,
-						"department":    dept,
-						"requested_by":  reqBy,
-						"vendor_name":   vendor,
-						"items_summary": summary,
-						"total_amount":  total,
-						"priority":      prio,
-						"status":        status,
-					})
-				}
-			}
-		}
-
-		JSONResponse(w, http.StatusOK, map[string]interface{}{
-			"tenant_id":            tenantID,
-			"inventory":            inventory,
-			"procurement_requests": requests,
-		})
-
-	case http.MethodPost:
-		var input map[string]interface{}
-		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-			JSONError(w, http.StatusBadRequest, "Invalid JSON")
-			return
-		}
-		recordType, _ := input["record_type"].(string)
-		id := uuid.New().String()
-
-		if recordType == "procurement" {
-			dept, _ := input["department"].(string)
-			reqBy, _ := input["requested_by"].(string)
-			vendor, _ := input["vendor_name"].(string)
-			summary, _ := input["items_summary"].(string)
-			total, _ := input["total_amount"].(float64)
-			prio, _ := input["priority"].(string)
-			if prio == "" {
-				prio = "NORMAL"
-			}
-			poNo := fmt.Sprintf("PO-%d-%s", time.Now().Year(), strings.ToUpper(id[:4]))
-			_, err := db.DB.Exec(`
-				INSERT INTO campus_procurement_requests (id, tenant_id, po_number, department, requested_by, vendor_name, items_summary, total_amount, priority, status)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING_APPROVAL')`,
-				id, tenantID, poNo, dept, reqBy, vendor, summary, total, prio,
-			)
-			if err != nil {
-				JSONError(w, http.StatusInternalServerError, "Failed to create procurement request")
-				return
-			}
-			JSONResponse(w, http.StatusCreated, map[string]interface{}{"id": id, "po_number": poNo, "message": "Purchase order request submitted"})
-			return
-		}
-
-		name, _ := input["item_name"].(string)
-		cat, _ := input["category"].(string)
-		unit, _ := input["unit"].(string)
-		loc, _ := input["location"].(string)
-		sup, _ := input["supplier_name"].(string)
-		qty := 0
-		if q, ok := input["quantity_in_stock"].(float64); ok {
-			qty = int(q)
-		}
-		reorder := 10
-		if r, ok := input["reorder_level"].(float64); ok {
-			reorder = int(r)
-		}
-		cost, _ := input["unit_cost"].(float64)
-		status := "IN_STOCK"
-		if qty <= reorder {
-			status = "LOW_STOCK"
-		}
-		sku := fmt.Sprintf("SKU-%s", strings.ToUpper(id[:5]))
-		_, err := db.DB.Exec(`
-			INSERT INTO campus_inventory_items (id, tenant_id, sku, item_name, category, unit, quantity_in_stock, reorder_level, unit_cost, location, supplier_name, status)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-			id, tenantID, sku, name, cat, unit, qty, reorder, cost, loc, sup, status,
-		)
-		if err != nil {
-			JSONError(w, http.StatusInternalServerError, "Failed to add inventory item")
-			return
-		}
-		JSONResponse(w, http.StatusCreated, map[string]interface{}{"id": id, "sku": sku, "message": "Inventory item added"})
-
-	case http.MethodPatch, http.MethodPut:
-		var input struct {
-			ID       string `json:"id"`
-			Status   string `json:"status"`
-			Quantity *int   `json:"quantity_in_stock"`
-		}
-		if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.ID == "" {
-			JSONError(w, http.StatusBadRequest, "id is required")
-			return
-		}
-		if input.Quantity != nil {
-			_, _ = db.DB.Exec("UPDATE campus_inventory_items SET quantity_in_stock = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_id = ?", *input.Quantity, input.ID, tenantID)
-		}
-		if input.Status != "" {
-			_, _ = db.DB.Exec("UPDATE campus_procurement_requests SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_id = ?", input.Status, input.ID, tenantID)
-		}
-		JSONResponse(w, http.StatusOK, map[string]string{"message": "Record updated"})
-
-	case http.MethodDelete:
-		id := r.URL.Query().Get("id")
-		_, _ = db.DB.Exec("DELETE FROM campus_inventory_items WHERE id = ? AND tenant_id = ?", id, tenantID)
-		_, _ = db.DB.Exec("DELETE FROM campus_procurement_requests WHERE id = ? AND tenant_id = ?", id, tenantID)
-		JSONResponse(w, http.StatusOK, map[string]string{"message": "Record deleted"})
-
-	default:
-		JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
-	}
-}
-
-// ============================================================================
-// 8. TRANSPORT & FLEET ROUTES (campus_transport_routes)
-// ============================================================================
-
-func HandleCampusTransport(w http.ResponseWriter, r *http.Request) {
-	tenantID := resolveHandlerTenantID(r)
-	if tenantID == "" {
-		JSONError(w, http.StatusBadRequest, "Tenant context required")
-		return
-	}
-	seedTenantOperationalDataIfEmpty(tenantID)
-
-	switch r.Method {
-	case http.MethodGet:
-		rows, err := db.DB.Query(`
-			SELECT id, tenant_id, route_name, bus_number, driver_name, COALESCE(driver_phone, ''), COALESCE(attendant_name, ''), capacity, assigned_students, COALESCE(stops_summary, ''), COALESCE(morning_departure, '06:45 AM'), COALESCE(afternoon_return, '03:30 PM'), term_fee, COALESCE(gps_status, 'ACTIVE')
-			FROM campus_transport_routes WHERE tenant_id = ? ORDER BY route_name ASC`, tenantID)
-		if err != nil {
-			JSONError(w, http.StatusInternalServerError, "Failed to fetch transport routes")
-			return
-		}
-		defer rows.Close()
-
-		routes := []map[string]interface{}{}
-		for rows.Next() {
-			var id, tID, rName, bus, driver, phone, attendant, stops, morn, aft, gps string
-			var cap, assigned int
-			var fee float64
-			if err := rows.Scan(&id, &tID, &rName, &bus, &driver, &phone, &attendant, &cap, &assigned, &stops, &morn, &aft, &fee, &gps); err == nil {
-				routes = append(routes, map[string]interface{}{
-					"id":                id,
-					"tenant_id":         tID,
-					"route_name":        rName,
-					"bus_number":        bus,
-					"driver_name":       driver,
-					"driver_phone":      phone,
-					"attendant_name":    attendant,
-					"capacity":          cap,
-					"assigned_students": assigned,
-					"stops_summary":     stops,
-					"morning_departure": morn,
-					"afternoon_return":  aft,
-					"term_fee":          fee,
-					"gps_status":        gps,
-				})
-			}
-		}
-		JSONResponse(w, http.StatusOK, routes)
-
-	case http.MethodPost:
-		var input struct {
-			RouteName        string  `json:"route_name"`
-			BusNumber        string  `json:"bus_number"`
-			DriverName       string  `json:"driver_name"`
-			DriverPhone      string  `json:"driver_phone"`
-			AttendantName    string  `json:"attendant_name"`
-			Capacity         int     `json:"capacity"`
-			AssignedStudents int     `json:"assigned_students"`
-			StopsSummary     string  `json:"stops_summary"`
-			MorningDeparture string  `json:"morning_departure"`
-			AfternoonReturn  string  `json:"afternoon_return"`
-			TermFee          float64 `json:"term_fee"`
-			GpsStatus        string  `json:"gps_status"`
-		}
-		if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.RouteName == "" {
-			JSONError(w, http.StatusBadRequest, "route_name is required")
-			return
-		}
-		if input.Capacity == 0 {
-			input.Capacity = 30
-		}
-		if input.GpsStatus == "" {
-			input.GpsStatus = "ACTIVE"
-		}
-		id := uuid.New().String()
-		_, err := db.DB.Exec(`
-			INSERT INTO campus_transport_routes (id, tenant_id, route_name, bus_number, driver_name, driver_phone, attendant_name, capacity, assigned_students, stops_summary, morning_departure, afternoon_return, term_fee, gps_status)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-			id, tenantID, input.RouteName, input.BusNumber, input.DriverName, input.DriverPhone, input.AttendantName, input.Capacity, input.AssignedStudents, input.StopsSummary, input.MorningDeparture, input.AfternoonReturn, input.TermFee, input.GpsStatus,
-		)
-		if err != nil {
-			JSONError(w, http.StatusInternalServerError, "Failed to create transport route")
-			return
-		}
-		JSONResponse(w, http.StatusCreated, map[string]interface{}{"id": id, "message": "Transport route added"})
-
-	case http.MethodDelete:
-		id := r.URL.Query().Get("id")
-		_, _ = db.DB.Exec("DELETE FROM campus_transport_routes WHERE id = ? AND tenant_id = ?", id, tenantID)
-		JSONResponse(w, http.StatusOK, map[string]string{"message": "Route removed"})
-
-	default:
-		JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
-	}
-}
 
 // ============================================================================
 // 9. HOSTEL & BOARDING ALLOCATIONS (campus_hostel_allocations)

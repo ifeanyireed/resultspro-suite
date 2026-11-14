@@ -70,10 +70,14 @@ func main() {
 		// Procurement & Asset Inventory
 		"/api/v1/campus/procurement": handlers.HandleCampusProcurement,
 		"/api/campus/procurement":    handlers.HandleCampusProcurement,
+		"/api/v1/campus/inventory":   handlers.HandleCampusProcurement,
+		"/api/campus/inventory":      handlers.HandleCampusProcurement,
 
 		// Transport Corridors & Fleet Routes
-		"/api/v1/campus/transport": handlers.HandleCampusTransport,
-		"/api/campus/transport":    handlers.HandleCampusTransport,
+		"/api/v1/campus/transport":        handlers.HandleCampusTransport,
+		"/api/campus/transport":           handlers.HandleCampusTransport,
+		"/api/v1/campus/transport/riders": handlers.HandleCampusTransportRiders,
+		"/api/campus/transport/riders":    handlers.HandleCampusTransportRiders,
 
 		// Hostel Halls & Bed Allocations
 		"/api/v1/campus/hostel": handlers.HandleCampusHostel,

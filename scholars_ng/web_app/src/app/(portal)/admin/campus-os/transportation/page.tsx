@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import TransportDashboard from '../../transport/page';
+import TransportManager from '../TransportManager';
 
 export default function CampusOSTransportationPage() {
-  return <TransportDashboard />;
+  return <TransportManager />;
 }
