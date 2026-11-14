@@ -481,10 +481,12 @@ func InitCampusSchema() {
 
 	// Graceful migration statements for existing columns
 	migrations := []string{
+		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS period_index INT NOT NULL DEFAULT 1",
 		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS section_id VARCHAR(64)",
 		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS arm_id VARCHAR(64)",
 		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS arm_name VARCHAR(64)",
 		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS period_label VARCHAR(32) DEFAULT 'Period 1'",
+		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS subject VARCHAR(128)",
 		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS subject_name VARCHAR(128)",
 		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS subject_id VARCHAR(64)",
 		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS subject_code VARCHAR(32)",
