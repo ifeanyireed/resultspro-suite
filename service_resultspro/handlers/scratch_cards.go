@@ -86,6 +86,10 @@ func VerifyScratchCard(c *gin.Context) {
 		return
 	}
 
+	// Rate-limit check (Fail-Closed anti-bruteforce: max 5 failed attempts per 15 minutes)
+	clientIP := c.ClientIP()
+	rateKey := db.GlobalRedis.BuildKey("results", "global", "scratchcard:rate", clientIP)
+
 	hash := sha256.Sum256([]byte(req.Pin))
 	pinHash := hex.EncodeToString(hash[:])
 
@@ -104,12 +108,25 @@ func VerifyScratchCard(c *gin.Context) {
 	}
 
 	if card.PinHash != pinHash {
+		// Increment rate limit counter on failed PIN
+		allowed, remaining, _ := db.GlobalRedis.RateLimit(c.Request.Context(), rateKey, 5, 900)
+		if !allowed {
+			c.JSON(http.StatusTooManyRequests, models.VerifyCardResponse{
+				Valid:   false,
+				Message: "Too many failed PIN verification attempts. Card verification locked for 15 minutes.",
+			})
+			return
+		}
+
 		c.JSON(http.StatusUnauthorized, models.VerifyCardResponse{
 			Valid:   false,
-			Message: "Invalid scratch card PIN",
+			Message: fmt.Sprintf("Invalid scratch card PIN (%d attempts remaining)", remaining),
 		})
 		return
 	}
+
+	// Reset rate-limit counter on successful PIN verification
+	_ = db.GlobalRedis.Delete(c.Request.Context(), rateKey)
 
 	if card.Status != "ACTIVE" {
 		c.JSON(http.StatusBadRequest, models.VerifyCardResponse{

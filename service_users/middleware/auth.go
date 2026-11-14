@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
 	"service_users.resultspro.ng/db"
@@ -16,13 +17,44 @@ const UserContextKey contextKey = "current_user_id"
 // RequireAuth ensures a valid Bearer JWT is attached
 func RequireAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		userID, err := utils.GetUserIDFromRequest(r)
-		if err != nil || userID == "" {
+		authHeader := r.Header.Get("Authorization")
+		if !strings.HasPrefix(authHeader, "Bearer ") {
 			utils.JSONError(w, http.StatusUnauthorized, "Unauthorized: valid Bearer token required")
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), UserContextKey, userID)
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		token, err := utils.VerifyToken(tokenString)
+		if err != nil || !token.Valid {
+			if err == utils.ErrTokenBlacklisted {
+				utils.JSONError(w, http.StatusUnauthorized, "Unauthorized: token has been revoked")
+				return
+			}
+			utils.JSONError(w, http.StatusUnauthorized, "Unauthorized: valid Bearer token required")
+			return
+		}
+
+		claims, ok := token.Claims.(jwt.MapClaims)
+		if !ok {
+			utils.JSONError(w, http.StatusUnauthorized, "Unauthorized: invalid token claims")
+			return
+		}
+
+		// Check token blacklist in Redis for revoked JWT IDs (jti)
+		if jti, ok := claims["jti"].(string); ok && jti != "" {
+			if utils.IsTokenBlacklisted(r.Context(), jti) {
+				utils.JSONError(w, http.StatusUnauthorized, "Unauthorized: token has been revoked")
+				return
+			}
+		}
+
+		sub, err := claims.GetSubject()
+		if err != nil || sub == "" {
+			utils.JSONError(w, http.StatusUnauthorized, "Unauthorized: valid Bearer token required")
+			return
+		}
+
+		ctx := context.WithValue(r.Context(), UserContextKey, sub)
 		next(w, r.WithContext(ctx))
 	}
 }
@@ -53,20 +85,40 @@ func RequireAppAuth(next http.HandlerFunc) http.HandlerFunc {
 func RequireRole(allowedRoles ...string) func(http.HandlerFunc) http.HandlerFunc {
 	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			userID, err := utils.GetUserIDFromRequest(r)
-			if err != nil || userID == "" {
+			authHeader := r.Header.Get("Authorization")
+			if !strings.HasPrefix(authHeader, "Bearer ") {
 				utils.JSONError(w, http.StatusUnauthorized, "Unauthorized: valid Bearer token required")
 				return
 			}
 
-			// We need to decode the token again to check roles (or fetch from DB). Since GetUserIDFromRequest handles verification, we can just extract the token from header.
-			authHeader := r.Header.Get("Authorization")
-			tokenString := authHeader[7:] // len("Bearer ")
-			token, _ := utils.VerifyToken(tokenString)
+			tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+			token, err := utils.VerifyToken(tokenString)
+			if err != nil || !token.Valid {
+				if err == utils.ErrTokenBlacklisted {
+					utils.JSONError(w, http.StatusUnauthorized, "Unauthorized: token has been revoked")
+					return
+				}
+				utils.JSONError(w, http.StatusUnauthorized, "Unauthorized: valid Bearer token required")
+				return
+			}
 
 			claims, ok := token.Claims.(jwt.MapClaims)
 			if !ok {
 				utils.JSONError(w, http.StatusForbidden, "Forbidden: Invalid token claims")
+				return
+			}
+
+			// Check token blacklist in Redis for revoked JWT IDs (jti)
+			if jti, ok := claims["jti"].(string); ok && jti != "" {
+				if utils.IsTokenBlacklisted(r.Context(), jti) {
+					utils.JSONError(w, http.StatusUnauthorized, "Unauthorized: token has been revoked")
+					return
+				}
+			}
+
+			sub, err := claims.GetSubject()
+			if err != nil || sub == "" {
+				utils.JSONError(w, http.StatusUnauthorized, "Unauthorized: valid Bearer token required")
 				return
 			}
 
@@ -103,7 +155,7 @@ func RequireRole(allowedRoles ...string) func(http.HandlerFunc) http.HandlerFunc
 				return
 			}
 
-			ctx := context.WithValue(r.Context(), UserContextKey, userID)
+			ctx := context.WithValue(r.Context(), UserContextKey, sub)
 			next(w, r.WithContext(ctx))
 		}
 	}

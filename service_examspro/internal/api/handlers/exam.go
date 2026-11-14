@@ -1,20 +1,23 @@
 package handlers
 
 import (
+	"encoding/csv"
+	"encoding/json"
+	"fmt"
+	"log"
 	"math"
+	"math/rand"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
-	"encoding/csv"
-	"fmt"
 	"time"
-	"log"
 
 	"exams-resultspro-backend/internal/database"
 	"exams-resultspro-backend/internal/models"
 	"exams-resultspro-backend/internal/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -456,6 +459,62 @@ func (h *ExamHandler) GetQuestionsBySubject(c *gin.Context) {
 		}
 	}
 
+	// 1. Redis Question Pool Cache lookup (24h TTL)
+	tenantScope := "global"
+	if tid, exists := c.Get("tenantId"); exists && tid != nil && fmt.Sprintf("%v", tid) != "" {
+		tenantScope = fmt.Sprintf("tenant_%v", tid)
+	}
+	cleanSubj := strings.ToLower(strings.TrimSpace(subjectIdStr))
+	cleanYear := strings.ToLower(strings.TrimSpace(yearStr))
+	if cleanYear == "" {
+		cleanYear = "all"
+	}
+	cleanType := strings.ToLower(strings.TrimSpace(qType))
+	if cleanType == "" {
+		cleanType = "all"
+	}
+	poolKey := ""
+	if database.GlobalRedis != nil {
+		poolKey = database.GlobalRedis.BuildKey("exams", tenantScope, "pool", fmt.Sprintf("subj_%s:yr_%s:type_%s", cleanSubj, cleanYear, cleanType))
+		if cachedVal, hit := database.GlobalRedis.Get(c.Request.Context(), poolKey); hit && cachedVal != "" {
+			var cachedQuestions []models.Question
+			if err := json.Unmarshal([]byte(cachedVal), &cachedQuestions); err == nil && len(cachedQuestions) > 0 {
+				shuffled := make([]models.Question, len(cachedQuestions))
+				copy(shuffled, cachedQuestions)
+				rand.Shuffle(len(shuffled), func(i, j int) {
+					shuffled[i], shuffled[j] = shuffled[j], shuffled[i]
+				})
+				if limit > 0 && limit < len(shuffled) {
+					shuffled = shuffled[:limit]
+				}
+				log.Printf("⚡ [GetQuestionsBySubject] Served %d questions from Redis pool cache (%s)", len(shuffled), poolKey)
+				c.JSON(http.StatusOK, shuffled)
+				return
+			}
+		}
+	}
+
+	// 2. Fetch up to 500 questions from Neon Postgres to seed the Redis question pool
+	var poolQuestions []models.Question
+	if err := query.Select("nat_exams_questions.*").Limit(500).Find(&poolQuestions).Error; err == nil && len(poolQuestions) > 0 {
+		if database.GlobalRedis != nil && poolKey != "" {
+			if poolBytes, err := json.Marshal(poolQuestions); err == nil {
+				_ = database.GlobalRedis.Set(c.Request.Context(), poolKey, string(poolBytes), 86400)
+				log.Printf("⚡ [GetQuestionsBySubject] Cached %d questions in Redis pool: %s", len(poolQuestions), poolKey)
+			}
+		}
+		result := poolQuestions
+		if limit > 0 && limit < len(result) {
+			rand.Shuffle(len(result), func(i, j int) {
+				result[i], result[j] = result[j], result[i]
+			})
+			result = result[:limit]
+		}
+		c.JSON(http.StatusOK, result)
+		return
+	}
+
+	// 3. Fallback direct DB query
 	var questions []models.Question
 	if err := query.Select("nat_exams_questions.*").Order("RANDOM()").Limit(limit).Find(&questions).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch questions"})
@@ -744,4 +803,122 @@ func (h *ExamHandler) ImportSyllabus(c *gin.Context) {
 		"errors":  errors,
 	})
 }
+
+// StartExamSession initializes a server-authoritative timer in Redis for a CBT exam session
+func (h *ExamHandler) StartExamSession(c *gin.Context) {
+	var input struct {
+		SessionID       string `json:"sessionId"`
+		DurationMinutes int    `json:"durationMinutes"`
+		DurationSeconds int    `json:"durationSeconds"`
+		ExamID          string `json:"examId"`
+		SubjectID       string `json:"subjectId"`
+	}
+
+	_ = c.ShouldBindJSON(&input)
+
+	sessionID := strings.TrimSpace(input.SessionID)
+	if sessionID == "" {
+		sessionID = uuid.New().String()
+	}
+
+	durationSeconds := input.DurationSeconds
+	if durationSeconds <= 0 {
+		if input.DurationMinutes > 0 {
+			durationSeconds = input.DurationMinutes * 60
+		} else {
+			durationSeconds = 7200 // Default 2 hours for standard JAMB/WAEC CBT
+		}
+	}
+
+	if database.GlobalRedis != nil {
+		if err := database.GlobalRedis.SetExamTimer(c.Request.Context(), sessionID, durationSeconds); err != nil {
+			log.Printf("⚠️ [StartExamSession] Warning: failed to set exam timer in Redis: %v", err)
+		}
+	}
+
+	now := time.Now().UTC()
+	expiresAt := now.Add(time.Duration(durationSeconds) * time.Second)
+
+	c.JSON(http.StatusOK, gin.H{
+		"sessionId":        sessionID,
+		"durationSeconds":  durationSeconds,
+		"remainingSeconds": durationSeconds,
+		"startedAt":        now,
+		"expiresAt":        expiresAt,
+		"status":           "active",
+	})
+}
+
+// GetExamSessionTimer retrieves the server-authoritative countdown for an active exam session
+func (h *ExamHandler) GetExamSessionTimer(c *gin.Context) {
+	sessionID := strings.TrimSpace(c.Param("sessionId"))
+	if sessionID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Session ID is required"})
+		return
+	}
+
+	if database.GlobalRedis != nil {
+		state, found, err := database.GlobalRedis.GetExamTimerState(c.Request.Context(), sessionID)
+		if err == nil && found && state != nil {
+			remaining, _, _ := database.GlobalRedis.GetRemainingExamTime(c.Request.Context(), sessionID)
+			status := "active"
+			if remaining <= 0 {
+				status = "expired"
+			}
+			c.JSON(http.StatusOK, gin.H{
+				"sessionId":        sessionID,
+				"remainingSeconds": remaining,
+				"isExpired":        remaining <= 0,
+				"status":           status,
+				"startTime":        state.StartTime,
+				"durationSeconds":  state.DurationSeconds,
+				"expiresAt":        state.ExpiresAt,
+			})
+			return
+		}
+	}
+
+	// Fail-open response if timer not in cache
+	c.JSON(http.StatusOK, gin.H{
+		"sessionId":        sessionID,
+		"remainingSeconds": 0,
+		"isExpired":        false,
+		"status":           "untracked",
+		"message":          "No active authoritative timer found in cache",
+	})
+}
+
+// SubmitExamSession finalizes an exam session and clears the authoritative timer
+func (h *ExamHandler) SubmitExamSession(c *gin.Context) {
+	sessionID := strings.TrimSpace(c.Param("sessionId"))
+	if sessionID == "" {
+		var input struct {
+			SessionID string `json:"sessionId"`
+		}
+		if err := c.ShouldBindJSON(&input); err == nil {
+			sessionID = strings.TrimSpace(input.SessionID)
+		}
+	}
+
+	if sessionID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Session ID is required"})
+		return
+	}
+
+	remaining := 0
+	if database.GlobalRedis != nil {
+		rem, _, _ := database.GlobalRedis.GetRemainingExamTime(c.Request.Context(), sessionID)
+		remaining = rem
+		_ = database.GlobalRedis.ClearExamTimer(c.Request.Context(), sessionID)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"sessionId":        sessionID,
+		"submitted":        true,
+		"status":           "completed",
+		"timeRemainingSec": remaining,
+		"submittedAt":      time.Now().UTC(),
+	})
+}
+
 

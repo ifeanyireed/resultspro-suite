@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"strconv"
 	"strings"
@@ -65,12 +67,61 @@ func (h *QuizHandler) GetQuestionsByTopic(c *gin.Context) {
 		}
 	}
 
-	if qType != "" {
-		if strings.ToLower(qType) == "mcq" {
+	cleanType := strings.ToLower(strings.TrimSpace(qType))
+	if cleanType != "" {
+		if cleanType == "mcq" {
 			query = query.Where("LOWER(type) IN ('mcq', 'mcqs')")
 		} else {
-			query = query.Where("LOWER(type) = ?", strings.ToLower(qType))
+			query = query.Where("LOWER(type) = ?", cleanType)
 		}
+	} else {
+		cleanType = "all"
+	}
+
+	// 1. Redis Question Pool Cache lookup (24h TTL)
+	tenantScope := "global"
+	if tid, exists := c.Get("tenantId"); exists && tid != nil && fmt.Sprintf("%v", tid) != "" {
+		tenantScope = fmt.Sprintf("tenant_%v", tid)
+	}
+	poolKey := ""
+	if database.GlobalRedis != nil {
+		poolKey = database.GlobalRedis.BuildKey("exams", tenantScope, "pool", fmt.Sprintf("topic_%d:type_%s", topicId, cleanType))
+		if cachedVal, hit := database.GlobalRedis.Get(c.Request.Context(), poolKey); hit && cachedVal != "" {
+			var cachedQuestions []models.Question
+			if err := json.Unmarshal([]byte(cachedVal), &cachedQuestions); err == nil && len(cachedQuestions) > 0 {
+				shuffled := make([]models.Question, len(cachedQuestions))
+				copy(shuffled, cachedQuestions)
+				rand.Shuffle(len(shuffled), func(i, j int) {
+					shuffled[i], shuffled[j] = shuffled[j], shuffled[i]
+				})
+				if limit > 0 && limit < len(shuffled) {
+					shuffled = shuffled[:limit]
+				}
+				log.Printf("⚡ [GetQuestionsByTopic] Served %d questions from Redis pool cache (%s)", len(shuffled), poolKey)
+				c.JSON(http.StatusOK, shuffled)
+				return
+			}
+		}
+	}
+
+	// 2. Fetch up to 500 questions from Neon Postgres to seed the Redis question pool
+	var poolQuestions []models.Question
+	if err := query.Limit(500).Find(&poolQuestions).Error; err == nil && len(poolQuestions) > 0 {
+		if database.GlobalRedis != nil && poolKey != "" {
+			if poolBytes, err := json.Marshal(poolQuestions); err == nil {
+				_ = database.GlobalRedis.Set(c.Request.Context(), poolKey, string(poolBytes), 86400)
+				log.Printf("⚡ [GetQuestionsByTopic] Cached %d questions in Redis pool: %s", len(poolQuestions), poolKey)
+			}
+		}
+		result := poolQuestions
+		if limit > 0 && limit < len(result) {
+			rand.Shuffle(len(result), func(i, j int) {
+				result[i], result[j] = result[j], result[i]
+			})
+			result = result[:limit]
+		}
+		c.JSON(http.StatusOK, result)
+		return
 	}
 
 	if err := query.Order("RANDOM()").Limit(limit).Find(&questions).Error; err != nil {
@@ -142,6 +193,35 @@ func (h *QuizHandler) SubmitAnswer(c *gin.Context) {
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
+	}
+
+	// 1. Anti-Cheat Rate Limiting: Maximum 2 submissions per second per student
+	if database.GlobalRedis != nil {
+		rateKey := database.GlobalRedis.BuildKey("exams", "global", "ratelimit", fmt.Sprintf("submit:%s", userID))
+		allowed, _, err := database.GlobalRedis.RateLimit(c.Request.Context(), rateKey, 2, 1)
+		if err == nil && !allowed {
+			c.JSON(http.StatusTooManyRequests, gin.H{
+				"error": "Rate limit exceeded: Maximum 2 answer submissions per second allowed",
+			})
+			return
+		}
+	}
+
+	// 2. Server-Authoritative CBT Session Timer Tracking
+	var remainingSec int = -1
+	if database.GlobalRedis != nil && strings.TrimSpace(input.SessionID) != "" {
+		remaining, exists, err := database.GlobalRedis.GetRemainingExamTime(c.Request.Context(), input.SessionID)
+		if err == nil && exists {
+			remainingSec = remaining
+			if remaining <= 0 {
+				c.JSON(http.StatusForbidden, gin.H{
+					"error":       "Exam time has expired. Submissions are no longer accepted for this session.",
+					"timeExpired": true,
+					"remainingMs": 0,
+				})
+				return
+			}
+		}
 	}
 
 	var question models.Question
@@ -349,14 +429,18 @@ func (h *QuizHandler) SubmitAnswer(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	resp := gin.H{
 		"isCorrect":       isCorrect,
 		"correctOptionId": correctOptionId,
 		"explanation":     feedback,
 		"coinsEarned":     coinsEarned,
 		"streakBonus":     streakBonus,
 		"totalStreak":     streakBonus > 0, // Signal to UI for confetti/alert
-	})
+	}
+	if remainingSec >= 0 {
+		resp["remainingSeconds"] = remainingSec
+	}
+	c.JSON(http.StatusOK, resp)
 }
 
 func (h *QuizHandler) GetHint(c *gin.Context) {

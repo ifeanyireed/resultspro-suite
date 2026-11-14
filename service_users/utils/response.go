@@ -44,6 +44,13 @@ func GetUserIDFromRequest(r *http.Request) (string, error) {
 		return "", sql.ErrNoRows
 	}
 
+	// Check token blacklist in Redis for revoked JWT IDs (jti)
+	if jti, ok := claims["jti"].(string); ok && jti != "" {
+		if IsTokenBlacklisted(r.Context(), jti) {
+			return "", ErrTokenBlacklisted
+		}
+	}
+
 	sub, err := claims.GetSubject()
 	if err != nil || sub == "" {
 		return "", sql.ErrNoRows

@@ -15,6 +15,7 @@ import (
 func main() {
 	config.InitConfig()
 	db.InitDB()
+	db.InitRedis()
 
 	r := gin.Default()
 
@@ -29,10 +30,15 @@ func main() {
 
 	// Health Check
 	r.GET("/health", func(c *gin.Context) {
+		redisStatus := "ok"
+		if db.GlobalRedis == nil {
+			redisStatus = "down"
+		}
 		c.JSON(http.StatusOK, gin.H{
 			"status":  "healthy",
 			"service": "service_resultspro",
 			"version": "1.0.0",
+			"redis":   redisStatus,
 		})
 	})
 
@@ -51,6 +57,8 @@ func main() {
 		// Marks & Scores Entry
 		api.POST("/results/scores", handlers.EnterStudentMarks)
 		api.GET("/results/instances/:instanceId/students/:studentId", handlers.GetStudentResult)
+		api.GET("/results/instances/:instanceId/broadsheet", handlers.GetClassBroadsheet)
+		api.GET("/results/instances/:instanceId/sections/:sectionId/broadsheet", handlers.GetClassBroadsheet)
 
 		// Analytics
 		api.GET("/results/instances/:instanceId/analytics", handlers.GetInstanceAnalytics)

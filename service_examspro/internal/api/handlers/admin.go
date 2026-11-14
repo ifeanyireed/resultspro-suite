@@ -859,6 +859,9 @@ func (h *AdminHandler) CreateQuestion(c *gin.Context) {
 	})
 
 	database.DB.Preload("Options").First(&question, "id = ?", question.ID)
+	if database.GlobalRedis != nil {
+		_ = database.GlobalRedis.DeletePattern(c.Request.Context(), "*:exams:*:pool:*")
+	}
 	c.JSON(http.StatusCreated, question)
 }
 
@@ -955,12 +958,19 @@ func (h *AdminHandler) UpdateQuestion(c *gin.Context) {
 		return nil
 	})
 
+	if database.GlobalRedis != nil {
+		_ = database.GlobalRedis.DeletePattern(c.Request.Context(), "*:exams:*:pool:*")
+	}
+
 	c.JSON(http.StatusOK, gin.H{"message": "Question updated successfully"})
 }
 
 func (h *AdminHandler) DeleteQuestion(c *gin.Context) {
 	id := c.Param("id")
 	database.DB.Delete(&models.Question{}, "id = ?", id)
+	if database.GlobalRedis != nil {
+		_ = database.GlobalRedis.DeletePattern(c.Request.Context(), "*:exams:*:pool:*")
+	}
 	c.JSON(http.StatusOK, gin.H{"message": "Question deleted"})
 }
 
@@ -983,6 +993,10 @@ func (h *AdminHandler) BulkDeleteQuestions(c *gin.Context) {
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete questions"})
 		return
+	}
+
+	if database.GlobalRedis != nil {
+		_ = database.GlobalRedis.DeletePattern(c.Request.Context(), "*:exams:*:pool:*")
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -1125,6 +1139,10 @@ func (h *AdminHandler) BulkUploadQuestions(c *gin.Context) {
 				})
 			}
 		}
+	}
+
+	if database.GlobalRedis != nil {
+		_ = database.GlobalRedis.DeletePattern(c.Request.Context(), "*:exams:*:pool:*")
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Uploaded %d questions", successCount)})

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"service_puzzlepro/internal/database"
@@ -41,9 +42,44 @@ type UpdateWaypointsRequest struct {
 	Waypoints   []database.LevelWaypoint `json:"waypoints"`
 }
 
-// GetWorldsHandler returns worlds from game_engine tables
+// resolveTenantScope extracts tenant isolation context from headers or query parameters
+func resolveTenantScope(r *http.Request, explicitSchoolID, explicitTenantID string) string {
+	scope := strings.TrimSpace(explicitSchoolID)
+	if scope == "" {
+		scope = strings.TrimSpace(explicitTenantID)
+	}
+	if scope == "" && r != nil {
+		scope = strings.TrimSpace(r.Header.Get("X-Tenant-ID"))
+		if scope == "" {
+			scope = strings.TrimSpace(r.Header.Get("X-School-ID"))
+		}
+		if scope == "" {
+			scope = strings.TrimSpace(r.URL.Query().Get("school_id"))
+		}
+		if scope == "" {
+			scope = strings.TrimSpace(r.URL.Query().Get("tenant_id"))
+		}
+	}
+	if scope == "" {
+		return "global"
+	}
+	if !strings.HasPrefix(scope, "school_") && !strings.HasPrefix(scope, "tenant_") {
+		return "school_" + scope
+	}
+	return scope
+}
+
+// GetWorldsHandler returns worlds from game_engine tables (cached in Redis)
 func (g *GameEngineHandler) GetWorldsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+
+	cacheKey := g.Cache.BuildKey("puzzle", "global", "worlds", "all")
+	if cachedJSON, ok := g.Cache.Get(r.Context(), cacheKey); ok && cachedJSON != "" {
+		w.Header().Set("X-Cache", "HIT")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(cachedJSON))
+		return
+	}
 
 	if g.DB == nil {
 		w.WriteHeader(http.StatusOK)
@@ -67,11 +103,19 @@ func (g *GameEngineHandler) GetWorldsHandler(w http.ResponseWriter, r *http.Requ
 		}
 	}
 
-	w.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(w).Encode(map[string]interface{}{
+	respObj := map[string]interface{}{
 		"success": true,
 		"worlds":  worlds,
-	})
+	}
+	respBytes, _ := json.Marshal(respObj)
+
+	if g.Cache != nil {
+		g.Cache.Set(r.Context(), cacheKey, string(respBytes), 24*time.Hour)
+	}
+
+	w.Header().Set("X-Cache", "MISS")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(respBytes)
 }
 
 // GetAdventuresHandler returns adventures from game_engine tables (cached in Redis)
@@ -79,12 +123,14 @@ func (g *GameEngineHandler) GetAdventuresHandler(w http.ResponseWriter, r *http.
 	w.Header().Set("Content-Type", "application/json")
 
 	worldIDStr := r.URL.Query().Get("world_id")
-	cacheKey := "game:adventures:all"
+	identifier := "all"
 	if worldIDStr != "" {
-		cacheKey = "game:adventures:world:" + worldIDStr
+		identifier = "world_" + worldIDStr
 	}
+	cacheKey := g.Cache.BuildKey("puzzle", "global", "adventures", identifier)
 
-	if cachedJSON, ok := g.Cache.Get(r.Context(), cacheKey); ok {
+	if cachedJSON, ok := g.Cache.Get(r.Context(), cacheKey); ok && cachedJSON != "" {
+		w.Header().Set("X-Cache", "HIT")
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte(cachedJSON))
 		return
@@ -126,8 +172,12 @@ func (g *GameEngineHandler) GetAdventuresHandler(w http.ResponseWriter, r *http.
 		"adventures": adventures,
 	}
 	respBytes, _ := json.Marshal(respObj)
-	g.Cache.Set(r.Context(), cacheKey, string(respBytes), 1*time.Hour)
 
+	if g.Cache != nil {
+		g.Cache.Set(r.Context(), cacheKey, string(respBytes), 1*time.Hour)
+	}
+
+	w.Header().Set("X-Cache", "MISS")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(respBytes)
 }
@@ -154,12 +204,14 @@ func (g *GameEngineHandler) GetLevelsHandler(w http.ResponseWriter, r *http.Requ
 		dbAdvID = (worldID-1)*5 + advID
 	}
 
-	cacheKey := fmt.Sprintf("game:levels:w:%d:adv:%d", worldID, advID)
+	identifier := fmt.Sprintf("w_%d_adv_%d", worldID, advID)
 	if adventureIDStr == "" {
-		cacheKey = fmt.Sprintf("game:levels:w:%d:all", worldID)
+		identifier = fmt.Sprintf("w_%d_all", worldID)
 	}
+	cacheKey := g.Cache.BuildKey("puzzle", "global", "levels", identifier)
 
-	if cachedJSON, ok := g.Cache.Get(r.Context(), cacheKey); ok {
+	if cachedJSON, ok := g.Cache.Get(r.Context(), cacheKey); ok && cachedJSON != "" {
+		w.Header().Set("X-Cache", "HIT")
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte(cachedJSON))
 		return
@@ -199,8 +251,12 @@ func (g *GameEngineHandler) GetLevelsHandler(w http.ResponseWriter, r *http.Requ
 					"levels":  levels,
 				}
 				respBytes, _ := json.Marshal(respObj)
-				g.Cache.Set(r.Context(), cacheKey, string(respBytes), 1*time.Hour)
 
+				if g.Cache != nil {
+					g.Cache.Set(r.Context(), cacheKey, string(respBytes), 1*time.Hour)
+				}
+
+				w.Header().Set("X-Cache", "MISS")
 				w.WriteHeader(http.StatusOK)
 				_, _ = w.Write(respBytes)
 				return
@@ -274,8 +330,19 @@ func (g *GameEngineHandler) SaveWaypointsHandler(w http.ResponseWriter, r *http.
 		return
 	}
 
-	// Invalidate Redis cache for levels
-	g.Cache.Del(r.Context(), "game:levels:all", fmt.Sprintf("game:levels:w:%d:adv:%d", worldID, req.AdventureID), "game:levels:adv:"+strconv.Itoa(req.AdventureID), "game:levels:adv:"+strconv.Itoa(dbAdvID))
+	// Invalidate Redis caches for levels
+	if g.Cache != nil {
+		g.Cache.Del(r.Context(),
+			g.Cache.BuildKey("puzzle", "global", "levels", "all"),
+			g.Cache.BuildKey("puzzle", "global", "levels", fmt.Sprintf("w_%d_adv_%d", worldID, req.AdventureID)),
+			g.Cache.BuildKey("puzzle", "global", "levels", fmt.Sprintf("w_%d_all", worldID)),
+			g.Cache.BuildKey("puzzle", "global", "levels", fmt.Sprintf("w_%d_adv_%d", worldID, dbAdvID)),
+			"game:levels:all",
+			fmt.Sprintf("game:levels:w:%d:adv:%d", worldID, req.AdventureID),
+			"game:levels:adv:"+strconv.Itoa(req.AdventureID),
+			"game:levels:adv:"+strconv.Itoa(dbAdvID),
+		)
+	}
 
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(map[string]interface{}{
@@ -299,6 +366,9 @@ type EventRequest struct {
 	Username    string `json:"username,omitempty"`
 	Avatar      string `json:"avatar,omitempty"`
 	GroupID     int    `json:"group_id,omitempty"`
+	TenantID    string `json:"tenant_id,omitempty"`
+	SchoolID    string `json:"school_id,omitempty"`
+	ClassID     string `json:"class_id,omitempty"`
 }
 
 // LevelProgressResponse holds level completion progress for a player
@@ -320,7 +390,7 @@ type LeaderboardEntry struct {
 	TotalStars int    `json:"total_stars"`
 }
 
-// EventHandler records player level completion, score, and stars in user_progress
+// EventHandler records player level completion, score, stars in user_progress, and updates Redis streaks & leaderboards
 func (g *GameEngineHandler) EventHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -353,6 +423,17 @@ func (g *GameEngineHandler) EventHandler(w http.ResponseWriter, r *http.Request)
 		req.Stars = 3
 	}
 
+	ctx := r.Context()
+	tenantScope := resolveTenantScope(r, req.SchoolID, req.TenantID)
+
+	// Update daily coding streak in Redis
+	streak := 1
+	if g.Cache != nil {
+		if s, err := g.Cache.IncrStreak(ctx, tenantScope, strconv.Itoa(req.UserID)); err == nil && s > 0 {
+			streak = s
+		}
+	}
+
 	if g.DB == nil {
 		w.WriteHeader(http.StatusOK)
 		_ = json.NewEncoder(w).Encode(map[string]interface{}{
@@ -360,6 +441,7 @@ func (g *GameEngineHandler) EventHandler(w http.ResponseWriter, r *http.Request)
 			"source":   "fallback",
 			"total_xp": req.Score,
 			"stars":    req.Stars,
+			"streak":   streak,
 			"progress": []LevelProgressResponse{
 				{
 					LevelNumber: req.LevelNumber,
@@ -373,8 +455,6 @@ func (g *GameEngineHandler) EventHandler(w http.ResponseWriter, r *http.Request)
 		})
 		return
 	}
-
-	ctx := r.Context()
 
 	_, err := g.DB.ExecContext(ctx, `
 		INSERT INTO user_progress (user_id, world_id, adventure_id, level_number, stars, score, completed)
@@ -407,6 +487,36 @@ func (g *GameEngineHandler) EventHandler(w http.ResponseWriter, r *http.Request)
 		`, req.UserID, req.Username, req.Avatar, req.GroupID, newXP, newStars)
 	}
 
+	// Update Redis XP Leaderboard Sorted Sets (ZADD)
+	if g.Cache != nil && newXP > 0 {
+		userMember := strconv.Itoa(req.UserID)
+
+		// School-scoped leaderboard: resultspro:{env}:puzzle:school_{tenant_id}:leaderboard:xp
+		schoolKey := g.Cache.BuildKey("puzzle", tenantScope, "leaderboard", "xp")
+		_ = g.Cache.ZAdd(ctx, schoolKey, float64(newXP), userMember)
+
+		// Global leaderboard: resultspro:{env}:puzzle:global:leaderboard:xp
+		globalKey := g.Cache.BuildKey("puzzle", "global", "leaderboard", "xp")
+		_ = g.Cache.ZAdd(ctx, globalKey, float64(newXP), userMember)
+
+		// Class / Group leaderboard
+		if req.GroupID > 0 {
+			groupKey := g.Cache.BuildKey("puzzle", tenantScope, fmt.Sprintf("group_%d", req.GroupID), "leaderboard_xp")
+			_ = g.Cache.ZAdd(ctx, groupKey, float64(newXP), userMember)
+		}
+		if req.ClassID != "" {
+			classKey := g.Cache.BuildKey("puzzle", tenantScope, fmt.Sprintf("class_%s", req.ClassID), "leaderboard_xp")
+			_ = g.Cache.ZAdd(ctx, classKey, float64(newXP), userMember)
+		}
+
+		// Invalidate cached JSON leaderboards
+		g.Cache.Del(ctx,
+			g.Cache.BuildKey("puzzle", tenantScope, "leaderboard_json", "all"),
+			g.Cache.BuildKey("puzzle", "global", "leaderboard_json", "all"),
+			g.Cache.BuildKey("puzzle", tenantScope, "leaderboard_json", fmt.Sprintf("group_%d", req.GroupID)),
+		)
+	}
+
 	progressList := g.getUserProgressList(ctx, req.UserID)
 
 	w.WriteHeader(http.StatusOK)
@@ -414,11 +524,12 @@ func (g *GameEngineHandler) EventHandler(w http.ResponseWriter, r *http.Request)
 		"success":  true,
 		"total_xp": newXP,
 		"stars":    newStars,
+		"streak":   streak,
 		"progress": progressList,
 	})
 }
 
-// GetProgressHandler returns player progress list for the given user_id
+// GetProgressHandler returns player progress list for the given user_id along with streak & rank
 func (g *GameEngineHandler) GetProgressHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -428,18 +539,33 @@ func (g *GameEngineHandler) GetProgressHandler(w http.ResponseWriter, r *http.Re
 		userID = 1
 	}
 
+	ctx := r.Context()
+	tenantScope := resolveTenantScope(r, "", "")
+
+	// Retrieve daily coding streak & ranking from Redis
+	streak := 0
+	var rank int64 = 0
+	if g.Cache != nil {
+		streak = g.Cache.GetStreak(ctx, tenantScope, strconv.Itoa(userID))
+		zsetKey := g.Cache.BuildKey("puzzle", tenantScope, "leaderboard", "xp")
+		if rk, found, _ := g.Cache.ZRevRank(ctx, zsetKey, strconv.Itoa(userID)); found {
+			rank = rk + 1
+		}
+	}
+
 	if g.DB == nil {
 		w.WriteHeader(http.StatusOK)
 		_ = json.NewEncoder(w).Encode(map[string]interface{}{
 			"success":  true,
 			"source":   "fallback",
 			"total_xp": 0,
+			"streak":   streak,
+			"rank":     rank,
 			"progress": []LevelProgressResponse{},
 		})
 		return
 	}
 
-	ctx := r.Context()
 	var totalXP int
 	_ = g.DB.QueryRowContext(ctx, "SELECT total_xp FROM users WHERE id = ?", userID).Scan(&totalXP)
 	if totalXP == 0 {
@@ -452,16 +578,34 @@ func (g *GameEngineHandler) GetProgressHandler(w http.ResponseWriter, r *http.Re
 	_ = json.NewEncoder(w).Encode(map[string]interface{}{
 		"success":  true,
 		"total_xp": totalXP,
+		"streak":   streak,
+		"rank":     rank,
 		"progress": progressList,
 	})
 }
 
-// GetLeaderboardHandler returns group & global player leaderboards
+// GetLeaderboardHandler returns group & global player leaderboards with Redis acceleration
 func (g *GameEngineHandler) GetLeaderboardHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
+	ctx := r.Context()
 	groupIDStr := r.URL.Query().Get("group_id")
 	groupID, _ := strconv.Atoi(groupIDStr)
+	tenantScope := resolveTenantScope(r, "", "")
+
+	identifier := "all"
+	if groupID > 0 {
+		identifier = fmt.Sprintf("group_%d", groupID)
+	}
+	jsonCacheKey := g.Cache.BuildKey("puzzle", tenantScope, "leaderboard_json", identifier)
+
+	// 1. Check cached JSON response
+	if cachedJSON, ok := g.Cache.Get(ctx, jsonCacheKey); ok && cachedJSON != "" {
+		w.Header().Set("X-Cache", "HIT")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(cachedJSON))
+		return
+	}
 
 	if g.DB == nil {
 		w.WriteHeader(http.StatusOK)
@@ -469,7 +613,6 @@ func (g *GameEngineHandler) GetLeaderboardHandler(w http.ResponseWriter, r *http
 		return
 	}
 
-	ctx := r.Context()
 	var query string
 	var args []interface{}
 
@@ -496,10 +639,82 @@ func (g *GameEngineHandler) GetLeaderboardHandler(w http.ResponseWriter, r *http
 		}
 	}
 
-	w.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(w).Encode(map[string]interface{}{
+	respObj := map[string]interface{}{
 		"success":     true,
 		"leaderboard": leaderboard,
+	}
+	respBytes, _ := json.Marshal(respObj)
+
+	if g.Cache != nil {
+		// Cache leaderboard JSON payload for 5 minutes
+		g.Cache.Set(ctx, jsonCacheKey, string(respBytes), 5*time.Minute)
+
+		// Warm up Redis Sorted Set with entries
+		zsetKey := g.Cache.BuildKey("puzzle", tenantScope, "leaderboard", "xp")
+		if groupID > 0 {
+			zsetKey = g.Cache.BuildKey("puzzle", tenantScope, fmt.Sprintf("group_%d", groupID), "leaderboard_xp")
+		}
+		for _, entry := range leaderboard {
+			_ = g.Cache.ZAdd(ctx, zsetKey, float64(entry.TotalXP), strconv.Itoa(entry.ID))
+		}
+	}
+
+	w.Header().Set("X-Cache", "MISS")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(respBytes)
+}
+
+// GetStudentStreakHandler returns the active coding streak for a given user_id
+func (g *GameEngineHandler) GetStudentStreakHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	userIDStr := r.URL.Query().Get("user_id")
+	userID, _ := strconv.Atoi(userIDStr)
+	if userID <= 0 {
+		userID = 1
+	}
+
+	tenantScope := resolveTenantScope(r, "", "")
+	streak := 0
+	if g.Cache != nil {
+		streak = g.Cache.GetStreak(r.Context(), tenantScope, strconv.Itoa(userID))
+	}
+
+	w.WriteHeader(http.StatusOK)
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
+		"success": true,
+		"user_id": userID,
+		"streak":  streak,
+	})
+}
+
+// GetStudentRankHandler returns the current XP ranking position for a given user_id
+func (g *GameEngineHandler) GetStudentRankHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	userIDStr := r.URL.Query().Get("user_id")
+	userID, _ := strconv.Atoi(userIDStr)
+	if userID <= 0 {
+		userID = 1
+	}
+
+	tenantScope := resolveTenantScope(r, "", "")
+	var rank int64 = 0
+	var found bool
+	if g.Cache != nil {
+		zsetKey := g.Cache.BuildKey("puzzle", tenantScope, "leaderboard", "xp")
+		if rk, f, _ := g.Cache.ZRevRank(r.Context(), zsetKey, strconv.Itoa(userID)); f {
+			rank = rk + 1
+			found = true
+		}
+	}
+
+	w.WriteHeader(http.StatusOK)
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
+		"success": true,
+		"user_id": userID,
+		"rank":    rank,
+		"found":   found,
 	})
 }
 

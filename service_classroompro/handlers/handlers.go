@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -92,29 +93,82 @@ func (h *Handler) CreateNote(c *gin.Context) {
 		return
 	}
 
+	// Invalidate notes cache
+	if db.GlobalRedis != nil {
+		tenantScope := "global"
+		if tid, exists := c.Get("tenant_id"); exists && tid != nil && fmt.Sprintf("%v", tid) != "" {
+			tenantScope = fmt.Sprintf("tenant_%v", tid)
+		}
+		_ = db.GlobalRedis.Delete(c.Request.Context(), db.GlobalRedis.BuildKey(tenantScope, "notes", "all"))
+		_ = db.GlobalRedis.Delete(c.Request.Context(), db.GlobalRedis.BuildKey(tenantScope, "notes", "subj_"+input.SubjectID))
+	}
+
 	c.JSON(http.StatusCreated, gin.H{"note": note})
 }
 
 func (h *Handler) GetNotes(c *gin.Context) {
 	subjectID := c.Query("subject_id")
-	var notes []models.Note
+	tenantScope := "global"
+	if tid, exists := c.Get("tenant_id"); exists && tid != nil && fmt.Sprintf("%v", tid) != "" {
+		tenantScope = fmt.Sprintf("tenant_%v", tid)
+	}
+	cacheID := "all"
+	if subjectID != "" {
+		cacheID = "subj_" + subjectID
+	}
 
+	if db.GlobalRedis != nil {
+		key := db.GlobalRedis.BuildKey(tenantScope, "notes", cacheID)
+		var cachedNotes []models.Note
+		if db.GlobalRedis.GetJSON(c.Request.Context(), key, &cachedNotes) {
+			c.JSON(http.StatusOK, gin.H{"notes": cachedNotes, "source": "cache"})
+			return
+		}
+	}
+
+	var notes []models.Note
 	query := db.DB
 	if subjectID != "" {
 		query = query.Where("subject_id = ?", subjectID)
 	}
 
 	query.Order("created_at DESC").Find(&notes)
+
+	if db.GlobalRedis != nil && len(notes) > 0 {
+		key := db.GlobalRedis.BuildKey(tenantScope, "notes", cacheID)
+		_ = db.GlobalRedis.SetJSON(c.Request.Context(), key, notes, 1800) // 30m TTL
+	}
+
 	c.JSON(http.StatusOK, gin.H{"notes": notes})
 }
 
 func (h *Handler) GetNoteByID(c *gin.Context) {
 	id := c.Param("id")
+	tenantScope := "global"
+	if tid, exists := c.Get("tenant_id"); exists && tid != nil && fmt.Sprintf("%v", tid) != "" {
+		tenantScope = fmt.Sprintf("tenant_%v", tid)
+	}
+
+	if db.GlobalRedis != nil {
+		key := db.GlobalRedis.BuildKey(tenantScope, "note", id)
+		var cachedNote models.Note
+		if db.GlobalRedis.GetJSON(c.Request.Context(), key, &cachedNote) {
+			c.JSON(http.StatusOK, gin.H{"note": cachedNote, "source": "cache"})
+			return
+		}
+	}
+
 	var note models.Note
 	if err := db.WithTenant(c).First(&note, "id = ?", id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Note not found"})
 		return
 	}
+
+	if db.GlobalRedis != nil {
+		key := db.GlobalRedis.BuildKey(tenantScope, "note", id)
+		_ = db.GlobalRedis.SetJSON(c.Request.Context(), key, note, 3600) // 1 hour TTL
+	}
+
 	c.JSON(http.StatusOK, gin.H{"note": note})
 }
 
@@ -152,29 +206,82 @@ func (h *Handler) CreateQuiz(c *gin.Context) {
 		return
 	}
 
+	// Invalidate quizzes cache
+	if db.GlobalRedis != nil {
+		tenantScope := "global"
+		if tid, exists := c.Get("tenant_id"); exists && tid != nil && fmt.Sprintf("%v", tid) != "" {
+			tenantScope = fmt.Sprintf("tenant_%v", tid)
+		}
+		_ = db.GlobalRedis.Delete(c.Request.Context(), db.GlobalRedis.BuildKey(tenantScope, "quizzes", "all"))
+		_ = db.GlobalRedis.Delete(c.Request.Context(), db.GlobalRedis.BuildKey(tenantScope, "quizzes", "subj_"+input.SubjectID))
+	}
+
 	c.JSON(http.StatusCreated, gin.H{"quiz": quiz})
 }
 
 func (h *Handler) GetQuizzes(c *gin.Context) {
 	subjectID := c.Query("subject_id")
-	var quizzes []models.Quiz
+	tenantScope := "global"
+	if tid, exists := c.Get("tenant_id"); exists && tid != nil && fmt.Sprintf("%v", tid) != "" {
+		tenantScope = fmt.Sprintf("tenant_%v", tid)
+	}
+	cacheID := "all"
+	if subjectID != "" {
+		cacheID = "subj_" + subjectID
+	}
 
+	if db.GlobalRedis != nil {
+		key := db.GlobalRedis.BuildKey(tenantScope, "quizzes", cacheID)
+		var cachedQuizzes []models.Quiz
+		if db.GlobalRedis.GetJSON(c.Request.Context(), key, &cachedQuizzes) {
+			c.JSON(http.StatusOK, gin.H{"quizzes": cachedQuizzes, "source": "cache"})
+			return
+		}
+	}
+
+	var quizzes []models.Quiz
 	query := db.DB
 	if subjectID != "" {
 		query = query.Where("subject_id = ?", subjectID)
 	}
 
 	query.Order("created_at DESC").Find(&quizzes)
+
+	if db.GlobalRedis != nil && len(quizzes) > 0 {
+		key := db.GlobalRedis.BuildKey(tenantScope, "quizzes", cacheID)
+		_ = db.GlobalRedis.SetJSON(c.Request.Context(), key, quizzes, 1800) // 30m TTL
+	}
+
 	c.JSON(http.StatusOK, gin.H{"quizzes": quizzes})
 }
 
 func (h *Handler) GetQuizByID(c *gin.Context) {
 	id := c.Param("id")
+	tenantScope := "global"
+	if tid, exists := c.Get("tenant_id"); exists && tid != nil && fmt.Sprintf("%v", tid) != "" {
+		tenantScope = fmt.Sprintf("tenant_%v", tid)
+	}
+
+	if db.GlobalRedis != nil {
+		key := db.GlobalRedis.BuildKey(tenantScope, "quiz", id)
+		var cachedQuiz models.Quiz
+		if db.GlobalRedis.GetJSON(c.Request.Context(), key, &cachedQuiz) {
+			c.JSON(http.StatusOK, gin.H{"quiz": cachedQuiz, "source": "cache"})
+			return
+		}
+	}
+
 	var quiz models.Quiz
 	if err := db.WithTenant(c).First(&quiz, "id = ?", id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Quiz not found"})
 		return
 	}
+
+	if db.GlobalRedis != nil {
+		key := db.GlobalRedis.BuildKey(tenantScope, "quiz", id)
+		_ = db.GlobalRedis.SetJSON(c.Request.Context(), key, quiz, 3600) // 1 hour TTL
+	}
+
 	c.JSON(http.StatusOK, gin.H{"quiz": quiz})
 }
 

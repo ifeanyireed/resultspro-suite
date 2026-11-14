@@ -1,0 +1,28 @@
+package middleware
+
+import (
+	"net/http"
+)
+
+// EnableCORS wraps an http.Handler with flexible CORS headers for sub-apps
+func EnableCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		origin := r.Header.Get("Origin")
+		if origin != "" {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+		} else {
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+		}
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Authorization, Content-Type, X-CSRF-Token, X-App-ID, X-App-Secret, X-Tenant-Domain, X-Tenant-Slug, X-Tenant-ID, x-tenant-id, x-tenant-slug, x-tenant-domain")
+		w.Header().Set("Access-Control-Expose-Headers", "Link, Content-Length, X-Tenant-ID, X-Tenant-Slug")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}

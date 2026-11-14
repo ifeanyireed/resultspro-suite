@@ -19,6 +19,7 @@ func main() {
 	}
 
 	db.InitDB()
+	db.InitRedis()
 
 	h := handlers.NewHandler()
 	r := gin.Default()

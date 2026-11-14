@@ -6,15 +6,18 @@ import (
 )
 
 type Config struct {
-	Port        string
-	Environment string
-	AllowedCORS string
-	DBHost      string
-	DBPort      string
-	DBUser      string
-	DBPassword  string
-	DBName      string
-	RedisURL    string
+	Port                  string
+	Environment           string
+	AllowedCORS           string
+	DBHost                string
+	DBPort                string
+	DBUser                string
+	DBPassword            string
+	DBName                string
+	RedisURL              string
+	UpstashRedisRestURL   string
+	UpstashRedisRestToken string
+	RedisEnv              string
 }
 
 func Load() *Config {
@@ -59,17 +62,26 @@ func Load() *Config {
 	}
 
 	redisURL := os.Getenv("REDIS_URL")
+	upstashURL := os.Getenv("UPSTASH_REDIS_REST_URL")
+	upstashToken := os.Getenv("UPSTASH_REDIS_REST_TOKEN")
+	redisEnv := os.Getenv("REDIS_ENV")
+	if redisEnv == "" {
+		redisEnv = env
+	}
 
 	return &Config{
-		Port:        port,
-		Environment: env,
-		AllowedCORS: cors,
-		DBHost:      dbHost,
-		DBPort:      dbPort,
-		DBUser:      dbUser,
-		DBPassword:  dbPassword,
-		DBName:      dbName,
-		RedisURL:    redisURL,
+		Port:                  port,
+		Environment:           env,
+		AllowedCORS:           cors,
+		DBHost:                dbHost,
+		DBPort:                dbPort,
+		DBUser:                dbUser,
+		DBPassword:            dbPassword,
+		DBName:                dbName,
+		RedisURL:              redisURL,
+		UpstashRedisRestURL:   upstashURL,
+		UpstashRedisRestToken: upstashToken,
+		RedisEnv:              redisEnv,
 	}
 }
 

@@ -820,6 +820,19 @@ func HandleResolveTenant(w http.ResponseWriter, r *http.Request) {
 	scholarsSubdomain := slugCandidate + ".scholars.ng"
 	resultsproSubdomain := slugCandidate + ".resultspro.ng"
 
+	// 1. Fast Redis Cache lookup (L2)
+	cacheKey := utils.GlobalRedis.BuildKey("users", "global", "domain", domain)
+	if cachedVal, ok := utils.GlobalRedis.Get(r.Context(), cacheKey); ok && cachedVal != "" {
+		var cachedTenant models.Tenant
+		if err := json.Unmarshal([]byte(cachedVal), &cachedTenant); err == nil && cachedTenant.ID != "" {
+			utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+				"tenant": cachedTenant,
+				"cached": true,
+			})
+			return
+		}
+	}
+
 	var t models.Tenant
 	if err := db.GormDB.Where(
 		"id = ? OR LOWER(slug) = ? OR LOWER(default_subdomain) IN (?, ?, ?) OR LOWER(custom_domain) IN (?, ?)",
@@ -847,7 +860,7 @@ func HandleResolveTenant(w http.ResponseWriter, r *http.Request) {
 				ID:                 "tenant-" + slugCandidate,
 				Name:               humanName,
 				Slug:               slugCandidate,
-				DefaultSubdomain:   &subDom,
+				DefaultSubdomain:   subDom,
 				Status:             "ACTIVE",
 				VerificationStatus: "VERIFIED",
 				SubscriptionTier:   "enterprise",
@@ -864,6 +877,11 @@ func HandleResolveTenant(w http.ResponseWriter, r *http.Request) {
 		}
 		utils.JSONError(w, http.StatusNotFound, "Tenant not found")
 		return
+	}
+
+	// Cache resolved tenant in Redis with 24h TTL
+	if tBytes, err := json.Marshal(t); err == nil {
+		_ = utils.GlobalRedis.Set(r.Context(), cacheKey, string(tBytes), 86400)
 	}
 
 	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{

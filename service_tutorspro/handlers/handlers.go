@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -34,16 +36,31 @@ func (h *Handler) GetPublicTutors(c *gin.Context) {
 		IsVerified  bool     `json:"isVerified"`
 	}
 
+	subjectKey := "all"
+	if strings.TrimSpace(subject) != "" {
+		subjectKey = strings.ToLower(strings.TrimSpace(subject))
+	}
+	cacheKey := db.BuildKey("tutors", "global", "directory", subjectKey)
+
+	// 1. Try reading from Redis cache first (TTL: 4 Hours / 14400s)
+	if cachedData, found := db.Get(c.Request.Context(), cacheKey); found && cachedData != "" {
+		var cachedTutors []EnrichedTutor
+		if err := json.Unmarshal([]byte(cachedData), &cachedTutors); err == nil {
+			c.JSON(http.StatusOK, gin.H{"tutors": cachedTutors})
+			return
+		}
+	}
+
 	var results []struct {
-		ID          string
-		Name        string
-		Bio         string
-		SubjectsRaw string `gorm:"column:subjects"`
-		Rating      float64
-		TotalReviews int `gorm:"column:total_reviews"`
-		HourlyRate  float64 `gorm:"column:hourly_rate"`
-		Avatar      string `gorm:"column:avatar_url"`
-		IsVerified  bool `gorm:"column:is_verified"`
+		ID           string
+		Name         string
+		Bio          string
+		SubjectsRaw  string `gorm:"column:subjects"`
+		Rating       float64
+		TotalReviews int     `gorm:"column:total_reviews"`
+		HourlyRate   float64 `gorm:"column:hourly_rate"`
+		Avatar       string  `gorm:"column:avatar_url"`
+		IsVerified   bool    `gorm:"column:is_verified"`
 	}
 
 	query := db.DB.Table("tut_profiles").
@@ -57,7 +74,7 @@ func (h *Handler) GetPublicTutors(c *gin.Context) {
 
 	query.Order("tut_profiles.rating DESC").Scan(&results)
 
-	var tutors []EnrichedTutor
+	tutors := make([]EnrichedTutor, 0)
 	for _, r := range results {
 		var subjs []string
 		_ = json.Unmarshal([]byte(r.SubjectsRaw), &subjs)
@@ -73,6 +90,11 @@ func (h *Handler) GetPublicTutors(c *gin.Context) {
 			Location:    "Online",
 			IsVerified:  r.IsVerified,
 		})
+	}
+
+	// 2. Cache directory listings in Redis (TTL: 4 Hours / 14400s)
+	if data, err := json.Marshal(tutors); err == nil {
+		_ = db.Set(c.Request.Context(), cacheKey, string(data), 14400)
 	}
 
 	c.JSON(http.StatusOK, gin.H{"tutors": tutors})
@@ -112,10 +134,17 @@ func (h *Handler) TutorOnboarding(c *gin.Context) {
 		UpdatedAt:     time.Now(),
 	}
 
+	if tenantID, exists := c.Get("tenant_id"); exists && tenantID != "" {
+		tutor.TenantID = tenantID.(string)
+	}
+
 	if err := db.WithTenant(c).Create(&tutor).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create tutor profile"})
 		return
 	}
+
+	// Invalidate public directory cache
+	_ = db.Delete(c.Request.Context(), db.BuildKey("tutors", "global", "directory", "all"))
 
 	c.JSON(http.StatusCreated, gin.H{"profile": tutor})
 }
@@ -145,6 +174,39 @@ func (h *Handler) CreateBooking(c *gin.Context) {
 		return
 	}
 
+	// Standard slot identifier according to Redis spec: {tutor_id}_{slot_timestamp}
+	// e.g. tutor_uuid777_20261120_1400
+	datePart := input.ScheduledDate.Format("20060102")
+	timePart := strings.ReplaceAll(input.StartTime, ":", "")
+	slotIdentifier := fmt.Sprintf("%s_%s", datePart, timePart)
+
+	// Acquire distributed lock for booking slot (TTL: 10 mins = 600s)
+	// Fail-closed concurrency lock to prevent double-booking of human tutors
+	locked, err := db.AcquireSlotLock(c.Request.Context(), input.TutorID, slotIdentifier, 600)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to acquire slot reservation lock"})
+		return
+	}
+	if !locked {
+		c.JSON(http.StatusConflict, gin.H{
+			"error": "This tutor slot is currently reserved or undergoing checkout by another student. Please select another slot.",
+		})
+		return
+	}
+
+	// Verify database hasn't already confirmed a booking for this slot
+	var existingBookings int64
+	db.WithTenant(c).Model(&models.Booking{}).
+		Where("tutor_id = ? AND scheduled_date = ? AND start_time = ? AND status != ?",
+			input.TutorID, input.ScheduledDate, input.StartTime, "CANCELLED").
+		Count(&existingBookings)
+	if existingBookings > 0 {
+		c.JSON(http.StatusConflict, gin.H{
+			"error": "This tutor slot has already been confirmed and booked.",
+		})
+		return
+	}
+
 	totalAmount := tutor.HourlyRate * input.Hours
 	booking := models.Booking{
 		ID:            uuid.New().String(),
@@ -165,7 +227,13 @@ func (h *Handler) CreateBooking(c *gin.Context) {
 		UpdatedAt:     time.Now(),
 	}
 
+	if tenantID, exists := c.Get("tenant_id"); exists && tenantID != "" {
+		booking.TenantID = tenantID.(string)
+	}
+
 	if err := db.WithTenant(c).Create(&booking).Error; err != nil {
+		// Release slot lock if DB creation failed so slot is not held unnecessarily
+		_ = db.ReleaseSlotLock(c.Request.Context(), input.TutorID, slotIdentifier)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create booking"})
 		return
 	}
@@ -207,6 +275,10 @@ func (h *Handler) CreateReview(c *gin.Context) {
 		CreatedAt: time.Now(),
 	}
 
+	if tenantID, exists := c.Get("tenant_id"); exists && tenantID != "" {
+		review.TenantID = tenantID.(string)
+	}
+
 	db.WithTenant(c).Create(&review)
 
 	// Update tutor average rating
@@ -219,6 +291,10 @@ func (h *Handler) CreateReview(c *gin.Context) {
 		"rating":        avgRating,
 		"total_reviews": count,
 	})
+
+	// Invalidate public directory cache & profile
+	_ = db.Delete(c.Request.Context(), db.BuildKey("tutors", "global", "directory", "all"))
+	_ = db.Delete(c.Request.Context(), db.BuildKey("tutors", "global", "tutor:profile", input.TutorID))
 
 	c.JSON(http.StatusCreated, gin.H{"review": review})
 }
@@ -248,6 +324,10 @@ func (h *Handler) RequestPayout(c *gin.Context) {
 		AccountName: input.AccountName,
 		Status:      "PENDING",
 		CreatedAt:   time.Now(),
+	}
+
+	if tenantID, exists := c.Get("tenant_id"); exists && tenantID != "" {
+		payout.TenantID = tenantID.(string)
 	}
 
 	if err := db.WithTenant(c).Create(&payout).Error; err != nil {

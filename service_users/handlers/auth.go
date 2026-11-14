@@ -196,6 +196,24 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	email := strings.ToLower(strings.TrimSpace(input.Email))
 
+	// Rate limiting setup: max 5 failed password attempts per 5 minutes per email/IP
+	clientIP := utils.GetClientIP(r)
+	rateIdentifier := email
+	if rateIdentifier == "" {
+		rateIdentifier = clientIP
+	}
+	rateKey := utils.GlobalRedis.BuildKey("users", "global", "ratelimit:login", rateIdentifier)
+
+	// Check if this identifier is already rate limited (locked out)
+	if val, ok := utils.GlobalRedis.Get(r.Context(), rateKey); ok && val != "" {
+		var count int
+		fmt.Sscanf(val, "%d", &count)
+		if count >= 5 {
+			utils.JSONError(w, http.StatusTooManyRequests, "Too many failed login attempts. Account temporarily locked for 5 minutes.")
+			return
+		}
+	}
+
 	var user models.User
 	var isGlobalAdmin bool
 	var globalRole sql.NullString
@@ -203,6 +221,11 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		Scan(&user.ID, &user.Email, &user.PasswordHash, &user.FullName, &user.AvatarURL, &user.AccountStatus, &user.MFAEnabled, &isGlobalAdmin, &globalRole)
 
 	if err == sql.ErrNoRows {
+		allowed, _, _ := utils.GlobalRedis.RateLimit(r.Context(), rateKey, 5, 300)
+		if !allowed {
+			utils.JSONError(w, http.StatusTooManyRequests, "Too many failed login attempts. Account temporarily locked for 5 minutes.")
+			return
+		}
 		utils.JSONError(w, http.StatusUnauthorized, "Invalid email or password")
 		return
 	} else if err != nil {
@@ -217,9 +240,17 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !utils.CheckPasswordHash(input.Password, *user.PasswordHash) {
+		allowed, _, _ := utils.GlobalRedis.RateLimit(r.Context(), rateKey, 5, 300)
+		if !allowed {
+			utils.JSONError(w, http.StatusTooManyRequests, "Too many failed login attempts. Account temporarily locked for 5 minutes.")
+			return
+		}
 		utils.JSONError(w, http.StatusUnauthorized, "Invalid email or password")
 		return
 	}
+
+	// On successful password check, clear the rate limit counter for that identifier
+	_ = utils.GlobalRedis.Delete(r.Context(), rateKey)
 
 	if user.AccountStatus == "unverified" {
 		var tenantName, tenantLogo string
@@ -525,6 +556,27 @@ func HandleLogout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Blacklist access token in Redis if provided in Authorization header
+	authHeader := r.Header.Get("Authorization")
+	if strings.HasPrefix(authHeader, "Bearer ") {
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		token, _ := utils.VerifyToken(tokenString)
+		if token != nil {
+			if claims, ok := token.Claims.(jwt.MapClaims); ok {
+				if jti, ok := claims["jti"].(string); ok && jti != "" {
+					remainingTTL := 86400
+					if exp, err := claims.GetExpirationTime(); err == nil && exp != nil {
+						diff := int(time.Until(exp.Time).Seconds())
+						if diff > 0 {
+							remainingTTL = diff
+						}
+					}
+					_ = utils.BlacklistToken(r.Context(), jti, remainingTTL)
+				}
+			}
+		}
+	}
+
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Logged out successfully"})
 }
 
@@ -545,6 +597,27 @@ func HandleLogoutAll(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		utils.JSONError(w, http.StatusInternalServerError, "Failed to revoke sessions")
 		return
+	}
+
+	// Blacklist current access token in Redis if provided
+	authHeader := r.Header.Get("Authorization")
+	if strings.HasPrefix(authHeader, "Bearer ") {
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		token, _ := utils.VerifyToken(tokenString)
+		if token != nil {
+			if claims, ok := token.Claims.(jwt.MapClaims); ok {
+				if jti, ok := claims["jti"].(string); ok && jti != "" {
+					remainingTTL := 86400
+					if exp, err := claims.GetExpirationTime(); err == nil && exp != nil {
+						diff := int(time.Until(exp.Time).Seconds())
+						if diff > 0 {
+							remainingTTL = diff
+						}
+					}
+					_ = utils.BlacklistToken(r.Context(), jti, remainingTTL)
+				}
+			}
+		}
 	}
 
 	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Logged out from all devices"})
@@ -580,9 +653,13 @@ func HandleIntrospect(w http.ResponseWriter, r *http.Request) {
 
 	token, err := utils.VerifyToken(input.Token)
 	if err != nil || !token.Valid {
+		reason := "token_invalid_or_expired"
+		if err == utils.ErrTokenBlacklisted {
+			reason = "token_revoked"
+		}
 		utils.JSONResponse(w, http.StatusOK, models.IntrospectionResponse{
 			Active: false,
-			Reason: "token_invalid_or_expired",
+			Reason: reason,
 		})
 		return
 	}
@@ -594,6 +671,17 @@ func HandleIntrospect(w http.ResponseWriter, r *http.Request) {
 			Reason: "invalid_claims",
 		})
 		return
+	}
+
+	// Check token blacklist in Redis for revoked JWT IDs (jti)
+	if jti, ok := claims["jti"].(string); ok && jti != "" {
+		if utils.IsTokenBlacklisted(r.Context(), jti) {
+			utils.JSONResponse(w, http.StatusOK, models.IntrospectionResponse{
+				Active: false,
+				Reason: "token_revoked",
+			})
+			return
+		}
 	}
 
 	userID, err := claims.GetSubject()

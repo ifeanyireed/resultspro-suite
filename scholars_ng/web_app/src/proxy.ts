@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { redisGet, redisSet, buildRedisKey } from './lib/redis';
 
 type ResolvedTenantEdge = {
   id: string;
@@ -10,18 +11,33 @@ type ResolvedTenantEdge = {
   status?: string;
 };
 
-// Lightweight edge cache (60s TTL) to avoid round-trips on every static/navigation request
+// Lightweight in-memory edge cache (60s TTL) to avoid round-trips on every static/navigation request
 const tenantEdgeCache = new Map<string, { tenant: ResolvedTenantEdge | null; expiresAt: number }>();
 
 async function resolveTenantAtEdge(identifier: string): Promise<ResolvedTenantEdge | null> {
   if (!identifier) return null;
   const key = identifier.toLowerCase().trim();
   const now = Date.now();
+
+  // 1. Fast in-memory check (L1 Cache)
   const cached = tenantEdgeCache.get(key);
   if (cached && cached.expiresAt > now) {
     return cached.tenant;
   }
 
+  // 2. Upstash Redis check (L2 Distributed Shared Cache)
+  const redisCacheKey = buildRedisKey('users', 'global', 'domain', key);
+  try {
+    const redisTenant = await redisGet<ResolvedTenantEdge>(redisCacheKey);
+    if (redisTenant) {
+      tenantEdgeCache.set(key, { tenant: redisTenant, expiresAt: now + 60_000 });
+      return redisTenant;
+    }
+  } catch {
+    // Graceful fallback to backend API
+  }
+
+  // 3. Fallback to service_users Authoritative API
   try {
     const apiUrl =
       process.env.NEXT_PUBLIC_API_URL ||
@@ -40,6 +56,12 @@ async function resolveTenantAtEdge(identifier: string): Promise<ResolvedTenantEd
     const data = await res.json();
     const tenant: ResolvedTenantEdge | null = data?.tenant || null;
     tenantEdgeCache.set(key, { tenant, expiresAt: now + 60_000 });
+
+    // Cache in Upstash Redis for 24 hours (86,400s) across all edge nodes
+    if (tenant) {
+      redisSet(redisCacheKey, tenant, 86400).catch(() => {});
+    }
+
     return tenant;
   } catch {
     return null;

@@ -20,6 +20,7 @@ func main() {
 	_ = godotenv.Load("../.env")
 
 	database.ConnectDB()
+	database.InitRedis()
 
 	// Initialize Handlers
 	userHandler := &handlers.UserHandler{}
@@ -87,6 +88,13 @@ func main() {
 		api.GET("/exams/:examId/subjects", examHandler.GetSubjectsByExam)
 		api.GET("/exams/:examId/syllabus", examHandler.GetFullSyllabus)
 
+		// CBT Active Session Timer Tracking (Public & Guest Practice)
+		api.POST("/exams/session/start", examHandler.StartExamSession)
+		api.GET("/exams/session/:sessionId/timer", examHandler.GetExamSessionTimer)
+		api.POST("/exams/session/:sessionId/submit", examHandler.SubmitExamSession)
+		api.POST("/quiz/session/start", examHandler.StartExamSession)
+		api.GET("/quiz/session/:sessionId/timer", examHandler.GetExamSessionTimer)
+
 
 		
 
@@ -114,6 +122,9 @@ func main() {
 				examGroup.GET("/subjects/:subjectId/years", examHandler.GetYearsBySubject)
 				examGroup.GET("/subjects/:subjectId/topics", examHandler.GetTopicsBySubject)
 				examGroup.GET("/subjects/:subjectId/questions", examHandler.GetQuestionsBySubject)
+				examGroup.POST("/session/start", examHandler.StartExamSession)
+				examGroup.GET("/session/:sessionId/timer", examHandler.GetExamSessionTimer)
+				examGroup.POST("/session/:sessionId/submit", examHandler.SubmitExamSession)
 			}
 
 			// Quiz
@@ -122,6 +133,9 @@ func main() {
 				quizGroup.GET("/available-types", quizHandler.GetAvailableQuestionTypes)
 				quizGroup.POST("/submit", quizHandler.SubmitAnswer)
 				quizGroup.POST("/hint", quizHandler.GetHint)
+				quizGroup.POST("/session/start", examHandler.StartExamSession)
+				quizGroup.GET("/session/:sessionId/timer", examHandler.GetExamSessionTimer)
+				quizGroup.POST("/session/:sessionId/submit", examHandler.SubmitExamSession)
 			}
 			authenticated.GET("/quiz/topics/:topicId/questions", quizHandler.GetQuestionsByTopic)
 
@@ -260,7 +274,14 @@ func main() {
 	}
 
 	r.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{"status": "ok"})
+		redisStatus := "local_fallback"
+		if database.GlobalRedis != nil {
+			redisStatus = "connected"
+		}
+		c.JSON(200, gin.H{
+			"status": "ok",
+			"redis":  redisStatus,
+		})
 	})
 
 	port := os.Getenv("PORT")

@@ -99,6 +99,9 @@ func (h *Handler) InternalPaymentCallback(c *gin.Context) {
 					
 					db.DB.Model(&enrollment).Updates(updates)
 				}
+
+				// Invalidate active cohort caches for enrolled count updates
+				h.InvalidateCohortCache(c.Request.Context(), cohort.TenantID, cohort.ID, cohort.Slug)
 			}
 		} else if payload.Status == "FAILED" {
 			db.DB.Model(&models.Enrollment{}).

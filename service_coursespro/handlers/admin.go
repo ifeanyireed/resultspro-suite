@@ -12,10 +12,26 @@ import (
 )
 
 func (h *Handler) AdminGetCohorts(c *gin.Context) {
+	tenantVal, _ := c.Get("tenant_id")
+	tenantID := ""
+	if tenantVal != nil {
+		tenantID = tenantVal.(string)
+	}
+
+	// Cache-Aside Retrieval for Admin Cohorts List
+	cacheKey := db.GlobalRedis.BuildKey("courses", tenantID, "cohorts", "admin_list")
+	var cachedCohorts []models.Cohort
+	if db.GlobalRedis.GetJSON(c.Request.Context(), cacheKey, &cachedCohorts) {
+		c.JSON(http.StatusOK, gin.H{"cohorts": cachedCohorts})
+		return
+	}
+
 	var cohorts []models.Cohort
 	db.WithTenant(c).
 		Select("crs_cohorts.*, (SELECT COUNT(id) FROM crs_enrollments WHERE crs_enrollments.cohort_id = crs_cohorts.id) as enrolled_count").
 		Preload("Program").Preload("CohortMentors").Order("created_at DESC").Find(&cohorts)
+
+	_ = db.GlobalRedis.SetJSON(c.Request.Context(), cacheKey, cohorts, 3600) // 1 hour TTL
 	c.JSON(http.StatusOK, gin.H{"cohorts": cohorts})
 }
 
@@ -98,6 +114,11 @@ func (h *Handler) AdminCreateCohort(c *gin.Context) {
 		return
 	}
 
+	// Invalidate active cohort caches
+	if tenantID != nil {
+		h.InvalidateCohortCache(c.Request.Context(), tenantID.(string), cohort.ID, cohort.Slug)
+	}
+
 	c.JSON(http.StatusCreated, gin.H{"cohort": cohort})
 }
 
@@ -173,10 +194,31 @@ func (h *Handler) AdminUpdateCohort(c *gin.Context) {
 
 	var cohort models.Cohort
 	db.WithTenant(c).First(&cohort, "id = ?", id)
+
+	// Invalidate cohort caches
+	tenantVal, _ := c.Get("tenant_id")
+	if tenantVal != nil {
+		h.InvalidateCohortCache(c.Request.Context(), tenantVal.(string), id, cohort.Slug)
+	}
+
 	c.JSON(http.StatusOK, gin.H{"cohort": cohort})
 }
 
 func (h *Handler) AdminGetPrograms(c *gin.Context) {
+	tenantVal, _ := c.Get("tenant_id")
+	tenantID := ""
+	if tenantVal != nil {
+		tenantID = tenantVal.(string)
+	}
+
+	// Cache-Aside Retrieval for Programs List and Outlines
+	cacheKey := db.GlobalRedis.BuildKey("courses", tenantID, "programs", "list")
+	var cachedData map[string]interface{}
+	if db.GlobalRedis.GetJSON(c.Request.Context(), cacheKey, &cachedData) {
+		c.JSON(http.StatusOK, cachedData)
+		return
+	}
+
 	var programs []models.Program
 	db.WithTenant(c).Order("created_at DESC").Find(&programs)
 
@@ -238,10 +280,15 @@ func (h *Handler) AdminGetPrograms(c *gin.Context) {
 		"total_quizzes": totalQuizzes,
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	resp := gin.H{
 		"programs": result,
 		"stats":    stats,
-	})
+	}
+
+	// Cache for 6 hours (21600 seconds)
+	_ = db.GlobalRedis.SetJSON(c.Request.Context(), cacheKey, resp, 21600)
+
+	c.JSON(http.StatusOK, resp)
 }
 
 func (h *Handler) AdminCreateProgram(c *gin.Context) {
@@ -272,6 +319,11 @@ func (h *Handler) AdminCreateProgram(c *gin.Context) {
 	if err := db.WithTenant(c).Create(&program).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create program"})
 		return
+	}
+
+	// Invalidate program cache
+	if tenantID != nil {
+		h.InvalidateProgramCache(c.Request.Context(), tenantID.(string), program.ID)
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"program": program})
@@ -313,6 +365,12 @@ func (h *Handler) AdminCreateStage(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create stage"})
 		return
 	}
+
+	// Invalidate program outline cache
+	if tenantID != "" {
+		h.InvalidateProgramCache(c.Request.Context(), tenantID, input.ProgramID)
+	}
+
 	c.JSON(http.StatusCreated, gin.H{"stage": stage})
 }
 
@@ -352,11 +410,29 @@ func (h *Handler) AdminCreateModule(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create module"})
 		return
 	}
+
+	// Invalidate program and cohort outline cache
+	if tenantID != nil {
+		h.InvalidateProgramCache(c.Request.Context(), tenantID.(string), "")
+	}
+
 	c.JSON(http.StatusCreated, gin.H{"module": module})
 }
 
 func (h *Handler) AdminGetCohortStats(c *gin.Context) {
-	tenantID, _ := c.Get("tenant_id")
+	tenantVal, _ := c.Get("tenant_id")
+	tenantID := ""
+	if tenantVal != nil {
+		tenantID = tenantVal.(string)
+	}
+
+	// Cache-Aside Retrieval for Cohort Statistics
+	cacheKey := db.GlobalRedis.BuildKey("courses", tenantID, "cohorts", "stats")
+	var cachedStats map[string]interface{}
+	if db.GlobalRedis.GetJSON(c.Request.Context(), cacheKey, &cachedStats) {
+		c.JSON(http.StatusOK, cachedStats)
+		return
+	}
 
 	var totalCohorts int64
 	var distinctPrograms int64
@@ -380,11 +456,16 @@ func (h *Handler) AdminGetCohortStats(c *gin.Context) {
 		fillRate = (float64(totalEnrolled) / float64(capRes.TotalCapacity)) * 100.0
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	resp := gin.H{
 		"active_cohorts":  totalCohorts,
 		"active_programs": distinctPrograms,
 		"fill_rate":       fillRate,
-	})
+	}
+
+	// Cache for 1 hour (3600 seconds)
+	_ = db.GlobalRedis.SetJSON(c.Request.Context(), cacheKey, resp, 3600)
+
+	c.JSON(http.StatusOK, resp)
 }
 
 func (h *Handler) AdminUpdateProgram(c *gin.Context) {
@@ -420,6 +501,13 @@ func (h *Handler) AdminUpdateProgram(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update program"})
 		return
 	}
+
+	// Invalidate program cache
+	tenantVal, _ := c.Get("tenant_id")
+	if tenantVal != nil {
+		h.InvalidateProgramCache(c.Request.Context(), tenantVal.(string), id)
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
@@ -429,6 +517,13 @@ func (h *Handler) AdminDeleteProgram(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete program"})
 		return
 	}
+
+	// Invalidate program cache
+	tenantVal, _ := c.Get("tenant_id")
+	if tenantVal != nil {
+		h.InvalidateProgramCache(c.Request.Context(), tenantVal.(string), id)
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
@@ -446,6 +541,13 @@ func (h *Handler) AdminUpdateStage(c *gin.Context) {
 			return
 		}
 	}
+
+	// Invalidate program outline cache
+	tenantVal, _ := c.Get("tenant_id")
+	if tenantVal != nil {
+		h.InvalidateProgramCache(c.Request.Context(), tenantVal.(string), "")
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
@@ -455,6 +557,13 @@ func (h *Handler) AdminDeleteStage(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete stage"})
 		return
 	}
+
+	// Invalidate program outline cache
+	tenantVal, _ := c.Get("tenant_id")
+	if tenantVal != nil {
+		h.InvalidateProgramCache(c.Request.Context(), tenantVal.(string), "")
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
@@ -489,6 +598,13 @@ func (h *Handler) AdminUpdateModule(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update module"})
 		return
 	}
+
+	// Invalidate program outline cache
+	tenantVal, _ := c.Get("tenant_id")
+	if tenantVal != nil {
+		h.InvalidateProgramCache(c.Request.Context(), tenantVal.(string), "")
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
@@ -498,16 +614,41 @@ func (h *Handler) AdminDeleteModule(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete module"})
 		return
 	}
+
+	// Invalidate program outline cache
+	tenantVal, _ := c.Get("tenant_id")
+	if tenantVal != nil {
+		h.InvalidateProgramCache(c.Request.Context(), tenantVal.(string), "")
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
 func (h *Handler) AdminGetProgramStages(c *gin.Context) {
 	id := c.Param("id")
+	tenantVal, _ := c.Get("tenant_id")
+	tenantID := ""
+	if tenantVal != nil {
+		tenantID = tenantVal.(string)
+	}
+
+	// Cache-Aside Retrieval for Program Stages Outline
+	cacheKey := db.GlobalRedis.BuildKey("courses", tenantID, "program", id+":stages")
+	var cachedStages []models.JourneyStage
+	if db.GlobalRedis.GetJSON(c.Request.Context(), cacheKey, &cachedStages) {
+		c.JSON(http.StatusOK, gin.H{"stages": cachedStages})
+		return
+	}
+
 	var stages []models.JourneyStage
 	if err := db.WithTenant(c).Where("program_id = ?", id).Order("stage_number ASC").Find(&stages).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch stages"})
 		return
 	}
+
+	// Cache for 6 hours (21600 seconds)
+	_ = db.GlobalRedis.SetJSON(c.Request.Context(), cacheKey, stages, 21600)
+
 	c.JSON(http.StatusOK, gin.H{"stages": stages})
 }
 
@@ -652,6 +793,11 @@ func (h *Handler) AdminDeleteCohort(c *gin.Context) {
 		return
 	}
 
+	// Invalidate cohort caches
+	if tenantID != nil {
+		h.InvalidateCohortCache(c.Request.Context(), tenantID.(string), id, cohort.Slug)
+	}
+
 	c.JSON(http.StatusOK, gin.H{"message": "Cohort deleted successfully"})
 }
 
@@ -692,6 +838,11 @@ func (h *Handler) AdminAssignStudentToCohort(c *gin.Context) {
 		return
 	}
 
+	// Invalidate cohort metadata cache due to enrollment count update
+	if tenantID != nil {
+		h.InvalidateCohortCache(c.Request.Context(), tenantID.(string), input.CohortID, "")
+	}
+
 	c.JSON(http.StatusOK, gin.H{"message": "Student assigned to cohort successfully", "enrollment": enrollment})
 }
 
@@ -699,9 +850,17 @@ func (h *Handler) AdminRemoveStudentFromCohort(c *gin.Context) {
     tenantID, _ := c.Get("tenant_id")
 	enrollmentID := c.Param("id")
 
+	var enrollment models.Enrollment
+	_ = db.WithTenant(c).Where("id = ? AND tenant_id = ?", enrollmentID, tenantID).First(&enrollment)
+
 	if err := db.WithTenant(c).Where("id = ? AND tenant_id = ?", enrollmentID, tenantID).Delete(&models.Enrollment{}).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to remove student from cohort"})
 		return
+	}
+
+	// Invalidate cohort metadata cache due to enrollment count update
+	if tenantID != nil && enrollment.CohortID != "" {
+		h.InvalidateCohortCache(c.Request.Context(), tenantID.(string), enrollment.CohortID, "")
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Student removed from cohort successfully"})

@@ -21,39 +21,75 @@ func (h *Handler) GetCohortJourney(c *gin.Context) {
 		return
 	}
 
-	var stages []models.JourneyStage
-	if cohort.ProgramID != nil {
-		db.WithTenant(c).Where("program_id = ?", *cohort.ProgramID).Order("stage_number ASC").Find(&stages)
+	tenantVal, _ := c.Get("tenant_id")
+	tenantID := ""
+	if tenantVal != nil {
+		tenantID = tenantVal.(string)
 	}
 
-	var stageIDs []string
-	for _, s := range stages {
-		stageIDs = append(stageIDs, s.ID)
+	type JourneyOutline struct {
+		Stages        []models.JourneyStage  `json:"stages"`
+		Modules       []models.JourneyModule `json:"modules"`
+		Schedules     map[string]interface{} `json:"schedules"`
+		CohortEndDate string                 `json:"cohort_end_date"`
+		StageIDs      []string               `json:"stage_ids"`
 	}
 
-	var modules []models.JourneyModule
-	if len(stageIDs) > 0 {
-		db.WithTenant(c).Where("stage_id IN ?", stageIDs).Order("order_index ASC").Find(&modules)
+	// Cache-Aside Retrieval for Cohort Curriculum Tree Outline
+	outlineKey := db.GlobalRedis.BuildKey("courses", tenantID, "cohort", cohortID+":tree")
+	var outline JourneyOutline
+	gotOutline := db.GlobalRedis.GetJSON(c.Request.Context(), outlineKey, &outline)
+
+	if !gotOutline {
+		var stages []models.JourneyStage
+		if cohort.ProgramID != nil {
+			db.WithTenant(c).Where("program_id = ?", *cohort.ProgramID).Order("stage_number ASC").Find(&stages)
+		}
+
+		var stageIDs []string
+		for _, s := range stages {
+			stageIDs = append(stageIDs, s.ID)
+		}
+
+		var modules []models.JourneyModule
+		if len(stageIDs) > 0 {
+			db.WithTenant(c).Where("stage_id IN ?", stageIDs).Order("order_index ASC").Find(&modules)
+		}
+
+		var schedules map[string]interface{}
+		if cohort.ModuleSchedulesJSON != "" {
+			json.Unmarshal([]byte(cohort.ModuleSchedulesJSON), &schedules)
+		}
+
+		// Default to cohort end date if schedules not mapped for stage
+		var globalEnd string
+		if !cohort.EndDate.IsZero() {
+			globalEnd = cohort.EndDate.Format(time.RFC3339)
+		}
+
+		outline = JourneyOutline{
+			Stages:        stages,
+			Modules:       modules,
+			Schedules:     schedules,
+			CohortEndDate: globalEnd,
+			StageIDs:      stageIDs,
+		}
+		_ = db.GlobalRedis.SetJSON(c.Request.Context(), outlineKey, outline, 21600) // 6 hours TTL
 	}
 
 	var progresses []models.ModuleProgress
 	userID, _ := c.Get("user_id")
-	if len(stageIDs) > 0 && userID != nil {
-		db.WithTenant(c).Where("user_id = ? AND module_id IN ?", userID.(string), stageIDs).Find(&progresses)
+	if len(outline.StageIDs) > 0 && userID != nil {
+		db.WithTenant(c).Where("user_id = ? AND module_id IN ?", userID.(string), outline.StageIDs).Find(&progresses)
 	}
 
-	var schedules map[string]interface{}
-	if cohort.ModuleSchedulesJSON != "" {
-		json.Unmarshal([]byte(cohort.ModuleSchedulesJSON), &schedules)
-	}
-	
-	// Default to cohort end date if schedules not mapped for stage
-	var globalEnd string
-	if !cohort.EndDate.IsZero() {
-		globalEnd = cohort.EndDate.Format(time.RFC3339)
-	}
-
-	c.JSON(http.StatusOK, gin.H{"stages": stages, "modules": modules, "progress": progresses, "schedules": schedules, "cohort_end_date": globalEnd})
+	c.JSON(http.StatusOK, gin.H{
+		"stages":          outline.Stages,
+		"modules":         outline.Modules,
+		"progress":        progresses,
+		"schedules":       outline.Schedules,
+		"cohort_end_date": outline.CohortEndDate,
+	})
 }
 
 func (h *Handler) UpdateModuleProgress(c *gin.Context) {

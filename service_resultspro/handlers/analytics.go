@@ -2,15 +2,40 @@ package handlers
 
 import (
 	"database/sql"
+	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"service_resultspro.resultspro.ng/db"
 )
 
-// GetInstanceAnalytics returns statistical breakdowns of scores for an assessment instance
+// GetInstanceAnalytics returns statistical breakdowns of scores for an assessment instance with 1-hour Redis caching
 func GetInstanceAnalytics(c *gin.Context) {
 	instanceID := c.Param("instanceId")
+
+	// Resolve tenant scope
+	tenantScope := c.GetString("tenant_id")
+	if tenantScope == "" {
+		_ = db.DB.QueryRow(`SELECT school_id FROM res_instances WHERE id = ?`, instanceID).Scan(&tenantScope)
+	}
+	if tenantScope == "" {
+		tenantScope = "global"
+	} else if !strings.HasPrefix(tenantScope, "school_") && !strings.HasPrefix(tenantScope, "tenant_") {
+		tenantScope = "school_" + tenantScope
+	}
+
+	cacheKey := db.GlobalRedis.BuildKey("results", tenantScope, "analytics", instanceID)
+
+	// Check Redis cache (1-hour TTL = 3600 seconds)
+	if cachedVal, ok := db.GlobalRedis.Get(c.Request.Context(), cacheKey); ok && cachedVal != "" {
+		var cachedResp gin.H
+		if err := json.Unmarshal([]byte(cachedVal), &cachedResp); err == nil {
+			c.Header("X-Cache", "HIT")
+			c.JSON(http.StatusOK, cachedResp)
+			return
+		}
+	}
 
 	var totalStudents int
 	var classAverage float64
@@ -42,7 +67,7 @@ func GetInstanceAnalytics(c *gin.Context) {
 		rows.Close()
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	response := gin.H{
 		"instance_id":     instanceID,
 		"total_students":  totalStudents,
 		"class_average":   classAverage,
@@ -56,5 +81,13 @@ func GetInstanceAnalytics(c *gin.Context) {
 			"E": countE.Int64,
 			"F": countF.Int64,
 		},
-	})
+	}
+
+	// Store in Redis with 1-hour TTL (3600 seconds)
+	if respBytes, err := json.Marshal(response); err == nil {
+		_ = db.GlobalRedis.Set(c.Request.Context(), cacheKey, string(respBytes), 3600)
+	}
+
+	c.Header("X-Cache", "MISS")
+	c.JSON(http.StatusOK, response)
 }

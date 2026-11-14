@@ -21,6 +21,7 @@ func main() {
 	}
 
 	db.InitDB()
+	db.InitRedis()
 
 	// Start background tasks
 	cron.StartCronJobs()

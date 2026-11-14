@@ -24,6 +24,7 @@ func main() {
 	}
 
 	config.InitConfig()
+	utils.InitRedis()
 
 	// 2. Initialize database
 	if config.DatabaseURL == "" {

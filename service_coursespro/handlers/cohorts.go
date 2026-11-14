@@ -22,6 +22,14 @@ func (h *Handler) GetPublicCohorts(c *gin.Context) {
 		return
 	}
 
+	// Cache-Aside Retrieval for Active Cohort Metadata
+	cacheKey := db.GlobalRedis.BuildKey("courses", tenantID, "cohorts", "active")
+	var cachedData map[string]interface{}
+	if db.GlobalRedis.GetJSON(c.Request.Context(), cacheKey, &cachedData) {
+		c.JSON(http.StatusOK, cachedData)
+		return
+	}
+
 	var cohorts []models.Cohort
 	db.DB.Where("tenant_id = ?", tenantID).
 		Select("crs_cohorts.*, (SELECT COUNT(id) FROM crs_enrollments WHERE crs_enrollments.cohort_id = crs_cohorts.id) as enrolled_count").
@@ -40,13 +48,18 @@ func (h *Handler) GetPublicCohorts(c *gin.Context) {
 		requireCardForInstallments = settings.RequireCardForInstallments
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"cohorts": cohorts,
-		"upfront_discount_amount": upfrontDiscount,
-		"enable_upfront_discount": enableUpfrontDiscount,
-		"enable_installments": enableInstallments,
+	resp := gin.H{
+		"cohorts":                       cohorts,
+		"upfront_discount_amount":       upfrontDiscount,
+		"enable_upfront_discount":       enableUpfrontDiscount,
+		"enable_installments":           enableInstallments,
 		"require_card_for_installments": requireCardForInstallments,
-	})
+	}
+
+	// Cache for 2 hours (7200 seconds)
+	_ = db.GlobalRedis.SetJSON(c.Request.Context(), cacheKey, resp, 7200)
+
+	c.JSON(http.StatusOK, resp)
 }
 
 func (h *Handler) GetCohortDetail(c *gin.Context) {
@@ -61,6 +74,14 @@ func (h *Handler) GetCohortDetail(c *gin.Context) {
 
 	if tenantID == "" {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Cohort not found"})
+		return
+	}
+
+	// Cache-Aside Retrieval for Cohort Detail
+	cacheKey := db.GlobalRedis.BuildKey("courses", tenantID, "cohort", id)
+	var cachedDetail map[string]interface{}
+	if db.GlobalRedis.GetJSON(c.Request.Context(), cacheKey, &cachedDetail) {
+		c.JSON(http.StatusOK, cachedDetail)
 		return
 	}
 
@@ -87,11 +108,20 @@ func (h *Handler) GetCohortDetail(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"cohort": cohort,
-		"upfront_discount_amount": upfrontDiscount,
-		"enable_upfront_discount": enableUpfrontDiscount,
-		"enable_installments": enableInstallments,
+	resp := gin.H{
+		"cohort":                        cohort,
+		"upfront_discount_amount":       upfrontDiscount,
+		"enable_upfront_discount":       enableUpfrontDiscount,
+		"enable_installments":           enableInstallments,
 		"require_card_for_installments": requireCardForInstallments,
-	})
+	}
+
+	// Cache for 2 hours (7200 seconds)
+	_ = db.GlobalRedis.SetJSON(c.Request.Context(), cacheKey, resp, 7200)
+	if cohort.Slug != "" && cohort.Slug != id {
+		slugKey := db.GlobalRedis.BuildKey("courses", tenantID, "cohort", cohort.Slug)
+		_ = db.GlobalRedis.SetJSON(c.Request.Context(), slugKey, resp, 7200)
+	}
+
+	c.JSON(http.StatusOK, resp)
 }

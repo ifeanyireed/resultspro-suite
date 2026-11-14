@@ -3,8 +3,11 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"strings"
+
 	"golang.org/x/crypto/bcrypt"
 
 	"service_users.resultspro.ng/db"
@@ -34,11 +37,33 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	email := strings.ToLower(strings.TrimSpace(input.Email))
+	clientIP := utils.GetClientIP(r)
+	rateIdentifier := email
+	if rateIdentifier == "" {
+		rateIdentifier = clientIP
+	}
+	rateKey := utils.GlobalRedis.BuildKey("users", "global", "ratelimit:login", rateIdentifier)
+
+	if val, ok := utils.GlobalRedis.Get(r.Context(), rateKey); ok && val != "" {
+		var count int
+		fmt.Sscanf(val, "%d", &count)
+		if count >= 5 {
+			utils.JSONError(w, http.StatusTooManyRequests, "Too many failed login attempts. Account temporarily locked for 5 minutes.")
+			return
+		}
+	}
+
 	var user models.User
-	err := db.DB.QueryRow("SELECT id, email, password_hash, full_name, avatar_url, account_status, has_ican, coin_balance, mfa_enabled FROM users WHERE email = ? AND deleted_at IS NULL", input.Email).
+	err := db.DB.QueryRow("SELECT id, email, password_hash, full_name, avatar_url, account_status, has_ican, coin_balance, mfa_enabled FROM users WHERE email = ? AND deleted_at IS NULL", email).
 		Scan(&user.ID, &user.Email, &user.PasswordHash, &user.FullName, &user.AvatarURL, &user.AccountStatus, &user.HasIcan, &user.CoinBalance, &user.MFAEnabled)
 
 	if err == sql.ErrNoRows {
+		allowed, _, _ := utils.GlobalRedis.RateLimit(r.Context(), rateKey, 5, 300)
+		if !allowed {
+			utils.JSONError(w, http.StatusTooManyRequests, "Too many failed login attempts. Account temporarily locked for 5 minutes.")
+			return
+		}
 		utils.JSONError(w, http.StatusUnauthorized, "Invalid credentials")
 		return
 	} else if err != nil {
@@ -52,9 +77,17 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(*user.PasswordHash), []byte(input.Password)); err != nil {
+		allowed, _, _ := utils.GlobalRedis.RateLimit(r.Context(), rateKey, 5, 300)
+		if !allowed {
+			utils.JSONError(w, http.StatusTooManyRequests, "Too many failed login attempts. Account temporarily locked for 5 minutes.")
+			return
+		}
 		utils.JSONError(w, http.StatusUnauthorized, "Invalid credentials")
 		return
 	}
+
+	// Successful password check: clear rate limit counter
+	_ = utils.GlobalRedis.Delete(r.Context(), rateKey)
 
 	if user.AccountStatus != "active" {
 		utils.JSONError(w, http.StatusForbidden, "Account is disabled or pending verification")
