@@ -61,13 +61,13 @@ export default function SupportPage() {
               <div style={{ position: 'sticky', top: '120px' }}>
                 <h2 className="h4" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '2rem' }}>Get in Touch</h2>
                 
-                <div style={{ padding: '2rem', background: 'var(--color-nets-red)', color: 'white', borderRadius: '2px', marginBottom: '2rem' }}>
-                  <h3 className="h5" style={{ color: 'white', marginBottom: '0.5rem' }}>Contact Sales & Support</h3>
-                  <p style={{ fontSize: '0.875rem', marginBottom: '1.5rem', opacity: 0.9 }}>We typically respond within 2 hours during business hours.</p>
-                  <a href="mailto:support@resultspro.ng" className="btn" style={{ background: 'white', color: 'var(--color-nets-red)', width: '100%', justifyContent: 'center', marginBottom: '1rem', textDecoration: 'none' }}>
+                <div style={{ padding: '2rem', background: 'var(--color-nets-red)', color: '#0D1060', borderRadius: '2px', marginBottom: '2rem' }}>
+                  <h3 className="h5" style={{ color: '#0D1060', marginBottom: '0.5rem' }}>Contact Sales & Support</h3>
+                  <p style={{ fontSize: '0.875rem', marginBottom: '1.5rem', color: '#0D1060', opacity: 0.9 }}>We typically respond within 2 hours during business hours.</p>
+                  <a href="mailto:support@resultspro.ng" className="btn" style={{ background: '#0D1060', color: 'white', width: '100%', justifyContent: 'center', marginBottom: '1rem', textDecoration: 'none' }}>
                     Email Us
                   </a>
-                  <a href="https://wa.me/2349167919439" target="_blank" rel="noopener noreferrer" className="btn" style={{ background: 'transparent', color: 'white', border: '1px solid white', width: '100%', justifyContent: 'center', textDecoration: 'none' }}>
+                  <a href="https://wa.me/2349167919439" target="_blank" rel="noopener noreferrer" className="btn" style={{ background: 'transparent', color: '#0D1060', border: '1px solid #0D1060', width: '100%', justifyContent: 'center', textDecoration: 'none', fontWeight: 600 }}>
                     Chat on WhatsApp
                   </a>
                 </div>

@@ -170,12 +170,11 @@ export async function proxy(req: NextRequest) {
     }
   }
 
-  // 4. Redirect legacy /admin/admissions* routes directly to CampusOS Admission tab
+  // 4. Redirect legacy /admin/admissions* routes directly to CampusOS Admission route
   if (url.pathname.startsWith('/admin/admissions')) {
     const sub = url.pathname.replace('/admin/admissions', '').replace(/^\//, '');
     const validSub = ['inquiries', 'applications', 'pipeline'].includes(sub) ? sub : 'overview';
-    url.pathname = '/admin/campus-os';
-    url.searchParams.set('tab', 'admission');
+    url.pathname = '/admin/campus-os/admission';
     url.searchParams.set('subtab', validSub);
     return NextResponse.redirect(url);
   }

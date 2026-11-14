@@ -13,7 +13,8 @@ import {
   Sparkles,
   TrendingUp,
   FileSpreadsheet,
-  AlertCircle
+  AlertCircle,
+  Layers
 } from 'lucide-react';
 import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@/components/ui/Cards';
 import { fetchCampusSummary, fetchTimetableSlots, fetchHomeworkAssignments, CampusSummary, TimetableSlot, HomeworkAssignment } from '@/lib/campus-api';
@@ -93,6 +94,13 @@ export default function AcademicOverviewPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3 z-10">
+          <Link
+            href="/admin/campus-os/academic/classes"
+            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition-colors shadow-sm flex items-center gap-2"
+          >
+            <Layers className="w-4 h-4" />
+            <span>Classes & Arms Roster</span>
+          </Link>
           <Link
             href="/admin/campus-os/academic/timetable"
             className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-colors shadow-sm flex items-center gap-2"

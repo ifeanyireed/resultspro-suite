@@ -1,13 +1,7 @@
 'use client';
 
-import React from 'react';
-import AdminCampusOSPage from '../campus-os/page';
-import { MotionRise } from '@/components/ScrollRiseProvider';
+import { redirect } from 'next/navigation';
 
 export default function AdminOperationsPage() {
-  return (
-    <MotionRise>
-      <AdminCampusOSPage />
-    </MotionRise>
-  );
+  redirect('/admin/campus-os/academic');
 }

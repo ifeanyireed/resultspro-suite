@@ -172,9 +172,9 @@ export default function SubjectSelectionPage() {
   /* 1 col (mobile) - alternate */
   @media (max-width: 639px) {
     .checkerboard-grid > div:nth-child(even) > a {
-      --card-from: #ef4444;
-      --card-to: #7f1d1d;
-      --icon-hover: #dc2626;
+      --card-from: #FBBC04;
+      --card-to: #b45309;
+      --icon-hover: #FBBC04;
     }
   }
 
@@ -182,9 +182,9 @@ export default function SubjectSelectionPage() {
   @media (min-width: 640px) and (max-width: 1023px) {
     .checkerboard-grid > div:nth-child(4n+2) > a, 
     .checkerboard-grid > div:nth-child(4n+3) > a {
-      --card-from: #ef4444;
-      --card-to: #7f1d1d;
-      --icon-hover: #dc2626;
+      --card-from: #FBBC04;
+      --card-to: #b45309;
+      --icon-hover: #FBBC04;
     }
   }
   /* 4 cols checkerboard */
@@ -193,9 +193,9 @@ export default function SubjectSelectionPage() {
     .checkerboard-grid > div:nth-child(8n+4) > a, 
     .checkerboard-grid > div:nth-child(8n+5) > a, 
     .checkerboard-grid > div:nth-child(8n+7) > a {
-      --card-from: #ef4444;
-      --card-to: #7f1d1d;
-      --icon-hover: #dc2626;
+      --card-from: #FBBC04;
+      --card-to: #b45309;
+      --icon-hover: #FBBC04;
     }
   }
   

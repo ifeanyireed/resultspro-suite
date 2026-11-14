@@ -26,7 +26,8 @@ import {
   Mail,
   Smartphone,
   CheckCircle2,
-  ChevronDown
+  ChevronDown,
+  Layers
 } from 'lucide-react';
 
 interface PillarCategory {
@@ -49,6 +50,7 @@ const PILLARS: PillarCategory[] = [
     icon: GraduationCap,
     subTabs: [
       { label: 'Executive Overview', href: '/admin/campus-os/academic/overview', icon: GraduationCap },
+      { label: 'Classes & Arms', href: '/admin/campus-os/academic/classes', icon: Layers },
       { label: 'Timetable & Bell Schedule', href: '/admin/campus-os/academic/timetable', icon: Calendar },
       { label: 'Homework & Assignments', href: '/admin/campus-os/academic/homework', icon: BookOpen },
     ],

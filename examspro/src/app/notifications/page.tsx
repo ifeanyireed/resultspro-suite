@@ -118,7 +118,7 @@ export default function NotificationsPage() {
                   `}
                 >
                   {!n.isRead && (
-                    <div className="absolute top-6 right-8 w-2 h-2 rounded-full bg-red-600 shadow-[0_0_10px_rgba(220,38,38,0.5)]" />
+                    <div className="absolute top-6 right-8 w-2 h-2 rounded-full bg-[#FBBC04] shadow-[0_0_10px_rgba(251,188,4,0.5)]" />
                   )}
                   
                   <div className="flex gap-6">

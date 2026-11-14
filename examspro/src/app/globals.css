@@ -10,7 +10,7 @@
 
 @theme {
   --color-navy: #0D1B2A;
-  --color-green: #dc2626;
+  --color-green: #FBBC04;
   --color-blue: #1565C0;
   --color-amber: #1e3a8a;
   
@@ -44,8 +44,8 @@
   --background: #0D1B2A;
   --foreground: #ffffff;
   
-  --primary: #dc2626;
-  --primary-foreground: #ffffff;
+  --primary: #FBBC04;
+  --primary-foreground: #0D1060;
   
   --secondary: #1e3a8a;
   --secondary-foreground: #ffffff;
@@ -61,7 +61,7 @@
   
   --border: #E5E7EB;
   --input: #E5E7EB;
-  --ring: #dc2626;
+  --ring: #FBBC04;
 }
 
 body {

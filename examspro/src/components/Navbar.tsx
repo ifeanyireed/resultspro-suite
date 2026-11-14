@@ -147,7 +147,7 @@ export default function Navbar() {
                 <Link href="/notifications" style={{ position: 'relative', color: isLanding ? 'rgba(255,255,255,0.6)' : '#64748b', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = isLanding ? 'white' : '#1e3a8a'} onMouseLeave={e => e.currentTarget.style.color = isLanding ? 'rgba(255,255,255,0.6)' : '#64748b'}>
                   <Bell style={{ width: '20px', height: '20px' }} />
                   {unreadCount > 0 && (
-                    <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', background: 'var(--color-nets-red)', color: isLanding ? 'white' : '#1e3a8a', fontSize: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>
+                    <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', background: 'var(--color-nets-red)', color: '#0D1060', fontSize: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
@@ -219,7 +219,7 @@ export default function Navbar() {
                         fontWeight: active ? 600 : 500, 
                         color: active ? 'var(--color-nets-red)' : '#fff', 
                         borderLeft: active ? '3px solid var(--color-nets-red)' : '3px solid transparent',
-                        background: active ? 'rgba(220, 38, 38, 0.05)' : 'transparent',
+                        background: active ? 'rgba(251, 188, 4, 0.08)' : 'transparent',
                         transition: 'all 0.2s ease'
                       }}
                     >

@@ -346,13 +346,13 @@ export default function BattleLobbyPage() {
           <motion.div 
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 5, ease: "linear" }}
-            className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0_200deg,#dc2626_260deg,#2563eb_310deg,#9333ea_360deg)]"
+            className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0_200deg,#FBBC04_260deg,#2563eb_310deg,#9333ea_360deg)]"
           />
           <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity animate-shimmer z-10" />
           <div className="relative bg-white rounded-[38px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 z-20">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
+                <div className="w-2 h-2 rounded-full bg-[#FBBC04] animate-pulse" />
                 <span className="text-xs font-bold text-red-600 uppercase tracking-widest">{mounted ? (onlineStats.battleModeCount || onlineStats.onlineCount) : '--'} Students Online</span>
               </div>
               <h2 className="text-3xl md:text-5xl font-display font-black text-navy mb-4">

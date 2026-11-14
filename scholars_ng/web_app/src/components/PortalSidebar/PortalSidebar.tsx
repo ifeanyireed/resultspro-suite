@@ -140,7 +140,7 @@ export default function PortalSidebar() {
             )}
             
             {menuItems.map((item, index) => {
-              const isActive = pathname === item.slug;
+              const isActive = pathname === item.slug || (item.slug !== '/' && pathname.startsWith(item.slug + '/'));
               const Icon = isActive ? item.activeIcon : item.icon;
               return (
                 <React.Fragment key={item.slug}>

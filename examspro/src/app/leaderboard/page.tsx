@@ -81,7 +81,7 @@ export default function LeaderboardPage() {
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                   background: activeTab === tab ? 'var(--color-nets-red)' : 'transparent',
-                  color: activeTab === tab ? 'white' : 'rgba(0,0,0,0.6)',
+                  color: activeTab === tab ? '#0D1060' : 'rgba(0,0,0,0.6)',
                   border: activeTab === tab ? '1px solid var(--color-nets-red)' : '1px solid rgba(0,0,0,0.1)',
                   cursor: 'pointer',
                   transition: 'all 0.2s',
@@ -130,12 +130,12 @@ export default function LeaderboardPage() {
                           padding: '1.5rem 2rem', 
                           alignItems: 'center',
                           borderBottom: index !== leaderboard.length - 1 ? '1px solid rgba(0,0,0,0.05)' : 'none',
-                          background: user.id === currentUser?.id ? 'rgba(220,38,38,0.05)' : (isTop3 ? 'rgba(0,0,0,0.02)' : 'transparent'),
+                          background: user.id === currentUser?.id ? 'rgba(251,188,4,0.08)' : (isTop3 ? 'rgba(0,0,0,0.02)' : 'transparent'),
                           transition: 'background 0.2s',
                           position: 'relative'
                         }}
                         onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.04)')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = user.id === currentUser?.id ? 'rgba(220,38,38,0.05)' : (isTop3 ? 'rgba(0,0,0,0.02)' : 'transparent'))}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = user.id === currentUser?.id ? 'rgba(251,188,4,0.08)' : (isTop3 ? 'rgba(0,0,0,0.02)' : 'transparent'))}
                       >
                         {isTop3 && (
                           <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '3px', background: 'var(--color-nets-red)' }} />

@@ -164,6 +164,65 @@ func seedTenantOperationalDataIfEmpty(tenantID string) {
 		(?, ?, 'Quadratic Equations & Factorization Problem Set', 'Mathematics', 'SS 2 Science', 'Mr. Babatunde Adewale', 'HOMEWORK', '2026-11-18', 20, 'Solve exercises 4a–4f showing full working steps and upload via ClassroomPRO.', 24, 28, 'PUBLISHED'),
 		(?, ?, 'Laws of Motion & Projectile Lab Report', 'Physics', 'SS 2 Science', 'Engr. Ibrahim Musa', 'LAB_ASSESSMENT', '2026-11-21', 30, 'Complete the pendulum oscillation table and calculate acceleration due to gravity.', 19, 28, 'PUBLISHED')
 	`, uuid.New().String(), tenantID, uuid.New().String(), tenantID)
+
+	// 11. Seed Academic Sessions, Terms and Calendar Events
+	var sessCount int
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_academic_sessions WHERE tenant_id = ?", tenantID).Scan(&sessCount)
+	if sessCount == 0 {
+		currentSessID := uuid.New().String()
+		archivedSessID := uuid.New().String()
+
+		_, _ = db.DB.Exec(`
+			INSERT INTO campus_academic_sessions (id, tenant_id, session_name, academic_year, start_date, end_date, is_current, status, terms_count, description)
+			VALUES
+			(?, ?, '2026 / 2027 Session', '2026/2027', '2026-09-09', '2027-07-23', true, 'ACTIVE', 3, 'Active academic year covering Harmattan, Rain, and Promotional terms.'),
+			(?, ?, '2025 / 2026 Session', '2025/2026', '2025-09-11', '2026-07-25', false, 'ARCHIVED', 3, 'Concluded and archived academic session.')
+		`, currentSessID, tenantID, archivedSessID, tenantID)
+
+		term1ID := uuid.New().String()
+		term2ID := uuid.New().String()
+		term3ID := uuid.New().String()
+
+		_, _ = db.DB.Exec(`
+			INSERT INTO campus_academic_terms (
+				id, tenant_id, session_id, term_name, term_alias, term_order, is_current, status,
+				resumption_date, mid_term_break_start, mid_term_break_end, exams_start_date, exams_end_date, vacation_date,
+				teaching_days, weeks_count, ca1_start_date, ca1_end_date, ca1_submission_deadline,
+				ca2_start_date, ca2_end_date, ca2_submission_deadline, terminal_exam_submission_deadline,
+				broadsheet_approval_date, results_release_date, notes
+			)
+			VALUES
+			(?, ?, ?, 'First Term', 'Harmattan', 1, true, 'ACTIVE',
+			 '2026-09-09', '2026-10-26', '2026-10-30', '2026-11-30', '2026-12-09', '2026-12-16',
+			 68, 14, '2026-10-05', '2026-10-16', '2026-10-19',
+			 '2026-11-09', '2026-11-20', '2026-11-23', '2026-12-11',
+			 '2026-12-14', '2026-12-16', 'Harmattan term active. Continuous assessment and terminal CBT exams scheduled.'),
+			(?, ?, ?, 'Second Term', 'Rain', 2, false, 'UPCOMING',
+			 '2027-01-11', '2027-02-22', '2027-02-26', '2027-03-22', '2027-04-02', '2027-04-09',
+			 63, 13, '2027-02-01', '2027-02-12', '2027-02-15',
+			 '2027-03-01', '2027-03-12', '2027-03-15', '2027-04-05',
+			 '2027-04-07', '2027-04-09', 'Rain term preparation and curriculum coverage.'),
+			(?, ?, ?, 'Third Term', 'Promotional', 3, false, 'PLANNED',
+			 '2027-04-26', '2027-06-07', '2027-06-11', '2027-07-05', '2027-07-16', '2027-07-23',
+			 62, 13, '2027-05-17', '2027-05-28', '2027-05-31',
+			 '2027-06-21', '2027-07-02', '2027-07-05', '2027-07-19',
+			 '2027-07-21', '2027-07-23', 'Promotional exams, broadsheets compilation, and graduation.')
+		`, term1ID, tenantID, currentSessID, term2ID, tenantID, currentSessID, term3ID, tenantID, currentSessID)
+
+		_, _ = db.DB.Exec(`
+			INSERT INTO campus_calendar_events (id, tenant_id, session_id, term_id, title, category, start_date, end_date, is_statutory_holiday, description)
+			VALUES
+			(?, ?, ?, ?, 'Independence Day Holiday', 'HOLIDAY', '2026-10-01', '2026-10-01', true, 'Federal Republic of Nigeria Independence Day public holiday.'),
+			(?, ?, ?, ?, 'First Term Mid-Term Break', 'ACADEMIC', '2026-10-26', '2026-10-30', false, 'School-wide mid-term rest and teacher marking break.'),
+			(?, ?, ?, ?, 'Annual Inter-House Sports Championship', 'SPORTS', '2026-11-14', '2026-11-14', false, 'Track and field events at the main campus sports arena.'),
+			(?, ?, ?, ?, 'Speech & Prize-Giving Assembly', 'ACADEMIC', '2026-12-15', '2026-12-15', false, 'Awards presentation for academic excellence and leadership.'),
+			(?, ?, ?, ?, 'Christmas & New Year Vacation', 'HOLIDAY', '2026-12-17', '2027-01-08', true, 'Statutory end-of-year festive vacation.')
+		`, uuid.New().String(), tenantID, currentSessID, term1ID,
+			uuid.New().String(), tenantID, currentSessID, term1ID,
+			uuid.New().String(), tenantID, currentSessID, term1ID,
+			uuid.New().String(), tenantID, currentSessID, term1ID,
+			uuid.New().String(), tenantID, currentSessID, term1ID)
+	}
 }
 
 // ============================================================================
@@ -1675,6 +1734,427 @@ func HandleCampusHomework(w http.ResponseWriter, r *http.Request) {
 		id := r.URL.Query().Get("id")
 		_, _ = db.DB.Exec("DELETE FROM campus_homework_and_assessments WHERE id = ? AND tenant_id = ?", id, tenantID)
 		JSONResponse(w, http.StatusOK, map[string]string{"message": "Assessment deleted"})
+
+	default:
+		JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+	}
+}
+
+// ============================================================================
+// 14. ACADEMIC SESSIONS & TERM CALENDAR (TENANT-ISOLATED & PERSISTENT)
+// ============================================================================
+
+func HandleCampusAcademicSessions(w http.ResponseWriter, r *http.Request) {
+	tenantID := resolveHandlerTenantID(r)
+	if tenantID == "" {
+		JSONError(w, http.StatusBadRequest, "Tenant context required")
+		return
+	}
+	seedTenantOperationalDataIfEmpty(tenantID)
+
+	switch r.Method {
+	case http.MethodGet:
+		requestedSessID := strings.TrimSpace(r.URL.Query().Get("session_id"))
+
+		// 1. Fetch all sessions for this tenant
+		sessRows, err := db.DB.Query(`
+			SELECT id, tenant_id, session_name, academic_year, start_date, end_date, is_current, status, terms_count, COALESCE(description, '')
+			FROM campus_academic_sessions
+			WHERE tenant_id = ?
+			ORDER BY is_current DESC, start_date DESC`, tenantID)
+		if err != nil {
+			JSONError(w, http.StatusInternalServerError, "Failed to fetch academic sessions")
+			return
+		}
+		defer sessRows.Close()
+
+		sessions := []map[string]interface{}{}
+		var activeSessionID string
+		var selectedSession map[string]interface{}
+
+		for sessRows.Next() {
+			var id, tID, sName, aYear, sDate, eDate, status, desc string
+			var isCurrent bool
+			var tCount int
+			if err := sessRows.Scan(&id, &tID, &sName, &aYear, &sDate, &eDate, &isCurrent, &status, &tCount, &desc); err == nil {
+				sessMap := map[string]interface{}{
+					"id":            id,
+					"tenant_id":     tID,
+					"session_name":  sName,
+					"academic_year": aYear,
+					"start_date":    sDate,
+					"end_date":      eDate,
+					"is_current":    isCurrent,
+					"status":        status,
+					"terms_count":   tCount,
+					"description":   desc,
+				}
+				sessions = append(sessions, sessMap)
+				if isCurrent && activeSessionID == "" {
+					activeSessionID = id
+				}
+				if requestedSessID != "" && id == requestedSessID {
+					selectedSession = sessMap
+				}
+			}
+		}
+
+		targetSessID := requestedSessID
+		if targetSessID == "" {
+			targetSessID = activeSessionID
+		}
+		if targetSessID == "" && len(sessions) > 0 {
+			targetSessID = sessions[0]["id"].(string)
+		}
+		if selectedSession == nil && len(sessions) > 0 {
+			for _, s := range sessions {
+				if s["id"] == targetSessID {
+					selectedSession = s
+					break
+				}
+			}
+		}
+
+		// 2. Fetch terms for target session
+		terms := []map[string]interface{}{}
+		var activeTerm map[string]interface{}
+
+		if targetSessID != "" {
+			tRows, err := db.DB.Query(`
+				SELECT id, tenant_id, session_id, term_name, COALESCE(term_alias, ''), term_order, is_current, status,
+				       COALESCE(resumption_date, ''), COALESCE(mid_term_break_start, ''), COALESCE(mid_term_break_end, ''),
+				       COALESCE(exams_start_date, ''), COALESCE(exams_end_date, ''), COALESCE(vacation_date, ''),
+				       teaching_days, weeks_count,
+				       COALESCE(ca1_start_date, ''), COALESCE(ca1_end_date, ''), COALESCE(ca1_submission_deadline, ''),
+				       COALESCE(ca2_start_date, ''), COALESCE(ca2_end_date, ''), COALESCE(ca2_submission_deadline, ''),
+				       COALESCE(terminal_exam_submission_deadline, ''), COALESCE(broadsheet_approval_date, ''),
+				       COALESCE(results_release_date, ''), COALESCE(notes, '')
+				FROM campus_academic_terms
+				WHERE tenant_id = ? AND session_id = ?
+				ORDER BY term_order ASC`, tenantID, targetSessID)
+			if err == nil && tRows != nil {
+				defer tRows.Close()
+				for tRows.Next() {
+					var id, tID, sID, tName, tAlias, status, resDate, mtStart, mtEnd, exStart, exEnd, vacDate string
+					var ca1Start, ca1End, ca1Sub, ca2Start, ca2End, ca2Sub, examSub, broadApp, resRel, notes string
+					var isCur bool
+					var order, teachDays, weeks int
+					if err := tRows.Scan(
+						&id, &tID, &sID, &tName, &tAlias, &order, &isCur, &status,
+						&resDate, &mtStart, &mtEnd, &exStart, &exEnd, &vacDate,
+						&teachDays, &weeks,
+						&ca1Start, &ca1End, &ca1Sub, &ca2Start, &ca2End, &ca2Sub, &examSub, &broadApp, &resRel, &notes,
+					); err == nil {
+						termMap := map[string]interface{}{
+							"id":                                id,
+							"tenant_id":                         tID,
+							"session_id":                        sID,
+							"term_name":                         tName,
+							"term_alias":                        tAlias,
+							"term_order":                        order,
+							"is_current":                        isCur,
+							"status":                            status,
+							"resumption_date":                   resDate,
+							"mid_term_break_start":              mtStart,
+							"mid_term_break_end":                mtEnd,
+							"exams_start_date":                  exStart,
+							"exams_end_date":                    exEnd,
+							"vacation_date":                     vacDate,
+							"teaching_days":                     teachDays,
+							"weeks_count":                       weeks,
+							"ca1_start_date":                    ca1Start,
+							"ca1_end_date":                      ca1End,
+							"ca1_submission_deadline":           ca1Sub,
+							"ca2_start_date":                    ca2Start,
+							"ca2_end_date":                      ca2End,
+							"ca2_submission_deadline":           ca2Sub,
+							"terminal_exam_submission_deadline": examSub,
+							"broadsheet_approval_date":          broadApp,
+							"results_release_date":              resRel,
+							"notes":                             notes,
+						}
+						terms = append(terms, termMap)
+						if isCur && activeTerm == nil {
+							activeTerm = termMap
+						}
+					}
+				}
+			}
+		}
+
+		// 3. Fetch events
+		events := []map[string]interface{}{}
+		if targetSessID != "" {
+			eRows, err := db.DB.Query(`
+				SELECT id, tenant_id, session_id, COALESCE(term_id, ''), title, category, start_date, COALESCE(end_date, ''), is_statutory_holiday, COALESCE(description, '')
+				FROM campus_calendar_events
+				WHERE tenant_id = ? AND session_id = ?
+				ORDER BY start_date ASC`, tenantID, targetSessID)
+			if err == nil && eRows != nil {
+				defer eRows.Close()
+				for eRows.Next() {
+					var id, tID, sID, termID, title, cat, sDate, eDate, desc string
+					var isStat bool
+					if err := eRows.Scan(&id, &tID, &sID, &termID, &title, &cat, &sDate, &eDate, &isStat, &desc); err == nil {
+						events = append(events, map[string]interface{}{
+							"id":                   id,
+							"tenant_id":            tID,
+							"session_id":           sID,
+							"term_id":              termID,
+							"title":                title,
+							"category":             cat,
+							"start_date":           sDate,
+							"end_date":             eDate,
+							"is_statutory_holiday": isStat,
+							"description":          desc,
+						})
+					}
+				}
+			}
+		}
+
+		JSONResponse(w, http.StatusOK, map[string]interface{}{
+			"status":         "success",
+			"sessions":       sessions,
+			"active_session": selectedSession,
+			"active_term":    activeTerm,
+			"terms":          terms,
+			"events":         events,
+		})
+
+	case http.MethodPost:
+		var input struct {
+			SessionName  string `json:"session_name"`
+			AcademicYear string `json:"academic_year"`
+			StartDate    string `json:"start_date"`
+			EndDate      string `json:"end_date"`
+			Description  string `json:"description"`
+			MakeActive   bool   `json:"make_active"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			JSONError(w, http.StatusBadRequest, "Invalid request payload")
+			return
+		}
+		if strings.TrimSpace(input.SessionName) == "" {
+			JSONError(w, http.StatusBadRequest, "Session name is required")
+			return
+		}
+		if input.AcademicYear == "" {
+			input.AcademicYear = input.SessionName
+		}
+		if input.StartDate == "" {
+			input.StartDate = time.Now().Format("2006-01-02")
+		}
+		if input.EndDate == "" {
+			input.EndDate = time.Now().AddDate(1, 0, 0).Format("2006-01-02")
+		}
+
+		newID := uuid.New().String()
+		if input.MakeActive {
+			_, _ = db.DB.Exec("UPDATE campus_academic_sessions SET is_current = false WHERE tenant_id = ?", tenantID)
+		}
+
+		_, err := db.DB.Exec(`
+			INSERT INTO campus_academic_sessions (id, tenant_id, session_name, academic_year, start_date, end_date, is_current, status, terms_count, description)
+			VALUES (?, ?, ?, ?, ?, ?, ?, 'ACTIVE', 3, ?)`,
+			newID, tenantID, input.SessionName, input.AcademicYear, input.StartDate, input.EndDate, input.MakeActive, input.Description,
+		)
+		if err != nil {
+			JSONError(w, http.StatusInternalServerError, "Failed to create academic session")
+			return
+		}
+
+		// Auto seed 3 terms for the new session
+		_, _ = db.DB.Exec(`
+			INSERT INTO campus_academic_terms (id, tenant_id, session_id, term_name, term_alias, term_order, is_current, status, resumption_date, mid_term_break_start, mid_term_break_end, exams_start_date, exams_end_date, vacation_date, teaching_days, weeks_count)
+			VALUES
+			(?, ?, ?, 'First Term', 'Harmattan', 1, true, 'ACTIVE', ?, '', '', '', '', '', 68, 14),
+			(?, ?, ?, 'Second Term', 'Rain', 2, false, 'UPCOMING', '', '', '', '', '', '', 63, 13),
+			(?, ?, ?, 'Third Term', 'Promotional', 3, false, 'PLANNED', '', '', '', '', '', '', 62, 13)
+		`, uuid.New().String(), tenantID, newID, input.StartDate,
+			uuid.New().String(), tenantID, newID,
+			uuid.New().String(), tenantID, newID)
+
+		JSONResponse(w, http.StatusCreated, map[string]interface{}{
+			"id":      newID,
+			"message": "Academic session created successfully",
+		})
+
+	case http.MethodPut:
+		var input struct {
+			Action    string `json:"action"`
+			SessionID string `json:"session_id"`
+			Status    string `json:"status"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			JSONError(w, http.StatusBadRequest, "Invalid payload")
+			return
+		}
+
+		if input.Action == "set_active_session" {
+			_, _ = db.DB.Exec("UPDATE campus_academic_sessions SET is_current = false WHERE tenant_id = ?", tenantID)
+			_, err := db.DB.Exec("UPDATE campus_academic_sessions SET is_current = true, status = 'ACTIVE' WHERE id = ? AND tenant_id = ?", input.SessionID, tenantID)
+			if err != nil {
+				JSONError(w, http.StatusInternalServerError, "Failed to activate session")
+				return
+			}
+			JSONResponse(w, http.StatusOK, map[string]string{"message": "Active academic session updated"})
+			return
+		}
+
+		if input.Action == "archive_session" {
+			_, err := db.DB.Exec("UPDATE campus_academic_sessions SET status = 'ARCHIVED', is_current = false WHERE id = ? AND tenant_id = ?", input.SessionID, tenantID)
+			if err != nil {
+				JSONError(w, http.StatusInternalServerError, "Failed to archive session")
+				return
+			}
+			JSONResponse(w, http.StatusOK, map[string]string{"message": "Academic session archived"})
+			return
+		}
+
+		JSONError(w, http.StatusBadRequest, "Unknown action")
+
+	default:
+		JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+	}
+}
+
+func HandleCampusAcademicTerms(w http.ResponseWriter, r *http.Request) {
+	tenantID := resolveHandlerTenantID(r)
+	if tenantID == "" {
+		JSONError(w, http.StatusBadRequest, "Tenant context required")
+		return
+	}
+
+	switch r.Method {
+	case http.MethodPut, http.MethodPatch, http.MethodPost:
+		var input struct {
+			Action                         string `json:"action"`
+			TermID                         string `json:"term_id"`
+			SessionID                      string `json:"session_id"`
+			ResumptionDate                 string `json:"resumption_date"`
+			MidTermBreakStart              string `json:"mid_term_break_start"`
+			MidTermBreakEnd                string `json:"mid_term_break_end"`
+			ExamsStartDate                 string `json:"exams_start_date"`
+			ExamsEndDate                   string `json:"exams_end_date"`
+			VacationDate                   string `json:"vacation_date"`
+			TeachingDays                   int    `json:"teaching_days"`
+			WeeksCount                     int    `json:"weeks_count"`
+			CA1StartDate                   string `json:"ca1_start_date"`
+			CA1EndDate                     string `json:"ca1_end_date"`
+			CA1SubmissionDeadline          string `json:"ca1_submission_deadline"`
+			CA2StartDate                   string `json:"ca2_start_date"`
+			CA2EndDate                     string `json:"ca2_end_date"`
+			CA2SubmissionDeadline          string `json:"ca2_submission_deadline"`
+			TerminalExamSubmissionDeadline string `json:"terminal_exam_submission_deadline"`
+			BroadsheetApprovalDate         string `json:"broadsheet_approval_date"`
+			ResultsReleaseDate             string `json:"results_release_date"`
+			Status                         string `json:"status"`
+			Notes                          string `json:"notes"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			JSONError(w, http.StatusBadRequest, "Invalid request payload")
+			return
+		}
+
+		if input.Action == "set_active_term" {
+			if input.SessionID == "" {
+				_ = db.DB.QueryRow("SELECT session_id FROM campus_academic_terms WHERE id = ? AND tenant_id = ?", input.TermID, tenantID).Scan(&input.SessionID)
+			}
+			_, _ = db.DB.Exec("UPDATE campus_academic_terms SET is_current = false, status = 'UPCOMING' WHERE tenant_id = ? AND session_id = ?", tenantID, input.SessionID)
+			_, err := db.DB.Exec("UPDATE campus_academic_terms SET is_current = true, status = 'ACTIVE' WHERE id = ? AND tenant_id = ?", input.TermID, tenantID)
+			if err != nil {
+				JSONError(w, http.StatusInternalServerError, "Failed to set active term")
+				return
+			}
+			JSONResponse(w, http.StatusOK, map[string]string{"message": "Active term updated successfully"})
+			return
+		}
+
+		// Update term dates and assessment windows
+		_, err := db.DB.Exec(`
+			UPDATE campus_academic_terms
+			SET resumption_date = ?, mid_term_break_start = ?, mid_term_break_end = ?,
+			    exams_start_date = ?, exams_end_date = ?, vacation_date = ?,
+			    teaching_days = COALESCE(NULLIF(?, 0), teaching_days),
+			    weeks_count = COALESCE(NULLIF(?, 0), weeks_count),
+			    ca1_start_date = ?, ca1_end_date = ?, ca1_submission_deadline = ?,
+			    ca2_start_date = ?, ca2_end_date = ?, ca2_submission_deadline = ?,
+			    terminal_exam_submission_deadline = ?, broadsheet_approval_date = ?,
+			    results_release_date = ?, notes = ?, updated_at = CURRENT_TIMESTAMP
+			WHERE id = ? AND tenant_id = ?`,
+			input.ResumptionDate, input.MidTermBreakStart, input.MidTermBreakEnd,
+			input.ExamsStartDate, input.ExamsEndDate, input.VacationDate,
+			input.TeachingDays, input.WeeksCount,
+			input.CA1StartDate, input.CA1EndDate, input.CA1SubmissionDeadline,
+			input.CA2StartDate, input.CA2EndDate, input.CA2SubmissionDeadline,
+			input.TerminalExamSubmissionDeadline, input.BroadsheetApprovalDate,
+			input.ResultsReleaseDate, input.Notes,
+			input.TermID, tenantID,
+		)
+		if err != nil {
+			JSONError(w, http.StatusInternalServerError, "Failed to update term configuration")
+			return
+		}
+
+		JSONResponse(w, http.StatusOK, map[string]string{"message": "Term dates and assessment windows saved successfully"})
+
+	default:
+		JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+	}
+}
+
+func HandleCampusAcademicEvents(w http.ResponseWriter, r *http.Request) {
+	tenantID := resolveHandlerTenantID(r)
+	if tenantID == "" {
+		JSONError(w, http.StatusBadRequest, "Tenant context required")
+		return
+	}
+
+	switch r.Method {
+	case http.MethodPost:
+		var input struct {
+			SessionID          string `json:"session_id"`
+			TermID             string `json:"term_id"`
+			Title              string `json:"title"`
+			Category           string `json:"category"`
+			StartDate          string `json:"start_date"`
+			EndDate            string `json:"end_date"`
+			IsStatutoryHoliday bool   `json:"is_statutory_holiday"`
+			Description        string `json:"description"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			JSONError(w, http.StatusBadRequest, "Invalid payload")
+			return
+		}
+		if strings.TrimSpace(input.Title) == "" {
+			JSONError(w, http.StatusBadRequest, "Event title is required")
+			return
+		}
+		if input.Category == "" {
+			input.Category = "ACADEMIC"
+		}
+
+		newID := uuid.New().String()
+		_, err := db.DB.Exec(`
+			INSERT INTO campus_calendar_events (id, tenant_id, session_id, term_id, title, category, start_date, end_date, is_statutory_holiday, description)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+			newID, tenantID, input.SessionID, input.TermID, input.Title, input.Category, input.StartDate, input.EndDate, input.IsStatutoryHoliday, input.Description,
+		)
+		if err != nil {
+			JSONError(w, http.StatusInternalServerError, "Failed to create calendar event")
+			return
+		}
+		JSONResponse(w, http.StatusCreated, map[string]interface{}{"id": newID, "message": "Event created"})
+
+	case http.MethodDelete:
+		eventID := r.URL.Query().Get("id")
+		_, err := db.DB.Exec("DELETE FROM campus_calendar_events WHERE id = ? AND tenant_id = ?", eventID, tenantID)
+		if err != nil {
+			JSONError(w, http.StatusInternalServerError, "Failed to delete event")
+			return
+		}
+		JSONResponse(w, http.StatusOK, map[string]string{"message": "Event deleted"})
 
 	default:
 		JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")

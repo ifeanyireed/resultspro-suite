@@ -5,6 +5,18 @@
 
 const CAMPUS_API = process.env.NEXT_PUBLIC_CAMPUS_API || '';
 
+export function getActiveTenantId(tenantId?: string): string {
+  if (tenantId && tenantId.trim() !== '') return tenantId;
+  if (typeof window !== 'undefined') {
+    const saved = localStorage.getItem('resultspro_tenant_id') ||
+                  localStorage.getItem('tenant_id') ||
+                  localStorage.getItem('current_tenant_id') ||
+                  localStorage.getItem('current_tenant');
+    if (saved && saved.trim() !== '') return saved;
+  }
+  return 'edusuite2';
+}
+
 function getHeaders(tenantId?: string): Record<string, string> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -15,13 +27,58 @@ function getHeaders(tenantId?: string): Record<string, string> {
       headers['Authorization'] = `Bearer ${token}`;
     }
   }
-  if (tenantId) {
-    headers['X-Tenant-ID'] = tenantId;
+  const resolved = getActiveTenantId(tenantId);
+  if (resolved) {
+    headers['X-Tenant-ID'] = resolved;
   }
   return headers;
 }
 
 // =================== TYPES ===================
+
+export interface CampusClassArm {
+  id: string;
+  tenant_id: string;
+  class_id: string;
+  class_name?: string;
+  name: string;
+  arm_code: string;
+  form_teacher_id?: string;
+  form_teacher_name: string;
+  room_number: string;
+  capacity: number;
+  enrolled_students: number;
+  status: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CampusClass {
+  id: string;
+  tenant_id: string;
+  name: string;
+  level_order: number;
+  category: string;
+  curriculum: string;
+  description: string;
+  arms: CampusClassArm[];
+  total_arms: number;
+  total_pupils: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CampusArmStudent {
+  id: string;
+  tenant_id: string;
+  arm_id: string;
+  student_id: string;
+  student_name: string;
+  admission_number: string;
+  gender: string;
+  status: string;
+  created_at?: string;
+}
 
 export interface CampusSummary {
   tenantId?: string;
@@ -632,4 +689,218 @@ export async function fetchMobileAccounts(tenantId?: string): Promise<MobileAcco
     console.warn('[campus-api] Using mobile-accounts fallback:', err);
   }
   return mockMobileAccounts;
+}
+
+// =================== CLASSES, ARMS & ROSTERS (PERSISTENT & TENANT-ISOLATED) ===================
+
+export async function fetchCampusClasses(tenantId?: string): Promise<CampusClass[]> {
+  const tID = getActiveTenantId(tenantId);
+  const base = CAMPUS_API || '';
+  const url = `${base}/api/v1/campus/classes?tenant_id=${encodeURIComponent(tID)}`;
+
+  const res = await fetch(url, {
+    headers: getHeaders(tID),
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text().catch(() => '');
+    throw new Error(`Failed to fetch campus classes: ${res.status} ${errorText}`);
+  }
+
+  const data = await res.json();
+  return Array.isArray(data) ? data : [];
+}
+
+export async function createCampusClass(data: {
+  name: string;
+  level_order?: number;
+  category?: string;
+  curriculum?: string;
+  description?: string;
+  tenantId?: string;
+}): Promise<any> {
+  const tID = getActiveTenantId(data.tenantId);
+  const base = CAMPUS_API || '';
+  const url = `${base}/api/v1/campus/classes?tenant_id=${encodeURIComponent(tID)}`;
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: getHeaders(tID),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.text().catch(() => '');
+    throw new Error(`Failed to create class: ${res.status} ${err}`);
+  }
+  return res.json();
+}
+
+export async function updateCampusClass(data: {
+  id: string;
+  name: string;
+  level_order?: number;
+  category?: string;
+  curriculum?: string;
+  description?: string;
+  tenantId?: string;
+}): Promise<any> {
+  const tID = getActiveTenantId(data.tenantId);
+  const base = CAMPUS_API || '';
+  const url = `${base}/api/v1/campus/classes?tenant_id=${encodeURIComponent(tID)}`;
+
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: getHeaders(tID),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.text().catch(() => '');
+    throw new Error(`Failed to update class: ${res.status} ${err}`);
+  }
+  return res.json();
+}
+
+export async function deleteCampusClass(id: string, tenantId?: string): Promise<boolean> {
+  const tID = getActiveTenantId(tenantId);
+  const base = CAMPUS_API || '';
+  const url = `${base}/api/v1/campus/classes?id=${encodeURIComponent(id)}&tenant_id=${encodeURIComponent(tID)}`;
+
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: getHeaders(tID),
+  });
+  return res.ok;
+}
+
+export async function fetchCampusArms(classId?: string, tenantId?: string): Promise<CampusClassArm[]> {
+  const tID = getActiveTenantId(tenantId);
+  const base = CAMPUS_API || '';
+  let url = `${base}/api/v1/campus/classes/arms?tenant_id=${encodeURIComponent(tID)}`;
+  if (classId) {
+    url += `&class_id=${encodeURIComponent(classId)}`;
+  }
+
+  const res = await fetch(url, {
+    headers: getHeaders(tID),
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text().catch(() => '');
+    throw new Error(`Failed to fetch class arms: ${res.status} ${errorText}`);
+  }
+
+  const data = await res.json();
+  return Array.isArray(data) ? data : [];
+}
+
+export async function createCampusArm(data: {
+  class_id: string;
+  name: string;
+  arm_code?: string;
+  form_teacher_name?: string;
+  room_number?: string;
+  capacity?: number;
+  tenantId?: string;
+}): Promise<any> {
+  const tID = getActiveTenantId(data.tenantId);
+  const base = CAMPUS_API || '';
+  const url = `${base}/api/v1/campus/classes/arms?tenant_id=${encodeURIComponent(tID)}`;
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: getHeaders(tID),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.text().catch(() => '');
+    throw new Error(`Failed to create class arm: ${res.status} ${err}`);
+  }
+  return res.json();
+}
+
+export async function updateCampusArm(data: {
+  id: string;
+  name: string;
+  arm_code?: string;
+  form_teacher_name?: string;
+  room_number?: string;
+  capacity?: number;
+  status?: string;
+  tenantId?: string;
+}): Promise<any> {
+  const tID = getActiveTenantId(data.tenantId);
+  const base = CAMPUS_API || '';
+  const url = `${base}/api/v1/campus/classes/arms?tenant_id=${encodeURIComponent(tID)}`;
+
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: getHeaders(tID),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.text().catch(() => '');
+    throw new Error(`Failed to update class arm: ${res.status} ${err}`);
+  }
+  return res.json();
+}
+
+export async function deleteCampusArm(id: string, tenantId?: string): Promise<boolean> {
+  const tID = getActiveTenantId(tenantId);
+  const base = CAMPUS_API || '';
+  const url = `${base}/api/v1/campus/classes/arms?id=${encodeURIComponent(id)}&tenant_id=${encodeURIComponent(tID)}`;
+
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: getHeaders(tID),
+  });
+  return res.ok;
+}
+
+export async function fetchArmStudents(armId: string, tenantId?: string): Promise<CampusArmStudent[]> {
+  const tID = getActiveTenantId(tenantId);
+  const base = CAMPUS_API || '';
+  const url = `${base}/api/v1/campus/classes/arms/students?tenant_id=${encodeURIComponent(tID)}&arm_id=${encodeURIComponent(armId)}`;
+
+  const res = await fetch(url, {
+    headers: getHeaders(tID),
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    const err = await res.text().catch(() => '');
+    throw new Error(`Failed to fetch arm students: ${res.status} ${err}`);
+  }
+
+  const data = await res.json();
+  return Array.isArray(data) ? data : [];
+}
+
+export async function enrollStudentInArm(data: {
+  arm_id: string;
+  student_name: string;
+  admission_number?: string;
+  gender?: string;
+  tenantId?: string;
+}): Promise<any> {
+  const tID = getActiveTenantId(data.tenantId);
+  const base = CAMPUS_API || '';
+  const url = `${base}/api/v1/campus/classes/arms/students?tenant_id=${encodeURIComponent(tID)}`;
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: getHeaders(tID),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.text().catch(() => '');
+    throw new Error(`Failed to enroll student into arm: ${res.status} ${err}`);
+  }
+  return res.json();
 }

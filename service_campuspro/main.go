@@ -90,6 +90,22 @@ func main() {
 		// Homework & Assignments
 		"/api/v1/campus/homework": handlers.HandleCampusHomework,
 		"/api/campus/homework":    handlers.HandleCampusHomework,
+
+		// Academic Classes, Arms & Rosters
+		"/api/v1/campus/classes":               handlers.HandleCampusClasses,
+		"/api/campus/classes":                  handlers.HandleCampusClasses,
+		"/api/v1/campus/classes/arms":          handlers.HandleCampusArms,
+		"/api/campus/classes/arms":             handlers.HandleCampusArms,
+		"/api/v1/campus/classes/arms/students": handlers.HandleCampusArmStudents,
+		"/api/campus/classes/arms/students":    handlers.HandleCampusArmStudents,
+
+		// Academic Sessions & Term Calendar
+		"/api/v1/campus/academic-sessions": handlers.HandleCampusAcademicSessions,
+		"/api/campus/academic-sessions":    handlers.HandleCampusAcademicSessions,
+		"/api/v1/campus/academic-terms":    handlers.HandleCampusAcademicTerms,
+		"/api/campus/academic-terms":       handlers.HandleCampusAcademicTerms,
+		"/api/v1/campus/academic-events":   handlers.HandleCampusAcademicEvents,
+		"/api/campus/academic-events":      handlers.HandleCampusAcademicEvents,
 	}
 
 	for path, handler := range routes {

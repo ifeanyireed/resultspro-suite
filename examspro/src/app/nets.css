@@ -6,7 +6,7 @@
 @theme {
   --color-nets-navy:        #1A1FA8;
   --color-nets-navy-dark:   #0D1060;
-  --color-nets-red:         #DC2626;
+  --color-nets-red:         #FBBC04;
   --color-nets-white:       #FFFFFF;
   --color-nets-light:       #F8F9FC;
   --color-nets-text:        #111827;
@@ -17,7 +17,7 @@
 
   --color-nets-navy-10:     rgba(26, 31, 168, 0.08);
   --color-nets-navy-15:     rgba(26, 31, 168, 0.15);
-  --color-nets-red-10:      rgba(220, 38, 38, 0.08);
+  --color-nets-red-10:      rgba(251, 188, 4, 0.12);
   --color-nets-dark-85:     rgba(13, 16, 96, 0.85);
   --color-nets-dark-70:     rgba(13, 16, 96, 0.70);
   --color-nets-dark-50:     rgba(13, 16, 96, 0.50);
@@ -133,14 +133,15 @@
 
 .btn-red {
   background: var(--color-nets-red);
-  color: #fff;
+  color: #0D1060;
   border-color: var(--color-nets-red);
 }
 .btn-red:hover {
-  background: #B91C1C;
-  border-color: #B91C1C;
+  background: #E5A800;
+  border-color: #E5A800;
+  color: #0D1060;
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(220,38,38,0.30);
+  box-shadow: 0 6px 20px rgba(251, 188, 4, 0.35);
 }
 
 .btn-navy {
