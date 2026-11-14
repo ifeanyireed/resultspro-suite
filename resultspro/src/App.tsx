@@ -3,60 +3,60 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Landing from "./pages/Landing";
-import AgentLanding from "./pages/AgentLanding";
-import Demo from "./pages/Demo";
-import Features from "./pages/Features";
-import Pricing from "./pages/Pricing";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import ResultChecker from "./pages/ResultChecker";
-import ResultsLookup from "./pages/ResultsLookup";
-import ScratchCardValidation from "./pages/ScratchCardValidation";
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import RegisterAgent from "./pages/auth/RegisterAgent";
-import VerifyEmail from "./pages/auth/VerifyEmail";
-import SchoolVerification from "./pages/auth/SchoolVerification";
-import PendingVerification from "./pages/auth/PendingVerification";
-import PasswordReset from "./pages/auth/PasswordReset";
-import PasswordResetConfirm from "./pages/auth/PasswordResetConfirm";
-import { OnboardingWizard } from "./pages/onboarding";
-import { PaymentComplete } from "./pages/PaymentComplete";
+import Landing from "./legacy-pages/Landing";
+import AgentLanding from "./legacy-pages/AgentLanding";
+import Demo from "./legacy-pages/Demo";
+import Features from "./legacy-pages/Features";
+import Pricing from "./legacy-pages/Pricing";
+import About from "./legacy-pages/About";
+import Contact from "./legacy-pages/Contact";
+import ResultChecker from "./legacy-pages/ResultChecker";
+import ResultsLookup from "./legacy-pages/ResultsLookup";
+import ScratchCardValidation from "./legacy-pages/ScratchCardValidation";
+import Login from "./legacy-pages/auth/Login";
+import Register from "./legacy-pages/auth/Register";
+import RegisterAgent from "./legacy-pages/auth/RegisterAgent";
+import VerifyEmail from "./legacy-pages/auth/VerifyEmail";
+import SchoolVerification from "./legacy-pages/auth/SchoolVerification";
+import PendingVerification from "./legacy-pages/auth/PendingVerification";
+import PasswordReset from "./legacy-pages/auth/PasswordReset";
+import PasswordResetConfirm from "./legacy-pages/auth/PasswordResetConfirm";
+import { OnboardingWizard } from "./legacy-pages/onboarding";
+import { PaymentComplete } from "./legacy-pages/PaymentComplete";
 import ProtectedSuperAdminRoute from "./components/ProtectedSuperAdminRoute";
 import ProtectedSupportAgentRoute from "./components/ProtectedSupportAgentRoute";
-import SuperAdminOverview from "./pages/super-admin/Overview";
-import SchoolVerifications from "./pages/super-admin/SchoolVerifications";
-import SchoolsManagement from "./pages/super-admin/SchoolsManagement";
-import FinancialDashboard from "./pages/super-admin/FinancialDashboard";
-import ScratchCardManagement from "./pages/super-admin/ScratchCardMgmt";
-import SubscriptionsManagement from "./pages/super-admin/Subscriptions";
-import Analytics from "./pages/super-admin/Analytics";
-import MultiSchoolDashboard from "./pages/MultiSchoolDashboard";
-import SupportTickets from "./pages/super-admin/Support";
-import SystemSettings from "./pages/super-admin/Settings";
-import Support from "./pages/Support";
-import SuperAdminSupportDashboard from "./pages/super-admin/SupportDashboard";
-import SupportAgentDashboard from "./pages/SupportAgentDashboard";
-import SupportAgentProfile from "./pages/SupportAgentProfile";
-import NotificationsPage from "./pages/Notifications";
-import SuperAdminProfile from "./pages/super-admin/Profile";
-import SuperAdminNotifications from "./pages/super-admin/Notifications";
-import AgentsManagement from "./pages/super-admin/AgentsManagement";
-import SupportStaffManagement from "./pages/super-admin/SupportStaffManagement";
-import EmailManagement from "./pages/super-admin/EmailManagement";
-import BlogList from "./pages/blog/BlogList";
-import BlogPost from "./pages/blog/BlogPost";
-import BlogManagementCMS from "./pages/super-admin/BlogManagementCMS";
-import VideoManagement from "./pages/super-admin/VideoManagement";
+import SuperAdminOverview from "./legacy-pages/super-admin/Overview";
+import SchoolVerifications from "./legacy-pages/super-admin/SchoolVerifications";
+import SchoolsManagement from "./legacy-pages/super-admin/SchoolsManagement";
+import FinancialDashboard from "./legacy-pages/super-admin/FinancialDashboard";
+import ScratchCardManagement from "./legacy-pages/super-admin/ScratchCardMgmt";
+import SubscriptionsManagement from "./legacy-pages/super-admin/Subscriptions";
+import Analytics from "./legacy-pages/super-admin/Analytics";
+import MultiSchoolDashboard from "./legacy-pages/MultiSchoolDashboard";
+import SupportTickets from "./legacy-pages/super-admin/Support";
+import SystemSettings from "./legacy-pages/super-admin/Settings";
+import Support from "./legacy-pages/Support";
+import SuperAdminSupportDashboard from "./legacy-pages/super-admin/SupportDashboard";
+import SupportAgentDashboard from "./legacy-pages/SupportAgentDashboard";
+import SupportAgentProfile from "./legacy-pages/SupportAgentProfile";
+import NotificationsPage from "./legacy-pages/Notifications";
+import SuperAdminProfile from "./legacy-pages/super-admin/Profile";
+import SuperAdminNotifications from "./legacy-pages/super-admin/Notifications";
+import AgentsManagement from "./legacy-pages/super-admin/AgentsManagement";
+import SupportStaffManagement from "./legacy-pages/super-admin/SupportStaffManagement";
+import EmailManagement from "./legacy-pages/super-admin/EmailManagement";
+import BlogList from "./legacy-pages/blog/BlogList";
+import BlogPost from "./legacy-pages/blog/BlogPost";
+import BlogManagementCMS from "./legacy-pages/super-admin/BlogManagementCMS";
+import VideoManagement from "./legacy-pages/super-admin/VideoManagement";
 import SchoolAdminLayout from "./components/SchoolAdminLayout";
 import TeacherDashboardLayout from "./components/TeacherDashboardLayout";
 import ParentDashboardLayout from "./components/ParentDashboardLayout";
-import SchoolRejected from "./pages/school-admin/SchoolRejected";
-import MyTickets from "./pages/school-admin/MyTickets";
+import SchoolRejected from "./legacy-pages/school-admin/SchoolRejected";
+import MyTickets from "./legacy-pages/school-admin/MyTickets";
 
-import { Dashboard as AgentDashboard, Profile as AgentProfile, SchoolsManaged, Referrals, Rewards, Withdrawals, SubscriptionPlans } from "./pages/agent";
-import SubscriptionVerify from "./pages/agent/SubscriptionVerify";
+import { Dashboard as AgentDashboard, Profile as AgentProfile, SchoolsManaged, Referrals, Rewards, Withdrawals, SubscriptionPlans } from "./legacy-pages/agent";
+import SubscriptionVerify from "./legacy-pages/agent/SubscriptionVerify";
 import { 
   ParentDashboard, 
   ChildDetailPage, 
@@ -64,7 +64,7 @@ import {
   ParentHolisticDevelopment,
   ParentProfile,
   ParentMessages
-} from "./pages/parent";
+} from "./legacy-pages/parent";
 import {
   TeacherDashboard,
   TeacherClassOverview,
@@ -73,7 +73,7 @@ import {
   TeacherStudentDetail,
   TeacherProfile,
   TeacherMessages
-} from "./pages/teacher";
+} from "./legacy-pages/teacher";
 import {
   Overview as SchoolOverview,
   SessionTermManagement,
@@ -96,9 +96,9 @@ import {
   ScratchCardDashboard,
   ScratchCardRequests,
   ScratchCardBatches,
-} from "./pages/school-admin";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+} from "./legacy-pages/school-admin";
+import Index from "./legacy-pages/Index";
+import NotFound from "./legacy-pages/NotFound";
 import { ScrollRiseProvider } from "./components/ScrollRiseProvider";
 
 const queryClient = new QueryClient();

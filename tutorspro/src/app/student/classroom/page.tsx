@@ -1,3 +1,5 @@
+"use client";
+
 import { IconVideo as Video, IconMicrophone as Mic, IconMessage as MessageSquare, IconHandStop as Hand, IconLayout as Layout, IconSettings as Settings, IconLogout as LogOut, IconUsers as Users, IconShare as Share, IconMaximize as Maximize, IconPlayerPlay as Play, IconSquare as Square, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '../../../store/useAuthStore';

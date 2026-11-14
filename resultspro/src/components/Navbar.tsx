@@ -16,7 +16,7 @@ export default function Navbar() {
   
   // Mocked for resultspro until auth store is ported over
   const isAuthenticated = false;
-  const user = null;
+  const user: { name?: string; email?: string } | null = null;
   const [mounted, setMounted] = useState(false);
   const [featureFlags, setFeatureFlags] = useState<Record<string, string>>({});
   const [unreadCount, setUnreadCount] = useState(0);
@@ -47,8 +47,7 @@ export default function Navbar() {
 
   const fetchUnreadCount = async () => {
     try {
-      const count = await getUnreadCount();
-      setUnreadCount(count);
+      setUnreadCount(0);
     } catch (err) {
       // silently fail
     }

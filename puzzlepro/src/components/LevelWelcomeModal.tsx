@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Target, Zap, Play, X, Award } from 'lucide-react';
+import { IconTarget as Target, IconBolt as Zap, IconPlayerPlay as Play, IconX as X, IconAward as Award } from '@tabler/icons-react';
 import { soundManager } from '@/utils/sound';
 
 export interface LevelInfo {

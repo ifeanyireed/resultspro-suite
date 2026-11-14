@@ -39,6 +39,8 @@ import {
 
 import { useAuthStore } from '@/store/useAuthStore';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { ModernDashboardLayout } from '@/components/layout/ModernDashboardLayout';
 
 export default function StudentLayout({
   children,

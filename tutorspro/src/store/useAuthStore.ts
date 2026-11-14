@@ -5,8 +5,10 @@ interface User {
   id: string;
   email: string;
   full_name: string | null;
+  name?: string | null;
   avatar_url: string | null;
-  role: 'SUPERADMIN' | 'PLATFORM_ADMIN' | 'SCHOOL_ADMIN' | 'TUTOR' | 'PARENT' | 'STUDENT';
+  avatarUrl?: string | null;
+  role: 'SUPERADMIN' | 'PLATFORM_ADMIN' | 'SCHOOL_ADMIN' | 'ADMIN' | 'TUTOR' | 'PARENT' | 'STUDENT';
   school_id?: string;
   class_id?: string;
   account_status: string;
