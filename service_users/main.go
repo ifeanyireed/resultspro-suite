@@ -47,7 +47,7 @@ func main() {
 		utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
 			"status":  "healthy",
 			"service": "service_users (Identity, Academics & Subscriptions Engine)",
-			"version": "2.0.0",
+			"version": "2.0.1",
 		})
 	})
 	mux.HandleFunc("/api/health", func(w http.ResponseWriter, r *http.Request) {
