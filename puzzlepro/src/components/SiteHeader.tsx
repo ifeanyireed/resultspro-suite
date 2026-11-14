@@ -12,6 +12,7 @@ import {
   IconMail, 
   IconBook 
 } from '@tabler/icons-react';
+import { getCdnUrl } from '@/utils/cdn';
 
 export const SiteHeader: React.FC = () => {
   const pathname = usePathname();
@@ -31,7 +32,7 @@ export const SiteHeader: React.FC = () => {
           {/* Brand Logo & Name */}
           <Link href="/" className="flex items-center space-x-3 group focus:outline-none">
             <Image 
-              src="/monkey1.svg" 
+              src={getCdnUrl('/monkey1.svg')} 
               alt="PuzzlePro Monkey" 
               width={42} 
               height={42} 

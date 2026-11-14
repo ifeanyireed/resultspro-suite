@@ -16,10 +16,10 @@ interface SplashScreenProps {
 }
 
 const CONFETTI_SVGS = [
-  '/confetti1.svg',
-  '/confetti2.svg',
-  '/confetti3.svg',
-  '/confetti4.svg',
+  getCdnUrl('/confetti1.svg'),
+  getCdnUrl('/confetti2.svg'),
+  getCdnUrl('/confetti3.svg'),
+  getCdnUrl('/confetti4.svg'),
 ];
 
 const CONFETTI_PARTICLES = Array.from({ length: 18 }, (_, i) => ({
@@ -144,7 +144,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
         {/* Background Wooden Frame SVG */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/badge_banner.svg"
+            src={getCdnUrl('/badge_banner.svg')}
             alt="Badge Banner Background"
             fill
             className="object-contain"
@@ -167,7 +167,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
             {/* Monkey 1 Avatar Header (layered behind the input field) */}
             <div className="relative z-10 w-28 h-28 sm:w-36 sm:h-36 drop-shadow-xl transform hover:scale-105 transition -mb-5 sm:-mb-7 pointer-events-none">
               <Image
-                src="/monkey1.svg"
+                src={getCdnUrl('/monkey1.svg')}
                 alt="Monkey Explorer"
                 fill
                 className="object-contain"
@@ -216,7 +216,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
               className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full transition cursor-pointer flex-shrink-0 drop-shadow-2xl z-30"
               title="Start Level"
             >
-              <Image src="/Login.svg" alt="Login Start Button" fill className="object-contain" priority />
+              <Image src={getCdnUrl('/Login.svg')} alt="Login Start Button" fill className="object-contain" priority />
             </motion.button>
           </div>
 

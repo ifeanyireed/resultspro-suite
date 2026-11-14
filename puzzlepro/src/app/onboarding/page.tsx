@@ -23,12 +23,12 @@ import {
   IconAlertCircle,
   IconX,
 } from '@tabler/icons-react';
-import { getCharacterAvatarUrl } from '@/utils/cdn';
+import { getCharacterAvatarUrl, getCdnUrl } from '@/utils/cdn';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const AVATAR_OPTIONS = Array.from(
   { length: 20 },
-  (_, i) => `/images/character${i + 1}.jpg`
+  (_, i) => getCdnUrl(`/images/character${i + 1}.jpg`)
 );
 
 export default function OnboardingPage() {
@@ -239,7 +239,7 @@ export default function OnboardingPage() {
       {/* Top Header Bar */}
       <header className="max-w-4xl w-full mx-auto flex items-center justify-between py-4">
         <div className="flex items-center space-x-3">
-          <Image src="/monkey1.svg" alt="PuzzlePro" width={48} height={48} className="object-contain" />
+          <Image src={getCdnUrl('/monkey1.svg')} alt="PuzzlePro" width={48} height={48} className="object-contain" />
           <div>
             <h1 className="text-lg font-medium text-slate-900 tracking-tight">PuzzlePro Setup</h1>
             <p className="text-xs text-slate-500 font-normal">One-Page Guided Onboarding</p>

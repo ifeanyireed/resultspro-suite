@@ -456,14 +456,26 @@ func (g *GameEngineHandler) EventHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	_, err := g.DB.ExecContext(ctx, `
-		INSERT INTO user_progress (user_id, world_id, adventure_id, level_number, stars, score, completed)
-		VALUES (?, ?, ?, ?, ?, ?, TRUE)
-		ON DUPLICATE KEY UPDATE
-			stars = GREATEST(stars, VALUES(stars)),
-			score = GREATEST(score, VALUES(score)),
-			completed = TRUE
-	`, req.UserID, req.WorldID, req.AdventureID, req.LevelNumber, req.Stars, req.Score)
+	var err error
+	if g.DB.DriverName == "postgres" {
+		_, err = g.DB.ExecContext(ctx, `
+			INSERT INTO user_progress (user_id, world_id, adventure_id, level_number, stars, score, completed)
+			VALUES (?, ?, ?, ?, ?, ?, TRUE)
+			ON CONFLICT (user_id, world_id, adventure_id, level_number) DO UPDATE SET
+				stars = GREATEST(user_progress.stars, EXCLUDED.stars),
+				score = GREATEST(user_progress.score, EXCLUDED.score),
+				completed = TRUE
+		`, req.UserID, req.WorldID, req.AdventureID, req.LevelNumber, req.Stars, req.Score)
+	} else {
+		_, err = g.DB.ExecContext(ctx, `
+			INSERT INTO user_progress (user_id, world_id, adventure_id, level_number, stars, score, completed)
+			VALUES (?, ?, ?, ?, ?, ?, TRUE)
+			ON DUPLICATE KEY UPDATE
+				stars = GREATEST(stars, VALUES(stars)),
+				score = GREATEST(score, VALUES(score)),
+				completed = TRUE
+		`, req.UserID, req.WorldID, req.AdventureID, req.LevelNumber, req.Stars, req.Score)
+	}
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -478,13 +490,23 @@ func (g *GameEngineHandler) EventHandler(w http.ResponseWriter, r *http.Request)
 	`, req.UserID).Scan(&newXP, &newStars)
 
 	if err == nil {
-		_, _ = g.DB.ExecContext(ctx, `
-			INSERT INTO users (id, username, avatar, group_id, total_xp, total_stars)
-			VALUES (?, COALESCE(NULLIF(?, ''), 'Player'), COALESCE(NULLIF(?, ''), 'default.png'), ?, ?, ?)
-			ON DUPLICATE KEY UPDATE
-				total_xp = VALUES(total_xp),
-				total_stars = VALUES(total_stars)
-		`, req.UserID, req.Username, req.Avatar, req.GroupID, newXP, newStars)
+		if g.DB.DriverName == "postgres" {
+			_, _ = g.DB.ExecContext(ctx, `
+				INSERT INTO users (id, username, avatar, group_id, total_xp, total_stars)
+				VALUES (?, COALESCE(NULLIF(?, ''), 'Player'), COALESCE(NULLIF(?, ''), 'default.png'), ?, ?, ?)
+				ON CONFLICT (id) DO UPDATE SET
+					total_xp = EXCLUDED.total_xp,
+					total_stars = EXCLUDED.total_stars
+			`, req.UserID, req.Username, req.Avatar, req.GroupID, newXP, newStars)
+		} else {
+			_, _ = g.DB.ExecContext(ctx, `
+				INSERT INTO users (id, username, avatar, group_id, total_xp, total_stars)
+				VALUES (?, COALESCE(NULLIF(?, ''), 'Player'), COALESCE(NULLIF(?, ''), 'default.png'), ?, ?, ?)
+				ON DUPLICATE KEY UPDATE
+					total_xp = VALUES(total_xp),
+					total_stars = VALUES(total_stars)
+			`, req.UserID, req.Username, req.Avatar, req.GroupID, newXP, newStars)
+		}
 	}
 
 	// Update Redis XP Leaderboard Sorted Sets (ZADD)

@@ -11,7 +11,7 @@ This document contains the complete technical specification, configuration, and 
 | **Host Website Domain** | `www.skilluplearningacademy.com` |
 | **Embed Page Route** | `https://www.skilluplearningacademy.com/puzzlepro` |
 | **iFrame Target Engine** | `https://learn2earnhq.com/embed?org_token=TOKEN_SKIL_9901` |
-| **Backend Microservice API** | Render API (`https://player-service-bttg.onrender.com`) |
+| **Backend Microservice API** | Render API (`https://resultspro-service-users.onrender.com`) |
 | **Google Ads Verification** | `https://www.learn2earnhq.com/ads.txt` |
 | **Email Proxy API** | `https://resultspro.ng/email_proxy/api/send-email.php` |
 

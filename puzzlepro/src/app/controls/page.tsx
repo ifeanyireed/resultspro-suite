@@ -50,12 +50,12 @@ import {
   IconDeviceLaptop,
   IconMapPin,
 } from '@tabler/icons-react';
-import { getCharacterAvatarUrl } from '@/utils/cdn';
+import { getCharacterAvatarUrl, getCdnUrl } from '@/utils/cdn';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const AVATAR_OPTIONS = Array.from(
   { length: 20 },
-  (_, i) => `/images/character${i + 1}.jpg`
+  (_, i) => getCdnUrl(`/images/character${i + 1}.jpg`)
 );
 
 // Types for Admin Platform Modules
@@ -486,7 +486,7 @@ export default function AdminControlsPage() {
           loop
           muted
           playsInline
-          poster="/images/login_bg_poster.jpg"
+          poster={getCdnUrl('/images/login_bg_poster.jpg')}
           aria-hidden="true"
           tabIndex={-1}
           onError={(e) => {
@@ -494,15 +494,15 @@ export default function AdminControlsPage() {
           }}
           className="absolute inset-0 w-full h-full object-cover filter brightness-85 contrast-105 z-0"
         >
-          <source src="/login_bg.mp4" type="video/mp4" />
-          <source src="/login_bg.mov" type="video/quicktime" />
+          <source src={getCdnUrl('/login_bg.mp4')} type="video/mp4" />
+          <source src={getCdnUrl('/login_bg.mov')} type="video/quicktime" />
         </video>
 
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-blue-950/85 to-slate-950/65 z-0" />
 
         <MotionRise className="hidden md:flex absolute left-12 lg:left-20 top-1/2 -translate-y-1/2 z-10 max-w-lg flex-col gap-6 text-white">
           <div className="flex items-center gap-3">
-            <Image src="/monkey1.svg" alt="PuzzlePro Logo" width={56} height={56} className="object-contain drop-shadow-md shrink-0 transition-transform hover:scale-105" />
+            <Image src={getCdnUrl('/monkey1.svg')} alt="PuzzlePro Logo" width={56} height={56} className="object-contain drop-shadow-md shrink-0 transition-transform hover:scale-105" />
             <span className="font-normal text-xs tracking-widest uppercase text-amber-300">
               PuzzlePro Controls
             </span>
@@ -544,7 +544,7 @@ export default function AdminControlsPage() {
 
         <MotionRise delay={0.1} className="relative z-10 w-full max-w-[380px] bg-slate-900/80 md:bg-white/90 p-7 rounded-[28px] border border-white/20 md:border-white/60 shadow-2xl backdrop-blur-xl flex flex-col gap-4">
           <div className="text-center md:text-left flex flex-col items-center md:items-start">
-            <Image src="/monkey1.svg" alt="PuzzlePro Logo" width={48} height={48} className="object-contain mb-2 drop-shadow-md shrink-0 transition-transform hover:scale-105" />
+            <Image src={getCdnUrl('/monkey1.svg')} alt="PuzzlePro Logo" width={48} height={48} className="object-contain mb-2 drop-shadow-md shrink-0 transition-transform hover:scale-105" />
             <h2 className="text-xl font-medium text-white md:text-slate-900 tracking-tight">Controls Dashboard</h2>
             <p className="text-[10px] text-slate-400 md:text-slate-500 font-normal uppercase tracking-wide mt-0.5">
               Sign in to platform dashboard
@@ -797,7 +797,7 @@ export default function AdminControlsPage() {
       {/* Top Admin Header Bar */}
       <header className="bg-white border-b border-slate-200 px-6 py-3.5 flex items-center justify-between shadow-xs z-10">
         <div className="flex items-center space-x-3">
-          <Image src="/monkey1.svg" alt="PuzzlePro Logo" width={44} height={44} className="object-contain drop-shadow-sm shrink-0 transition-transform hover:scale-105" />
+          <Image src={getCdnUrl('/monkey1.svg')} alt="PuzzlePro Logo" width={44} height={44} className="object-contain drop-shadow-sm shrink-0 transition-transform hover:scale-105" />
           <div>
             <h1 className="text-base font-medium text-slate-900 tracking-tight">
               PuzzlePro

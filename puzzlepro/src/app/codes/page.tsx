@@ -22,7 +22,7 @@ import {
   IconEyeOff,
 } from '@tabler/icons-react';
 import { fetchGroupStudentsByCode } from '@/services/api';
-import { getCharacterAvatarUrl } from '@/utils/cdn';
+import { getCharacterAvatarUrl, getCdnUrl } from '@/utils/cdn';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface StudentItem {
@@ -114,7 +114,7 @@ export default function StudentCodesPage() {
           loop
           muted
           playsInline
-          poster="/images/login_bg_poster.jpg"
+          poster={getCdnUrl('/images/login_bg_poster.jpg')}
           aria-hidden="true"
           tabIndex={-1}
           onError={(e) => {
@@ -122,8 +122,8 @@ export default function StudentCodesPage() {
           }}
           className="absolute inset-0 w-full h-full object-cover filter brightness-85 contrast-105 z-0"
         >
-          <source src="/login_bg.mp4" type="video/mp4" />
-          <source src="/login_bg.mov" type="video/quicktime" />
+          <source src={getCdnUrl('/login_bg.mp4')} type="video/mp4" />
+          <source src={getCdnUrl('/login_bg.mov')} type="video/quicktime" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-blue-950/85 to-slate-950/65 z-0" />
       </div>
@@ -137,7 +137,7 @@ export default function StudentCodesPage() {
         <MotionRise className="hidden md:flex max-w-lg flex-col gap-6 text-white">
           <div className="flex items-center gap-3">
             <Image
-              src="/monkey1.svg"
+              src={getCdnUrl('/monkey1.svg')}
               alt="PuzzlePro Logo"
               width={56}
               height={56}
@@ -190,7 +190,7 @@ export default function StudentCodesPage() {
             <div className="flex flex-col gap-4">
               <div className="text-center md:text-left flex flex-col items-center md:items-start">
                 <Image
-                  src="/monkey1.svg"
+                  src={getCdnUrl('/monkey1.svg')}
                   alt="PuzzlePro Logo"
                   width={48}
                   height={48}

@@ -9,6 +9,7 @@ type Config struct {
 	Port                  string
 	Environment           string
 	AllowedCORS           string
+	DatabaseURL           string
 	DBHost                string
 	DBPort                string
 	DBUser                string
@@ -69,10 +70,13 @@ func Load() *Config {
 		redisEnv = env
 	}
 
+	databaseURL := os.Getenv("DATABASE_URL")
+
 	return &Config{
 		Port:                  port,
 		Environment:           env,
 		AllowedCORS:           cors,
+		DatabaseURL:           databaseURL,
 		DBHost:                dbHost,
 		DBPort:                dbPort,
 		DBUser:                dbUser,
@@ -86,6 +90,9 @@ func Load() *Config {
 }
 
 func (c *Config) DSN() string {
+	if c.DatabaseURL != "" {
+		return c.DatabaseURL
+	}
 	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
 		c.DBUser, c.DBPassword, c.DBHost, c.DBPort, c.DBName)
 }

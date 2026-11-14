@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IconX as X } from '@tabler/icons-react';
 import { soundManager } from '../utils/sound';
+import { getCdnUrl } from '../utils/cdn';
 
 interface VictoryModalProps {
   levelTitle?: string;
@@ -16,10 +17,10 @@ interface VictoryModalProps {
 }
 
 const CONFETTI_SVGS = [
-  '/confetti1.svg',
-  '/confetti2.svg',
-  '/confetti3.svg',
-  '/confetti4.svg',
+  getCdnUrl('/confetti1.svg'),
+  getCdnUrl('/confetti2.svg'),
+  getCdnUrl('/confetti3.svg'),
+  getCdnUrl('/confetti4.svg'),
 ];
 
 const CONFETTI_PARTICLES = Array.from({ length: 18 }, (_, i) => ({
@@ -123,7 +124,7 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
           {/* Background Wooden Frame SVG */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/badge_banner.svg"
+              src={getCdnUrl('/badge_banner.svg')}
               alt="Badge Banner Background"
               fill
               className="object-contain"
@@ -162,7 +163,7 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
                     className="w-10 h-10 sm:w-12 sm:h-12 relative flex-shrink-0 drop-shadow-lg"
                   >
                     <Image
-                      src="/maze_star.svg"
+                      src={getCdnUrl('/maze_star.svg')}
                       alt="Star"
                       fill
                       className={`object-contain transition ${starIndex <= stars ? 'brightness-110' : 'grayscale opacity-40'}`}
@@ -197,7 +198,7 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
                 className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full transition cursor-pointer flex-shrink-0 drop-shadow-2xl z-30"
                 title="Next Stage"
               >
-                <Image src="/next_stage.svg" alt="Next Stage Button" fill className="object-contain" priority />
+                <Image src={getCdnUrl('/next_stage.svg')} alt="Next Stage Button" fill className="object-contain" priority />
               </motion.button>
             </div>
 

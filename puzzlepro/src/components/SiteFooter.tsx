@@ -9,6 +9,7 @@ import {
   IconMail, 
   IconShieldCheck 
 } from '@tabler/icons-react';
+import { getCdnUrl } from '@/utils/cdn';
 
 export const SiteFooter: React.FC = () => {
   return (
@@ -18,7 +19,7 @@ export const SiteFooter: React.FC = () => {
         {/* Column 1: Brand Info */}
         <div className="space-y-4">
           <div className="flex items-center space-x-3">
-            <Image src="/monkey1.svg" alt="PuzzlePro Monkey" width={36} height={36} className="object-contain shrink-0" />
+            <Image src={getCdnUrl('/monkey1.svg')} alt="PuzzlePro Monkey" width={36} height={36} className="object-contain shrink-0" />
             <span className="text-2xl font-black font-varela bg-gradient-to-r from-amber-600 to-amber-700 bg-clip-text text-transparent">
               PuzzlePro
             </span>

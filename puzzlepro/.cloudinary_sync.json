@@ -1,0 +1,502 @@
+{
+  "Back.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794642826/puzzlepro/assets/Back.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Controls.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794642838/puzzlepro/assets/Controls.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Events.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794642493/puzzlepro/assets/Events.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Exit.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794642495/puzzlepro/assets/Exit.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Fullscreen.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794642496/puzzlepro/assets/Fullscreen.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "IDE_Copy.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794642498/puzzlepro/assets/IDE_Copy.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "IDE_Reset.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794642499/puzzlepro/assets/IDE_Reset.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "IDE_Run.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794642501/puzzlepro/assets/IDE_Run.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Leaderboard.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794642503/puzzlepro/assets/Leaderboard.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Login.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643149/puzzlepro/assets/Login.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Looks.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643169/puzzlepro/assets/Looks.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Map.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643139/puzzlepro/assets/Map.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Motion.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643159/puzzlepro/assets/Motion.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Mute SFX.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643179/puzzlepro/assets/Mute%20SFX.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Notification.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643619/puzzlepro/assets/Notification.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Profile.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643629/puzzlepro/assets/Profile.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Quest.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643639/puzzlepro/assets/Quest.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Settings.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643219/puzzlepro/assets/Settings.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Setup.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643239/puzzlepro/assets/Setup.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Sound.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643249/puzzlepro/assets/Sound.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Unmute SFX.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643229/puzzlepro/assets/Unmute%20SFX.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "Vars.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643260/puzzlepro/assets/Vars.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "badge_banner.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643701/puzzlepro/assets/badge_banner.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "beaver1.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643712/puzzlepro/assets/beaver1.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "beaver2.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643722/puzzlepro/assets/beaver2.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "beaver3.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643301/puzzlepro/assets/beaver3.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "beaver4.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643321/puzzlepro/assets/beaver4.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "beaver5.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643331/puzzlepro/assets/beaver5.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "beaver6.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643311/puzzlepro/assets/beaver6.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "beaver7.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643341/puzzlepro/assets/beaver7.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "beaver8.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643783/puzzlepro/assets/beaver8.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "coin.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643794/puzzlepro/assets/coin.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "confetti1.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643815/puzzlepro/assets/confetti1.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "confetti2.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643824/puzzlepro/assets/confetti2.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "confetti3.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643845/puzzlepro/assets/confetti3.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "confetti4.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643855/puzzlepro/assets/confetti4.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "file.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643865/puzzlepro/assets/file.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "globe.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643876/puzzlepro/assets/globe.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "html.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643392/puzzlepro/assets/html.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "ic_repeat.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643928/puzzlepro/assets/ic_repeat.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "images/character10.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643938/puzzlepro/assets/images/character10.jpg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "images/character11.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643959/puzzlepro/assets/images/character11.jpg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "images/character1.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643963/puzzlepro/assets/images/character1.jpg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "images/character12.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794643969/puzzlepro/assets/images/character12.jpg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey16.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644012/puzzlepro/assets/monkey16.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey17.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644022/puzzlepro/assets/monkey17.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey18.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644032/puzzlepro/assets/monkey18.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey19.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644042/puzzlepro/assets/monkey19.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey1_backward_y.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644062/puzzlepro/assets/monkey1_backward_y.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey1_forward_left_x.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644073/puzzlepro/assets/monkey1_forward_left_x.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey1_forward_right_x.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644093/puzzlepro/assets/monkey1_forward_right_x.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey2.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644104/puzzlepro/assets/monkey2.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey20.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644124/puzzlepro/assets/monkey20.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey21.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644135/puzzlepro/assets/monkey21.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey22.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644145/puzzlepro/assets/monkey22.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey4.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644184/puzzlepro/assets/monkey4.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey3.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644187/puzzlepro/assets/monkey3.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "monkey23.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794644188/puzzlepro/assets/monkey23.svg",
+    "uploaded_at": "2026-11-14T08:16:00Z"
+  },
+  "next.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794645361/puzzlepro/assets/next.svg",
+    "uploaded_at": "2026-11-14T08:36:01Z"
+  },
+  "images/character14.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794646409/puzzlepro/assets/images/character14.jpg",
+    "uploaded_at": "2026-11-14T08:53:28.804Z",
+    "bytes": 29859,
+    "format": "jpg"
+  },
+  "vercel.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794646923/puzzlepro/assets/vercel.svg",
+    "uploaded_at": "2026-11-14T09:02:03Z",
+    "bytes": 128,
+    "format": "svg"
+  },
+  "images/character13.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647255/puzzlepro/assets/images/character13.jpg",
+    "uploaded_at": "2026-11-14T09:08:52.946Z",
+    "bytes": 31143,
+    "format": "jpg"
+  },
+  "images/character16.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647343/puzzlepro/assets/images/character16.jpg",
+    "uploaded_at": "2026-11-14T09:09:02.821Z",
+    "bytes": 36884,
+    "format": "jpg"
+  },
+  "images/character15.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647343/puzzlepro/assets/images/character15.jpg",
+    "uploaded_at": "2026-11-14T09:09:02.891Z",
+    "bytes": 28865,
+    "format": "jpg"
+  },
+  "images/character18.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647363/puzzlepro/assets/images/character18.jpg",
+    "uploaded_at": "2026-11-14T09:09:23.058Z",
+    "bytes": 32081,
+    "format": "jpg"
+  },
+  "images/character19.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647383/puzzlepro/assets/images/character19.jpg",
+    "uploaded_at": "2026-11-14T09:09:43.337Z",
+    "bytes": 35527,
+    "format": "jpg"
+  },
+  "images/character2.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647459/puzzlepro/assets/images/character2.jpg",
+    "uploaded_at": "2026-11-14T09:10:59.352Z",
+    "bytes": 33186,
+    "format": "jpg"
+  },
+  "images/character20.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647469/puzzlepro/assets/images/character20.jpg",
+    "uploaded_at": "2026-11-14T09:11:09.263Z",
+    "bytes": 27998,
+    "format": "jpg"
+  },
+  "images/character5.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647489/puzzlepro/assets/images/character5.jpg",
+    "uploaded_at": "2026-11-14T09:11:29.785Z",
+    "bytes": 32224,
+    "format": "jpg"
+  },
+  "images/character7.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647521/puzzlepro/assets/images/character7.jpg",
+    "uploaded_at": "2026-11-14T09:12:01.509Z",
+    "bytes": 29964,
+    "format": "jpg"
+  },
+  "images/character4.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647531/puzzlepro/assets/images/character4.jpg",
+    "uploaded_at": "2026-11-14T09:12:11.508Z",
+    "bytes": 32941,
+    "format": "jpg"
+  },
+  "images/character8.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647542/puzzlepro/assets/images/character8.jpg",
+    "uploaded_at": "2026-11-14T09:12:21.586Z",
+    "bytes": 28972,
+    "format": "jpg"
+  },
+  "images/character9.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647562/puzzlepro/assets/images/character9.jpg",
+    "uploaded_at": "2026-11-14T09:12:41.821Z",
+    "bytes": 29787,
+    "format": "jpg"
+  },
+  "locked.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647598/puzzlepro/assets/locked.svg",
+    "uploaded_at": "2026-11-14T09:13:19.254Z",
+    "bytes": 129517,
+    "format": "svg"
+  },
+  "maze_dander.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647639/puzzlepro/assets/maze_dander.svg",
+    "uploaded_at": "2026-11-14T09:13:59.736Z",
+    "bytes": 90385,
+    "format": "svg"
+  },
+  "maze_finish.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647659/puzzlepro/assets/maze_finish.svg",
+    "uploaded_at": "2026-11-14T09:14:19.539Z",
+    "bytes": 58057,
+    "format": "svg"
+  },
+  "login_bg.mov": {
+    "url": "https://res.cloudinary.com/qsdwzejd/video/upload/v1794647670/puzzlepro/assets/login_bg.mov",
+    "uploaded_at": "2026-11-14T09:14:30.045Z",
+    "bytes": 1155513,
+    "format": "mov"
+  },
+  "maze_pit.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647679/puzzlepro/assets/maze_pit.svg",
+    "uploaded_at": "2026-11-14T09:14:39.983Z",
+    "bytes": 51888,
+    "format": "svg"
+  },
+  "maze_star.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647693/puzzlepro/assets/maze_star.svg",
+    "uploaded_at": "2026-11-14T09:14:53.858Z",
+    "bytes": 81457,
+    "format": "svg"
+  },
+  "maze_start.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647728/puzzlepro/assets/maze_start.svg",
+    "uploaded_at": "2026-11-14T09:15:28.985Z",
+    "bytes": 47046,
+    "format": "svg"
+  },
+  "monkey1.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647748/puzzlepro/assets/monkey1.svg",
+    "uploaded_at": "2026-11-14T09:15:49.258Z",
+    "bytes": 281726,
+    "format": "svg"
+  },
+  "monkey12.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647758/puzzlepro/assets/monkey12.svg",
+    "uploaded_at": "2026-11-14T09:15:59.437Z",
+    "bytes": 270474,
+    "format": "svg"
+  },
+  "monkey13.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647779/puzzlepro/assets/monkey13.svg",
+    "uploaded_at": "2026-11-14T09:16:20.305Z",
+    "bytes": 303729,
+    "format": "svg"
+  },
+  "monkey14.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647789/puzzlepro/assets/monkey14.svg",
+    "uploaded_at": "2026-11-14T09:16:31.438Z",
+    "bytes": 282990,
+    "format": "svg"
+  },
+  "monkey10.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647799/puzzlepro/assets/monkey10.svg",
+    "uploaded_at": "2026-11-14T09:16:40.612Z",
+    "bytes": 341190,
+    "format": "svg"
+  },
+  "monkey11.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647810/puzzlepro/assets/monkey11.svg",
+    "uploaded_at": "2026-11-14T09:16:50.680Z",
+    "bytes": 262170,
+    "format": "svg"
+  },
+  "monkey15.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647821/puzzlepro/assets/monkey15.svg",
+    "uploaded_at": "2026-11-14T09:17:02.307Z",
+    "bytes": 286690,
+    "format": "svg"
+  },
+  "monkey8.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647861/puzzlepro/assets/monkey8.svg",
+    "uploaded_at": "2026-11-14T09:17:42.629Z",
+    "bytes": 214981,
+    "format": "svg"
+  },
+  "monkey7.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647891/puzzlepro/assets/monkey7.svg",
+    "uploaded_at": "2026-11-14T09:18:12.452Z",
+    "bytes": 288718,
+    "format": "svg"
+  },
+  "next_stage.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647930/puzzlepro/assets/next_stage.svg",
+    "uploaded_at": "2026-11-14T09:18:50.694Z",
+    "bytes": 82316,
+    "format": "svg"
+  },
+  "scroll.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647967/puzzlepro/assets/scroll.svg",
+    "uploaded_at": "2026-11-14T09:19:28.311Z",
+    "bytes": 131010,
+    "format": "svg"
+  },
+  "reset.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794647980/puzzlepro/assets/reset.svg",
+    "uploaded_at": "2026-11-14T09:19:41.412Z",
+    "bytes": 59769,
+    "format": "svg"
+  },
+  "start.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794648001/puzzlepro/assets/start.svg",
+    "uploaded_at": "2026-11-14T09:20:01.708Z",
+    "bytes": 59970,
+    "format": "svg"
+  },
+  "window.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794648011/puzzlepro/assets/window.svg",
+    "uploaded_at": "2026-11-14T09:20:11.811Z",
+    "bytes": 385,
+    "format": "svg"
+  },
+  "images/character3.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794648090/puzzlepro/assets/images/character3.jpg",
+    "uploaded_at": "2026-11-14T09:21:30.236Z",
+    "bytes": 31125,
+    "format": "jpg"
+  },
+  "images/login_bg_poster.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794648100/puzzlepro/assets/images/login_bg_poster.jpg",
+    "uploaded_at": "2026-11-14T09:21:40.263Z",
+    "bytes": 38149,
+    "format": "jpg"
+  },
+  "images/character17.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794648100/puzzlepro/assets/images/character17.jpg",
+    "uploaded_at": "2026-11-14T09:21:40.277Z",
+    "bytes": 33788,
+    "format": "jpg"
+  },
+  "login_bg.mp4": {
+    "url": "https://res.cloudinary.com/qsdwzejd/video/upload/v1794648122/puzzlepro/assets/login_bg.mp4",
+    "uploaded_at": "2026-11-14T09:22:02.396Z",
+    "bytes": 1155499,
+    "format": "mp4"
+  },
+  "images/character6.jpg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794648148/puzzlepro/assets/images/character6.jpg",
+    "uploaded_at": "2026-11-14T09:22:27.685Z",
+    "bytes": 30228,
+    "format": "jpg"
+  },
+  "monkey9.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794648157/puzzlepro/assets/monkey9.svg",
+    "uploaded_at": "2026-11-14T09:22:38.014Z",
+    "bytes": 296062,
+    "format": "svg"
+  },
+  "monkey5.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794648168/puzzlepro/assets/monkey5.svg",
+    "uploaded_at": "2026-11-14T09:22:48.815Z",
+    "bytes": 253532,
+    "format": "svg"
+  },
+  "monkey6.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794648172/puzzlepro/assets/monkey6.svg",
+    "uploaded_at": "2026-11-14T09:22:53.049Z",
+    "bytes": 271041,
+    "format": "svg"
+  },
+  "play.svg": {
+    "url": "https://res.cloudinary.com/qsdwzejd/image/upload/v1794648208/puzzlepro/assets/play.svg",
+    "uploaded_at": "2026-11-14T09:23:28.882Z",
+    "bytes": 59218,
+    "format": "svg"
+  }
+}

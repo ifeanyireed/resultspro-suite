@@ -1,37 +1,34 @@
-export const CDN_BASE_URL = (process.env.NEXT_PUBLIC_CDN_URL || 'https://cdn.resultspro.ng/assets').replace(/\/+$/, '');
+export const CDN_BASE_URL = (process.env.NEXT_PUBLIC_CDN_URL || '').replace(/\/+$/, '');
 
 // Unique version key to manage browser and CDN cache invalidation deterministically
 const ASSET_VERSION_KEY = process.env.NEXT_PUBLIC_BUILD_VERSION || '2.1.1_v1';
 
-// Local assets stored directly in /public directory that should bypass external CDN URL
-const LOCAL_PUBLIC_ASSETS = ['/scroll.svg', '/play.svg', '/reset.svg', '/start.svg', '/monkey1.svg'];
-
 export const CHARACTER_AVATARS_CDN = Array.from(
   { length: 20 },
-  (_, i) => `/images/character${i + 1}.jpg`
+  (_, i) => getCdnUrl(`/images/character${i + 1}.jpg`)
 );
 
 export function getCharacterAvatarUrl(avatarPath?: string, index: number = 1): string {
-  if (!avatarPath) return '/images/character1.jpg';
+  if (!avatarPath) return getCdnUrl('/images/character1.jpg');
 
   const match = avatarPath.match(/character(\d+)/i);
   if (match && match[1]) {
     const num = parseInt(match[1], 10);
     if (num >= 1 && num <= 20) {
-      return `/images/character${num}.jpg`;
+      return getCdnUrl(`/images/character${num}.jpg`);
     }
   }
 
-  if (avatarPath.startsWith('http://') || avatarPath.startsWith('https://') || avatarPath.startsWith('/')) {
+  if (avatarPath.startsWith('http://') || avatarPath.startsWith('https://')) {
     return avatarPath;
   }
 
   const idx = ((Math.max(1, index) - 1) % 20) + 1;
-  return `/images/character${idx}.jpg`;
+  return getCdnUrl(`/images/character${idx}.jpg`);
 }
 
 /**
- * Returns full URL for an asset, appending CDN_BASE_URL (or local public path for local files),
+ * Returns full URL for an asset, appending CDN_BASE_URL (or local public path if CDN is not configured),
  * including a cache-busting query parameter to force browser & CDN cache refresh.
  */
 export function getCdnUrl(assetPath: string, cacheBust: boolean = true): string {
@@ -43,22 +40,13 @@ export function getCdnUrl(assetPath: string, cacheBust: boolean = true): string 
   const cleanPath = assetPath.startsWith('/') ? assetPath : `/${assetPath}`;
   const query = cacheBust ? `?v=${ASSET_VERSION_KEY}` : '';
 
-  if (cleanPath.includes('character')) {
-    return getCharacterAvatarUrl(cleanPath);
+  // Route through external Cloudinary CDN whenever configured
+  if (CDN_BASE_URL) {
+    return `${CDN_BASE_URL}${encodeURI(cleanPath)}${query}`;
   }
 
-  // If asset is present locally in /public directory, serve directly from local server
-  if (
-    cleanPath.startsWith('/images/') ||
-    cleanPath.startsWith('/avatars/') ||
-    cleanPath.startsWith('/monkey') ||
-    cleanPath.startsWith('/beaver') ||
-    LOCAL_PUBLIC_ASSETS.includes(cleanPath)
-  ) {
-    return `${cleanPath}${query}`;
-  }
-
-  return `${CDN_BASE_URL}${encodeURI(cleanPath)}${query}`;
+  // Fallback to local server /public directory when CDN_BASE_URL is not provided
+  return `${cleanPath}${query}`;
 }
 
 /**

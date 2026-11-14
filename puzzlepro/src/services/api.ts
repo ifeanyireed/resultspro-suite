@@ -1,7 +1,9 @@
 import { Organisation, PlatformUser, Subscription } from '@/app/controls/page';
 
 const PLAYER_SERVICE_URL = (
-  process.env.NEXT_PUBLIC_PLAYER_SERVICE_URL || 'https://player-service-y1ur.onrender.com'
+  process.env.NEXT_PUBLIC_PLAYER_SERVICE_URL ||
+  process.env.NEXT_PUBLIC_USERS_API ||
+  'https://resultspro-service-users.onrender.com'
 ).replace(/\/+$/, '');
 
 // ORGANISATIONS / SCHOOLS & FAMILIES

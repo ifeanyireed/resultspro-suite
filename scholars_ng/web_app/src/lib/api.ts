@@ -124,6 +124,13 @@ api.interceptors.request.use((config) => {
     }
   }
 
+  // 3. Dynamic Microservice Routing: direct campus endpoints to CampusPRO if configured
+  const campusApi = process.env.NEXT_PUBLIC_CAMPUS_API;
+  if (campusApi && config.url && (config.url.includes('/campus/') || config.url.startsWith('/campus') || config.url.startsWith('/public/campus'))) {
+    const cleanCampus = campusApi.replace(/\/+$/, '');
+    config.baseURL = cleanCampus.endsWith('/api') ? cleanCampus : `${cleanCampus}/api`;
+  }
+
   return config;
 }, (error) => {
   return Promise.reject(error);

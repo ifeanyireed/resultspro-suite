@@ -55,11 +55,93 @@ type Level struct {
 	Waypoints       []LevelWaypoint `json:"waypoints,omitempty"`
 }
 
-// InitGameEngineSchema creates game_engine microservice tables
+// InitGameEngineSchema creates game_engine microservice tables for Postgres or MySQL
 func (db *DB) InitGameEngineSchema() error {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
+	if db.DriverName == "postgres" {
+		queries := []string{
+			`CREATE TABLE IF NOT EXISTS worlds (
+				id SERIAL PRIMARY KEY,
+				slug VARCHAR(100) UNIQUE NOT NULL,
+				name VARCHAR(255) NOT NULL,
+				description TEXT,
+				created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+			);`,
+			`CREATE TABLE IF NOT EXISTS adventures (
+				id SERIAL PRIMARY KEY,
+				world_id INT DEFAULT 1 REFERENCES worlds(id) ON DELETE CASCADE,
+				slug VARCHAR(100) UNIQUE NOT NULL,
+				title VARCHAR(255) NOT NULL,
+				concept VARCHAR(100) DEFAULT 'Sequencing',
+				icon VARCHAR(50) DEFAULT '🐵',
+				story TEXT,
+				learning_objective TEXT,
+				total_levels INT DEFAULT 12,
+				created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+			);`,
+			`CREATE TABLE IF NOT EXISTS levels (
+				id SERIAL PRIMARY KEY,
+				adventure_id INT NOT NULL REFERENCES adventures(id) ON DELETE CASCADE,
+				level_number INT NOT NULL,
+				title VARCHAR(255) NOT NULL,
+				objective TEXT,
+				mechanic VARCHAR(255),
+				svg_map VARCHAR(255),
+				max_blocks INT DEFAULT 10,
+				available_blocks JSONB,
+				waypoints JSONB,
+				created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+				UNIQUE (adventure_id, level_number)
+			);`,
+			`CREATE TABLE IF NOT EXISTS level_waypoints (
+				id SERIAL PRIMARY KEY,
+				level_id INT NOT NULL REFERENCES levels(id) ON DELETE CASCADE,
+				waypoint_index INT NOT NULL,
+				x_percent FLOAT NOT NULL,
+				y_percent FLOAT NOT NULL,
+				type VARCHAR(50) DEFAULT 'normal',
+				label VARCHAR(100),
+				effect VARCHAR(50),
+				created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+				UNIQUE (level_id, waypoint_index)
+			);`,
+			`CREATE TABLE IF NOT EXISTS users (
+				id SERIAL PRIMARY KEY,
+				username VARCHAR(100) DEFAULT '',
+				avatar VARCHAR(255) DEFAULT 'default.png',
+				group_id INT DEFAULT 0,
+				total_xp INT DEFAULT 0,
+				total_stars INT DEFAULT 0,
+				created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+				updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+			);`,
+			`CREATE TABLE IF NOT EXISTS user_progress (
+				id SERIAL PRIMARY KEY,
+				user_id INT NOT NULL,
+				world_id INT DEFAULT 1,
+				adventure_id INT DEFAULT 1,
+				level_number INT NOT NULL,
+				stars INT DEFAULT 0,
+				score INT DEFAULT 0,
+				completed BOOLEAN DEFAULT FALSE,
+				updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+				UNIQUE (user_id, world_id, adventure_id, level_number)
+			);`,
+		}
+
+		for _, q := range queries {
+			if _, err := db.ExecContext(ctx, q); err != nil {
+				log.Printf("⚠️ [service_puzzlepro] Postgres schema warning: %v", err)
+			}
+		}
+
+		log.Println("✅ [service_puzzlepro] PostgreSQL tables (worlds, adventures, levels, level_waypoints, users, user_progress) initialized.")
+		return nil
+	}
+
+	// MySQL fallback
 	createWorldsTable := `
 	CREATE TABLE IF NOT EXISTS worlds (
 		id INT AUTO_INCREMENT PRIMARY KEY,
@@ -167,13 +249,13 @@ func (db *DB) InitGameEngineSchema() error {
 		return err
 	}
 
-	log.Println("✅ [service_puzzlepro] Tables (worlds, adventures, levels, level_waypoints, users, user_progress) initialized.")
+	log.Println("✅ [service_puzzlepro] MySQL Tables (worlds, adventures, levels, level_waypoints, users, user_progress) initialized.")
 	return nil
 }
 
 // SeedWorldsAndAdventures populates 5 Worlds & 5 Adventures into game_engine tables
 func (db *DB) SeedWorldsAndAdventures() error {
-	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 
 	worlds := []struct {
@@ -190,11 +272,19 @@ func (db *DB) SeedWorldsAndAdventures() error {
 	}
 
 	for _, w := range worlds {
-		_, _ = db.ExecContext(ctx, `
-			INSERT INTO worlds (id, slug, name, description)
-			VALUES (?, ?, ?, ?)
-			ON DUPLICATE KEY UPDATE name=VALUES(name), description=VALUES(description)
-		`, w.ID, w.Slug, w.Name, w.Description)
+		if db.DriverName == "postgres" {
+			_, _ = db.ExecContext(ctx, `
+				INSERT INTO worlds (id, slug, name, description)
+				VALUES (?, ?, ?, ?)
+				ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description
+			`, w.ID, w.Slug, w.Name, w.Description)
+		} else {
+			_, _ = db.ExecContext(ctx, `
+				INSERT INTO worlds (id, slug, name, description)
+				VALUES (?, ?, ?, ?)
+				ON DUPLICATE KEY UPDATE name=VALUES(name), description=VALUES(description)
+			`, w.ID, w.Slug, w.Name, w.Description)
+		}
 	}
 
 	adventures := []struct {
@@ -223,11 +313,19 @@ func (db *DB) SeedWorldsAndAdventures() error {
 	}
 
 	for _, a := range adventures {
-		_, _ = db.ExecContext(ctx, `
-			INSERT INTO adventures (id, world_id, slug, title, concept, icon, story, learning_objective, total_levels)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?, 12)
-			ON DUPLICATE KEY UPDATE world_id=VALUES(world_id), title=VALUES(title), concept=VALUES(concept), icon=VALUES(icon), story=VALUES(story)
-		`, a.ID, a.WorldID, a.Slug, a.Title, a.Concept, a.Icon, a.Story, a.LearningObjective)
+		if db.DriverName == "postgres" {
+			_, _ = db.ExecContext(ctx, `
+				INSERT INTO adventures (id, world_id, slug, title, concept, icon, story, learning_objective, total_levels)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, 12)
+				ON CONFLICT (id) DO UPDATE SET world_id = EXCLUDED.world_id, title = EXCLUDED.title, concept = EXCLUDED.concept, icon = EXCLUDED.icon, story = EXCLUDED.story
+			`, a.ID, a.WorldID, a.Slug, a.Title, a.Concept, a.Icon, a.Story, a.LearningObjective)
+		} else {
+			_, _ = db.ExecContext(ctx, `
+				INSERT INTO adventures (id, world_id, slug, title, concept, icon, story, learning_objective, total_levels)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, 12)
+				ON DUPLICATE KEY UPDATE world_id=VALUES(world_id), title=VALUES(title), concept=VALUES(concept), icon=VALUES(icon), story=VALUES(story)
+			`, a.ID, a.WorldID, a.Slug, a.Title, a.Concept, a.Icon, a.Story, a.LearningObjective)
+		}
 	}
 
 	level1Waypoints := []LevelWaypoint{
@@ -286,15 +384,27 @@ func (db *DB) SeedWorldsAndAdventures() error {
 			blocksJSON, _ := json.Marshal(advBlocks)
 			wpsJSON, _ := json.Marshal(level1Waypoints)
 
-			_, _ = db.ExecContext(ctx, `
-				INSERT INTO levels (adventure_id, level_number, title, objective, mechanic, svg_map, max_blocks, available_blocks, waypoints)
-				VALUES (?, ?, ?, 'Complete mission goal.', 'Sequential Execution', ?, 15, ?, ?)
-				ON DUPLICATE KEY UPDATE title=VALUES(title), svg_map=VALUES(svg_map), max_blocks=VALUES(max_blocks), available_blocks=VALUES(available_blocks)
-			`, a.ID, lvlNum, title, svgPath, string(blocksJSON), string(wpsJSON))
+			if db.DriverName == "postgres" {
+				_, _ = db.ExecContext(ctx, `
+					INSERT INTO levels (adventure_id, level_number, title, objective, mechanic, svg_map, max_blocks, available_blocks, waypoints)
+					VALUES (?, ?, ?, 'Complete mission goal.', 'Sequential Execution', ?, 15, ?::jsonb, ?::jsonb)
+					ON CONFLICT (adventure_id, level_number) DO UPDATE SET
+						title = EXCLUDED.title,
+						svg_map = EXCLUDED.svg_map,
+						max_blocks = EXCLUDED.max_blocks,
+						available_blocks = EXCLUDED.available_blocks
+				`, a.ID, lvlNum, title, svgPath, string(blocksJSON), string(wpsJSON))
+			} else {
+				_, _ = db.ExecContext(ctx, `
+					INSERT INTO levels (adventure_id, level_number, title, objective, mechanic, svg_map, max_blocks, available_blocks, waypoints)
+					VALUES (?, ?, ?, 'Complete mission goal.', 'Sequential Execution', ?, 15, ?, ?)
+					ON DUPLICATE KEY UPDATE title=VALUES(title), svg_map=VALUES(svg_map), max_blocks=VALUES(max_blocks), available_blocks=VALUES(available_blocks)
+				`, a.ID, lvlNum, title, svgPath, string(blocksJSON), string(wpsJSON))
+			}
 		}
 	}
 
-	log.Println("🌱 [game_engine] Seeded 5 Worlds, 5 Adventures, and 60 Levels into DB.")
+	log.Println("🌱 [service_puzzlepro] Seeded 5 Worlds, 5 Adventures, and 60 Levels into DB.")
 	return nil
 }
 
@@ -310,10 +420,18 @@ func (db *DB) SaveLevelWaypoints(ctx context.Context, adventureID int, levelNumb
 	}
 
 	var res sql.Result
-	if maxBlocks > 0 {
-		res, err = db.ExecContext(ctx, "UPDATE levels SET waypoints = ?, max_blocks = ? WHERE adventure_id = ? AND level_number = ?", string(waypointsJSON), maxBlocks, adventureID, levelNumber)
+	if db.DriverName == "postgres" {
+		if maxBlocks > 0 {
+			res, err = db.ExecContext(ctx, "UPDATE levels SET waypoints = ?::jsonb, max_blocks = ? WHERE adventure_id = ? AND level_number = ?", string(waypointsJSON), maxBlocks, adventureID, levelNumber)
+		} else {
+			res, err = db.ExecContext(ctx, "UPDATE levels SET waypoints = ?::jsonb WHERE adventure_id = ? AND level_number = ?", string(waypointsJSON), adventureID, levelNumber)
+		}
 	} else {
-		res, err = db.ExecContext(ctx, "UPDATE levels SET waypoints = ? WHERE adventure_id = ? AND level_number = ?", string(waypointsJSON), adventureID, levelNumber)
+		if maxBlocks > 0 {
+			res, err = db.ExecContext(ctx, "UPDATE levels SET waypoints = ?, max_blocks = ? WHERE adventure_id = ? AND level_number = ?", string(waypointsJSON), maxBlocks, adventureID, levelNumber)
+		} else {
+			res, err = db.ExecContext(ctx, "UPDATE levels SET waypoints = ? WHERE adventure_id = ? AND level_number = ?", string(waypointsJSON), adventureID, levelNumber)
+		}
 	}
 	if err != nil {
 		return fmt.Errorf("failed to update levels waypoints: %w", err)
@@ -325,11 +443,21 @@ func (db *DB) SaveLevelWaypoints(ctx context.Context, adventureID int, levelNumb
 		if mb <= 0 {
 			mb = 15
 		}
-		_, _ = db.ExecContext(ctx, `
-			INSERT INTO levels (adventure_id, level_number, title, objective, mechanic, max_blocks, waypoints)
-			VALUES (?, ?, 'Custom Level', '', '', ?, ?)
-			ON DUPLICATE KEY UPDATE waypoints = VALUES(waypoints), max_blocks = VALUES(max_blocks)
-		`, adventureID, levelNumber, mb, string(waypointsJSON))
+		if db.DriverName == "postgres" {
+			_, _ = db.ExecContext(ctx, `
+				INSERT INTO levels (adventure_id, level_number, title, objective, mechanic, max_blocks, waypoints)
+				VALUES (?, ?, 'Custom Level', '', '', ?, ?::jsonb)
+				ON CONFLICT (adventure_id, level_number) DO UPDATE SET
+					waypoints = EXCLUDED.waypoints,
+					max_blocks = EXCLUDED.max_blocks
+			`, adventureID, levelNumber, mb, string(waypointsJSON))
+		} else {
+			_, _ = db.ExecContext(ctx, `
+				INSERT INTO levels (adventure_id, level_number, title, objective, mechanic, max_blocks, waypoints)
+				VALUES (?, ?, 'Custom Level', '', '', ?, ?)
+				ON DUPLICATE KEY UPDATE waypoints = VALUES(waypoints), max_blocks = VALUES(max_blocks)
+			`, adventureID, levelNumber, mb, string(waypointsJSON))
+		}
 	}
 
 	var levelID int
