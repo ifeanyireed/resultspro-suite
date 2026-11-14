@@ -54,7 +54,8 @@ func InitDB(dataSourceName string) {
 
 	rawDB, err := sql.Open("postgres", dataSourceName)
 	if err != nil {
-		log.Fatalf("Failed to open database: %v", err)
+		log.Printf("⚠️ Failed to open database: %v", err)
+		return
 	}
 
 	rawDB.SetMaxOpenConns(5)

@@ -28,14 +28,15 @@ func main() {
 
 	// 2. Initialize database
 	if config.DatabaseURL == "" {
-		log.Fatal("DATABASE_URL environment variable is required")
+		log.Println("⚠️ [service_users] DATABASE_URL environment variable is required but not set")
+	} else {
+		log.Printf("Connecting to database...")
+		db.InitDB(config.DatabaseURL)
+		db.InitPuzzleSchema()
+		db.InitTenantIsolationSchema()
+		handlers.EnsureBlogSchema()
+		handlers.EnsureDemoSchema()
 	}
-	log.Printf("Connecting to database...")
-	db.InitDB(config.DatabaseURL)
-	db.InitPuzzleSchema()
-	db.InitTenantIsolationSchema()
-	handlers.EnsureBlogSchema()
-	handlers.EnsureDemoSchema()
 
 	mux := http.NewServeMux()
 
