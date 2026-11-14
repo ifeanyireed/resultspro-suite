@@ -49,6 +49,9 @@ type CampusArmStudent struct {
 	ID              string    `json:"id"`
 	TenantID        string    `json:"tenant_id"`
 	ArmID           string    `json:"arm_id"`
+	ArmName         string    `json:"arm_name,omitempty"`
+	ClassID         string    `json:"class_id,omitempty"`
+	ClassName       string    `json:"class_name,omitempty"`
 	StudentID       string    `json:"student_id"`
 	StudentName     string    `json:"student_name"`
 	AdmissionNumber string    `json:"admission_number"`
@@ -555,18 +558,37 @@ func HandleCampusArmStudents(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case http.MethodGet:
-		armID := r.URL.Query().Get("arm_id")
-		if armID == "" {
-			JSONError(w, http.StatusBadRequest, "arm_id parameter is required")
-			return
+		armID := strings.TrimSpace(r.URL.Query().Get("arm_id"))
+		classID := strings.TrimSpace(r.URL.Query().Get("class_id"))
+		searchQuery := strings.TrimSpace(r.URL.Query().Get("search"))
+
+		query := `
+			SELECT s.id, s.tenant_id, s.arm_id, COALESCE(a.name, ''), COALESCE(c.id, ''), COALESCE(c.name, ''),
+			       s.student_id, s.student_name, s.admission_number, s.gender, s.status, s.created_at
+			FROM campus_class_students s
+			LEFT JOIN campus_class_arms a ON s.arm_id = a.id
+			LEFT JOIN campus_classes c ON a.class_id = c.id
+			WHERE s.tenant_id = ?
+		`
+		args := []interface{}{tenantID}
+
+		if armID != "" && armID != "ALL" {
+			query += " AND s.arm_id = ?"
+			args = append(args, armID)
+		}
+		if classID != "" && classID != "ALL" {
+			query += " AND a.class_id = ?"
+			args = append(args, classID)
+		}
+		if searchQuery != "" {
+			query += " AND (LOWER(s.student_name) LIKE ? OR LOWER(s.admission_number) LIKE ?)"
+			likePattern := "%" + strings.ToLower(searchQuery) + "%"
+			args = append(args, likePattern, likePattern)
 		}
 
-		rows, err := db.DB.Query(`
-			SELECT id, tenant_id, arm_id, student_id, student_name, admission_number, gender, status, created_at
-			FROM campus_class_students
-			WHERE tenant_id = ? AND arm_id = ?
-			ORDER BY student_name ASC
-		`, tenantID, armID)
+		query += " ORDER BY c.level_order ASC, a.name ASC, s.student_name ASC"
+
+		rows, err := db.DB.Query(query, args...)
 		if err != nil {
 			JSONError(w, http.StatusInternalServerError, "Failed to load student roster")
 			return
@@ -576,7 +598,10 @@ func HandleCampusArmStudents(w http.ResponseWriter, r *http.Request) {
 		students := []CampusArmStudent{}
 		for rows.Next() {
 			var s CampusArmStudent
-			if err := rows.Scan(&s.ID, &s.TenantID, &s.ArmID, &s.StudentID, &s.StudentName, &s.AdmissionNumber, &s.Gender, &s.Status, &s.CreatedAt); err == nil {
+			if err := rows.Scan(
+				&s.ID, &s.TenantID, &s.ArmID, &s.ArmName, &s.ClassID, &s.ClassName,
+				&s.StudentID, &s.StudentName, &s.AdmissionNumber, &s.Gender, &s.Status, &s.CreatedAt,
+			); err == nil {
 				students = append(students, s)
 			}
 		}
@@ -624,6 +649,28 @@ func HandleCampusArmStudents(w http.ResponseWriter, r *http.Request) {
 			"admission_number": input.AdmissionNumber,
 			"message":          "Student enrolled successfully",
 		})
+
+	case http.MethodDelete:
+		id := r.URL.Query().Get("id")
+		if id == "" {
+			JSONError(w, http.StatusBadRequest, "Student record ID is required")
+			return
+		}
+
+		var armID string
+		_ = db.DB.QueryRow("SELECT arm_id FROM campus_class_students WHERE id = ? AND tenant_id = ?", id, tenantID).Scan(&armID)
+
+		_, err := db.DB.Exec("DELETE FROM campus_class_students WHERE id = ? AND tenant_id = ?", id, tenantID)
+		if err != nil {
+			JSONError(w, http.StatusInternalServerError, "Failed to delete student record")
+			return
+		}
+
+		if armID != "" {
+			_, _ = db.DB.Exec("UPDATE campus_class_arms SET enrolled_students = GREATEST(0, enrolled_students - 1), updated_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_id = ?", armID, tenantID)
+		}
+
+		JSONResponse(w, http.StatusOK, map[string]interface{}{"success": true, "message": "Student unenrolled successfully"})
 
 	default:
 		JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")

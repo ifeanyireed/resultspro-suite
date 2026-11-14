@@ -47,8 +47,12 @@ func main() {
 		"/api/campus/summary":    handlers.HandleCampusSummary,
 
 		// Timetable & Periods Bell Schedule
-		"/api/v1/campus/timetable": handlers.HandleCampusTimetable,
-		"/api/campus/timetable":    handlers.HandleCampusTimetable,
+		"/api/v1/campus/timetable":               handlers.HandleCampusTimetable,
+		"/api/campus/timetable":                  handlers.HandleCampusTimetable,
+		"/api/v1/campus/timetable/generate":      handlers.HandleCampusTimetableGenerate,
+		"/api/campus/timetable/generate":         handlers.HandleCampusTimetableGenerate,
+		"/api/v1/campus/timetable/bell-schedule": handlers.HandleCampusBellSchedule,
+		"/api/campus/timetable/bell-schedule":    handlers.HandleCampusBellSchedule,
 
 		// Admissions & Applications
 		"/api/public/campus/admissions/apply": handlers.HandleCampusAdmissions,
@@ -114,8 +118,10 @@ func main() {
 		"/api/campus/subjects/allocations":    handlers.HandleCampusSubjectAllocations,
 
 		// Staff & Faculty HR Management
-		"/api/v1/campus/staff": handlers.HandleCampusStaff,
-		"/api/campus/staff":    handlers.HandleCampusStaff,
+		"/api/v1/campus/staff":  handlers.HandleCampusStaff,
+		"/api/campus/staff":     handlers.HandleCampusStaff,
+		"/api/v1/campus/tutors": handlers.HandleCampusTutors,
+		"/api/campus/tutors":    handlers.HandleCampusTutors,
 	}
 
 	for path, handler := range routes {

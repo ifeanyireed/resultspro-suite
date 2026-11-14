@@ -43,6 +43,8 @@ import AdmissionsDashboard, { type AdmissionSubtab } from '@/components/Dashboar
 import api from '@/lib/api';
 import AcademicSessionManager from './AcademicSessionManager';
 import SubjectManager from './SubjectManager';
+import TimetableManager from './TimetableManager';
+import TutorAssignmentManager from './TutorAssignmentManager';
 
 interface CampusOSContextType {
   selectedCampus: string;
@@ -73,191 +75,10 @@ export type CampusOSTab =
 
 type AcademicSubtab = 'overview' | 'session' | 'classes' | 'subjects' | 'assigned-tutors' | 'timetable';
 
-function MasterTimetableGrid() {
-  const [selectedArm, setSelectedArm] = useState('SS 1 Science');
-  const arms = ['JSS 1 Gold', 'JSS 2 Gold', 'JSS 3 Emerald', 'SS 1 Science', 'SS 2 Commercial', 'SS 3 Science (WAEC)'];
-
-  const periods = [
-    { id: 'p1', label: 'Period 1', time: '08:00 – 08:45' },
-    { id: 'p2', label: 'Period 2', time: '08:45 – 09:30' },
-    { id: 'p3', label: 'Period 3', time: '09:30 – 10:15' },
-    { id: 'break1', label: 'Short Break', time: '10:15 – 10:35', isBreak: true },
-    { id: 'p4', label: 'Period 4', time: '10:35 – 11:20' },
-    { id: 'p5', label: 'Period 5', time: '11:20 – 12:05' },
-    { id: 'p6', label: 'Period 6', time: '12:05 – 12:50' },
-    { id: 'break2', label: 'Lunch & Recreation', time: '12:50 – 13:30', isBreak: true },
-    { id: 'p7', label: 'Period 7', time: '13:30 – 14:15' },
-    { id: 'p8', label: 'Period 8', time: '14:15 – 15:00' },
-  ];
-
-  const schedule: Record<string, { subject: string; tutor: string; room: string; color: string }[]> = {
-    Monday: [
-      { subject: 'Mathematics', tutor: 'Mr. D. Jenkins', room: 'Sci-S1', color: 'bg-blue-50 text-[#146ef5] border-blue-200' },
-      { subject: 'English Language', tutor: 'Mrs. F. Adebayo', room: 'Sci-S1', color: 'bg-purple-50 text-purple-700 border-purple-200' },
-      { subject: 'Physics (Theory)', tutor: 'Dr. S. Eze', room: 'Sci-S1', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      { subject: 'Break', tutor: '', room: '', color: '' },
-      { subject: 'Chemistry', tutor: 'Mr. K. Bello', room: 'Chem Lab', color: 'bg-teal-50 text-teal-700 border-teal-200' },
-      { subject: 'Biology', tutor: 'Ms. Z. Lawal', room: 'Bio Lab', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      { subject: 'Data Processing & AI', tutor: 'Mr. E. Okafor', room: 'ICT Hub', color: 'bg-amber-50 text-amber-700 border-amber-200' },
-      { subject: 'Lunch', tutor: '', room: '', color: '' },
-      { subject: 'Further Mathematics', tutor: 'Mr. D. Jenkins', room: 'Sci-S1', color: 'bg-blue-50 text-[#146ef5] border-blue-200' },
-      { subject: 'Civic Education', tutor: 'Mrs. H. Bello', room: 'Sci-S1', color: 'bg-rose-50 text-rose-700 border-rose-200' },
-    ],
-    Tuesday: [
-      { subject: 'Physics Practical', tutor: 'Dr. S. Eze', room: 'Physics Lab', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      { subject: 'Physics Practical', tutor: 'Dr. S. Eze', room: 'Physics Lab', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      { subject: 'Mathematics', tutor: 'Mr. D. Jenkins', room: 'Sci-S1', color: 'bg-blue-50 text-[#146ef5] border-blue-200' },
-      { subject: 'Break', tutor: '', room: '', color: '' },
-      { subject: 'English Literature', tutor: 'Mrs. F. Adebayo', room: 'Sci-S1', color: 'bg-purple-50 text-purple-700 border-purple-200' },
-      { subject: 'Economics', tutor: 'Mrs. N. Obi', room: 'Sci-S1', color: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
-      { subject: 'Technical Drawing', tutor: 'Engr. P. Audu', room: 'Studio 2', color: 'bg-amber-50 text-amber-700 border-amber-200' },
-      { subject: 'Lunch', tutor: '', room: '', color: '' },
-      { subject: 'Chemistry', tutor: 'Mr. K. Bello', room: 'Sci-S1', color: 'bg-teal-50 text-teal-700 border-teal-200' },
-      { subject: 'PuzzlePRO Coding Lab', tutor: 'Mr. E. Okafor', room: 'ICT Hub', color: 'bg-amber-50 text-amber-700 border-amber-200' },
-    ],
-    Wednesday: [
-      { subject: 'Mathematics', tutor: 'Mr. D. Jenkins', room: 'Sci-S1', color: 'bg-blue-50 text-[#146ef5] border-blue-200' },
-      { subject: 'Chemistry Practical', tutor: 'Mr. K. Bello', room: 'Chem Lab', color: 'bg-teal-50 text-teal-700 border-teal-200' },
-      { subject: 'Chemistry Practical', tutor: 'Mr. K. Bello', room: 'Chem Lab', color: 'bg-teal-50 text-teal-700 border-teal-200' },
-      { subject: 'Break', tutor: '', room: '', color: '' },
-      { subject: 'Biology', tutor: 'Ms. Z. Lawal', room: 'Sci-S1', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      { subject: 'English Language', tutor: 'Mrs. F. Adebayo', room: 'Sci-S1', color: 'bg-purple-50 text-purple-700 border-purple-200' },
-      { subject: 'Further Mathematics', tutor: 'Mr. D. Jenkins', room: 'Sci-S1', color: 'bg-blue-50 text-[#146ef5] border-blue-200' },
-      { subject: 'Lunch', tutor: '', room: '', color: '' },
-      { subject: 'Sports & Houses', tutor: 'Coach M. Musa', room: 'Main Pitch', color: 'bg-orange-50 text-orange-700 border-orange-200' },
-      { subject: 'Club & Robotics Society', tutor: 'Mr. E. Okafor', room: 'Innovation Lab', color: 'bg-amber-50 text-amber-700 border-amber-200' },
-    ],
-    Thursday: [
-      { subject: 'English Language', tutor: 'Mrs. F. Adebayo', room: 'Sci-S1', color: 'bg-purple-50 text-purple-700 border-purple-200' },
-      { subject: 'Mathematics', tutor: 'Mr. D. Jenkins', room: 'Sci-S1', color: 'bg-blue-50 text-[#146ef5] border-blue-200' },
-      { subject: 'Biology Practical', tutor: 'Ms. Z. Lawal', room: 'Bio Lab', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      { subject: 'Break', tutor: '', room: '', color: '' },
-      { subject: 'Physics', tutor: 'Dr. S. Eze', room: 'Sci-S1', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      { subject: 'Geography & GIS', tutor: 'Mr. T. Bakare', room: 'Geo Room', color: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
-      { subject: 'Data Processing & AI', tutor: 'Mr. E. Okafor', room: 'ICT Hub', color: 'bg-amber-50 text-amber-700 border-amber-200' },
-      { subject: 'Lunch', tutor: '', room: '', color: '' },
-      { subject: 'Economics', tutor: 'Mrs. N. Obi', room: 'Sci-S1', color: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
-      { subject: 'Library & CBT Prep', tutor: 'Librarian', room: 'E-Library', color: 'bg-gray-100 text-gray-700 border-gray-200' },
-    ],
-    Friday: [
-      { subject: 'Further Mathematics', tutor: 'Mr. D. Jenkins', room: 'Sci-S1', color: 'bg-blue-50 text-[#146ef5] border-blue-200' },
-      { subject: 'Physics', tutor: 'Dr. S. Eze', room: 'Sci-S1', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-      { subject: 'Chemistry', tutor: 'Mr. K. Bello', room: 'Sci-S1', color: 'bg-teal-50 text-teal-700 border-teal-200' },
-      { subject: 'Break', tutor: '', room: '', color: '' },
-      { subject: 'English Language', tutor: 'Mrs. F. Adebayo', room: 'Sci-S1', color: 'bg-purple-50 text-purple-700 border-purple-200' },
-      { subject: 'Civic Education', tutor: 'Mrs. H. Bello', room: 'Sci-S1', color: 'bg-rose-50 text-rose-700 border-rose-200' },
-      { subject: 'Continuous Assessment CBT', tutor: 'Exam Officer', room: 'CBT Hall', color: 'bg-blue-50 text-[#146ef5] border-blue-200' },
-      { subject: 'Lunch', tutor: '', room: '', color: '' },
-      { subject: 'Mentorship & Assembly', tutor: 'Form Teacher', room: 'Auditorium', color: 'bg-purple-50 text-purple-700 border-purple-200' },
-      { subject: 'Early Dismissal / Prep', tutor: 'All Staff', room: 'Campus', color: 'bg-gray-100 text-gray-600 border-gray-200' },
-    ],
-  };
-
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Master Class Timetable</h2>
-          <p className="text-sm text-gray-500 mt-1">
-            Weekly period matrix, laboratory allocations, and conflict-free teacher scheduling for <span className="font-semibold text-gray-900">{selectedArm}</span>.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          {arms.map((arm) => (
-            <button
-              key={arm}
-              type="button"
-              onClick={() => setSelectedArm(arm)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                selectedArm === arm
-                  ? 'bg-[#146ef5] text-white shadow-sm'
-                  : 'bg-white border border-gray-200 text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              {arm}
-            </button>
-          ))}
-          <button
-            type="button"
-            className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-sm transition-colors flex items-center gap-1.5 cursor-pointer"
-          >
-            <PlusIcon className="w-3.5 h-3.5" />
-            Auto-Generate Slot
-          </button>
-        </div>
-      </div>
-
-      {/* Timetable Weekly Grid */}
-      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
-        <div className="overflow-x-auto custom-scrollbar">
-          <table className="w-full text-left border-collapse min-w-[1100px]">
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="py-4 px-4 text-xs font-bold uppercase tracking-wider text-gray-500 w-28 sticky left-0 bg-gray-50 z-10 border-r border-gray-100">
-                  Day / Period
-                </th>
-                {periods.map((p) => (
-                  <th
-                    key={p.id}
-                    className={`py-3 px-3 text-center border-r border-gray-100 last:border-r-0 ${
-                      p.isBreak ? 'bg-amber-50/60 w-24' : 'min-w-[135px]'
-                    }`}
-                  >
-                    <div className="text-xs font-bold text-gray-800">{p.label}</div>
-                    <div className="text-[10px] font-medium text-gray-400 mt-0.5">{p.time}</div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {Object.entries(schedule).map(([day, slots]) => (
-                <tr key={day} className="hover:bg-gray-50/40 transition-colors">
-                  <td className="py-4 px-4 font-bold text-sm text-gray-900 sticky left-0 bg-white z-10 border-r border-gray-100">
-                    {day}
-                  </td>
-                  {slots.map((slot, idx) => {
-                    const periodMeta = periods[idx];
-                    if (periodMeta?.isBreak) {
-                      return (
-                        <td
-                          key={idx}
-                          className="p-2 bg-amber-50/40 text-center border-r border-gray-100 align-middle"
-                        >
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700">
-                            {periodMeta.label}
-                          </span>
-                        </td>
-                      );
-                    }
-                    return (
-                      <td key={idx} className="p-2 border-r border-gray-100 last:border-r-0 align-top">
-                        <div className={`rounded-xl p-2.5 border ${slot.color} h-full flex flex-col justify-between`}>
-                          <div>
-                            <div className="text-xs font-bold leading-snug">{slot.subject}</div>
-                            <div className="text-[10px] opacity-80 mt-1">{slot.tutor}</div>
-                          </div>
-                          <div className="mt-2 pt-1.5 border-t border-current/10 flex items-center justify-between text-[10px] font-semibold">
-                            <span>{slot.room}</span>
-                            <span>45m</span>
-                          </div>
-                        </div>
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function AcademicOperationsHub() {
   const [subtab, setSubtab] = useState<AcademicSubtab>('overview');
   const [subjectsCount, setSubjectsCount] = useState<number | undefined>(undefined);
+  const [tutorsCount, setTutorsCount] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -283,7 +104,7 @@ export function AcademicOperationsHub() {
     { id: 'session', label: 'Academic Session', icon: CalendarIcon, count: '2026/2027' },
     { id: 'classes', label: 'Classes', icon: AcademicCapIcon, count: '18 Arms' },
     { id: 'subjects', label: 'Subjects', icon: BookOpenIcon, count: subjectsCount !== undefined ? `${subjectsCount}` : '28' },
-    { id: 'assigned-tutors', label: 'Assigned Tutors', icon: UserGroupIcon, count: '64' },
+    { id: 'assigned-tutors', label: 'Assigned Tutors', icon: UserGroupIcon, count: tutorsCount !== undefined ? `${tutorsCount}` : 'Faculty' },
     { id: 'timetable', label: 'Timetable', icon: ClockIcon, count: 'Weekly Grid' },
   ];
 
@@ -394,71 +215,13 @@ export function AcademicOperationsHub() {
         <SubjectManager onSubjectsCountChange={(count) => setSubjectsCount(count)} />
       )}
 
-      {/* 4. ASSIGNED TUTORS */}
+      {/* 4. ASSIGNED TUTORS (Tenant-Isolated & Persistent Faculty Allocation Hub) */}
       {subtab === 'assigned-tutors' && (
-        <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Assigned Tutors &amp; Subject Allocation</h2>
-              <p className="text-sm text-gray-500 mt-1">
-                Map educators and subject specialists to specific class arms and monitor weekly teaching periods.
-              </p>
-            </div>
-            <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2 self-start sm:self-auto">
-              <PlusIcon className="w-4 h-4" />
-              Assign Tutor to Class
-            </button>
-          </div>
-
-          <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  <th className="px-6 py-4">Tutor / Educator</th>
-                  <th className="px-6 py-4">Primary Subject</th>
-                  <th className="px-6 py-4">Assigned Class Arms</th>
-                  <th className="px-6 py-4">Weekly Load</th>
-                  <th className="px-6 py-4">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {[
-                  { name: 'Mr. David Jenkins', role: 'HOD Mathematics', subject: 'Further & General Mathematics', classes: 'SS 1 Sci, SS 2 Sci, SS 3 Sci', periods: '22 Periods / wk', status: 'Optimal Load' },
-                  { name: 'Dr. Samuel Eze', role: 'Senior Physics Tutor', subject: 'Physics & Lab Practicals', classes: 'SS 1 Sci, SS 2 Sci, SS 3 Sci', periods: '20 Periods / wk', status: 'Optimal Load' },
-                  { name: 'Mrs. Funke Adebayo', role: 'Lead English Educator', subject: 'English Language & Diction', classes: 'JSS 1 Gold, JSS 1 Diamond, JSS 2 Gold', periods: '24 Periods / wk', status: 'Full Capacity' },
-                  { name: 'Mr. Emeka Okafor', role: 'STEM & Coding Mentor', subject: 'Data Processing & PuzzlePRO Coding', classes: 'JSS 1 – JSS 3 (All Arms)', periods: '18 Periods / wk', status: 'Optimal Load' },
-                  { name: 'Ms. Zainab Lawal', role: 'Biology & Integrated Science', subject: 'Biology', classes: 'SS 1 Sci, SS 2 Sci, JSS 3 Emerald', periods: '21 Periods / wk', status: 'Optimal Load' },
-                  { name: 'Mrs. Ngozi Obi', role: 'Commercial Studies Lead', subject: 'Economics & Financial Accounting', classes: 'SS 1 Comm, SS 2 Comm, SS 3 Comm', periods: '19 Periods / wk', status: 'Optimal Load' },
-                ].map((t, i) => (
-                  <tr key={i} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="font-medium text-gray-900">{t.name}</div>
-                      <div className="text-xs text-gray-400">{t.role}</div>
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-[#146ef5]">{t.subject}</td>
-                    <td className="px-6 py-4 text-xs text-gray-600">{t.classes}</td>
-                    <td className="px-6 py-4 text-xs font-semibold text-gray-800">{t.periods}</td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
-                          t.status === 'Optimal Load'
-                            ? 'bg-emerald-50 text-emerald-700'
-                            : 'bg-amber-50 text-amber-700'
-                        }`}
-                      >
-                        {t.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <TutorAssignmentManager onTutorsCountChange={(count) => setTutorsCount(count)} />
       )}
 
-      {/* 5. MASTER TIMETABLE GRID */}
-      {subtab === 'timetable' && <MasterTimetableGrid />}
+      {/* 5. MASTER TIMETABLE GRID (Persistent & Tenant-Isolated Engine) */}
+      {subtab === 'timetable' && <TimetableManager />}
     </div>
   );
 }
