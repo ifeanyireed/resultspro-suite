@@ -27,7 +27,8 @@ import {
   Smartphone,
   CheckCircle2,
   ChevronDown,
-  Layers
+  Layers,
+  UserCheck
 } from 'lucide-react';
 
 interface PillarCategory {
@@ -53,6 +54,15 @@ const PILLARS: PillarCategory[] = [
       { label: 'Classes & Arms', href: '/admin/campus-os/academic/classes', icon: Layers },
       { label: 'Timetable & Bell Schedule', href: '/admin/campus-os/academic/timetable', icon: Calendar },
       { label: 'Homework & Assignments', href: '/admin/campus-os/academic/homework', icon: BookOpen },
+    ],
+  },
+  {
+    id: 'staff',
+    label: 'Staff & Faculty HR',
+    href: '/admin/campus-os/staff',
+    icon: UserCheck,
+    subTabs: [
+      { label: 'Staff Directory & Roster', href: '/admin/campus-os/staff', icon: UserCheck },
     ],
   },
   {

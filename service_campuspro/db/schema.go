@@ -11,15 +11,35 @@ func InitCampusSchema() {
 			id VARCHAR(64) PRIMARY KEY,
 			tenant_id VARCHAR(64) NOT NULL,
 			class_name VARCHAR(64) NOT NULL,
+			section_id VARCHAR(64),
+			arm_id VARCHAR(64),
+			arm_name VARCHAR(64),
 			day_of_week VARCHAR(16) NOT NULL,
-			period_index INT NOT NULL,
+			period_index INT NOT NULL DEFAULT 1,
+			period_label VARCHAR(32) NOT NULL DEFAULT 'Period 1',
 			start_time VARCHAR(16) NOT NULL,
 			end_time VARCHAR(16) NOT NULL,
-			subject VARCHAR(128) NOT NULL,
+			subject VARCHAR(128),
+			subject_name VARCHAR(128) NOT NULL,
+			subject_id VARCHAR(64),
+			subject_code VARCHAR(32),
+			teacher_id VARCHAR(64),
 			teacher_name VARCHAR(128) NOT NULL,
 			room VARCHAR(64) NOT NULL,
+			color VARCHAR(64) DEFAULT 'bg-blue-50 text-[#146ef5] border-blue-200',
+			status VARCHAR(32) NOT NULL DEFAULT 'SCHEDULED',
 			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		)`,
+		`CREATE TABLE IF NOT EXISTS campus_bell_schedules (
+			id VARCHAR(64) PRIMARY KEY,
+			tenant_id VARCHAR(64) NOT NULL,
+			period_index INT NOT NULL,
+			period_label VARCHAR(32) NOT NULL,
+			start_time VARCHAR(16) NOT NULL,
+			end_time VARCHAR(16) NOT NULL,
+			is_break BOOLEAN NOT NULL DEFAULT FALSE,
+			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		)`,
 		`CREATE TABLE IF NOT EXISTS campus_admissions_inquiries (
 			id VARCHAR(64) PRIMARY KEY,
@@ -332,12 +352,42 @@ func InitCampusSchema() {
 			weekly_periods INT DEFAULT 4,
 			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		)`,
+		`CREATE TABLE IF NOT EXISTS campus_staff (
+			id VARCHAR(64) PRIMARY KEY,
+			tenant_id VARCHAR(64) NOT NULL,
+			staff_number VARCHAR(64) NOT NULL,
+			title VARCHAR(32),
+			full_name VARCHAR(128) NOT NULL,
+			gender VARCHAR(16),
+			email VARCHAR(128),
+			phone VARCHAR(64),
+			cadre VARCHAR(32) NOT NULL DEFAULT 'TEACHING',
+			designation VARCHAR(128),
+			department VARCHAR(64),
+			employment_type VARCHAR(32) DEFAULT 'FULL_TIME',
+			qualification VARCHAR(255),
+			trcn_number VARCHAR(64),
+			assigned_arm_id VARCHAR(64),
+			assigned_arm_name VARCHAR(64),
+			weekly_teaching_periods INT DEFAULT 0,
+			attendance_rate NUMERIC(5,2) DEFAULT 100.0,
+			status VARCHAR(32) DEFAULT 'ACTIVE',
+			joined_date VARCHAR(32),
+			notes TEXT,
+			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_classes_tenant ON campus_classes(tenant_id, level_order)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_arms_tenant ON campus_class_arms(tenant_id, class_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_students_arm ON campus_class_students(tenant_id, arm_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_subjects_tenant ON campus_subjects(tenant_id, department)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_class_subjects_tenant ON campus_class_subjects(tenant_id, subject_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_subject_teachers_tenant ON campus_subject_teachers(tenant_id, subject_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_staff_tenant ON campus_staff(tenant_id, cadre, status)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_timetable_tenant ON campus_timetable_slots(tenant_id, class_name, day_of_week)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_timetable_teacher ON campus_timetable_slots(tenant_id, teacher_name)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_timetable_room ON campus_timetable_slots(tenant_id, room)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_bell_tenant ON campus_bell_schedules(tenant_id, period_index)`,
 	}
 
 	for _, stmt := range tables {
@@ -345,5 +395,24 @@ func InitCampusSchema() {
 			log.Printf("⚠️ [service_campuspro] Table creation warning: %v", err)
 		}
 	}
+
+	// Graceful migration statements for existing columns
+	migrations := []string{
+		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS section_id VARCHAR(64)",
+		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS arm_id VARCHAR(64)",
+		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS arm_name VARCHAR(64)",
+		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS period_label VARCHAR(32) DEFAULT 'Period 1'",
+		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS subject_name VARCHAR(128)",
+		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS subject_id VARCHAR(64)",
+		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS subject_code VARCHAR(32)",
+		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS teacher_id VARCHAR(64)",
+		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS color VARCHAR(64) DEFAULT 'bg-blue-50 text-[#146ef5] border-blue-200'",
+		"ALTER TABLE campus_timetable_slots ADD COLUMN IF NOT EXISTS status VARCHAR(32) DEFAULT 'SCHEDULED'",
+		"UPDATE campus_timetable_slots SET subject_name = subject WHERE (subject_name IS NULL OR subject_name = '') AND subject IS NOT NULL",
+	}
+	for _, mig := range migrations {
+		_, _ = DB.Exec(mig)
+	}
+
 	log.Println("⚡ [service_campuspro] Schema initialized successfully")
 }

@@ -80,6 +80,40 @@ export interface CampusArmStudent {
   created_at?: string;
 }
 
+export interface CampusStaffMember {
+  id: string;
+  tenant_id: string;
+  staff_number: string;
+  title: string;
+  full_name: string;
+  gender: string;
+  email: string;
+  phone: string;
+  cadre: 'TEACHING' | 'NON_TEACHING' | string;
+  designation: string;
+  department: string;
+  employment_type: string;
+  qualification: string;
+  trcn_number?: string;
+  assigned_arm_id?: string;
+  assigned_arm_name?: string;
+  weekly_teaching_periods: number;
+  attendance_rate: number;
+  status: 'ACTIVE' | 'ON_LEAVE' | 'INACTIVE' | string;
+  joined_date: string;
+  notes?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CampusStaffSummary {
+  total_staff: number;
+  teaching_count: number;
+  non_teaching_count: number;
+  form_masters_count: number;
+  average_attendance: number;
+}
+
 export interface CampusSummary {
   tenantId?: string;
   totalStudents: number;
@@ -903,4 +937,93 @@ export async function enrollStudentInArm(data: {
     throw new Error(`Failed to enroll student into arm: ${res.status} ${err}`);
   }
   return res.json();
+}
+
+// =================== FACULTY & STAFF HR (PERSISTENT & TENANT-ISOLATED) ===================
+
+export async function fetchCampusStaff(params?: {
+  cadre?: string;
+  department?: string;
+  status?: string;
+  search?: string;
+  tenantId?: string;
+}): Promise<{ staff: CampusStaffMember[]; summary: CampusStaffSummary }> {
+  const tID = getActiveTenantId(params?.tenantId);
+  const base = CAMPUS_API || '';
+  const url = new URL(`${base}/api/v1/campus/staff`, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
+  url.searchParams.set('tenant_id', tID);
+  if (params?.cadre) url.searchParams.set('cadre', params.cadre);
+  if (params?.department) url.searchParams.set('department', params.department);
+  if (params?.status) url.searchParams.set('status', params.status);
+  if (params?.search) url.searchParams.set('search', params.search);
+
+  const res = await fetch(url.toString(), {
+    headers: getHeaders(tID),
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    throw new Error(`Failed to fetch campus staff: ${res.status} ${errText}`);
+  }
+
+  const data = await res.json();
+  return {
+    staff: Array.isArray(data?.staff) ? data.staff : [],
+    summary: data?.summary || {
+      total_staff: 0,
+      teaching_count: 0,
+      non_teaching_count: 0,
+      form_masters_count: 0,
+      average_attendance: 0,
+    },
+  };
+}
+
+export async function createCampusStaff(data: Partial<CampusStaffMember> & { tenantId?: string }): Promise<any> {
+  const tID = getActiveTenantId(data.tenantId);
+  const base = CAMPUS_API || '';
+  const url = `${base}/api/v1/campus/staff?tenant_id=${encodeURIComponent(tID)}`;
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: getHeaders(tID),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.text().catch(() => '');
+    throw new Error(`Failed to create staff record: ${res.status} ${err}`);
+  }
+  return res.json();
+}
+
+export async function updateCampusStaff(data: Partial<CampusStaffMember> & { id: string; tenantId?: string }): Promise<any> {
+  const tID = getActiveTenantId(data.tenantId);
+  const base = CAMPUS_API || '';
+  const url = `${base}/api/v1/campus/staff?tenant_id=${encodeURIComponent(tID)}`;
+
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: getHeaders(tID),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.text().catch(() => '');
+    throw new Error(`Failed to update staff record: ${res.status} ${err}`);
+  }
+  return res.json();
+}
+
+export async function deleteCampusStaff(id: string, tenantId?: string): Promise<boolean> {
+  const tID = getActiveTenantId(tenantId);
+  const base = CAMPUS_API || '';
+  const url = `${base}/api/v1/campus/staff?id=${encodeURIComponent(id)}&tenant_id=${encodeURIComponent(tID)}`;
+
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: getHeaders(tID),
+  });
+  return res.ok;
 }
