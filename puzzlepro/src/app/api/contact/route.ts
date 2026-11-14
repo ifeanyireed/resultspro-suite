@@ -12,7 +12,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const playerServiceUrl = process.env.NEXT_PUBLIC_PLAYER_SERVICE_URL || 'http://localhost:8081';
+    const playerServiceUrl = process.env.NEXT_PUBLIC_PLAYER_SERVICE_URL || '';
+    if (!playerServiceUrl) {
+      return NextResponse.json({ success: false, error: 'PLAYER_SERVICE_URL is not configured' }, { status: 503 });
+    }
 
     const response = await fetch(`${playerServiceUrl}/api/v1/contact/send`, {
       method: 'POST',

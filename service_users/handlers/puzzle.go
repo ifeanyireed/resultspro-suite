@@ -25,9 +25,6 @@ func getPuzzleproEngineURL() string {
 	if u == "" {
 		u = os.Getenv("NEXT_PUBLIC_GAME_ENGINE_URL")
 	}
-	if u == "" {
-		u = "http://localhost:8082"
-	}
 	return strings.TrimRight(u, "/")
 }
 

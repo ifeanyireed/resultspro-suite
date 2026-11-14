@@ -26,9 +26,6 @@ func InitConfig() {
 	}
 
 	DatabaseURL = os.Getenv("DATABASE_URL")
-	if DatabaseURL == "" {
-		DatabaseURL = "u721451974_resultspro:*Reedb4b4@tcp(srv2113.hstgr.io:3306)/u721451974_resultspro_db?charset=utf8mb4&parseTime=True&loc=Local"
-	}
 
 	JWTSecret = os.Getenv("JWT_SECRET")
 	if JWTSecret == "" {

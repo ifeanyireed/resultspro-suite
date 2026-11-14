@@ -34,9 +34,11 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		token := strings.TrimPrefix(authHeader, "Bearer ")
 
-		usersURL := os.Getenv("USERS_SERVICE_URL")
+		usersURL := strings.TrimRight(os.Getenv("USERS_SERVICE_URL"), "/")
 		if usersURL == "" {
-			usersURL = "https://resultspro-service-users.onrender.com"
+			c.JSON(http.StatusServiceUnavailable, gin.H{"error": "USERS_SERVICE_URL is not configured"})
+			c.Abort()
+			return
 		}
 
 		domain := c.GetHeader("X-Tenant-Domain")

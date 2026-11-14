@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -232,12 +233,10 @@ func HandlePlatformPaystackWebhook(w http.ResponseWriter, r *http.Request) {
 }
 
 func dispatchToCoursesPro(userID, cohortID, status, authCode, planType string) error {
-	coursesURL := os.Getenv("COURSES_SERVICE_URL")
+	coursesURL := strings.TrimRight(os.Getenv("COURSES_SERVICE_URL"), "/")
 	if coursesURL == "" {
-		coursesURL = "https://resultspro-service-coursespro.onrender.com"
-	}
-	if os.Getenv("NODE_ENV") == "development" {
-		coursesURL = "http://localhost:8081"
+		log.Printf("⚠️ COURSES_SERVICE_URL not configured. Skipping dispatchToCoursesPro for user %s", userID)
+		return nil
 	}
 
 	payload, _ := json.Marshal(map[string]string{

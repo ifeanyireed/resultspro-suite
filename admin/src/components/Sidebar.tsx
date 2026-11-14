@@ -10,6 +10,7 @@ import {
   CreditCardIcon,
   BriefcaseIcon,
   BuildingOfficeIcon,
+  BuildingLibraryIcon,
   DocumentCheckIcon,
   SparklesIcon,
   BookOpenIcon,
@@ -27,6 +28,7 @@ import {
   CreditCardIcon as CreditCardSolid,
   BriefcaseIcon as BriefcaseSolid,
   BuildingOfficeIcon as BuildingOfficeSolid,
+  BuildingLibraryIcon as BuildingLibrarySolid,
   DocumentCheckIcon as DocumentCheckSolid,
   SparklesIcon as SparklesSolid,
   BookOpenIcon as BookOpenSolid,
@@ -73,6 +75,7 @@ export function Sidebar() {
     {
       title: 'MODULAR SUITE CONTROLS',
       links: [
+        { label: 'Campus OS (ERP)', href: '/admin/campus-os/academic/overview', icon: BuildingLibraryIcon, activeIcon: BuildingLibrarySolid, badge: 'ERP' },
         { label: 'ScholarsNG (Tenants)', href: '/scholars_ng', icon: BuildingOfficeIcon, activeIcon: BuildingOfficeSolid },
         { label: 'ResultPRO', href: '/resultspro', icon: DocumentCheckIcon, activeIcon: DocumentCheckSolid },
         { label: 'ExamsPRO', href: '/exampro', icon: SparklesIcon, activeIcon: SparklesSolid },
@@ -108,7 +111,8 @@ export function Sidebar() {
             </p>
             <div className="space-y-1">
               {section.links.map((link) => {
-                const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
+                const isCampusLink = link.href.includes('/campus-os');
+                const isActive = pathname === link.href || pathname.startsWith(link.href + '/') || (isCampusLink && pathname.includes('/campus-os'));
                 const Icon = isActive ? link.activeIcon : link.icon;
                 return (
                   <Link

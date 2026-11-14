@@ -19,7 +19,7 @@ const TABS = [
   { id: 'subscribers', name: 'Subscribers', icon: Users },
 ];
 
-const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
 
 export default function BlogCMSPage() {
   const [activeTab, setActiveTab] = useState('posts');

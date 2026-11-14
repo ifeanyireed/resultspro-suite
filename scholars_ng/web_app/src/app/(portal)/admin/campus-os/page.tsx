@@ -55,7 +55,7 @@ export type CampusOSTab =
   | 'messaging'
   | 'mobile-app';
 
-type AcademicSubtab = 'overview' | 'session' | 'subjects' | 'classes' | 'assigned-tutors' | 'timetable';
+type AcademicSubtab = 'overview' | 'session' | 'classes' | 'subjects' | 'assigned-tutors' | 'timetable';
 
 function MasterTimetableGrid() {
   const [selectedArm, setSelectedArm] = useState('SS 1 Science');
@@ -245,8 +245,8 @@ function AcademicOperationsHub() {
   const academicSubtabs: { id: AcademicSubtab; label: string; icon: any; count?: string }[] = [
     { id: 'overview', label: 'Overview', icon: ChartBarIcon, count: 'Pulse' },
     { id: 'session', label: 'Academic Session', icon: CalendarIcon, count: '2026/2027' },
-    { id: 'subjects', label: 'Subjects', icon: BookOpenIcon, count: '28' },
     { id: 'classes', label: 'Classes', icon: AcademicCapIcon, count: '18 Arms' },
+    { id: 'subjects', label: 'Subjects', icon: BookOpenIcon, count: '28' },
     { id: 'assigned-tutors', label: 'Assigned Tutors', icon: UserGroupIcon, count: '64' },
     { id: 'timetable', label: 'Timetable', icon: ClockIcon, count: 'Weekly Grid' },
   ];
@@ -394,65 +394,7 @@ function AcademicOperationsHub() {
         </div>
       )}
 
-      {/* 2. SUBJECTS */}
-      {subtab === 'subjects' && (
-        <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Curriculum Subjects</h2>
-              <p className="text-sm text-gray-500 mt-1">
-                NERDC, WAEC/NECO, and Cambridge IGCSE subjects offered across Junior and Senior Secondary levels.
-              </p>
-            </div>
-            <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2 self-start sm:self-auto">
-              <PlusIcon className="w-4 h-4" />
-              Add Subject
-            </button>
-          </div>
-
-          <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  <th className="px-6 py-4">Code</th>
-                  <th className="px-6 py-4">Subject Title</th>
-                  <th className="px-6 py-4">Department</th>
-                  <th className="px-6 py-4">Category</th>
-                  <th className="px-6 py-4">Curriculum</th>
-                  <th className="px-6 py-4">Assigned Tutors</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {[
-                  { code: 'MTH-101', title: 'General Mathematics', dept: 'STEM & Sciences', type: 'Core Compulsory', curr: 'NERDC / WAEC / IGCSE', tutors: '4 Tutors' },
-                  { code: 'ENG-102', title: 'English Language & Literature', dept: 'Humanities', type: 'Core Compulsory', curr: 'NERDC / WAEC / IGCSE', tutors: '5 Tutors' },
-                  { code: 'PHY-201', title: 'Physics (Practical & Theory)', dept: 'STEM & Sciences', type: 'Science Core', curr: 'WAEC / IGCSE', tutors: '2 Tutors' },
-                  { code: 'CHM-202', title: 'Chemistry', dept: 'STEM & Sciences', type: 'Science Core', curr: 'WAEC / IGCSE', tutors: '2 Tutors' },
-                  { code: 'BIO-203', title: 'Biology', dept: 'STEM & Sciences', type: 'Science Core', curr: 'NERDC / WAEC', tutors: '3 Tutors' },
-                  { code: 'CSC-301', title: 'Data Processing, Coding & AI', dept: 'Future Skills', type: 'Core Compulsory', curr: 'NERDC / PuzzlePRO', tutors: '3 Tutors' },
-                  { code: 'ECO-210', title: 'Economics & Financial Accounting', dept: 'Commercial', type: 'Commercial Core', curr: 'NERDC / WAEC', tutors: '2 Tutors' },
-                  { code: 'GOV-215', title: 'Civic Education & Government', dept: 'Humanities', type: 'Core / Elective', curr: 'NERDC / WAEC', tutors: '2 Tutors' },
-                ].map((s, i) => (
-                  <tr key={i} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 text-xs font-bold text-[#146ef5]">{s.code}</td>
-                    <td className="px-6 py-4 font-medium text-gray-900">{s.title}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{s.dept}</td>
-                    <td className="px-6 py-4">
-                      <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-[#146ef5]">
-                        {s.type}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-xs text-gray-500">{s.curr}</td>
-                    <td className="px-6 py-4 text-xs font-semibold text-gray-700">{s.tutors}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {/* 3. CLASSES */}
+      {/* 2. CLASSES */}
       {subtab === 'classes' && (
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -508,6 +450,64 @@ function AcademicOperationsHub() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* 3. SUBJECTS */}
+      {subtab === 'subjects' && (
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Curriculum Subjects</h2>
+              <p className="text-sm text-gray-500 mt-1">
+                NERDC, WAEC/NECO, and Cambridge IGCSE subjects offered across Junior and Senior Secondary levels.
+              </p>
+            </div>
+            <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2 self-start sm:self-auto">
+              <PlusIcon className="w-4 h-4" />
+              Add Subject
+            </button>
+          </div>
+
+          <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4">Code</th>
+                  <th className="px-6 py-4">Subject Title</th>
+                  <th className="px-6 py-4">Department</th>
+                  <th className="px-6 py-4">Category</th>
+                  <th className="px-6 py-4">Curriculum</th>
+                  <th className="px-6 py-4">Assigned Tutors</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {[
+                  { code: 'MTH-101', title: 'General Mathematics', dept: 'STEM & Sciences', type: 'Core Compulsory', curr: 'NERDC / WAEC / IGCSE', tutors: '4 Tutors' },
+                  { code: 'ENG-102', title: 'English Language & Literature', dept: 'Humanities', type: 'Core Compulsory', curr: 'NERDC / WAEC / IGCSE', tutors: '5 Tutors' },
+                  { code: 'PHY-201', title: 'Physics (Practical & Theory)', dept: 'STEM & Sciences', type: 'Science Core', curr: 'WAEC / IGCSE', tutors: '2 Tutors' },
+                  { code: 'CHM-202', title: 'Chemistry', dept: 'STEM & Sciences', type: 'Science Core', curr: 'WAEC / IGCSE', tutors: '2 Tutors' },
+                  { code: 'BIO-203', title: 'Biology', dept: 'STEM & Sciences', type: 'Science Core', curr: 'NERDC / WAEC', tutors: '3 Tutors' },
+                  { code: 'CSC-301', title: 'Data Processing, Coding & AI', dept: 'Future Skills', type: 'Core Compulsory', curr: 'NERDC / PuzzlePRO', tutors: '3 Tutors' },
+                  { code: 'ECO-210', title: 'Economics & Financial Accounting', dept: 'Commercial', type: 'Commercial Core', curr: 'NERDC / WAEC', tutors: '2 Tutors' },
+                  { code: 'GOV-215', title: 'Civic Education & Government', dept: 'Humanities', type: 'Core / Elective', curr: 'NERDC / WAEC', tutors: '2 Tutors' },
+                ].map((s, i) => (
+                  <tr key={i} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 text-xs font-bold text-[#146ef5]">{s.code}</td>
+                    <td className="px-6 py-4 font-medium text-gray-900">{s.title}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{s.dept}</td>
+                    <td className="px-6 py-4">
+                      <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-[#146ef5]">
+                        {s.type}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-xs text-gray-500">{s.curr}</td>
+                    <td className="px-6 py-4 text-xs font-semibold text-gray-700">{s.tutors}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

@@ -34,9 +34,11 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		token := strings.TrimPrefix(authHeader, "Bearer ")
 
-		usersURL := os.Getenv("USERS_SERVICE_URL")
+		usersURL := strings.TrimRight(os.Getenv("USERS_SERVICE_URL"), "/")
 		if usersURL == "" {
-			usersURL = "https://resultspro-service-users.onrender.com"
+			c.JSON(http.StatusServiceUnavailable, gin.H{"error": "USERS_SERVICE_URL is not configured"})
+			c.Abort()
+			return
 		}
 
 		domain := c.GetHeader("X-Tenant-Domain")
@@ -84,25 +86,24 @@ func OptionalAuthMiddleware() gin.HandlerFunc {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader != "" && strings.HasPrefix(authHeader, "Bearer ") {
 			token := strings.TrimPrefix(authHeader, "Bearer ")
-			usersURL := os.Getenv("USERS_SERVICE_URL")
-			if usersURL == "" {
-				usersURL = "https://resultspro-service-users.onrender.com"
-			}
-			payload, _ := json.Marshal(map[string]string{"token": token})
-			req, err := http.NewRequest("POST", usersURL+"/auth/introspect", bytes.NewBuffer(payload))
-			if err == nil {
-				req.Header.Set("Content-Type", "application/json")
-				req.Header.Set("X-App-ID", "classroompro-app-id")
-				req.Header.Set("X-App-Secret", "your-app-secret-key-123")
-				client := &http.Client{Timeout: 3 * time.Second}
-				resp, err := client.Do(req)
-				if err == nil && resp.StatusCode == http.StatusOK {
-					defer resp.Body.Close()
-					var result IntrospectResponse
-					if err := json.NewDecoder(resp.Body).Decode(&result); err == nil && result.Active {
-						c.Set("user_id", result.User.ID)
-						c.Set("user_email", result.User.Email)
-						c.Set("user_name", result.User.FullName)
+			usersURL := strings.TrimRight(os.Getenv("USERS_SERVICE_URL"), "/")
+			if usersURL != "" {
+				payload, _ := json.Marshal(map[string]string{"token": token})
+				req, err := http.NewRequest("POST", usersURL+"/auth/introspect", bytes.NewBuffer(payload))
+				if err == nil {
+					req.Header.Set("Content-Type", "application/json")
+					req.Header.Set("X-App-ID", "classroompro-app-id")
+					req.Header.Set("X-App-Secret", "your-app-secret-key-123")
+					client := &http.Client{Timeout: 3 * time.Second}
+					resp, err := client.Do(req)
+					if err == nil && resp.StatusCode == http.StatusOK {
+						defer resp.Body.Close()
+						var result IntrospectResponse
+						if err := json.NewDecoder(resp.Body).Decode(&result); err == nil && result.Active {
+							c.Set("user_id", result.User.ID)
+							c.Set("user_email", result.User.Email)
+							c.Set("user_name", result.User.FullName)
+						}
 					}
 				}
 			}

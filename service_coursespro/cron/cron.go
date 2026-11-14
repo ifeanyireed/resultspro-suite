@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"service_coursespro/db"
@@ -48,12 +49,10 @@ func processBilling() {
 
 	log.Printf("[Cron] Found %d enrollments due for billing", len(dueEnrollments))
 
-	usersServiceURL := os.Getenv("USERS_SERVICE_URL")
+	usersServiceURL := strings.TrimRight(os.Getenv("USERS_SERVICE_URL"), "/")
 	if usersServiceURL == "" {
-		usersServiceURL = "https://resultspro-service-users.onrender.com"
-	}
-	if os.Getenv("NODE_ENV") == "development" {
-		usersServiceURL = "http://localhost:8080" // or whatever users service is on
+		log.Println("⚠️ [Cron] USERS_SERVICE_URL is not configured. Skipping automated charges.")
+		return
 	}
 
 	for _, enrollment := range dueEnrollments {

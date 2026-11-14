@@ -6,7 +6,7 @@ import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { Check, Edit, Trash2, Plus, School, Users, UserCog, Building, LayoutDashboard, Receipt, GraduationCap, Map, Home, Briefcase, Puzzle, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/Badge';
 
-const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
 
 async function fetchPlans() {
   try {

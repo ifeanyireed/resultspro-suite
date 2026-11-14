@@ -120,7 +120,9 @@ async function getTenant(host: string, slugHeader?: string | null, tenantIdHeade
   if (!searchDomain) return null;
 
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com'}/api`;
+    const usersBase = process.env.NEXT_PUBLIC_USERS_API ? `${process.env.NEXT_PUBLIC_USERS_API}/api` : '';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || usersBase;
+    if (!apiUrl) return null;
     const res = await fetch(`${apiUrl}/public/tenant/resolve?domain=${encodeURIComponent(searchDomain)}`, { 
       next: { revalidate: 60 }
     });

@@ -563,12 +563,11 @@ func (h *ExamHandler) GetSubjectById(c *gin.Context) {
 
 	// Normalize URL if it's relative (for old records)
 	if subject.TextbookURL != nil && strings.HasPrefix(*subject.TextbookURL, "/uploads") {
-		baseURL := os.Getenv("BACKEND_URL")
-		if baseURL == "" {
-			baseURL = "https://resultspro-service-examspro.vercel.app" // Fallback
+		baseURL := strings.TrimRight(os.Getenv("BACKEND_URL"), "/")
+		if baseURL != "" {
+			normalized := baseURL + *subject.TextbookURL
+			subject.TextbookURL = &normalized
 		}
-		normalized := baseURL + *subject.TextbookURL
-		subject.TextbookURL = &normalized
 	}
 
 	c.JSON(http.StatusOK, subject)

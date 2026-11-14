@@ -19,7 +19,7 @@ export default function OrientationForm({ tenant }: { tenant: any }) {
     let cohortId = Cookies.get('selected_cohort_id');
     if (cohortId && (tenant?.id || tenant?.slug)) {
       cohortId = cohortId.replace(/['"]+/g, '');
-      const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
+      const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || '';
       const tenantParam = tenant?.id || tenant?.slug;
       axios.get(`${COURSES_API}/api/public/cohorts/${cohortId}?tenant_id=${tenantParam}`, {
         headers: {

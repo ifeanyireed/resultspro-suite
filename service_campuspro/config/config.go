@@ -21,9 +21,6 @@ func InitConfig() {
 	}
 
 	DatabaseURL = os.Getenv("DATABASE_URL")
-	if DatabaseURL == "" {
-		DatabaseURL = "postgres://postgres:postgres@localhost:5432/resultspro?sslmode=disable"
-	}
 
 	JWTSecret = os.Getenv("JWT_SECRET")
 	if JWTSecret == "" {

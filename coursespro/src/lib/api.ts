@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-export const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
-export const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || 'https://resultspro-service-examspro.onrender.com';
+export const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
+export const EXAMS_API = process.env.NEXT_PUBLIC_EXAMS_API || '';
 
 /**
  * Extracts the tenant slug from the current hostname.
@@ -92,7 +92,7 @@ api.interceptors.response.use(
 );
 
 
-export const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
+export const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || '';
 
 export const coursesApi = axios.create({
   baseURL: COURSES_API,

@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -21,9 +22,10 @@ func NewHandler() *Handler {
 
 // ProxyAuth forwards any auth requests to service_users
 func (h *Handler) ProxyAuth(c *gin.Context) {
-	usersURL := os.Getenv("USERS_SERVICE_URL")
+	usersURL := strings.TrimRight(os.Getenv("USERS_SERVICE_URL"), "/")
 	if usersURL == "" {
-		usersURL = "https://resultspro-service-users.onrender.com"
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "USERS_SERVICE_URL is not configured"})
+		return
 	}
 
 	targetURL := usersURL + c.Request.URL.Path

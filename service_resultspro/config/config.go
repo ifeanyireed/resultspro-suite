@@ -24,8 +24,8 @@ func InitConfig() {
 
 	AppConfig = Config{
 		Port:            getEnv("PORT", "5000"),
-		DatabaseURL:     getEnv("DATABASE_URL", "u721451974_resultspro:*Reedb4b4@tcp(srv2113.hstgr.io:3306)/u721451974_resultspro_db?charset=utf8mb4&parseTime=True&loc=Local"),
-		UsersServiceURL: getEnv("USERS_SERVICE_URL", "https://resultspro-service-users.onrender.com"),
+		DatabaseURL:     os.Getenv("DATABASE_URL"),
+		UsersServiceURL: os.Getenv("USERS_SERVICE_URL"),
 		AppID:           getEnv("APP_ID", "resultspro-app-id"),
 		AppSecret:       getEnv("APP_SECRET", "resultspro_secret_456"),
 	}

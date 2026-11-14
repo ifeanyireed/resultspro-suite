@@ -86,8 +86,9 @@ export function getActiveTenantContext(): { tenantId: string; tenantSlug: string
  * - baseURL: Points to the Go control plane (service_users / service_classroom / etc.).
  * - Headers: Automatically attaches JWT and X-Tenant-Domain / X-Tenant-Slug / X-Tenant-Id.
  */
+const defaultApiUrl = process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_USERS_API ? `${process.env.NEXT_PUBLIC_USERS_API}/api` : '');
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com'}/api`,
+  baseURL: defaultApiUrl,
   headers: {
     'Content-Type': 'application/json',
   },

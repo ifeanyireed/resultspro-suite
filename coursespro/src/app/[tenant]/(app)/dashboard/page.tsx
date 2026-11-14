@@ -48,7 +48,7 @@ export default function LearnerDashboard() {
     if (reference && token) {
       setVerifying(true);
       const tenantSlug = (params?.tenant as string) || (typeof window !== 'undefined' ? window.location.hostname : '');
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "https://resultspro-service-users.onrender.com";
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "";
       
       fetch(`${USERS_API}/api/v1/payments/verify`, {
         method: 'POST',

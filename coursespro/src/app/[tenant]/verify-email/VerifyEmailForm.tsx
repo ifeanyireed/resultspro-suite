@@ -101,7 +101,7 @@ function VerifyEmailContent({ tenant }: { tenant: any }) {
     setSuccess('');
 
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
       await axios.post(`${USERS_API}/api/v1/auth/verify-email`, {
         token: otp.trim(),
         otp: otp.trim()
@@ -165,7 +165,7 @@ function VerifyEmailContent({ tenant }: { tenant: any }) {
     setSuccess('');
 
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
       const res = await axios.post(`${USERS_API}/api/v1/auth/resend-verification`, {
         email: email.trim(),
         tenant_id: tenant?.id,

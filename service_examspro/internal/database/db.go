@@ -18,7 +18,8 @@ var DB *gorm.DB
 func ConnectDB() {
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
-		dsn = "postgres://postgres:postgres@localhost:5432/resultspro?sslmode=disable"
+		log.Println("⚠️ [service_examspro] DATABASE_URL is not set")
+		return
 	}
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{

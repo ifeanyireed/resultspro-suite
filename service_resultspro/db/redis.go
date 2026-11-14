@@ -37,7 +37,13 @@ var (
 func InitRedis() {
 	redisOnce.Do(func() {
 		restURL := strings.TrimSpace(os.Getenv("UPSTASH_REDIS_REST_URL"))
+		if restURL == "" {
+			restURL = strings.TrimSpace(os.Getenv("KV_REST_API_URL"))
+		}
 		restToken := strings.TrimSpace(os.Getenv("UPSTASH_REDIS_REST_TOKEN"))
+		if restToken == "" {
+			restToken = strings.TrimSpace(os.Getenv("KV_REST_API_TOKEN"))
+		}
 		env := strings.TrimSpace(os.Getenv("REDIS_ENV"))
 		if env == "" {
 			env = strings.TrimSpace(os.Getenv("ENV"))

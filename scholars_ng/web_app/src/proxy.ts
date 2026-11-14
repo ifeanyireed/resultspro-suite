@@ -41,7 +41,8 @@ async function resolveTenantAtEdge(identifier: string): Promise<ResolvedTenantEd
   try {
     const apiUrl =
       process.env.NEXT_PUBLIC_API_URL ||
-      `${process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com'}/api`;
+      (process.env.NEXT_PUBLIC_USERS_API ? `${process.env.NEXT_PUBLIC_USERS_API}/api` : '');
+    if (!apiUrl) return null;
     const res = await fetch(
       `${apiUrl}/public/tenant/resolve?domain=${encodeURIComponent(key)}`,
       {

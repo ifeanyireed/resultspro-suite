@@ -113,7 +113,7 @@ export default function PlanForm({ tenant }: { tenant: any }) {
         return;
       }
       const token = Cookies.get('token');
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "https://resultspro-service-users.onrender.com";
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "";
       const dashboardTarget = window.location.origin + (window.location.pathname.startsWith(`/${tenant.slug}`) ? `/${tenant.slug}` : '') + `/dashboard`;
       
       const res = await fetch(`${USERS_API}/api/v1/payments/initialize`, {

@@ -68,7 +68,7 @@ export default function LoginForm({ tenant }: { tenant: any }) {
       } else {
         const checkEnrollment = async () => {
           try {
-            const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
+            const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || '';
             const res = await axios.get(`${COURSES_API}/api/v1/student/dashboard-summary`, {
               headers: { 'Authorization': `Bearer ${token}`, 'X-Tenant-Domain': resolvedTenantSlug }
             });
@@ -130,7 +130,7 @@ export default function LoginForm({ tenant }: { tenant: any }) {
       router.push('/onboarding/orientation');
     } else {
       try {
-        const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || 'https://resultspro-service-coursespro.onrender.com';
+        const COURSES_API = process.env.NEXT_PUBLIC_COURSES_API || '';
         const summaryRes = await axios.get(`${COURSES_API}/api/v1/student/dashboard-summary`, {
           headers: { 'Authorization': `Bearer ${authToken}`, 'X-Tenant-Domain': resolvedTenantSlug }
         });
@@ -149,7 +149,7 @@ export default function LoginForm({ tenant }: { tenant: any }) {
     setError('');
     setSuccessMessage('');
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
       
       const res = await axios.post(`${USERS_API}/api/v1/auth/login`, { 
         email, 

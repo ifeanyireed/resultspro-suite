@@ -18,7 +18,7 @@ export default function CreateBlogPost() {
   );
 }
 
-const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
 
 function CreateBlogPostContent() {
     const router = useRouter();

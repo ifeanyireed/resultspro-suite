@@ -1,5 +1,5 @@
 export async function getTenant(tenantSlug: string) {
-  const USERS_API = process.env.NEXT_PUBLIC_USERS_API || 'https://resultspro-service-users.onrender.com';
+  const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
   
   try {
     const res = await fetch(`${USERS_API}/api/public/tenant/resolve?domain=${tenantSlug}`, {

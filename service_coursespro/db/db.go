@@ -18,7 +18,8 @@ var DB *gorm.DB
 func InitDB() {
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
-		dsn = "postgres://postgres:postgres@localhost:5432/resultspro?sslmode=disable"
+		log.Println("⚠️ [service_coursespro] DATABASE_URL is not set")
+		return
 	}
 
 	var err error
