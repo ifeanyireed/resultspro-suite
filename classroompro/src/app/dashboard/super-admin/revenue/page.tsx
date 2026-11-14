@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect, useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 import {
   Select,
   SelectContent,
@@ -84,7 +85,7 @@ export default function RevenueAnalytics() {
       
       
       <main className="p-8 space-y-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <MotionRise className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Financial Performance</h2>
             <p className="text-sm text-gray-500">Detailed breakdown of platform revenue and subscription health.</p>
@@ -97,12 +98,12 @@ export default function RevenueAnalytics() {
                 <Download className="w-4 h-4 mr-2" /> Export Report
              </Button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {revenueStats.map((stat, i) => (
-            <div key={i} className="bg-white shadow-sm border border-gray-100 p-6 rounded-[24px] hover:border-gray-200 transition-all">
+            <MotionRise key={i} delay={i * 0.05} className="bg-white shadow-sm border border-gray-100 p-6 rounded-[24px] hover:border-gray-200 transition-all">
               <div className="flex justify-between items-start mb-4">
                 <div className={cn("p-2.5 rounded-xl", stat.bg, stat.color)}>
                   {stat.icon}
@@ -116,13 +117,13 @@ export default function RevenueAnalytics() {
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
               <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{stat.label}</div>
-            </div>
+            </MotionRise>
           ))}
-        </div>
+        </MotionStagger>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
            {/* Revenue Chart Placeholder */}
-           <div className="lg:col-span-2 bg-white shadow-sm border border-gray-100 rounded-[32px] p-8">
+           <MotionRise className="lg:col-span-2 bg-white shadow-sm border border-gray-100 rounded-[32px] p-8">
               <div className="flex justify-between items-center mb-10">
                  <div>
                     <h3 className="text-lg font-bold text-gray-900 font-display">Revenue Over Time</h3>
@@ -159,10 +160,10 @@ export default function RevenueAnalytics() {
                     </div>
                  ))}
               </div>
-           </div>
+           </MotionRise>
 
            {/* Plan Distribution */}
-           <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8">
+           <MotionRise delay={0.1} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8">
               <h3 className="text-lg font-bold text-gray-900 font-display mb-8">Plan Distribution</h3>
               <div className="space-y-8">
                  <div className="space-y-3">
@@ -211,11 +212,11 @@ export default function RevenueAnalytics() {
                  <p className="text-2xl font-bold text-gray-900">₦1,240,500</p>
                  <p className="text-[10px] text-gray-500 mt-1">Scheduled for Feb 1st, 2025</p>
               </div>
-           </div>
-        </div>
+           </MotionRise>
+        </MotionStagger>
 
         {/* Transactions Table */}
-        <div className="space-y-6">
+        <MotionRise delay={0.1} className="space-y-6">
            <h3 className="text-xl font-bold text-gray-900 font-display px-2">Recent Transactions</h3>
            <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
               <div className="overflow-x-auto">
@@ -315,7 +316,7 @@ export default function RevenueAnalytics() {
                  </div>
               )}
            </div>
-        </div>
+        </MotionRise>
       </main>
     </div>
   );

@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function PlatformSettings() {
   const [activeTab, setActiveTab] = useState("general");
@@ -54,7 +55,7 @@ export default function PlatformSettings() {
       
       
       <main className="p-8 max-w-6xl mx-auto space-y-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <MotionRise className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Global Configurations</h2>
             <p className="text-sm text-gray-500">Manage platform-wide settings, subscription tiers, and system security.</p>
@@ -62,11 +63,11 @@ export default function PlatformSettings() {
           <Button className="bg-emerald-600 text-white font-bold h-11 px-8 shadow-lg shadow-green/10">
              <Save className="w-4 h-4 mr-2" /> Save All Changes
           </Button>
-        </div>
+        </MotionRise>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <MotionStagger className="flex flex-col lg:flex-row gap-8">
            {/* Navigation Sidebar */}
-           <div className="lg:w-64 space-y-1">
+           <MotionRise className="lg:w-64 space-y-1">
               {tabs.map((tab) => (
                  <button
                     key={tab.id}
@@ -81,10 +82,10 @@ export default function PlatformSettings() {
                     {tab.label}
                  </button>
               ))}
-           </div>
+           </MotionRise>
 
            {/* Content Area */}
-           <div className="flex-1 bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 md:p-10">
+           <MotionRise delay={0.05} className="flex-1 bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 md:p-10">
               {activeTab === "general" && (
                  <div className="space-y-10">
                     <div className="space-y-6">
@@ -248,8 +249,8 @@ export default function PlatformSettings() {
                     </div>
                  </div>
               )}
-           </div>
-        </div>
+           </MotionRise>
+        </MotionStagger>
       </main>
     </div>
   );

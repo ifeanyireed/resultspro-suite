@@ -18,6 +18,7 @@ import {
   AcademicCapIcon,
   FireIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface StudentInfo {
   id: string;
@@ -85,7 +86,7 @@ export default function MentorCohorts() {
   };
 
   return (
-    <div className="space-y-8 pb-16">
+    <MotionRise className="space-y-8 pb-16">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mt-2">
         <div>
@@ -123,7 +124,7 @@ export default function MentorCohorts() {
       </div>
 
       {/* KPI Stats Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex items-center justify-between">
           <div>
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Active Cohorts</p>
@@ -163,7 +164,7 @@ export default function MentorCohorts() {
             <DocumentCheckIcon className="w-6 h-6" />
           </div>
         </div>
-      </div>
+      </MotionStagger>
 
       {/* Search Input */}
       <div className="relative max-w-md">
@@ -389,6 +390,6 @@ export default function MentorCohorts() {
           </p>
         </div>
       )}
-    </div>
+    </MotionRise>
   );
 }

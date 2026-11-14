@@ -1,4 +1,5 @@
 import DashboardNoteDetailClient from "./DashboardNoteDetailClient";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 
 export const dynamicParams = false;
 
@@ -22,5 +23,9 @@ export async function generateStaticParams() {
 }
 
 export default function NoteDetailPage() {
-  return <DashboardNoteDetailClient />;
+  return (
+    <MotionRise>
+      <DashboardNoteDetailClient />
+    </MotionRise>
+  );
 }

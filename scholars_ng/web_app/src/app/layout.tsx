@@ -3,6 +3,7 @@ import { headers, cookies } from "next/headers";
 import "./globals.css";
 
 import { TenantProvider } from "../components/TenantProvider";
+import { ScrollRiseProvider } from "../components/ScrollRiseProvider";
 
 const FALLBACK_TENANT_CATALOG: Record<
   string,
@@ -180,7 +181,9 @@ export default async function RootLayout({
       </head>
       <body suppressHydrationWarning className="antialiased">
         <TenantProvider tenant={tenant}>
-          {children}
+          <ScrollRiseProvider>
+            {children}
+          </ScrollRiseProvider>
         </TenantProvider>
       </body>
     </html>

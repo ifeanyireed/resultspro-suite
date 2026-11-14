@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Trophy, Star, Medal, Award, Zap, Crown, BarChart01, Users, TrendingUp, DollarSign, Calendar, User, LogOut } from '@/lib/hugeicons-compat';
 import { useAgentRewards } from '@/hooks/useAgentAnalytics';
 import { useNavigate } from 'react-router-dom';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const BADGE_ICONS: Record<string, React.ReactNode> = {
   FIRST_SCHOOL: <Star className="w-8 h-8 text-yellow-400" />,
@@ -40,38 +41,38 @@ export const Rewards: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
           <div className="space-y-6">
       {/* Header */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-6 text-white border border-[rgba(255,255,255,0.07)]">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-6 text-white border border-[rgba(255,255,255,0.07)]">
         <h1 className="text-3xl font-bold mb-2">Rewards & Gamification</h1>
         <p className="text-gray-300">Track your points, badges, and ranking</p>
-      </div>
+      </MotionRise>
 
       {rewards && (
         <>
           {/* Points Card */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-6 text-white border border-[rgba(255,255,255,0.07)] hover:bg-white/5 transition-colors">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-6 text-white border border-[rgba(255,255,255,0.07)] hover:bg-white/5 transition-colors">
               <div className="text-sm text-gray-400 mb-2">Current Balance</div>
               <div className="text-4xl font-bold mb-4">{rewards.pointsBalance}</div>
               <div className="text-xs text-gray-400">Points</div>
-            </div>
+            </MotionRise>
 
-            <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-6 text-white border border-[rgba(255,255,255,0.07)] hover:bg-white/5 transition-colors">
+            <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-6 text-white border border-[rgba(255,255,255,0.07)] hover:bg-white/5 transition-colors">
               <div className="text-sm text-gray-400 mb-2">Lifetime Points</div>
               <div className="text-4xl font-bold mb-4">{rewards.lifetimePoints}</div>
               <div className="text-xs text-gray-400">All Time</div>
-            </div>
+            </MotionRise>
 
-            <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-6 text-white border border-[rgba(255,255,255,0.07)] hover:bg-white/5 transition-colors">
+            <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-6 text-white border border-[rgba(255,255,255,0.07)] hover:bg-white/5 transition-colors">
               <div className="text-sm text-gray-400 mb-2">Leaderboard Rank</div>
               <div className="text-4xl font-bold mb-4">
                 {rewards.leaderboardRank ? `#${rewards.leaderboardRank}` : '—'}
               </div>
               <div className="text-xs text-gray-400">Top Agents</div>
-            </div>
-          </div>
+            </MotionRise>
+          </MotionStagger>
 
           {/* Badges Section */}
-          <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-6 border border-[rgba(255,255,255,0.07)]">
+          <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-6 border border-[rgba(255,255,255,0.07)]">
             <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
               <Trophy className="w-5 h-5 text-yellow-400" />
               Your Badges ({rewards.badges?.length || 0})
@@ -97,10 +98,10 @@ export const Rewards: React.FC = () => {
                 <p>No badges earned yet. Keep working to unlock achievements!</p>
               </div>
             )}
-          </div>
+          </MotionRise>
 
           {/* Points Breakdown */}
-          <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-6 border border-[rgba(255,255,255,0.07)]">
+          <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-6 border border-[rgba(255,255,255,0.07)]">
             <h2 className="text-lg font-semibold text-white mb-4">How Points Work</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-[rgba(0,0,0,0.40)] rounded-[20px] p-4 border border-[rgba(255,255,255,0.07)]">
@@ -120,12 +121,12 @@ export const Rewards: React.FC = () => {
                 <div className="text-2xl font-bold text-white">300 pts</div>
               </div>
             </div>
-          </div>
+          </MotionRise>
         </>
       )}
 
       {/* Leaderboard */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] overflow-hidden">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] overflow-hidden">
         <div className="p-6 border-b border-[rgba(255,255,255,0.07)]">
           <h2 className="text-lg font-semibold text-white flex items-center gap-2">
             <Trophy className="w-5 h-5 text-yellow-400" />
@@ -195,7 +196,7 @@ export const Rewards: React.FC = () => {
             </table>
           </div>
         )}
-      </div>
+      </MotionRise>
           </div>
         </div>
       </main>

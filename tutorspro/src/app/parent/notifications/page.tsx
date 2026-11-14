@@ -1,6 +1,7 @@
 "use client";
 
 import api from '@/lib/api';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { IconBell as Bell, IconCalendar as Calendar, IconCreditCard as CreditCard, IconMessage as MessageSquare, IconTrophy as Trophy, IconSettings as Settings, IconChevronRight as ChevronRight, IconDotsVertical as MoreVertical, IconCheck as Check, IconLoader2 as Loader2, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -54,7 +55,7 @@ export default function ParentNotifications() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-4xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Alert <span className="text-blue">Inbox</span>
@@ -67,10 +68,10 @@ export default function ParentNotifications() {
           >
             Mark all as read
           </button>
-        </div>
+        </MotionRise>
 
         {/* Filter Tabs */}
-        <div className="flex gap-2 mb-8 overflow-x-auto pb-2 no-scrollbar">
+        <MotionRise delay={0.05} className="flex gap-2 mb-8 overflow-x-auto pb-2 no-scrollbar">
            {['all', 'class', 'billing', 'milestone', 'message'].map(t => (
               <button 
                 key={t}
@@ -82,7 +83,7 @@ export default function ParentNotifications() {
                  {t}
               </button>
            ))}
-        </div>
+        </MotionRise>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 opacity-50">
@@ -90,7 +91,7 @@ export default function ParentNotifications() {
             <p className="text-white font-bold">Checking alerts...</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <MotionStagger className="space-y-4">
              {filteredNotifications.map((n) => {
                 const config = ICON_MAP[n.type] || ICON_MAP.default;
                 const Icon = config.icon;
@@ -133,16 +134,16 @@ export default function ParentNotifications() {
                    <p className="text-gray-500 font-bold">Your inbox is empty.</p>
                 </div>
              )}
-          </div>
+          </MotionStagger>
         )}
 
         {/* Support Section */}
-        <div className="mt-16 p-8 rounded-[40px] bg-white/[0.02] border border-white/5 text-center">
+        <MotionRise className="mt-16 p-8 rounded-[40px] bg-white/[0.02] border border-white/5 text-center">
            <p className="text-xs text-gray-600 font-bold uppercase tracking-widest mb-6">Need to change your alert preferences?</p>
            <button className="px-8 py-3 rounded-2xl bg-white/5 border border-white/10 text-white font-bold text-sm hover:bg-white/10 transition-all flex items-center gap-2 mx-auto">
               <Settings className="w-4 h-4" /> NOTIFICATION SETTINGS
            </button>
-        </div>
+        </MotionRise>
       </div>
     </main>
   );

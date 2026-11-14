@@ -5,6 +5,7 @@ import { ArrowLeftIcon, PaperAirplaneIcon, UserCircleIcon } from '@heroicons/rea
 import api from '@/lib/api';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function TicketDetailPage() {
   const routeParams = useParams();
@@ -83,9 +84,9 @@ export default function TicketDetailPage() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)]">
+    <MotionStagger className="flex flex-col h-[calc(100vh-8rem)]">
       {/* Header */}
-      <div className="bg-white rounded-t-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shrink-0 z-10">
+      <MotionRise className="bg-white rounded-t-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shrink-0 z-10">
         <div className="flex items-center gap-4">
           <Link href="/support/tickets" className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors">
             <ArrowLeftIcon className="w-5 h-5" />
@@ -112,10 +113,10 @@ export default function TicketDetailPage() {
             <option value="resolved">Resolved</option>
           </select>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Messages */}
-      <div className="flex-1 bg-gray-50 p-6 overflow-y-auto flex flex-col gap-6 border-x border-gray-100">
+      <MotionRise delay={0.05} className="flex-1 bg-gray-50 p-6 overflow-y-auto flex flex-col gap-6 border-x border-gray-100">
         {/* Original Ticket Message */}
         <div className="flex gap-4 max-w-3xl">
           <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 mt-1">
@@ -160,10 +161,10 @@ export default function TicketDetailPage() {
             </div>
           );
         })}
-      </div>
+      </MotionRise>
 
       {/* Reply Input */}
-      <div className="bg-white rounded-b-[1.5rem] p-4 shadow-sm border border-gray-100 shrink-0 z-10">
+      <MotionRise delay={0.08} className="bg-white rounded-b-[1.5rem] p-4 shadow-sm border border-gray-100 shrink-0 z-10">
         <form onSubmit={handleSendReply} className="flex gap-3">
           <input 
             type="text"
@@ -185,7 +186,7 @@ export default function TicketDetailPage() {
             )}
           </button>
         </form>
-      </div>
-    </div>
+      </MotionRise>
+    </MotionStagger>
   );
 }

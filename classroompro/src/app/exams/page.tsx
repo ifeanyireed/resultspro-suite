@@ -7,6 +7,7 @@ import { IconFileText as FileText, IconLoader2 as Loader2, IconClock as Clock, I
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import api from "@/lib/api";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function PublicExamsIndex() {
   const [exams, setExams] = useState<any[]>([]);
@@ -34,7 +35,7 @@ export default function PublicExamsIndex() {
       <main className="flex-1 pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-16">
+          <MotionRise className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold font-display text-white mb-4">
               Exam <span className="text-green">Archives</span>
             </h1>
@@ -42,7 +43,7 @@ export default function PublicExamsIndex() {
               Prepare for success with our curated mock exams and simulations. 
               Practice in real-time under timed conditions.
             </p>
-          </div>
+          </MotionRise>
 
           {/* Exams Grid */}
           {loading ? (
@@ -50,10 +51,11 @@ export default function PublicExamsIndex() {
                <Loader2 className="w-12 h-12 text-green animate-spin" />
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {exams.map((exam) => (
-                <div 
+            <MotionStagger className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {exams.map((exam, idx) => (
+                <MotionRise 
                   key={exam.id} 
+                  delay={idx * 0.06}
                   className="group bg-white/5 border border-white/10 rounded-[40px] p-8 hover:border-green/50 transition-all duration-300"
                 >
                   <div className="flex flex-col md:flex-row justify-between items-start gap-6">
@@ -109,20 +111,20 @@ export default function PublicExamsIndex() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </MotionRise>
               ))}
-            </div>
+            </MotionStagger>
           )}
 
           {!loading && exams.length === 0 && (
-            <div className="text-center py-20 bg-white/5 rounded-[32px] border border-white/10">
+            <MotionRise className="text-center py-20 bg-white/5 rounded-[32px] border border-white/10">
                <p className="text-white text-xl font-display mb-2">No exams available yet</p>
                <p className="text-muted-foreground">Check back later for newly published exams.</p>
-            </div>
+            </MotionRise>
           )}
 
           {/* CTA Section */}
-          <div className="mt-24 bg-gradient-to-br from-green/20 to-blue/20 border border-white/10 rounded-[40px] p-12 text-center relative overflow-hidden">
+          <MotionRise className="mt-24 bg-gradient-to-br from-green/20 to-blue/20 border border-white/10 rounded-[40px] p-12 text-center relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-30">
               <div className="absolute top-0 right-1/4 w-96 h-96 bg-green/20 blur-[100px] rounded-full" />
               <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-blue/20 blur-[100px] rounded-full" />
@@ -147,7 +149,7 @@ export default function PublicExamsIndex() {
                 </Button>
               </Link>
             </div>
-          </div>
+          </MotionRise>
         </div>
       </main>
 

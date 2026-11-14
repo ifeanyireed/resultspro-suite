@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconTrophy as Trophy, IconCoins as Coins, IconBolt as Zap, IconRefresh as RefreshCcw, IconHome as Home, IconCircleX as XCircle, IconShare2 as Share2, IconSword as Sword, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -135,7 +136,7 @@ function BattleResultContent() {
         <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] ${isWinner ? 'bg-[#146ef5]/10' : 'bg-primary/10'} rounded-full blur-[120px] animate-pulse`} />
       </div>
 
-      <div className="relative z-10 w-full max-w-2xl text-center">
+      <MotionRise className="relative z-10 w-full max-w-2xl text-center">
         {/* Result Header */}
         <div className="mb-12 animate-in zoom-in duration-500">
           <div className={`
@@ -210,7 +211,7 @@ function BattleResultContent() {
             </Button>
           </Link>
         </div>
-      </div>
+      </MotionRise>
     </main>
   );
 }

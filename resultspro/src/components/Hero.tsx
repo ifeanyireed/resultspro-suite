@@ -26,6 +26,7 @@ const Hero = () => {
   return (
     <section
       id="hero"
+      data-no-rise
       aria-label="Hero — ResultsPRO"
       style={{
         position: 'relative',

@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import HeroEditorial from '@/components/HeroEditorial';
 import ScrollReveal from '@/components/ScrollReveal';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -86,7 +87,7 @@ export default function SubscribePage() {
       />
 
       <section id="subscribe-form" className="section section-white">
-        <div className="container">
+        <MotionRise className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 0.8fr', gap: '4rem', alignItems: 'start' }}>
             <ScrollReveal animation="fade-up">
               <div style={{ padding: '3rem', border: '1px solid var(--color-border)', background: '#fafafa' }}>
@@ -163,7 +164,7 @@ export default function SubscribePage() {
               </div>
             </ScrollReveal>
           </div>
-        </div>
+        </MotionRise>
       </section>
     </>
   );

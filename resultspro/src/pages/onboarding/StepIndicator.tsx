@@ -1,4 +1,5 @@
 import { CheckCircle, Building2, Calendar, Users, BookOpen, Zap, ShoppingCart, User } from '@/lib/hugeicons-compat';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface StepIndicatorProps {
   currentStep: number;
@@ -32,8 +33,8 @@ export const StepIndicator = ({
   totalSteps = 7,
 }: StepIndicatorProps) => {
   return (
-    <div className="w-full py-8 px-4">
-      <div className="flex items-start justify-center gap-8">
+    <MotionRise className="w-full py-8 px-4">
+      <MotionStagger className="flex items-start justify-center gap-8">
         {Array.from({ length: totalSteps }, (_, i) => i + 1).map((step, index) => {
           const IconComponent = stepIcons[index];
           
@@ -66,10 +67,10 @@ export const StepIndicator = ({
             </div>
           );
         })}
-      </div>
+      </MotionStagger>
 
       {/* Progress Text */}
-      <div className="text-center mt-4">
+      <MotionRise delay={0.1} className="text-center mt-4">
         <p className="text-sm text-gray-400">
           Step <span className="font-bold text-blue-400">{currentStep}</span> of{' '}
           <span className="font-bold text-gray-300">{totalSteps}</span>
@@ -79,7 +80,7 @@ export const StepIndicator = ({
             {completedSteps.length} of {totalSteps} steps completed
           </p>
         )}
-      </div>
-    </div>
+      </MotionRise>
+    </MotionRise>
   );
 };

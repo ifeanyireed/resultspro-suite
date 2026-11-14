@@ -12,6 +12,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { coursesApi } from '@/lib/api';
 import StoreProductModal from './StoreProductModal';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function StoreManagementPage() {
   
@@ -55,7 +56,7 @@ export default function StoreManagementPage() {
   };
 
   return (
-    <>
+    <MotionRise>
       <div className="flex items-center justify-between mb-8">
         <div>
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Digital Store Management</h2>
@@ -70,7 +71,7 @@ export default function StoreManagementPage() {
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <MotionRise className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-8 text-center text-sm text-gray-500 animate-pulse">Loading products...</div>
         ) : products.length === 0 ? (
@@ -160,7 +161,7 @@ export default function StoreManagementPage() {
             </table>
           </div>
         )}
-      </div>
+      </MotionRise>
 
       <StoreProductModal 
         isOpen={isModalOpen} 
@@ -168,6 +169,6 @@ export default function StoreManagementPage() {
         onSaved={() => refetch()} 
         product={selectedProduct} 
       />
-    </>
+    </MotionRise>
   );
 }

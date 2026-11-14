@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { MotionRise } from './ScrollRiseProvider';
 import {
   IconBus,
   IconSocial,
@@ -101,7 +102,7 @@ export default function MobileAppSection() {
     >
       <div className="container-nets">
         {/* ── Section Header ── */}
-        <div
+        <MotionRise
           className="flex flex-col lg:flex-row lg:items-end justify-between gap-8"
           style={{ marginBottom: '4rem' }}
         >
@@ -126,15 +127,16 @@ export default function MobileAppSection() {
               Deploy School Portal
             </Link>
           </div>
-        </div>
+        </MotionRise>
 
         {/* ── 6 Mobile App Feature Cards Grid ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {MOBILE_FEATURES.map((feat) => {
+          {MOBILE_FEATURES.map((feat, featIdx) => {
             const Icon = feat.icon;
             return (
-              <div
+              <MotionRise
                 key={feat.id}
+                delay={featIdx * 0.08}
                 style={{
                   background: 'rgba(255,255,255,0.04)',
                   border: '1px solid rgba(255,255,255,0.12)',
@@ -225,7 +227,7 @@ export default function MobileAppSection() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </MotionRise>
             );
           })}
         </div>

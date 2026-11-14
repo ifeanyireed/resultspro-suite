@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 import api from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 import {
   Select,
   SelectContent,
@@ -114,7 +115,7 @@ export default function ParentDashboard() {
       
       <main className="p-8 space-y-10">
         {/* Welcome & Quick Stats */}
-        <div className="flex flex-col md:flex-row gap-8 items-center justify-between">
+        <MotionRise className="flex flex-col md:flex-row gap-8 items-center justify-between">
            <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-2 font-display">Hello, {parentName}</h2>
               <p className="text-gray-500">Here&apos;s how your children are performing this week.</p>
@@ -129,12 +130,12 @@ export default function ParentDashboard() {
                  <p className="text-xl font-bold text-[#146ef5]">12h</p>
               </div>
            </div>
-        </div>
+        </MotionRise>
 
         {/* Children Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-           {children.length > 0 ? children.map((child) => (
-              <div key={child.id} className="p-8 rounded-[40px] bg-white shadow-sm border border-gray-100 hover:border-gray-200 transition-all group relative overflow-hidden">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 gap-8">
+           {children.length > 0 ? children.map((child, i) => (
+              <MotionRise key={child.id} delay={i * 0.05} className="p-8 rounded-[40px] bg-white shadow-sm border border-gray-100 hover:border-gray-200 transition-all group relative overflow-hidden">
                  <div className="absolute top-0 right-0 p-8">
                     <Link href={`/dashboard/parent/progress?childId=${child.id}`}>
                       <button className="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors">
@@ -181,17 +182,17 @@ export default function ParentDashboard() {
                        </Button>
                     </Link>
                  </div>
-              </div>
+              </MotionRise>
            )) : (
              <div className="col-span-full p-12 text-center bg-white shadow-sm border border-gray-100 border border-dashed border-gray-100 rounded-[40px]">
                 <p className="text-gray-500">No children linked to your account yet.</p>
              </div>
            )}
-        </div>
+        </MotionStagger>
 
         {/* Activity & Highlights */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-           <div className="lg:col-span-2 space-y-6 flex flex-col">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+           <MotionRise className="lg:col-span-2 space-y-6 flex flex-col">
               <div className="flex items-center justify-between px-2">
                  <h3 className="text-xl font-bold text-gray-900 font-display">Recent Activity</h3>
                  {totalItems > limit && (
@@ -267,9 +268,9 @@ export default function ParentDashboard() {
                    </div>
                 </div>
               )}
-           </div>
+           </MotionRise>
 
-           <div className="space-y-6">
+           <MotionRise delay={0.1} className="space-y-6">
               <h3 className="text-xl font-bold text-gray-900 font-display px-2">Key Highlights</h3>
               <div className="p-8 rounded-[32px] bg-gradient-to-br from-blue/20 to-green/10 border border-gray-100 space-y-6">
                  <div className="space-y-2">
@@ -288,8 +289,8 @@ export default function ParentDashboard() {
                     View Study Plan
                  </Button>
               </div>
-           </div>
-        </div>
+           </MotionRise>
+        </MotionStagger>
       </main>
     </div>
   );

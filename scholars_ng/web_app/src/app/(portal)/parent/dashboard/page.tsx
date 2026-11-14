@@ -8,6 +8,7 @@ import {
   DocumentTextIcon,
   ChevronDownIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function ParentDashboardPage() {
@@ -41,7 +42,7 @@ export default function ParentDashboardPage() {
 
   return (
     <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Welcome back, Sarah</h1>
           <p className="text-sm text-gray-500 mt-1">Here is a quick overview of Alex's progress at Greenwood High.</p>
@@ -55,12 +56,12 @@ export default function ParentDashboardPage() {
             <ChevronDownIcon className="w-4 h-4 ml-1" />
           </button>
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         
         {/* Attendance Ring */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center aspect-square relative group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center aspect-square relative group hover:-translate-y-1 transition-transform">
           <h3 className="text-base font-normal text-gray-900 absolute top-6 left-6">Attendance</h3>
           
           <div className="relative w-32 h-32 mt-4">
@@ -73,10 +74,10 @@ export default function ParentDashboardPage() {
             </div>
           </div>
           <span className="text-[10px] font-bold text-gray-400 mt-4 uppercase tracking-wider">This Term</span>
-        </div>
+        </MotionRise>
 
         {/* Recent Results */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-base font-normal text-gray-900">Latest Result</h3>
             <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#146ef5]">
@@ -89,10 +90,10 @@ export default function ParentDashboardPage() {
               <span className="font-bold text-gray-700">Mathematics</span> Mid-Term
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Future Skills Status */}
-        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
           <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
           <div className="flex justify-between items-start z-10">
             <h3 className="text-base font-normal text-white">Courses</h3>
@@ -106,10 +107,10 @@ export default function ParentDashboardPage() {
               <span>Coding Streak Active 🔥</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Fees & Notices */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-base font-normal text-gray-900">Next Payment</h3>
             <div className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center text-orange-500">
@@ -122,11 +123,11 @@ export default function ParentDashboardPage() {
               <span className="text-orange-500 font-bold">Live Bursary Balance</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-      </div>
+      </MotionStagger>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+      <MotionRise delay={0.08} className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         {/* Main Feed */}
         <div className="lg:col-span-8 flex flex-col gap-3">
           <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 p-6 flex-1">
@@ -184,7 +185,7 @@ export default function ParentDashboardPage() {
             </button>
           </div>
         </div>
-      </div>
+      </MotionRise>
     </>
   );
 }

@@ -3,6 +3,7 @@ import Navigation from '../components/Navigation';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
 import Footer from '../components/Footer';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 const Index = () => {
   return (
@@ -23,7 +24,9 @@ const Index = () => {
         <Hero />
         
         {/* Features Section */}
-        <Features />
+        <MotionRise>
+          <Features />
+        </MotionRise>
       </main>
       
       {/* Footer */}

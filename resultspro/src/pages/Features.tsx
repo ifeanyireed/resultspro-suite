@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import FeatureCard from '@/components/ui/FeatureCard';
 import { ArrowRight01, Check, XClose } from '@/lib/hugeicons-compat';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const Features: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -163,7 +164,7 @@ const Features: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
         {/* Content */}
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
+        <MotionRise className="relative z-10 max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight leading-tight text-white">
             Everything Schools Need
           </h1>
@@ -176,12 +177,12 @@ const Features: React.FC = () => {
               <ArrowRight01 className="w-5 h-5" />
             </Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Category Filter */}
       <section className="relative py-16 px-4 md:px-8 bg-black overflow-hidden">
-        <div className="max-w-6xl mx-auto">
+        <MotionRise className="max-w-6xl mx-auto">
           <div className="flex flex-wrap justify-center gap-3">
             {featureCategories.map((category) => (
               <button
@@ -197,7 +198,7 @@ const Features: React.FC = () => {
               </button>
             ))}
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Features Grid */}
@@ -207,7 +208,7 @@ const Features: React.FC = () => {
           <div className="absolute w-96 h-96 bg-gradient-to-tl from-blue-500/10 to-purple-500/10 rounded-full blur-3xl bottom-0 right-1/4 translate-x-1/2" />
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayedFeatures.map((feature, index) => {
               return (
                 <FeatureCard
@@ -240,21 +241,23 @@ const Features: React.FC = () => {
                 />
               );
             })}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
       {/* Detailed Features Section */}
       <section className="relative py-20 px-4 md:px-8 bg-black overflow-hidden">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            Deep Dive Into <span className="text-blue-400">Capabilities</span>
-          </h2>
-          <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
-            Explore the comprehensive toolset designed for modern education management
-          </p>
+          <MotionRise>
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
+              Deep Dive Into <span className="text-blue-400">Capabilities</span>
+            </h2>
+            <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
+              Explore the comprehensive toolset designed for modern education management
+            </p>
+          </MotionRise>
 
-          <div className="space-y-8">
+          <MotionStagger className="space-y-8">
             {/* Feature Detail 1 */}
             <div className="relative rounded-[30px] border shadow-[0_1px_3px_0_rgba(199,220,255,0.30)_inset,0_0_60px_0_rgba(198,204,255,0.22)_inset,0_1px_22px_0_rgba(255,255,255,0.05),0_4px_4px_0_rgba(0,0,0,0.05),0_10px_10px_0_rgba(0,0,0,0.10)] backdrop-blur-[10px] bg-[rgba(255,255,255,0.05)] p-8 overflow-hidden hover:bg-white/10 transition-all duration-300 border-solid border-[rgba(255,255,255,0.07)]">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -382,13 +385,13 @@ const Features: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
       {/* Comparison Table */}
       <section className="relative py-20 px-4 md:px-8 bg-black overflow-hidden">
-        <div className="max-w-6xl mx-auto">
+        <MotionRise className="max-w-6xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
             Compare Plans & Features
           </h2>
@@ -456,7 +459,7 @@ const Features: React.FC = () => {
               </tbody>
             </table>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Use Cases Section */}
@@ -466,14 +469,16 @@ const Features: React.FC = () => {
           <div className="absolute w-96 h-96 bg-gradient-to-tl from-blue-500/5 to-purple-500/5 rounded-full blur-3xl bottom-0 right-0" />
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            Real-World <span className="text-blue-400">Use Cases</span>
-          </h2>
-          <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
-            See how schools use Results Pro to streamline their workflows
-          </p>
+          <MotionRise>
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
+              Real-World <span className="text-blue-400">Use Cases</span>
+            </h2>
+            <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
+              See how schools use Results Pro to streamline their workflows
+            </p>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
                 title: 'Publishing Term Results',
@@ -545,21 +550,23 @@ const Features: React.FC = () => {
                 </div>
               </div>
             ))}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
       {/* Training & Support Section */}
       <section className="relative py-20 px-4 md:px-8 bg-black overflow-hidden">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            Training & <span className="text-blue-400">Support</span>
-          </h2>
-          <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
-            We're here to help you succeed every step of the way
-          </p>
+          <MotionRise>
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
+              Training & <span className="text-blue-400">Support</span>
+            </h2>
+            <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
+              We're here to help you succeed every step of the way
+            </p>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
                 title: 'Live Chat Support',
@@ -633,7 +640,7 @@ const Features: React.FC = () => {
                 </div>
               </div>
             ))}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
@@ -643,7 +650,7 @@ const Features: React.FC = () => {
           <div className="absolute w-96 h-96 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl top-0 left-1/4 -translate-x-1/2" />
           <div className="absolute w-96 h-96 bg-gradient-to-tl from-blue-500/10 to-purple-500/10 rounded-full blur-3xl bottom-0 right-1/4 translate-x-1/2" />
         </div>
-        <div className="max-w-4xl mx-auto relative z-10">
+        <MotionRise className="max-w-4xl mx-auto relative z-10">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
             Frequently Asked <span className="text-blue-400">Questions</span>
           </h2>
@@ -720,12 +727,12 @@ const Features: React.FC = () => {
               </div>
             ))}
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* CTA Section */}
       <section className="relative py-20 px-4 md:px-8 bg-gradient-to-b from-black to-blue-950/20">
-        <div className="max-w-4xl mx-auto text-center">
+        <MotionRise className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Ready to Transform Result Management?
           </h2>
@@ -741,7 +748,7 @@ const Features: React.FC = () => {
               Back to Home
             </Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Footer */}

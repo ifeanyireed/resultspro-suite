@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function TeacherDashboard() {
   const user = useAuthStore((state) => state.user);
@@ -74,7 +75,7 @@ export default function TeacherDashboard() {
       
       <div className="p-8 max-w-7xl mx-auto space-y-10">
         {/* Welcome & Quick Actions */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <MotionRise className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Hello, {teacherName}! 👋</h2>
             <p className="text-gray-500">Manage your classes and learning materials.</p>
@@ -87,24 +88,24 @@ export default function TeacherDashboard() {
                <FilePlus className="w-4 h-4 mr-2" /> New Quiz
              </Button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {teacherStats.map((stat, idx) => (
-            <div key={idx} className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+            <MotionRise key={idx} delay={idx * 0.05} className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
               <div className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center mb-4`}>
                 {stat.icon}
               </div>
               <p className="text-sm text-gray-500 mb-1">{stat.label}</p>
               <h4 className="text-2xl font-bold text-gray-900">{stat.value}</h4>
-            </div>
+            </MotionRise>
           ))}
-        </div>
+        </MotionStagger>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <MotionStagger className="grid lg:grid-cols-3 gap-8">
            {/* My Classes */}
-           <div className="lg:col-span-2 space-y-6">
+           <MotionRise className="lg:col-span-2 space-y-6">
               <div className="flex items-center justify-between px-2">
                  <h3 className="text-xl font-bold text-gray-900">My Classes</h3>
                  <Link href="/dashboard/teacher/classes">
@@ -165,10 +166,10 @@ export default function TeacherDashboard() {
                     ))}
                  </div>
               </div>
-           </div>
+           </MotionRise>
 
            {/* Upcoming Deadlines / Tasks */}
-           <div className="space-y-6">
+           <MotionRise delay={0.1} className="space-y-6">
               <h3 className="text-xl font-bold text-gray-900 px-2">Tasks & Deadlines</h3>
               <div className="space-y-4">
                  <div className="p-4 rounded-xl bg-white shadow-sm border border-gray-100 flex gap-4">
@@ -207,8 +208,8 @@ export default function TeacherDashboard() {
                     </Button>
                  </Link>
               </div>
-           </div>
-        </div>
+           </MotionRise>
+        </MotionStagger>
       </div>
     </div>
   );

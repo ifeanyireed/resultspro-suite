@@ -41,6 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 import QueryProvider from '@/components/providers/QueryProvider';
+import { ScrollRiseProvider } from '@/components/ScrollRiseProvider';
 
 export default function RootLayout({
   children,
@@ -51,7 +52,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <QueryProvider>
-          {children}
+          <ScrollRiseProvider>
+            {children}
+          </ScrollRiseProvider>
         </QueryProvider>
       </body>
     </html>

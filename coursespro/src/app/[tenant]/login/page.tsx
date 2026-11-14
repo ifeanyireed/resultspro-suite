@@ -2,6 +2,7 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import { getTenant } from '@/lib/tenant';
 import LoginForm from './LoginForm';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default async function LoginPage({ params }: { params: Promise<{ tenant: string }> }) {
   const resolvedParams = await params;
@@ -11,5 +12,9 @@ export default async function LoginPage({ params }: { params: Promise<{ tenant: 
     notFound();
   }
 
-  return <LoginForm tenant={tenant} />;
+  return (
+    <MotionRise>
+      <LoginForm tenant={tenant} />
+    </MotionRise>
+  );
 }

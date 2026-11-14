@@ -131,7 +131,7 @@ export async function proxy(req: NextRequest) {
     const tenantSlugMismatch =
       Boolean(sessionTenantSlug) &&
       Boolean(resolvedTenant?.slug) &&
-      sessionTenantSlug.toLowerCase() !== resolvedTenant!.slug.toLowerCase();
+      sessionTenantSlug!.toLowerCase() !== resolvedTenant!.slug.toLowerCase();
 
     if (tenantIdMismatch || tenantSlugMismatch) {
       const loginUrl = req.nextUrl.clone();

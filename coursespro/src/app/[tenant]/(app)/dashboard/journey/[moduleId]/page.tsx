@@ -29,6 +29,7 @@ import {
 import { CheckCircleIcon as CheckCircleSolid } from '@heroicons/react/24/solid';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api, { coursesApi } from '@/lib/api';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 type ContentItem = {
   id: string;
@@ -528,7 +529,7 @@ export default function LessonPlayerPage() {
             </div>
           ) : (
             <>
-              <div className="w-full max-w-5xl bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10 min-h-[60vh] relative">
+              <MotionRise className="w-full max-w-5xl bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10 min-h-[60vh] relative">
                 
                 {currentItem?.type === 'VIDEO' && (
                   <div className="space-y-6">
@@ -915,7 +916,7 @@ export default function LessonPlayerPage() {
                   </div>
                 )}
 
-              </div>
+              </MotionRise>
 
               {/* Footer Actions */}
               <div className="w-full max-w-5xl mt-8 flex justify-end">

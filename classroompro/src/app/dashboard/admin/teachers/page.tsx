@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 
 const teachersData = [
   { id: 1, name: "Sarah Johnson", email: "sarah.j@school.com", phone: "+234 801 234 5678", subjects: ["Mathematics", "Further Math"], classes: ["SSS 1", "SSS 2"], status: "Active" },
@@ -46,7 +47,7 @@ export default function ManageTeachersPage() {
       
       
       <main className="p-8 space-y-6">
-        <div className="flex justify-between items-center">
+        <MotionRise className="flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 font-display">Faculty Directory</h2>
             <p className="text-sm text-gray-500">Manage your school's teaching staff and their assignments.</p>
@@ -54,10 +55,10 @@ export default function ManageTeachersPage() {
           <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold">
             <Plus className="w-4 h-4 mr-2" /> Add New Teacher
           </Button>
-        </div>
+        </MotionRise>
 
         {/* Filters */}
-        <div className="flex gap-4 bg-white shadow-sm border border-gray-100 p-4 rounded-2xl border border-gray-100">
+        <MotionRise delay={0.06} className="flex gap-4 bg-white shadow-sm border border-gray-100 p-4 rounded-2xl border border-gray-100">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
             <Input 
@@ -68,10 +69,10 @@ export default function ManageTeachersPage() {
           <Button variant="outline" className="border-gray-100 hover:bg-gray-50 text-gray-900">
             <Filter className="w-4 h-4 mr-2" /> Filter
           </Button>
-        </div>
+        </MotionRise>
 
         {/* Teachers Table */}
-        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden">
+        <MotionRise delay={0.12} className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-gray-100 bg-white/[0.02]">
@@ -124,7 +125,7 @@ export default function ManageTeachersPage() {
               ))}
             </tbody>
           </table>
-        </div>
+        </MotionRise>
       </main>
     </div>
   );

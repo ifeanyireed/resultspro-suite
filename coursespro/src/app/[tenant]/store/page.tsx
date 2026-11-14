@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { getTenant } from '@/lib/tenant';
 import { BookOpenIcon, ArchiveBoxIcon, DocumentIcon } from '@heroicons/react/24/outline';
 import { COURSES_API } from '@/lib/api';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default async function StorePage({ params }: { params: Promise<{ tenant: string }> }) {
   const resolvedParams = await params;
@@ -40,16 +41,16 @@ export default async function StorePage({ params }: { params: Promise<{ tenant: 
       <Navbar tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} contactEmail={tenant.contact_email} contactPhone={tenant.contact_phone} contactLocation={tenant.full_address} />
       
       <section className="section-py bg-navy text-white text-center" style={{ marginTop: "-72px", paddingTop: "calc(5rem + 72px)" }}>
-        <div className="container-nets max-w-3xl pt-16">
+        <MotionRise className="container-nets max-w-3xl pt-16">
           <h1 className="text-d2 fw-300 mb-6">Digital Store</h1>
           <p className="text-body-lg text-muted-light mb-10">
             E-books, downloadable courses, and premium templates for your learning journey.
           </p>
-        </div>
+        </MotionRise>
       </section>
 
       <section className="section-py bg-light min-h-[50vh]">
-        <div className="container-nets">
+        <MotionRise className="container-nets">
           {products.length === 0 ? (
             <div className="text-center py-24 bg-white rounded-2xl border border-slate-200">
               <ArchiveBoxIcon className="w-12 h-12 text-slate-300 mx-auto mb-4" />
@@ -57,7 +58,7 @@ export default async function StorePage({ params }: { params: Promise<{ tenant: 
               <p className="text-muted">There are no digital products available at the moment.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {products.map((prod: any) => {
                 const isBookOutOfStock = prod.product_type === 'BOOK' && typeof prod.stock === 'number' && prod.stock <= 0;
                 const hasStock = prod.product_type === 'BOOK' && typeof prod.stock === 'number';
@@ -111,9 +112,9 @@ export default async function StorePage({ params }: { params: Promise<{ tenant: 
                   </div>
                 );
               })}
-            </div>
+            </MotionStagger>
           )}
-        </div>
+        </MotionRise>
       </section>
 
       <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} contactEmail={tenant.contact_email} contactPhone={tenant.contact_phone} contactLocation={tenant.full_address} />

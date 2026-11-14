@@ -14,6 +14,7 @@ import {
   BuildingLibraryIcon,
   SparklesIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function MentorSettings() {
   const { user } = useAuthStore();
@@ -78,7 +79,7 @@ export default function MentorSettings() {
   };
 
   return (
-    <div className="space-y-8 pb-16 max-w-4xl">
+    <MotionRise className="space-y-8 pb-16 max-w-4xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-2">
         <div>
@@ -248,6 +249,6 @@ export default function MentorSettings() {
           </div>
         </form>
       )}
-    </div>
+    </MotionRise>
   );
 }

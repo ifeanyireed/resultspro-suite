@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const subjectsData = [
   { id: 1, name: "Mathematics", category: "Science", classes: 12, notes: 145 },
@@ -56,7 +57,7 @@ export default function ManageSubjectsPage() {
       
       
       <main className="p-8 space-y-6">
-        <div className="flex justify-between items-center">
+        <MotionRise className="flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 font-display">Academic Subjects</h2>
             <p className="text-sm text-gray-500">Configure the subjects offered across all grade levels.</p>
@@ -64,9 +65,9 @@ export default function ManageSubjectsPage() {
           <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold">
             <Plus className="w-4 h-4 mr-2" /> Add New Subject
           </Button>
-        </div>
+        </MotionRise>
 
-        <div className="flex gap-4">
+        <MotionRise delay={0.06} className="flex gap-4">
            <div className="relative flex-1 max-w-md">
              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
              <Input 
@@ -77,12 +78,12 @@ export default function ManageSubjectsPage() {
            <Button variant="outline" className="border-gray-100 hover:bg-gray-50 text-gray-900">
              <Filter className="w-4 h-4 mr-2" /> All Categories
            </Button>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-6 gap-6">
-              {subjectsData.map((sub) => (
-                 <div key={sub.id} className="bg-[#146ef5]/40 border border-white/5 rounded-2xl p-6 hover:border-green/30 transition-all group">
+        <MotionRise delay={0.12} className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
+           <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-6 gap-6">
+              {subjectsData.map((sub, idx) => (
+                 <MotionRise key={sub.id} delay={idx * 0.05} className="bg-[#146ef5]/40 border border-white/5 rounded-2xl p-6 hover:border-green/30 transition-all group">
                     <div className="flex justify-between items-start mb-4">
                        <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
                           <BookOpen className="w-5 h-5" />
@@ -103,10 +104,10 @@ export default function ManageSubjectsPage() {
                           <span className="text-emerald-600">{sub.notes}</span> Notes
                        </div>
                     </div>
-                 </div>
+                 </MotionRise>
               ))}
-           </div>
-        </div>
+           </MotionStagger>
+        </MotionRise>
       </main>
     </div>
   );

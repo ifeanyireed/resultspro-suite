@@ -39,6 +39,7 @@ import {
 } from '@/services/api';
 import { authenticateUser } from '@/services/rbac';
 import { getCharacterAvatarUrl } from '@/utils/cdn';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const AVATAR_OPTIONS = Array.from(
   { length: 20 },
@@ -343,7 +344,7 @@ export default function FamiliesPage() {
 
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-purple-950/85 to-slate-950/65 z-0" />
 
-        <div className="hidden md:flex absolute left-12 lg:left-20 top-1/2 -translate-y-1/2 z-10 max-w-lg flex-col gap-6 text-white animate-fade-in-up">
+        <MotionRise className="hidden md:flex absolute left-12 lg:left-20 top-1/2 -translate-y-1/2 z-10 max-w-lg flex-col gap-6 text-white">
           <div className="flex items-center gap-3">
             <Image src="/monkey1.svg" alt="PuzzlePro Logo" width={56} height={56} className="object-contain drop-shadow-md shrink-0 transition-transform hover:scale-105" />
             <span className="font-normal text-xs tracking-widest uppercase text-amber-300">
@@ -360,31 +361,31 @@ export default function FamiliesPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
+          <MotionStagger className="grid grid-cols-2 gap-3 text-xs">
+            <MotionRise className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
               <span className="text-amber-300 font-medium block mb-1">Child Account Creation</span>
               <span className="text-[11px] text-slate-200/80">Easily create & customize profile avatars for your children.</span>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
+            </MotionRise>
+            <MotionRise delay={0.05} className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
               <span className="text-amber-300 font-medium block mb-1">8-Digit Access Codes</span>
               <span className="text-[11px] text-slate-200/80">Safe & simple 8-digit access codes for kids to sign in.</span>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
+            </MotionRise>
+            <MotionRise delay={0.1} className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
               <span className="text-amber-300 font-medium block mb-1">World Unlock & Selection</span>
               <span className="text-[11px] text-slate-200/80">Assign Monkey Explorers, HTML, CSS, JS, or Python.</span>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
+            </MotionRise>
+            <MotionRise delay={0.15} className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
               <span className="text-amber-300 font-medium block mb-1">XP & Achievements</span>
               <span className="text-[11px] text-slate-200/80">Track coding progress, total XP earned, and badges.</span>
-            </div>
-          </div>
+            </MotionRise>
+          </MotionStagger>
 
           <div className="text-[10px] text-slate-400 font-normal uppercase tracking-wider mt-2">
             © 2026 PuzzlePro Families Portal. All rights reserved.
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="relative z-10 w-full max-w-[380px] bg-slate-900/80 md:bg-white/90 p-7 rounded-[28px] border border-white/20 md:border-white/60 shadow-2xl backdrop-blur-xl flex flex-col gap-4 animate-fade-in-up">
+        <MotionRise delay={0.1} className="relative z-10 w-full max-w-[380px] bg-slate-900/80 md:bg-white/90 p-7 rounded-[28px] border border-white/20 md:border-white/60 shadow-2xl backdrop-blur-xl flex flex-col gap-4">
           <div className="text-center md:text-left flex flex-col items-center md:items-start">
             <Image src="/monkey1.svg" alt="PuzzlePro Logo" width={48} height={48} className="object-contain mb-2 drop-shadow-md shrink-0 transition-transform hover:scale-105" />
             <h2 className="text-xl font-medium text-white md:text-slate-900 tracking-tight">Family Portal</h2>
@@ -454,7 +455,7 @@ export default function FamiliesPage() {
               New Family? Start Onboarding Setup →
             </Link>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Public Footer Links */}
         <div className="absolute bottom-4 left-0 right-0 z-20 flex items-center justify-center space-x-3 sm:space-x-5 text-[11px] text-slate-300 md:text-slate-400 font-medium">
@@ -493,10 +494,10 @@ export default function FamiliesPage() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-6 animate-fade-in-up">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-6">
         {/* Metric Summary */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+        <MotionStagger className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <MotionRise className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
               <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Children Accounts</p>
               <h3 className="text-2xl font-medium text-slate-900 mt-1">{children.length} Enrolled</h3>
@@ -505,9 +506,9 @@ export default function FamiliesPage() {
             <div className="w-12 h-12 rounded-full bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600">
               <IconHeartHandshake className="w-6 h-6" />
             </div>
-          </div>
+          </MotionRise>
 
-          <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+          <MotionRise delay={0.06} className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
               <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Learning Worlds</p>
               <h3 className="text-2xl font-medium text-slate-900 mt-1">Worlds 1 – 5</h3>
@@ -516,9 +517,9 @@ export default function FamiliesPage() {
             <div className="w-12 h-12 rounded-full bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
               <IconWorld className="w-6 h-6" />
             </div>
-          </div>
+          </MotionRise>
 
-          <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+          <MotionRise delay={0.12} className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
               <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Total Family XP</p>
               <h3 className="text-2xl font-medium text-slate-900 mt-1">
@@ -529,11 +530,11 @@ export default function FamiliesPage() {
             <div className="w-12 h-12 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
               <IconCrown className="w-6 h-6" />
             </div>
-          </div>
-        </div>
+          </MotionRise>
+        </MotionStagger>
 
         {/* Navigation Tabs */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+        <MotionRise delay={0.08} className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
           <div className="flex items-center space-x-6 w-full sm:w-auto px-2 overflow-x-auto">
             <button
               onClick={() => setActiveTab('children')}
@@ -566,11 +567,11 @@ export default function FamiliesPage() {
               className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:ring-2 focus:ring-amber-500"
             />
           </div>
-        </div>
+        </MotionRise>
 
         {/* TAB 1: CHILDREN MANAGEMENT BOX */}
         {activeTab === 'children' && (
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col gap-4 animate-fade-in-up">
+          <MotionRise delay={0.12} className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col gap-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-150">
             <div>
               <h2 className="text-base font-medium text-slate-900">Your Children's Accounts</h2>
@@ -685,12 +686,12 @@ export default function FamiliesPage() {
               </tbody>
             </table>
           </div>
-        </div>
+        </MotionRise>
       )}
 
         {/* TAB 2: PROFILE & BILLING SETTINGS */}
         {activeTab === 'profile' && (
-          <div className="flex flex-col gap-6 animate-fade-in-up">
+          <MotionRise className="flex flex-col gap-6">
             {/* Header banner */}
             <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center space-x-4">
@@ -922,7 +923,7 @@ export default function FamiliesPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </MotionRise>
         )}
       </main>
 

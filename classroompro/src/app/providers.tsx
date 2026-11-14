@@ -5,6 +5,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { MsalProvider } from "@azure/msal-react";
 import { msalInstance } from "@/lib/msal";
 import { PopupProvider } from "@/components/PopupProvider";
+import { ScrollRiseProvider } from "@/components/ScrollRiseProvider";
 import { useEffect, useState } from "react";
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {
@@ -34,7 +35,9 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
     <GoogleOAuthProvider clientId={googleClientId}>
       <Toaster position="top-right" />
       <PopupProvider>
-        {children}
+        <ScrollRiseProvider>
+          {children}
+        </ScrollRiseProvider>
       </PopupProvider>
     </GoogleOAuthProvider>
   );

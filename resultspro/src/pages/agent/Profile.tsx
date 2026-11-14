@@ -18,6 +18,7 @@ import {
 } from '@/lib/hugeicons-compat';
 import { useAgentProfile } from '@/hooks/useAgentAnalytics';
 import { useNavigate } from 'react-router-dom';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export const Profile: React.FC = () => {
   const navigate = useNavigate();
@@ -113,7 +114,7 @@ export const Profile: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
           <div className="space-y-6">
       {/* Header */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 text-white hover:bg-white/5 transition-colors">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 text-white hover:bg-white/5 transition-colors">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-6">
             {profile.avatarUrl ? (
@@ -141,11 +142,11 @@ export const Profile: React.FC = () => {
             {isEditing ? 'Cancel' : 'Edit'}
           </button>
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Profile Section */}
-        <div className="lg:col-span-2 space-y-4">
+        <MotionRise className="lg:col-span-2 space-y-4">
           {/* Bio Section */}
           <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
@@ -255,10 +256,10 @@ export const Profile: React.FC = () => {
               <p className="text-gray-400">No credentials uploaded yet</p>
             )}
           </div>
-        </div>
+        </MotionRise>
 
         {/* Sidebar */}
-        <div className="space-y-4">
+        <MotionRise className="space-y-4">
           {/* Account Info */}
           <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
             <h3 className="text-sm font-semibold text-white mb-4">Account Information</h3>
@@ -321,8 +322,8 @@ export const Profile: React.FC = () => {
                 : 'Complete verification to unlock full features'}
             </p>
           </div>
-        </div>
-      </div>
+        </MotionRise>
+      </MotionStagger>
           </div>
         </div>
       </main>

@@ -3,6 +3,7 @@
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function SupportPage() {
   const faqs = [
@@ -29,7 +30,7 @@ export default function SupportPage() {
       <Navbar />
 
       <section style={{ paddingTop: '160px', paddingBottom: '80px', background: 'white' }}>
-        <div className="container-nets">
+        <MotionRise className="container-nets">
           <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
             <span className="overline" style={{ color: 'var(--color-nets-red)', marginBottom: '1rem', display: 'inline-block' }}>Support</span>
             <h1 className="h1" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '1.5rem' }}>How can we help?</h1>
@@ -37,11 +38,11 @@ export default function SupportPage() {
               Everything you need to know about ResultsPRO, how to get started, and how to reach our team.
             </p>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       <section style={{ padding: '80px 0', background: 'var(--color-nets-light)' }}>
-        <div className="container-nets">
+        <MotionRise delay={0.1} className="container-nets">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '4rem' }}>
             
             <div style={{ gridColumn: 'span 12' }} className="lg:col-span-8">
@@ -81,7 +82,7 @@ export default function SupportPage() {
             </div>
 
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       <Footer />

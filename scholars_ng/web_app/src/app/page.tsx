@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { useTenant } from '@/components/TenantProvider';
 import { useLandingConfig } from '@/lib/landingConfig';
 import api from '@/lib/api';
@@ -181,7 +182,7 @@ export default function Home() {
             }}
           >
             {/* Left Column: Editorial Headline */}
-            <div style={{ gridColumn: 'span 12' }} className="lg:col-span-7">
+            <MotionRise style={{ gridColumn: 'span 12' }} className="lg:col-span-7">
               <div style={{ marginBottom: '1.5rem' }}>
                 <span className="overline-dark">
                   Multi-Tenant School Operating System · Control Plane
@@ -235,10 +236,11 @@ export default function Home() {
                   <span>100% Tenant-Scoped Tables</span>
                 </div>
               </div>
-            </div>
+            </MotionRise>
 
             {/* Right Column: Standard Glassmorphic Subdomain Launcher Card */}
-            <div
+            <MotionRise
+              delay={0.12}
               style={{ gridColumn: 'span 12', display: 'flex' }}
               className="lg:col-span-5 lg:col-start-8 lg:justify-end justify-center"
             >
@@ -326,14 +328,14 @@ export default function Home() {
                   </div>
                 </form>
               </div>
-            </div>
+            </MotionRise>
           </div>
         </section>
 
         {/* ── Active Tenant Workspaces Section (#workspaces) ── */}
         <section id="workspaces" className="section-py bg-white border-b border-gray-200">
           <div className="container-nets">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <MotionRise className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
               <div style={{ maxWidth: '680px' }}>
                 <div className="overline" style={{ marginBottom: '0.75rem' }}>
                   <IconSchool size={15} /> Provisioned Institutional Workspaces
@@ -346,11 +348,11 @@ export default function Home() {
               <Link href="/register" className="btn btn-navy btn-sm">
                 Provision New School Tenant &rarr;
               </Link>
-            </div>
+            </MotionRise>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {sampleTenants.map((item) => (
-                <div key={item.slug} className="card flex flex-col justify-between overflow-hidden">
+              {sampleTenants.map((item, idx) => (
+                <MotionRise key={item.slug} delay={idx * 0.08} className="card flex flex-col justify-between overflow-hidden">
                   <div>
                     <div style={{ position: 'relative', height: '210px', overflow: 'hidden' }}>
                       <img
@@ -413,7 +415,7 @@ export default function Home() {
                       Open {item.name} CampusPRO &rarr;
                     </a>
                   </div>
-                </div>
+                </MotionRise>
               ))}
             </div>
           </div>
@@ -422,7 +424,7 @@ export default function Home() {
         {/* ── Architecture & Isolation Guarantees (#architecture) ── */}
         <section id="architecture" className="section-py bg-light border-b border-gray-200">
           <div className="container-nets">
-            <div style={{ marginBottom: '3.5rem', maxWidth: '680px' }}>
+            <MotionRise style={{ marginBottom: '3.5rem', maxWidth: '680px' }}>
               <div className="overline" style={{ marginBottom: '0.75rem' }}>
                 <IconLockAccess size={15} /> Multi-Tenant Security &amp; Routing
               </div>
@@ -430,7 +432,7 @@ export default function Home() {
               <p className="text-muted text-body-lg" style={{ marginTop: '0.5rem' }}>
                 Every request is resolved at the edge and verified by the Go control plane before any database query executes.
               </p>
-            </div>
+            </MotionRise>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
@@ -455,13 +457,13 @@ export default function Home() {
                   desc: 'Every academic, operational, CMS, and financial table enforces a direct indexed tenant_id column on all SELECT, INSERT, UPDATE, and DELETE queries.'
                 }
               ].map((st, idx) => (
-                <div key={idx} className="card p-6">
+                <MotionRise key={idx} delay={idx * 0.08} className="card p-6">
                   <div className="step-number mb-3" style={{ fontSize: '2.75rem', color: 'var(--color-nets-navy)' }}>
                     {st.step}
                   </div>
                   <h3 className="text-lg fw-600 mb-2">{st.title}</h3>
                   <p className="text-xs text-muted leading-relaxed">{st.desc}</p>
-                </div>
+                </MotionRise>
               ))}
             </div>
           </div>
@@ -550,7 +552,7 @@ export default function Home() {
       {/* ── Official Notice Board (#notices) ── */}
       <section id="notices" className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-10 gap-6">
+          <MotionRise className="flex flex-col lg:flex-row lg:items-end justify-between mb-10 gap-6">
             <div style={{ maxWidth: '640px' }}>
               <div className="overline" style={{ marginBottom: '0.75rem' }}>
                 <IconBellRinging size={15} /> Official Notice Board
@@ -582,12 +584,13 @@ export default function Home() {
                 </button>
               ))}
             </div>
-          </div>
+          </MotionRise>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredNotices.map((notice) => (
-              <div
+            {filteredNotices.map((notice, idx) => (
+              <MotionRise
                 key={notice.id}
+                delay={idx * 0.06}
                 className="card p-6 sm:p-8 flex flex-col justify-between"
                 style={notice.pinned ? { borderLeft: '4px solid var(--color-nets-red)' } : {}}
               >
@@ -626,7 +629,7 @@ export default function Home() {
                     Read Full Circular &rarr;
                   </Link>
                 </div>
-              </div>
+              </MotionRise>
             ))}
           </div>
         </div>
@@ -636,7 +639,7 @@ export default function Home() {
       <section id="about" className="section-py bg-light border-b border-gray-200">
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <MotionRise>
               <div className="overline" style={{ marginBottom: '1rem' }}>{config.aboutOverline} · {schoolName}</div>
               <h2 className="text-d3 fw-300 mb-6">{config.aboutTitle}</h2>
               <p className="text-body-lg text-muted mb-8 leading-relaxed">
@@ -666,16 +669,16 @@ export default function Home() {
                 <Link href="#admissions" className="btn btn-navy">Apply for Admission</Link>
                 <Link href="/login" className="btn btn-red">Access Campus Portal</Link>
               </div>
-            </div>
+            </MotionRise>
             
-            <div className="relative">
+            <MotionRise delay={0.12} className="relative">
               <img 
                 src={config.aboutImage || '/photo05.jpeg'} 
                 alt={`${schoolName} Students in Classroom`} 
                 className="rounded-sm shadow-card-lg" 
                 style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
               />
-            </div>
+            </MotionRise>
           </div>
         </div>
       </section>
@@ -683,7 +686,7 @@ export default function Home() {
       {/* ── Campus Facilities Showcase (#facilities) ── */}
       <section id="facilities" className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <MotionRise className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div style={{ maxWidth: '680px' }}>
               <div className="overline" style={{ marginBottom: '0.75rem' }}>World-Class Infrastructure</div>
               <h2 className="text-d4 fw-400">Campus Facilities Built for Discovery.</h2>
@@ -694,11 +697,11 @@ export default function Home() {
             <Link href="#admissions" className="btn btn-navy btn-sm">
               Book a Physical Campus Tour &rarr;
             </Link>
-          </div>
+          </MotionRise>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {facilities.map((fac, idx) => (
-              <div key={idx} className="card flex flex-col justify-between overflow-hidden">
+              <MotionRise key={idx} delay={idx * 0.08} className="card flex flex-col justify-between overflow-hidden">
                 <div>
                   <div style={{ position: 'relative', height: '220px', overflow: 'hidden' }}>
                     <img
@@ -739,7 +742,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </MotionRise>
             ))}
           </div>
         </div>
@@ -748,7 +751,7 @@ export default function Home() {
       {/* ── News & Upcoming Events (#news) ── */}
       <section id="news" className="section-py bg-light border-b border-gray-200">
         <div className="container-nets">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <MotionRise className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div style={{ maxWidth: '650px' }}>
               <div className="overline" style={{ marginBottom: '0.75rem' }}>
                 <IconCalendarEvent size={15} /> News &amp; Events
@@ -761,11 +764,11 @@ export default function Home() {
             <Link href="/news" className="btn btn-navy btn-sm">
               View Full School Calendar &rarr;
             </Link>
-          </div>
+          </MotionRise>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {newsAndEvents.map((item, i) => (
-              <div key={i} className="card flex flex-col justify-between overflow-hidden">
+              <MotionRise key={i} delay={i * 0.08} className="card flex flex-col justify-between overflow-hidden">
                 <div>
                   <div style={{ position: 'relative', height: '210px', overflow: 'hidden' }}>
                     <img
@@ -809,7 +812,7 @@ export default function Home() {
                     Details &rarr;
                   </Link>
                 </div>
-              </div>
+              </MotionRise>
             ))}
           </div>
         </div>
@@ -818,7 +821,7 @@ export default function Home() {
       {/* ── Leadership & Faculty Team (#team) ── */}
       <section id="team" className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
-          <div style={{ marginBottom: '3.5rem', maxWidth: '680px' }}>
+          <MotionRise style={{ marginBottom: '3.5rem', maxWidth: '680px' }}>
             <div className="overline" style={{ marginBottom: '0.75rem' }}>
               <IconUsers size={15} /> School Leadership &amp; Faculty
             </div>
@@ -826,11 +829,11 @@ export default function Home() {
             <p className="text-muted text-body-lg" style={{ marginTop: '0.5rem' }}>
               Our leadership and teaching faculty bring decades of experience in Nigerian and international secondary education, STEM mentorship, and pastoral care.
             </p>
-          </div>
+          </MotionRise>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {leadershipTeam.map((member, idx) => (
-              <div key={idx} className="card p-6 flex flex-col justify-between">
+              <MotionRise key={idx} delay={idx * 0.08} className="card p-6 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-4 mb-5">
                     <img
@@ -848,7 +851,7 @@ export default function Home() {
                   <div className="text-xs fw-600 text-muted mb-2">{member.qualification}</div>
                   <p className="text-xs text-muted leading-relaxed">{member.bio}</p>
                 </div>
-              </div>
+              </MotionRise>
             ))}
           </div>
         </div>
@@ -857,7 +860,7 @@ export default function Home() {
       {/* ── Admissions Process & Application Form (#admissions) ── */}
       <section id="admissions" className="section-py bg-light border-b border-gray-200">
         <div className="container-nets">
-          <div style={{ marginBottom: '3.5rem', maxWidth: '680px' }}>
+          <MotionRise style={{ marginBottom: '3.5rem', maxWidth: '680px' }}>
             <div className="overline" style={{ marginBottom: '0.75rem' }}>
               <IconSchool size={15} /> {config.academicSession} Admissions
             </div>
@@ -865,23 +868,23 @@ export default function Home() {
             <p className="text-muted text-body-lg" style={{ marginTop: '0.5rem' }}>
               Applications are open for Primary, Junior Secondary (JSS 1–2), and Senior Secondary (SSS 1) streams. Follow our 4-step enrollment pathway below.
             </p>
-          </div>
+          </MotionRise>
 
           {/* 4-Step Process */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
             {admissionSteps.map((st, idx) => (
-              <div key={idx} className="card p-6">
+              <MotionRise key={idx} delay={idx * 0.08} className="card p-6">
                 <div className="step-number mb-3" style={{ fontSize: '2.75rem', color: 'var(--color-nets-navy)' }}>
                   {st.step}
                 </div>
                 <h3 className="text-lg fw-600 mb-2">{st.title}</h3>
                 <p className="text-xs text-muted leading-relaxed">{st.desc}</p>
-              </div>
+              </MotionRise>
             ))}
           </div>
 
           {/* Application Form Card */}
-          <div className="card p-8 sm:p-12 bg-white">
+          <MotionRise className="card p-8 sm:p-12 bg-white">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
               <div className="lg:col-span-5">
                 <span className="overline" style={{ marginBottom: '0.75rem' }}>Online Admission Desk</span>
@@ -1004,14 +1007,14 @@ export default function Home() {
                 </div>
               </form>
             </div>
-          </div>
+          </MotionRise>
         </div>
       </section>
 
       {/* ── Role Dashboard Portals (#portals) ── */}
       <section id="portals" className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
-          <div style={{ marginBottom: '3.5rem', maxWidth: '680px' }}>
+          <MotionRise style={{ marginBottom: '3.5rem', maxWidth: '680px' }}>
             <div className="overline" style={{ marginBottom: '0.75rem' }}>
               <IconLockAccess size={15} /> Digital Campus Portals
             </div>
@@ -1019,11 +1022,11 @@ export default function Home() {
             <p className="text-muted text-body-lg" style={{ marginTop: '0.5rem' }}>
               Select your role below to sign in to your personalized dashboard or launch your portal workspace directly.
             </p>
-          </div>
+          </MotionRise>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {dashboardPortals.map((p, idx) => (
-              <div key={idx} className="card p-6 sm:p-8 flex flex-col justify-between">
+              <MotionRise key={idx} delay={idx * 0.08} className="card p-6 sm:p-8 flex flex-col justify-between">
                 <div>
                   <span
                     style={{
@@ -1062,7 +1065,7 @@ export default function Home() {
                     Preview Dashboard &rarr;
                   </Link>
                 </div>
-              </div>
+              </MotionRise>
             ))}
           </div>
         </div>
@@ -1070,7 +1073,7 @@ export default function Home() {
 
       {/* ── CTA Banner ── */}
       <section className="section-py bg-navy text-white text-center" style={{ background: 'var(--color-nets-navy-dark)' }}>
-        <div className="container-nets max-w-3xl">
+        <MotionRise className="container-nets max-w-3xl">
           <h2 className="text-d3 fw-300 mb-6 text-white">Give Your Child a World-Class Education</h2>
           <p className="text-body-lg text-muted-light mb-10">
             Join {schoolName} for the {config.academicSession} academic session or sign in to your student, parent, teacher, or administrator portal.
@@ -1079,7 +1082,7 @@ export default function Home() {
             <Link href="#admissions" className="btn btn-red btn-lg">Apply for Admission</Link>
             <Link href="/login" className="btn btn-outline-white btn-lg">Campus Portal Login</Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       <Footer />

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import { MotionRise } from './ScrollRiseProvider';
 
 const footerSections = [
   {
@@ -43,7 +44,7 @@ export default function Footer() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '2rem' }}>
 
           {/* Brand */}
-          <div style={{ gridColumn: 'span 12' }} className="lg:col-span-4">
+          <MotionRise style={{ gridColumn: 'span 12' }} className="lg:col-span-4">
             <Link href="/" style={{ display: 'inline-block', marginBottom: '1.5rem', transition: 'opacity 0.2s ease' }} onMouseEnter={e => e.currentTarget.style.opacity = '0.8'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
               <img src="/logo.png" alt="ScholarsNG Logo" style={{ height: '60px', width: 'auto', objectFit: 'contain' }} />
             </Link>
@@ -65,15 +66,15 @@ export default function Footer() {
                 <span style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.6)' }}>{c.value}</span>
               </div>
             ))}
-          </div>
+          </MotionRise>
 
           {/* Nav columns */}
           <div
             style={{ gridColumn: 'span 12', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem' }}
             className="lg:col-span-7 lg:col-start-6"
           >
-            {footerSections.map(sec => (
-              <div key={sec.title}>
+            {footerSections.map((sec, secIdx) => (
+              <MotionRise key={sec.title} delay={(secIdx + 1) * 0.08}>
                 <h3 style={{
                   fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.15em',
                   textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)',
@@ -96,7 +97,7 @@ export default function Footer() {
                     )
                   })}
                 </ul>
-              </div>
+              </MotionRise>
             ))}
           </div>
         </div>

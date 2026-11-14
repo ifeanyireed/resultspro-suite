@@ -7,18 +7,19 @@ import {
   ShieldCheckIcon,
   ArrowDownTrayIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function WholesaleStorePage() {
   return (
-    <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+    <MotionStagger className="w-full">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Wholesale Store</h1>
           <p className="text-sm text-gray-500 mt-1">Purchase ResultsPRO PINs in bulk at discounted agent rates.</p>
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+      <MotionRise delay={0.05} className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
         {/* Inventory Card */}
         <div className="bg-[#146ef5] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between h-[160px] relative overflow-hidden group">
           <div className="absolute right-0 top-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
@@ -48,11 +49,13 @@ export default function WholesaleStorePage() {
             </div>
           </div>
         </div>
-      </div>
+      </MotionRise>
 
-      <h3 className="font-bold text-gray-900 mb-6">Available Packages</h3>
+      <MotionRise delay={0.08}>
+        <h3 className="font-bold text-gray-900 mb-6">Available Packages</h3>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <MotionRise delay={0.1} className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         {/* Package 1 */}
         <div className="bg-white rounded-[1.5rem] p-8 shadow-sm border border-gray-100 flex flex-col relative hover:-translate-y-1 transition-transform">
@@ -132,7 +135,7 @@ export default function WholesaleStorePage() {
           </div>
         </div>
 
-      </div>
-    </>
+      </MotionRise>
+    </MotionStagger>
   );
 }

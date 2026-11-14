@@ -4,6 +4,7 @@ import api from '@/lib/api';
 import { IconPlus as Plus, IconFileText as FileText, IconPaperclip as Paperclip, IconCalendar as Calendar, IconCircleCheck as CheckCircle2, IconDotsVertical as MoreVertical, IconChevronRight as ChevronRight, IconBook as BookOpen, IconTarget as Target, IconClock as Clock, IconDeviceFloppy as Save, IconTrash as Trash2, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function TutorPlanner() {
   const [mounted, setMounted] = useState(false);
@@ -68,7 +69,7 @@ export default function TutorPlanner() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Lesson <span className="text-green">Planner</span>
@@ -83,11 +84,11 @@ export default function TutorPlanner() {
           >
              <Plus className="w-5 h-5" /> CREATE NEW PLAN
           </button>
-        </div>
+        </MotionRise>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Planner Form (Left) */}
-          <div className="lg:col-span-2 space-y-8">
+          <MotionRise delay={0.1} className="lg:col-span-2 space-y-8">
             <section className="p-10 rounded-[40px] bg-white/[0.02] border border-white/5 space-y-8">
                <div className="flex justify-between items-center border-b border-white/5 pb-8 mb-8">
                   <div className="flex items-center gap-4 w-full">
@@ -170,10 +171,10 @@ export default function TutorPlanner() {
                   </div>
                </div>
             </section>
-          </div>
+          </MotionRise>
 
           {/* Sidebar - Recent Plans (Right) */}
-          <div className="space-y-8">
+          <MotionRise delay={0.2} className="space-y-8">
             <section>
                <h2 className="text-2xl font-display font-bold text-white mb-6">Recent Plans</h2>
                
@@ -182,7 +183,7 @@ export default function TutorPlanner() {
                      <Loader2 className="w-8 h-8 text-green animate-spin" />
                   </div>
                ) : (
-                  <div className="space-y-4">
+                  <MotionStagger className="space-y-4">
                      {plans.map((plan: any) => (
                        <div key={plan.id} className="p-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/[0.08] transition-all cursor-pointer group">
                           <div className="flex justify-between items-start mb-4">
@@ -207,7 +208,7 @@ export default function TutorPlanner() {
                            <p className="text-gray-400 text-sm">No plans created yet.</p>
                         </div>
                      )}
-                  </div>
+                  </MotionStagger>
                )}
             </section>
 
@@ -221,7 +222,7 @@ export default function TutorPlanner() {
                   Browse Templates
                </button>
             </section>
-          </div>
+          </MotionRise>
         </div>
       </div>
     </main>

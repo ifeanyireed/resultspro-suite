@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Header } from '@/components/Header';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { Badge } from '@/components/Badge';
 import { Users, Search, Filter, ShieldAlert, UserCheck, KeyRound } from 'lucide-react';
 import { fetchUsers, updateUserStatus, deleteUser } from '@/lib/api';
@@ -61,14 +62,16 @@ export default function UsersPage() {
   const paginatedUsers = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <div className="w-full">
-      <Header
-        title="Universal User Directory"
-        subtitle="Manage master identity profiles, account statuses, and MFA settings"
-      />
+    <MotionStagger className="w-full">
+      <MotionRise>
+        <Header
+          title="Universal User Directory"
+          subtitle="Manage master identity profiles, account statuses, and MFA settings"
+        />
+      </MotionRise>
 
       <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-4 sm:space-y-6 w-full">
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white shadow-sm shadow-slate-200/50 p-5 flex flex-col md:flex-row items-center justify-between gap-5 transition-all">
+        <MotionRise delay={0.05} className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white shadow-sm shadow-slate-200/50 p-5 flex flex-col md:flex-row items-center justify-between gap-5 transition-all">
           <div className="relative w-full md:w-96 group">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><Search className="w-4 h-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" /></div>
             <input
@@ -93,10 +96,10 @@ export default function UsersPage() {
               <option value="unverified">Unverified</option>
             </select></div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Users Table */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/40 overflow-hidden">
+        <MotionRise delay={0.1} className="bg-white rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/40 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50/80 border-b border-slate-100">
@@ -190,8 +193,8 @@ export default function UsersPage() {
               </div>
             </div>
           )}
-        </div>
+        </MotionRise>
       </div>
-    </div>
+    </MotionStagger>
   );
 }

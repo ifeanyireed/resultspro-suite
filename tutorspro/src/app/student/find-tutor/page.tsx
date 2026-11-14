@@ -3,6 +3,7 @@
 import { IconSearch as Search, IconFilter as Filter, IconStar as Star, IconClock as Clock, IconHeart as Heart, IconAdjustmentsHorizontal as SlidersHorizontal, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { RoleGate } from '../../../components/RoleGate';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '../../../lib/api';
 
 export default function FindTutor() {
@@ -40,7 +41,7 @@ export default function FindTutor() {
       <main className="min-h-screen bg-navy pb-24">
                 
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+          <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
             <div>
               <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
                 Discover <span className="text-green">Experts</span>
@@ -62,10 +63,10 @@ export default function FindTutor() {
                   <SlidersHorizontal className="w-6 h-6" />
                </button>
             </div>
-          </div>
+          </MotionRise>
 
           {/* Categories */}
-          <div className="flex gap-2 overflow-x-auto pb-4 mb-8 scrollbar-hide">
+          <MotionRise delay={0.05} className="flex gap-2 overflow-x-auto pb-4 mb-8 scrollbar-hide">
              {categories.map(cat => (
                <button 
                  key={cat}
@@ -77,7 +78,7 @@ export default function FindTutor() {
                  {cat}
                </button>
              ))}
-          </div>
+          </MotionRise>
 
           {/* Tutor Grid */}
           {loading ? (
@@ -85,7 +86,7 @@ export default function FindTutor() {
                <Loader2 className="w-12 h-12 text-green animate-spin" />
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredTutors.length > 0 ? filteredTutors.map((tutor, i) => (
                 <div key={tutor.id} className="p-6 rounded-[32px] bg-white/[0.02] border border-white/10 hover:bg-white/[0.05] transition-all relative group">
                   <button className="absolute top-6 right-6 p-2 rounded-full bg-white/5 text-gray-500 hover:text-red-500 transition-colors">
@@ -132,7 +133,7 @@ export default function FindTutor() {
                    <p className="text-gray-500 font-bold">No tutors found matching your search.</p>
                 </div>
               )}
-            </div>
+            </MotionStagger>
           )}
         </div>
       </main>

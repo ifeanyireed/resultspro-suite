@@ -15,6 +15,7 @@ import {
   BuildingLibraryIcon,
   ShieldCheckIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const NIGERIAN_BANKS = [
   "Guaranty Trust Bank (GTBank)",
@@ -138,7 +139,7 @@ export default function MentorEarnings() {
   }
 
   return (
-    <>
+    <MotionRise>
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 mt-2">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-[#146ef5] mb-2 border border-blue-100">
@@ -170,7 +171,7 @@ export default function MentorEarnings() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {/* Cleared Balance */}
         <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-2xl p-6 shadow-sm flex flex-col justify-between text-white relative overflow-hidden group">
           <div className="flex justify-between items-start z-10">
@@ -234,7 +235,7 @@ export default function MentorEarnings() {
             <p className="text-xs text-gray-500 font-medium">Lifetime Gross: ₦{lifetimeEarnings.toLocaleString()}</p>
           </div>
         </div>
-      </div>
+      </MotionStagger>
 
       {/* Model Compensation Notice */}
       <div className="bg-blue-50/60 border border-blue-100 rounded-2xl p-4 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-blue-900">
@@ -480,6 +481,6 @@ export default function MentorEarnings() {
           </div>
         </div>
       )}
-    </>
+    </MotionRise>
   );
 }

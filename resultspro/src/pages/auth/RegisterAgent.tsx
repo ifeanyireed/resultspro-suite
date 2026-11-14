@@ -7,6 +7,7 @@ import { InlineLoadingSpinner } from '@/components/LoadingSpinner';
 import Navigation from '@/components/Navigation';
 import axiosInstance from '@/lib/axiosConfig';
 import { useToast } from '@/hooks/use-toast';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 const SPECIALIZATIONS = [
   'Setup Specialist',
@@ -103,7 +104,7 @@ const RegisterAgent: React.FC = () => {
         <img src="/Hero.png" className="absolute h-full w-full object-cover inset-0" alt="Background" />
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
-        <div className="relative z-10 max-w-md mx-auto text-center w-full">
+        <MotionRise className="relative z-10 max-w-md mx-auto text-center w-full">
           <h1 className="text-5xl md:text-5xl font-bold mb-2 text-white">Join as Agent</h1>
           <p className="text-gray-400 text-sm mb-12">Start earning with Nigeria's #1 School Management System</p>
 
@@ -196,7 +197,7 @@ const RegisterAgent: React.FC = () => {
           </div>
 
           <p className="text-center text-gray-400 text-sm mt-8">Already an agent? <Link to="/auth/login" className="text-blue-400 hover:text-blue-300 transition-colors font-semibold">Sign in</Link></p>
-        </div>
+        </MotionRise>
       </section>
     </div>
   );

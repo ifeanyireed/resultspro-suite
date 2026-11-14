@@ -10,6 +10,7 @@ import {
   XCircleIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 interface Tenant {
   id: string;
@@ -65,7 +66,7 @@ export default function SuperAdminTenantsPage() {
         </div>
       }
     >
-      <div className="p-8 max-w-7xl mx-auto">
+      <MotionRise className="p-8 max-w-7xl mx-auto">
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Tenant Payment Management</h1>
@@ -133,7 +134,7 @@ export default function SuperAdminTenantsPage() {
             </table>
           </div>
         </div>
-      </div>
+      </MotionRise>
     </ModernDashboardLayout>
   );
 }

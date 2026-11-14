@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { Button } from '@/components/ui/button';
 import { IconClock as Timer, IconCoins as Coins, IconChevronRight as ChevronRight, IconX as X, IconAlertCircle as AlertCircle, IconCircleCheck as CheckCircle2, IconBrain as Brain, IconLoader2 as Loader2, IconCheck as Check, IconBolt as Zap, IconSword as Sword, IconVolume, IconVolumeOff } from '@tabler/icons-react';
 import Link from 'next/link';
@@ -637,7 +638,7 @@ function QuizContent() {
         />
       </div>
 
-      <div className="flex-1 max-w-4xl mx-auto w-full px-4 py-12 flex flex-col">
+      <MotionRise className="flex-1 max-w-4xl mx-auto w-full px-4 py-12 flex flex-col">
         {/* Difficulty Badge */}
         <div className="mb-6">
           <span className="px-3 py-1 rounded-full bg-[#146ef5]/10 border border-[#146ef5]/20 text-[10px] font-bold text-[#146ef5] tracking-widest uppercase">
@@ -778,7 +779,7 @@ function QuizContent() {
               </Button>
             )}
           </div>
-        </div>      </div>
+        </div>      </MotionRise>
     </main>
   );
 }

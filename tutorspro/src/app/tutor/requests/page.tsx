@@ -4,6 +4,7 @@ import api from '@/lib/api';
 import { IconBell as Bell, IconCalendar as Calendar, IconClock as Clock, IconCheck as Check, IconX as X, IconMessage as MessageSquare, IconUser as User, IconDotsVertical as MoreVertical, IconChevronRight as ChevronRight, IconFilter as Filter, IconSearch as Search, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function TutorRequests() {
   const [mounted, setMounted] = useState(false);
@@ -52,7 +53,7 @@ export default function TutorRequests() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Class <span className="text-green">Requests</span>
@@ -68,7 +69,7 @@ export default function TutorRequests() {
                 <Filter className="w-5 h-5" />
              </button>
           </div>
-        </div>
+        </MotionRise>
 
         {loading ? (
            <div className="flex flex-col items-center justify-center py-24 opacity-50">
@@ -76,7 +77,7 @@ export default function TutorRequests() {
              <p className="text-white font-bold">Loading requests...</p>
            </div>
         ) : (
-          <div className="space-y-6">
+          <MotionStagger className="space-y-6">
              {requests.length > 0 ? requests.map((req) => (
                 <div key={req.id} className="p-8 rounded-[40px] bg-white/5 border border-white/10 hover:bg-white/[0.08] transition-all group">
                    <div className="flex flex-col lg:flex-row justify-between gap-8">
@@ -98,7 +99,7 @@ export default function TutorRequests() {
                             </div>
                             <div className="flex items-center gap-4 text-sm text-gray-500">
                                <div className="flex items-center gap-2">
-                                  <CalendarIcon className="w-4 h-4" /> {req.date}
+                                  <Calendar className="w-4 h-4" /> {req.date}
                                </div>
                                <div className="flex items-center gap-2">
                                   <Clock className="w-4 h-4" /> {req.time}
@@ -140,11 +141,11 @@ export default function TutorRequests() {
                  <p className="text-sm text-gray-400">You're all caught up!</p>
                </div>
              )}
-          </div>
+          </MotionStagger>
         )}
 
         {/* Info Banner */}
-        <div className="mt-16 p-10 rounded-[40px] bg-gradient-to-br from-green/20 to-transparent border border-white/10 flex flex-col md:flex-row items-center justify-between gap-8">
+        <MotionRise delay={0.15} className="mt-16 p-10 rounded-[40px] bg-gradient-to-br from-green/20 to-transparent border border-white/10 flex flex-col md:flex-row items-center justify-between gap-8">
            <div className="flex items-center gap-6">
               <div className="w-16 h-16 rounded-3xl bg-green/10 flex items-center justify-center text-green">
                  <Bell className="w-8 h-8" />
@@ -157,7 +158,7 @@ export default function TutorRequests() {
            <button className="px-8 py-4 rounded-2xl border border-white/10 text-white font-bold hover:bg-white/5 transition-all flex items-center gap-2">
               Notification Settings <ChevronRight className="w-4 h-4" />
            </button>
-        </div>
+        </MotionRise>
       </div>
     </main>
   );

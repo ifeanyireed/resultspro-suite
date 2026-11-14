@@ -2,6 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -61,7 +62,7 @@ export default function LeaderboardPage() {
       <Navbar />
       
       <section style={{ paddingTop: '160px', paddingBottom: '60px', background: 'white' }}>
-        <div className="container-nets" style={{ textAlign: 'center' }}>
+        <MotionRise className="container-nets" style={{ textAlign: 'center' }}>
           <span className="overline" style={{ color: 'var(--color-nets-red)', marginBottom: '1rem', display: 'inline-block' }}>Hall of Fame</span>
           <h1 className="h1" style={{ color: 'var(--color-nets-navy-dark)', marginBottom: '2rem' }}>
             {activeTab.toUpperCase()} RANKINGS
@@ -91,12 +92,12 @@ export default function LeaderboardPage() {
               </button>
             ))}
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       <section style={{ padding: '60px 0 100px 0', background: 'var(--color-nets-light)', flex: 1 }}>
         <div className="container-nets">
-          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <MotionRise delay={0.1} style={{ maxWidth: '800px', margin: '0 auto' }}>
             {loading ? (
               <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--color-nets-text-2)' }}>
                 Loading rankings...
@@ -164,7 +165,7 @@ export default function LeaderboardPage() {
                 )}
               </div>
             )}
-          </div>
+          </MotionRise>
         </div>
       </section>
       

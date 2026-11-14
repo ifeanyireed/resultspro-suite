@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/Navbar';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconSend as Send, IconSparkles as Sparkles, IconBook as BookOpen, IconBolt as Zap, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2, IconAlertCircle as AlertCircle, IconHistory as History, IconMessage as MessageSquare } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -106,7 +107,7 @@ export default function StudyAssistantPage() {
     <main className="min-h-screen bg-[var(--color-nets-light)] flex flex-col h-screen overflow-hidden">
       <Navbar />
       
-      <div className="flex-1 flex max-w-7xl mx-auto w-full overflow-hidden p-4 md:p-8 gap-6">
+      <MotionRise className="flex-1 flex max-w-7xl mx-auto w-full overflow-hidden p-4 md:p-8 gap-6">
         
         {/* Sidebar - Desktop */}
         <aside className="hidden lg:flex flex-col w-80 space-y-6">
@@ -303,7 +304,7 @@ export default function StudyAssistantPage() {
             </div>
           </div>
         </div>
-      </div>
+      </MotionRise>
     </main>
   );
 }

@@ -12,6 +12,7 @@ import {
   PlusIcon
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function FeesDashboard() {
@@ -91,7 +92,7 @@ export default function FeesDashboard() {
 
   return (
     <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Fees & Finance</h1>
           <p className="text-sm text-gray-500 mt-1">Manage tenant-isolated tuition structures, student invoices, and bursary collections.</p>
@@ -105,10 +106,10 @@ export default function FeesDashboard() {
             Issue Student Invoice
           </button>
         </div>
-      </div>
+      </MotionRise>
 
       {showAddInvoice && (
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-blue-200 mb-6">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-blue-200 mb-6">
           <h3 className="text-lg font-bold text-gray-900 mb-4">Issue New Student Fee Invoice</h3>
           <form onSubmit={handleCreateInvoice} className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <input
@@ -157,11 +158,11 @@ export default function FeesDashboard() {
               </button>
             </div>
           </form>
-        </div>
+        </MotionRise>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        <MotionRise className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start z-10">
             <h3 className="text-xl font-normal text-white">Collected (Term)</h3>
             <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white">
@@ -175,9 +176,9 @@ export default function FeesDashboard() {
               <span>Verified Settlements</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Pending Invoices</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -188,9 +189,9 @@ export default function FeesDashboard() {
             <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">{pendingCount}</h2>
             <div className="text-xs text-gray-500">Out of {invoices.length} issued invoices</div>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Collection Rate</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -201,9 +202,9 @@ export default function FeesDashboard() {
             <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">{collectionRate}%</h2>
             <div className="text-xs text-gray-500">Target: 95% before exams</div>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Fee Structures</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -214,10 +215,10 @@ export default function FeesDashboard() {
             <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">{feeStructures.length}</h2>
             <div className="text-xs text-gray-500">Active billing templates</div>
           </div>
-        </div>
-      </div>
+        </MotionRise>
+      </MotionStagger>
 
-      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden mb-6">
+      <MotionRise delay={0.1} className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden mb-6">
         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
           <h3 className="text-lg font-bold text-gray-900">Student Fee Invoices (Database Persisted)</h3>
           <span className="text-xs font-semibold text-[#146ef5] bg-blue-50 px-3 py-1 rounded-full">
@@ -272,7 +273,7 @@ export default function FeesDashboard() {
             ))}
           </tbody>
         </table>
-      </div>
+      </MotionRise>
     </>
   );
 }

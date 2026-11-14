@@ -5,6 +5,7 @@ import {
   EnvelopeIcon,
   PencilSquareIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function ParentCommunicationsPage() {
@@ -51,7 +52,7 @@ export default function ParentCommunicationsPage() {
 
   return (
     <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Communications</h1>
           <p className="text-sm text-gray-500 mt-1">Direct messages with teachers and school admin.</p>
@@ -60,9 +61,9 @@ export default function ParentCommunicationsPage() {
           <PencilSquareIcon className="w-4 h-4" />
           New Message
         </button>
-      </div>
+      </MotionRise>
 
-      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 flex h-[600px] overflow-hidden">
+      <MotionRise delay={0.08} className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 flex h-[600px] overflow-hidden">
         <div className="w-1/3 border-r border-gray-100 flex flex-col">
           <div className="p-4 border-b border-gray-100 bg-gray-50">
             <h3 className="font-medium text-gray-900">Inbox ({messages.length})</h3>
@@ -117,7 +118,7 @@ export default function ParentCommunicationsPage() {
             </div>
           </form>
         </div>
-      </div>
+      </MotionRise>
     </>
   );
 }

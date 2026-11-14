@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BarChart01, Users, AlertTriangle } from '@/lib/hugeicons-compat';
 import { IconTrendingUp as TrendingUp } from '@tabler/icons-react';
 import { axiosInstance as axios } from '@/lib/axiosConfig';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface TeacherClass {
   id: string;
@@ -102,14 +103,14 @@ const TeacherDashboard: React.FC = () => {
     <div className="min-h-screen text-white">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Teacher Dashboard</h1>
           <p className="text-slate-400">Monitor your class performance and student progress</p>
-        </div>
+        </MotionRise>
 
         {/* Quick Stats */}
         {classes.length > 0 && classStats[classes[0].id] && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-slate-800 p-6 rounded-lg">
               <p className="text-slate-400 text-sm">Total Classes</p>
               <p className="text-4xl font-bold mt-2">{classes.length}</p>
@@ -139,11 +140,11 @@ const TeacherDashboard: React.FC = () => {
                 %
               </p>
             </div>
-          </div>
+          </MotionStagger>
         )}
 
         {/* Classes Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {classes.map((cls) => {
             const stats = classStats[cls.id];
             return (
@@ -199,13 +200,13 @@ const TeacherDashboard: React.FC = () => {
               </div>
             );
           })}
-        </div>
+        </MotionStagger>
 
         {classes.length === 0 && (
-          <div className="text-center py-20">
+          <MotionRise className="text-center py-20">
             <Users size={48} className="mx-auto text-slate-600 mb-4" />
             <p className="text-slate-400 text-lg">No classes assigned yet</p>
-          </div>
+          </MotionRise>
         )}
       </div>
     </div>

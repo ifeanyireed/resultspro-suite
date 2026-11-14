@@ -4,6 +4,7 @@ import { ArrowRight01, Eye, EyeOff, CheckSquare, Check } from '@/lib/hugeicons-c
 import { InlineLoadingSpinner } from '@/components/LoadingSpinner';
 import Navigation from '@/components/Navigation';
 import axios from 'axios';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.VITE_API_URL || '');
 
@@ -98,7 +99,7 @@ const PasswordResetConfirm: React.FC = () => {
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
-          <div className="relative z-10 max-w-md mx-auto text-center w-full">
+          <MotionRise className="relative z-10 max-w-md mx-auto text-center w-full">
             <div className="flex justify-center mb-6">
               <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.3)]">
                 <Check className="w-10 h-10 text-white" />
@@ -133,7 +134,7 @@ const PasswordResetConfirm: React.FC = () => {
                 <ArrowRight01 className="w-5 h-5" />
               </Link>
             </div>
-          </div>
+          </MotionRise>
         </section>
 
         {/* Footer */}
@@ -193,7 +194,7 @@ const PasswordResetConfirm: React.FC = () => {
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
-          <div className="relative z-10 max-w-md mx-auto text-center w-full">
+          <MotionRise className="relative z-10 max-w-md mx-auto text-center w-full">
             <div className="flex justify-center mb-6">
               <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.3)]">
                 <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -236,7 +237,7 @@ const PasswordResetConfirm: React.FC = () => {
                 Back to Sign In
               </Link>
             </p>
-          </div>
+          </MotionRise>
         </section>
 
         {/* Footer */}
@@ -294,7 +295,7 @@ const PasswordResetConfirm: React.FC = () => {
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
-        <div className="relative z-10 max-w-md mx-auto text-center w-full">
+        <MotionRise className="relative z-10 max-w-md mx-auto text-center w-full">
           <h1 className="text-5xl md:text-6xl font-bold mb-2 tracking-tight leading-tight text-white">
             Create New Password
           </h1>
@@ -395,7 +396,7 @@ const PasswordResetConfirm: React.FC = () => {
               Back to Sign In
             </Link>
           </p>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Footer */}

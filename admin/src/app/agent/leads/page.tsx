@@ -8,18 +8,19 @@ import {
   BuildingOfficeIcon,
   LinkIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function LeadRegistrationPage() {
   return (
-    <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+    <MotionStagger className="w-full">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Registrations</h1>
           <p className="text-sm text-gray-500 mt-1">Register new schools and track their onboarding progress.</p>
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <MotionRise delay={0.05} className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         
         {/* Registration Form */}
         <div className="lg:col-span-1 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
@@ -86,10 +87,10 @@ export default function LeadRegistrationPage() {
           </div>
         </div>
 
-      </div>
+      </MotionRise>
 
       {/* Kanban Board */}
-      <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 min-h-[500px]">
+      <MotionRise delay={0.1} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 min-h-[500px]">
         <div className="flex justify-between items-center mb-6">
           <h3 className="font-bold text-gray-900">Lead Status Board</h3>
           <button className="text-xs font-semibold px-3 py-1.5 border border-gray-200 rounded-full flex items-center gap-1 hover:bg-gray-50">
@@ -182,7 +183,7 @@ export default function LeadRegistrationPage() {
           </div>
 
         </div>
-      </div>
-    </>
+      </MotionRise>
+    </MotionStagger>
   );
 }

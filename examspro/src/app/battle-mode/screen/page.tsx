@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconClock as Timer, IconCoins as Coins, IconSword as Sword, IconBolt as Zap, IconTarget as Target, IconCircleCheck as CheckCircle2, IconAlertCircle as AlertCircle, IconTrophy as Trophy, IconLoader2 as Loader2, IconFlag as Flag, IconVolume as Volume, IconVolumeOff as VolumeOff } from '@tabler/icons-react';
 import { useBattle } from '@/hooks/useBattle';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -391,7 +392,7 @@ function BattleScreenContent() {
         </div>
 
         {/* Main Question Area */}
-        <div className="flex-1 p-8 md:p-16 flex flex-col max-w-4xl mx-auto w-full">
+        <MotionRise className="flex-1 p-8 md:p-16 flex flex-col max-w-4xl mx-auto w-full">
           {(status === 'finished' || isFinishing) ? (
              <div className="flex-1 flex flex-col items-center justify-center text-center animate-in fade-in zoom-in duration-500">
                 <Trophy className="w-20 h-20 text-primary mb-6" />
@@ -506,7 +507,7 @@ function BattleScreenContent() {
                 </div>
              </>
           )}
-        </div>
+        </MotionRise>
       </div>
 
       <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#146ef5]/10 to-transparent pointer-events-none" />

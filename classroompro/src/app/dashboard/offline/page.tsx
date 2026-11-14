@@ -4,10 +4,11 @@ import { IconWifiOff as WifiOff, IconRefresh as RefreshCcw, IconBook as BookOpen
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Logo from "@/components/Logo";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 
 export default function OfflinePage() {
   return (
-    <div className="min-h-screen bg-[#146ef5] flex flex-col items-center justify-center p-4 text-center">
+    <MotionRise className="min-h-screen bg-[#146ef5] flex flex-col items-center justify-center p-4 text-center">
       <div className="mb-12">
         <Logo />
       </div>
@@ -37,6 +38,6 @@ export default function OfflinePage() {
          <div className="w-2 h-2 rounded-full bg-amber animate-pulse" />
          Offline Mode Active
       </div>
-    </div>
+    </MotionRise>
   );
 }

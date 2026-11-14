@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Users, AlertTriangle, Target } from '@/lib/hugeicons-compat';
 import { IconTrendingUp as TrendingUp } from '@tabler/icons-react';
 import axios from 'axios';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface HolisticDevelopmentData {
   academic: {
@@ -105,7 +106,7 @@ const ParentHolisticDevelopment: React.FC = () => {
     <div className="min-h-screen text-white">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <button
             onClick={() => navigate(-1)}
             className="text-blue-400 hover:text-blue-300 mb-4"
@@ -114,10 +115,10 @@ const ParentHolisticDevelopment: React.FC = () => {
           </button>
           <h1 className="text-3xl font-bold mb-2">Holistic Development Profile</h1>
           <p className="text-slate-400">Academic, Affective, and Psychomotor Assessment</p>
-        </div>
+        </MotionRise>
 
         {/* Three-Dimensional Display */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {/* Academic Dimension */}
           <div className={`bg-gradient-to-br ${getDimensionColor('academic')} rounded-lg p-8`}>
             <div className="flex items-center gap-3 mb-6">
@@ -179,12 +180,12 @@ const ParentHolisticDevelopment: React.FC = () => {
               ))}
             </div>
           </div>
-        </div>
+        </MotionStagger>
 
         {/* Insights */}
-        <div className="bg-slate-800 rounded-lg p-6">
+        <MotionRise className="bg-slate-800 rounded-lg p-6">
           <h2 className="text-xl font-bold mb-4">Development Insights</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-slate-700 p-4 rounded">
               <p className="text-green-400 font-semibold mb-2">✓ Strengths</p>
               <ul className="text-slate-300 space-y-1 text-sm">
@@ -199,8 +200,8 @@ const ParentHolisticDevelopment: React.FC = () => {
                 <li>• Punctuality consistency</li>
               </ul>
             </div>
-          </div>
-        </div>
+          </MotionStagger>
+        </MotionRise>
       </div>
     </div>
   );

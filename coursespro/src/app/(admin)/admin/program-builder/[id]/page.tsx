@@ -22,6 +22,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { RichTextEditor } from '@/components/RichTextEditor';
 import { QuizBuilderModal } from './QuizBuilderModal';
 import { PreviewModal } from './PreviewModal';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 
 
@@ -249,7 +250,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-2rem)] bg-gray-50 -mx-8 -mb-8 -mt-2 rounded-t-2xl overflow-hidden border-t border-gray-200 shadow-sm">
+    <MotionRise className="flex flex-col h-[calc(100vh-2rem)] bg-gray-50 -mx-8 -mb-8 -mt-2 rounded-t-2xl overflow-hidden border-t border-gray-200 shadow-sm">
       {/* Builder Top Nav */}
       <div className="h-14 border-b border-gray-200 bg-white flex items-center justify-between pl-4 pr-10 sticky top-0 z-10 shrink-0">
         <div className="flex items-center gap-4">
@@ -1632,7 +1633,7 @@ export default function BuilderOSPage({ params }: { params: Promise<{ id: string
           }
         }}
       />
-    </div>
+    </MotionRise>
   );
 }
 

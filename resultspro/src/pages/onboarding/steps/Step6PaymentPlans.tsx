@@ -3,6 +3,7 @@ import axiosInstance from '@/lib/axiosConfig';
 import { Button } from '@/components/ui/button';
 import { IconExclamationCircle as AlertCircle, IconCheck as Check, IconRefresh as RefreshCw } from '@tabler/icons-react';
 import { useOnboardingStore, Step6Data } from '@/stores/onboardingStore';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface Plan {
   id: string;
@@ -253,18 +254,18 @@ export const Step6PaymentPlans = ({
   const isExpired = currentSubscription && currentSubscription.tier !== 'Free' && currentSubscription.endDate < new Date();
 
   return (
-    <div className="w-full max-w-5xl mx-auto text-white">
+    <MotionRise className="w-full max-w-5xl mx-auto text-white">
       <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 backdrop-blur-xl shadow-2xl">
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <h2 className="text-3xl font-bold text-white">Choose Your Plan</h2>
           <p className="text-gray-400 mt-2">
             Select a subscription plan that works best for your school
           </p>
-        </div>
+        </MotionRise>
 
         {/* Current Subscription Info */}
         {currentSubscription && (
-          <div className={`mb-8 p-6 rounded-2xl border ${isExpired ? 'bg-red-500/10 border-red-500/30' : 'bg-blue-500/10 border-blue-500/30'}`}>
+          <MotionRise className={`mb-8 p-6 rounded-2xl border ${isExpired ? 'bg-red-500/10 border-red-500/30' : 'bg-blue-500/10 border-blue-500/30'}`}>
             <div className="flex items-start gap-4">
               <div className={`flex-shrink-0 p-2 rounded-full ${isExpired ? 'bg-red-500/20' : 'bg-blue-500/20'}`}>
                 {isExpired ? <AlertCircle className="w-6 h-6 text-red-400" /> : <Check className="w-6 h-6 text-blue-400" />}
@@ -290,20 +291,20 @@ export const Step6PaymentPlans = ({
                 {isExpired ? 'Renew Subscription' : 'Extend/Change Subscription'}
               </Button>
             </div>
-          </div>
+          </MotionRise>
         )}
 
         {submitError && (
-          <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex gap-3">
+          <MotionRise className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex gap-3">
             <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
             <p className="text-red-400 text-sm">{submitError}</p>
-          </div>
+          </MotionRise>
         )}
 
         {(!currentSubscription || isExpired || showPlansGrid || currentSubscription.tier === 'Free') && (
           <>
             {/* Billing Period Toggle */}
-            <div className="mb-8 flex justify-center">
+            <MotionRise className="mb-8 flex justify-center">
               <div className="inline-flex rounded-xl border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.02)] p-1">
                 {(['term', 'year'] as const).map((period) => (
                   <button
@@ -320,10 +321,10 @@ export const Step6PaymentPlans = ({
                   </button>
                 ))}
               </div>
-            </div>
+            </MotionRise>
 
             {/* Plans Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               {filteredPlans.map((plan) => {
                 const isSelected = selectedPlanId === plan.id;
                 return (
@@ -376,12 +377,12 @@ export const Step6PaymentPlans = ({
                   </div>
                 );
               })}
-            </div>
+            </MotionStagger>
           </>
         )}
 
         {/* Action Buttons */}
-        <div className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex flex-col sm:flex-row gap-4 justify-between">
+        <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex flex-col sm:flex-row gap-4 justify-between">
           <Button
             type="button"
             variant="outline"
@@ -401,8 +402,8 @@ export const Step6PaymentPlans = ({
              (currentSubscription && isCurrentPlanSelected && isExpired) ? 'Renew & Proceed to Payment' :
              selectedPlanId === 'free' ? 'Next: Add Students' : 'Proceed to Payment'}
           </Button>
-        </div>
+        </MotionRise>
       </div>
-    </div>
+    </MotionRise>
   );
 };

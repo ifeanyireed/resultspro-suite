@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from 'react';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconUsers as Users, IconMessage as MessageSquare, IconClock as Clock, IconBolt as Zap, IconSend as Send, IconShieldCheck as ShieldCheck, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2, IconTrophy as Trophy } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -95,7 +96,7 @@ function SpectatorViewContent() {
     <main className="min-h-screen bg-navy text-white flex flex-col">
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Main Feed Section */}
-        <div className="flex-1 p-6 md:p-12 overflow-y-auto relative">
+        <MotionRise className="flex-1 p-6 md:p-12 overflow-y-auto relative">
           <div className="max-w-4xl mx-auto">
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
@@ -176,7 +177,7 @@ function SpectatorViewContent() {
                ))}
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Spectator Sidebar */}
         <aside className="w-full lg:w-96 bg-white/[0.02] border-l border-white/[0.05] border-t-white/[0.1] flex flex-col h-[500px] lg:h-auto backdrop-blur-xl">

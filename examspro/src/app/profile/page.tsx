@@ -3,6 +3,7 @@
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { useAuthStore } from '@/store/useAuthStore';
 import { IconUser as User, IconSettings as Settings, IconLogout as LogOut, IconChevronRight as ChevronRight, IconAward as Award, IconTarget as Target, IconBolt as Zap, IconHistory as History, IconShield as Shield, IconBell as Bell, IconCoins as Coins, IconTrophy as Trophy, IconSword as Sword, IconCircleCheck as CheckCircle2, IconLock as Lock, IconDeviceMobile as Smartphone, IconGift as Gift, IconMail as Mail, IconUsers as Users, IconEye as Eye, IconPhoto as ImageIcon, IconLoader2 as Loader2, IconArrowRight as ArrowRight } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
@@ -156,7 +157,7 @@ export default function ProfilePage() {
     <main className="min-h-screen bg-navy pb-24">
       <Navbar />
       
-      <div className="max-w-4xl mx-auto px-4 md:px-8 pt-12">
+      <MotionRise className="max-w-4xl mx-auto px-4 md:px-8 pt-12">
         {/* Profile Header */}
         <div className="flex flex-col md:flex-row items-center gap-8 mb-12 p-8 rounded-[40px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] relative overflow-hidden">
           <div className="absolute top-0 right-0 p-12 opacity-5">
@@ -292,7 +293,7 @@ export default function ProfilePage() {
             </div>
           </>
         )}
-      </div>
+      </MotionRise>
 
       {/* Modals */}
       <Modal 

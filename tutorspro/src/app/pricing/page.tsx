@@ -2,6 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 import { IconCheck as Check, IconBolt as Zap, IconShield as Shield, IconHelpCircle as HelpCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -96,7 +97,7 @@ export default function PricingPage() {
       {/* Hero Section */}
       <section className="bg-navy text-white text-center" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '6rem' }}>
         <div className="container-nets">
-          <div className="max-w-3xl mx-auto">
+          <MotionRise className="max-w-3xl mx-auto">
             <div className="overline-dark" style={{ marginBottom: '1.5rem' }}>Transparent Pricing</div>
             <h1 className="fw-300" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
               Invest in Your <br /><span style={{ fontWeight: 700, color: 'var(--primary)' }}>Future.</span>
@@ -104,15 +105,15 @@ export default function PricingPage() {
             <p className="text-body-lg text-white/70">
               Choose a plan that fits your learning pace and academic goals. No hidden fees.
             </p>
-          </div>
+          </MotionRise>
         </div>
       </section>
 
       <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
-           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+           <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
              {plans.map((plan, i) => (
-               <article key={i} className={`p-8 rounded-sm bg-white border transition-all hover:shadow-card-lg flex flex-col ${plan.featured ? 'border-nets-red shadow-md scale-[1.02]' : 'border-gray-200 shadow-sm'}`} style={{ borderColor: plan.featured ? 'var(--primary)' : '' }}>
+               <MotionRise key={i} delay={i * 0.08} className={`p-8 rounded-sm bg-white border transition-all hover:shadow-card-lg flex flex-col ${plan.featured ? 'border-nets-red shadow-md scale-[1.02]' : 'border-gray-200 shadow-sm'}`} style={{ borderColor: plan.featured ? 'var(--primary)' : '' }}>
                  {plan.featured && (
                     <div className="mb-6">
                       <span className="text-[10px] fw-700 text-[#0D1060] uppercase tracking-widest px-3 py-1 rounded-sm" style={{ background: 'var(--primary)' }}>
@@ -149,12 +150,12 @@ export default function PricingPage() {
                  >
                    {plan.cta}
                  </Link>
-               </article>
+               </MotionRise>
              ))}
-           </div>
+           </MotionStagger>
 
            {/* Comparison Note */}
-           <div className="mt-16 p-8 rounded-sm bg-light border border-gray-200 flex flex-col md:flex-row items-center justify-between gap-8">
+           <MotionRise className="mt-16 p-8 rounded-sm bg-light border border-gray-200 flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="flex items-center gap-6">
                  <div className="w-12 h-12 rounded-sm bg-white border border-gray-200 flex items-center justify-center">
                     <Shield size={24} style={{ color: 'var(--primary)' }} />
@@ -167,7 +168,7 @@ export default function PricingPage() {
               <Link href="/faq" className="text-sm fw-600 text-navy hover:opacity-80 flex items-center gap-2">
                  <HelpCircle size={16} /> View Pricing FAQ
               </Link>
-           </div>
+           </MotionRise>
         </div>
       </section>
 

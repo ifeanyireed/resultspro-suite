@@ -30,6 +30,7 @@ import {
   KeyIcon,
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 import TimetableDashboard from '../timetable/page';
 import PerformanceDashboard from '../performance/page';
@@ -583,7 +584,7 @@ function AcademicOperationsHub() {
 function ParentsDashboard() {
   return (
     <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Parents &amp; Guardians CRM</h1>
           <p className="text-sm text-gray-500 mt-1">
@@ -600,10 +601,10 @@ function ParentsDashboard() {
             Export Directory
           </button>
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        <MotionRise className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
           <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
           <div className="flex justify-between items-start z-10">
             <h3 className="text-xl font-normal text-white">Active Guardians</h3>
@@ -620,9 +621,9 @@ function ParentsDashboard() {
               <span>Portal logins this week</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Ward Linkages</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -635,9 +636,9 @@ function ParentsDashboard() {
               <span className="text-gray-400">1,228 of 1,248 students linked</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Notice Read Rate</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -650,9 +651,9 @@ function ParentsDashboard() {
               <span className="text-gray-400">SMS, WhatsApp &amp; Email</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">PTA Attendance</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -665,10 +666,10 @@ function ParentsDashboard() {
               <span className="text-gray-400">Last Term General Forum</span>
             </div>
           </div>
-        </div>
-      </div>
+        </MotionRise>
+      </MotionStagger>
 
-      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
+      <MotionRise delay={0.08} className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-6 border-b border-gray-100 flex items-center justify-between">
           <h3 className="text-lg font-medium text-gray-900">Guardian Directory &amp; Ward Accounts</h3>
           <span className="text-xs font-semibold text-[#146ef5] bg-blue-50 px-3 py-1 rounded-full">
@@ -736,7 +737,7 @@ function ParentsDashboard() {
             ))}
           </tbody>
         </table>
-      </div>
+      </MotionRise>
     </>
   );
 }
@@ -1784,7 +1785,7 @@ export default function AdminCampusOSPage() {
   return (
     <div className="min-w-0 w-full max-w-full">
       {/* CampusPRO Module Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-2 mb-5">
+      <MotionRise className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-2 mb-5">
         <div>
           <div className="flex items-center gap-2.5">
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">CampusPRO</h1>
@@ -1812,7 +1813,7 @@ export default function AdminCampusOSPage() {
             <option>Abuja Maitama Campus</option>
           </select>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Horizontal Subtabs Bar — Sticky Outer Pill Container with Auto-Hiding 2px Scrollbar Underneath */}
       <div
@@ -1887,7 +1888,7 @@ export default function AdminCampusOSPage() {
       </div>
 
       {/* Active CampusOS Subtab Content — 10px below primary toggle container */}
-      <div className="mt-[4px]">
+      <MotionRise delay={0.06} className="mt-[4px]">
         {activeTab === 'academic' && <AcademicOperationsHub />}
         {activeTab === 'staff' && <PerformanceDashboard />}
         {activeTab === 'students' && <EnrollmentDashboard />}
@@ -1899,7 +1900,7 @@ export default function AdminCampusOSPage() {
         {activeTab === 'admission' && <AdmissionsDashboard initialSubtab={admissionSubtab} />}
         {activeTab === 'messaging' && <MessagingDashboard />}
         {activeTab === 'mobile-app' && <MobileAppDashboard selectedCampus={selectedCampus} />}
-      </div>
+      </MotionRise>
     </div>
   );
 }

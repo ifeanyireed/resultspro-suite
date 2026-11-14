@@ -23,6 +23,7 @@ import {
 } from '@tabler/icons-react';
 import { fetchGroupStudentsByCode } from '@/services/api';
 import { getCharacterAvatarUrl } from '@/utils/cdn';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface StudentItem {
   id: string;
@@ -133,7 +134,7 @@ export default function StudentCodesPage() {
       <div className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 lg:px-12 py-10 flex flex-col md:flex-row items-center justify-between gap-10">
         
         {/* Left Side Info Panel */}
-        <div className="hidden md:flex max-w-lg flex-col gap-6 text-white animate-fade-in-up">
+        <MotionRise className="hidden md:flex max-w-lg flex-col gap-6 text-white">
           <div className="flex items-center gap-3">
             <Image
               src="/monkey1.svg"
@@ -157,32 +158,32 @@ export default function StudentCodesPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
+          <MotionStagger className="grid grid-cols-2 gap-3 text-xs">
+            <MotionRise className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
               <span className="text-amber-300 font-medium block mb-1">Group Self-Service</span>
               <span className="text-[11px] text-slate-200/80">No need to wait for printed password sheets.</span>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
+            </MotionRise>
+            <MotionRise delay={0.05} className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
               <span className="text-amber-300 font-medium block mb-1">Instant Name Search</span>
               <span className="text-[11px] text-slate-200/80">Type your name to locate your access code in seconds.</span>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
+            </MotionRise>
+            <MotionRise delay={0.1} className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
               <span className="text-amber-300 font-medium block mb-1">One-Click Copy</span>
               <span className="text-[11px] text-slate-200/80">Click copy and paste your code directly into sign in.</span>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
+            </MotionRise>
+            <MotionRise delay={0.15} className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
               <span className="text-amber-300 font-medium block mb-1">6-Digit Serial Code</span>
               <span className="text-[11px] text-slate-200/80">Search by your class 6-digit serial number.</span>
-            </div>
-          </div>
+            </MotionRise>
+          </MotionStagger>
 
           <div className="text-[10px] text-slate-400 font-normal uppercase tracking-wider mt-2">
             © 2026 PuzzlePro Student Directory. All rights reserved.
           </div>
-        </div>
+        </MotionRise>
 
         {/* Right Side Glass Card (Step 1: Enter Group Code / Step 2: Student Directory) */}
-        <div className="relative z-10 w-full max-w-[460px] bg-slate-900/80 md:bg-white/95 p-7 rounded-[28px] border border-white/20 md:border-white/60 shadow-2xl backdrop-blur-xl flex flex-col gap-5 animate-fade-in-up">
+        <MotionRise delay={0.1} className="relative z-10 w-full max-w-[460px] bg-slate-900/80 md:bg-white/95 p-7 rounded-[28px] border border-white/20 md:border-white/60 shadow-2xl backdrop-blur-xl flex flex-col gap-5">
           
           {!activeGroup ? (
             /* STEP 1: ENTER GROUP CODE FORM */
@@ -416,7 +417,7 @@ export default function StudentCodesPage() {
               </div>
             </div>
           )}
-        </div>
+        </MotionRise>
       </div>
 
       {/* Footer copyright */}

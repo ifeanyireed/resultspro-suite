@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const classesData = [
   { id: 1, name: "SSS 3", level: "Senior Secondary", students: 45, teachers: 8 },
@@ -50,7 +51,7 @@ export default function ManageClassesPage() {
       
       
       <main className="p-8 space-y-6">
-        <div className="flex justify-between items-center">
+        <MotionRise className="flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 font-display">Academic Classes</h2>
             <p className="text-sm text-gray-500">Define and manage the grade levels and classes in your school.</p>
@@ -58,19 +59,19 @@ export default function ManageClassesPage() {
           <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold">
             <Plus className="w-4 h-4 mr-2" /> Add New Class
           </Button>
-        </div>
+        </MotionRise>
 
-        <div className="relative max-w-md">
+        <MotionRise delay={0.06} className="relative max-w-md">
           <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
           <Input 
             placeholder="Search classes..." 
             className="pl-10 bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900"
           />
-        </div>
+        </MotionRise>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {classesData.map((cls) => (
-            <div key={cls.id} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-6 hover:border-green/50 transition-all group">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {classesData.map((cls, idx) => (
+            <MotionRise key={cls.id} delay={idx * 0.05} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-6 hover:border-green/50 transition-all group">
               <div className="flex justify-between items-start mb-6">
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-[#146ef5]">
                   <Layers className="w-6 h-6" />
@@ -103,9 +104,9 @@ export default function ManageClassesPage() {
                    </div>
                 </div>
               </div>
-            </div>
+            </MotionRise>
           ))}
-        </div>
+        </MotionStagger>
       </main>
     </div>
   );

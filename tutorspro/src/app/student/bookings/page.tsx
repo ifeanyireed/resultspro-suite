@@ -4,6 +4,7 @@ import { IconCalendar as Calendar, IconClock as Clock, IconUser as User, IconChe
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { RoleGate } from '../../../components/RoleGate';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '../../../lib/api';
 
 export default function Bookings() {
@@ -41,7 +42,7 @@ export default function Bookings() {
       <main className="min-h-screen bg-navy pb-24">
                 
         <div className="max-w-5xl mx-auto px-4 md:px-8 pt-12">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+          <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
              <div>
                 <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
                    My <span className="text-amber">Bookings</span>
@@ -51,11 +52,11 @@ export default function Bookings() {
              <button onClick={() => setStep(2)} className="px-6 py-3 rounded-2xl bg-green-600 text-white font-bold flex items-center gap-2 hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
                 <Plus className="w-5 h-5" /> Book New Session
              </button>
-          </div>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-8">
              {/* Booking List (Left) */}
-             <div className="md:col-span-2 space-y-4">
+             <MotionRise className="md:col-span-2 space-y-4">
                 {bookings.length > 0 ? bookings.map(booking => (
                   <div key={booking.id} className="p-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-all group">
                      <div className="flex items-center justify-between mb-6">
@@ -97,10 +98,10 @@ export default function Bookings() {
                      <p className="text-gray-500 font-bold uppercase tracking-widest text-sm">No bookings found</p>
                   </div>
                 )}
-             </div>
+             </MotionRise>
 
              {/* Sidebar Info (Right) */}
-             <div className="space-y-6">
+             <MotionRise delay={0.1} className="space-y-6">
                 <section className="p-8 rounded-[40px] bg-gradient-to-br from-green/20 to-transparent border border-white/10">
                    <div className="w-12 h-12 rounded-2xl bg-green/20 flex items-center justify-center text-green mb-6">
                       <Wallet className="w-6 h-6" />
@@ -127,8 +128,8 @@ export default function Bookings() {
                       ))}
                    </div>
                 </section>
-             </div>
-          </div>
+             </MotionRise>
+          </MotionStagger>
         </div>
       </main>
     </RoleGate>

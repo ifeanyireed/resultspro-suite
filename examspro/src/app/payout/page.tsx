@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconCoins as Coins, IconArrowsRightLeft as ArrowRightLeft, IconCash as Banknote, IconHistory as History, IconAlertCircle as AlertCircle, IconCircleCheck as CheckCircle2, IconBuilding as Building2, IconUser as User, IconHash as Hash } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -84,7 +85,7 @@ export default function PayoutPage() {
     <main className="min-h-screen bg-navy pb-24">
       <Navbar />
       
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
+      <MotionRise className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
           <div className="text-center md:text-left">
@@ -262,7 +263,7 @@ export default function PayoutPage() {
             </div>
           </div>
         </div>
-      </div>
+      </MotionRise>
     </main>
   );
 }

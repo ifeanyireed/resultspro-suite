@@ -16,6 +16,7 @@ import {
   ArrowTrendingUpIcon
 } from '@heroicons/react/24/outline';
 import { TrophyIcon as TrophySolid } from '@heroicons/react/24/solid';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface Leader {
   rank: number;
@@ -76,7 +77,7 @@ export default function LeaderboardPage() {
   const remainingLeaders = filteredLeaders.filter((l) => !searchQuery.trim() || true);
 
   return (
-    <div className="space-y-8 pb-12">
+    <MotionRise className="space-y-8 pb-12">
       {/* Header & KPI Summary */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mt-2">
         <div>
@@ -120,7 +121,7 @@ export default function LeaderboardPage() {
 
       {/* Top 3 Podium Cards */}
       {topThree.length > 0 && !isLoading && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
           {/* Silver - 2nd Place */}
           {topThree[1] && (
             <div className="relative bg-gradient-to-b from-gray-50/80 to-white rounded-[2rem] p-6 border border-gray-200 shadow-sm flex flex-col items-center text-center order-2 md:order-1 hover:shadow-md transition-all">
@@ -252,7 +253,7 @@ export default function LeaderboardPage() {
               </div>
             </div>
           )}
-        </div>
+        </MotionStagger>
       )}
 
       {/* Filter and Search Bar */}
@@ -447,6 +448,6 @@ export default function LeaderboardPage() {
           </div>
         )}
       </div>
-    </div>
+    </MotionRise>
   );
 }

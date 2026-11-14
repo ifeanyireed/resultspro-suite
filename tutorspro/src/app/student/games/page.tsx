@@ -4,6 +4,7 @@ import { IconDeviceGamepad2 as Gamepad2, IconTrophy as Trophy, IconUsers as User
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { RoleGate } from '@/components/RoleGate';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function GamesHub() {
   const [data, setData] = useState<any>(null);
@@ -41,7 +42,7 @@ export default function GamesHub() {
                 
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+          <MotionRise className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
              <div>
                 <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-1">
                    Games Hub
@@ -65,9 +66,9 @@ export default function GamesHub() {
                    </div>
                 </div>
              </div>
-          </div>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
              {/* Main Featured Game */}
              <div className="lg:col-span-2 rounded-[1.5rem] bg-gradient-to-br from-[#146ef5] to-[#0a2e70] p-8 md:p-12 relative overflow-hidden flex flex-col justify-end min-h-[360px] shadow-sm group">
                 <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/10 rounded-full filter blur-[4rem] translate-x-1/3 -translate-y-1/3"></div>
@@ -117,10 +118,10 @@ export default function GamesHub() {
                    </button>
                 </div>
              </div>
-          </div>
+          </MotionStagger>
 
           {/* Game Library */}
-          <div className="flex items-center justify-between mb-6">
+          <MotionRise className="flex items-center justify-between mb-6">
              <h3 className="text-xl font-normal text-gray-900">All Games</h3>
              <div className="flex gap-2">
                 <button className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-medium">All</button>
@@ -128,9 +129,9 @@ export default function GamesHub() {
                 <button className="px-4 py-2 rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium">Science</button>
                 <button className="px-4 py-2 rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium">Language</button>
              </div>
-          </div>
+          </MotionRise>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <MotionStagger className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
              {games.length > 0 ? games.map((game: any) => (
                 <div key={game.id} className="rounded-[1.5rem] bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all group overflow-hidden flex flex-col">
                    <div className="aspect-[4/3] bg-gray-100 relative overflow-hidden">
@@ -162,7 +163,7 @@ export default function GamesHub() {
                    <p className="font-medium text-sm">No games available right now</p>
                 </div>
              )}
-          </div>
+          </MotionStagger>
 
         </div>
       </main>

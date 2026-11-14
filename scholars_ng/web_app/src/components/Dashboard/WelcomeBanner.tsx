@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 interface WelcomeBannerProps {
   title: string;
@@ -17,7 +18,7 @@ export default function WelcomeBanner({
   backgroundColor = '#146ef5' 
 }: WelcomeBannerProps) {
   return (
-    <div 
+    <MotionRise 
       className="relative overflow-hidden rounded-[1.5rem] p-8 text-white flex justify-between items-center shadow-sm" 
       style={{ backgroundColor }}
     >
@@ -28,6 +29,6 @@ export default function WelcomeBanner({
       <div className="absolute right-8 bottom-0 translate-y-2">
          <Image src={monsterSrc} alt="Monster" width={160} height={160} className="object-contain" />
       </div>
-    </div>
+    </MotionRise>
   );
 }

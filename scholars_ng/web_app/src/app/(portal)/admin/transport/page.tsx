@@ -9,6 +9,7 @@ import {
   CheckCircleIcon,
   PlusIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function TransportDashboard() {
@@ -72,7 +73,7 @@ export default function TransportDashboard() {
 
   return (
     <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Transport & Fleet</h1>
           <p className="text-sm text-gray-500 mt-1">Manage tenant-scoped school bus corridors, drivers, and student riders.</p>
@@ -86,10 +87,10 @@ export default function TransportDashboard() {
             Add Bus Route
           </button>
         </div>
-      </div>
+      </MotionRise>
 
       {showAddModal && (
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-blue-200 mb-6">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-blue-200 mb-6">
           <h3 className="text-lg font-bold text-gray-900 mb-4">Add New Bus Route</h3>
           <form onSubmit={handleAddRoute} className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <input
@@ -139,11 +140,11 @@ export default function TransportDashboard() {
               </button>
             </div>
           </form>
-        </div>
+        </MotionRise>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between aspect-square text-white">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        <MotionRise className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between aspect-square text-white">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal">Active Routes</h3>
             <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
@@ -154,9 +155,9 @@ export default function TransportDashboard() {
             <h2 className="text-5xl font-medium tracking-tight mb-2">{routes.length}</h2>
             <p className="text-xs text-white/80">GPS-monitored school buses</p>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Enrolled Riders</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -167,9 +168,9 @@ export default function TransportDashboard() {
             <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">{totalStudents}</h2>
             <p className="text-xs text-gray-500">Out of {totalCapacity} fleet seats</p>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Seat Utilization</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -182,9 +183,9 @@ export default function TransportDashboard() {
             </h2>
             <p className="text-xs text-gray-500">Morning & afternoon runs</p>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Safety Record</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -195,10 +196,10 @@ export default function TransportDashboard() {
             <h2 className="text-5xl font-medium tracking-tight text-emerald-600 mb-2">100%</h2>
             <p className="text-xs text-gray-500">Zero incidents this term</p>
           </div>
-        </div>
-      </div>
+        </MotionRise>
+      </MotionStagger>
 
-      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden mb-6">
+      <MotionRise delay={0.08} className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden mb-6">
         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
           <h3 className="text-lg font-bold text-gray-900">Active School Bus Corridors</h3>
           <span className="text-xs font-semibold text-[#146ef5] bg-blue-50 px-3 py-1 rounded-full">
@@ -239,7 +240,7 @@ export default function TransportDashboard() {
             ))}
           </tbody>
         </table>
-      </div>
+      </MotionRise>
     </>
   );
 }

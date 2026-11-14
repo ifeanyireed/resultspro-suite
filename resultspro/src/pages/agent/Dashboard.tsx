@@ -14,6 +14,7 @@ import {
 } from '@/lib/hugeicons-compat';
 import { useNavigate } from 'react-router-dom';
 import { useAgentDashboard } from '@/hooks/useAgentAnalytics';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface AgentDashboardProps {
   agentId?: string;
@@ -133,7 +134,7 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentId = '' }) 
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
           <div className="space-y-6">
       {/* Header Card */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 text-white hover:bg-white/5 transition-colors">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 text-white hover:bg-white/5 transition-colors">
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">Agent Dashboard</h1>
@@ -152,12 +153,12 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentId = '' }) 
             />
           )}
         </div>
-      </div>
+      </MotionRise>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Commission Earned */}
-        <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
+        <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
           <div className="flex items-center justify-between mb-2">
             <span className="text-gray-400 text-sm">Total Earned</span>
             <DollarSign className="w-5 h-5 text-green-400" />
@@ -168,10 +169,10 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentId = '' }) 
           <div className="text-xs text-gray-400 mt-1">
             Pending: ₦{agent.pendingCommission.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
-        </div>
+        </MotionRise>
 
         {/* Points Balance */}
-        <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
+        <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
           <div className="flex items-center justify-between mb-2">
             <span className="text-gray-400 text-sm">Points Balance</span>
             <Target className="w-5 h-5 text-blue-400" />
@@ -180,10 +181,10 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentId = '' }) 
           <div className="text-xs text-gray-400 mt-1">
             Lifetime: {rewards.lifetimePoints}
           </div>
-        </div>
+        </MotionRise>
 
         {/* Active Referrals */}
-        <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
+        <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
           <div className="flex items-center justify-between mb-2">
             <span className="text-gray-400 text-sm">Total Referrals</span>
             <Users className="w-5 h-5 text-purple-400" />
@@ -194,10 +195,10 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentId = '' }) 
           <div className="text-xs text-gray-400 mt-1">
             Approved: {referralStats.approvedReferrals}
           </div>
-        </div>
+        </MotionRise>
 
         {/* Leaderboard Rank */}
-        <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
+        <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
           <div className="flex items-center justify-between mb-2">
             <span className="text-gray-400 text-sm">Leaderboard Rank</span>
             <Trophy className="w-5 h-5 text-yellow-400" />
@@ -208,11 +209,11 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentId = '' }) 
           <div className="text-xs text-gray-400 mt-1">
             {rewards.badges?.length || 0} badges
           </div>
-        </div>
-      </div>
+        </MotionRise>
+      </MotionStagger>
 
       {/* Referral Code Section */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 hover:bg-white/5 transition-colors">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 hover:bg-white/5 transition-colors">
         <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
           <Target className="w-5 h-5 text-blue-400" />
           Your Referral Code
@@ -258,34 +259,34 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentId = '' }) 
             <div className="text-xs text-gray-400">Commission Paid</div>
           </div>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Badges Section */}
       {rewards.badges && rewards.badges.length > 0 && (
-        <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 hover:bg-white/5 transition-colors">
+        <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 hover:bg-white/5 transition-colors">
           <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <Trophy className="w-5 h-5 text-yellow-400" />
             Your Badges
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <MotionStagger className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {rewards.badges.map((badge: any, idx: number) => (
-              <div
+              <MotionRise
                 key={idx}
                 className="text-center bg-[rgba(255,255,255,0.02)] rounded-[20px] p-4 border border-[rgba(255,255,255,0.07)] hover:bg-white/5 transition-colors"
               >
                 <div className="text-3xl mb-2">🏆</div>
                 <div className="text-sm font-semibold text-white">{badge.badgeType}</div>
                 <div className="text-xs text-gray-400 mt-1">{badge.description}</div>
-              </div>
+              </MotionRise>
             ))}
-          </div>
-        </div>
+          </MotionStagger>
+        </MotionRise>
       )}
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Withdrawal Stats */}
-        <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
+        <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
           <h3 className="text-sm font-semibold text-white mb-3">Withdrawals</h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between text-gray-300">
@@ -303,10 +304,10 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentId = '' }) 
               </span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Referral Stats */}
-        <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
+        <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
           <h3 className="text-sm font-semibold text-white mb-3">Referral Stats</h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between text-gray-300">
@@ -325,10 +326,10 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentId = '' }) 
               </span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Quick Actions */}
-        <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
+        <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
           <h3 className="text-sm font-semibold text-white mb-3">Quick Links</h3>
           <div className="space-y-2">
             <button className="w-full text-left text-xs text-blue-400 hover:text-blue-300 transition">
@@ -341,8 +342,8 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentId = '' }) 
               → Upgrade Plan
             </button>
           </div>
-        </div>
-      </div>
+        </MotionRise>
+      </MotionStagger>
       </div>
       </div>
     </main>

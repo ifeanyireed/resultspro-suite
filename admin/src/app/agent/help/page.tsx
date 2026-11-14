@@ -7,18 +7,19 @@ import {
   VideoCameraIcon,
   ChevronDownIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function HelpPage() {
   return (
-    <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+    <MotionStagger className="w-full">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Help & Resources</h1>
           <p className="text-sm text-gray-500 mt-1">Get support, read our guides, and find answers to common questions.</p>
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <MotionRise delay={0.05} className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         
         {/* Support Cards */}
         <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col items-center text-center hover:-translate-y-1 transition-transform cursor-pointer">
@@ -48,9 +49,9 @@ export default function HelpPage() {
           <span className="text-sm font-semibold text-purple-500 mt-auto">Watch Videos</span>
         </div>
 
-      </div>
+      </MotionRise>
 
-      <div className="bg-white rounded-[1.5rem] p-8 shadow-sm border border-gray-100">
+      <MotionRise delay={0.1} className="bg-white rounded-[1.5rem] p-8 shadow-sm border border-gray-100">
         <h3 className="font-bold text-gray-900 mb-6 text-lg">Frequently Asked Questions</h3>
         
         <div className="space-y-4">
@@ -91,7 +92,7 @@ export default function HelpPage() {
           </div>
 
         </div>
-      </div>
-    </>
+      </MotionRise>
+    </MotionStagger>
   );
 }

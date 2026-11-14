@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Users, Award } from '@/lib/hugeicons-compat';
 import { IconTrendingUp as TrendingUp, IconTrendingDown as TrendingDown } from '@tabler/icons-react';
 import { axiosInstance as axios } from '@/lib/axiosConfig';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface CohortTier {
   count: number;
@@ -112,7 +113,7 @@ const TeacherCohortAnalysis: React.FC = () => {
     <div className="min-h-screen text-white">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <button
             onClick={() => navigate(-1)}
             className="text-blue-400 hover:text-blue-300 mb-4"
@@ -121,12 +122,12 @@ const TeacherCohortAnalysis: React.FC = () => {
           </button>
           <h1 className="text-3xl font-bold mb-2">Cohort Analysis</h1>
           <p className="text-slate-400">Student grouping by performance tier</p>
-        </div>
+        </MotionRise>
 
         {/* Distribution Visualization */}
-        <div className="mb-8 bg-slate-800 rounded-lg p-6">
+        <MotionRise className="mb-8 bg-slate-800 rounded-lg p-6">
           <h2 className="text-xl font-bold mb-6">Class Distribution</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {tiers.map((tier) => (
               <div
                 key={tier.key}
@@ -153,11 +154,11 @@ const TeacherCohortAnalysis: React.FC = () => {
                 <p className="text-sm mt-2">{tier.data.percentage.toFixed(0)}% of class</p>
               </div>
             ))}
-          </div>
-        </div>
+          </MotionStagger>
+        </MotionRise>
 
         {/* Detailed Student Lists */}
-        <div className="space-y-4">
+        <MotionStagger className="space-y-4">
           {tiers.map((tier) => (
             <div key={tier.key} className="bg-slate-800 rounded-lg overflow-hidden">
               <button
@@ -219,10 +220,10 @@ const TeacherCohortAnalysis: React.FC = () => {
               )}
             </div>
           ))}
-        </div>
+        </MotionStagger>
 
         {/* Insights and Recommendations */}
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <MotionStagger className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-slate-800 rounded-lg p-6">
             <h3 className="text-lg font-bold mb-4">📊 Class Insights</h3>
             <div className="space-y-3 text-sm text-slate-300">
@@ -258,7 +259,7 @@ const TeacherCohortAnalysis: React.FC = () => {
               </p>
             </div>
           </div>
-        </div>
+        </MotionStagger>
       </div>
     </div>
   );

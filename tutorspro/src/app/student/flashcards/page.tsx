@@ -3,6 +3,7 @@
 import { IconBolt as Zap, IconRotate as RotateCcw, IconCheck as Check, IconX as X, IconChevronRight as ChevronRight, IconStack2 as Layers, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { RoleGate } from '@/components/RoleGate';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function Flashcards() {
@@ -42,7 +43,7 @@ export default function Flashcards() {
       <main className="min-h-screen bg-navy pb-24">
                 
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+          <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
              <div>
                 <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
                    Study <span className="text-amber">Flashcards</span>
@@ -52,11 +53,11 @@ export default function Flashcards() {
              <button className="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 text-white font-bold flex items-center gap-2 hover:bg-white/10 transition-all">
                 <Layers className="w-5 h-5" /> Create New Deck
              </button>
-          </div>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
              {/* Active Card View (Large) */}
-             <div className="lg:col-span-2">
+             <MotionRise className="lg:col-span-2">
                 {activeCard ? (
                   <>
                     <div 
@@ -113,10 +114,10 @@ export default function Flashcards() {
                      <p className="text-gray-500 font-bold uppercase tracking-widest text-sm">Select a deck to start studying</p>
                   </div>
                 )}
-             </div>
+             </MotionRise>
 
              {/* Card Decks Sidebar */}
-             <div className="space-y-6">
+             <MotionRise delay={0.1} className="space-y-6">
                 <h3 className="text-xl font-display font-bold text-white px-2">Your Decks</h3>
                 {decks.length > 0 ? decks.map((set, i) => (
                   <div 
@@ -139,8 +140,8 @@ export default function Flashcards() {
                 )) : (
                   <p className="text-gray-600 text-sm italic px-2">No decks found.</p>
                 )}
-             </div>
-          </div>
+             </MotionRise>
+          </MotionStagger>
         </div>
         
         <style jsx global>{`

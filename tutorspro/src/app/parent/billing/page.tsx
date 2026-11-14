@@ -1,6 +1,7 @@
 "use client";
 
 import api from '@/lib/api';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { IconCreditCard as CreditCard, IconWallet as Wallet, IconHistory as History, IconArrowDownLeft as ArrowDownLeft, IconArrowUpRight as ArrowUpRight, IconDownload as Download, IconShieldCheck as ShieldCheck, IconPlus as Plus, IconChevronRight as ChevronRight, IconTrendingUp as TrendingUp, IconAlertCircle as AlertCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -33,7 +34,7 @@ export default function ParentBilling() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Billing & <span className="text-blue">Credits</span>
@@ -43,7 +44,7 @@ export default function ParentBilling() {
           <button className="px-8 py-4 rounded-2xl bg-blue text-white font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-blue/20">
              <Plus className="w-5 h-5" /> ADD FUNDS
           </button>
-        </div>
+        </MotionRise>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 opacity-50">
@@ -51,9 +52,9 @@ export default function ParentBilling() {
             <p className="text-white font-bold">Loading billing details...</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content (Left) */}
-            <div className="lg:col-span-2 space-y-8">
+            <MotionRise className="lg:col-span-2 space-y-8">
                {/* Wallet Card */}
                <div className="p-10 rounded-[40px] bg-gradient-to-br from-blue to-purple relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:scale-110 transition-transform duration-700">
@@ -119,10 +120,10 @@ export default function ParentBilling() {
                      )}
                   </div>
                </section>
-            </div>
+            </MotionRise>
 
             {/* Sidebar (Right) */}
-            <div className="space-y-8">
+            <MotionRise delay={0.1} className="space-y-8">
                {/* Credit Usage */}
                <section className="p-8 rounded-[40px] bg-white/5 border border-white/10">
                   <div className="flex items-center gap-3 text-blue font-bold mb-8">
@@ -165,8 +166,8 @@ export default function ParentBilling() {
                      Manage Invoices <ChevronRight className="w-4 h-4" />
                   </button>
                </section>
-            </div>
-          </div>
+            </MotionRise>
+          </MotionStagger>
         )}
       </div>
     </main>

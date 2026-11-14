@@ -6,6 +6,7 @@ import { FaMicrosoft } from 'react-icons/fa';
 import { InlineLoadingSpinner } from '@/components/LoadingSpinner';
 import Navigation from '@/components/Navigation';
 import axiosInstance from '@/lib/axiosConfig';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -110,7 +111,7 @@ const Login: React.FC = () => {
         <img src="/Hero.png" className="absolute h-full w-full object-cover inset-0" alt="Background" />
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
-        <div className="relative z-10 max-w-md mx-auto text-center w-full">
+        <MotionRise className="relative z-10 max-w-md mx-auto text-center w-full">
           <h1 className="text-5xl md:text-6xl font-bold mb-2 text-white">Welcome Back</h1>
           <p className="text-gray-400 text-sm mb-12">Sign in to your Results Pro account</p>
 
@@ -194,7 +195,7 @@ const Login: React.FC = () => {
           <p className="text-center text-gray-400 text-sm mt-8">
             Don't have an account? <Link to="/auth/register" className="text-blue-400 hover:text-blue-300 transition-colors font-semibold">Sign up</Link>
           </p>
-        </div>
+        </MotionRise>
       </section>
     </div>
   );

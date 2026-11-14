@@ -13,6 +13,7 @@ import { coursesApi } from '@/lib/api';
 import MentorEditModal from './MentorEditModal';
 import InviteMentorModal from './InviteMentorModal';
 import MentorApplicationsSection from './MentorApplicationsSection';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function MentorsPage() {
 
@@ -52,7 +53,7 @@ export default function MentorsPage() {
   const mentors = data?.mentors || [];
 
   return (
-    <>
+    <MotionRise>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Mentors</h2>
@@ -64,7 +65,7 @@ export default function MentorsPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-video group hover:-translate-y-1 transition-transform">
           <h3 className="text-xl font-normal text-gray-900">Total Mentors</h3>
           <div>
@@ -92,11 +93,11 @@ export default function MentorsPage() {
             <p className="text-xs text-gray-500">Awaiting mentor feedback</p>
           </div>
         </div>
-      </div>
+      </MotionStagger>
 
       <MentorApplicationsSection />
 
-      <div className="space-y-4">
+      <MotionRise className="space-y-4">
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-lg font-medium text-gray-900">Active Mentors</h3>
           <span className="text-xs text-gray-500 font-medium">{mentors.length} total</span>
@@ -151,7 +152,7 @@ export default function MentorsPage() {
             ))}
           </div>
         )}
-      </div>
+      </MotionRise>
             <InviteMentorModal 
         isOpen={isInviteModalOpen} 
         onClose={() => setIsInviteModalOpen(false)} 
@@ -164,6 +165,6 @@ export default function MentorsPage() {
         mentor={selectedMentor} 
       />
 
-    </>
+    </MotionRise>
   );
 }

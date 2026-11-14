@@ -13,11 +13,12 @@ import {
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
 import { CustomizerLeaderboard } from '@puzzlepro/modules';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 function PuzzlePROAdminAnalytics() {
   return (
     <div>
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Coding Cohorts & School-Wide Progress</h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -29,11 +30,11 @@ function PuzzlePROAdminAnalytics() {
             Export STEM Progress Report
           </button>
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {/* Total Enrolled Coders */}
-        <div className="bg-gradient-to-br from-[#f59e0b] to-[#ea580c] rounded-[1.5rem] p-6 shadow-sm shadow-amber-500/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-gradient-to-br from-[#f59e0b] to-[#ea580c] rounded-[1.5rem] p-6 shadow-sm shadow-amber-500/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
           <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-amber-950 rounded-full filter blur-[3rem] opacity-40"></div>
           <div className="flex justify-between items-start z-10">
             <h3 className="text-xl font-normal text-white">Active Coders</h3>
@@ -50,10 +51,10 @@ function PuzzlePROAdminAnalytics() {
               <span>Active this term</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Puzzles Solved */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Puzzles Solved</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -67,10 +68,10 @@ function PuzzlePROAdminAnalytics() {
               <span>Across JSS1 – SS3</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Active Portfolios */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Game Projects</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -84,10 +85,10 @@ function PuzzlePROAdminAnalytics() {
               <span>Blockly &amp; JS builds</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Certificates & Badges */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Skill Badges</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -100,10 +101,10 @@ function PuzzlePROAdminAnalytics() {
               <span className="text-gray-400">Verified certificates</span>
             </div>
           </div>
-        </div>
-      </div>
+        </MotionRise>
+      </MotionStagger>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+      <MotionRise delay={0.08} className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         {/* Main Table Area */}
         <div className="lg:col-span-8 flex flex-col gap-3">
           <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden flex-1">
@@ -184,7 +185,7 @@ function PuzzlePROAdminAnalytics() {
             </div>
           </div>
         </div>
-      </div>
+      </MotionRise>
     </div>
   );
 }
@@ -237,7 +238,7 @@ function PuzzlePROCurriculumWorlds() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-[1.5rem] p-6 border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <MotionRise className="bg-white rounded-[1.5rem] p-6 border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-3 py-1 rounded-full">
             636 Interactive Waypoints
@@ -256,11 +257,11 @@ function PuzzlePROCurriculumWorlds() {
           <SparklesIcon className="w-4 h-4" />
           Launch PuzzlePRO Studio
         </a>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {worlds.map((w) => (
-          <div key={w.world} className="bg-white rounded-[1.5rem] p-6 border border-gray-100 shadow-sm flex flex-col justify-between">
+          <MotionRise key={w.world} className="bg-white rounded-[1.5rem] p-6 border border-gray-100 shadow-sm flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full">{w.world}</span>
@@ -279,18 +280,18 @@ function PuzzlePROCurriculumWorlds() {
             <div className="pt-3 border-t border-gray-100 text-xs font-medium text-emerald-600">
               {w.status}
             </div>
-          </div>
+          </MotionRise>
         ))}
-      </div>
+      </MotionStagger>
     </div>
   );
 }
 
 function AdminPuzzleLeaderboardView() {
   return (
-    <div style={{ maxWidth: '900px', margin: '1rem auto 4rem auto' }}>
+    <MotionRise style={{ maxWidth: '900px', margin: '1rem auto 4rem auto' }}>
       <CustomizerLeaderboard onClose={() => {}} />
-    </div>
+    </MotionRise>
   );
 }
 

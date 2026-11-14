@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function CreateExamPage() {
   const [loading, setLoading] = useState(true);
@@ -45,7 +46,7 @@ export default function CreateExamPage() {
       
       
       <main className="p-8 max-w-5xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <MotionRise className="flex justify-between items-center mb-8">
           <Link href="/dashboard/teacher" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 transition-colors">
             <ChevronLeft className="w-4 h-4 mr-1" /> Back
           </Link>
@@ -57,10 +58,10 @@ export default function CreateExamPage() {
               <Save className="w-4 h-4 mr-2" /> Publish Exam
             </Button>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <MotionRise className="lg:col-span-2 space-y-6">
             <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 space-y-4">
               <Input 
                 placeholder="Exam Title (e.g. SSS 2 Biology 1st Term Final)" 
@@ -81,10 +82,10 @@ export default function CreateExamPage() {
                   <Button variant="outline" className="border-gray-100 text-gray-900 h-10 px-6">Upload File</Button>
                </div>
             </div>
-          </div>
+          </MotionRise>
 
           {/* Sidebar Settings */}
-          <div className="space-y-6">
+          <MotionRise delay={0.1} className="space-y-6">
             <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 space-y-6">
               <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2">
                 <Settings className="w-4 h-4" /> Exam Setup
@@ -113,8 +114,8 @@ export default function CreateExamPage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </MotionRise>
+        </MotionStagger>
       </main>
     </div>
   );

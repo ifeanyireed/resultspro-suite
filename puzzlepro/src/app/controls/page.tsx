@@ -51,6 +51,7 @@ import {
   IconMapPin,
 } from '@tabler/icons-react';
 import { getCharacterAvatarUrl } from '@/utils/cdn';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const AVATAR_OPTIONS = Array.from(
   { length: 20 },
@@ -499,7 +500,7 @@ export default function AdminControlsPage() {
 
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-blue-950/85 to-slate-950/65 z-0" />
 
-        <div className="hidden md:flex absolute left-12 lg:left-20 top-1/2 -translate-y-1/2 z-10 max-w-lg flex-col gap-6 text-white animate-fade-in-up">
+        <MotionRise className="hidden md:flex absolute left-12 lg:left-20 top-1/2 -translate-y-1/2 z-10 max-w-lg flex-col gap-6 text-white">
           <div className="flex items-center gap-3">
             <Image src="/monkey1.svg" alt="PuzzlePro Logo" width={56} height={56} className="object-contain drop-shadow-md shrink-0 transition-transform hover:scale-105" />
             <span className="font-normal text-xs tracking-widest uppercase text-amber-300">
@@ -517,31 +518,31 @@ export default function AdminControlsPage() {
           </div>
 
           {/* Key App Features Highlights */}
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
+          <MotionStagger className="grid grid-cols-2 gap-3 text-xs">
+            <MotionRise className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
               <span className="text-amber-300 font-medium block mb-1">636 Coding Quests</span>
               <span className="text-[11px] text-slate-200/80">Interactive Scratch blocks, HTML, CSS, JS & Python.</span>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
+            </MotionRise>
+            <MotionRise delay={0.05} className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
               <span className="text-amber-300 font-medium block mb-1">8-Digit Access Codes</span>
               <span className="text-[11px] text-slate-200/80">Instant passwordless student logins & tracking.</span>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
+            </MotionRise>
+            <MotionRise delay={0.1} className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
               <span className="text-amber-300 font-medium block mb-1">5 Gamified Worlds</span>
               <span className="text-[11px] text-slate-200/80">Custom world assignments per school or child.</span>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
+            </MotionRise>
+            <MotionRise delay={0.15} className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15">
               <span className="text-amber-300 font-medium block mb-1">Google Ads & Embeds</span>
               <span className="text-[11px] text-slate-200/80">Toggle ad monetization & iFrame LMS embeds.</span>
-            </div>
-          </div>
+            </MotionRise>
+          </MotionStagger>
 
           <div className="text-[10px] text-slate-400 font-normal uppercase tracking-wider mt-2">
             © 2026 PuzzlePro Controls Dashboard. All rights reserved.
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="relative z-10 w-full max-w-[380px] bg-slate-900/80 md:bg-white/90 p-7 rounded-[28px] border border-white/20 md:border-white/60 shadow-2xl backdrop-blur-xl flex flex-col gap-4 animate-fade-in-up">
+        <MotionRise delay={0.1} className="relative z-10 w-full max-w-[380px] bg-slate-900/80 md:bg-white/90 p-7 rounded-[28px] border border-white/20 md:border-white/60 shadow-2xl backdrop-blur-xl flex flex-col gap-4">
           <div className="text-center md:text-left flex flex-col items-center md:items-start">
             <Image src="/monkey1.svg" alt="PuzzlePro Logo" width={48} height={48} className="object-contain mb-2 drop-shadow-md shrink-0 transition-transform hover:scale-105" />
             <h2 className="text-xl font-medium text-white md:text-slate-900 tracking-tight">Controls Dashboard</h2>
@@ -619,7 +620,7 @@ export default function AdminControlsPage() {
               )}
             </button>
           </form>
-        </div>
+        </MotionRise>
 
         {/* FORGOT PASSWORD MODAL */}
         {showForgotModal && (
@@ -818,10 +819,10 @@ export default function AdminControlsPage() {
       </header>
 
       {/* Main Admin Dashboard Body */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-6 animate-fade-in-up">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-6">
         {/* Metric Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
+        <MotionStagger className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <MotionRise className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
             <div>
               <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Schools & Families</p>
               <h3 className="text-2xl font-medium text-slate-900 mt-1">{organisations.length} Active</h3>
@@ -832,9 +833,9 @@ export default function AdminControlsPage() {
             <div className="w-12 h-12 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 transition-transform duration-200 hover:scale-110">
               <IconBuildingSkyscraper className="w-6 h-6" />
             </div>
-          </div>
+          </MotionRise>
 
-          <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
+          <MotionRise delay={0.05} className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
             <div>
               <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Enrolled Students</p>
               <h3 className="text-2xl font-medium text-slate-900 mt-1">{usersList.length} Students</h3>
@@ -843,9 +844,9 @@ export default function AdminControlsPage() {
             <div className="w-12 h-12 rounded-full bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600 transition-transform duration-200 hover:scale-110">
               <IconUsers className="w-6 h-6" />
             </div>
-          </div>
+          </MotionRise>
 
-          <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
+          <MotionRise delay={0.1} className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex items-center justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
             <div>
               <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Paid Subscriptions</p>
               <h3 className="text-2xl font-medium text-slate-900 mt-1">{subscriptionsList.length} Accounts</h3>
@@ -854,11 +855,11 @@ export default function AdminControlsPage() {
             <div className="w-12 h-12 rounded-full bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 transition-transform duration-200 hover:scale-110">
               <IconCreditCard className="w-6 h-6" />
             </div>
-          </div>
-        </div>
+          </MotionRise>
+        </MotionStagger>
 
         {/* 3 Core Modules Navigation Tabs */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+        <MotionRise delay={0.08} className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
           <div className="flex items-center space-x-6 w-full sm:w-auto px-2">
             <button
               onClick={() => handleTabChange('organisations')}
@@ -908,11 +909,11 @@ export default function AdminControlsPage() {
               className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-normal text-slate-800 outline-none focus:ring-2 focus:ring-amber-500 transition-all duration-200"
             />
           </div>
-        </div>
+        </MotionRise>
 
         {/* MODULE 1: SCHOOLS & FAMILIES */}
         {activeTab === 'organisations' && (
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col gap-4 animate-fade-in-up">
+          <MotionRise delay={0.12} className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col gap-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-150">
               <div>
                 <h2 className="text-base font-medium text-slate-900 tracking-tight">Schools & Families</h2>
@@ -1118,12 +1119,12 @@ export default function AdminControlsPage() {
                 </button>
               </div>
             </div>
-          </div>
+          </MotionRise>
         )}
 
         {/* MODULE 2: USER & WORLD ASSIGNMENT MANAGEMENT */}
         {activeTab === 'users' && (
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col gap-4 animate-fade-in-up">
+          <MotionRise className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col gap-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-150">
               <div>
                 <h2 className="text-base font-medium text-slate-900 tracking-tight">User & World Assignment</h2>
@@ -1360,12 +1361,12 @@ export default function AdminControlsPage() {
                 </button>
               </div>
             </div>
-          </div>
+          </MotionRise>
         )}
 
         {/* MODULE 3: SUBSCRIPTION MANAGEMENT */}
         {activeTab === 'subscriptions' && (
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col gap-4 animate-fade-in-up">
+          <MotionRise className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col gap-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-150">
               <div>
                 <h2 className="text-base font-medium text-slate-900 tracking-tight">Subscription Management</h2>
@@ -1468,7 +1469,7 @@ export default function AdminControlsPage() {
                 </button>
               </div>
             </div>
-          </div>
+          </MotionRise>
         )}
       </main>
 

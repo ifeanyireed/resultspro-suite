@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const myClassesData = [
   { id: 1, name: "JSS 2 Science", students: 32, performance: "82%" },
@@ -61,7 +62,7 @@ export default function TeacherStudentsPage() {
       
       
       <main className="p-8 space-y-8">
-        <div className="flex justify-between items-center">
+        <MotionRise className="flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 font-display">Classroom Overview</h2>
             <p className="text-sm text-gray-500">Monitor performance across your assigned classes.</p>
@@ -69,14 +70,14 @@ export default function TeacherStudentsPage() {
           <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold">
             <MessageSquare className="w-4 h-4 mr-2" /> Message All Classes
           </Button>
-        </div>
+        </MotionRise>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Class List */}
-          <div className="lg:col-span-2 space-y-6">
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {myClassesData.map((cls) => (
-                   <div key={cls.id} className="bg-white shadow-sm border border-gray-100 p-6 rounded-[24px] hover:border-green/50 transition-all group cursor-pointer">
+          <MotionRise className="lg:col-span-2 space-y-6">
+             <MotionStagger className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {myClassesData.map((cls, i) => (
+                   <MotionRise key={cls.id} delay={i * 0.05} className="bg-white shadow-sm border border-gray-100 p-6 rounded-[24px] hover:border-green/50 transition-all group cursor-pointer">
                       <div className="flex justify-between items-start mb-4">
                          <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
                             <Users className="w-5 h-5" />
@@ -90,9 +91,9 @@ export default function TeacherStudentsPage() {
                          <div className="text-xs text-gray-500">Avg. Performance</div>
                          <div className="text-sm font-bold text-emerald-600">{cls.performance}</div>
                       </div>
-                   </div>
+                   </MotionRise>
                 ))}
-             </div>
+             </MotionStagger>
 
              <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center">
@@ -107,10 +108,10 @@ export default function TeacherStudentsPage() {
                    <p className="text-gray-500 text-sm">Select a class above to view student details <br /> or use search to find a specific student.</p>
                 </div>
              </div>
-          </div>
+          </MotionRise>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <MotionRise delay={0.1} className="space-y-6">
              <div className="bg-white shadow-sm border border-gray-100 p-6 rounded-[32px]">
                 <h3 className="text-lg font-bold text-gray-900 font-display mb-6 flex items-center gap-2">
                    <BarChart3 className="w-5 h-5 text-amber-600" /> Top Performers
@@ -145,8 +146,8 @@ export default function TeacherStudentsPage() {
                    </Button>
                 </div>
              </div>
-          </div>
-        </div>
+          </MotionRise>
+        </MotionStagger>
       </main>
     </div>
   );

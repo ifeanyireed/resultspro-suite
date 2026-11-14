@@ -1,6 +1,7 @@
 "use client";
 
 import api from '@/lib/api';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { IconTrendingUp as TrendingUp, IconUser as User, IconBrain as Brain, IconChartBar as BarChart3, IconChevronRight as ChevronRight, IconArrowUpRight as ArrowUpRight, IconTarget as Target, IconClock as Clock, IconLayoutDashboard as LayoutDashboard, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -63,7 +64,7 @@ export default function ParentProgress() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Progress <span className="text-blue">Analytics</span>
@@ -84,7 +85,7 @@ export default function ParentProgress() {
               </button>
             ))}
           </div>
-        </div>
+        </MotionRise>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 opacity-50">
@@ -100,9 +101,9 @@ export default function ParentProgress() {
              <p className="text-sm text-gray-500">Link a child account to see their progress analytics.</p>
           </div>
         ) : (
-          <div className={`grid grid-cols-1 lg:grid-cols-3 gap-8 transition-opacity duration-300 ${loadingProgress ? 'opacity-50' : 'opacity-100'}`}>
+          <MotionStagger className={`grid grid-cols-1 lg:grid-cols-3 gap-8 transition-opacity duration-300 ${loadingProgress ? 'opacity-50' : 'opacity-100'}`}>
             {/* Main Analytics (Left) */}
-            <div className="lg:col-span-2 space-y-8">
+            <MotionRise className="lg:col-span-2 space-y-8">
               {/* Subject Performance Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  {progressData?.subject_mastery.map((data: any, i: number) => (
@@ -155,10 +156,10 @@ export default function ParentProgress() {
                     <span>Dec</span>
                  </div>
               </section>
-            </div>
+            </MotionRise>
 
             {/* Sidebar (Right) */}
-            <div className="space-y-8">
+            <MotionRise delay={0.1} className="space-y-8">
                {/* Target Goals */}
                <section className="p-8 rounded-[40px] bg-white/5 border border-white/10">
                   <div className="w-12 h-12 rounded-2xl bg-amber/10 text-amber flex items-center justify-center mb-6">
@@ -200,8 +201,8 @@ export default function ParentProgress() {
                      Full Activity Log
                   </button>
                </section>
-            </div>
-          </div>
+            </MotionRise>
+          </MotionStagger>
         )}
       </div>
     </main>

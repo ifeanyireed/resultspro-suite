@@ -6,6 +6,7 @@ import api from '@/lib/api';
 import { IconLoader2 } from '@tabler/icons-react';
 import { RoleGate } from '@/components/RoleGate';
 import Link from 'next/link';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function TutorSupport() {
   const { user } = useAuthStore();
@@ -66,12 +67,14 @@ export default function TutorSupport() {
     <RoleGate allowedRoles={["TUTOR", "SUPERADMIN"]}>
       <main className="min-h-screen bg-gray-50 pb-24">
         <div className="max-w-4xl mx-auto px-4 md:px-8 pt-12 space-y-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Support Center</h1>
-            <p className="text-gray-500">Need help? Submit a ticket and our team will get back to you shortly.</p>
-          </div>
+          <MotionRise>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Support Center</h1>
+              <p className="text-gray-500">Need help? Submit a ticket and our team will get back to you shortly.</p>
+            </div>
+          </MotionRise>
 
-          <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm">
+          <MotionRise delay={0.1} className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Create New Ticket</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -118,9 +121,9 @@ export default function TutorSupport() {
                 </button>
               </div>
             </form>
-          </div>
+          </MotionRise>
 
-          <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm">
+          <MotionRise delay={0.2} className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Your Tickets</h2>
             {loading ? (
               <div className="flex justify-center py-8">
@@ -131,7 +134,7 @@ export default function TutorSupport() {
                 You haven't submitted any tickets yet.
               </div>
             ) : (
-              <div className="space-y-4">
+              <MotionStagger className="space-y-4">
                 {tickets.map((t: any) => (
                   <div key={t.id} className="flex flex-col md:flex-row md:items-center justify-between p-5 border border-gray-100 rounded-2xl gap-4 hover:border-gray-200 hover:shadow-sm transition-all bg-gray-50 cursor-pointer">
                     <div>
@@ -153,9 +156,9 @@ export default function TutorSupport() {
                     </div>
                   </div>
                 ))}
-              </div>
+              </MotionStagger>
             )}
-          </div>
+          </MotionRise>
         </div>
       </main>
     </RoleGate>

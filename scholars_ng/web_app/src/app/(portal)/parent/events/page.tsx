@@ -5,6 +5,7 @@ import {
   CalendarIcon,
   MapPinIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function ParentEventsPage() {
@@ -22,14 +23,14 @@ export default function ParentEventsPage() {
 
   return (
     <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Calendar & Events</h1>
           <p className="text-sm text-gray-500 mt-1">Upcoming school events, holidays, and PTA meetings.</p>
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
+      <MotionRise delay={0.08} className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-6 border-b border-gray-100">
           <h3 className="text-lg font-medium text-gray-900">Campus Notices & Scheduled Events</h3>
         </div>
@@ -56,7 +57,7 @@ export default function ParentEventsPage() {
             </div>
           ))}
         </div>
-      </div>
+      </MotionRise>
     </>
   );
 }

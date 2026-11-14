@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconEye as Eye, IconUsers as Users, IconPlayerPlay as Play, IconSearch as Search, IconChevronRight as ChevronRight, IconDeviceDesktop as Monitor, IconShieldCheck as ShieldCheck, IconGlobe as Globe, IconClock as Clock, IconBolt as Zap, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -43,7 +44,7 @@ export default function SpectatorLobby() {
     <main className="min-h-screen bg-navy text-white pb-24">
       <Navbar />
       
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
+      <MotionRise className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div>
@@ -159,7 +160,7 @@ export default function SpectatorLobby() {
             </div>
           </>
         )}
-      </div>
+      </MotionRise>
     </main>
   );
 }

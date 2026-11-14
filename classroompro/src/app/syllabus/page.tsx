@@ -18,6 +18,7 @@ import Link from "next/link";
 import api from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/useAuthStore";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function PublicSyllabusPage() {
   const { user, isAuthenticated } = useAuthStore();
@@ -117,17 +118,17 @@ export default function PublicSyllabusPage() {
       <main className="flex-1 pt-32 pb-20 px-4">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
+          <MotionRise className="text-center mb-12">
             <h1 className="text-4xl md:text-6xl font-bold font-display text-white mb-4 tracking-tight">
               Study <span className="text-green">Syllabus</span>
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
               A structured 12-week learning path designed for academic mastery.
             </p>
-          </div>
+          </MotionRise>
 
           {/* Filters */}
-          <div className="space-y-4 mb-16 bg-white/5 p-6 rounded-[40px] border border-white/10 backdrop-blur-2xl shadow-2xl">
+          <MotionRise delay={0.08} className="space-y-4 mb-16 bg-white/5 p-6 rounded-[40px] border border-white/10 backdrop-blur-2xl shadow-2xl">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
@@ -199,7 +200,7 @@ export default function PublicSyllabusPage() {
                   </Select>
                </div>
             </div>
-          </div>
+          </MotionRise>
 
           {/* Syllabus Timeline */}
           {loading ? (
@@ -207,12 +208,12 @@ export default function PublicSyllabusPage() {
                <Loader2 className="w-12 h-12 text-green animate-spin" />
             </div>
           ) : currentSyllabusList.length > 0 ? (
-            <div className="space-y-12">
-              {currentSyllabusList.map((syllabus: any) => {
+            <MotionStagger className="space-y-12">
+              {currentSyllabusList.map((syllabus: any, idx: number) => {
                 const isExpanded = !!expandedGroups[syllabus.key];
                 
                 return (
-                  <div key={syllabus.key} className="space-y-6">
+                  <MotionRise key={syllabus.key} delay={idx * 0.05} className="space-y-6">
                     {/* Syllabus Header Item - Clickable to Toggle */}
                     <button 
                       onClick={() => toggleGroup(syllabus.key)}
@@ -354,7 +355,7 @@ export default function PublicSyllabusPage() {
                         </div>
                       </div>
                     )}
-                  </div>
+                  </MotionRise>
                 );
               })}
 
@@ -439,7 +440,7 @@ export default function PublicSyllabusPage() {
                    </div>
                 </div>
               )}
-            </div>
+            </MotionStagger>
           ) : (
             <div className="text-center py-32 bg-white/5 rounded-[40px] border border-white/10 border-dashed">
                <Layers className="w-16 h-16 text-muted-foreground mx-auto mb-6 opacity-20" />

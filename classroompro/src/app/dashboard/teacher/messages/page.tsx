@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const contactsData = [
   { id: 1, name: "Mr. Kunle Alabi", role: "Parent (Jessica Alabi)", lastMessage: "Thank you for the update on Jessica's progress.", time: "10:24 AM", unread: 2, online: true },
@@ -72,7 +73,7 @@ export default function TeacherMessagesPage() {
       
       <main className="flex-1 flex overflow-hidden">
         {/* Contacts Sidebar */}
-        <div className="w-full md:w-80 border-r border-gray-100 bg-[#146ef5]/30 flex flex-col">
+        <MotionRise className="w-full md:w-80 border-r border-gray-100 bg-[#146ef5]/30 flex flex-col">
           <div className="p-6 space-y-4">
              <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
@@ -85,13 +86,14 @@ export default function TeacherMessagesPage() {
              </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto no-scrollbar">
-             {contactsData.map((contact) => (
-                <button 
+          <MotionStagger className="flex-1 overflow-y-auto no-scrollbar">
+             {contactsData.map((contact, i) => (
+                <MotionRise 
                    key={contact.id}
+                   delay={i * 0.04}
                    onClick={() => setActiveContact(contact)}
                    className={cn(
-                      "w-full p-4 flex items-center gap-4 hover:bg-gray-50 transition-all text-left relative group",
+                      "w-full p-4 flex items-center gap-4 hover:bg-gray-50 transition-all text-left relative group cursor-pointer",
                       activeContact.id === contact.id ? "bg-white shadow-sm border border-gray-100" : ""
                    )}
                 >
@@ -121,15 +123,15 @@ export default function TeacherMessagesPage() {
                          {contact.unread}
                       </div>
                    )}
-                </button>
+                </MotionRise>
              ))}
-          </div>
-        </div>
+          </MotionStagger>
+        </MotionRise>
 
         {/* Chat Area */}
         <div className="flex-1 flex flex-col bg-gray-50 relative">
            {/* Chat Header */}
-           <div className="h-20 border-b border-gray-100 px-8 flex items-center justify-between backdrop-blur-md">
+           <MotionRise delay={0.05} className="h-20 border-b border-gray-100 px-8 flex items-center justify-between backdrop-blur-md">
               <div className="flex items-center gap-4">
                  <div className="w-10 h-10 rounded-xl bg-white shadow-sm border border-gray-100 flex items-center justify-center font-bold text-gray-900">
                     {activeContact.name.split(' ').map(n => n[0]).join('')}
@@ -153,16 +155,16 @@ export default function TeacherMessagesPage() {
                     <MoreVertical className="w-4 h-4" />
                  </button>
               </div>
-           </div>
+           </MotionRise>
 
            {/* Messages */}
-           <div className="flex-1 overflow-y-auto p-8 space-y-6 no-scrollbar">
+           <MotionStagger className="flex-1 overflow-y-auto p-8 space-y-6 no-scrollbar">
               <div className="flex justify-center">
                  <span className="px-4 py-1 rounded-full bg-white shadow-sm border border-gray-100 text-[10px] font-bold text-gray-500 uppercase tracking-widest border border-gray-100">Today</span>
               </div>
 
               {/* Message Received */}
-              <div className="flex items-start gap-4 max-w-2xl text-sm">
+              <MotionRise delay={0.05} className="flex items-start gap-4 max-w-2xl text-sm">
                  <div className="w-8 h-8 rounded-lg bg-white shadow-sm border border-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-900 shrink-0">
                     {activeContact.name.split(' ').map(n => n[0]).join('')}
                  </div>
@@ -173,10 +175,10 @@ export default function TeacherMessagesPage() {
                     </div>
                     <span className="text-[10px] text-gray-500 font-medium">10:20 AM</span>
                  </div>
-              </div>
+              </MotionRise>
 
               {/* Message Sent */}
-              <div className="flex items-start gap-4 max-w-2xl ml-auto flex-row-reverse text-sm">
+              <MotionRise delay={0.1} className="flex items-start gap-4 max-w-2xl ml-auto flex-row-reverse text-sm">
                  <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">
                     JD
                  </div>
@@ -189,10 +191,10 @@ export default function TeacherMessagesPage() {
                        10:22 AM <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                     </div>
                  </div>
-              </div>
+              </MotionRise>
 
               {/* Message Received */}
-              <div className="flex items-start gap-4 max-w-2xl text-sm">
+              <MotionRise delay={0.15} className="flex items-start gap-4 max-w-2xl text-sm">
                  <div className="w-8 h-8 rounded-lg bg-white shadow-sm border border-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-900 shrink-0">
                     {activeContact.name.split(' ').map(n => n[0]).join('')}
                  </div>
@@ -202,11 +204,11 @@ export default function TeacherMessagesPage() {
                     </div>
                     <span className="text-[10px] text-gray-500 font-medium">10:24 AM</span>
                  </div>
-              </div>
-           </div>
+              </MotionRise>
+           </MotionStagger>
 
            {/* Input Area */}
-           <div className="p-6 bg-[#146ef5]/80 backdrop-blur-xl border-t border-gray-100">
+           <MotionRise delay={0.1} className="p-6 bg-[#146ef5]/80 backdrop-blur-xl border-t border-gray-100">
               <div className="flex items-center gap-4 bg-white shadow-sm border border-gray-100 rounded-2xl p-2 px-4 shadow-2xl focus-within:border-green/50 transition-all">
                  <button className="p-2 text-gray-500 hover:text-gray-900 transition-all">
                     <MessageSquare className="w-5 h-5" />
@@ -219,7 +221,7 @@ export default function TeacherMessagesPage() {
                     Send <Send className="w-3.5 h-3.5 ml-2" />
                  </Button>
               </div>
-           </div>
+           </MotionRise>
         </div>
       </main>
     </div>

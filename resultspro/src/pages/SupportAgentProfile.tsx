@@ -11,6 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 const API_BASE = (import.meta.env.VITE_API_URL || '');
 
@@ -165,7 +166,7 @@ const SupportAgentProfile: React.FC = () => {
       {/* Main Content */}
       <main className="relative z-10 flex-1 overflow-auto pb-20">
         <div className="max-w-4xl mx-auto px-4 md:px-8 py-12">
-          <div className="space-y-6">
+          <MotionRise className="space-y-6">
             {/* Profile Card */}
             <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-8">
               <div className="flex items-start justify-between mb-8">
@@ -315,7 +316,7 @@ const SupportAgentProfile: React.FC = () => {
                 </div>
               </div>
             )}
-          </div>
+          </MotionRise>
         </div>
       </main>
 

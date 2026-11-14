@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function NewKBArticle() {
   const router = useRouter();
@@ -73,8 +74,8 @@ export default function NewKBArticle() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-gray-50/50 p-6 rounded-2xl overflow-y-auto">
-      <div className="flex items-center gap-4 mb-8">
+    <MotionStagger className="flex flex-col h-full bg-gray-50/50 p-6 rounded-2xl overflow-y-auto">
+      <MotionRise className="flex items-center gap-4 mb-8">
         <Link href="/support/kb" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-500 shadow-sm border border-gray-100 hover:text-gray-900 transition-colors">
           <ArrowLeftIcon className="w-5 h-5" />
         </Link>
@@ -82,8 +83,9 @@ export default function NewKBArticle() {
           <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Create Article</h2>
           <p className="text-sm text-gray-500 mt-1">Write a new knowledge base blueprint.</p>
         </div>
-      </div>
+      </MotionRise>
 
+      <MotionRise delay={0.05} className="flex-1 flex flex-col">
       <form onSubmit={handleSubmit} className="flex-1 flex flex-col max-w-4xl bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
         <div className="grid grid-cols-2 gap-6 mb-6">
           <div>
@@ -165,6 +167,7 @@ export default function NewKBArticle() {
           </button>
         </div>
       </form>
-    </div>
+      </MotionRise>
+    </MotionStagger>
   );
 }

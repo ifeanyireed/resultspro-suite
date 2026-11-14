@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTenant } from '@/components/TenantProvider';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { useAuthStore } from '@/store/useAuthStore';
 import api from '@/lib/api';
 import {
@@ -164,7 +165,7 @@ function LoginContent() {
           }}
         />
 
-        <div style={{ position: 'relative', zIndex: 1 }}>
+        <MotionRise style={{ position: 'relative', zIndex: 1 }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', marginBottom: '3rem' }}>
             <img src={schoolLogo} alt={schoolName} style={{ height: '48px', width: 'auto', objectFit: 'contain' }} />
             <div>
@@ -185,68 +186,70 @@ function LoginContent() {
             Sign in with your school credentials to access your personalized {schoolName} dashboard.
           </p>
 
-          <div className="space-y-3 mb-10">
+          <MotionStagger className="space-y-3 mb-10">
             {activeConfig.perks.map((perk, idx) => (
-              <div key={idx} className="flex items-start gap-3 text-xs text-white/90">
+              <MotionRise key={idx} className="flex items-start gap-3 text-xs text-white/90">
                 <IconCheck size={16} color="#4ade80" className="shrink-0 mt-0.5" />
                 <span className="leading-relaxed">{perk}</span>
-              </div>
+              </MotionRise>
             ))}
-          </div>
-        </div>
+          </MotionStagger>
+        </MotionRise>
 
-        <div style={{ position: 'relative', zIndex: 1 }} className="pt-6 border-t border-white/10 flex items-center justify-between text-xs text-white/60">
+        <MotionRise delay={0.15} style={{ position: 'relative', zIndex: 1 }} className="pt-6 border-t border-white/10 flex items-center justify-between text-xs text-white/60">
           <Link href="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 600 }}>
             &larr; Back to School Website
           </Link>
           <span>Powered by ScholarsNG</span>
-        </div>
+        </MotionRise>
       </div>
 
       {/* ── Right Column: Role Selector & Auth Form ── */}
       <div className="lg:col-span-7 flex items-center justify-center p-6 sm:p-12 lg:p-16 bg-white">
-        <div style={{ width: '100%', maxWidth: '500px' }}>
-          <div className="mb-8">
+        <MotionRise style={{ width: '100%', maxWidth: '500px' }}>
+          <MotionRise className="mb-8">
             <div className="overline" style={{ marginBottom: '0.5rem' }}>Campus Authentication</div>
             <h2 className="text-d4 fw-600 mb-2">Sign in to Your Dashboard</h2>
             <p className="text-sm text-muted">
               Choose your portal role below and enter your credentials.
             </p>
-          </div>
+          </MotionRise>
 
           {/* 4 Role Tabs */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-8">
+          <MotionStagger className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-8">
             {(['student', 'parent', 'teacher', 'admin'] as PortalRole[]).map((r) => {
               const cfg = ROLE_CONFIG[r];
               const Icon = cfg.icon;
               const isSelected = role === r;
               return (
-                <button
-                  key={r}
-                  type="button"
-                  onClick={() => setRole(r)}
-                  style={{
-                    padding: '0.75rem 0.5rem',
-                    borderRadius: '2px',
-                    border: isSelected ? '2px solid var(--color-nets-navy)' : '1px solid var(--color-nets-border)',
-                    background: isSelected ? 'rgba(26, 31, 168, 0.06)' : '#fff',
-                    color: isSelected ? 'var(--color-nets-navy)' : 'var(--color-nets-text-2)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                    transition: 'all 0.15s ease'
-                  }}
-                >
-                  <Icon size={20} />
-                  <span style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                    {r}
-                  </span>
-                </button>
+                <MotionRise key={r}>
+                  <button
+                    type="button"
+                    onClick={() => setRole(r)}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 0.5rem',
+                      borderRadius: '2px',
+                      border: isSelected ? '2px solid var(--color-nets-navy)' : '1px solid var(--color-nets-border)',
+                      background: isSelected ? 'rgba(26, 31, 168, 0.06)' : '#fff',
+                      color: isSelected ? 'var(--color-nets-navy)' : 'var(--color-nets-text-2)',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <Icon size={20} />
+                    <span style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      {r}
+                    </span>
+                  </button>
+                </MotionRise>
               );
             })}
-          </div>
+          </MotionStagger>
 
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
@@ -322,7 +325,7 @@ function LoginContent() {
               Activate Your Portal Account &rarr;
             </Link>
           </div>
-        </div>
+        </MotionRise>
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 // import axiosInstance from '@/lib/axiosConfig'; // we can mock the login for now or use this
 
 import TenantLogo from '@/components/TenantLogo';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -87,7 +88,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex">
+    <MotionRise className="min-h-screen w-full flex">
       {/* Left Panel - Branding & Aesthetic */}
       <div className="hidden lg:flex w-[55%] relative overflow-hidden bg-[#0B1021]">
         {/* Abstract Background Elements */}
@@ -230,6 +231,6 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-    </div>
+    </MotionRise>
   );
 }

@@ -2,6 +2,7 @@ import { IconVideo as Video, IconMicrophone as Mic, IconMessage as MessageSquare
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { RoleGate } from '../../../components/RoleGate';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import api from '../../../lib/api';
 
 export default function Classroom() {
@@ -61,7 +62,7 @@ export default function Classroom() {
         </header>
 
         {/* Main Classroom Content */}
-        <div className="flex-1 flex overflow-hidden">
+        <MotionRise className="flex-1 flex overflow-hidden">
            {/* Left Side: Video & Whiteboard */}
            <div className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
               {/* Whiteboard / Content Area */}
@@ -198,7 +199,7 @@ export default function Classroom() {
                  </div>
               </div>
            </div>
-        </div>
+        </MotionRise>
       </main>
     </RoleGate>
   );

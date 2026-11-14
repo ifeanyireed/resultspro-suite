@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { Header } from '@/components/Header';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { fetchDemoBookings, updateDemoBookingStatus } from '@/lib/api';
 import {
   Calendar,
@@ -117,15 +118,17 @@ export default function DemoBookingsPage() {
   };
 
   return (
-    <div className="w-full">
-      <Header
-        title="Enterprise Demo Bookings"
-        subtitle="Manage inbound institutional walkthroughs, SME complexity profiles, and demo scheduling"
-      />
+    <MotionStagger className="w-full">
+      <MotionRise>
+        <Header
+          title="Enterprise Demo Bookings"
+          subtitle="Manage inbound institutional walkthroughs, SME complexity profiles, and demo scheduling"
+        />
+      </MotionRise>
 
       <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-6 w-full">
         {/* KPI Summary Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <MotionRise delay={0.05} className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs uppercase font-bold text-slate-400">Total Inbound</span>
@@ -161,10 +164,10 @@ export default function DemoBookingsPage() {
             <p className="text-3xl font-extrabold text-emerald-600">{stats.onPrem}</p>
             <p className="text-xs text-slate-500 mt-1">Physical campus delegations</p>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Filter & Search Bar */}
-        <div className="flex flex-col sm:flex-row gap-3 bg-white p-3 rounded-2xl border border-slate-200 shadow-xs">
+        <MotionRise delay={0.1} className="flex flex-col sm:flex-row gap-3 bg-white p-3 rounded-2xl border border-slate-200 shadow-xs">
           <div className="flex-1 relative">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
@@ -203,7 +206,7 @@ export default function DemoBookingsPage() {
               <option value="Tutoring">Tutoring Hubs</option>
             </select>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Bookings List */}
         {loading ? (
@@ -465,7 +468,7 @@ export default function DemoBookingsPage() {
           </div>
         )}
       </div>
-    </div>
+    </MotionStagger>
   );
 }
 

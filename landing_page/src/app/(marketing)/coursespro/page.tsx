@@ -1,4 +1,5 @@
 import HeroAnimationWrapper from '@/components/HeroAnimationWrapper';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import Link from 'next/link';
 import { 
   IconCertificate, 
@@ -75,7 +76,7 @@ export default function CoursesProPage() {
       <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div>
+            <MotionRise>
               <h2 className="text-3xl fw-600 text-navy mb-6 leading-tight">
                 Upskill with expertly crafted modules.
               </h2>
@@ -97,14 +98,14 @@ export default function CoursesProPage() {
                   </li>
                 ))}
               </ul>
-            </div>
-            <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
+            </MotionRise>
+            <MotionRise delay={0.15} className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
               <img 
                 src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250560/landing_page/photo11.jpg" 
                 alt="Student learning on CoursesPRO" 
                 className="absolute inset-0 w-full h-full object-cover"
               />
-            </div>
+            </MotionRise>
           </div>
         </div>
       </section>
@@ -112,21 +113,21 @@ export default function CoursesProPage() {
       {/* Feature Grid */}
       <section id="features" className="section-py bg-light">
         <div className="container-nets">
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <MotionRise className="text-center max-w-2xl mx-auto mb-16">
             <div className="overline-dark mb-4">Core Capabilities</div>
             <h2 className="text-4xl fw-600 text-navy mb-4 tracking-tight">Learn without limits.</h2>
             <p className="text-muted text-lg">A powerful engine designed to make online learning seamless and impactful.</p>
-          </div>
+          </MotionRise>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {FEATURES.map((feat, i) => (
-              <div key={i} className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 hover:shadow-card-lg transition-all">
+              <MotionRise key={i} delay={i * 0.08} className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 hover:shadow-card-lg transition-all">
                 <div className="w-12 h-12 bg-cyan-50 rounded-lg flex items-center justify-center mb-6 text-cyan-600">
                   <feat.icon size={24} />
                 </div>
                 <h3 className="text-xl fw-600 text-navy mb-3">{feat.title}</h3>
                 <p className="text-muted leading-relaxed">{feat.desc}</p>
-              </div>
+              </MotionRise>
             ))}
           </div>
         </div>
@@ -134,13 +135,13 @@ export default function CoursesProPage() {
 
       {/* CTA Section */}
       <section className="py-24 bg-navy text-white relative overflow-hidden" style={{ background: 'var(--color-nets-navy-dark)' }}>
-        <div className="container-nets relative z-10 text-center max-w-3xl mx-auto">
+        <MotionRise className="container-nets relative z-10 text-center max-w-3xl mx-auto">
           <h2 className="text-4xl fw-600 mb-6">Ready to expand your knowledge?</h2>
           <p className="text-xl text-white/70 mb-10">Start your journey today and earn certificates that matter.</p>
           <Link href="/onboard/agent" className="btn inline-flex items-center gap-2" style={{ backgroundColor: 'var(--color-nets-red)', color: '#0D1060', fontWeight: 700, padding: '1rem 2.5rem', fontSize: '1.125rem' }}>
             Browse Courses <IconArrowRight size={20} />
           </Link>
-        </div>
+        </MotionRise>
       </section>
     </main>
   );

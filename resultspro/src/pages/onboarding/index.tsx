@@ -11,6 +11,7 @@ import { Step5GradingSystem } from './steps/Step5GradingSystem';
 import { Step6PaymentPlans } from './steps/Step6PaymentPlans';
 import { Step7AddStudents } from './steps/Step7AddStudents';
 import { useToast } from '@/hooks/use-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export const OnboardingWizard = () => {
   const navigate = useNavigate();
@@ -370,11 +371,11 @@ export const OnboardingWizard = () => {
   if (apiStatus === 'error') {
     return (
       <div className="flex items-center justify-center p-4">
-        <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] backdrop-blur-xl shadow-2xl p-8 max-w-md text-center">
+        <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] backdrop-blur-xl shadow-2xl p-8 max-w-md text-center">
           <h2 className="text-xl font-bold text-red-400 mb-2">Server Connection Error</h2>
           <p className="text-gray-300 mb-6">Could not connect to the backend server. Please ensure the server is running on port 5000.</p>
           <button onClick={() => window.location.reload()} className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">Retry</button>
-        </div>
+        </MotionRise>
       </div>
     );
   }
@@ -382,10 +383,10 @@ export const OnboardingWizard = () => {
   if (apiStatus === 'checking') {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="text-center">
+        <MotionRise className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
           <p className="text-gray-300">Loading onboarding wizard...</p>
-        </div>
+        </MotionRise>
       </div>
     );
   }
@@ -393,7 +394,7 @@ export const OnboardingWizard = () => {
   return (
     <div className="space-y-8">
       <div className="max-w-5xl mx-auto">
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <div>
               <h1 className="text-3xl font-bold text-white mb-2">School Setup Wizard</h1>
@@ -406,9 +407,9 @@ export const OnboardingWizard = () => {
           <div className="bg-white/5 rounded-[30px] border border-white/10 p-2 backdrop-blur-md">
             <StepIndicator currentStep={currentStep} completedSteps={completedSteps} totalSteps={7} />
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] backdrop-blur-xl shadow-2xl p-8 mb-8">
+        <MotionRise delay={0.1} className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] backdrop-blur-xl shadow-2xl p-8 mb-8">
           {currentStep === 1 && <Step1SchoolProfile onNext={handleStep1Next} onPrevious={handlePrevious} initialData={step1Data || undefined} isLoading={isLoading} />}
           {currentStep === 2 && <Step2AcademicSession onNext={handleStep2Next} onPrevious={handlePrevious} initialData={step2Data || undefined} isLoading={isLoading} />}
           {currentStep === 3 && <Step3Classes onNext={handleStep3Next} onPrevious={handlePrevious} initialData={step3Data || undefined} isLoading={isLoading} />}
@@ -416,10 +417,10 @@ export const OnboardingWizard = () => {
           {currentStep === 5 && <Step5GradingSystem onNext={handleStep5Next} onPrevious={handlePrevious} initialData={step5Data || undefined} isLoading={isLoading} />}
           {currentStep === 6 && <Step6PaymentPlans onNext={handleStep6Next} onPrevious={handlePrevious} initialData={step6Data || undefined} isLoading={isLoading} />}
           {currentStep === 7 && <Step7AddStudents onNext={handleStep7Next} onPrevious={handlePrevious} initialData={step7Data || undefined} isLoading={isLoading} />}
-        </div>
+        </MotionRise>
 
-        {error && <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-[15px] text-red-400 text-sm mb-8">{error}</div>}
-        <div className="text-center text-sm text-gray-500 py-4"><p>Questions? Contact support@resultspro.ng</p></div>
+        {error && <MotionRise className="p-4 bg-red-500/10 border border-red-500/30 rounded-[15px] text-red-400 text-sm mb-8">{error}</MotionRise>}
+        <MotionRise delay={0.15} className="text-center text-sm text-gray-500 py-4"><p>Questions? Contact support@resultspro.ng</p></MotionRise>
       </div>
     </div>
   );

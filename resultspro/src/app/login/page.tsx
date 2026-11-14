@@ -6,6 +6,7 @@ import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { Mail, Lock, ArrowRight, Loader2, Sparkles, Building2, Users, ShieldCheck } from 'lucide-react';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 // import axiosInstance from '@/lib/axiosConfig'; // we can mock the login for now or use this
 
 export default function LoginPage() {
@@ -54,7 +55,7 @@ export default function LoginPage() {
           </div>
 
           {/* Value Proposition */}
-          <div className="max-w-xl">
+          <MotionRise className="max-w-xl">
             <div className="inline-flex items-center space-x-2 bg-blue-500/10 border border-blue-500/20 text-blue-300 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4" />
               <span>Version 2.0 Released</span>
@@ -66,7 +67,7 @@ export default function LoginPage() {
               Manage schools, tutors, assessments, and payments across the entire ecosystem from one centralized command center.
             </p>
 
-            <div className="flex space-x-8">
+            <MotionStagger className="flex space-x-8">
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
                   <Building2 className="w-6 h-6 text-blue-400" />
@@ -85,8 +86,8 @@ export default function LoginPage() {
                   <p className="text-slate-400 text-sm">Total Users</p>
                 </div>
               </div>
-            </div>
-          </div>
+            </MotionStagger>
+          </MotionRise>
 
           {/* Footer Note */}
           <div className="flex items-center space-x-2 text-slate-500 text-sm font-medium">
@@ -103,7 +104,7 @@ export default function LoginPage() {
            <Image src={logoSrc || "/logo.png"} alt="Logo" width={64} height={64} className="object-contain" />
         </div>
 
-        <div className="w-full max-w-md">
+        <MotionRise delay={0.1} className="w-full max-w-md">
           <div className="mb-10 text-center lg:text-left">
             <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Welcome Back</h2>
             <p className="text-slate-500 font-medium">Enter your credentials to access the admin hub.</p>
@@ -172,7 +173,7 @@ export default function LoginPage() {
               <a href="https://www.resultspro.ng/terms" className="text-slate-600 hover:underline">Terms of Service</a>.
             </p>
           </div>
-        </div>
+        </MotionRise>
       </div>
     </div>
   );

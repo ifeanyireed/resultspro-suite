@@ -30,6 +30,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { coursesApi } from '@/lib/api';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { useQuery } from '@tanstack/react-query';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const COLUMNS = [
   { name: 'To Do', color: 'bg-gray-100 text-gray-700 border-gray-200', dot: 'bg-gray-400', badge: 'bg-gray-100 text-gray-600' },
@@ -274,7 +275,7 @@ export default function WorkspacePage() {
   };
 
   return (
-    <>
+    <MotionRise>
       {/* Workspace Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 mt-2 gap-4">
         <div>
@@ -304,7 +305,7 @@ export default function WorkspacePage() {
       </div>
 
       {/* Velocity & Status Metric Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <MotionStagger className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {/* Total Tasks */}
         <div className="bg-white rounded-[1.25rem] p-5 border border-gray-100 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between">
@@ -368,7 +369,7 @@ export default function WorkspacePage() {
             </div>
           </div>
         </div>
-      </div>
+      </MotionStagger>
 
       {/* Search & Tag Filter Bar */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-6 bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
@@ -777,6 +778,6 @@ export default function WorkspacePage() {
           </div>
         </div>
       )}
-    </>
+    </MotionRise>
   );
 }

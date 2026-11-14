@@ -1,2 +1,12 @@
+'use client';
+
 import Home from '../page';
-export default Home;
+import { MotionRise } from '@/components/ScrollRiseProvider';
+
+export default function NewsPage() {
+  return (
+    <MotionRise>
+      <Home />
+    </MotionRise>
+  );
+}

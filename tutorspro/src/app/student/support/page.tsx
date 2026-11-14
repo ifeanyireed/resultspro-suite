@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import api from '@/lib/api';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconLoader2 } from '@tabler/icons-react';
 import { RoleGate } from '@/components/RoleGate';
 import Link from 'next/link';
@@ -66,12 +67,12 @@ export default function StudentSupport() {
     <RoleGate allowedRoles={['STUDENT', 'SUPERADMIN']}>
       <main className="min-h-screen bg-gray-50 pb-24">
         <div className="max-w-4xl mx-auto px-4 md:px-8 pt-12 space-y-8">
-          <div>
+          <MotionRise>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Support Center</h1>
             <p className="text-gray-500">Need help? Submit a ticket and our team will get back to you shortly.</p>
-          </div>
+          </MotionRise>
 
-          <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm">
+          <MotionRise delay={0.06} className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Create New Ticket</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -118,9 +119,9 @@ export default function StudentSupport() {
                 </button>
               </div>
             </form>
-          </div>
+          </MotionRise>
 
-          <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm">
+          <MotionRise delay={0.12} className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Your Tickets</h2>
             {loading ? (
               <div className="flex justify-center py-8">
@@ -155,7 +156,7 @@ export default function StudentSupport() {
                 ))}
               </div>
             )}
-          </div>
+          </MotionRise>
         </div>
       </main>
     </RoleGate>

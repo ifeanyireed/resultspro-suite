@@ -1,13 +1,15 @@
 "use client";
 
 import api from '@/lib/api';
-import { IconCamera as Camera, IconUser as User, IconBook as BookOpen, IconBolt as Zap, IconGlobe as Globe, IconDollarSign as DollarSign, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconPlus as Plus, IconTrash as Trash2, IconDeviceFloppy as Save, IconCheck as Check, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconCamera as Camera, IconUser as User, IconBook as BookOpen, IconBolt as Zap, IconGlobe as Globe, IconCurrencyDollar as DollarSign, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconPlus as Plus, IconTrash as Trash2, IconDeviceFloppy as Save, IconCheck as Check, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { toast } from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function TutorProfileEditor() {
   const { user } = useAuthStore();
+  const tutorUser = user as any;
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -18,12 +20,12 @@ export default function TutorProfileEditor() {
 
   useEffect(() => {
     setMounted(true);
-    if (user) {
-      setHourlyRate(user.hourlyRate?.toString() || '');
-      setBio(user.bio || '');
+    if (tutorUser) {
+      setHourlyRate(tutorUser.hourlyRate?.toString() || '');
+      setBio(tutorUser.bio || '');
       try {
-        if (user.subjects_json) {
-          setSubjects(JSON.parse(user.subjects_json));
+        if (tutorUser.subjects_json) {
+          setSubjects(JSON.parse(tutorUser.subjects_json));
         }
       } catch (e) {
         console.error('Failed to parse subjects');
@@ -66,7 +68,7 @@ export default function TutorProfileEditor() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-6xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Public <span className="text-green">Profile</span>
@@ -86,11 +88,11 @@ export default function TutorProfileEditor() {
                 SAVE CHANGES
              </button>
           </div>
-        </div>
+        </MotionRise>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
            {/* Sidebar - Avatar and Verification */}
-           <div className="space-y-8">
+           <MotionRise delay={0.1} className="space-y-8">
               <div className="p-8 rounded-[40px] bg-white/5 border border-white/10 flex flex-col items-center text-center relative overflow-hidden">
                  <div className="relative group mb-6">
                     <div className="w-32 h-32 rounded-[40px] bg-gradient-to-br from-green to-blue flex items-center justify-center text-navy text-4xl font-black shadow-2xl">
@@ -101,7 +103,7 @@ export default function TutorProfileEditor() {
                     </button>
                  </div>
                  <h3 className="text-xl font-display font-bold text-white mb-1">{user?.full_name || 'Tutor Name'}</h3>
-                 {user?.isVerified && (
+                 {tutorUser?.isVerified && (
                    <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green/10 border border-green/20 text-[10px] font-bold text-green uppercase tracking-widest mb-6">
                       <ShieldCheck className="w-3 h-3" /> VERIFIED TUTOR
                    </div>
@@ -135,10 +137,10 @@ export default function TutorProfileEditor() {
                     </ul>
                  </div>
               </section>
-           </div>
+           </MotionRise>
 
            {/* Main Content - Form */}
-           <div className="lg:col-span-2 space-y-10">
+           <MotionRise delay={0.2} className="lg:col-span-2 space-y-10">
               <section className="space-y-8 p-10 rounded-[40px] bg-white/[0.02] border border-white/5">
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
@@ -230,7 +232,7 @@ export default function TutorProfileEditor() {
                     <Camera className="w-4 h-4" /> UPLOAD VIDEO
                  </button>
               </section>
-           </div>
+           </MotionRise>
         </div>
       </div>
     </main>

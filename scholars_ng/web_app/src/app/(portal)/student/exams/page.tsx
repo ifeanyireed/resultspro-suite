@@ -10,6 +10,7 @@ import {
   AlertCircleIcon,
   ArrowRight01Icon
 } from 'hugeicons-react';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function StudentMyExams() {
@@ -29,7 +30,7 @@ export default function StudentMyExams() {
 
   return (
     <div style={{ maxWidth: '1200px', paddingBottom: '4rem' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
+      <MotionRise style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#6366f1', background: '#eef2ff', padding: '0.25rem 0.75rem', borderRadius: '2rem' }}>ExamPRO</span>
@@ -45,9 +46,9 @@ export default function StudentMyExams() {
           <Quiz01Icon size={20} />
           Start Practice Test
         </button>
-      </header>
+      </MotionRise>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.8fr', gap: '2.5rem' }}>
+      <MotionRise delay={0.06} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.8fr', gap: '2.5rem' }}>
         {/* Left Column: Schedule & Weak Topics */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
            {/* Upcoming */}
@@ -129,7 +130,7 @@ export default function StudentMyExams() {
               </div>
            </div>
         </div>
-      </div>
+      </MotionRise>
     </div>
   );
 }

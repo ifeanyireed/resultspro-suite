@@ -7,6 +7,7 @@ import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
 import Link from "next/link";
 import { Skeleton } from "../../../../components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function CreateNotePage() {
   const [loading, setLoading] = useState(true);
@@ -39,17 +40,17 @@ export default function CreateNotePage() {
       
       
       <main className="p-8 max-w-5xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <MotionRise className="flex justify-between items-center mb-8">
           <Link href="/dashboard/teacher" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 transition-colors">
             <ChevronLeft className="w-4 h-4 mr-1" /> Back
           </Link>
           <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold">
             <Save className="w-4 h-4 mr-2" /> Publish Note
           </Button>
-        </div>
+        </MotionRise>
 
         <div className="space-y-8">
-          <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 space-y-6">
+          <MotionRise delay={0.05} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 space-y-6">
             <div className="flex items-center gap-4 mb-2">
                <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600">
                   <FileText className="w-6 h-6" />
@@ -86,14 +87,14 @@ export default function CreateNotePage() {
                   </select>
                </div>
             </div>
-          </div>
+          </MotionRise>
 
-          <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 min-h-[400px]">
+          <MotionRise delay={0.1} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 min-h-[400px]">
              <textarea 
                placeholder="Start writing your note content here... Support for Markdown and KaTeX is enabled."
                className="w-full h-full min-h-[300px] bg-transparent border-none focus:outline-none text-gray-900 leading-relaxed resize-none"
              />
-          </div>
+          </MotionRise>
         </div>
       </main>
     </div>

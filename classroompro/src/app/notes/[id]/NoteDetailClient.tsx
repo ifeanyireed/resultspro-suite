@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/useAuthStore";
 import LoginPromptModal from "@/components/LoginPromptModal";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function PublicNoteDetailClient() {
   const { id } = useParams();
@@ -65,9 +66,9 @@ export default function PublicNoteDetailClient() {
       <LoginPromptModal show={showLoginPrompt} onClose={() => setShowLoginPrompt(false)} />
       
       <main className="flex-1 pt-28 pb-20 px-4">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-4 gap-12">
+        <MotionStagger className="max-w-7xl mx-auto grid lg:grid-cols-4 gap-12">
           {/* Main Content */}
-          <div className="lg:col-span-3 space-y-8">
+          <MotionRise className="lg:col-span-3 space-y-8">
             <Link href="/notes" className="inline-flex items-center text-sm text-muted-foreground hover:text-white transition-colors">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to all notes
             </Link>
@@ -160,10 +161,10 @@ export default function PublicNoteDetailClient() {
                  </div>
                )}
             </div>
-          </div>
+          </MotionRise>
 
           {/* Sidebar */}
-          <div className="space-y-8">
+          <MotionRise delay={0.1} className="space-y-8">
             <div className="bg-white/5 border border-white/10 rounded-[32px] p-8">
                <h3 className="text-lg font-bold text-white font-display mb-6">Note Tools</h3>
                <div className="space-y-3">
@@ -212,8 +213,8 @@ export default function PublicNoteDetailClient() {
                   )}
                </div>
             </div>
-          </div>
-        </div>
+          </MotionRise>
+        </MotionStagger>
       </main>
 
       <Footer />

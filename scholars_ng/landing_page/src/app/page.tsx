@@ -3,6 +3,7 @@ import Hero from '@/components/Hero';
 import MobileAppSection from '@/components/MobileAppSection';
 import PricingSection from '@/components/PricingSection';
 import Footer from '@/components/Footer';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { 
   IconChartBar, 
   IconBook2, 
@@ -144,19 +145,19 @@ export default function Home() {
       {/* ── Specialist Applications (The Engine) ── */}
       <section id="apps" className="section-py bg-light">
         <div className="container-nets">
-          <div style={{ marginBottom: '4rem', maxWidth: '720px' }}>
+          <MotionRise style={{ marginBottom: '4rem', maxWidth: '720px' }}>
             <div className="overline" style={{ marginBottom: '1rem' }}>The Engine</div>
             <h2 className="text-d4 fw-400">Five Independent Powerhouses. One Cohesive Workspace.</h2>
             <p className="text-muted text-body-lg" style={{ marginTop: '0.75rem' }}>
               Unlike rigid all-in-one monoliths, ScholarsNG orchestrates five dedicated, industry-leading applications—ResultsPRO, ClassroomPRO, TutorsPRO, PuzzlePRO, and CampusPRO—into a unified lateral experience under your school’s own domain.
             </p>
-          </div>
+          </MotionRise>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            {specialistApps.map((app) => {
+            {specialistApps.map((app, appIdx) => {
               const Icon = app.icon;
               return (
-                <div key={app.id} className="card p-8 flex flex-col justify-between">
+                <MotionRise key={app.id} delay={appIdx * 0.08} className="card p-8 flex flex-col justify-between">
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                       <div className="w-12 h-12 rounded-sm bg-nets-light flex items-center justify-center shrink-0">
@@ -192,7 +193,7 @@ export default function Home() {
                   <Link href={app.href} className="nav-link text-navy fw-600" style={{ color: 'var(--color-nets-navy)' }}>
                     Explore {app.title} &rarr;
                   </Link>
-                </div>
+                </MotionRise>
               );
             })}
           </div>
@@ -203,7 +204,7 @@ export default function Home() {
       <section id="why-us" className="section-py bg-white border-y border-gray-200">
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <MotionRise>
               <div className="overline" style={{ marginBottom: '1rem' }}>Institutional Power</div>
               <h2 className="text-d3 fw-300 mb-6">Designed for Institutional Excellence.</h2>
               <p className="text-body-lg text-muted mb-8 leading-relaxed">
@@ -214,7 +215,7 @@ export default function Home() {
                 {whyFeatures.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={i} className="flex gap-4">
+                    <MotionRise key={i} delay={i * 0.08} className="flex gap-4">
                       <div className="w-12 h-12 rounded-sm bg-nets-light flex items-center justify-center shrink-0">
                         <Icon className="w-6 h-6 text-red" style={{ color: 'var(--color-nets-red)' }} />
                       </div>
@@ -222,22 +223,22 @@ export default function Home() {
                         <h4 className="fw-600 mb-1">{item.title}</h4>
                         <p className="text-sm text-muted leading-relaxed">{item.desc}</p>
                       </div>
-                    </div>
+                    </MotionRise>
                   );
                 })}
               </div>
 
               <Link href="#pricing" className="btn btn-navy">Deploy Your School Portal</Link>
-            </div>
+            </MotionRise>
             
-            <div className="relative">
+            <MotionRise delay={0.15} className="relative">
               <img 
                 src="/photo05.jpeg" 
                 alt="Students learning in computer lab" 
                 className="rounded-sm shadow-card-lg" 
                 style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
               />
-            </div>
+            </MotionRise>
           </div>
         </div>
       </section>
@@ -245,17 +246,17 @@ export default function Home() {
       {/* ── Role Workspaces ── */}
       <section id="roles" className="section-py bg-light">
         <div className="container-nets">
-          <div style={{ marginBottom: '4rem', maxWidth: '700px' }}>
+          <MotionRise style={{ marginBottom: '4rem', maxWidth: '700px' }}>
             <div className="overline" style={{ marginBottom: '1rem' }}>Role Workspaces</div>
             <h2 className="text-d4 fw-400">Tailored Experiences for Every Stakeholder.</h2>
             <p className="text-muted text-body-lg" style={{ marginTop: '0.75rem' }}>
               Each role experiences a focused, distraction-free horizontal subtabs interface configured specifically for their daily tasks.
             </p>
-          </div>
+          </MotionRise>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {roleWorkspaces.map((rw, idx) => (
-              <div key={idx} className="card p-8 flex flex-col justify-between">
+              <MotionRise key={idx} delay={idx * 0.08} className="card p-8 flex flex-col justify-between">
                 <div>
                   <span style={{ 
                     fontSize: '0.6875rem', 
@@ -290,7 +291,7 @@ export default function Home() {
                     Access Workspace &rarr;
                   </Link>
                 </div>
-              </div>
+              </MotionRise>
             ))}
           </div>
         </div>
@@ -304,7 +305,7 @@ export default function Home() {
 
       {/* ── CTA Banner ── */}
       <section className="section-py bg-navy text-white text-center" style={{ background: 'var(--color-nets-navy-dark)' }}>
-        <div className="container-nets max-w-3xl">
+        <MotionRise className="container-nets max-w-3xl">
           <h2 className="text-d3 fw-300 mb-6 text-white">Accelerate Your Institution Today</h2>
           <p className="text-body-lg text-muted-light mb-10 leading-relaxed">
             Deploy your school&apos;s digital campus in under 5 minutes with zero technical overhead. Connect your administrators, teachers, parents, and students on a unified platform.
@@ -313,7 +314,7 @@ export default function Home() {
             <Link href="#pricing" className="btn btn-red btn-lg">Deploy School Portal</Link>
             <Link href="/school/login" className="btn btn-outline-white btn-lg">Sign In to Portal</Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       <Footer />

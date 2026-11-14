@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function ExamsPage() {
   const user = useAuthStore((state) => state.user);
@@ -96,15 +97,15 @@ export default function ExamsPage() {
       
       
       <main className="p-8 max-w-7xl mx-auto space-y-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2 font-display">Academic Assessments</h2>
             <p className="text-gray-500 text-sm">Track your scheduled exams and past performance.</p>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
            <div className="bg-white shadow-sm border border-gray-100 p-6 rounded-[32px] flex items-center gap-4 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-blue/5 blur-2xl rounded-full" />
               <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-[#146ef5] group-hover:scale-110 transition-transform">
@@ -151,10 +152,10 @@ export default function ExamsPage() {
                  <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Avg. Score</div>
               </div>
            </div>
-        </div>
+        </MotionStagger>
 
         {/* Search and Filters */}
-        <div className="flex flex-col md:flex-row gap-4 bg-white shadow-sm border border-gray-100 p-4 rounded-2xl border border-gray-100 backdrop-blur-xl">
+        <MotionRise className="flex flex-col md:flex-row gap-4 bg-white shadow-sm border border-gray-100 p-4 rounded-2xl border border-gray-100 backdrop-blur-xl">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
             <Input 
@@ -176,13 +177,13 @@ export default function ExamsPage() {
                 </SelectContent>
              </Select>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Exams Grid */}
         <div className="space-y-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {currentExams.map((exam) => (
-              <div key={exam.id} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 hover:border-green/50 transition-all group flex flex-col md:flex-row gap-8 relative overflow-hidden">
+          <MotionStagger className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {currentExams.map((exam, idx) => (
+              <MotionRise key={exam.id} delay={idx * 0.05} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 hover:border-green/50 transition-all group flex flex-col md:flex-row gap-8 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-600/5 blur-[40px] rounded-full -z-10" />
                 
                 <div className="flex flex-col items-center md:items-start text-center md:text-left gap-4">
@@ -228,9 +229,9 @@ export default function ExamsPage() {
                     </Button>
                   </div>
                 </div>
-              </div>
+              </MotionRise>
             ))}
-          </div>
+          </MotionStagger>
 
           {/* Empty State */}
           {currentExams.length === 0 && (

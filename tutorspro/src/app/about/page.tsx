@@ -2,6 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 import { IconShieldCheck as ShieldCheck, IconUsers as Users, IconTarget as Target, IconCircleCheck as CheckCircle2, IconAward as Award, IconBolt as Zap } from '@tabler/icons-react';
 
 export default function AboutPage() {
@@ -36,7 +37,7 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="bg-navy text-white text-center" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '6rem' }}>
         <div className="container-nets">
-          <div className="max-w-3xl mx-auto">
+          <MotionRise className="max-w-3xl mx-auto">
             <div className="overline-dark" style={{ marginBottom: '1.5rem' }}>Our Mission</div>
             <h1 className="fw-300" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
               Empowering the Next <br /><span style={{ fontWeight: 700, color: 'var(--primary)' }}>Generation of Leaders.</span>
@@ -44,7 +45,7 @@ export default function AboutPage() {
             <p className="text-body-lg text-white/70">
               TutorsPro is more than just a marketplace. We are a technology-driven education platform dedicated to connecting students with the world&apos;s most talented educators.
             </p>
-          </div>
+          </MotionRise>
         </div>
       </section>
 
@@ -52,7 +53,7 @@ export default function AboutPage() {
       <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <div className="space-y-8">
+            <MotionRise className="space-y-8">
               <div className="overline" style={{ marginBottom: '1rem' }}>How It Works</div>
               <h2 className="text-d4 fw-400 text-navy mb-12">The TutorsPro <span style={{ fontWeight: 700 }}>Process</span></h2>
               <div className="space-y-8">
@@ -71,9 +72,9 @@ export default function AboutPage() {
                   </div>
                 ))}
               </div>
-            </div>
+            </MotionRise>
             
-            <div className="relative">
+            <MotionRise delay={0.12} className="relative">
               <div className="p-8 md:p-12 rounded-sm bg-light border border-gray-200 shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-12 opacity-5">
                    <Award size={240} className="text-navy" />
@@ -97,7 +98,7 @@ export default function AboutPage() {
                   ))}
                 </ul>
               </div>
-            </div>
+            </MotionRise>
           </div>
         </div>
       </section>
@@ -105,22 +106,22 @@ export default function AboutPage() {
       {/* Values Section */}
       <section className="section-py bg-light border-b border-gray-200">
         <div className="container-nets">
-          <div className="text-center mb-16 max-w-2xl mx-auto">
+          <MotionRise className="text-center mb-16 max-w-2xl mx-auto">
             <div className="overline" style={{ marginBottom: '1rem' }}>Core Values</div>
             <h2 className="text-d4 fw-400 text-navy mb-4">The principles that <span style={{ fontWeight: 700 }}>drive us.</span></h2>
-          </div>
+          </MotionRise>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {values.map((value, i) => (
-              <div key={i} className="p-8 rounded-sm bg-white border border-gray-200 shadow-sm hover:shadow-card-lg transition-all">
+              <MotionRise key={i} delay={i * 0.08} className="p-8 rounded-sm bg-white border border-gray-200 shadow-sm hover:shadow-card-lg transition-all">
                 <div className="mb-6">
                   <value.icon size={48} style={{ color: value.color }} />
                 </div>
                 <h3 className="text-2xl fw-700 text-navy mb-3">{value.title}</h3>
                 <p className="text-muted text-sm leading-relaxed">{value.desc}</p>
-              </div>
+              </MotionRise>
             ))}
-          </div>
+          </MotionStagger>
         </div>
       </section>
       

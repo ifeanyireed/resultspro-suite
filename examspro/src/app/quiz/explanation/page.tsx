@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from '@/components/ui/button';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconCoins as Coins, IconSparkles as Sparkles, IconArrowLeft as ArrowLeft, IconBook as BookOpen, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
 import Link from 'next/link';
 
@@ -25,7 +26,7 @@ export default function ExplanationPage() {
         </div>
       </div>
 
-      <div className="flex-1 max-w-3xl mx-auto w-full px-4 py-12">
+      <MotionRise className="flex-1 max-w-3xl mx-auto w-full px-4 py-12">
         {/* Question Recap */}
         <div className="mb-8 p-6 rounded-2xl bg-white border border-gray-200 ">
           <div className="flex items-center gap-2 mb-3 text-gray-500">
@@ -116,7 +117,7 @@ export default function ExplanationPage() {
             </div>
           </Button>
         </div>
-      </div>
+      </MotionRise>
     </main>
   );
 }

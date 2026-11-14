@@ -2,6 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
 import { IconPlus as Plus, IconMinus as Minus, IconSearch as Search, IconHelpCircle as HelpCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
@@ -56,7 +57,7 @@ export default function FAQPage() {
       {/* Hero Section */}
       <section className="bg-navy text-white text-center" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '6rem' }}>
         <div className="container-nets">
-          <div className="max-w-3xl mx-auto">
+          <MotionRise className="max-w-3xl mx-auto">
             <div className="overline-dark" style={{ marginBottom: '1.5rem' }}>Help Center</div>
             <h1 className="fw-300" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
               Frequently Asked <br /><span style={{ fontWeight: 700, color: 'var(--primary)' }}>Questions.</span>
@@ -75,12 +76,12 @@ export default function FAQPage() {
                  onChange={(e) => setSearchTerm(e.target.value)}
                />
             </div>
-          </div>
+          </MotionRise>
         </div>
       </section>
 
       <section className="section-py bg-white border-b border-gray-200">
-        <div className="container-nets max-w-3xl mx-auto">
+        <MotionRise className="container-nets max-w-3xl mx-auto">
           {searchTerm ? (
              <div className="space-y-4">
                {filteredFaqs.map((faq, i) => (
@@ -130,7 +131,7 @@ export default function FAQPage() {
               </div>
             ))
           )}
-        </div>
+        </MotionRise>
       </section>
 
       <Footer />

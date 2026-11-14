@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import DemoBookingFlow from '@/components/demo/DemoBookingFlow';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import {
   IconCheck,
   IconShieldCheck,
@@ -52,7 +53,7 @@ export default function DemoPage() {
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#FBBC04]/10 blur-[130px] rounded-full pointer-events-none" />
         <div className="absolute bottom-0 left-10 w-80 h-80 bg-blue-500/15 blur-[120px] rounded-full pointer-events-none" />
 
-        <div className="container-nets relative z-10 text-center max-w-4xl mx-auto px-4">
+        <MotionRise className="container-nets relative z-10 text-center max-w-4xl mx-auto px-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs sm:text-sm font-bold mb-6 backdrop-blur-md text-[#FBBC04]">
             <IconSparkles size={16} />
             <span>Tailored Institutional Walkthrough</span>
@@ -95,14 +96,14 @@ export default function DemoPage() {
               <p className="text-xs text-white/60">Nigerian States Deployed</p>
             </div>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* INTERACTIVE WIZARD SECTION */}
       <section className="relative -mt-10 z-20 pb-20 px-4 sm:px-6">
-        <div className="container-nets">
+        <MotionRise delay={0.1} className="container-nets">
           <DemoBookingFlow />
-        </div>
+        </MotionRise>
       </section>
 
       {/* WHY BOOK A TAILORED DEMO SECTION */}

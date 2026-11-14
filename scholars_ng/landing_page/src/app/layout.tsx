@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ScrollRiseProvider from "@/components/ScrollRiseProvider";
 
 export const metadata: Metadata = {
   title: "ScholarsNG — The Digital Campus Operating System",
@@ -21,7 +22,9 @@ export default function RootLayout({
         <link rel="icon" href="/icon.png" />
       </head>
       <body suppressHydrationWarning className="antialiased">
-        {children}
+        <ScrollRiseProvider>
+          {children}
+        </ScrollRiseProvider>
       </body>
     </html>
   );

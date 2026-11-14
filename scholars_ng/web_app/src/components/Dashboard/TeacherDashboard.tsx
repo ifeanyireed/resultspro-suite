@@ -18,6 +18,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import api from '@/lib/api';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function TeacherDashboard() {
   const [data, setData] = useState<any>(null);
@@ -42,9 +43,9 @@ export default function TeacherDashboard() {
   }
 
   return (
-    <>
+    <MotionRise>
       {/* Dashboard Title & Actions */}
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise delay={0.04} className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Teacher Portal</h1>
           <p className="text-sm text-gray-500 mt-1">Manage your classes, assignments, and students.</p>
@@ -59,13 +60,13 @@ export default function TeacherDashboard() {
             Grade Submissions
           </button>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Top Metric Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         
         {/* Card 1: Primary Dark */}
-        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+        <MotionRise delay={0.06} className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
           {/* Subtle Depth Effects */}
           <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
           <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
@@ -82,10 +83,10 @@ export default function TeacherDashboard() {
               <span className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold">In progress</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Card 2: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise delay={0.1} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Total Students</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
@@ -98,10 +99,10 @@ export default function TeacherDashboard() {
               <span>Across all your active courses</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Card 3: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise delay={0.14} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Pending Grading</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
@@ -114,10 +115,10 @@ export default function TeacherDashboard() {
               <span className="text-orange-500 font-semibold">Needs attention today</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Card 4: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise delay={0.18} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Upcoming Tests</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
@@ -130,15 +131,15 @@ export default function TeacherDashboard() {
               <span className="text-gray-400">Scheduled for this week</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-      </div>
+      </MotionStagger>
 
       {/* Main Content Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+      <MotionStagger className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         
         {/* Left Side */}
-        <div className="lg:col-span-8 flex flex-col gap-3">
+        <MotionRise delay={0.1} className="lg:col-span-8 flex flex-col gap-3">
           
           <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
             <div className="flex justify-between items-center mb-6">
@@ -162,10 +163,10 @@ export default function TeacherDashboard() {
               ))}
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Right Sidebar Stack */}
-        <div className="lg:col-span-4 flex flex-col gap-3">
+        <MotionRise delay={0.14} className="lg:col-span-4 flex flex-col gap-3">
           
           {/* Action Items */}
           <div className="w-full bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
@@ -215,9 +216,9 @@ export default function TeacherDashboard() {
             </div>
           </div>
 
-        </div>
+        </MotionRise>
 
-      </div>
-    </>
+      </MotionStagger>
+    </MotionRise>
   );
 }

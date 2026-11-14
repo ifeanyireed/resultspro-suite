@@ -1,3 +1,5 @@
+import { MotionRise } from '@/components/ScrollRiseProvider';
+
 export default function AdminRoot() {
-  return null;
+  return <MotionRise>{null}</MotionRise>;
 }

@@ -22,6 +22,7 @@ import {
   PlusIcon,
   TrashIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 type CmsTab = 'hero' | 'notices' | 'facilities' | 'news' | 'team' | 'admissions';
 
@@ -193,7 +194,7 @@ export default function AdminLandingCmsPage() {
   return (
     <div className="space-y-6 min-w-0 w-full max-w-full">
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-2">
+      <MotionRise className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Website CMS</h1>
           <p className="text-sm text-gray-500 mt-1">
@@ -233,7 +234,7 @@ export default function AdminLandingCmsPage() {
             {saving ? 'Saving to Database...' : 'Save & Publish Changes'}
           </button>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Horizontal Subtabs Bar — Sticky Outer Pill Container with Auto-Hiding 2px Scrollbar Underneath */}
       <div
@@ -309,7 +310,7 @@ export default function AdminLandingCmsPage() {
 
       {/* ── TAB 1: HERO & ABOUT ── */}
       {activeTab === 'hero' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <MotionRise className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-white rounded-[1.5rem] p-6 sm:p-8 shadow-sm border border-gray-100 space-y-5">
             <h2 className="text-xl font-bold text-gray-900">Hero Section &amp; Branding</h2>
 
@@ -525,12 +526,12 @@ export default function AdminLandingCmsPage() {
               </p>
             </div>
           </div>
-        </div>
+        </MotionRise>
       )}
 
       {/* ── TAB 2: NOTICE BOARD ── */}
       {activeTab === 'notices' && (
-        <div className="space-y-4">
+        <MotionRise className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-gray-900">Official Notice Board Circulars</h2>
             <button
@@ -622,12 +623,12 @@ export default function AdminLandingCmsPage() {
               </div>
             ))}
           </div>
-        </div>
+        </MotionRise>
       )}
 
       {/* ── TAB 3: FACILITIES ── */}
       {activeTab === 'facilities' && (
-        <div className="space-y-4">
+        <MotionRise className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-gray-900">Campus Facilities Showcase</h2>
             <button
@@ -715,12 +716,12 @@ export default function AdminLandingCmsPage() {
               </div>
             ))}
           </div>
-        </div>
+        </MotionRise>
       )}
 
       {/* ── TAB 4: NEWS & EVENTS ── */}
       {activeTab === 'news' && (
-        <div className="space-y-4">
+        <MotionRise className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-gray-900">Campus News &amp; Upcoming Events</h2>
             <button
@@ -810,12 +811,12 @@ export default function AdminLandingCmsPage() {
               </div>
             ))}
           </div>
-        </div>
+        </MotionRise>
       )}
 
       {/* ── TAB 5: LEADERSHIP TEAM ── */}
       {activeTab === 'team' && (
-        <div className="space-y-4">
+        <MotionRise className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-gray-900">Leadership &amp; Faculty Team Profiles</h2>
             <button
@@ -902,12 +903,12 @@ export default function AdminLandingCmsPage() {
               </div>
             ))}
           </div>
-        </div>
+        </MotionRise>
       )}
 
       {/* ── TAB 6: ADMISSIONS STEPS ── */}
       {activeTab === 'admissions' && (
-        <div className="bg-white rounded-[1.5rem] p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold text-gray-900">Admissions Process Steps</h2>
@@ -954,7 +955,7 @@ export default function AdminLandingCmsPage() {
               </div>
             ))}
           </div>
-        </div>
+        </MotionRise>
       )}
     </div>
   );

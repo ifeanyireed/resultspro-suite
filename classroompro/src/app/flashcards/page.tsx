@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import api from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function PublicFlashcardsIndex() {
   const [search, setSearch] = useState("");
@@ -89,7 +90,7 @@ export default function PublicFlashcardsIndex() {
       <main className="flex-1 pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
+          <MotionRise className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold font-display text-white mb-4">
               Smart <span className="text-blue">Flashcards</span>
             </h1>
@@ -97,10 +98,10 @@ export default function PublicFlashcardsIndex() {
               Master complex concepts with active recall. Browse community-curated 
               study sets and accelerate your learning.
             </p>
-          </div>
+          </MotionRise>
 
           {/* Search and Filters */}
-          <div className="space-y-4 mb-12 bg-white/5 p-6 rounded-[32px] border border-white/10 backdrop-blur-xl">
+          <MotionRise delay={0.08} className="space-y-4 mb-12 bg-white/5 p-6 rounded-[32px] border border-white/10 backdrop-blur-xl">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
@@ -172,7 +173,7 @@ export default function PublicFlashcardsIndex() {
                   </Select>
                </div>
             </div>
-          </div>
+          </MotionRise>
 
           {/* Flashcards Grid */}
           {loading ? (
@@ -180,10 +181,11 @@ export default function PublicFlashcardsIndex() {
                <Loader2 className="w-12 h-12 text-blue animate-spin" />
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 min-h-[400px]">
-              {currentItems.map((set) => (
-                <div 
+            <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 min-h-[400px]">
+              {currentItems.map((set, idx) => (
+                <MotionRise 
                   key={set.id} 
+                  delay={idx * 0.05}
                   className="group bg-white/5 border border-white/10 rounded-[32px] p-6 hover:border-blue/50 transition-all duration-300 flex flex-col relative overflow-hidden"
                 >
                   <div className="absolute top-0 right-0 w-24 h-24 bg-blue/5 blur-[30px] rounded-full -z-10" />
@@ -231,9 +233,9 @@ export default function PublicFlashcardsIndex() {
                       </Button>
                     </Link>
                   </div>
-                </div>
+                </MotionRise>
               ))}
-            </div>
+            </MotionStagger>
           )}
 
           {!loading && filteredFlashcards.length === 0 && (

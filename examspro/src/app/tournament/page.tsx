@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconTrophy as Trophy, IconUsers as Users, IconClock as Timer, IconChevronRight as ChevronRight, IconSword as Sword, IconTarget as Target, IconBolt as Zap, IconInfoCircle as Info } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
@@ -34,7 +35,7 @@ export default function TournamentPage() {
     <main className="min-h-screen bg-navy pb-24">
       <Navbar />
       
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-8">
+      <MotionRise className="max-w-7xl mx-auto px-4 md:px-8 pt-8">
         {/* Header Section */}
         <div className="relative p-8 md:p-12 rounded-[40px] bg-gradient-to-br from-green/20 via-blue/10 to-transparent border border-white/10 overflow-hidden mb-12">
           <div className="absolute top-0 right-0 p-12 opacity-10 hidden lg:block">
@@ -147,7 +148,7 @@ export default function TournamentPage() {
             <p className="text-sm text-gray-400 text-balance">Winner: 2,500 Coins + Elite Badge. Semi-finalists: 500 Coins. Quarter-finalists: 100 Coins.</p>
           </div>
         </div>
-      </div>
+      </MotionRise>
     </main>
   );
 }

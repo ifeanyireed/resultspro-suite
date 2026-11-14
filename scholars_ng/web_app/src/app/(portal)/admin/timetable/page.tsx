@@ -16,11 +16,12 @@ import {
   StopIcon
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function TimetableDashboard() {
   return (
     <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Academic Overview</h1>
           <p className="text-sm text-gray-500 mt-1">Institutional curriculum health, room utilization, and academic operations.</p>
@@ -35,11 +36,11 @@ export default function TimetableDashboard() {
             View Analytics
           </button>
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         
-        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
           <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
           <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
           
@@ -56,9 +57,9 @@ export default function TimetableDashboard() {
               <span>vs Last Month</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Room Utilization</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
@@ -72,9 +73,9 @@ export default function TimetableDashboard() {
               <span>vs Last Month</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Teacher Load</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
@@ -87,9 +88,9 @@ export default function TimetableDashboard() {
               <span className="text-gray-400">Total this week</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Conflicts</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
@@ -102,11 +103,11 @@ export default function TimetableDashboard() {
               <span className="text-gray-400">Overall average</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-      </div>
+      </MotionStagger>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+      <MotionRise delay={0.08} className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         
         <div className="lg:col-span-9 flex flex-col gap-3">
           
@@ -203,7 +204,7 @@ export default function TimetableDashboard() {
           </div>
         </div>
 
-      </div>
+      </MotionRise>
     </>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconKey as Key, IconUser as User, IconBook as BookOpen, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCircleCheck as CheckCircle2, IconUpload as Upload, IconAlertCircle as AlertCircle, IconLayoutGrid as LayoutGrid, IconEye as Eye, IconEyeOff as EyeOff, IconPhone as Phone, IconCompass as Compass, IconCheck as Check, IconRotate as RotateCw, IconScissors as Scissors, IconMail as Mail, IconShieldCheck as ShieldCheck, IconSend as Send, IconSparkles as Sparkles, IconChevronDown as ChevronDown, IconSchool as School, IconPlus as Plus, IconCamera as Camera, IconX as X, IconCalculator as Calculator, IconFlask as FlaskConical, IconGlobe as Globe, IconBook as BookText } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
@@ -239,14 +240,14 @@ export default function TeacherOnboarding() {
                 <div style={{ height: '4rem' }} />
 
                 {/* Headers */}
-                <div className="text-center mb-6 flex flex-col items-center">
+                <MotionRise className="text-center mb-6 flex flex-col items-center">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 font-extrabold text-[10px] tracking-wider uppercase mb-3">
                     <School className="w-3.5 h-3.5" />
                     <span>{formData.schoolName}</span>
                   </div>
                   <h1 className="!text-[2.25rem] md:!text-[3rem] font-bold text-[#0f172a] !text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Invitation Verification</h1>
                   <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-base font-medium mb-4">Verify your pre-approved classroom registry details and secure your access.</p>
-                </div>
+                </MotionRise>
 
                 {/* Spacer above Section Label */}
                 <div style={{ height: '1.5rem' }} />

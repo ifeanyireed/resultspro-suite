@@ -6,6 +6,7 @@ import api from "@/lib/api";
 import { useAuthStore } from "@/store/useAuthStore";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function LeaderboardPage() {
   const user = useAuthStore((state) => state.user);
@@ -75,7 +76,7 @@ export default function LeaderboardPage() {
       
       
       <main className="p-8 space-y-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2 font-display">Hall of Fame 🏆</h2>
             <p className="text-gray-500 text-sm">Compete with your peers and climb the ranks.</p>
@@ -98,11 +99,11 @@ export default function LeaderboardPage() {
               </button>
             ))}
           </div>
-        </div>
+        </MotionRise>
 
         <div className="max-w-2xl mx-auto space-y-12">
             {/* Top 3 Podium */}
-            <div className="flex items-end justify-center gap-2 md:gap-4 pt-12 pb-4">
+            <MotionRise delay={0.08} className="flex items-end justify-center gap-2 md:gap-4 pt-12 pb-4">
               {/* Rank 2 */}
               {podium[0] && (
                 <div className="flex flex-col items-center gap-4 flex-1 max-w-[140px]">
@@ -178,10 +179,10 @@ export default function LeaderboardPage() {
                   <div className="w-full h-20 bg-gradient-to-t from-green/20 to-green/5 rounded-t-2xl border-t border-x border-green/20" />
                 </div>
               )}
-            </div>
+            </MotionRise>
 
             {/* List of others */}
-            <div className="space-y-3">
+            <MotionStagger className="space-y-3">
               {others.length === 0 && (
                 <div className="text-center py-12 text-gray-500 italic">No more players found.</div>
               )}
@@ -234,7 +235,7 @@ export default function LeaderboardPage() {
                   </div>
                 );
               })}
-            </div>
+            </MotionStagger>
 
             {/* User's own rank sticky */}
             {user && myProfile && (

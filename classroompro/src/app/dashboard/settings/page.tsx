@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import api from "@/lib/api";
 import { toast } from "react-hot-toast";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -83,7 +84,7 @@ export default function SettingsPage() {
       
       
       <main className="p-8 max-w-4xl space-y-8">
-        <div className="flex flex-col md:flex-row gap-8">
+        <MotionRise className="flex flex-col md:flex-row gap-8">
           {/* Tabs */}
           <div className="w-full md:w-64 space-y-1">
             {tabs.map((tab) => (
@@ -325,7 +326,7 @@ export default function SettingsPage() {
                </div>
             )}
           </div>
-        </div>
+        </MotionRise>
       </main>
     </div>
   );

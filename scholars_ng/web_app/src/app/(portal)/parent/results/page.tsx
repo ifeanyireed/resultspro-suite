@@ -9,20 +9,23 @@ import { AnalyticsUpIcon, File01Icon, DocumentValidationIcon } from 'hugeicons-r
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
 import { CompactGradebook, ResultCheckerView } from '@resultspro/modules';
 import { useAppHost } from '@/components/AppHostContext';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 function ParentResultsStream() {
   return (
     <div style={{ maxWidth: '1200px', padding: '1rem 0 4rem 0' }}>
-      <header style={{ marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.25rem', letterSpacing: '-0.02em' }}>
-          Term Assessments & Analytics
-        </h2>
-        <p style={{ color: '#64748b', fontSize: '0.95rem', fontWeight: '500' }}>
-          Review your ward&apos;s latest grades, class ranking, and term trajectory.
-        </p>
-      </header>
+      <MotionRise>
+        <header style={{ marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.25rem', letterSpacing: '-0.02em' }}>
+            Term Assessments & Analytics
+          </h2>
+          <p style={{ color: '#64748b', fontSize: '0.95rem', fontWeight: '500' }}>
+            Review your ward&apos;s latest grades, class ranking, and term trajectory.
+          </p>
+        </header>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <MotionRise delay={0.06} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
           <h3 className="text-xl font-bold text-gray-900 mb-6">Recent Continuous Assessments</h3>
           <div className="space-y-4">
@@ -59,7 +62,7 @@ function ParentResultsStream() {
              <span>Term: 1st Term 2025/2026</span>
           </div>
         </div>
-      </div>
+      </MotionRise>
     </div>
   );
 }
@@ -107,7 +110,7 @@ function ParentOfficialReportCard() {
   };
 
   return (
-    <div style={{ maxWidth: '900px', margin: '1rem auto 4rem auto', background: 'white', borderRadius: '1.5rem', padding: '2rem', boxShadow: '0 4px 25px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
+    <MotionRise style={{ maxWidth: '900px', margin: '1rem auto 4rem auto', background: 'white', borderRadius: '1.5rem', padding: '2rem', boxShadow: '0 4px 25px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
       <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1e293b' }}>Official Terminal Report Card</h3>
@@ -126,7 +129,7 @@ function ParentOfficialReportCard() {
         result={mockResult as any}
         template={mockTemplate as any}
       />
-    </div>
+    </MotionRise>
   );
 }
 
@@ -153,13 +156,15 @@ export default function ParentResultsHub() {
   ];
 
   return (
-    <SpecialistAppContainer
-      appTitle="Parent Academic Records"
-      appSubtitle="Continuous assessments, official terminal broadsheets, and scratch card grade verification."
-      appBadge="ResultsPRO"
-      accentColor="#8b5cf6"
-      tabs={tabs}
-      defaultTabId="assessments"
-    />
+    <MotionRise>
+      <SpecialistAppContainer
+        appTitle="Parent Academic Records"
+        appSubtitle="Continuous assessments, official terminal broadsheets, and scratch card grade verification."
+        appBadge="ResultsPRO"
+        accentColor="#8b5cf6"
+        tabs={tabs}
+        defaultTabId="assessments"
+      />
+    </MotionRise>
   );
 }

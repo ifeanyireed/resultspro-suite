@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { BlogPostClientWrapper } from '@/components/BlogPostClientWrapper';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
@@ -154,10 +155,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   } : null;
 
   return (
-    <BlogPostClientWrapper 
-      initialPost={formattedPost} 
-      initialRelatedPosts={relatedPosts} 
-      slug={post?.slug || resolvedParams.slug} 
-    />
+    <MotionRise>
+      <BlogPostClientWrapper 
+        initialPost={formattedPost} 
+        initialRelatedPosts={relatedPosts} 
+        slug={post?.slug || resolvedParams.slug} 
+      />
+    </MotionRise>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { Check, Edit, Trash2, Plus, School, Users, UserCog, Building, LayoutDashboard, Receipt, GraduationCap, Map, Home, Briefcase, Puzzle, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/Badge';
 
@@ -174,13 +175,15 @@ export default function SubscriptionsCommandCenter() {
   const filteredPlans = plans.filter(p => (p.app_module || p.category) === activeTab || p.app_module === activeTab || (p.category === 'School' && activeTab === 'scholars_ng') || (p.category === 'Family' && activeTab === 'FamilyHub') || (p.category === 'Agent' && activeTab === 'AgentNetwork') || (p.category === 'ICAN' && activeTab === 'ExamsPRO'));
 
   return (
-    <div className="w-full relative">
-      <Header
-        title="Subscriptions & Central Billing"
-        subtitle="Manage standardized subscription tiers, quotas, and invoice ledgers across the suite"
-      />
+    <MotionStagger className="w-full relative">
+      <MotionRise>
+        <Header
+          title="Subscriptions & Central Billing"
+          subtitle="Manage standardized subscription tiers, quotas, and invoice ledgers across the suite"
+        />
+      </MotionRise>
 
-      <div className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4">
+      <MotionRise delay={0.05} className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4">
         <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto pb-px scrollbar-hide">
           {tabs.map(tab => {
             const Icon = tab.icon;
@@ -201,9 +204,9 @@ export default function SubscriptionsCommandCenter() {
             )
           })}
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-6 sm:space-y-8">
+      <MotionRise delay={0.1} className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-6 sm:space-y-8">
         
         {activeTab === 'Invoices' ? (
           <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4">
@@ -330,7 +333,7 @@ export default function SubscriptionsCommandCenter() {
             </div>
           </div>
         )}
-      </div>
+      </MotionRise>
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 p-4">
@@ -469,6 +472,6 @@ export default function SubscriptionsCommandCenter() {
           </div>
         </div>
       )}
-    </div>
+    </MotionStagger>
   );
 }

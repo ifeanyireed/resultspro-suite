@@ -6,6 +6,7 @@ import { Input } from "../../../../components/ui/input";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Skeleton } from "../../../../components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const classesData = [
   { id: 1, name: "SS3 Biology", students: 42, performance: "82%", term: "1st Term" },
@@ -48,7 +49,7 @@ export default function MyClassesPage() {
       
       
       <div className="p-8 max-w-7xl mx-auto space-y-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <MotionRise className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Manage Your Classes</h2>
             <p className="text-sm text-gray-500">View performance and manage students for each of your assigned classes.</p>
@@ -56,18 +57,18 @@ export default function MyClassesPage() {
           <Button className="bg-emerald-600 text-white font-bold">
             <Plus className="w-4 h-4 mr-2" /> Request New Class
           </Button>
-        </div>
+        </MotionRise>
 
-        <div className="flex flex-col md:flex-row gap-4">
+        <MotionRise delay={0.05} className="flex flex-col md:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
             <Input placeholder="Search classes..." className="pl-10 h-12 bg-white shadow-sm border border-gray-100 border-gray-100" />
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {classesData.map((cls) => (
-            <div key={cls.id} className="p-6 rounded-3xl bg-white shadow-sm border border-gray-100 hover:border-gray-200 transition-all group">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {classesData.map((cls, i) => (
+            <MotionRise key={cls.id} delay={i * 0.05} className="p-6 rounded-3xl bg-white shadow-sm border border-gray-100 hover:border-gray-200 transition-all group">
               <div className="flex justify-between items-start mb-6">
                  <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-[#146ef5]">
                     <Users className="w-6 h-6" />
@@ -105,9 +106,9 @@ export default function MyClassesPage() {
                     </Button>
                  </Link>
               </div>
-            </div>
+            </MotionRise>
           ))}
-        </div>
+        </MotionStagger>
       </div>
     </div>
   );

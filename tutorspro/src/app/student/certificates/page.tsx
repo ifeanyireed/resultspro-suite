@@ -3,6 +3,7 @@
 import { IconTrophy as Trophy, IconDownload as Download, IconExternalLink as ExternalLink, IconAward as Award, IconShieldCheck as ShieldCheck, IconCalendar as Calendar, IconSearch as Search, IconChevronRight as ChevronRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { RoleGate } from '@/components/RoleGate';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function StudentCertificates() {
@@ -41,7 +42,7 @@ export default function StudentCertificates() {
       <main className="min-h-screen bg-navy pb-24">
                 
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+          <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
             <div>
               <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
                 My <span className="text-amber">Certificates</span>
@@ -60,9 +61,9 @@ export default function StudentCertificates() {
                 />
               </div>
             </div>
-          </div>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredCerts.length > 0 ? filteredCerts.map((cert) => (
               <div key={cert.id} className="group relative">
                  {/* Decorative background for the card */}
@@ -121,9 +122,9 @@ export default function StudentCertificates() {
                  View Requirements <ChevronRight className="w-3 h-3" />
                </button>
             </div>
-          </div>
+          </MotionStagger>
           {/* ... verification notice ... */}
-          <div className="mt-16 p-8 rounded-[40px] bg-white/[0.02] border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
+          <MotionRise delay={0.1} className="mt-16 p-8 rounded-[40px] bg-white/[0.02] border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
              <div className="flex items-center gap-6">
                 <div className="w-16 h-16 rounded-full bg-green/10 flex items-center justify-center text-green">
                   <ShieldCheck className="w-8 h-8" />
@@ -136,7 +137,7 @@ export default function StudentCertificates() {
              <button className="px-8 py-4 rounded-2xl border border-white/10 text-white font-bold hover:bg-white/5 transition-all">
                 Verify a Certificate
              </button>
-          </div>
+          </MotionRise>
         </div>
       </main>
     </RoleGate>

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function PlatformPricingPage() {
   const [plans, setPlans] = useState<any[]>([]);
@@ -54,7 +55,7 @@ export default function PlatformPricingPage() {
       <section className="bg-navy text-white relative overflow-hidden" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '8rem' }}>
         <div className="absolute top-0 right-0 w-[50%] h-[100%] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
         
-        <div className="container-nets relative z-10">
+        <MotionRise className="container-nets relative z-10">
           <div className="max-w-3xl text-center mx-auto">
             <h1 className="fw-300 tracking-tight" style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
               Simple, transparent <span style={{ fontWeight: 700, color: 'white' }}>pricing.</span>
@@ -63,12 +64,12 @@ export default function PlatformPricingPage() {
               Start building your academy for free. Upgrade when you need more storage and advanced features.
             </p>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Pricing Section */}
       <section className="section-py pt-24 md:pt-32 pb-24 md:pb-32 bg-white">
-        <div className="w-full px-6 md:px-16 lg:px-24 mx-auto max-w-7xl">
+        <MotionRise className="w-full px-6 md:px-16 lg:px-24 mx-auto max-w-7xl">
           <div className="flex justify-center items-center mb-16 space-x-4">
             <span className={`text-sm font-semibold ${!isAnnual ? 'text-slate-900' : 'text-slate-400'}`}>Monthly</span>
             <button 
@@ -163,7 +164,7 @@ export default function PlatformPricingPage() {
               })
             )}
           </div>
-        </div>
+        </MotionRise>
       </section>
       
       <Footer hideInstructorLink={true} isPlatform={true} flattenLogo={false} />

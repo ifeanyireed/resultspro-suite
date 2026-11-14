@@ -4,6 +4,7 @@ import { ArrowRight01 } from '@/lib/hugeicons-compat';
 import { InlineLoadingSpinner } from '@/components/LoadingSpinner';
 import Navigation from '@/components/Navigation';
 import axiosInstance from '@/lib/axiosConfig';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 const ResultsLookup: React.FC = () => {
   const [schoolCode, setSchoolCode] = useState('');
@@ -53,7 +54,7 @@ const ResultsLookup: React.FC = () => {
         {/* Gradient Overlay - Dark edges to transparent center */}
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
-        <div className="relative z-10 max-w-2xl mx-auto text-center w-full">
+        <MotionRise className="relative z-10 max-w-2xl mx-auto text-center w-full">
           <h1 className="text-6xl md:text-7xl font-bold mb-6 tracking-tight leading-tight text-white">
             Check Your <span className="text-blue-400">Results</span>
           </h1>
@@ -112,7 +113,7 @@ const ResultsLookup: React.FC = () => {
               </p>
             </form>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Footer */}

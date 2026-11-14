@@ -10,6 +10,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 
 function VerifyEmailContent() {
   const router = useRouter();
@@ -74,7 +75,7 @@ function VerifyEmailContent() {
         title="Email Verified!"
         subtitle="Your account is now active. Redirecting you..."
       >
-        <div className="flex flex-col items-center py-10 space-y-6">
+        <MotionRise className="flex flex-col items-center py-10 space-y-6">
           <div className="w-20 h-20 rounded-full bg-green/20 flex items-center justify-center text-green animate-bounce">
             <CheckCircle2 className="w-12 h-12" />
           </div>
@@ -84,7 +85,7 @@ function VerifyEmailContent() {
           >
             Go to Login
           </Button>
-        </div>
+        </MotionRise>
       </AuthLayout>
     );
   }
@@ -94,6 +95,7 @@ function VerifyEmailContent() {
       title="Verify your email"
       subtitle={`We've sent a 6-digit verification code to ${email || 'your email'}.`}
     >
+      <MotionRise>
       <form onSubmit={onSubmit} className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="otp" className="text-white text-center block font-bold uppercase tracking-widest text-xs">Verification Code</Label>
@@ -140,6 +142,7 @@ function VerifyEmailContent() {
           </button>
         </div>
       </form>
+      </MotionRise>
     </AuthLayout>
   );
 }

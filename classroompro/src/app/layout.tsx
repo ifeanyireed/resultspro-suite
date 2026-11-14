@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, DM_Sans, IBM_Plex_Mono } from "next/font/google";
 import { ClientProviders } from "./providers";
+import { ScrollRiseProvider } from "@/components/ScrollRiseProvider";
 import "./globals.css";
 
 
@@ -45,7 +46,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ClientProviders>
-          {children}
+          <ScrollRiseProvider>
+            {children}
+          </ScrollRiseProvider>
         </ClientProviders>
       </body>
     </html>

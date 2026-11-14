@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 import { IconSearch as Search, IconFilter as Filter, IconStar as Star, IconMapPin as MapPin, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from "next/link";
 import api from "@/lib/api";
@@ -72,7 +73,7 @@ export default function TutorsPage() {
       {/* Hero Section styled identically to Blog page */}
       <section className="bg-navy text-white" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '6rem' }}>
         <div className="container-nets">
-          <div className="max-w-3xl">
+          <MotionRise className="max-w-3xl">
             <div className="overline-dark" style={{ marginBottom: '1.5rem' }}>Our Tutors</div>
             <h1 className="fw-300" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
               Find Your Perfect <br /><span style={{ fontWeight: 700, color: 'var(--primary)' }}>Tutor.</span>
@@ -80,14 +81,14 @@ export default function TutorsPage() {
             <p className="text-body-lg text-white/70">
               Browse our directory of top-rated educators, check their verified credentials, and book a session today to accelerate your learning.
             </p>
-          </div>
+          </MotionRise>
         </div>
       </section>
 
       <section className="section-py">
         <div className="container-nets">
            {/* Filters & Search */}
-           <div className="flex flex-col md:flex-row gap-4 mb-12">
+           <MotionRise className="flex flex-col md:flex-row gap-4 mb-12">
              <div className="flex-1 relative">
                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                <input 
@@ -102,7 +103,7 @@ export default function TutorsPage() {
                <Filter className="w-5 h-5" />
                <span>Filters</span>
              </button>
-           </div>
+           </MotionRise>
 
            {/* Tutor Grid */}
            {loading ? (
@@ -112,8 +113,8 @@ export default function TutorsPage() {
            ) : filteredTutors.length === 0 ? (
              <div className="text-center text-muted py-12">No tutors found. Try adjusting your search keywords.</div>
            ) : (
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-               {filteredTutors.map((tutor) => {
+             <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+               {filteredTutors.map((tutor, idx) => {
                  const tName = tutor.name || "Anonymous Tutor";
                  const tAvatar = tutor.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(tName)}&background=0D1B2A&color=fff`;
                  const tRate = tutor.hourlyRate || tutor.hourly_rate || 0;
@@ -127,7 +128,7 @@ export default function TutorsPage() {
                  if (!Array.isArray(tSubjects)) tSubjects = [];
 
                  return (
-                 <article key={tutor.id} className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-gray-200">
+                 <MotionRise key={tutor.id} delay={(idx % 6) * 0.06} className="bg-white rounded-sm shadow-sm hover:shadow-card-lg transition-shadow overflow-hidden flex flex-col border border-gray-200">
                     <div className="relative h-48 overflow-hidden bg-nets-light flex items-center justify-center border-b border-gray-200">
                       <img 
                         src={tAvatar} 
@@ -176,10 +177,10 @@ export default function TutorsPage() {
                         </Link>
                       </div>
                     </div>
-                 </article>
+                 </MotionRise>
                  );
                })}
-             </div>
+             </MotionStagger>
            )}
         </div>
       </section>

@@ -24,6 +24,7 @@ import {
   CheckBadgeIcon as CheckBadgeSolid,
   DocumentCheckIcon
 } from '@heroicons/react/24/solid';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface Submission {
   id: string;
@@ -92,7 +93,7 @@ export default function MentorDashboard() {
   };
 
   return (
-    <div className="space-y-8 pb-16">
+    <MotionRise className="space-y-8 pb-16">
       {/* Header & Quick Action Buttons */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mt-2">
         <div>
@@ -130,7 +131,7 @@ export default function MentorDashboard() {
       </div>
 
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Pending Reviews */}
         <div className="bg-gradient-to-br from-[#146ef5] to-[#0b3882] rounded-[2rem] p-6 text-white shadow-sm flex flex-col justify-between relative overflow-hidden group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start z-10">
@@ -225,7 +226,7 @@ export default function MentorDashboard() {
             </div>
           </div>
         )}
-      </div>
+      </MotionStagger>
 
       {/* Main Content Layout: 2 Columns */}
       <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
@@ -416,6 +417,6 @@ export default function MentorDashboard() {
           </div>
         </div>
       </div>
-    </div>
+    </MotionRise>
   );
 }

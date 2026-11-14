@@ -14,6 +14,7 @@ import {
 import api from '@/lib/api';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
 import { NotesListView, QuizzesListView, FlashcardsListView } from '@classroompro/modules';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 function StudentClassroomSnapshot() {
   const [classroomData, setClassroomData] = useState<any>(null);
@@ -32,16 +33,18 @@ function StudentClassroomSnapshot() {
 
   return (
     <div style={{ maxWidth: '1200px', padding: '1rem 0 4rem 0' }}>
-      <header style={{ marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.25rem', letterSpacing: '-0.02em' }}>
-          Daily Learning Stream
-        </h2>
-        <p style={{ color: '#64748b', fontSize: '0.95rem', fontWeight: '500' }}>
-          Real-time daily learning activity, attendance streaks, and classroom announcements.
-        </p>
-      </header>
+      <MotionRise>
+        <header style={{ marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.25rem', letterSpacing: '-0.02em' }}>
+            Daily Learning Stream
+          </h2>
+          <p style={{ color: '#64748b', fontSize: '0.95rem', fontWeight: '500' }}>
+            Real-time daily learning activity, attendance streaks, and classroom announcements.
+          </p>
+        </header>
+      </MotionRise>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem' }}>
+      <MotionRise delay={0.06} style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem' }}>
         {/* Main Feed */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {/* Today's Lessons */}
@@ -125,7 +128,7 @@ function StudentClassroomSnapshot() {
              </div>
           </div>
         </div>
-      </div>
+      </MotionRise>
     </div>
   );
 }
@@ -159,13 +162,15 @@ export default function StudentClassroomHub() {
   ];
 
   return (
-    <SpecialistAppContainer
-      appTitle="Classroom Hub"
-      appSubtitle="Centralized learning stream, curriculum notes, quizzes, and spaced-repetition flashcards."
-      appBadge="ClassroomPRO"
-      accentColor="#146ef5"
-      tabs={tabs}
-      defaultTabId="feed"
-    />
+    <MotionRise>
+      <SpecialistAppContainer
+        appTitle="Classroom Hub"
+        appSubtitle="Centralized learning stream, curriculum notes, quizzes, and spaced-repetition flashcards."
+        appBadge="ClassroomPRO"
+        accentColor="#146ef5"
+        tabs={tabs}
+        defaultTabId="feed"
+      />
+    </MotionRise>
   );
 }

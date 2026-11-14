@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { Building2, ShieldCheck, Palette, LayoutDashboard } from 'lucide-react';
 
 import OverviewTab from './tabs/OverviewTab';
@@ -21,13 +22,15 @@ export default function ScholarsNgPage() {
   ];
 
   return (
-    <div className="w-full">
-      <Header
-        title="ScholarsNG (Tenants)"
-        subtitle="Manage multi-tenant institutions, verification pipelines, and white-label branding"
-      />
+    <MotionStagger className="w-full">
+      <MotionRise>
+        <Header
+          title="ScholarsNG (Tenants)"
+          subtitle="Manage multi-tenant institutions, verification pipelines, and white-label branding"
+        />
+      </MotionRise>
 
-      <div className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4">
+      <MotionRise delay={0.05} className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4">
         <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto pb-px scrollbar-hide">
           {tabs.map(tab => {
             const Icon = tab.icon;
@@ -48,14 +51,14 @@ export default function ScholarsNgPage() {
             )
           })}
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 w-full">
+      <MotionRise delay={0.1} className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 w-full">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'tenants' && <TenantsListTab />}
         {activeTab === 'verifications' && <VerificationsTab />}
         {activeTab === 'branding' && <BrandingTab />}
-      </div>
-    </div>
+      </MotionRise>
+    </MotionStagger>
   );
 }

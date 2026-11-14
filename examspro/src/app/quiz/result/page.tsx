@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconTrophy as Trophy, IconCoins as Coins, IconChevronRight as ChevronRight, IconRotate as RotateCcw, IconShare2 as Share2, IconCircleCheck as CheckCircle2, IconCircleX as XCircle, IconBolt as Zap, IconStar as Star } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -10,7 +11,7 @@ export default function QuizResultPage() {
     <main className="min-h-screen bg-slate-50 pb-24">
       <Navbar />
       
-      <div className="max-w-3xl mx-auto px-4 pt-12">
+      <MotionRise className="max-w-3xl mx-auto px-4 pt-12">
         {/* Success Header */}
         <div className="text-center mb-12">
           <div className="w-24 h-24 rounded-full bg-[#146ef5]/10 flex items-center justify-center text-[#146ef5] mx-auto mb-6 relative">
@@ -128,7 +129,7 @@ export default function QuizResultPage() {
             <ChevronRight className="w-4 h-4" />
           </div>
         </div>
-      </div>
+      </MotionRise>
     </main>
   );
 }

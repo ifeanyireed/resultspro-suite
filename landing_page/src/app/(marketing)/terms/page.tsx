@@ -1,3 +1,5 @@
+import { MotionRise } from '@/components/ScrollRiseProvider';
+
 export const metadata = {
   title: 'Terms of Service | ResultsPro Edu Suite',
 };
@@ -6,15 +8,15 @@ export default function TermsOfService() {
   return (
     <main className="min-h-screen bg-light" style={{ background: 'var(--color-nets-light)' }}>
       <section className="bg-navy text-white" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '10rem', paddingBottom: '4rem' }}>
-        <div className="container-nets">
+        <MotionRise className="container-nets">
           <h1 className="fw-300 tracking-tight" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', lineHeight: 1.1 }}>
             Terms of <span style={{ fontWeight: 700, color: 'white' }}>Service.</span>
           </h1>
-        </div>
+        </MotionRise>
       </section>
 
       <section className="section-py bg-white border-b border-gray-200">
-        <div className="container-nets max-w-3xl">
+        <MotionRise delay={0.1} className="container-nets max-w-3xl">
           <div className="prose prose-lg text-slate-600">
             <p className="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-8">Last updated: {new Date().toLocaleDateString()}</p>
             
@@ -38,7 +40,7 @@ export default function TermsOfService() {
               If you have any questions or concerns regarding these Terms, please contact our legal team at <a href="mailto:hello@resultspro.ng" className="text-blue-600 hover:underline">hello@resultspro.ng</a>.
             </p>
           </div>
-        </div>
+        </MotionRise>
       </section>
     </main>
   );

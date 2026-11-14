@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const usersData = [
   { id: 1, fullName: "Jessica Alabi", email: "jessica@student.com", role: "Student", school: "Lekki British School", status: "Active", lastLogin: "2 mins ago" },
@@ -54,7 +55,7 @@ export default function GlobalUserManagement() {
       
       
       <main className="p-8 space-y-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <MotionRise className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">User Directory</h2>
             <p className="text-sm text-gray-500">Manage all users across all schools and roles on the platform.</p>
@@ -67,10 +68,10 @@ export default function GlobalUserManagement() {
                 <UserCheck className="w-4 h-4 mr-2" /> Verify Users
              </Button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Search & Filters */}
-        <div className="flex flex-col md:flex-row gap-4">
+        <MotionRise delay={0.05} className="flex flex-col md:flex-row gap-4">
            <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
               <Input placeholder="Search by name, email or school..." className="pl-10 h-12 bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900" />
@@ -91,10 +92,10 @@ export default function GlobalUserManagement() {
                  <option>Banned</option>
               </select>
            </div>
-        </div>
+        </MotionRise>
 
         {/* Users Table */}
-        <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden text-sm">
+        <MotionRise delay={0.1} className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden text-sm">
            <table className="w-full text-left">
               <thead>
                  <tr className="border-b border-gray-100 bg-white shadow-sm border border-gray-100">
@@ -168,7 +169,7 @@ export default function GlobalUserManagement() {
                  </Button>
               </div>
            </div>
-        </div>
+        </MotionRise>
       </main>
     </div>
   );

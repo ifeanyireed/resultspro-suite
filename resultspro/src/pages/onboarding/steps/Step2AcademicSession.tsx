@@ -15,6 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { AlertCircle, Trash2 } from '@/lib/hugeicons-compat';
 import { useOnboardingStore, Step2Data } from '@/stores/onboardingStore';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const termSchema = z.object({
   name: z.string().min(1, 'Term name is required'),
@@ -196,9 +197,9 @@ export const Step2AcademicSession = ({
   const termFields = form.watch('terms') || [];
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <MotionRise className="w-full max-w-2xl mx-auto">
       <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-8 backdrop-blur-xl">
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-3xl font-bold text-white">Academic Session</h2>
@@ -210,26 +211,26 @@ export const Step2AcademicSession = ({
               <div className="text-xs text-gray-400 animate-pulse">Saving...</div>
             )}
           </div>
-        </div>
+        </MotionRise>
 
         {submitError && (
-          <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex gap-3">
+          <MotionRise className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex gap-3">
             <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
             <p className="text-red-400 text-sm">{submitError}</p>
-          </div>
+          </MotionRise>
         )}
 
         {saveError && (
-          <div className="mb-6 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30 flex gap-3">
+          <MotionRise className="mb-6 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30 flex gap-3">
             <AlertCircle className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
             <p className="text-yellow-400 text-sm">Auto-save failed: {saveError}</p>
-          </div>
+          </MotionRise>
         )}
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             {/* Session Information */}
-            <div>
+            <MotionRise>
               <h3 className="text-lg font-semibold text-white mb-6">
                 Session Details
               </h3>
@@ -254,15 +255,15 @@ export const Step2AcademicSession = ({
                   </FormItem>
                 )}
               />
-            </div>
+            </MotionRise>
 
             {/* Term Dates Section */}
-            <div className="border-t border-[rgba(255,255,255,0.07)] pt-8">
+            <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8">
               <h3 className="text-lg font-semibold text-white mb-6">
                 Session Duration
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <MotionStagger className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
                   name="startDate"
@@ -304,7 +305,7 @@ export const Step2AcademicSession = ({
                     </FormItem>
                   )}
                 />
-              </div>
+              </MotionStagger>
 
               {/* Date Range Summary */}
               {form.watch('startDate') && form.watch('endDate') && (
@@ -331,10 +332,10 @@ export const Step2AcademicSession = ({
                   </p>
                 </div>
               )}
-            </div>
+            </MotionRise>
 
             {/* Info Box */}
-            <div className="border-t border-[rgba(255,255,255,0.07)] pt-8">
+            <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8">
               <h3 className="text-lg font-semibold text-white mb-6">
                 Term Dates
               </h3>
@@ -342,7 +343,7 @@ export const Step2AcademicSession = ({
                 Define the dates for each term within this academic session.
               </p>
 
-              <div className="space-y-6">
+              <MotionStagger className="space-y-6">
                 {termFields.map((term, index) => (
                   <div key={index} className="p-4 bg-[rgba(255,255,255,0.03)] rounded-lg border border-[rgba(255,255,255,0.1)]">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -402,12 +403,12 @@ export const Step2AcademicSession = ({
                     </div>
                   </div>
                 ))}
-              </div>
-            </div>
+              </MotionStagger>
+            </MotionRise>
 
             {/* Terms Summary */}
             {termFields.some(t => t.startDate && t.endDate) && (
-              <div className="p-4 bg-blue-500/10 rounded-lg border border-blue-500/30">
+              <MotionRise className="p-4 bg-blue-500/10 rounded-lg border border-blue-500/30">
                 <p className="text-sm text-blue-300 font-semibold mb-2">Terms Overview:</p>
                 <div className="space-y-1 text-xs text-blue-300">
                   {termFields.filter(t => t.startDate && t.endDate).map((term, idx) => (
@@ -425,11 +426,11 @@ export const Step2AcademicSession = ({
                     </p>
                   ))}
                 </div>
-              </div>
+              </MotionRise>
             )}
 
             {/* Action Buttons */}
-            <div className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
+            <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
               <Button
                 type="button"
                 variant="outline"
@@ -446,10 +447,10 @@ export const Step2AcademicSession = ({
               >
                 {isLoading ? 'Saving...' : 'Next: Classes'}
               </Button>
-            </div>
+            </MotionRise>
           </form>
         </Form>
       </div>
-    </div>
+    </MotionRise>
   );
 };

@@ -36,6 +36,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { coursesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 const SUGGESTED_SKILLS = [
   'TypeScript', 'Next.js', 'React', 'Golang', 'PostgreSQL', 
@@ -274,7 +275,7 @@ export default function PortfolioPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto pb-16">
+    <MotionRise className="max-w-6xl mx-auto pb-16">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 mt-2">
         <div>
@@ -1016,6 +1017,6 @@ export default function PortfolioPage() {
           </div>
         </div>
       )}
-    </div>
+    </MotionRise>
   );
 }

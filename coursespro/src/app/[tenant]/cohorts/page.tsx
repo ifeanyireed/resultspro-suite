@@ -8,6 +8,7 @@ import { serverFetch } from '@/lib/server-api';
 import { COURSES_API } from '@/lib/api';
 import CohortCard from '@/components/CohortCard';
 import CohortSlideshow from '@/components/CohortSlideshow';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export const dynamic = 'force-dynamic';
 
@@ -88,25 +89,27 @@ export default async function CohortsPage({ params, searchParams }: { params: Pr
             <div style={{ position: 'absolute', inset: 0, zIndex: 30, pointerEvents: 'none', background: 'linear-gradient(to top, rgba(13,16,96,0.8) 0%, transparent 60%)' }}></div>
           </div>
         )}
-        <div className="container-nets max-w-3xl pt-16 pb-16 relative z-10 flex-1 flex flex-col justify-center">
+        <MotionRise className="container-nets max-w-3xl pt-16 pb-16 relative z-10 flex-1 flex flex-col justify-center">
           <h1 className="text-d2 fw-300 mb-6">Browse Open Cohorts</h1>
           <p className="text-body-lg text-white/90 mb-10">
             Join a live, interactive learning environment led by industry experts.
           </p>
-        </div>
+        </MotionRise>
       </section>
 
       <section className="section-py bg-light">
-        <div className="container-nets">
+        <MotionRise className="container-nets">
           <CohortSearchFilters statuses={statuses} difficulties={difficulties} />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredCohorts.length === 0 ? (
-              <div className="col-span-3 text-center py-12 text-slate-500">No cohorts found matching your search.</div>
-            ) : filteredCohorts.map((cohort: any) => (
-              <CohortCard key={cohort.id} cohort={cohort} settings={settings} />
-            ))}
-          </div>
-        </div>
+          {filteredCohorts.length === 0 ? (
+            <div className="col-span-3 text-center py-12 text-slate-500">No cohorts found matching your search.</div>
+          ) : (
+            <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredCohorts.map((cohort: any) => (
+                <CohortCard key={cohort.id} cohort={cohort} settings={settings} />
+              ))}
+            </MotionStagger>
+          )}
+        </MotionRise>
       </section>
       <Footer tenantName={tenant.name} tenantLogo={tenant.logo_url} darkLogoUrl={tenant.dark_logo_url} flattenLogo={tenant.flatten_logo} contactEmail={tenant.contact_email} contactPhone={tenant.contact_phone} contactLocation={tenant.full_address} />
     </main>

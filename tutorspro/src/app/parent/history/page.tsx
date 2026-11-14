@@ -1,6 +1,7 @@
 "use client";
 
 import api from '@/lib/api';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconHistory as History, IconCalendar as Calendar, IconSearch as Search, IconFilter as Filter, IconPlayerPlay as Play, IconFileText as FileText, IconDotsVertical as MoreVertical, IconUser as User, IconCircleCheck as CheckCircle2, IconCircleX as XCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -41,7 +42,7 @@ export default function ParentHistory() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Lesson <span className="text-blue">History</span>
@@ -65,7 +66,7 @@ export default function ParentHistory() {
                 <Filter className="w-5 h-5" />
              </button>
           </div>
-        </div>
+        </MotionRise>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 opacity-50">
@@ -73,7 +74,7 @@ export default function ParentHistory() {
             <p className="text-white font-bold">Loading records...</p>
           </div>
         ) : (
-          <>
+          <MotionRise delay={0.08}>
             <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden">
                <div className="overflow-x-auto">
                   <table className="w-full text-left">
@@ -139,7 +140,7 @@ export default function ParentHistory() {
                  <p className="text-sm text-gray-500">Try adjusting your filters or checking back later.</p>
               </div>
             )}
-          </>
+          </MotionRise>
         )}
       </div>
     </main>

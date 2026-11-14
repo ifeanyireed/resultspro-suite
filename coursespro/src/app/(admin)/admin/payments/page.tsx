@@ -6,6 +6,7 @@ import {
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import { serverFetch } from '@/lib/server-api';
 import { USERS_API } from '@/lib/api';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default async function PaymentsPage() {
   // Fetch data directly on the server! No more useEffect, no more loading spinners!
@@ -32,7 +33,7 @@ export default async function PaymentsPage() {
   }
 
   return (
-    <>
+    <MotionRise>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Payments Console</h2>
@@ -44,7 +45,7 @@ export default async function PaymentsPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-[1.5rem] p-6 shadow-sm shadow-emerald-500/20 flex flex-col justify-between aspect-video relative overflow-hidden group hover:-translate-y-1 transition-transform">
           <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-emerald-900 rounded-full filter blur-[3rem] opacity-40"></div>
           
@@ -83,9 +84,9 @@ export default async function PaymentsPage() {
             </div>
           </div>
         </div>
-      </div>
+      </MotionStagger>
 
-      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
+      <MotionRise className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
           <h3 className="text-lg font-medium text-gray-900">Recent Transactions</h3>
         </div>
@@ -130,7 +131,7 @@ export default async function PaymentsPage() {
             ))}
           </tbody>
         </table>
-      </div>
-    </>
+      </MotionRise>
+    </MotionRise>
   );
 }

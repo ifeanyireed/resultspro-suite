@@ -1,6 +1,7 @@
 import React from 'react';
 import { getTenant } from '@/lib/tenant';
 import StandardContent from '@/app/[tenant]/the-standard/StandardContent';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default async function PlatformStandardPage({
   searchParams
@@ -18,5 +19,9 @@ export default async function PlatformStandardPage({
     logo_url: null,
   };
 
-  return <StandardContent tenant={activeTenant} isPlatform={true} />;
+  return (
+    <MotionRise>
+      <StandardContent tenant={activeTenant} isPlatform={true} />
+    </MotionRise>
+  );
 }

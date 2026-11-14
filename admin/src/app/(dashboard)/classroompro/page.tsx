@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { BookOpen, FileText, Layers, Award, LayoutDashboard } from 'lucide-react';
 
 import OverviewTab from './tabs/OverviewTab';
@@ -22,13 +23,15 @@ export default function ClassroomProAdminPage() {
   ];
 
   return (
-    <div className="w-full">
-      <Header
-        title="ClassroomPRO Content & Curriculum Hub"
-        subtitle="Oversight of digital lesson handouts, interactive quizzes, and flashcards SRS"
-      />
+    <MotionStagger className="w-full">
+      <MotionRise>
+        <Header
+          title="ClassroomPRO Content & Curriculum Hub"
+          subtitle="Oversight of digital lesson handouts, interactive quizzes, and flashcards SRS"
+        />
+      </MotionRise>
 
-      <div className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4">
+      <MotionRise delay={0.05} className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4">
         <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto pb-px scrollbar-hide">
           {tabs.map(tab => {
             const Icon = tab.icon;
@@ -49,9 +52,9 @@ export default function ClassroomProAdminPage() {
             )
           })}
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 w-full">
+      <MotionRise delay={0.1} className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 w-full">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'notes' && <NotesTab />}
         {activeTab === 'quizzes' && <QuizzesTab />}
@@ -62,7 +65,7 @@ export default function ClassroomProAdminPage() {
             <p className="font-medium">Gamification settings coming soon!</p>
           </div>
         )}
-      </div>
-    </div>
+      </MotionRise>
+    </MotionStagger>
   );
 }

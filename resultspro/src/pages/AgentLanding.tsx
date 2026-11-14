@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { IconTrendingUp as TrendingUp, IconCurrencyDollar as DollarSign, IconUsers as Users, IconAward as Award, IconBolt as Zap, IconShield as Shield, IconArrowRight as ArrowRight } from '@tabler/icons-react';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const AgentLanding = () => {
   const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
@@ -22,7 +23,7 @@ const AgentLanding = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
         {/* Content */}
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
+        <MotionRise className="relative z-10 max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight leading-tight text-white">
             Earn as an Agent
           </h1>
@@ -38,15 +39,17 @@ const AgentLanding = () => {
               AGENT LOGIN
             </Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* How It Works */}
       <section className="relative py-20 px-4 md:px-8 bg-black overflow-hidden">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-16">How It Works</h2>
+          <MotionRise>
+            <h2 className="text-4xl font-bold text-center mb-16">How It Works</h2>
+          </MotionRise>
           
-          <div className="grid md:grid-cols-4 gap-8">
+          <MotionStagger className="grid md:grid-cols-4 gap-8">
             {[
               {
                 step: '01',
@@ -85,7 +88,7 @@ const AgentLanding = () => {
                 )}
               </div>
             ))}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
@@ -96,9 +99,11 @@ const AgentLanding = () => {
           <div className="absolute w-96 h-96 bg-gradient-to-tl from-blue-500/10 to-purple-500/10 rounded-full blur-3xl bottom-0 right-1/4 translate-x-1/2" />
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
-          <h2 className="text-4xl font-bold text-center mb-16">Commission Tiers</h2>
+          <MotionRise>
+            <h2 className="text-4xl font-bold text-center mb-16">Commission Tiers</h2>
+          </MotionRise>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <MotionStagger className="grid md:grid-cols-3 gap-8">
             {[
               {
                 plan: 'Free Plans',
@@ -132,16 +137,18 @@ const AgentLanding = () => {
                 <p className="text-gray-300">{tier.description}</p>
               </div>
             ))}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
       {/* Benefits */}
       <section className="relative py-20 px-4 md:px-8 bg-black overflow-hidden">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-16">Why Become an Agent</h2>
+          <MotionRise>
+            <h2 className="text-4xl font-bold text-center mb-16">Why Become an Agent</h2>
+          </MotionRise>
           
-          <div className="grid md:grid-cols-2 gap-8">
+          <MotionStagger className="grid md:grid-cols-2 gap-8">
             {[
               {
                 icon: DollarSign,
@@ -189,14 +196,14 @@ const AgentLanding = () => {
                 </div>
               );
             })}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
       {/* Stats */}
       <section className="relative py-20 px-4 md:px-8 bg-black overflow-hidden border-t border-[rgba(255,255,255,0.07)]">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
+          <MotionStagger className="grid md:grid-cols-3 gap-8 text-center">
             {[
               { label: 'Max Commission', value: '25%' },
               { label: 'Schools Onboarded', value: '100+' },
@@ -207,7 +214,7 @@ const AgentLanding = () => {
                 <p className="text-gray-400">{stat.label}</p>
               </div>
             ))}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
@@ -217,7 +224,7 @@ const AgentLanding = () => {
           <div className="absolute w-96 h-96 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl top-0 left-1/4 -translate-x-1/2" />
           <div className="absolute w-96 h-96 bg-gradient-to-tl from-blue-500/10 to-purple-500/10 rounded-full blur-3xl bottom-0 right-1/4 translate-x-1/2" />
         </div>
-        <div className="max-w-3xl mx-auto relative z-10">
+        <MotionRise className="max-w-3xl mx-auto relative z-10">
           <h2 className="text-4xl font-bold text-center mb-16">Questions?</h2>
           
           <div className="space-y-4">
@@ -264,12 +271,12 @@ const AgentLanding = () => {
               </div>
             ))}
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* CTA Section */}
       <section className="relative py-20 px-4 md:px-8 bg-black overflow-hidden border-t border-[rgba(255,255,255,0.07)]">
-        <div className="max-w-4xl mx-auto text-center">
+        <MotionRise className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Start Earning?</h2>
           <p className="text-xl text-gray-300 mb-8">
             Join hundreds of agents already earning passive income from school referrals
@@ -284,7 +291,7 @@ const AgentLanding = () => {
               LEARN MORE
             </Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Footer Section */}

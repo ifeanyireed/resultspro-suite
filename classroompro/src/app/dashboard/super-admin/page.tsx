@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const stats = [
   { label: "Total Schools", value: "124", trend: "+12", positive: true, icon: <School className="w-5 h-5" />, color: "text-[#146ef5]", bg: "bg-blue-50" },
@@ -34,9 +35,9 @@ export default function SuperAdminDashboard() {
       
       <main className="p-8 space-y-10">
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, i) => (
-            <div key={i} className="bg-white shadow-sm border border-gray-100 p-6 rounded-[24px] hover:border-gray-200 transition-all">
+            <MotionRise key={i} delay={i * 0.05} className="bg-white shadow-sm border border-gray-100 p-6 rounded-[24px] hover:border-gray-200 transition-all">
               <div className="flex justify-between items-start mb-4">
                 <div className={cn("p-2.5 rounded-xl", stat.bg, stat.color)}>
                   {stat.icon}
@@ -56,13 +57,13 @@ export default function SuperAdminDashboard() {
                 {loading ? <Skeleton className="h-8 w-24" /> : stat.value}
               </div>
               <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{stat.label}</div>
-            </div>
+            </MotionRise>
           ))}
-        </div>
+        </MotionStagger>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
            {/* Recent Schools Table */}
-           <div className="lg:col-span-2 space-y-6">
+           <MotionRise className="lg:col-span-2 space-y-6">
               <div className="flex items-center justify-between px-2">
                  <h3 className="text-xl font-bold text-gray-900 font-display">New School Onboarding</h3>
                  <Link href="/dashboard/super-admin/schools">
@@ -131,10 +132,10 @@ export default function SuperAdminDashboard() {
                     </tbody>
                  </table>
               </div>
-           </div>
+           </MotionRise>
 
            {/* Platform Health/Alerts */}
-           <div className="space-y-6">
+           <MotionRise delay={0.1} className="space-y-6">
               <h3 className="text-xl font-bold text-gray-900 font-display px-2">Platform Health</h3>
               
               <div className="space-y-4">
@@ -179,8 +180,8 @@ export default function SuperAdminDashboard() {
                     </p>
                  </div>
               </div>
-           </div>
-        </div>
+           </MotionRise>
+        </MotionStagger>
       </main>
     </div>
   );

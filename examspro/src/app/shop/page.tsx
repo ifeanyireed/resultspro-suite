@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 
 import { useState, useEffect, useMemo } from 'react';
 import Navbar from '@/components/Navbar';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconCoins as Coins, IconBolt as Zap, IconShieldCheck as ShieldCheck, IconHistory as History, IconSparkles as Sparkles, IconGift as Gift, IconLoader2 as Loader2, IconInfoCircle as Info, IconCircleCheck as CheckCircle2, IconBook, IconBooks, IconCertificate } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
@@ -195,7 +196,7 @@ export default function CoinShopPage() {
     <main className="min-h-screen bg-light pb-24">
       <Navbar />
       
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
+      <MotionRise className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         {/* Header / Balance */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
           <div className={`text-center ${(isMounted && user) ? 'md:text-left' : 'md:text-center w-full'}`}>
@@ -453,7 +454,7 @@ export default function CoinShopPage() {
             <p className="text-xs text-gray-500 leading-relaxed">Coming soon: Send coin packs to your friends and students.</p>
           </div>
         </div>
-      </div>
+      </MotionRise>
     </main>
   );
 }

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { sendContactForm } from '@/services/api';
 import { 
   IconMail, 
@@ -75,6 +76,7 @@ export default function ContactPage() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
         
         {/* HERO SECTION */}
+        <MotionRise>
         <section className="text-center space-y-4 pt-4 sm:pt-8">
           <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-700 text-xs sm:text-sm font-bold uppercase tracking-wider shadow-xs">
             <IconMessage className="w-4 h-4 text-amber-600" />
@@ -89,12 +91,13 @@ export default function ContactPage() {
             Have questions about school licensing, curriculum integration, or need technical assistance with your family account? Send us a message or contact us directly.
           </p>
         </section>
+        </MotionRise>
 
         {/* MAIN CONTACT GRID: DIRECT INFO & INTERACTIVE FORM */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* LEFT: DIRECT CONTACT DETAILS (5 COLS) */}
-          <div className="lg:col-span-5 space-y-6">
+          <MotionRise delay={0.05} className="lg:col-span-5 space-y-6">
             
             <div className="bg-white border border-slate-200/80 p-6 sm:p-8 rounded-3xl space-y-6 shadow-md">
               <div className="space-y-2 border-b border-slate-200 pb-4">
@@ -187,10 +190,10 @@ export default function ContactPage() {
               </div>
             </div>
 
-          </div>
+          </MotionRise>
 
           {/* RIGHT: INTERACTIVE CONTACT FORM (7 COLS) */}
-          <div className="lg:col-span-7 bg-white border border-slate-200/80 p-6 sm:p-10 rounded-3xl shadow-md space-y-6">
+          <MotionRise delay={0.12} className="lg:col-span-7 bg-white border border-slate-200/80 p-6 sm:p-10 rounded-3xl shadow-md space-y-6">
             
             <div className="space-y-2 border-b border-slate-200 pb-4">
               <h2 className="text-2xl font-bold font-varela text-slate-900">Send Us a Message</h2>
@@ -316,13 +319,13 @@ export default function ContactPage() {
               </form>
             )}
 
-          </div>
+          </MotionRise>
 
         </section>
 
         {/* FREQUENTLY ASKED QUESTIONS ACCORDION */}
         <section className="space-y-8 pt-6">
-          <div className="text-center space-y-2">
+          <MotionRise className="text-center space-y-2">
             <div className="inline-flex items-center space-x-2 text-amber-600 text-xs font-bold uppercase tracking-wider">
               <IconHelp className="w-4 h-4" />
               <span>FAQ</span>
@@ -330,12 +333,13 @@ export default function ContactPage() {
             <h2 className="text-2xl sm:text-4xl font-black font-varela text-slate-900 tracking-tight">
               Frequently Asked Questions
             </h2>
-          </div>
+          </MotionRise>
 
-          <div className="max-w-3xl mx-auto space-y-4">
+          <MotionStagger className="max-w-3xl mx-auto space-y-4">
             {faqs.map((faq, i) => (
-              <div
+              <MotionRise
                 key={i}
+                delay={i * 0.05}
                 className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-xs transition"
               >
                 <button
@@ -350,9 +354,9 @@ export default function ContactPage() {
                     {faq.a}
                   </div>
                 )}
-              </div>
+              </MotionRise>
             ))}
-          </div>
+          </MotionStagger>
         </section>
 
       </main>

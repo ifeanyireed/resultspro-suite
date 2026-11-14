@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { ArrowRight01, Zap, Users, Shield, CheckCircle } from '@/lib/hugeicons-compat';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const About: React.FC = () => {
   const values = [
@@ -64,14 +65,14 @@ const About: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
         {/* Content */}
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
+        <MotionRise className="relative z-10 max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight leading-tight text-white">
             Transforming Nigerian <span className="text-blue-400">Education</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-8 leading-relaxed max-w-2xl mx-auto">
             Result management shouldn't be complicated. We're making it simple, secure, and accessible for every school in Nigeria.
           </p>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Mission Section */}
@@ -81,7 +82,7 @@ const About: React.FC = () => {
           <div className="absolute w-96 h-96 bg-gradient-to-tl from-blue-500/10 to-purple-500/10 rounded-full blur-3xl bottom-0 right-1/4 translate-x-1/2" />
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
                 Our <span className="text-blue-400">Mission</span>
@@ -119,21 +120,23 @@ const About: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
       {/* Values Section */}
       <section className="relative py-20 px-4 md:px-8 bg-black overflow-hidden">
         <div className="max-w-6xl mx-auto relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            Our <span className="text-blue-400">Core Values</span>
-          </h2>
-          <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
-            These principles guide everything we build
-          </p>
+          <MotionRise>
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
+              Our <span className="text-blue-400">Core Values</span>
+            </h2>
+            <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
+              These principles guide everything we build
+            </p>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {values.map((value, idx) => {
               const Icon = value.icon;
               return (
@@ -153,21 +156,23 @@ const About: React.FC = () => {
                 </div>
               );
             })}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
       {/* Stats Section */}
       <section className="relative py-20 px-4 md:px-8 bg-gradient-to-b from-black to-blue-950/20 overflow-hidden">
         <div className="max-w-6xl mx-auto relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            By The <span className="text-blue-400">Numbers</span>
-          </h2>
-          <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
-            Growing impact across Nigerian education
-          </p>
+          <MotionRise>
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
+              By The <span className="text-blue-400">Numbers</span>
+            </h2>
+            <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
+              Growing impact across Nigerian education
+            </p>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {stats.map((stat, idx) => (
               <div
                 key={idx}
@@ -177,7 +182,7 @@ const About: React.FC = () => {
                 <p className="text-gray-300 text-sm md:text-base">{stat.label}</p>
               </div>
             ))}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
@@ -188,14 +193,16 @@ const About: React.FC = () => {
           <div className="absolute w-96 h-96 bg-gradient-to-tl from-blue-500/10 to-purple-500/10 rounded-full blur-3xl bottom-0 right-1/4 translate-x-1/2" />
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            Why Choose <span className="text-blue-400">Results Pro</span>
-          </h2>
-          <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
-            We're not just another software. We're built differently.
-          </p>
+          <MotionRise>
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
+              Why Choose <span className="text-blue-400">Results Pro</span>
+            </h2>
+            <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
+              We're not just another software. We're built differently.
+            </p>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {whyUs.map((item, idx) => (
               <div
                 key={idx}
@@ -210,13 +217,13 @@ const About: React.FC = () => {
                 </div>
               </div>
             ))}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="relative py-20 px-4 md:px-8 bg-gradient-to-b from-black to-blue-950/20">
-        <div className="max-w-4xl mx-auto text-center">
+        <MotionRise className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Join Schools Across Nigeria
           </h2>
@@ -232,7 +239,7 @@ const About: React.FC = () => {
               Contact Us
             </Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Footer */}

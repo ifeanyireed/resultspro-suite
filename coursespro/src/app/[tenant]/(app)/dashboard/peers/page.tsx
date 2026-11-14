@@ -25,6 +25,7 @@ import { useQuery } from '@tanstack/react-query';
 import { coursesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface Peer {
   user_id: string;
@@ -155,7 +156,7 @@ export default function PeersPage() {
   }, [rawPeers, statusFilter, searchQuery]);
 
   return (
-    <div className="max-w-7xl mx-auto pb-16">
+    <MotionRise className="max-w-7xl mx-auto pb-16">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 mt-2">
         <div>
@@ -265,7 +266,7 @@ export default function PeersPage() {
       )}
 
       {/* KPI Metrics */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+      <MotionStagger className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
             <UserGroupIcon className="w-6 h-6" />
@@ -305,7 +306,7 @@ export default function PeersPage() {
             <div className="text-xs text-slate-500 font-medium">Top Cohort XP</div>
           </div>
         </div>
-      </div>
+      </MotionStagger>
 
       {/* Search & Filter Bar */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6">
@@ -369,7 +370,7 @@ export default function PeersPage() {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {filteredPeers.map((peer) => (
             <div
               key={peer.user_id}
@@ -468,8 +469,8 @@ export default function PeersPage() {
               </div>
             </div>
           ))}
-        </div>
+        </MotionStagger>
       )}
-    </div>
+    </MotionRise>
   );
 }

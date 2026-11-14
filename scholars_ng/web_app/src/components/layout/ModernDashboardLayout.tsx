@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -195,9 +196,15 @@ export function ModernDashboardLayout({ sidebarContent, headerContent, children 
           )}
 
           {/* Dashboard Content */}
-          <div className="flex-1 px-6 pb-20 min-w-0 max-w-full">
+          <motion.div
+            key={pathname}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="flex-1 px-6 pb-20 min-w-0 max-w-full"
+          >
             {children}
-          </div>
+          </motion.div>
         </main>
 
         {/* ── Floating "SWITCH ROLES" Profile Switcher ── */}

@@ -34,6 +34,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useQuery } from '@tanstack/react-query';
 import { coursesApi } from '@/lib/api';
 import { useRouter } from 'next/navigation';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function JourneyPage() {
   const router = useRouter();
@@ -223,7 +224,7 @@ export default function JourneyPage() {
   })();
 
   return (
-    <>
+    <MotionRise>
       <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 mt-2 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">The Learning Journey</h1>
@@ -289,7 +290,7 @@ export default function JourneyPage() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-4">
+        <MotionStagger className="lg:col-span-2 space-y-4">
           {stages.length === 0 ? (
             <div className="bg-white rounded-[1.5rem] p-8 sm:p-12 text-center border border-gray-100 shadow-sm space-y-4">
               <div className="w-14 h-14 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
@@ -582,7 +583,7 @@ export default function JourneyPage() {
               );
             })
           )}
-        </div>
+        </MotionStagger>
         
         <div className="space-y-6">
           {/* 1. Enhanced Journey Progress Card */}
@@ -869,6 +870,6 @@ export default function JourneyPage() {
           </div>
         </div>
       </div>
-    </>
+    </MotionRise>
   );
 }

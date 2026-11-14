@@ -1,4 +1,5 @@
 import NoteDetailClient from "./NoteDetailClient";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 
 export const dynamicParams = false;
 
@@ -22,5 +23,9 @@ export async function generateStaticParams() {
 }
 
 export default function PublicNoteDetailPage() {
-  return <NoteDetailClient />;
+  return (
+    <MotionRise>
+      <NoteDetailClient />
+    </MotionRise>
+  );
 }

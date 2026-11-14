@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { AlertTriangle, Send } from '@/lib/hugeicons-compat';
 import { IconTrendingDown as TrendingDown } from '@tabler/icons-react';
 import { axiosInstance as axios } from '@/lib/axiosConfig';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface AtRiskStudent {
   studentId: string;
@@ -81,7 +82,7 @@ const TeacherAtRiskStudents: React.FC = () => {
     <div className="min-h-screen text-white">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <button
             onClick={() => navigate(-1)}
             className="text-blue-400 hover:text-blue-300 mb-4"
@@ -92,10 +93,10 @@ const TeacherAtRiskStudents: React.FC = () => {
           <p className="text-slate-400">
             {students.length} student{students.length !== 1 ? 's' : ''} requiring intervention
           </p>
-        </div>
+        </MotionRise>
 
         {/* Risk Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-red-600/20 border border-red-600 rounded-lg p-6">
             <p className="text-red-300 text-sm">Critical Risk</p>
             <p className="text-3xl font-bold mt-2">
@@ -120,10 +121,10 @@ const TeacherAtRiskStudents: React.FC = () => {
               {students.filter((s) => s.riskLevel === 'LOW').length}
             </p>
           </div>
-        </div>
+        </MotionStagger>
 
         {/* Students List */}
-        <div className="space-y-4">
+        <MotionStagger className="space-y-4">
           {students.length === 0 ? (
             <div className="text-center py-20">
               <AlertTriangle size={48} className="mx-auto text-slate-600 mb-4" />
@@ -216,10 +217,10 @@ const TeacherAtRiskStudents: React.FC = () => {
               </div>
             ))
           )}
-        </div>
+        </MotionStagger>
 
         {/* Intervention Recommendations */}
-        <div className="mt-8 bg-slate-800 rounded-lg p-6">
+        <MotionRise className="mt-8 bg-slate-800 rounded-lg p-6">
           <h2 className="text-xl font-bold mb-4">📋 Intervention Recommendations</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-slate-700 p-4 rounded">
@@ -241,7 +242,7 @@ const TeacherAtRiskStudents: React.FC = () => {
               </ul>
             </div>
           </div>
-        </div>
+        </MotionRise>
       </div>
 
       {/* Message Modal */}

@@ -4,6 +4,7 @@ import "../nets.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingChat from "@/components/FloatingChat";
+import ScrollRiseProvider from "@/components/ScrollRiseProvider";
 
 export const metadata: Metadata = {
   title: "ResultsPRO NG | Education Infrastructure",
@@ -23,10 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-primary">
-        <Navbar />
-        {children}
-        <Footer />
-        <FloatingChat />
+        <ScrollRiseProvider>
+          <Navbar />
+          {children}
+          <Footer />
+          <FloatingChat />
+        </ScrollRiseProvider>
       </body>
     </html>
   );

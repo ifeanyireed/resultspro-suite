@@ -20,6 +20,7 @@ import {
   StarIcon as StarSolid,
   CheckBadgeIcon as CheckBadgeSolid 
 } from '@heroicons/react/24/solid';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface Achievement {
   id: string;
@@ -63,7 +64,7 @@ export default function AchievementsPage() {
   const completionPct = stats.total > 0 ? Math.round((stats.earned / stats.total) * 100) : 0;
 
   return (
-    <div className="space-y-8 pb-16">
+    <MotionRise className="space-y-8 pb-16">
       {/* Header & KPI Summary */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mt-2">
         <div>
@@ -177,7 +178,7 @@ export default function AchievementsPage() {
           <p className="text-gray-400 text-xs mt-1">Try switching to the 'All Badges' filter.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+        <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
           {filteredAchievements.map((a) => (
             <div 
               key={a.id} 
@@ -247,8 +248,8 @@ export default function AchievementsPage() {
               </div>
             </div>
           ))}
-        </div>
+        </MotionStagger>
       )}
-    </div>
+    </MotionRise>
   );
 }

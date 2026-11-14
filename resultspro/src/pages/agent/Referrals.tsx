@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TrendingUp, Building2, Users, Target, BarChart01, Trophy, DollarSign, Calendar, User, LogOut } from '@/lib/hugeicons-compat';
 import { useAgentReferrals } from '@/hooks/useAgentAnalytics';
 import { useNavigate } from 'react-router-dom';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export const Referrals: React.FC = () => {
   const navigate = useNavigate();
@@ -42,50 +43,50 @@ export const Referrals: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
           <div className="space-y-6">
       {/* Header */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 text-white hover:bg-white/5 transition-colors">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 text-white hover:bg-white/5 transition-colors">
         <h1 className="text-3xl font-bold mb-2">Referral Tracking</h1>
         <p className="text-gray-300">Monitor your referrals and earnings</p>
-      </div>
+      </MotionRise>
 
       {/* Stats Cards */}
       {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-400 text-sm">Total Referrals</span>
               <Target className="w-5 h-5 text-blue-400" />
             </div>
             <div className="text-2xl font-bold text-white">{stats.totalReferrals}</div>
-          </div>
+          </MotionRise>
 
-          <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
+          <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-400 text-sm">Pending</span>
               <Building2 className="w-5 h-5 text-yellow-400" />
             </div>
             <div className="text-2xl font-bold text-white">{stats.pendingReferrals}</div>
-          </div>
+          </MotionRise>
 
-          <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
+          <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-400 text-sm">Approved</span>
               <Users className="w-5 h-5 text-green-400" />
             </div>
             <div className="text-2xl font-bold text-white">{stats.approvedReferrals}</div>
-          </div>
+          </MotionRise>
 
-          <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
+          <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-400 text-sm">Successful Signups</span>
               <TrendingUp className="w-5 h-5 text-purple-400" />
             </div>
             <div className="text-2xl font-bold text-white">{stats.successfulRegistrations}</div>
-          </div>
-        </div>
+          </MotionRise>
+        </MotionStagger>
       )}
 
       {/* Referrals Table */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] overflow-hidden">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] overflow-hidden">
         <div className="p-6 border-b border-[rgba(255,255,255,0.07)]">
           <h2 className="text-lg font-semibold text-white">Recent Referrals</h2>
         </div>
@@ -160,7 +161,7 @@ export const Referrals: React.FC = () => {
             Next
           </button>
         </div>
-      </div>
+      </MotionRise>
           </div>
         </div>
       </main>

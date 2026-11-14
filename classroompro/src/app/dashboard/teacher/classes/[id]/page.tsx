@@ -1,4 +1,5 @@
 import { TeacherClassDetailClient } from "./TeacherClassDetailClient";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 
 export const dynamicParams = false;
 
@@ -22,5 +23,9 @@ export async function generateStaticParams() {
 }
 
 export default function TeacherClassDetailPage() {
-  return <TeacherClassDetailClient />;
+  return (
+    <MotionRise>
+      <TeacherClassDetailClient />
+    </MotionRise>
+  );
 }

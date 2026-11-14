@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconShield as Shield, IconMail as Mail, IconLock as Lock, IconChevronRight as ChevronRight, IconUserCircle as UserCircle2, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -45,7 +46,7 @@ export default function ParentLogin() {
         <div className="absolute bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-purple/10 rounded-full blur-[120px]" />
       </div>
 
-      <div className="w-full max-w-md relative z-10">
+      <MotionRise className="w-full max-w-md relative z-10">
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue/10 border border-blue/20 text-[10px] font-bold text-blue uppercase tracking-widest mb-6">
              <Shield className="w-3 h-3" /> Parent Security Portal
@@ -112,7 +113,7 @@ export default function ParentLogin() {
           <div className="w-1 h-1 rounded-full bg-white/10 self-center" />
           <Link href="/contact" className="text-xs font-bold text-gray-600 hover:text-white transition-colors">HELP CENTER</Link>
         </div>
-      </div>
+      </MotionRise>
     </main>
   );
 }

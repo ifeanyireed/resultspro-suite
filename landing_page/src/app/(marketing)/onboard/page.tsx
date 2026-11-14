@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
 import { IconLayoutGrid as LayoutGrid, IconClipboardList as ClipboardList, IconPhone as Phone, IconShieldCheck as ShieldCheck, IconCamera as Camera, IconCreditCard as CreditCard, IconArrowRight as ArrowRight, IconUser as User, IconSchool as School, IconUsersGroup as Handshake, IconCertificate as GraduationCap, IconCalendar as Calendar, IconStack2 as Layers, IconUsers as Users, IconWallet as Wallet, IconShare2 as Share2, IconKey as Key, IconSearch as Search, IconBook as BookOpen } from '@tabler/icons-react';
 
@@ -124,7 +125,7 @@ export default function OnboardPage() {
         <div style={{ height: '4rem' }} />
 
         {/* Headers */}
-        <div className="text-center mb-6 flex flex-col items-center">
+        <MotionRise className="text-center mb-6 flex flex-col items-center">
           <h1 className="!text-[2.25rem] md:!text-[3rem] font-bold text-[#0f172a] !text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Select Role</h1>
           <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-base font-medium mb-4">Follow the steps to precisely categorize your business.</p>
           <button
@@ -133,7 +134,7 @@ export default function OnboardPage() {
           >
             RESET PROGRESS & START OVER
           </button>
-        </div>
+        </MotionRise>
 
         {/* Spacer above Section Label */}
         <div style={{ height: '1.5rem' }} />
@@ -146,7 +147,7 @@ export default function OnboardPage() {
         <div style={{ height: '1.25rem' }} />
 
         {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <MotionRise delay={0.1} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           {roles.map((role) => {
             const Icon = role.icon;
             const isSelected = selectedRole === role.id;
@@ -183,7 +184,7 @@ export default function OnboardPage() {
               </button>
             );
           })}
-        </div>
+        </MotionRise>
 
         {/* Bottom Nav / Next Button Section (Inline) */}
         <div className="w-full border-t border-gray-200 flex justify-end" style={{ marginTop: '2rem', paddingTop: '2rem' }}>

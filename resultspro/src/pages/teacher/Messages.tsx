@@ -3,6 +3,7 @@ import { IconSearch as Search, IconSend as Send, IconUser as User, IconMessageCi
 import { axiosInstance as axios } from '@/lib/axiosConfig';
 import { useToast } from '@/hooks/use-toast';
 import { formatDistanceToNow } from 'date-fns';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface Conversation {
   otherUser: {
@@ -160,7 +161,7 @@ const TeacherMessages: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row h-[calc(100vh-180px)] bg-slate-900/50 rounded-2xl border border-white/10 overflow-hidden backdrop-blur-xl">
+    <MotionRise className="flex flex-col lg:flex-row h-[calc(100vh-180px)] bg-slate-900/50 rounded-2xl border border-white/10 overflow-hidden backdrop-blur-xl">
       {/* Conversations List */}
       <div className={`w-full lg:w-1/3 border-r border-white/10 flex flex-col ${selectedConv ? 'hidden lg:flex' : 'flex'}`}>
         <div className="p-4 border-b border-white/10">
@@ -184,37 +185,39 @@ const TeacherMessages: React.FC = () => {
               <p className="text-slate-400">No conversations found</p>
             </div>
           ) : (
-            filteredConversations.map((conv, idx) => (
-              <div
-                key={`${conv.otherUser.id}-${conv.student.id}`}
-                onClick={() => setSelectedConv(conv)}
-                className={`p-4 border-b border-white/5 cursor-pointer transition-all hover:bg-white/5 ${
-                  selectedConv?.otherUser.id === conv.otherUser.id && selectedConv?.student.id === conv.student.id
-                    ? 'bg-blue-500/10 border-l-4 border-l-blue-500'
-                    : 'border-l-4 border-l-transparent'
-                }`}
-              >
-                <div className="flex justify-between items-start mb-1">
-                  <h3 className="font-semibold text-white truncate pr-2">{conv.otherUser.fullName}</h3>
-                  <span className="text-[10px] text-slate-500 whitespace-nowrap">
-                    {formatDistanceToNow(new Date(conv.lastMessage.createdAt), { addSuffix: true })}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 font-bold">
-                    {conv.student.name}
-                  </span>
-                  {conv.unreadCount > 0 && (
-                    <span className="bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
-                      {conv.unreadCount}
+            <MotionStagger>
+              {filteredConversations.map((conv, idx) => (
+                <div
+                  key={`${conv.otherUser.id}-${conv.student.id}`}
+                  onClick={() => setSelectedConv(conv)}
+                  className={`p-4 border-b border-white/5 cursor-pointer transition-all hover:bg-white/5 ${
+                    selectedConv?.otherUser.id === conv.otherUser.id && selectedConv?.student.id === conv.student.id
+                      ? 'bg-blue-500/10 border-l-4 border-l-blue-500'
+                      : 'border-l-4 border-l-transparent'
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-1">
+                    <h3 className="font-semibold text-white truncate pr-2">{conv.otherUser.fullName}</h3>
+                    <span className="text-[10px] text-slate-500 whitespace-nowrap">
+                      {formatDistanceToNow(new Date(conv.lastMessage.createdAt), { addSuffix: true })}
                     </span>
-                  )}
+                  </div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 font-bold">
+                      {conv.student.name}
+                    </span>
+                    {conv.unreadCount > 0 && (
+                      <span className="bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                        {conv.unreadCount}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-slate-400 line-clamp-1">
+                    {conv.lastMessage.senderRole === 'TEACHER' ? 'You: ' : ''}{conv.lastMessage.body}
+                  </p>
                 </div>
-                <p className="text-sm text-slate-400 line-clamp-1">
-                  {conv.lastMessage.senderRole === 'TEACHER' ? 'You: ' : ''}{conv.lastMessage.body}
-                </p>
-              </div>
-            ))
+              ))}
+            </MotionStagger>
           )}
         </div>
       </div>
@@ -302,7 +305,7 @@ const TeacherMessages: React.FC = () => {
           </div>
         )}
       </div>
-    </div>
+    </MotionRise>
   );
 };
 

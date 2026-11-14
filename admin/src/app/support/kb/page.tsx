@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { PlusIcon, DocumentTextIcon, FolderIcon, TrashIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function KnowledgeBaseDashboard() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -56,8 +57,8 @@ export default function KnowledgeBaseDashboard() {
     : articles;
 
   return (
-    <div className="flex flex-col h-full bg-gray-50/50 p-6 rounded-2xl">
-      <div className="flex justify-between items-center mb-8">
+    <MotionStagger className="flex flex-col h-full bg-gray-50/50 p-6 rounded-2xl">
+      <MotionRise className="flex justify-between items-center mb-8">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Knowledge Base</h2>
           <p className="text-sm text-gray-500 mt-1">Manage support articles, guides, and blueprints.</p>
@@ -66,14 +67,14 @@ export default function KnowledgeBaseDashboard() {
           <PlusIcon className="w-5 h-5" />
           New Article
         </Link>
-      </div>
+      </MotionRise>
 
       {loading ? (
         <div className="flex-1 flex items-center justify-center">
           <div className="w-8 h-8 border-4 border-[#146ef5] border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
-        <div className="flex gap-8 flex-1 overflow-hidden">
+        <MotionRise delay={0.05} className="flex gap-8 flex-1 overflow-hidden">
           {/* Categories Sidebar */}
           <div className="w-64 shrink-0 flex flex-col gap-2">
             <button
@@ -164,8 +165,8 @@ export default function KnowledgeBaseDashboard() {
               </div>
             )}
           </div>
-        </div>
+        </MotionRise>
       )}
-    </div>
+    </MotionStagger>
   );
 }

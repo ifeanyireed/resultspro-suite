@@ -17,6 +17,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import api from '@/lib/api';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function ParentDashboard() {
   const [data, setData] = useState<any>(null);
@@ -43,9 +44,9 @@ export default function ParentDashboard() {
   const { stats, children_progress, messages, events } = data;
 
   return (
-    <>
+    <MotionRise>
       {/* Dashboard Title & Actions */}
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise delay={0.04} className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Parent Portal</h1>
           <p className="text-sm text-gray-500 mt-1">Monitor your children's progress and stay updated.</p>
@@ -60,13 +61,13 @@ export default function ParentDashboard() {
             Message School
           </button>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Top Metric Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         
         {/* Card 1: Primary Dark */}
-        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+        <MotionRise delay={0.06} className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
           {/* Subtle Depth Effects */}
           <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
           <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
@@ -83,10 +84,10 @@ export default function ParentDashboard() {
               <span>Due by {stats.next_payment_due}</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Card 2: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise delay={0.1} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Enrolled Children</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
@@ -99,10 +100,10 @@ export default function ParentDashboard() {
               <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> Good standing</div>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Card 3: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise delay={0.14} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Unread Messages</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
@@ -115,10 +116,10 @@ export default function ParentDashboard() {
               <span className="text-orange-500 font-semibold">Important updates waiting</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Card 4: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise delay={0.18} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Upcoming Events</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
@@ -131,15 +132,15 @@ export default function ParentDashboard() {
               <span className="text-gray-400">Scheduled for this month</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-      </div>
+      </MotionStagger>
 
       {/* Main Content Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+      <MotionStagger className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         
         {/* Left Side */}
-        <div className="lg:col-span-8 flex flex-col gap-3">
+        <MotionRise delay={0.1} className="lg:col-span-8 flex flex-col gap-3">
           
           <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
             <div className="flex justify-between items-center mb-6">
@@ -166,10 +167,10 @@ export default function ParentDashboard() {
               ))}
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Right Sidebar Stack */}
-        <div className="lg:col-span-4 flex flex-col gap-3">
+        <MotionRise delay={0.14} className="lg:col-span-4 flex flex-col gap-3">
           
           {/* Recent Messages */}
           <div className="w-full bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
@@ -194,9 +195,9 @@ export default function ParentDashboard() {
             </div>
           </div>
 
-        </div>
+        </MotionRise>
 
-      </div>
-    </>
+      </MotionStagger>
+    </MotionRise>
   );
 }

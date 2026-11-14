@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Loader2, ArrowRight, Building2, CheckCircle2 } from 'lucide-react';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function CreatorOnboardingPage() {
   const router = useRouter();
@@ -63,7 +64,7 @@ export default function CreatorOnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden bg-[#0B1021]">
+    <MotionRise className="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden bg-[#0B1021]">
       {/* Background Abstract Glows */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/30 blur-[120px]" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-600/20 blur-[150px]" />
@@ -149,6 +150,6 @@ export default function CreatorOnboardingPage() {
           )}
         </div>
       </div>
-    </div>
+    </MotionRise>
   );
 }

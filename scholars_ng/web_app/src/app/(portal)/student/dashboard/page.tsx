@@ -1,5 +1,12 @@
+'use client';
+
 import StudentDashboard from '@/components/Dashboard/StudentDashboard';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function StudentDashboardPage() {
-  return <StudentDashboard />;
+  return (
+    <MotionRise>
+      <StudentDashboard />
+    </MotionRise>
+  );
 }

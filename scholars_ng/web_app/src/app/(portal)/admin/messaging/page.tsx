@@ -2,7 +2,12 @@
 
 import React from 'react';
 import { MessagingDashboard } from '../campus-os/page';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function AdminMessagingPage() {
-  return <MessagingDashboard />;
+  return (
+    <MotionRise>
+      <MessagingDashboard />
+    </MotionRise>
+  );
 }

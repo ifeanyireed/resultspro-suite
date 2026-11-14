@@ -3,6 +3,7 @@
 import { IconDownload as Download, IconTrash as Trash2, IconWifiOff as WifiOff, IconCircleCheck as CheckCircle2, IconFileText as FileText, IconClock as Clock, IconExternalLink as ExternalLink, IconShieldCheck as ShieldCheck } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const downloadedContent = [
   { id: 1, title: "Biology: Photosynthesis (Detailed)", type: "Note", size: "2.4 MB", date: "Oct 12, 2025" },
@@ -16,7 +17,7 @@ export default function DownloadsPage() {
       
       
       <main className="p-8 max-w-4xl mx-auto space-y-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 font-display">Download Manager</h2>
             <p className="text-sm text-gray-500">Access your synced content even when you're offline.</p>
@@ -25,9 +26,9 @@ export default function DownloadsPage() {
              <ShieldCheck className="w-4 h-4 text-emerald-600" />
              <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">PWA Active</span>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-blue/5 border border-blue/10 rounded-[32px] p-8 flex items-center gap-8">
+        <MotionRise delay={0.08} className="bg-blue/5 border border-blue/10 rounded-[32px] p-8 flex items-center gap-8">
            <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-[#146ef5] shrink-0">
               <WifiOff className="w-8 h-8" />
            </div>
@@ -38,9 +39,9 @@ export default function DownloadsPage() {
                  ClassroomPRO will automatically switch to offline mode when internet is unavailable.
               </p>
            </div>
-        </div>
+        </MotionRise>
 
-        <div className="space-y-4">
+        <MotionRise delay={0.14} className="space-y-4">
            <div className="flex justify-between items-center px-2">
               <h3 className="text-sm font-bold text-gray-900 uppercase tracking-[0.2em]">Synced Resources</h3>
               <span className="text-[10px] font-bold text-gray-500 uppercase">{downloadedContent.length} Items</span>
@@ -81,9 +82,9 @@ export default function DownloadsPage() {
                  ))}
               </div>
            </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 text-center">
+        <MotionRise delay={0.2} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 text-center">
            <div className="text-xs text-gray-500 mb-4 font-medium">Storage Usage</div>
            <div className="w-full max-w-md mx-auto h-2 bg-white shadow-sm border border-gray-100 rounded-full overflow-hidden mb-2">
               <div className="h-full bg-emerald-600 w-[15%]" />
@@ -91,7 +92,7 @@ export default function DownloadsPage() {
            <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
               4.7 MB of 100 MB Used
            </div>
-        </div>
+        </MotionRise>
       </main>
     </div>
   );

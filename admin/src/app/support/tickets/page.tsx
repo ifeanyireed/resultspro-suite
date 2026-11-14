@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { TicketIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import api from '@/lib/api';
 import Link from 'next/link';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function AdminTicketsPage() {
   const [tickets, setTickets] = useState<any[]>([]);
@@ -35,8 +36,8 @@ export default function AdminTicketsPage() {
   });
 
   return (
-    <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 min-h-[calc(100vh-8rem)]">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+    <MotionStagger className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 min-h-[calc(100vh-8rem)]">
+      <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 tracking-tight">All Tickets</h2>
           <p className="text-sm text-gray-500">Manage and resolve user issues</p>
@@ -64,14 +65,14 @@ export default function AdminTicketsPage() {
             <option value="resolved">Resolved</option>
           </select>
         </div>
-      </div>
+      </MotionRise>
 
       {loading ? (
         <div className="text-gray-500 py-12 text-center">Loading tickets...</div>
       ) : filteredTickets.length === 0 ? (
         <div className="text-gray-500 py-12 text-center">No tickets match your filters.</div>
       ) : (
-        <div className="space-y-3">
+        <MotionRise delay={0.05} className="space-y-3">
           {filteredTickets.map(t => (
             <Link key={t.id} href={`/support/tickets/${t.id}`}>
               <div className="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:border-blue-300 hover:shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer bg-white">
@@ -103,8 +104,8 @@ export default function AdminTicketsPage() {
               </div>
             </Link>
           ))}
-        </div>
+        </MotionRise>
       )}
-    </div>
+    </MotionStagger>
   );
 }

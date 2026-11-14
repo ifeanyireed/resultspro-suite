@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import PhotoHero from '@/components/PhotoHero';
 import ScrollReveal from '@/components/ScrollReveal';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import Link from 'next/link';
 
 export default function UnsubscribePage() {
@@ -52,7 +53,7 @@ export default function UnsubscribePage() {
       />
 
       <section className="section section-white">
-        <div className="container" style={{ maxWidth: '600px', textAlign: 'center' }}>
+        <MotionRise className="container" style={{ maxWidth: '600px', textAlign: 'center' }}>
           <ScrollReveal animation="fade-up">
             <h2 style={{ color: 'var(--color-sky-blue)', marginBottom: '2rem' }}>Confirm Unsubscribe</h2>
             <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '1.5rem' }}>
@@ -85,7 +86,7 @@ export default function UnsubscribePage() {
               <p style={{ color: 'red', marginTop: '1.5rem', fontWeight: '600' }}>Something went wrong. Please try again or contact support.</p>
             )}
           </ScrollReveal>
-        </div>
+        </MotionRise>
       </section>
     </>
   );

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { IconStack2 as Layers, IconCalendar as Calendar, IconUsersGroup as Users2, IconArrowRight as ArrowRight, IconCircleCheck as CheckCircle2 } from '@tabler/icons-react';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function CoursesCatalogPage() {
   const cohorts = [
@@ -30,10 +31,10 @@ export default function CoursesCatalogPage() {
   ];
 
   return (
-    <div className="flex-1 flex flex-col">
+    <MotionRise className="flex-1 flex flex-col">
       
 
-      <div className="p-8 max-w-5xl mx-auto w-full space-y-6">
+      <MotionStagger className="p-8 max-w-5xl mx-auto w-full space-y-6">
         {cohorts.map((c) => (
           <div key={c.id} className="bg-surface rounded-2xl border border-line p-8 shadow-sm space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -78,7 +79,7 @@ export default function CoursesCatalogPage() {
             </div>
           </div>
         ))}
-      </div>
-    </div>
+      </MotionStagger>
+    </MotionRise>
   );
 }

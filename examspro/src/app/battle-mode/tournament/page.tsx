@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconTrophy as Trophy, IconUsers as Users, IconCalendar as Calendar, IconClock as Timer, IconCoins as Coins, IconChevronLeft as ChevronLeft, IconLoader2 as Loader2, IconCircleCheck as CheckCircle2, IconArrowRight as ArrowRight, IconShieldCheck as ShieldCheck, IconAlertCircle as AlertCircle } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -92,7 +93,7 @@ export default function TournamentPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden border-b border-white/5 bg-white">
+      <MotionRise className="relative overflow-hidden border-b border-white/5 bg-white">
         <div className="absolute inset-0 bg-gradient-to-br from-amber/10 via-transparent to-[#146ef5]/10 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24 relative z-10">
           <Link href="/battle-mode" className="inline-flex items-center text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors mb-8 group">
@@ -180,10 +181,10 @@ export default function TournamentPage() {
             </div>
           </div>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Rankings Section */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-24">
+      <MotionRise delay={0.1} className="max-w-7xl mx-auto px-4 md:px-8 py-24">
         <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-12">
           <div>
             <h2 className="text-4xl font-display font-black text-gray-900 mb-2">LIVE RANKINGS</h2>
@@ -252,7 +253,7 @@ export default function TournamentPage() {
             </tbody>
           </table>
         </div>
-      </div>
+      </MotionRise>
     </main>
   );
 }

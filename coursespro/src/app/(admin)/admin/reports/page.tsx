@@ -5,10 +5,11 @@ import {
   ArrowUpRightIcon,
   ChartBarIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function ReportsPage() {
   return (
-    <>
+    <MotionRise>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Reports & Analytics</h2>
@@ -16,7 +17,7 @@ export default function ReportsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <MotionStagger className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Engagement Chart Mock */}
         <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
           <h3 className="text-lg font-medium text-gray-900 mb-6">Cohort Engagement</h3>
@@ -80,7 +81,7 @@ export default function ReportsPage() {
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </MotionStagger>
+    </MotionRise>
   );
 }

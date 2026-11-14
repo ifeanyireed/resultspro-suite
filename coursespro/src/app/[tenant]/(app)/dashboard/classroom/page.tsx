@@ -24,6 +24,7 @@ import DailyIframe, { DailyCall, DailyEventObjectAppMessage } from '@daily-co/da
 import { coursesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface ChatMessage {
   id?: string;
@@ -254,7 +255,7 @@ export default function ClassroomPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto pb-16">
+    <MotionRise className="max-w-7xl mx-auto pb-16">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 mt-2">
         <div>
@@ -515,7 +516,7 @@ export default function ClassroomPage() {
       </div>
 
       {/* Classroom Etiquette & Guidelines Footer */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6">
         <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex items-start gap-3">
           <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
             <MicrophoneIcon className="w-5 h-5" />
@@ -551,7 +552,7 @@ export default function ClassroomPage() {
             </p>
           </div>
         </div>
-      </div>
-    </div>
+      </MotionStagger>
+    </MotionRise>
   );
 }

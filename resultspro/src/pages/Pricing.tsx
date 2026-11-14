@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { ArrowRight01, Check, X } from '@/lib/hugeicons-compat';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const Pricing: React.FC = () => {
   const [billingPeriod, setBillingPeriod] = useState<'termly' | 'annually'>('annually');
@@ -194,7 +195,7 @@ const Pricing: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
         {/* Content */}
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
+        <MotionRise className="relative z-10 max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight leading-tight text-white">
             Simple, Transparent <span className="text-blue-400">Pricing</span>
           </h1>
@@ -204,7 +205,7 @@ const Pricing: React.FC = () => {
           <div ref={heroToggleRef}>
             <BillingPeriodToggle sticky={false} />
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Sticky Toggle - appears when hero toggle scrolls out of view */}
@@ -220,7 +221,7 @@ const Pricing: React.FC = () => {
         </div>
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="flex justify-center">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+            <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
             {pricingPlans.map((plan, idx) => (
               <div
                 key={idx}
@@ -303,14 +304,14 @@ const Pricing: React.FC = () => {
                 </div>
               </div>
             ))}
-            </div>
+            </MotionStagger>
           </div>
         </div>
       </section>
 
       {/* Comparison Table */}
       <section ref={comparisonSectionRef} className="relative py-20 px-4 md:px-8 bg-black overflow-hidden">
-        <div className="max-w-7xl mx-auto">
+        <MotionRise className="max-w-7xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
             Detailed <span className="text-blue-400">Comparison</span>
           </h2>
@@ -364,7 +365,7 @@ const Pricing: React.FC = () => {
               </tbody>
             </table>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* FAQ Section */}
@@ -373,7 +374,7 @@ const Pricing: React.FC = () => {
           <div className="absolute w-96 h-96 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl top-0 left-1/4 -translate-x-1/2" />
           <div className="absolute w-96 h-96 bg-gradient-to-tl from-blue-500/10 to-purple-500/10 rounded-full blur-3xl bottom-0 right-1/4 translate-x-1/2" />
         </div>
-        <div className="max-w-4xl mx-auto relative z-10">
+        <MotionRise className="max-w-4xl mx-auto relative z-10">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
             Pricing <span className="text-blue-400">FAQ</span>
           </h2>
@@ -426,12 +427,12 @@ const Pricing: React.FC = () => {
               </div>
             ))}
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* CTA Section */}
       <section className="relative py-20 px-4 md:px-8 bg-gradient-to-b from-black to-blue-950/20">
-        <div className="max-w-4xl mx-auto text-center">
+        <MotionRise className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Ready to Get Started?
           </h2>
@@ -447,7 +448,7 @@ const Pricing: React.FC = () => {
               Talk to Sales
             </Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Footer */}

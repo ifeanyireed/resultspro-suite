@@ -6,6 +6,7 @@ import { IconMail as Mail, IconPhone as Phone, IconMapPin as MapPin, IconMessage
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function ContactPage() {
   return (
@@ -15,7 +16,7 @@ export default function ContactPage() {
       <main className="flex-1 pt-28 pb-20 px-4">
         <div className="max-w-7xl mx-auto space-y-16">
           {/* Hero Section */}
-          <div className="text-center max-w-3xl mx-auto space-y-6">
+          <MotionRise className="text-center max-w-3xl mx-auto space-y-6">
              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green/10 border border-green/20 text-green text-xs font-black uppercase tracking-widest mb-4">
                 <MessageSquare className="w-4 h-4" /> Get in Touch
              </div>
@@ -25,11 +26,11 @@ export default function ContactPage() {
              <p className="text-muted-foreground text-xl leading-relaxed">
                 Have questions about ClassroomPRO? Our team is here to help your school transition to a better digital learning experience.
              </p>
-          </div>
+          </MotionRise>
 
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
+          <MotionStagger className="grid lg:grid-cols-2 gap-16 items-start">
              {/* Contact Form */}
-             <div className="bg-white/5 border border-white/10 rounded-[40px] p-8 md:p-12 relative overflow-hidden">
+             <MotionRise className="bg-white/5 border border-white/10 rounded-[40px] p-8 md:p-12 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-green/5 blur-[100px] rounded-full -mr-32 -mt-32" />
                 
                 <form className="relative z-10 space-y-6">
@@ -74,10 +75,10 @@ export default function ContactPage() {
                       Send Message <Send className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                    </Button>
                 </form>
-             </div>
+             </MotionRise>
 
              {/* Info & Details */}
-             <div className="space-y-12 lg:pt-12">
+             <MotionRise delay={0.12} className="space-y-12 lg:pt-12">
                 <div className="grid sm:grid-cols-2 gap-8">
                    <div className="space-y-4">
                       <div className="w-12 h-12 rounded-2xl bg-blue/10 flex items-center justify-center text-blue">
@@ -137,8 +138,8 @@ export default function ContactPage() {
                       Book a Demo
                    </Button>
                 </div>
-             </div>
-          </div>
+             </MotionRise>
+          </MotionStagger>
         </div>
       </main>
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import { getTenant } from '@/lib/tenant';
 import MentorApplyForm from './MentorApplyForm';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default async function MentorApplyPage({ params }: { params: Promise<{ tenant: string }> }) {
   const resolvedParams = await params;
@@ -11,5 +12,9 @@ export default async function MentorApplyPage({ params }: { params: Promise<{ te
     notFound();
   }
 
-  return <MentorApplyForm tenant={tenant} />;
+  return (
+    <MotionRise>
+      <MentorApplyForm tenant={tenant} />
+    </MotionRise>
+  );
 }

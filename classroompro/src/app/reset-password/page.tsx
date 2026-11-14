@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import api from "@/lib/api";
 import { toast } from "react-hot-toast";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 
 function ResetPasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -49,7 +50,7 @@ function ResetPasswordForm() {
 
   if (isSuccess) {
     return (
-      <div className="space-y-6">
+      <MotionRise className="space-y-6">
         <div className="bg-green/10 border border-green/20 rounded-xl p-4 flex items-center gap-3 text-green text-sm">
           <CheckCircle2 className="w-5 h-5" />
           <span>Success! Your account is secure again.</span>
@@ -59,11 +60,12 @@ function ResetPasswordForm() {
             Log in to your account
           </Button>
         </Link>
-      </div>
+      </MotionRise>
     );
   }
 
   return (
+    <MotionRise>
     <form onSubmit={onSubmit} className="space-y-6">
       <div className="space-y-2">
         <Label htmlFor="password">New Password</Label>
@@ -120,6 +122,7 @@ function ResetPasswordForm() {
         </p>
       )}
     </form>
+    </MotionRise>
   );
 }
 

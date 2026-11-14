@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect, useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 import {
   Select,
   SelectContent,
@@ -87,7 +88,7 @@ export default function ContentModeration() {
       
       
       <main className="p-8 space-y-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <MotionRise className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Moderation Queue</h2>
             <p className="text-sm text-gray-500">Review and approve content submitted to the public library or flagged items.</p>
@@ -97,10 +98,10 @@ export default function ContentModeration() {
              <button className="px-6 py-2 rounded-lg text-gray-500 hover:text-gray-900 font-bold text-sm transition-colors">Approved</button>
              <button className="px-6 py-2 rounded-lg text-gray-500 hover:text-gray-900 font-bold text-sm transition-colors">Rejected</button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Search & Filters */}
-        <div className="flex flex-col md:flex-row gap-4">
+        <MotionRise delay={0.05} className="flex flex-col md:flex-row gap-4">
            <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
               <input 
@@ -115,12 +116,12 @@ export default function ContentModeration() {
                  <Filter className="w-4 h-4" /> Filter
               </button>
            </div>
-        </div>
+        </MotionRise>
 
         {/* Queue List */}
-        <div className="grid gap-4">
-           {currentItems.map((item) => (
-              <div key={item.id} className="p-6 rounded-3xl bg-white shadow-sm border border-gray-100 hover:border-gray-200 transition-all flex flex-col md:flex-row md:items-center gap-6 group">
+        <MotionStagger className="grid gap-4">
+           {currentItems.map((item, i) => (
+              <MotionRise key={item.id} delay={i * 0.04} className="p-6 rounded-3xl bg-white shadow-sm border border-gray-100 hover:border-gray-200 transition-all flex flex-col md:flex-row md:items-center gap-6 group">
                  <div className="w-14 h-14 rounded-2xl bg-[#146ef5] border border-gray-100 flex items-center justify-center text-gray-500 group-hover:text-emerald-600 transition-colors shrink-0">
                     {item.type === 'note' && <BookOpen className="w-7 h-7" />}
                     {item.type === 'quiz' && <BrainCircuit className="w-7 h-7" />}
@@ -155,7 +156,7 @@ export default function ContentModeration() {
                        </button>
                     </div>
                  </div>
-              </div>
+              </MotionRise>
            ))}
 
            {currentItems.length === 0 && (
@@ -167,11 +168,11 @@ export default function ContentModeration() {
                  <p className="text-gray-500">Try adjusting your search or filters.</p>
               </div>
            )}
-        </div>
+        </MotionStagger>
 
         {/* Pagination Footer */}
         {totalItems > limit && (
-           <div className="mt-8 bg-white shadow-sm border border-gray-100 rounded-[32px] p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+           <MotionRise delay={0.1} className="mt-8 bg-white shadow-sm border border-gray-100 rounded-[32px] p-6 flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                  <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Show</span>
                  <Select value={itemsPerPage} onValueChange={setItemsPerPage}>
@@ -232,7 +233,7 @@ export default function ContentModeration() {
               <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">
                  Page {currentPage} of {totalPages}
               </p>
-           </div>
+           </MotionRise>
         )}
       </main>
     </div>

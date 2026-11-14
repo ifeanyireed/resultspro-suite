@@ -2,6 +2,7 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import { getTenant } from '@/lib/tenant';
 import OrientationForm from './OrientationForm';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default async function OrientationPage({ params }: { params: Promise<{ tenant: string }> }) {
   const resolvedParams = await params;
@@ -11,5 +12,9 @@ export default async function OrientationPage({ params }: { params: Promise<{ te
     notFound();
   }
 
-  return <OrientationForm tenant={tenant} />;
+  return (
+    <MotionRise>
+      <OrientationForm tenant={tenant} />
+    </MotionRise>
+  );
 }

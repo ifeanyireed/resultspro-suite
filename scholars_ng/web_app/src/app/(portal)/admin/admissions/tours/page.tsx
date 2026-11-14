@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Calendar03Icon, Clock01Icon, UserGroupIcon } from 'hugeicons-react';
 import { PlusIcon } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function AdmissionsToursPage() {
@@ -64,24 +65,26 @@ export default function AdmissionsToursPage() {
 
   return (
     <div style={{ maxWidth: '1200px', paddingBottom: '4rem' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
-        <div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
-            Tours & Events
-          </h1>
-          <p style={{ color: '#64748b', fontSize: '1.1rem', fontWeight: '500' }}>
-            Schedule campus visits, manage open house events, and assign tour guides to prospective families.
-          </p>
-        </div>
-        <button style={{ background: '#146ef5', color: 'white', border: 'none', padding: '1rem 1.5rem', borderRadius: '1.25rem', fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(20, 110, 245, 0.25)' }}>
-          <PlusIcon style={{ width: 20, height: 20 }} />
-          Book Tour
-        </button>
-      </header>
+      <MotionRise>
+        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
+          <div>
+            <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
+              Tours & Events
+            </h1>
+            <p style={{ color: '#64748b', fontSize: '1.1rem', fontWeight: '500' }}>
+              Schedule campus visits, manage open house events, and assign tour guides to prospective families.
+            </p>
+          </div>
+          <button style={{ background: '#146ef5', color: 'white', border: 'none', padding: '1rem 1.5rem', borderRadius: '1.25rem', fontWeight: '700', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(20, 110, 245, 0.25)' }}>
+            <PlusIcon style={{ width: 20, height: 20 }} />
+            Book Tour
+          </button>
+        </header>
+      </MotionRise>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2.5rem' }}>
+      <MotionStagger style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2.5rem' }}>
          {/* Today's Schedule */}
-         <div style={{ background: 'white', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem' }}>
+         <MotionRise style={{ background: 'white', borderRadius: '2rem', border: '1px solid #f1f5f9', padding: '2rem' }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '2rem' }}>Today&apos;s Schedule</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                {data.tours?.map((tour: any, i: number) => (
@@ -116,10 +119,10 @@ export default function AdmissionsToursPage() {
                  </motion.div>
                ))}
             </div>
-         </div>
+         </MotionRise>
 
          {/* Calendar Widget Placeholder */}
-         <div style={{ background: '#1e293b', borderRadius: '2rem', padding: '2rem', color: 'white' }}>
+         <MotionRise style={{ background: '#1e293b', borderRadius: '2rem', padding: '2rem', color: 'white' }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '2rem' }}>June 2024</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '0.5rem', textAlign: 'center' }}>
                {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => (
@@ -157,10 +160,10 @@ export default function AdmissionsToursPage() {
                         <div style={{ fontSize: '0.75rem', opacity: 0.6 }}>Saturday, 22 June</div>
                      </div>
                   </div>
-               </div>
-            </div>
-         </div>
-      </div>
-    </div>
-  );
-}
+                </div>
+             </div>
+          </MotionRise>
+       </MotionStagger>
+     </div>
+   );
+ }

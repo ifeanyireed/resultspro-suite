@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { MotionRise } from './ScrollRiseProvider';
 import { IconCheck, IconCalculator, IconSparkles, IconTrendingUp } from '@tabler/icons-react';
 
 type BillingCycle = 'term' | 'session';
@@ -140,7 +141,7 @@ export default function PricingSection() {
     <section id="pricing" className="section-py bg-white border-y border-gray-200">
       <div className="container-nets">
         {/* ── Header & Term / Session Billing Toggle ── */}
-        <div
+        <MotionRise
           className="flex flex-col lg:flex-row lg:items-end justify-between gap-8"
           style={{ marginBottom: '3.5rem' }}
         >
@@ -221,19 +222,20 @@ export default function PricingSection() {
               </span>
             </button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* ── 4 Pricing Cards ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {PRICING_TIERS.map((tier) => {
+          {PRICING_TIERS.map((tier, tierIdx) => {
             const activePrice =
               billingCycle === 'term' ? tier.termPrice : tier.sessionTermPrice;
             const unitCost =
               billingCycle === 'term' ? tier.unitCostTerm : tier.unitCostSession;
 
             return (
-              <div
+              <MotionRise
                 key={tier.id}
+                delay={tierIdx * 0.08}
                 className={`card p-8 flex flex-col justify-between relative ${
                   tier.popular ? 'border-2' : ''
                 }`}
@@ -241,7 +243,6 @@ export default function PricingSection() {
                   tier.popular
                     ? {
                         borderColor: 'var(--color-nets-red)',
-                        transform: 'translateY(-4px)',
                         boxShadow: 'var(--shadow-card-lg)',
                         overflow: 'visible'
                       }
@@ -401,13 +402,14 @@ export default function PricingSection() {
                     {tier.cta}
                   </Link>
                 </div>
-              </div>
+              </MotionRise>
             );
           })}
         </div>
 
         {/* ── Interactive Self-Funding Bursary & Scratch Card ROI Calculator ── */}
-        <div
+        <MotionRise
+          delay={0.15}
           style={{
             marginTop: '3.5rem',
             background: 'var(--color-nets-navy-dark)',
@@ -682,7 +684,7 @@ export default function PricingSection() {
               </div>
             </div>
           </div>
-        </div>
+        </MotionRise>
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User, Mail, Phone, MapPin, Edit02, Save, X, BookOpen } from '@/lib/hugeicons-compat';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const TeacherProfile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -57,10 +58,10 @@ const TeacherProfile: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="text-2xl font-bold text-white mb-6">My Profile</div>
+      <MotionRise className="text-2xl font-bold text-white mb-6">My Profile</MotionRise>
 
       {/* Profile Card */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 hover:bg-white/5 transition-colors">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 hover:bg-white/5 transition-colors">
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
@@ -90,7 +91,7 @@ const TeacherProfile: React.FC = () => {
         </div>
 
         {/* Profile Information */}
-        <div className="space-y-4">
+        <MotionStagger className="space-y-4">
           {/* Email */}
           <div className="bg-[rgba(0,0,0,0.40)] rounded-[15px] p-4 border border-[rgba(255,255,255,0.07)]">
             <label className="flex items-center gap-2 text-slate-400 text-sm mb-2">
@@ -184,7 +185,7 @@ const TeacherProfile: React.FC = () => {
               <p className="text-white font-semibold">{profile.bio || 'Not provided'}</p>
             )}
           </div>
-        </div>
+        </MotionStagger>
 
         {/* Save Button */}
         {isEditing && (
@@ -196,10 +197,10 @@ const TeacherProfile: React.FC = () => {
             Save Changes
           </button>
         )}
-      </div>
+      </MotionRise>
 
       {/* Account Info */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 hover:bg-white/5 transition-colors">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 hover:bg-white/5 transition-colors">
         <h3 className="text-xl font-bold text-white mb-4">Account Information</h3>
         <div className="space-y-3 text-sm text-slate-400">
           <div className="flex justify-between">
@@ -215,7 +216,7 @@ const TeacherProfile: React.FC = () => {
             <span className="text-white font-semibold">Class Management & Analytics</span>
           </div>
         </div>
-      </div>
+      </MotionRise>
     </div>
   );
 };

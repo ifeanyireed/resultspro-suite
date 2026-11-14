@@ -16,6 +16,7 @@ import {
   ExclamationTriangleIcon,
   ClockIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function SettingsPage() {
   const [tenantId, setTenantId] = useState('');
@@ -360,7 +361,7 @@ const { data: tenantData, isLoading } = useQuery({
   if (loading) return <div className="p-8 text-gray-500">Loading settings...</div>;
 
   return (
-    <>
+    <MotionRise>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Platform & AI Settings</h2>
@@ -971,6 +972,6 @@ const { data: tenantData, isLoading } = useQuery({
           </div>
         </div>
       </div>
-    </>
+    </MotionRise>
   );
 }

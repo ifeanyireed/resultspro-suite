@@ -4,6 +4,7 @@ import { useToast } from '@/hooks/use-toast';
 import axiosInstance from '@/lib/axiosConfig';
 import { IconPlus as Plus, IconTrash as Trash2 } from '@tabler/icons-react';
 import { useOnboardingStore, Step7Data } from '@/stores/onboardingStore';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface Student {
   id: string;
@@ -196,22 +197,22 @@ export const Step7AddStudents = ({
 
   return (
     <div className="space-y-8">
-      <div>
+      <MotionRise>
         <h2 className="text-2xl font-bold text-white mb-2">
           Add Students
         </h2>
         <p className="text-gray-400 text-sm">
           Add students to classes to get started. All fields are required to ensure results delivery to parents.
         </p>
-      </div>
+      </MotionRise>
 
       {submitError && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+        <MotionRise className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
           <p className="text-red-400 text-sm">{submitError}</p>
-        </div>
+        </MotionRise>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <MotionStagger className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Add Student Form */}
         <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.1)] rounded-lg p-6 space-y-4">
           <h3 className="text-lg font-semibold text-white">Add New Student</h3>
@@ -314,10 +315,10 @@ export const Step7AddStudents = ({
             )}
           </div>
         </div>
-      </div>
+      </MotionStagger>
 
       {/* Action Buttons */}
-      <div className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
+      <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
         <Button
           type="button"
           variant="outline"
@@ -334,7 +335,7 @@ export const Step7AddStudents = ({
         >
           {isLoading ? 'Saving...' : 'Next: Complete Setup'}
         </Button>
-      </div>
+      </MotionRise>
     </div>
   );
 };

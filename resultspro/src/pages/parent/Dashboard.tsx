@@ -4,6 +4,7 @@ import { useParentDashboard, useParentChildren } from '@/hooks/useParentAnalytic
 import { KPICard } from '@/components/analytics/KPICard';
 import { RiskLevelBadge } from '@/components/analytics/Badges';
 import { useNavigate } from 'react-router-dom';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const ParentDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -41,9 +42,9 @@ const ParentDashboard: React.FC = () => {
   return (
     <>
       <div className="space-y-6">
-        <div className="text-lg font-bold text-white mb-6">Welcome, {dashboardData.parentName}</div>
+        <MotionRise className="text-lg font-bold text-white mb-6">Welcome, {dashboardData.parentName}</MotionRise>
         {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <KPICard
             label="Total Children"
             value={dashboardData.totalChildren}
@@ -69,12 +70,12 @@ const ParentDashboard: React.FC = () => {
             icon={<Award className="w-5 h-5" />}
             color="purple"
           />
-        </div>
+        </MotionStagger>
 
         {/* Children Overview */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Children List */}
-          <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 hover:bg-white/5 transition-colors">
+          <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 hover:bg-white/5 transition-colors">
             <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
               <Users className="w-5 h-5 text-blue-400" />
               My Children
@@ -119,10 +120,10 @@ const ParentDashboard: React.FC = () => {
                 ))}
               </div>
             )}
-          </div>
+          </MotionRise>
 
           {/* Quick Stats */}
-          <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 hover:bg-white/5 transition-colors">
+          <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 hover:bg-white/5 transition-colors">
             <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
               <Award className="w-5 h-5 text-green-400" />
               Performance Overview
@@ -169,12 +170,12 @@ const ParentDashboard: React.FC = () => {
                 <p className="text-slate-400">Select a child to view details</p>
               </div>
             )}
-          </div>
-        </div>
+          </MotionRise>
+        </MotionStagger>
 
         {/* Alert Summary */}
         {(dashboardData.alerts.critical > 0 || dashboardData.alerts.high > 0) && (
-          <div className="mt-8 bg-red-500/10 border border-red-500/30 rounded-lg p-6">
+          <MotionRise className="mt-8 bg-red-500/10 border border-red-500/30 rounded-lg p-6">
             <div className="flex items-start gap-4">
               <AlertTriangle className="w-6 h-6 text-red-400 flex-shrink-0 mt-1" />
               <div className="flex-1">
@@ -196,15 +197,15 @@ const ParentDashboard: React.FC = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </MotionRise>
         )}
 
         {/* Help Section */}
-        <div className="mt-8 bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 text-center hover:bg-white/5 transition-colors">
+        <MotionRise className="mt-8 bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] p-8 text-center hover:bg-white/5 transition-colors">
           <p className="text-slate-400">
             Need help? <a href="#" className="text-blue-400 hover:text-blue-300 underline">Contact support</a>
           </p>
-        </div>
+        </MotionRise>
       </div>
     </>
   );

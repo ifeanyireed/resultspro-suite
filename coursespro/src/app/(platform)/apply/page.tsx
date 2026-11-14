@@ -1,6 +1,7 @@
 import React from 'react';
 import { getTenant } from '@/lib/tenant';
 import ApplyForm from '@/app/[tenant]/apply/ApplyForm';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default async function PlatformApplyPage({
   searchParams
@@ -18,5 +19,9 @@ export default async function PlatformApplyPage({
     logo_url: null,
   };
 
-  return <ApplyForm tenant={activeTenant} />;
+  return (
+    <MotionRise>
+      <ApplyForm tenant={activeTenant} />
+    </MotionRise>
+  );
 }

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { 
   IconSparkles, 
   IconCode, 
@@ -103,6 +104,7 @@ export default function AboutPage() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
         
         {/* HERO BANNER SECTION */}
+        <MotionRise>
         <section className="text-center space-y-6 pt-4 sm:pt-8">
           <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-700 text-xs sm:text-sm font-bold uppercase tracking-wider shadow-xs">
             <IconSparkles className="w-4 h-4 text-amber-600" />
@@ -134,44 +136,46 @@ export default function AboutPage() {
             </Link>
           </div>
         </section>
+        </MotionRise>
 
         {/* METRICS STATS GRID */}
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-          <div className="bg-white border border-slate-200/80 p-6 rounded-3xl text-center space-y-2 shadow-sm">
+        <MotionStagger className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+          <MotionRise className="bg-white border border-slate-200/80 p-6 rounded-3xl text-center space-y-2 shadow-sm">
             <div className="text-3xl sm:text-4xl font-black font-varela text-amber-600">636</div>
             <div className="text-xs font-bold text-slate-600 uppercase tracking-wider">Coding Exercises</div>
-          </div>
-          <div className="bg-white border border-slate-200/80 p-6 rounded-3xl text-center space-y-2 shadow-sm">
+          </MotionRise>
+          <MotionRise delay={0.05} className="bg-white border border-slate-200/80 p-6 rounded-3xl text-center space-y-2 shadow-sm">
             <div className="text-3xl sm:text-4xl font-black font-varela text-emerald-600">5</div>
             <div className="text-xs font-bold text-slate-600 uppercase tracking-wider">Learning Worlds</div>
-          </div>
-          <div className="bg-white border border-slate-200/80 p-6 rounded-3xl text-center space-y-2 shadow-sm">
+          </MotionRise>
+          <MotionRise delay={0.1} className="bg-white border border-slate-200/80 p-6 rounded-3xl text-center space-y-2 shadow-sm">
             <div className="text-3xl sm:text-4xl font-black font-varela text-blue-600">100%</div>
             <div className="text-xs font-bold text-slate-600 uppercase tracking-wider">Kid-Safe & Ad-Controlled</div>
-          </div>
-          <div className="bg-white border border-slate-200/80 p-6 rounded-3xl text-center space-y-2 shadow-sm">
+          </MotionRise>
+          <MotionRise delay={0.15} className="bg-white border border-slate-200/80 p-6 rounded-3xl text-center space-y-2 shadow-sm">
             <div className="text-3xl sm:text-4xl font-black font-varela text-purple-600">K-12</div>
             <div className="text-xs font-bold text-slate-600 uppercase tracking-wider">Classroom & Family Ready</div>
-          </div>
-        </section>
+          </MotionRise>
+        </MotionStagger>
 
         {/* MISSION & PILLARS SECTION */}
         <section className="space-y-8">
-          <div className="text-center space-y-2">
+          <MotionRise className="text-center space-y-2">
             <h2 className="text-2xl sm:text-4xl font-black font-varela text-slate-900 tracking-tight">
               Why Kids & Educators Love PuzzlePro
             </h2>
             <p className="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto">
               Our curriculum bridges visual block coding with professional software development.
             </p>
-          </div>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {pillars.map((pillar, i) => {
               const Icon = pillar.icon;
               return (
-                <div
+                <MotionRise
                   key={i}
+                  delay={i * 0.06}
                   className="bg-white border border-slate-200/80 p-6 sm:p-8 rounded-3xl space-y-4 hover:border-amber-400 transition-colors shadow-sm"
                 >
                   <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
@@ -179,29 +183,30 @@ export default function AboutPage() {
                   </div>
                   <h3 className="text-xl font-bold font-varela text-slate-900">{pillar.title}</h3>
                   <p className="text-slate-600 text-sm leading-relaxed">{pillar.desc}</p>
-                </div>
+                </MotionRise>
               );
             })}
-          </div>
+          </MotionStagger>
         </section>
 
         {/* 5 PROGRESSIVE WORLDS BREAKDOWN */}
         <section className="space-y-8">
-          <div className="text-center space-y-2">
+          <MotionRise className="text-center space-y-2">
             <h2 className="text-2xl sm:text-4xl font-black font-varela text-slate-900 tracking-tight">
               The 5 Progressive Learning Worlds
             </h2>
             <p className="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto">
               A structured 636-level learning path designed for gradual skill accumulation.
             </p>
-          </div>
+          </MotionRise>
 
-          <div className="space-y-4">
-            {worlds.map((w) => {
+          <MotionStagger className="space-y-4">
+            {worlds.map((w, idx) => {
               const Icon = w.icon;
               return (
-                <div
+                <MotionRise
                   key={w.num}
+                  delay={idx * 0.05}
                   className="bg-white border border-slate-200/80 p-5 sm:p-6 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-amber-400 transition shadow-sm"
                 >
                   <div className="flex items-start space-x-4">
@@ -223,13 +228,14 @@ export default function AboutPage() {
                       </p>
                     </div>
                   </div>
-                </div>
+                </MotionRise>
               );
             })}
-          </div>
+          </MotionStagger>
         </section>
 
         {/* OFFICE LOCATION & CONTACT CARD */}
+        <MotionRise>
         <section className="bg-gradient-to-br from-white via-slate-50 to-white border border-amber-400/40 rounded-3xl p-6 sm:p-10 shadow-md space-y-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-3">
@@ -284,6 +290,7 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
+        </MotionRise>
 
       </main>
 

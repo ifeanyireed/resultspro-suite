@@ -3,6 +3,7 @@
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import LoginPromptModal from '@/components/LoginPromptModal';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconSearch as Search, IconChevronRight as ChevronRight, IconTarget as Target, IconFilter as Filter, IconLock as Lock, IconLoader2 as Loader2, IconX as X } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useState, useCallback, useRef } from 'react';
@@ -156,7 +157,7 @@ export default function PracticePage() {
       {/* 30-second login prompt for guests */}
       <LoginPromptModal delayMs={30000} />
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12 pb-40">
+      <MotionRise className="max-w-7xl mx-auto px-4 md:px-8 pt-12 pb-40">
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-3xl md:text-5xl font-display font-bold text-[#146ef5] mb-6">
@@ -370,7 +371,7 @@ export default function PracticePage() {
             )}
           </motion.div>
         )}
-      </div>
+      </MotionRise>
       {/* MOBILE Bottom Sheet Preview */}
       <AnimatePresence>
         {mobilePreviewExamId && (

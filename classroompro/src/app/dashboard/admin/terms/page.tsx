@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const termsData = [
   { id: 1, name: "1st Term", session: "2025/2026", status: "Active", dates: "Sept 12 - Dec 18", progress: 65 },
@@ -50,7 +51,7 @@ export default function ManageTermsPage() {
       
       
       <main className="p-8 space-y-8">
-        <div className="flex justify-between items-center">
+        <MotionRise className="flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 font-display">Academic Calendar</h2>
             <p className="text-sm text-gray-500">Manage terms, academic sessions, and key dates.</p>
@@ -63,11 +64,11 @@ export default function ManageTermsPage() {
                 <Plus className="w-4 h-4 mr-2" /> Create New Term
              </Button>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="grid gap-4">
-           {termsData.map((term) => (
-              <div key={term.id} className={cn(
+        <MotionStagger className="grid gap-4">
+           {termsData.map((term, idx) => (
+              <MotionRise key={term.id} delay={idx * 0.05} className={cn(
                  "p-6 rounded-[24px] border flex items-center justify-between transition-all",
                  term.status === "Active" ? "bg-white shadow-sm border border-gray-100 border-green/30" : "bg-white/[0.02] border-gray-100 opacity-70"
               )}>
@@ -110,9 +111,9 @@ export default function ManageTermsPage() {
                        <MoreVertical className="w-5 h-5" />
                     </button>
                  </div>
-              </div>
+              </MotionRise>
            ))}
-        </div>
+        </MotionStagger>
 
         <div className="bg-blue-50 border border-blue/20 p-8 rounded-[32px] flex items-center justify-between">
            <div>

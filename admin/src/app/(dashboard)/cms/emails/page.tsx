@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { Badge } from '@/components/Badge';
 import { Send, Users, List, Mail, Plus, Search, MapPin, Eye, Trash2, CheckCircle2, FileText, AlertCircle, RefreshCw } from 'lucide-react';
 
@@ -34,15 +35,17 @@ export default function EmailsPage() {
   }, []);
 
   return (
-    <div className="w-full">
-      <Header
-        title="Email Broadcasts & Communications"
-        subtitle="Dispatch system-wide notifications, manage subscriber lists, and view campaign history"
-      />
+    <MotionStagger className="w-full">
+      <MotionRise>
+        <Header
+          title="Email Broadcasts & Communications"
+          subtitle="Dispatch system-wide notifications, manage subscriber lists, and view campaign history"
+        />
+      </MotionRise>
 
       <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-4 sm:space-y-6 w-full">
         {/* Header Actions */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <MotionRise delay={0.05} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex bg-slate-100 p-1 rounded-full shadow-inner border border-slate-200 overflow-x-auto whitespace-nowrap hide-scrollbar">
             {[
               { id: 'campaigns', label: 'Campaigns', icon: Send },
@@ -79,10 +82,10 @@ export default function EmailsPage() {
               </span>
             </button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Content */}
-        <div className="animate-in fade-in duration-300">
+        <MotionRise delay={0.1} className="animate-in fade-in duration-300">
           {activeSubTab === 'campaigns' && (
             <div className="space-y-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -279,8 +282,8 @@ export default function EmailsPage() {
               </div>
             </div>
           )}
-        </div>
+        </MotionRise>
       </div>
-    </div>
+    </MotionStagger>
   );
 }

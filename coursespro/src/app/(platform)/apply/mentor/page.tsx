@@ -1,6 +1,7 @@
 import React from 'react';
 import { getTenant } from '@/lib/tenant';
 import MentorApplyForm from '@/app/[tenant]/apply/mentor/MentorApplyForm';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default async function PlatformMentorApplyPage({
   searchParams
@@ -18,5 +19,9 @@ export default async function PlatformMentorApplyPage({
     logo_url: null,
   };
 
-  return <MentorApplyForm tenant={activeTenant} />;
+  return (
+    <MotionRise>
+      <MentorApplyForm tenant={activeTenant} />
+    </MotionRise>
+  );
 }

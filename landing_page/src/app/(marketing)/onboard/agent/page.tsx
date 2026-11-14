@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { useRouter } from 'next/navigation';
 import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
 import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
@@ -242,10 +243,10 @@ export default function AgentOnboarding() {
               >
                 <div style={{ height: '4rem' }} />
                 {/* Form Header */}
-                <div className="text-center mb-6 flex flex-col items-center">
+                <MotionRise className="text-center mb-6 flex flex-col items-center">
                   <h1 className="!text-[2.25rem] md:!text-[3rem] font-bold text-[#0f172a] !text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Account Registration</h1>
                   <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-base font-medium mb-4">Provide accurate bio-data details. This cannot be easily changed.</p>
-                </div>
+                </MotionRise>
 
                 {/* Spacer above Section Label */}
                 <div style={{ height: '1.5rem' }} />

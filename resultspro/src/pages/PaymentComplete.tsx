@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '@/lib/axiosConfig';
 import { useToast } from '@/hooks/use-toast';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export const PaymentComplete = () => {
   const [searchParams] = useSearchParams();
@@ -66,7 +67,7 @@ export const PaymentComplete = () => {
 
   return (
     <div className="flex items-center justify-center py-20">
-      <div className="w-full max-w-md">
+      <MotionRise className="w-full max-w-md">
         <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-8 backdrop-blur-xl shadow-2xl">
           {status === 'loading' && (
             <div className="text-center">
@@ -113,7 +114,7 @@ export const PaymentComplete = () => {
             </div>
           )}
         </div>
-      </div>
+      </MotionRise>
     </div>
   );
 };

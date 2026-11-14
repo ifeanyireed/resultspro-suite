@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconUsers as Users, IconCoins as Coins, IconTrophy as Trophy, IconClock as Timer, IconChevronRight as ChevronRight, IconSword as Sword, IconSearch as Search, IconBolt as Zap, IconEye as Eye, IconArrowRight as ArrowRight } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -70,7 +71,7 @@ export default function LiveGameLobby() {
     <main className="min-h-screen bg-light text-navy">
       <Navbar />
       
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12 pb-24">
+      <MotionRise className="max-w-7xl mx-auto px-4 md:px-8 pt-12 pb-24">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div>
@@ -241,7 +242,7 @@ export default function LiveGameLobby() {
             Open Spectator Lobby
           </Button>
         </div>
-      </div>
+      </MotionRise>
 
       <Footer />
 

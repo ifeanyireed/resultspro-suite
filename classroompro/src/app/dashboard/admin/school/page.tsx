@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function SchoolManagementPage() {
   const [loading, setLoading] = useState(true);
@@ -45,7 +46,7 @@ export default function SchoolManagementPage() {
       
       
       <main className="p-8 max-w-4xl space-y-8">
-        <div className="flex justify-between items-end">
+        <MotionRise className="flex justify-between items-end">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 font-display">School Profile</h2>
             <p className="text-sm text-gray-500">Update your institution's public information and preferences.</p>
@@ -53,9 +54,9 @@ export default function SchoolManagementPage() {
           <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold">
             <Save className="w-4 h-4 mr-2" /> Save Changes
           </Button>
-        </div>
+        </MotionRise>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo Upload */}
           <div className="space-y-4">
              <Label className="text-[10px] text-gray-500 uppercase font-bold tracking-[0.2em]">School Logo</Label>
@@ -111,7 +112,7 @@ export default function SchoolManagementPage() {
                 </div>
              </div>
           </div>
-        </div>
+        </MotionStagger>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
            <div className="bg-white shadow-sm border border-gray-100 p-8 rounded-[32px] space-y-6">

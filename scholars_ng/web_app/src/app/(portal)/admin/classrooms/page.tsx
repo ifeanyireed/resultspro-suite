@@ -10,6 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import ClassroomPRODashboard from '@/components/Dashboard/ClassroomPRODashboard';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { 
   NotesListView, 
   QuizzesListView, 
@@ -52,13 +53,15 @@ export default function AdminClassroomHub() {
   ];
 
   return (
-    <SpecialistAppContainer
-      appTitle="Classroom Curriculum & Learning Management"
-      appSubtitle="NERDC curriculum lesson handouts, timed interactive quizzes, and spaced-repetition flashcards."
-      appBadge="ClassroomPRO"
-      accentColor="#146ef5"
-      tabs={tabs}
-      defaultTabId="analytics"
-    />
+    <MotionRise>
+      <SpecialistAppContainer
+        appTitle="Classroom Curriculum & Learning Management"
+        appSubtitle="NERDC curriculum lesson handouts, timed interactive quizzes, and spaced-repetition flashcards."
+        appBadge="ClassroomPRO"
+        accentColor="#146ef5"
+        tabs={tabs}
+        defaultTabId="analytics"
+      />
+    </MotionRise>
   );
 }

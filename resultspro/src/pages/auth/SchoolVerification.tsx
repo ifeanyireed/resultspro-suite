@@ -4,6 +4,7 @@ import { Upload01, CheckCircle } from '@/lib/hugeicons-compat';
 import { InlineLoadingSpinner } from '@/components/LoadingSpinner';
 import Navigation from '@/components/Navigation';
 import axios from 'axios';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 const API_BASE = (import.meta.env.VITE_API_URL || '');
 
@@ -169,7 +170,7 @@ const SchoolVerification: React.FC = () => {
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
-          <div className="relative z-10 max-w-md mx-auto text-center w-full">
+          <MotionRise className="relative z-10 max-w-md mx-auto text-center w-full">
             <h1 className="text-5xl md:text-6xl font-bold mb-2 tracking-tight leading-tight text-white">
               School Verification
             </h1>
@@ -312,7 +313,7 @@ const SchoolVerification: React.FC = () => {
                 </form>
               )}
             </div>
-          </div>
+          </MotionRise>
         </section>
     </div>
   );

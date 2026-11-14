@@ -3,6 +3,7 @@ import { fetchStaticRoutes } from "@/lib/static-routes";
 import SyllabusClient from "./SyllabusClient";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 
 export async function generateStaticParams() {
   try {
@@ -34,7 +35,9 @@ export default async function ExamSyllabusPage(props: { params: Promise<{ examId
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
       <Navbar />
-      <SyllabusClient syllabus={syllabus} examId={examId} />
+      <MotionRise className="flex-1">
+        <SyllabusClient syllabus={syllabus} examId={examId} />
+      </MotionRise>
       <Footer />
     </div>
   );

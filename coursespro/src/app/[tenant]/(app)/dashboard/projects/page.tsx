@@ -33,6 +33,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { coursesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 type FilterTab = 'ALL' | 'IN_PROGRESS' | 'SUBMITTED' | 'APPROVED' | 'REVISION';
 
@@ -264,7 +265,7 @@ export default function ProjectsPage() {
   }
 
   return (
-    <>
+    <MotionRise>
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 mt-2 gap-4">
         <div>
@@ -284,7 +285,7 @@ export default function ProjectsPage() {
       </div>
 
       {/* Top Velocity Metric Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <MotionStagger className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {/* Card 1: Total */}
         <div className="bg-white rounded-[1.25rem] p-5 border border-gray-100 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between">
@@ -340,7 +341,7 @@ export default function ProjectsPage() {
             <p className="text-[11px] text-gray-400 mt-0.5">Action requested</p>
           </div>
         </div>
-      </div>
+      </MotionStagger>
 
       {/* Filter Tabs */}
       <div className="flex flex-wrap items-center gap-2 mb-6 border-b border-gray-100 pb-3">
@@ -416,7 +417,7 @@ export default function ProjectsPage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProjects.map((proj: any, idx: number) => {
             const isLocked = proj.status === 'Locked';
             const submission = getSubmissionForProject(proj);
@@ -611,7 +612,7 @@ export default function ProjectsPage() {
               </div>
             );
           })}
-        </div>
+        </MotionStagger>
       )}
 
       {/* 1. Project Submission Modal */}
@@ -924,6 +925,6 @@ export default function ProjectsPage() {
           </div>
         );
       })()}
-    </>
+    </MotionRise>
   );
 }

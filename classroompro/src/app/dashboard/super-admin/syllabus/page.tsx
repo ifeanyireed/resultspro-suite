@@ -14,6 +14,7 @@ import {
 import api from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function SuperAdminSyllabusPage() {
   const [loading, setLoading] = useState(true);
@@ -125,8 +126,8 @@ export default function SuperAdminSyllabusPage() {
       
       <main className="p-8 space-y-8">
         {/* Stats / Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-           <div className="bg-white shadow-sm border border-gray-100 p-6 rounded-3xl">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-6">
+           <MotionRise delay={0.05} className="bg-white shadow-sm border border-gray-100 p-6 rounded-3xl">
               <div className="flex items-center gap-4 mb-4">
                  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
                     <BookOpen className="w-5 h-5" />
@@ -136,8 +137,8 @@ export default function SuperAdminSyllabusPage() {
               <div className="text-3xl font-bold text-gray-900 font-display">
                 {topics.length}
               </div>
-           </div>
-           <div className="bg-white shadow-sm border border-gray-100 p-6 rounded-3xl">
+           </MotionRise>
+           <MotionRise delay={0.1} className="bg-white shadow-sm border border-gray-100 p-6 rounded-3xl">
               <div className="flex items-center gap-4 mb-4">
                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#146ef5]">
                     <CheckCircle2 className="w-5 h-5" />
@@ -147,8 +148,8 @@ export default function SuperAdminSyllabusPage() {
               <div className="text-3xl font-bold text-gray-900 font-display">
                 {subjects.length}
               </div>
-           </div>
-           <div className="bg-white shadow-sm border border-gray-100 p-6 rounded-3xl">
+           </MotionRise>
+           <MotionRise delay={0.15} className="bg-white shadow-sm border border-gray-100 p-6 rounded-3xl">
               <div className="flex items-center gap-4 mb-4">
                  <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
                     <Filter className="w-5 h-5" />
@@ -158,10 +159,10 @@ export default function SuperAdminSyllabusPage() {
               <div className="text-3xl font-bold text-gray-900 font-display">
                 {classes.length}
               </div>
-           </div>
-        </div>
+           </MotionRise>
+        </MotionStagger>
 
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <MotionRise delay={0.05} className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="relative w-full md:w-96">
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
             <Input 
@@ -174,10 +175,10 @@ export default function SuperAdminSyllabusPage() {
           <Button onClick={() => setShowAddModal(true)} className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl px-6 h-12 shadow-lg shadow-green/10">
             <Plus className="w-4 h-4 mr-2" /> Add New Topic
           </Button>
-        </div>
+        </MotionRise>
 
         {/* Topics Table */}
-        <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
+        <MotionRise delay={0.1} className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
            <div className="overflow-x-auto">
              <table className="w-full text-left border-collapse">
                 <thead>
@@ -288,7 +289,7 @@ export default function SuperAdminSyllabusPage() {
                 </p>
              </div>
            )}
-        </div>
+        </MotionRise>
       </main>
 
       {/* Add Topic Modal */}

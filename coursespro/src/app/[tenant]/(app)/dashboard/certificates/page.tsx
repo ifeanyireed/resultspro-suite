@@ -18,6 +18,7 @@ import {
   ClipboardDocumentCheckIcon
 } from '@heroicons/react/24/outline';
 import { CheckBadgeIcon as CheckBadgeSolid } from '@heroicons/react/24/solid';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface EarnedCertificate {
   id: string;
@@ -76,7 +77,7 @@ export default function CertificatesPage() {
   };
 
   return (
-    <div className="space-y-10 pb-16">
+    <MotionRise className="space-y-10 pb-16">
       {/* Header & KPI Summary */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mt-2">
         <div>
@@ -152,7 +153,7 @@ export default function CertificatesPage() {
                 </Link>
               </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <MotionStagger className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {earned.map((cert) => (
                   <div
                     key={cert.id}
@@ -257,7 +258,7 @@ export default function CertificatesPage() {
                     </div>
                   </div>
                 ))}
-              </div>
+              </MotionStagger>
             )}
           </section>
 
@@ -282,7 +283,7 @@ export default function CertificatesPage() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <MotionStagger className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {upcoming.map((cert) => (
                   <div
                     key={cert.id}
@@ -331,11 +332,11 @@ export default function CertificatesPage() {
                     </div>
                   </div>
                 ))}
-              </div>
+              </MotionStagger>
             )}
           </section>
         </div>
       )}
-    </div>
+    </MotionRise>
   );
 }

@@ -6,6 +6,7 @@ import api from "@/lib/api";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "react-hot-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function SavedContentPage() {
   const [items, setItems] = useState<any[]>([]);
@@ -59,15 +60,15 @@ export default function SavedContentPage() {
       
       
       <div className="p-8 max-w-7xl mx-auto space-y-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2 font-display">My Bookmarks</h2>
             <p className="text-gray-500 text-sm">Access all your saved notes, quizzes and flashcards in one place.</p>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Filter Tabs */}
-        <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar">
+        <MotionRise delay={0.08} className="flex gap-3 overflow-x-auto pb-4 no-scrollbar">
            <button 
              onClick={() => setFilter("")}
              className={cn(
@@ -104,17 +105,17 @@ export default function SavedContentPage() {
            >
               Flashcards
            </button>
-        </div>
+        </MotionRise>
 
         {items.length === 0 ? (
-           <div className="py-32 text-center bg-white shadow-sm border border-gray-100 rounded-[40px] border border-gray-100 border-dashed">
+           <MotionRise className="py-32 text-center bg-white shadow-sm border border-gray-100 rounded-[40px] border border-gray-100 border-dashed">
               <Bookmark className="w-12 h-12 text-gray-500/20 mx-auto mb-4" />
               <p className="text-gray-500">No bookmarks found in this category.</p>
-           </div>
+           </MotionRise>
         ) : (
-          <div className="space-y-4">
-             {items.map((item) => (
-                <div key={item.id} className="p-6 rounded-[32px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] hover:bg-white/[0.05] hover:border-gray-200 transition-all group flex items-center justify-between">
+          <MotionStagger className="space-y-4">
+             {items.map((item, idx) => (
+                <MotionRise key={item.id} delay={idx * 0.05} className="p-6 rounded-[32px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] hover:bg-white/[0.05] hover:border-gray-200 transition-all group flex items-center justify-between">
                    <div className="flex items-center gap-6">
                       <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shrink-0", 
                          item.contentType === 'NOTE' ? 'bg-emerald-50 text-emerald-600' : 
@@ -143,9 +144,9 @@ export default function SavedContentPage() {
                          <ChevronRight className="w-5 h-5" />
                       </button>
                    </div>
-                </div>
+                </MotionRise>
              ))}
-          </div>
+          </MotionStagger>
         )}
       </div>
     </div>

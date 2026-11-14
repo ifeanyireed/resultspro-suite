@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconTrophy as Trophy, IconShare2 as Share2, IconArrowRight as ArrowRight, IconMedal as Medal, IconStar as Star, IconHome as Home, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -47,7 +48,7 @@ function LiveGameResultContent() {
     <main className="min-h-screen bg-navy text-white pb-24">
       <Navbar />
       
-      <div className="max-w-5xl mx-auto px-4 pt-12">
+      <MotionRise className="max-w-5xl mx-auto px-4 pt-12">
         {/* Podium Section */}
         <div className="flex flex-col items-center mb-20">
           <div className="w-20 h-20 rounded-full bg-amber/10 flex items-center justify-center text-amber mb-6 animate-bounce">
@@ -158,7 +159,7 @@ function LiveGameResultContent() {
             </Button>
           </Link>
         </div>
-      </div>
+      </MotionRise>
     </main>
   );
 }

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Navigation from '@/components/Navigation';
 import { ArrowRight01, Mail, Phone, MapPin, MessageCircle } from '@/lib/hugeicons-compat';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -111,7 +112,7 @@ const Contact: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
         {/* Content */}
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
+        <MotionRise className="relative z-10 max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight leading-tight text-white">
             Get in <span className="text-blue-400">Touch</span>
           </h1>
@@ -119,7 +120,7 @@ const Contact: React.FC = () => {
             We're here to help. Whether you have questions, need support, or want to explore a partnership—reach out.
           </p>
           <p className="text-gray-400 text-sm">We typically respond within 4 business hours</p>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Contact Methods */}
@@ -129,11 +130,13 @@ const Contact: React.FC = () => {
           <div className="absolute w-96 h-96 bg-gradient-to-tl from-blue-500/10 to-purple-500/10 rounded-full blur-3xl bottom-0 right-1/4 translate-x-1/2" />
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
-            Contact <span className="text-blue-400">Information</span>
-          </h2>
+          <MotionRise>
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
+              Contact <span className="text-blue-400">Information</span>
+            </h2>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {contactMethods.map((method, idx) => {
               const Icon = method.icon;
               return (
@@ -155,14 +158,14 @@ const Contact: React.FC = () => {
                 </a>
               );
             })}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
       {/* Contact Form and Info */}
       <section className="relative py-20 px-4 md:px-8 bg-black overflow-hidden">
         <div className="max-w-6xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <MotionStagger className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Form */}
             <div>
               <h2 className="text-4xl md:text-5xl font-bold mb-8">
@@ -345,13 +348,13 @@ const Contact: React.FC = () => {
                 ))}
               </div>
             </div>
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="relative py-20 px-4 md:px-8 bg-gradient-to-b from-black to-blue-950/20">
-        <div className="max-w-4xl mx-auto text-center">
+        <MotionRise className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Ready to Get Started?
           </h2>
@@ -367,7 +370,7 @@ const Contact: React.FC = () => {
               Learn More
             </Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Footer */}

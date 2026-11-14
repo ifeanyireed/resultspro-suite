@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function SplashPage() {
   const router = useRouter();
@@ -22,7 +23,7 @@ export default function SplashPage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-green/5 rounded-full blur-[120px]" />
       </div>
 
-      <div className={`relative z-10 transition-all duration-1000 flex flex-col items-center ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+      <MotionRise className={`relative z-10 transition-all duration-1000 flex flex-col items-center ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
         {/* Animated Logo */}
         <div className="w-24 h-24 bg-green rounded-[32px] flex items-center justify-center font-display font-black text-navy text-4xl shadow-[0_0_50px_rgba(0,200,83,0.3)] animate-bounce mb-8">
           E
@@ -35,7 +36,7 @@ export default function SplashPage() {
         <p className="text-gray-500 font-medium tracking-[0.2em] uppercase text-xs animate-pulse">
           AI-Powered • Gamified • Free
         </p>
-      </div>
+      </MotionRise>
 
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
         <div className="w-48 h-1 bg-white/5 rounded-full overflow-hidden">

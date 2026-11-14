@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { GradientMetricCard, WhiteMetricCard, WidgetCard } from '@/components/ui/Cards';
 import { IconFlame, IconCoins, IconTrophy, IconChevronRight, IconPlayerPlay, IconSword, IconBook, IconLoader2, IconBolt, IconSparkles, IconWallet } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
@@ -130,7 +131,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <MotionRise className="flex flex-col gap-6">
       {/* Top Welcome Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-2">
         <div>
@@ -396,6 +397,6 @@ export default function Dashboard() {
           </WidgetCard>
         </div>
       </div>
-    </div>
+    </MotionRise>
   );
 }

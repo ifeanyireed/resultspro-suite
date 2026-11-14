@@ -21,6 +21,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function FlashcardAnalyticsPage() {
   const [profile, setProfile] = useState<any>(null);
@@ -119,7 +120,7 @@ export default function FlashcardAnalyticsPage() {
       
       
       <main className="p-8 max-w-7xl mx-auto space-y-8">
-        <div className="flex items-center justify-between">
+        <MotionRise className="flex items-center justify-between">
            <div className="flex items-center gap-4">
               <Link href="/dashboard/flashcards">
                  <button className="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors">
@@ -157,10 +158,10 @@ export default function FlashcardAnalyticsPage() {
                  <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Level</span>
               </div>
            </div>
-        </div>
+        </MotionRise>
 
         {/* Level Progress Bar */}
-        <div className="bg-white shadow-sm border border-gray-100 p-8 rounded-[40px] relative overflow-hidden">
+        <MotionRise delay={0.08} className="bg-white shadow-sm border border-gray-100 p-8 rounded-[40px] relative overflow-hidden">
            <div className="absolute top-0 right-0 w-96 h-96 bg-blue/5 blur-[100px] rounded-full -mr-48 -mt-48" />
            <div className="relative z-10 space-y-4">
               <div className="flex justify-between items-end">
@@ -180,9 +181,9 @@ export default function FlashcardAnalyticsPage() {
                  />
               </div>
            </div>
-        </div>
+        </MotionRise>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <MotionStagger className="grid lg:grid-cols-3 gap-8">
            {/* Retention Forecast */}
            <div className="lg:col-span-1 bg-white shadow-sm border border-gray-100 rounded-[32px] p-6 flex flex-col">
               <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
@@ -250,9 +251,9 @@ export default function FlashcardAnalyticsPage() {
                  </ResponsiveContainer>
               </div>
            </div>
-        </div>
+        </MotionStagger>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <MotionStagger className="grid lg:grid-cols-2 gap-8">
            {/* Time Spent Heatmap-like chart */}
            <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
@@ -302,10 +303,10 @@ export default function FlashcardAnalyticsPage() {
                  ))}
               </div>
            </div>
-        </div>
+        </MotionStagger>
 
         {/* Badges Snapshot */}
-        <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8">
+        <MotionRise className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8">
            <h3 className="text-xl font-bold text-gray-900 mb-8 flex items-center gap-2">
               <Award className="w-6 h-6 text-emerald-600" /> Achievements
            </h3>
@@ -333,7 +334,7 @@ export default function FlashcardAnalyticsPage() {
                  );
               })}
            </div>
-        </div>
+        </MotionRise>
       </main>
     </div>
   );

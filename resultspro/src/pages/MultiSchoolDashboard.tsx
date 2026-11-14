@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { IconBuilding as Building2, IconUsers as Users, IconTrendingUp as TrendingUp, IconAlertTriangle as AlertTriangle, IconDownload as Download, IconFilter as Filter, IconSearch as Search, IconChevronRight as ChevronRight, IconCircleCheck as CheckCircle, IconClock as Clock, IconCircleX as XCircle, IconCurrencyDollar as DollarSign } from '@tabler/icons-react';
 import axios from '@/lib/axiosConfig';
 import { useToast } from '@/hooks/use-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface NetworkOverview {
   totalSchools: number;
@@ -102,7 +103,7 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ overview, loading }) 
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, idx) => {
           const Icon = stat.icon;
           return (
@@ -119,9 +120,9 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ overview, loading }) 
             </div>
           );
         })}
-      </div>
+      </MotionStagger>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <MotionStagger className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <h3 className="font-semibold text-gray-900 mb-3">Average Metrics</h3>
           <div className="space-y-3">
@@ -185,7 +186,7 @@ const OverviewSection: React.FC<OverviewSectionProps> = ({ overview, loading }) 
             </div>
           </div>
         </div>
-      </div>
+      </MotionStagger>
     </div>
   );
 };
@@ -376,7 +377,7 @@ const MultiSchoolDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <MotionRise className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
@@ -394,7 +395,7 @@ const MultiSchoolDashboard: React.FC = () => {
             </button>
           </div>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Tabs */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">

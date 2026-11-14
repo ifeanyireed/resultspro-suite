@@ -4,6 +4,7 @@ import api from '@/lib/api';
 import { IconStar as Star, IconMessage as MessageSquare, IconFilter as Filter, IconChevronRight as ChevronRight, IconArrowUpRight as ArrowUpRight, IconThumbUp as ThumbsUp, IconAlertCircle as AlertCircle, IconChartBar as BarChart3, IconSearch as Search, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function TutorReviews() {
   const [mounted, setMounted] = useState(false);
@@ -33,7 +34,7 @@ export default function TutorReviews() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Student <span className="text-green">Reviews</span>
@@ -49,7 +50,7 @@ export default function TutorReviews() {
                 <Filter className="w-5 h-5" />
              </button>
           </div>
-        </div>
+        </MotionRise>
 
         {loading ? (
            <div className="flex flex-col items-center justify-center py-24 opacity-50">
@@ -58,7 +59,7 @@ export default function TutorReviews() {
            </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
+            <MotionStagger className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
                {/* Rating Highlights */}
                <div className="p-8 rounded-[40px] bg-gradient-to-br from-amber/20 to-transparent border border-white/10 flex flex-col items-center text-center">
                   <div className="text-6xl font-display font-black text-white mb-2">{reviewData?.rating?.toFixed(1) || '0.0'}</div>
@@ -101,11 +102,11 @@ export default function TutorReviews() {
                   </div>
                   <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Recommendation Rate</div>
                </div>
-            </div>
+            </MotionStagger>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                {/* Review Feed */}
-               <div className="lg:col-span-2 space-y-6">
+               <MotionStagger className="lg:col-span-2 space-y-6">
                   {reviewData?.reviews?.map((review: any) => (
                      <div key={review.id} className="p-8 rounded-[40px] bg-white/5 border border-white/10 hover:bg-white/[0.08] transition-all group">
                         <div className="flex justify-between items-start mb-6">
@@ -147,10 +148,10 @@ export default function TutorReviews() {
                        <p className="text-sm text-gray-400">Complete more sessions to receive feedback.</p>
                     </div>
                   )}
-               </div>
+               </MotionStagger>
 
                {/* Sidebar */}
-               <div className="space-y-8">
+               <MotionRise delay={0.2} className="space-y-8">
                   <section className="p-8 rounded-[40px] bg-white/5 border border-white/10">
                      <div className="w-12 h-12 rounded-2xl bg-green/10 text-green flex items-center justify-center mb-6">
                         <ThumbsUp size={24} />
@@ -173,7 +174,7 @@ export default function TutorReviews() {
                         Student names are partially masked in public profiles to protect student privacy while maintaining tutor transparency.
                      </p>
                   </section>
-               </div>
+               </MotionRise>
             </div>
           </>
         )}

@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { IconTrophy as Trophy, IconAward as Award, IconStar as Star, IconBolt as Zap, IconTarget as Target, IconLock as Lock, IconCircleCheck as CheckCircle2, IconTrendingUp as TrendingUp, IconCrown as Crown } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
@@ -20,7 +21,7 @@ export default function AchievementsPage() {
       
       <div className="max-w-6xl mx-auto px-4 pt-12">
         {/* Header Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        <MotionRise className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           <div className="md:col-span-2 p-10 rounded-[48px] bg-gradient-to-br from-blue/20 to-purple-500/10 border border-white/10 flex flex-col md:flex-row items-center gap-10">
             <div className="relative">
               <div className="w-32 h-32 rounded-full border-4 border-blue flex items-center justify-center bg-blue/10">
@@ -51,18 +52,21 @@ export default function AchievementsPage() {
               View Leaderboard
             </Button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Badges Grid */}
-        <h2 className="text-xl font-display font-bold mb-8 flex items-center gap-3">
-          <Award className="w-6 h-6 text-green" />
-          Achievement Gallery
-        </h2>
+        <MotionRise delay={0.08}>
+          <h2 className="text-xl font-display font-bold mb-8 flex items-center gap-3">
+            <Award className="w-6 h-6 text-green" />
+            Achievement Gallery
+          </h2>
+        </MotionRise>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {badges.map((badge) => (
-            <div 
+        <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {badges.map((badge, idx) => (
+            <MotionRise 
               key={badge.id}
+              delay={idx * 0.06}
               className={`
                 p-8 rounded-[40px] border transition-all relative overflow-hidden group
                 ${badge.status === 'unlocked' ? 'bg-white/5 border-white/10' : 'bg-white/[0.02] border-white/[0.05] border-t-white/[0.1] opacity-60'}
@@ -98,9 +102,9 @@ export default function AchievementsPage() {
                   />
                 </div>
               </div>
-            </div>
+            </MotionRise>
           ))}
-        </div>
+        </MotionStagger>
       </div>
     </main>
   );

@@ -19,6 +19,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import api from '@/lib/api';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export type AdmissionSubtab = 'overview' | 'inquiries' | 'applications' | 'pipeline';
 
@@ -265,9 +266,9 @@ export default function AdmissionsDashboard({
   };
 
   return (
-    <div className="space-y-6">
+    <MotionRise className="space-y-6">
       {/* Secondary Subtab Bar under CampusOS -> Admission */}
-      <div className="w-full overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <MotionRise delay={0.04} className="w-full overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <div className="inline-flex items-center gap-1.5 bg-gray-100/90 rounded-full p-1 border border-gray-200/70">
           {admissionSubtabs.map((item) => {
             const Icon = item.icon;
@@ -298,11 +299,11 @@ export default function AdmissionsDashboard({
             );
           })}
         </div>
-      </div>
+      </MotionRise>
 
       {/* Shared Add Inquiry / Application Modal Form */}
       {showAddModal && (
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-blue-200">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-blue-200">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-lg font-bold text-gray-900">Record New Admission Inquiry / Application</h3>
@@ -369,7 +370,7 @@ export default function AdmissionsDashboard({
               </button>
             </div>
           </form>
-        </div>
+        </MotionRise>
       )}
 
       {/* =========================================================
@@ -377,7 +378,7 @@ export default function AdmissionsDashboard({
       ========================================================= */}
       {subtab === 'overview' && (
         <>
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <MotionRise delay={0.05} className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
               <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Admissions CRM Overview</h2>
               <p className="text-sm text-gray-500 mt-1">
@@ -394,12 +395,13 @@ export default function AdmissionsDashboard({
                 Add Inquiry
               </button>
             </div>
-          </div>
+          </MotionRise>
 
           {/* Top Metric Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Card 1: Primary Dark */}
-            <div
+            <MotionRise
+              delay={0.06}
               onClick={() => setSubtab('inquiries')}
               className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform cursor-pointer"
             >
@@ -423,10 +425,11 @@ export default function AdmissionsDashboard({
                   <span>vs last month</span>
                 </div>
               </div>
-            </div>
+            </MotionRise>
 
             {/* Card 2: White */}
-            <div
+            <MotionRise
+              delay={0.1}
               onClick={() => {
                 setStageFilter('tour_scheduled');
                 setSubtab('inquiries');
@@ -450,10 +453,11 @@ export default function AdmissionsDashboard({
                   <span>Campus visits</span>
                 </div>
               </div>
-            </div>
+            </MotionRise>
 
             {/* Card 3: White */}
-            <div
+            <MotionRise
+              delay={0.14}
               onClick={() => setSubtab('applications')}
               className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform cursor-pointer"
             >
@@ -471,10 +475,11 @@ export default function AdmissionsDashboard({
                   <span className="text-orange-500 font-semibold">Needs attention</span>
                 </div>
               </div>
-            </div>
+            </MotionRise>
 
             {/* Card 4: White */}
-            <div
+            <MotionRise
+              delay={0.18}
               onClick={() => setSubtab('pipeline')}
               className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform cursor-pointer"
             >
@@ -492,11 +497,11 @@ export default function AdmissionsDashboard({
                   <span className="text-emerald-500 font-semibold">Awaiting acceptance</span>
                 </div>
               </div>
-            </div>
-          </div>
+            </MotionRise>
+          </MotionStagger>
 
           {/* Recent Inquiries List */}
-          <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
+          <MotionRise delay={0.12} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
               <div>
                 <h3 className="text-xl font-normal text-gray-900 tracking-tight">Recent Inquiries</h3>
@@ -570,7 +575,7 @@ export default function AdmissionsDashboard({
                 );
               })}
             </div>
-          </div>
+          </MotionRise>
         </>
       )}
 
@@ -578,7 +583,7 @@ export default function AdmissionsDashboard({
           SUBTAB 2: INQUIRIES (Moved from /admin/admissions/inquiries)
       ========================================================= */}
       {subtab === 'inquiries' && (
-        <div className="space-y-6">
+        <MotionRise className="space-y-6">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
             <div>
               <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Inquiry Database</h2>
@@ -714,14 +719,14 @@ export default function AdmissionsDashboard({
               </table>
             </div>
           </div>
-        </div>
+        </MotionRise>
       )}
 
       {/* =========================================================
           SUBTAB 3: APPLICATIONS (Moved from /admin/admissions/applications)
       ========================================================= */}
       {subtab === 'applications' && (
-        <div className="space-y-6">
+        <MotionRise className="space-y-6">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
             <div>
               <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Application Manager</h2>
@@ -857,14 +862,14 @@ export default function AdmissionsDashboard({
               Next Admissions Committee Review Cycle: <strong className="text-gray-900">Monday, 09:00 AM</strong>. Ensure all completed entrance CBT scripts and interview notes are verified before issuing provisional admission letters.
             </p>
           </div>
-        </div>
+        </MotionRise>
       )}
 
       {/* =========================================================
           SUBTAB 4: PIPELINE (Moved from /admin/admissions/pipeline)
       ========================================================= */}
       {subtab === 'pipeline' && (
-        <div className="space-y-6">
+        <MotionRise className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
               <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Admissions Pipeline</h2>
@@ -1045,8 +1050,8 @@ export default function AdmissionsDashboard({
               </button>
             </div>
           </div>
-        </div>
+        </MotionRise>
       )}
-    </div>
+    </MotionRise>
   );
 }

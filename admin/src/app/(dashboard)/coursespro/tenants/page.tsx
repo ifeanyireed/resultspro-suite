@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Badge } from '@/components/Badge';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { Building2, Search, Filter, ExternalLink, Plus, X, Globe, ChevronDown, ChevronUp, RefreshCw, CheckCircle2, AlertTriangle, Clock } from 'lucide-react';
 import { fetchSchools, verifySchool, createTenant, updateTenant } from '@/lib/api';
 import { School } from '@/lib/types';
@@ -202,9 +203,9 @@ export default function CoursesProTenantManager() {
   });
 
   return (
-    <div className="space-y-6">
+    <MotionStagger className="space-y-6">
       {/* Filter Controls (Glassmorphism) */}
-      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white shadow-sm shadow-slate-200/50 p-5 flex flex-col md:flex-row items-center justify-between gap-5 transition-all">
+      <MotionRise className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white shadow-sm shadow-slate-200/50 p-5 flex flex-col md:flex-row items-center justify-between gap-5 transition-all">
         <div className="relative w-full md:w-96 group">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <Search className="w-4 h-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
@@ -257,10 +258,10 @@ export default function CoursesProTenantManager() {
             New CoursesPro Tenant
           </button>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Schools Table */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/40 overflow-hidden">
+      <MotionRise delay={0.08} className="bg-white rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/40 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-slate-50/80 border-b border-slate-100">
@@ -385,7 +386,7 @@ export default function CoursesProTenantManager() {
             </tbody>
           </table>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Create Tenant Modal */}
       {isModalOpen && (
@@ -896,6 +897,6 @@ export default function CoursesProTenantManager() {
           </div>
         </div>
       )}
-    </div>
+    </MotionStagger>
   );
 }

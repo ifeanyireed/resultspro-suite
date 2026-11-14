@@ -17,6 +17,7 @@ import {
 } from "../../../components/ui/select";
 
 import { Skeleton } from "../../../components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function FlashcardsPage() {
   const user = useAuthStore((state) => state.user);
@@ -148,7 +149,7 @@ export default function FlashcardsPage() {
       
       
       <main className="p-8 space-y-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2 font-display">Study Sets</h2>
             <p className="text-gray-500 text-sm">Use active recall to master difficult topics faster.</p>
@@ -163,10 +164,10 @@ export default function FlashcardsPage() {
                <Plus className="w-4 h-4 mr-2" /> Create New Set
              </Button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
            <div className="bg-white shadow-sm border border-gray-100 p-6 rounded-[32px] flex items-center gap-4 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-blue/5 blur-2xl rounded-full" />
               <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-[#146ef5] group-hover:scale-110 transition-transform">
@@ -213,10 +214,10 @@ export default function FlashcardsPage() {
                  <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Longest Streak</div>
               </div>
            </div>
-        </div>
+        </MotionStagger>
 
         {/* Search and Filters */}
-        <div className="flex flex-col md:flex-row gap-4 bg-white shadow-sm border border-gray-100 p-4 rounded-2xl border border-gray-100 backdrop-blur-xl">
+        <MotionRise className="flex flex-col md:flex-row gap-4 bg-white shadow-sm border border-gray-100 p-4 rounded-2xl border border-gray-100 backdrop-blur-xl">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
             <Input 
@@ -274,13 +275,13 @@ export default function FlashcardsPage() {
                 </SelectContent>
              </Select>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Flashcards Grid */}
         <div className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {currentSets.map((set) => (
-              <div key={set.id} className={cn(
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {currentSets.map((set, idx) => (
+              <MotionRise key={set.id} delay={idx * 0.05} className={cn(
                 "bg-white shadow-sm border border-gray-100 rounded-[32px] p-6 transition-all group relative overflow-hidden flex flex-col",
                 set.dueCount === 0 && set.lastStudied ? "opacity-40 grayscale-[0.6]" : "hover:border-blue/50"
               )}>
@@ -352,9 +353,9 @@ export default function FlashcardsPage() {
                       )}
                   </div>
                 </div>
-              </div>
+              </MotionRise>
             ))}
-          </div>
+          </MotionStagger>
 
           {/* Pagination Controller */}
           {totalItems > limit && (

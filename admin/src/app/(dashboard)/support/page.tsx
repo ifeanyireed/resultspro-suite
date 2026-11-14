@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { Badge } from '@/components/Badge';
 import { fetchSupportTickets } from '@/lib/api';
 import { AlertCircle, Clock, CheckCircle2, XCircle, Search, Filter, Eye, MessageCircle } from 'lucide-react';
@@ -29,15 +30,17 @@ export default function SupportPage() {
   }, []);
 
   return (
-    <div className="w-full">
-      <Header
-        title="Support Desk"
-        subtitle="Manage and resolve incoming support tickets from schools and agents"
-      />
+    <MotionStagger className="w-full">
+      <MotionRise>
+        <Header
+          title="Support Desk"
+          subtitle="Manage and resolve incoming support tickets from schools and agents"
+        />
+      </MotionRise>
 
       <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-4 sm:space-y-6 w-full">
         {/* Header Overview */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-blue-50/50 p-4 sm:p-6 rounded-2xl border border-blue-100/50 shadow-sm">
+        <MotionRise delay={0.05} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-blue-50/50 p-4 sm:p-6 rounded-2xl border border-blue-100/50 shadow-sm">
           <div>
             <h2 className="text-base sm:text-lg font-bold text-slate-800">Support Overview</h2>
             <p className="text-xs text-slate-500 mt-0.5 sm:mt-1">Manage and respond to school support requests</p>
@@ -46,10 +49,10 @@ export default function SupportPage() {
             <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-0.5 sm:mb-1">Avg Resolution</p>
             <p className="text-xl sm:text-2xl font-bold text-blue-600">{stats?.averageResolutionTimeHours} <span className="text-xs text-slate-400 font-normal">hrs</span></p>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
+        <MotionRise delay={0.08} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
           {[
             { label: 'Open', value: stats?.open, icon: AlertCircle, color: 'text-blue-500', bg: 'bg-blue-50 border-blue-100' },
             { label: 'Pending', value: stats?.pending, icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50 border-amber-100' },
@@ -65,10 +68,10 @@ export default function SupportPage() {
               <p className="text-2xl font-bold text-slate-800">{(stat.value || 0).toLocaleString()}</p>
             </div>
           ))}
-        </div>
+        </MotionRise>
 
         {/* Filters Bar */}
-        <div className="flex flex-col md:flex-row gap-4 bg-white p-2 rounded-full border border-slate-200 shadow-sm">
+        <MotionRise delay={0.11} className="flex flex-col md:flex-row gap-4 bg-white p-2 rounded-full border border-slate-200 shadow-sm">
           <div className="flex-1 relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input type="text" placeholder="Search tickets..." className="w-full pl-11 pr-4 py-2.5 rounded-full bg-slate-50 border border-transparent text-sm focus:outline-none focus:bg-white focus:border-blue-500 transition-all" />
@@ -94,10 +97,10 @@ export default function SupportPage() {
               <option>Critical</option>
             </select>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Tickets Table */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/40 overflow-hidden">
+        <MotionRise delay={0.14} className="bg-white rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/40 overflow-hidden">
           <div className="p-5 border-b border-slate-100 flex items-center justify-between">
             <h2 className="font-bold text-base text-slate-800">Active Tickets</h2>
             <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-bold">{tickets.length} total</span>
@@ -145,8 +148,8 @@ export default function SupportPage() {
               </tbody>
             </table>
           </div>
-        </div>
+        </MotionRise>
       </div>
-    </div>
+    </MotionStagger>
   );
 }

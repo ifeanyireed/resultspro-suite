@@ -16,6 +16,7 @@ import {
   TutorCalendarView, 
   VirtualClassroomView 
 } from '@tutorspro/modules';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function AdminTutorsHub() {
   const tabs: AppSubtab[] = [
@@ -52,13 +53,15 @@ export default function AdminTutorsHub() {
   ];
 
   return (
-    <SpecialistAppContainer
-      appTitle="TutorsPRO 1-on-1 Mentorship & Sessions"
-      appSubtitle="Vetted educator allocation, live calendar booking, synchronized whiteboards, and lesson delivery."
-      appBadge="TutorsPRO"
-      accentColor="#10b981"
-      tabs={tabs}
-      defaultTabId="analytics"
-    />
+    <MotionRise>
+      <SpecialistAppContainer
+        appTitle="TutorsPRO 1-on-1 Mentorship & Sessions"
+        appSubtitle="Vetted educator allocation, live calendar booking, synchronized whiteboards, and lesson delivery."
+        appBadge="TutorsPRO"
+        accentColor="#10b981"
+        tabs={tabs}
+        defaultTabId="analytics"
+      />
+    </MotionRise>
   );
 }

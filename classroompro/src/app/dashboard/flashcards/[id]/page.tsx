@@ -1,4 +1,5 @@
 import FlashcardStudyClient from "./FlashcardStudyClient";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 
 export const dynamicParams = false;
 
@@ -25,5 +26,9 @@ export async function generateStaticParams() {
 }
 
 export default function FlashcardStudyPage() {
-  return <FlashcardStudyClient />;
+  return (
+    <MotionRise>
+      <FlashcardStudyClient />
+    </MotionRise>
+  );
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAgentSubscription } from '@/hooks/useAgentAnalytics';
 import { CheckCircle, XCircle, Loading01 } from '@/lib/hugeicons-compat';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 const SubscriptionVerify: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -36,7 +37,7 @@ const SubscriptionVerify: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.07)] rounded-[30px] p-8 text-center">
+      <MotionRise className="max-w-md w-full bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.07)] rounded-[30px] p-8 text-center">
         {status === 'loading' && (
           <div className="space-y-4">
             <Loading01 className="w-12 h-12 text-blue-500 animate-spin mx-auto" />
@@ -66,7 +67,7 @@ const SubscriptionVerify: React.FC = () => {
             </button>
           </div>
         )}
-      </div>
+      </MotionRise>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Crown, Check, X, BarChart01, Users, Building2, TrendingUp, DollarSign, Calendar, User, LogOut, Trophy } from '@/lib/hugeicons-compat';
 import { useAgentSubscription, useAgentProfile } from '@/hooks/useAgentAnalytics';
 import { useNavigate } from 'react-router-dom';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export const SubscriptionPlans: React.FC = () => {
   const navigate = useNavigate();
@@ -113,7 +114,7 @@ export const SubscriptionPlans: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
           <div className="space-y-6">
       {/* Header */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-8 text-white border border-[rgba(255,255,255,0.07)] flex flex-col md:flex-row justify-between items-center gap-6">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-8 text-white border border-[rgba(255,255,255,0.07)] flex flex-col md:flex-row justify-between items-center gap-6">
         <div>
           <h1 className="text-3xl font-bold mb-2 text-center md:text-left">Subscription Plans</h1>
           <p className="text-gray-300 text-center md:text-left">Choose the perfect plan for your business</p>
@@ -135,12 +136,12 @@ export const SubscriptionPlans: React.FC = () => {
             <span className="text-[10px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded uppercase tracking-wider">Save 17%</span>
           </button>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Plans Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {plans.map((plan) => (
-          <div
+          <MotionRise
             key={plan.tier}
             className={`relative rounded-[20px] border p-6 transition ${
               plan.highlighted
@@ -216,12 +217,12 @@ export const SubscriptionPlans: React.FC = () => {
             >
               {upgrading ? 'Processing...' : profile?.subscriptionTier === plan.tier ? 'Current Plan' : plan.termlyFee === 0 ? 'Starter' : 'Upgrade Now'}
             </button>
-          </div>
+          </MotionRise>
         ))}
-      </div>
+      </MotionStagger>
 
       {/* Comparison Table */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] overflow-hidden">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] overflow-hidden">
         <div className="p-6 border-b border-[rgba(255,255,255,0.07)] bg-white/5">
           <h2 className="text-lg font-bold text-white uppercase tracking-widest">Detailed Comparison</h2>
         </div>
@@ -279,10 +280,10 @@ export const SubscriptionPlans: React.FC = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      </MotionRise>
 
       {/* FAQ Section */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-10 border border-[rgba(255,255,255,0.07)] shadow-2xl">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-10 border border-[rgba(255,255,255,0.07)] shadow-2xl">
         <h2 className="text-2xl font-bold text-white mb-8">Agent Pricing FAQs</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           <div className="space-y-4">
@@ -322,7 +323,7 @@ export const SubscriptionPlans: React.FC = () => {
             </p>
           </div>
         </div>
-      </div>
+      </MotionRise>
           </div>
         </div>
       </main>

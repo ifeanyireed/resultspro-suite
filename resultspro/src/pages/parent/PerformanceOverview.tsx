@@ -9,6 +9,7 @@ import {
 } from '@/lib/hugeicons-compat';
 import { IconTrendingUp as TrendingUp, IconMessage as MessageSquare } from '@tabler/icons-react';
 import axios from 'axios';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface SubjectPerformance {
   subject: string;
@@ -86,7 +87,7 @@ const ParentPerformanceOverview: React.FC = () => {
     <div className="min-h-screen text-white">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <button
             onClick={() => navigate(-1)}
             className="text-blue-400 hover:text-blue-300 mb-4 flex items-center gap-2"
@@ -95,10 +96,10 @@ const ParentPerformanceOverview: React.FC = () => {
           </button>
           <h1 className="text-3xl font-bold mb-2">{data.studentName} - Performance Overview</h1>
           <p className="text-slate-400">Term Performance Summary</p>
-        </div>
+        </MotionRise>
 
         {/* Overall Performance Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-6 rounded-lg">
             <p className="text-blue-100 text-sm">Overall Average</p>
             <p className="text-4xl font-bold mt-2">{data.overallAverage.toFixed(1)}</p>
@@ -130,10 +131,10 @@ const ParentPerformanceOverview: React.FC = () => {
               <p className="text-orange-100 text-xs mt-2">Performance Flag</p>
             </div>
           )}
-        </div>
+        </MotionStagger>
 
         {/* Subject Breakdown */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           {/* Subjects Table */}
           <div className="lg:col-span-2 bg-slate-800 rounded-lg p-6">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
@@ -232,10 +233,10 @@ const ParentPerformanceOverview: React.FC = () => {
               </ul>
             </div>
           </div>
-        </div>
+        </MotionStagger>
 
         {/* Action Buttons */}
-        <div className="flex gap-4">
+        <MotionRise className="flex gap-4">
           <button
             onClick={() =>
               navigate(`/parent/child/${childId}/analytics`)
@@ -254,7 +255,7 @@ const ParentPerformanceOverview: React.FC = () => {
             <MessageSquare size={18} />
             Contact Teacher
           </button>
-        </div>
+        </MotionRise>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import api from '@/lib/api';
 import { IconUsers as Users, IconSearch as Search, IconFilter as Filter, IconChevronRight as ChevronRight, IconBrain as Brain, IconCircleCheck as CheckCircle2, IconClock as Clock, IconTrendingUp as TrendingUp, IconMessage as MessageSquare, IconChartBar as BarChart3, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function TutorStudentProgress() {
   const [mounted, setMounted] = useState(false);
@@ -33,7 +34,7 @@ export default function TutorStudentProgress() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Student <span className="text-green">Analytics</span>
@@ -50,7 +51,7 @@ export default function TutorStudentProgress() {
                 <Filter className="w-5 h-5" />
              </button>
           </div>
-        </div>
+        </MotionRise>
 
         {loading ? (
            <div className="flex flex-col items-center justify-center py-24 opacity-50">
@@ -60,7 +61,7 @@ export default function TutorStudentProgress() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
              {/* Summary Sidebar */}
-             <div className="space-y-6">
+             <MotionRise delay={0.1} className="space-y-6">
                 {[
                   { label: 'Avg Mastery', value: '84%', icon: Brain, color: 'text-purple', bg: 'bg-purple/10' },
                   { label: 'Avg Attendance', value: '96%', icon: Clock, color: 'text-blue', bg: 'bg-blue/10' },
@@ -80,10 +81,10 @@ export default function TutorStudentProgress() {
                    <h3 className="text-lg font-bold text-white mb-2">Teaching Insight</h3>
                    <p className="text-xs text-gray-500 leading-relaxed">Your students' scores in Mathematics have increased by 12% since you started using interactive flashcards.</p>
                 </section>
-             </div>
+             </MotionRise>
 
              {/* Student List */}
-             <div className="lg:col-span-3 space-y-4">
+             <MotionStagger className="lg:col-span-3 space-y-4">
                 {students.map((student) => (
                   <div key={student.id} className="p-6 md:p-8 rounded-[40px] bg-white/5 border border-white/10 hover:bg-white/[0.08] transition-all group">
                      <div className="flex flex-col md:flex-row justify-between gap-8">
@@ -134,7 +135,7 @@ export default function TutorStudentProgress() {
                      <p className="text-sm text-gray-400">You don't have any students assigned yet.</p>
                    </div>
                 )}
-             </div>
+             </MotionStagger>
           </div>
         )}
       </div>

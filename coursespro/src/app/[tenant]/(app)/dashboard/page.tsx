@@ -21,6 +21,7 @@ import { coursesApi } from '@/lib/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 import UnenrolledDashboardView from './UnenrolledDashboardView';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function LearnerDashboard() {
   const router = useRouter();
@@ -126,7 +127,7 @@ export default function LearnerDashboard() {
   }
 
   return (
-    <>
+    <MotionRise>
       {/* Dashboard Title & Actions */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 mt-2 gap-4">
         <div>
@@ -157,7 +158,7 @@ export default function LearnerDashboard() {
       </div>
 
       {/* Top Metric Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         
         {/* Card 1: Streak */}
         <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
@@ -236,7 +237,7 @@ export default function LearnerDashboard() {
           </div>
         </div>
 
-      </div>
+      </MotionStagger>
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
@@ -375,6 +376,6 @@ export default function LearnerDashboard() {
         </div>
 
       </div>
-    </>
+    </MotionRise>
   );
 }

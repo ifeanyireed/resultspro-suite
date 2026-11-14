@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconSchool, IconBuildingCommunity, IconBrain, IconBook, IconTrophy, IconUserPlus, IconChartBar, IconDeviceLaptop, IconChalkboard, IconCertificate, IconPuzzle } from '@tabler/icons-react';
 import Link from 'next/link';
 
@@ -13,10 +14,10 @@ export default function Home() {
       {/* Services Grid (Mimicking NETS ServicesGrid) */}
       <section className="section-py bg-light">
         <div className="container-nets">
-          <div style={{ marginBottom: '4rem', maxWidth: '600px' }}>
+          <MotionRise style={{ marginBottom: '4rem', maxWidth: '600px' }}>
             <div className="overline" style={{ marginBottom: '1rem' }}>The Suite</div>
             <h2 className="text-d4 fw-400">Comprehensive educational infrastructure.</h2>
-          </div>
+          </MotionRise>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -29,14 +30,14 @@ export default function Home() {
               { id: 'coursespro', title: 'CoursesPRO', desc: 'Curated digital courses and certification pathways.', icon: IconCertificate, href: '/coursespro' },
               { id: 'puzzlepro', title: 'PuzzlePRO', desc: '636 coding games for kids in HTML, CSS, JavaScript, and Python.', icon: IconPuzzle, href: '/puzzlepro' },
             ].map((cat, i) => (
-              <div key={i} id={cat.id} className="card p-8 hover:shadow-card-lg transition-shadow">
+              <MotionRise key={i} id={cat.id} delay={i * 0.06} className="card p-8 hover:shadow-card-lg transition-shadow">
                 <cat.icon className="w-8 h-8 text-red mb-6" style={{ color: 'var(--color-nets-red)' }} />
                 <h3 className="text-xl fw-600 mb-2">{cat.title}</h3>
                 <p className="text-muted text-sm mb-6">{cat.desc}</p>
                 <Link href={cat.href} className="nav-link text-navy" style={{ color: 'var(--color-nets-navy)' }}>
                   Learn more &rarr;
                 </Link>
-              </div>
+              </MotionRise>
             ))}
           </div>
         </div>
@@ -46,7 +47,7 @@ export default function Home() {
       <section className="section-py bg-white border-y border-gray-200">
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <MotionRise>
               <div className="overline" style={{ marginBottom: '1rem' }}>The Mission</div>
               <h2 className="text-d3 fw-300 mb-6">Prepare Africa for Takeover.</h2>
               <p className="text-body-lg text-muted mb-8">
@@ -60,7 +61,7 @@ export default function Home() {
                   { title: 'Gamified Learning', desc: 'Engage students effectively', icon: IconTrophy },
                   { title: 'Seamless Collaboration', desc: 'Connect homes and schools', icon: IconUserPlus },
                 ].map((item, i) => (
-                  <div key={i} className="flex gap-4">
+                  <MotionRise key={i} delay={i * 0.08} className="flex gap-4">
                     <div className="w-12 h-12 rounded-sm bg-nets-light flex items-center justify-center shrink-0">
                       <item.icon className="w-6 h-6" style={{ color: 'var(--color-nets-red)' }} />
                     </div>
@@ -68,22 +69,22 @@ export default function Home() {
                       <h4 className="fw-600">{item.title}</h4>
                       <p className="text-sm text-muted">{item.desc}</p>
                     </div>
-                  </div>
+                  </MotionRise>
                 ))}
               </div>
               <Link href="/onboard" className="btn btn-navy">Deploy Infrastructure</Link>
-            </div>
+            </MotionRise>
             
-            <div className="relative">
+            <MotionRise delay={0.15} className="relative">
               <img src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/photo13.jpg" alt="School management" className="rounded-sm shadow-card-lg w-full h-[600px] object-cover" />
-            </div>
+            </MotionRise>
           </div>
         </div>
       </section>
 
       {/* CTA Banner (Mimicking CTABanner) */}
       <section className="section-py bg-navy text-white text-center">
-        <div className="container-nets max-w-3xl">
+        <MotionRise className="container-nets max-w-3xl">
           <h2 className="text-d3 fw-300 mb-6 text-white">Join the Future of African Education</h2>
           <p className="text-body-lg text-muted-light mb-10">
             Start your transformation journey today. Set up your digital campus in minutes.
@@ -92,7 +93,7 @@ export default function Home() {
             <Link href="/onboard" className="btn btn-red btn-lg">Partner With Us</Link>
             <Link href="/contact" className="btn btn-outline-white btn-lg">Contact Sales</Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
     </main>
   );

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAppHost } from './AppHostContext';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export interface AppSubtab {
   id: string;
@@ -46,7 +47,7 @@ export function SpecialistAppContainer({
   return (
     <div className="w-full bg-slate-50 min-h-screen">
       {/* ── App Header ── */}
-      <div className="bg-white border-b border-slate-200 px-6 py-5 flex items-center justify-between">
+      <MotionRise className="bg-white border-b border-slate-200 px-6 py-5 flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2.5">
             <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">{appTitle}</h1>
@@ -72,10 +73,10 @@ export function SpecialistAppContainer({
             <span>{tenant.name}</span>
           </div>
         )}
-      </div>
+      </MotionRise>
 
       {/* ── Horizontal Subtabs Navigation (Admin Pattern) ── */}
-      <div className="bg-white border-b border-slate-200 px-6 pt-3">
+      <MotionRise delay={0.05} className="bg-white border-b border-slate-200 px-6 pt-3">
         <div className="flex space-x-2 overflow-x-auto pb-px scrollbar-hide">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -104,10 +105,10 @@ export function SpecialistAppContainer({
             );
           })}
         </div>
-      </div>
+      </MotionRise>
 
       {/* ── Mounted Feature Slice Content ── */}
-      <div className="p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto">
+      <MotionRise key={activeTab} delay={0.08} className="p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto">
         {ActiveComponent ? (
           <ActiveComponent {...mergedProps} />
         ) : (
@@ -115,7 +116,7 @@ export function SpecialistAppContainer({
             Select a subtab to view content.
           </div>
         )}
-      </div>
+      </MotionRise>
     </div>
   );
 }

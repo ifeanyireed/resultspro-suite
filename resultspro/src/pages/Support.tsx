@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { ArrowRight01, MessageCircle, Mail, Phone, Check, Ticket01 } from '@/lib/hugeicons-compat';
 import TicketSubmissionModal from '@/components/TicketSubmissionModal';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const Support: React.FC = () => {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
@@ -84,7 +85,7 @@ const Support: React.FC = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black via-black/40 to-black" />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
+        <MotionRise className="relative z-10 max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight leading-tight text-white">
             We're Here to <span className="text-blue-400">Help</span>
           </h1>
@@ -99,7 +100,7 @@ const Support: React.FC = () => {
             <Ticket01 className="w-6 h-6" />
             Create Support Ticket
           </button>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Support Channels */}
@@ -109,14 +110,16 @@ const Support: React.FC = () => {
           <div className="absolute w-96 h-96 bg-gradient-to-tl from-blue-500/10 to-purple-500/10 rounded-full blur-3xl bottom-0 right-1/4 translate-x-1/2" />
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            Multiple Ways to <span className="text-blue-400">Get Support</span>
-          </h2>
-          <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
-            Choose the support method that works best for you
-          </p>
+          <MotionRise>
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
+              Multiple Ways to <span className="text-blue-400">Get Support</span>
+            </h2>
+            <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
+              Choose the support method that works best for you
+            </p>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {supportChannels.map((channel, idx) => {
               const Icon = channel.icon;
               const isActionable = !!channel.action;
@@ -140,13 +143,13 @@ const Support: React.FC = () => {
                 </div>
               );
             })}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
       {/* FAQ Section */}
       <section className="relative py-20 px-4 md:px-8 bg-black overflow-hidden">
-        <div className="max-w-4xl mx-auto">
+        <MotionRise className="max-w-4xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
             Frequently Asked <span className="text-blue-400">Questions</span>
           </h2>
@@ -184,12 +187,12 @@ const Support: React.FC = () => {
               </div>
             ))}
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* CTA Section */}
       <section className="relative py-20 px-4 md:px-8 bg-gradient-to-b from-black to-blue-950/20">
-        <div className="max-w-4xl mx-auto text-center">
+        <MotionRise className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Still Need Help?
           </h2>
@@ -212,7 +215,7 @@ const Support: React.FC = () => {
               <ArrowRight01 className="w-5 h-5" />
             </a>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Ticket Submission Modal */}

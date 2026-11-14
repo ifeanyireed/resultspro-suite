@@ -3,13 +3,11 @@
 import React, { use } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft01Icon } from 'hugeicons-react';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function LessonPlayer({ params }: { params: Promise<{ cohortId: string, moduleId: string }> }) {
   const router = useRouter();
   const { cohortId, moduleId } = use(params);
-
-  // In a real app, fetch the specific module by ID
-  // For now, we will render a placeholder player
 
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', paddingBottom: '4rem' }}>
@@ -20,7 +18,7 @@ export default function LessonPlayer({ params }: { params: Promise<{ cohortId: s
         <ArrowLeft01Icon size={20} /> Back to Journey Map
       </button>
 
-      <div style={{ background: 'white', borderRadius: '1.5rem', border: '1px solid #f1f5f9', overflow: 'hidden' }}>
+      <MotionRise style={{ background: 'white', borderRadius: '1.5rem', border: '1px solid #f1f5f9', overflow: 'hidden' }}>
         <div style={{ padding: '2rem', borderBottom: '1px solid #f1f5f9' }}>
           <h1 style={{ fontSize: '2rem', fontWeight: '800', color: '#1e293b', margin: 0 }}>Module Content Player</h1>
           <p style={{ color: '#64748b', fontSize: '1rem', marginTop: '0.5rem' }}>Module ID: {moduleId}</p>
@@ -34,7 +32,7 @@ export default function LessonPlayer({ params }: { params: Promise<{ cohortId: s
           <button style={{ padding: '0.8rem 1.5rem', borderRadius: '1rem', border: '1px solid #e2e8f0', background: 'white', color: '#64748b', fontWeight: '700', cursor: 'pointer' }}>Previous Module</button>
           <button style={{ padding: '0.8rem 1.5rem', borderRadius: '1rem', border: 'none', background: '#10b981', color: 'white', fontWeight: '700', cursor: 'pointer' }}>Mark as Complete</button>
         </div>
-      </div>
+      </MotionRise>
     </div>
   );
 }

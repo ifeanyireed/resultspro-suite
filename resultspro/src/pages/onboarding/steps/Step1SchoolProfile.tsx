@@ -15,6 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { AlertCircle, Upload02 } from '@/lib/hugeicons-compat';
 import { useOnboardingStore, Step1Data } from '@/stores/onboardingStore';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const step1Schema = z.object({
   motto: z.string().optional().default(''),
@@ -225,9 +226,9 @@ export const Step1SchoolProfile = ({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <MotionRise className="w-full max-w-2xl mx-auto">
       <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-8 backdrop-blur-xl">
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-3xl font-bold text-white">School Profile</h2>
@@ -239,26 +240,26 @@ export const Step1SchoolProfile = ({
               <div className="text-xs text-gray-400 animate-pulse">Saving...</div>
             )}
           </div>
-        </div>
+        </MotionRise>
 
         {submitError && (
-          <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex gap-3">
+          <MotionRise className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex gap-3">
             <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
             <p className="text-red-400 text-sm">{submitError}</p>
-          </div>
+          </MotionRise>
         )}
 
         {saveError && (
-          <div className="mb-6 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30 flex gap-3">
+          <MotionRise className="mb-6 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30 flex gap-3">
             <AlertCircle className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
             <p className="text-yellow-400 text-sm">Auto-save failed: {saveError}</p>
-          </div>
+          </MotionRise>
         )}
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             {/* School Logo Section */}
-            <div className="border-t border-[rgba(255,255,255,0.07)] pt-8">
+            <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8">
               <h3 className="text-lg font-semibold text-white mb-6">
                 School Logo
               </h3>
@@ -310,10 +311,10 @@ export const Step1SchoolProfile = ({
               <FormDescription className="text-gray-500 mt-4">
                 Your school's logo will be displayed in the application
               </FormDescription>
-            </div>
+            </MotionRise>
 
             {/* School Branding Section */}
-            <div className="border-t border-[rgba(255,255,255,0.07)] pt-8">
+            <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8">
               <h3 className="text-lg font-semibold text-white mb-6">
                 Branding
               </h3>
@@ -338,15 +339,15 @@ export const Step1SchoolProfile = ({
                   </FormItem>
                 )}
               />
-            </div>
+            </MotionRise>
 
             {/* Color Scheme Section */}
-            <div className="border-t border-[rgba(255,255,255,0.07)] pt-8">
+            <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8">
               <h3 className="text-lg font-semibold text-white mb-6">
                 Color Scheme
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <FormField
                   control={form.control}
                   name="primaryColor"
@@ -427,16 +428,16 @@ export const Step1SchoolProfile = ({
                     </FormItem>
                   )}
                 />
-              </div>
-            </div>
+              </MotionStagger>
+            </MotionRise>
 
             {/* Contact Information Section */}
-            <div className="border-t border-[rgba(255,255,255,0.07)] pt-8">
+            <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8">
               <h3 className="text-lg font-semibold text-white mb-6">
                 Contact Information
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <MotionStagger className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
                   name="contactPersonName"
@@ -473,7 +474,7 @@ export const Step1SchoolProfile = ({
                     </FormItem>
                   )}
                 />
-              </div>
+              </MotionStagger>
 
               <FormField
                 control={form.control}
@@ -493,10 +494,10 @@ export const Step1SchoolProfile = ({
                   </FormItem>
                 )}
               />
-            </div>
+            </MotionRise>
 
             {/* Action Buttons */}
-            <div className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
+            <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
               <Button
                 type="button"
                 variant="outline"
@@ -513,10 +514,10 @@ export const Step1SchoolProfile = ({
               >
                 {isLoading ? 'Saving...' : 'Next: Academic Session'}
               </Button>
-            </div>
+            </MotionRise>
           </form>
         </Form>
       </div>
-    </div>
+    </MotionRise>
   );
 };

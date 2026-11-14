@@ -20,6 +20,7 @@ import {
   BuildingLibraryIcon,
   PrinterIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 interface Subscription {
   id: string;
@@ -152,7 +153,7 @@ export default function BillingPage() {
   const activePlansCount = subscriptions.filter(s => s.status === 'active').length;
 
   return (
-    <div className="space-y-8 pb-16">
+    <MotionRise className="space-y-8 pb-16">
       {/* Header & KPI Summary */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mt-2">
         <div>
@@ -583,6 +584,6 @@ export default function BillingPage() {
           </div>
         </div>
       )}
-    </div>
+    </MotionRise>
   );
 }

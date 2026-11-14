@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { Badge } from '@/components/Badge';
 import { StatCard } from '@/components/StatCard';
 import { FileText, CheckCircle2, File, Plus, Tag, MessageSquare, Folder, Users, Eye } from 'lucide-react';
@@ -211,16 +212,18 @@ export default function BlogCMSPage() {
   const totalViews = posts.reduce((sum, p) => sum + (Number(p.view_count) || 0), 0);
 
   return (
-    <div className="w-full">
-      <Header
-        title="Suite Blog CMS"
-        subtitle="Manage global articles, categories, tags, and comments across the suite"
-      />
+    <MotionStagger className="w-full">
+      <MotionRise>
+        <Header
+          title="Suite Blog CMS"
+          subtitle="Manage global articles, categories, tags, and comments across the suite"
+        />
+      </MotionRise>
 
       <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-6 sm:space-y-8">
         
         {/* Header Actions */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+        <MotionRise delay={0.05} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div className="flex bg-slate-100 p-1 rounded-full shadow-inner border border-slate-200 overflow-x-auto whitespace-nowrap hide-scrollbar">
             {TABS.map((tab) => {
               const Icon = tab.icon;
@@ -253,11 +256,11 @@ export default function BlogCMSPage() {
               </button>
             )}
           </div>
-        </div>
+        </MotionRise>
 
         {/* Tab Content */}
         {activeTab === 'posts' && (
-          <div className="space-y-8 animate-in fade-in duration-300">
+          <MotionRise delay={0.1} className="space-y-8 animate-in fade-in duration-300">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 { label: 'Total Posts', value: loading ? '...' : totalPosts, icon: FileText, color: 'text-blue-500', bg: 'bg-blue-50' },
@@ -349,11 +352,11 @@ export default function BlogCMSPage() {
                 </table>
               </div>
             </div>
-          </div>
+          </MotionRise>
         )}
 
         {activeTab === 'categories' && (
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-300">
+          <MotionRise delay={0.1} className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-300">
             <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
               <h3 className="font-semibold text-slate-800">Categories</h3>
               <input type="text" placeholder="Search categories..." className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -384,11 +387,11 @@ export default function BlogCMSPage() {
                 )}
               </tbody>
             </table>
-          </div>
+          </MotionRise>
         )}
 
         {activeTab === 'tags' && (
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-300">
+          <MotionRise delay={0.1} className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-300">
             <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
               <h3 className="font-semibold text-slate-800">Tags</h3>
               <input type="text" placeholder="Search tags..." className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -421,11 +424,11 @@ export default function BlogCMSPage() {
                 )}
               </tbody>
             </table>
-          </div>
+          </MotionRise>
         )}
 
         {activeTab === 'comments' && (
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-300">
+          <MotionRise delay={0.1} className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-300">
             <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
               <h3 className="font-semibold text-slate-800">Blog Comments</h3>
             </div>
@@ -467,11 +470,11 @@ export default function BlogCMSPage() {
                 )}
               </tbody>
             </table>
-          </div>
+          </MotionRise>
         )}
         
         {activeTab === 'subscribers' && (
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-300">
+          <MotionRise delay={0.1} className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-300">
             <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
               <h3 className="font-semibold text-slate-800">Newsletter Subscribers</h3>
             </div>
@@ -505,10 +508,10 @@ export default function BlogCMSPage() {
                 )}
               </tbody>
             </table>
-          </div>
+          </MotionRise>
         )}
 
       </div>
-    </div>
+    </MotionStagger>
   );
 }

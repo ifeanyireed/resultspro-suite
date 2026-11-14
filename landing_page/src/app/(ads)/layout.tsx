@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import "../nets.css";
+import ScrollRiseProvider from "@/components/ScrollRiseProvider";
 
 export const metadata: Metadata = {
   title: "ResultsPRO NG | Education Infrastructure",
@@ -20,8 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-primary">
-                {children}
-        </body>
+        <ScrollRiseProvider>
+          {children}
+        </ScrollRiseProvider>
+      </body>
     </html>
   );
 }

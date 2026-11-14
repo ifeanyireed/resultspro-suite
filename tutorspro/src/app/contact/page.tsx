@@ -1,6 +1,7 @@
 "use client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 import { IconMail as Mail, IconPhone as Phone, IconMapPin as MapPin, IconSend as Send, IconMessageCircle as MessageCircle, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
@@ -43,7 +44,7 @@ export default function ContactPage() {
       {/* Hero Section */}
       <section className="bg-navy text-white text-center" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '6rem' }}>
         <div className="container-nets">
-          <div className="max-w-3xl mx-auto">
+          <MotionRise className="max-w-3xl mx-auto">
             <div className="overline-dark" style={{ marginBottom: '1.5rem' }}>Get In Touch</div>
             <h1 className="fw-300" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
               Contact <span style={{ fontWeight: 700, color: 'var(--primary)' }}>Us.</span>
@@ -51,7 +52,7 @@ export default function ContactPage() {
             <p className="text-body-lg text-white/70">
               Have questions or need support? We&apos;re here to help.
             </p>
-          </div>
+          </MotionRise>
         </div>
       </section>
 
@@ -59,7 +60,7 @@ export default function ContactPage() {
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Contact Info */}
-            <div className="space-y-12">
+            <MotionRise className="space-y-12">
               <div className="space-y-4">
                  <h2 className="text-3xl fw-700 text-navy">Contact Information</h2>
                  <p className="text-muted text-body-lg leading-relaxed max-w-md">
@@ -98,10 +99,10 @@ export default function ContactPage() {
                    </div>
                  </div>
               </div>
-            </div>
+            </MotionRise>
 
             {/* Contact Form */}
-            <div className="p-8 md:p-12 rounded-sm bg-white border border-gray-200 shadow-sm">
+            <MotionRise delay={0.1} className="p-8 md:p-12 rounded-sm bg-white border border-gray-200 shadow-sm">
                <form className="space-y-6">
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                    <div className="space-y-2">
@@ -145,7 +146,7 @@ export default function ContactPage() {
                    Send Message <Send size={20} />
                  </button>
                </form>
-            </div>
+            </MotionRise>
           </div>
         </div>
       </section>

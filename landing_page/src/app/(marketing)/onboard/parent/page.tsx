@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconLayoutGrid as LayoutGrid, IconUser as User, IconSearch as Search, IconUsers as Users, IconCreditCard as CreditCard, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCircleCheck as CheckCircle2, IconShieldCheck as ShieldCheck, IconLock as Lock, IconPlus as Plus, IconTrash as Trash2, IconAlertCircle as AlertCircle, IconDeviceMobile as Smartphone, IconMail as Mail, IconCheck as Check, IconTicket as Ticket, IconClock as Clock, IconSparkles as Sparkles, IconInfoCircle as Info, IconCreditCard as CardIcon, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
@@ -326,10 +327,12 @@ export default function ParentOnboarding() {
                 {/* Spacer above title for better breathing room */}
                 <div style={{ height: '4rem' }} />
 
-                <ResultsProPageHeader 
-                  title="Parent Registry" 
-                  subtitle="Set up your parent credentials. We will verify your email and phone number to enable instant notification flags for academic results." 
-                />
+                <MotionRise>
+                  <ResultsProPageHeader 
+                    title="Parent Registry" 
+                    subtitle="Set up your parent credentials. We will verify your email and phone number to enable instant notification flags for academic results." 
+                  />
+                </MotionRise>
 
                 {/* Spacer above Section Label */}
                 <div style={{ height: '1.5rem' }} />

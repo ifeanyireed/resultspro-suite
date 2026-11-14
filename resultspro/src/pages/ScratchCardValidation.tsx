@@ -3,6 +3,7 @@ import { ArrowRight01, Check, AlertCircle, Building01, Calendar01, Hash, Activit
 import { InlineLoadingSpinner } from '@/components/LoadingSpinner';
 import Navigation from '@/components/Navigation';
 import axiosInstance from '@/lib/axiosConfig';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 interface UsageRecord {
   usedAt: string;
@@ -81,7 +82,7 @@ const ScratchCardValidation: React.FC = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
-          <div className="relative z-10 max-w-3xl mx-auto w-full">
+          <MotionRise className="relative z-10 max-w-3xl mx-auto w-full">
             <div className="flex justify-center mb-6">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg">
                 <Check className="w-8 h-8 text-white" />
@@ -202,7 +203,7 @@ const ScratchCardValidation: React.FC = () => {
               Verify Another Card
               <ArrowRight01 className="w-5 h-5" />
             </button>
-          </div>
+          </MotionRise>
         </section>
 
         <footer className="border-t border-blue-500/10 bg-black py-12 px-4 md:px-8 text-center">
@@ -224,7 +225,7 @@ const ScratchCardValidation: React.FC = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
-        <div className="relative z-10 max-w-xl mx-auto w-full">
+        <MotionRise className="relative z-10 max-w-xl mx-auto w-full">
           <div className="text-center mb-10">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">
               Card <span className="text-blue-400">Verifier</span>
@@ -285,7 +286,7 @@ const ScratchCardValidation: React.FC = () => {
               </button>
             </div>
           </form>
-        </div>
+        </MotionRise>
       </section>
 
       <footer className="border-t border-blue-500/10 bg-black py-12 px-4 md:px-8 text-center">

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import Navigation from '@/components/Navigation';
 import FeatureCard from '@/components/ui/FeatureCard';
 import { ArrowRight01 } from '@/lib/hugeicons-compat';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const Landing = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -99,7 +100,7 @@ const Landing = () => {
         </div>
 
         {/* Content Container */}
-        <div className="relative z-10 max-w-2xl pt-20">
+        <MotionRise className="relative z-10 max-w-2xl pt-20">
           {/* Main Heading */}
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight leading-tight text-white">
             Results Pro
@@ -125,7 +126,7 @@ const Landing = () => {
           <div className="text-sm text-gray-400">
             Free for first 100 students • No credit card required
           </div>
-        </div>
+        </MotionRise>
 
         {/* Right side - empty space for character/illustration */}
         <div className="hidden lg:block absolute right-0 bottom-0 z-10 w-1/3">
@@ -153,15 +154,17 @@ const Landing = () => {
         {/* Gradient Overlay - Dark edges to transparent center */}
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
         <div className="max-w-6xl mx-auto relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            Why Schools Love <span className="text-blue-400">Results Pro</span>
-          </h2>
-          <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
-            Built specifically for Nigerian schools with the features that matter most
-          </p>
+          <MotionRise>
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
+              Why Schools Love <span className="text-blue-400">Results Pro</span>
+            </h2>
+            <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
+              Built specifically for Nigerian schools with the features that matter most
+            </p>
+          </MotionRise>
 
           {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
                 title: 'Zero Teacher Login',
@@ -230,7 +233,7 @@ const Landing = () => {
                 />
               );
             })}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
@@ -242,11 +245,13 @@ const Landing = () => {
           <div className="absolute w-96 h-96 bg-gradient-to-tl from-blue-500/10 to-purple-500/10 rounded-full blur-3xl bottom-0 right-1/4 translate-x-1/2" />
         </div>
         <div className="relative z-10 max-w-6xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
-            How Results Pro Works
-          </h2>
+          <MotionRise>
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
+              How Results Pro Works
+            </h2>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 title: 'Upload Results',
@@ -283,13 +288,13 @@ const Landing = () => {
                 </div>
               </div>
             ))}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="relative py-20 px-4 md:px-8 bg-gradient-to-b from-black to-blue-950/20">
-        <div className="max-w-4xl mx-auto text-center">
+        <MotionRise className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Ready to Transform Results Management?
           </h2>
@@ -305,7 +310,7 @@ const Landing = () => {
               Contact Sales
             </Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Footer */}

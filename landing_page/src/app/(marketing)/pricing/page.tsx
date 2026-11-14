@@ -3,6 +3,7 @@
 import PricingSection from '@/components/PricingSection';
 import ProductPricingSection from '@/components/ProductPricingSection';
 import HeroAnimationWrapper from '@/components/HeroAnimationWrapper';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconCreditCard } from '@tabler/icons-react';
 
 export default function PricingPage() {
@@ -30,10 +31,14 @@ export default function PricingPage() {
         </div>
       </section>
       
-      <PricingSection />
+      <MotionRise>
+        <PricingSection />
+      </MotionRise>
       
       {/* Product Specific Plans */}
-      <ProductPricingSection />
+      <MotionRise delay={0.1}>
+        <ProductPricingSection />
+      </MotionRise>
     </main>
   );
 }

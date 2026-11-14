@@ -1,6 +1,7 @@
 "use client";
 
 import api from '@/lib/api';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { IconUsers as Users, IconPlus as Plus, IconUserPlus as UserPlus, IconSettings as Settings, IconShieldCheck as ShieldCheck, IconChevronRight as ChevronRight, IconUserCircle as UserCircle2, IconTrash as Trash2, IconExternalLink as ExternalLink, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -54,7 +55,7 @@ export default function ParentChildren() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               My <span className="text-blue">Children</span>
@@ -68,11 +69,11 @@ export default function ParentChildren() {
             <Plus className="w-5 h-5" />
             ADD ANOTHER CHILD
           </button>
-        </div>
+        </MotionRise>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Children List */}
-          <div className="lg:col-span-2 space-y-6">
+          <MotionRise className="lg:col-span-2 space-y-6">
             {loading ? (
               <div className="flex flex-col items-center justify-center py-24 opacity-50">
                 <Loader2 className="w-12 h-12 text-blue animate-spin mb-4" />
@@ -125,10 +126,10 @@ export default function ParentChildren() {
                 <p className="text-sm text-gray-500 max-w-xs mx-auto">Enter an invite code on the right to start monitoring your child's progress.</p>
               </div>
             )}
-          </div>
+          </MotionRise>
 
           {/* Sidebar / Invite Form */}
-          <div className="space-y-8">
+          <MotionRise delay={0.1} className="space-y-8">
             <section className="p-8 rounded-[40px] bg-white/5 border border-white/10">
               <div className="w-12 h-12 rounded-2xl bg-blue/10 text-blue flex items-center justify-center mb-6">
                 <ShieldCheck className="w-6 h-6" />
@@ -173,8 +174,8 @@ export default function ParentChildren() {
                  ))}
                </ul>
             </section>
-          </div>
-        </div>
+          </MotionRise>
+        </MotionStagger>
       </div>
     </main>
   );

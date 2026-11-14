@@ -4,6 +4,7 @@ import { IconTrophy as Trophy, IconCrown as Crown, IconTrendingUp as TrendingUp,
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 // Mock data reflecting the school admin context
 const rankingData = [
@@ -64,7 +65,7 @@ export default function SchoolLeaderboardPage() {
       
       <main className="p-8 max-w-5xl mx-auto">
         {/* Header Section from Frontend UI */}
-        <div className="text-center mb-16">
+        <MotionRise className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 border border-amber/20 text-amber-600 mb-6">
             <Trophy className="w-4 h-4" />
             <span className="text-xs font-bold uppercase tracking-widest">Hall of Fame</span>
@@ -88,10 +89,10 @@ export default function SchoolLeaderboardPage() {
               </button>
             ))}
           </div>
-        </div>
+        </MotionRise>
 
         {/* Top 3 Podium from Frontend UI style */}
-        <div className="flex items-end justify-center gap-4 mb-20 max-w-3xl mx-auto">
+        <MotionRise delay={0.08} className="flex items-end justify-center gap-4 mb-20 max-w-3xl mx-auto">
           {/* Rank 2 */}
           {podium[0] && (
             <div className="flex flex-col items-center gap-4 flex-1 max-w-[140px]">
@@ -158,10 +159,10 @@ export default function SchoolLeaderboardPage() {
               <div className="w-full h-20 bg-gradient-to-t from-green/20 to-green/5 rounded-t-2xl border-t border-x border-green/20" />
             </div>
           )}
-        </div>
+        </MotionRise>
 
         {/* List of others from Frontend UI style */}
-        <div className="space-y-3 max-w-4xl mx-auto">
+        <MotionStagger className="space-y-3 max-w-4xl mx-auto">
           {others.map((student, index) => (
             <div 
               key={student.id}
@@ -194,14 +195,14 @@ export default function SchoolLeaderboardPage() {
               </div>
             </div>
           ))}
-        </div>
+        </MotionStagger>
 
         {/* Action Button */}
-        <div className="mt-12 flex justify-center">
+        <MotionRise className="mt-12 flex justify-center">
            <Button variant="outline" className="border-gray-100 hover:bg-gray-50 text-gray-400 hover:text-gray-900 rounded-xl px-8">
               Download Full Report
            </Button>
-        </div>
+        </MotionRise>
       </main>
     </div>
   );

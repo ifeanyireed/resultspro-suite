@@ -66,6 +66,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { coursesApi } from '@/lib/api';
 import { useRouter } from 'next/navigation';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function ProgramBuilderPage() {
   const router = useRouter();
@@ -123,7 +124,7 @@ export default function ProgramBuilderPage() {
   };
 
   return (
-    <>
+    <MotionRise>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Program Builder</h2>
@@ -140,7 +141,7 @@ export default function ProgramBuilderPage() {
       </div>
 
             {/* Top-Level KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <GradientMetricCard
           title="Total Journeys"
           value={programs.length}
@@ -172,7 +173,7 @@ export default function ProgramBuilderPage() {
           trendColor="green"
           icon={FileCheck2}
         />
-      </div>
+      </MotionStagger>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Existing Journeys */}
@@ -250,6 +251,6 @@ export default function ProgramBuilderPage() {
         </div>
       </div>
 
-          </>
+    </MotionRise>
   );
 }

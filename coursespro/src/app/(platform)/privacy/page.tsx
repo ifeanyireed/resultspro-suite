@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { IconLock, IconArrowLeft } from '@tabler/icons-react';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export const metadata = {
   title: 'Privacy Policy | CoursesPRO',
@@ -23,7 +24,7 @@ export default function PlatformPrivacyPage() {
             color: '#ffffff',
           }}
         >
-          <div className="container-nets max-w-4xl mx-auto px-4 sm:px-6">
+          <MotionRise className="container-nets max-w-4xl mx-auto px-4 sm:px-6">
             <Link
               href="/login"
               className="inline-flex items-center text-xs uppercase tracking-widest text-slate-400 hover:text-white mb-6 transition-colors"
@@ -44,11 +45,11 @@ export default function PlatformPrivacyPage() {
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl">
               How CoursesPRO protects personal information, secures academic data, and maintains multi-tenant isolation.
             </p>
-          </div>
+          </MotionRise>
         </section>
 
         <section className="py-12 md:py-16 bg-white border-b border-gray-200">
-          <div className="container-nets max-w-4xl mx-auto px-4 sm:px-6">
+          <MotionRise className="container-nets max-w-4xl mx-auto px-4 sm:px-6">
             <div className="prose prose-slate max-w-none text-slate-700 space-y-8">
               <div className="flex items-center justify-between pb-6 border-b border-slate-100 text-xs sm:text-sm text-slate-500">
                 <span>CoursesPRO &bull; ResultsPRO Suite</span>
@@ -83,7 +84,7 @@ export default function PlatformPrivacyPage() {
                 </p>
               </section>
             </div>
-          </div>
+          </MotionRise>
         </section>
       </article>
 

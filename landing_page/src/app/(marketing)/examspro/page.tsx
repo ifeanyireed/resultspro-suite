@@ -1,4 +1,5 @@
 import HeroAnimationWrapper from '@/components/HeroAnimationWrapper';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import Link from 'next/link';
 import { 
   IconTrophy, 
@@ -76,7 +77,7 @@ export default function ExamsProPage() {
       <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div>
+            <MotionRise>
               <h2 className="text-3xl fw-600 text-navy mb-6 leading-tight">
                 Build extreme readiness for high-stakes exams.
               </h2>
@@ -98,14 +99,14 @@ export default function ExamsProPage() {
                   </li>
                 ))}
               </ul>
-            </div>
-            <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
+            </MotionRise>
+            <MotionRise delay={0.15} className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
               <img 
                 src="https://res.cloudinary.com/qsdwzejd/image/upload/v1789250543/landing_page/photo03.jpg" 
                 alt="Students using ExamsPRO" 
                 className="absolute inset-0 w-full h-full object-cover"
               />
-            </div>
+            </MotionRise>
           </div>
         </div>
       </section>
@@ -113,21 +114,21 @@ export default function ExamsProPage() {
       {/* Feature Grid */}
       <section id="features" className="section-py bg-light">
         <div className="container-nets">
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <MotionRise className="text-center max-w-2xl mx-auto mb-16">
             <div className="overline-dark mb-4">Core Capabilities</div>
             <h2 className="text-4xl fw-600 text-navy mb-4 tracking-tight">The ultimate practice engine.</h2>
             <p className="text-muted text-lg">Designed specifically for the competitive modern student.</p>
-          </div>
+          </MotionRise>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {FEATURES.map((feat, i) => (
-              <div key={i} className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 hover:shadow-card-lg transition-all">
+              <MotionRise key={i} delay={i * 0.08} className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 hover:shadow-card-lg transition-all">
                 <div className="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center mb-6 text-purple-600">
                   <feat.icon size={24} />
                 </div>
                 <h3 className="text-xl fw-600 text-navy mb-3">{feat.title}</h3>
                 <p className="text-muted leading-relaxed">{feat.desc}</p>
-              </div>
+              </MotionRise>
             ))}
           </div>
         </div>
@@ -135,13 +136,13 @@ export default function ExamsProPage() {
 
       {/* CTA Section */}
       <section className="py-24 bg-navy text-white relative overflow-hidden" style={{ background: 'var(--color-nets-navy-dark)' }}>
-        <div className="container-nets relative z-10 text-center max-w-3xl mx-auto">
+        <MotionRise className="container-nets relative z-10 text-center max-w-3xl mx-auto">
           <h2 className="text-4xl fw-600 mb-6">Ready to dominate your exams?</h2>
           <p className="text-xl text-white/70 mb-10">Join thousands of students turning their study time into winning streaks.</p>
           <Link href="https://exams.resultspro.ng" className="btn inline-flex items-center gap-2" style={{ backgroundColor: 'var(--color-nets-red)', color: '#0D1060', fontWeight: 700, padding: '1rem 2.5rem', fontSize: '1.125rem' }}>
             Start Practicing <IconArrowRight size={20} />
           </Link>
-        </div>
+        </MotionRise>
       </section>
     </main>
   );

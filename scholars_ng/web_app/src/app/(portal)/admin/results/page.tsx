@@ -6,6 +6,7 @@ import ResultsPRODashboard from '@/components/Dashboard/ResultsPRODashboard';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
 import { CompactGradebook, ResultCheckerView } from '@resultspro/modules';
 import { useAppHost } from '@/components/AppHostContext';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 function AdminBroadsheetPreview() {
   const { tenant } = useAppHost();
@@ -50,7 +51,7 @@ function AdminBroadsheetPreview() {
   };
 
   return (
-    <div style={{ maxWidth: '900px', margin: '1rem auto 4rem auto', background: 'white', borderRadius: '1.5rem', padding: '2rem', boxShadow: '0 4px 25px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
+    <MotionRise style={{ maxWidth: '900px', margin: '1rem auto 4rem auto', background: 'white', borderRadius: '1.5rem', padding: '2rem', boxShadow: '0 4px 25px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
       <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1e293b' }}>Official Broadsheet Template Preview</h3>
@@ -69,7 +70,7 @@ function AdminBroadsheetPreview() {
         result={mockResult as any}
         template={mockTemplate as any}
       />
-    </div>
+    </MotionRise>
   );
 }
 

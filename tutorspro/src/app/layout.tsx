@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ClientProviders } from "./providers";
+import { ScrollRiseProvider } from "@/components/ScrollRiseProvider";
 import "./globals.css";
 import "./nets.css";
 
@@ -26,7 +27,9 @@ export default function RootLayout({
       <body>
         
         <ClientProviders>
-          {children}
+          <ScrollRiseProvider>
+            {children}
+          </ScrollRiseProvider>
         </ClientProviders>
       
       </body>

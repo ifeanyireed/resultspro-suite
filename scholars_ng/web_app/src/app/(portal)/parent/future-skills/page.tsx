@@ -12,11 +12,12 @@ import { SparklesIcon } from '@heroicons/react/24/solid';
 import { CodeCircleIcon, Award01Icon } from 'hugeicons-react';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
 import { CustomizerLeaderboard } from '@puzzlepro/modules';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 function ParentFutureSkillsJourney() {
   return (
     <div style={{ maxWidth: '1200px', padding: '1rem 0 4rem 0' }}>
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Future Skills Journey</h1>
           <p className="text-sm text-gray-500 mt-1">Track your ward&apos;s progress in coding, AI, and robotics projects.</p>
@@ -27,9 +28,9 @@ function ParentFutureSkillsJourney() {
             View Certificate
           </button>
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
+      <MotionRise delay={0.06} className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
         {/* Main Journey Flow */}
         <div className="lg:col-span-8 flex flex-col gap-3">
           <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
@@ -115,16 +116,16 @@ function ParentFutureSkillsJourney() {
             </div>
           </div>
         </div>
-      </div>
+      </MotionRise>
     </div>
   );
 }
 
 function ParentLeaderboardView() {
   return (
-    <div style={{ maxWidth: '900px', margin: '1rem auto 4rem auto' }}>
+    <MotionRise style={{ maxWidth: '900px', margin: '1rem auto 4rem auto' }}>
       <CustomizerLeaderboard onClose={() => {}} />
-    </div>
+    </MotionRise>
   );
 }
 
@@ -145,13 +146,15 @@ export default function ParentFutureSkillsPage() {
   ];
 
   return (
-    <SpecialistAppContainer
-      appTitle="Future Skills & Coding Tracker"
-      appSubtitle="Algorithmic problem solving, visual programming milestones, and child badge showcase."
-      appBadge="PuzzlePRO"
-      accentColor="#f59e0b"
-      tabs={tabs}
-      defaultTabId="journey"
-    />
+    <MotionRise>
+      <SpecialistAppContainer
+        appTitle="Future Skills & Coding Tracker"
+        appSubtitle="Algorithmic problem solving, visual programming milestones, and child badge showcase."
+        appBadge="PuzzlePRO"
+        accentColor="#f59e0b"
+        tabs={tabs}
+        defaultTabId="journey"
+      />
+    </MotionRise>
   );
 }

@@ -13,6 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 import { coursesApi } from '@/lib/api';
 import CohortModal from './CohortModal';
 import CohortScheduleModal from './CohortScheduleModal';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function CohortsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,7 +79,7 @@ export default function CohortsPage() {
   };
 
   return (
-    <>
+    <MotionRise>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Cohort Configurator</h2>
@@ -93,7 +94,7 @@ export default function CohortsPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-video relative overflow-hidden group hover:-translate-y-1 transition-transform">
           <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
           <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
@@ -124,9 +125,9 @@ export default function CohortsPage() {
             </div>
           </div>
         </div>
-      </div>
+      </MotionStagger>
 
-      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
+      <MotionRise className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-6 border-b border-gray-100">
           <h3 className="text-lg font-medium text-gray-900">Upcoming & Active</h3>
         </div>
@@ -239,7 +240,7 @@ export default function CohortsPage() {
             )}
           </tbody>
         </table>
-      </div>
+      </MotionRise>
 
       <CohortModal 
         isOpen={isModalOpen}
@@ -260,6 +261,6 @@ export default function CohortsPage() {
         }}
         cohort={selectedCohort}
       />
-    </>
+    </MotionRise>
   );
 }

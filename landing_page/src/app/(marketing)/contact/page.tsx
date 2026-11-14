@@ -9,6 +9,7 @@ import {
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,7 +30,7 @@ export default function ContactPage() {
       <section className="bg-navy text-white relative overflow-hidden" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '8rem' }}>
         <div className="absolute top-0 left-0 w-[50%] h-[100%] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
         
-        <div className="container-nets relative z-10 text-center max-w-3xl mx-auto">
+        <MotionRise className="container-nets relative z-10 text-center max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-sm fw-600 mb-6 backdrop-blur-sm text-blue-300 mx-auto">
             <IconMessageCircle size={16} />
             <span>Support & Partnerships</span>
@@ -40,7 +41,7 @@ export default function ContactPage() {
           <p className="text-body-lg text-white/70 mt-6">
             Whether you're looking to deploy our infrastructure across your campuses, integrate our APIs, or simply say hello, our team is ready to assist you.
           </p>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Main Content */}
@@ -49,7 +50,7 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             {/* Contact Information Cards */}
-            <div className="lg:col-span-1 space-y-6">
+            <MotionRise delay={0.08} className="lg:col-span-1 space-y-6">
               <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
                 <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-6">
                   <IconMail size={24} />
@@ -82,10 +83,10 @@ export default function ContactPage() {
                   (Full address available upon appointment)
                 </address>
               </div>
-            </div>
+            </MotionRise>
 
             {/* Contact Form */}
-            <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 p-8 sm:p-12">
+            <MotionRise delay={0.15} className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 p-8 sm:p-12">
               <h2 className="text-3xl fw-600 text-navy mb-2">Send us a message</h2>
               <p className="text-muted mb-8">Fill out the form below and we'll get back to you within 24 hours.</p>
               
@@ -153,7 +154,7 @@ export default function ContactPage() {
                   {!isSubmitting && <IconSend size={18} />}
                 </button>
               </form>
-            </div>
+            </MotionRise>
 
           </div>
         </div>

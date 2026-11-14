@@ -4,6 +4,7 @@ import axios from '@/lib/axiosConfig';
 import Navigation from '@/components/Navigation';
 import { ArrowRight01, Play } from '@/lib/hugeicons-compat';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface VideoTutorial {
   id: string;
@@ -58,14 +59,14 @@ const Demo: React.FC = () => {
           <div className="absolute w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] bottom-0 right-0" />
         </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto text-center">
+        <MotionRise className="relative z-10 max-w-6xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight leading-tight">
             Video <span className="text-blue-400">Tutorials</span>
           </h1>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-12">
             Master Results Pro with our comprehensive video guides. From initial setup to advanced analytics, we've got you covered.
           </p>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Main Video Section */}
@@ -79,7 +80,7 @@ const Demo: React.FC = () => {
           ) : videos.length > 0 ? (
             <>
               {/* Featured Video (Almost Full Width) */}
-              <div className="mb-16">
+              <MotionRise className="mb-16">
                 <div className="relative aspect-video w-full rounded-[30px] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(59,130,246,0.15)] bg-white/5">
                   <iframe
                     src={`https://www.youtube.com/embed/${currentVideo.id}`}
@@ -105,13 +106,13 @@ const Demo: React.FC = () => {
                     </span>
                   </div>
                 </div>
-              </div>
+              </MotionRise>
 
               {/* Video Grid */}
               {videos.length > 1 && (
                 <>
                   <h3 className="text-2xl font-bold mb-8 text-white">More Tutorials</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {videos.map((video, idx) => (
                       <div 
                         key={idx}
@@ -144,7 +145,7 @@ const Demo: React.FC = () => {
                         </p>
                       </div>
                     ))}
-                  </div>
+                  </MotionStagger>
                 </>
               )}
             </>
@@ -158,7 +159,7 @@ const Demo: React.FC = () => {
 
       {/* CTA Section */}
       <section className="relative py-20 px-4 md:px-8 bg-gradient-to-b from-black to-blue-950/20">
-        <div className="max-w-4xl mx-auto text-center">
+        <MotionRise className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-5xl font-bold mb-6">
             Ready to See it in Action?
           </h2>
@@ -174,7 +175,7 @@ const Demo: React.FC = () => {
               Explore Features
             </Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Footer */}

@@ -3,6 +3,7 @@
 import { IconBell as Bell, IconBook as BookOpen, IconBrain as BrainCircuit, IconTrophy as Trophy, IconMessage as MessageSquare, IconCheck as Check, IconDotsVertical as MoreVertical, IconClock as Clock } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const notifications = [
   {
@@ -57,7 +58,7 @@ export default function NotificationsPage() {
       
       
       <main className="p-8 max-w-4xl space-y-6">
-        <div className="flex justify-between items-center">
+        <MotionRise className="flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 font-display">Inbox</h2>
             <p className="text-sm text-gray-500">Stay updated with your academic activities.</p>
@@ -65,9 +66,9 @@ export default function NotificationsPage() {
           <Button variant="outline" className="text-xs font-bold border-gray-100 hover:bg-gray-50 text-gray-900">
             Mark all as read
           </Button>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
+        <MotionRise delay={0.08} className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
           <div className="divide-y divide-gray-100">
             {notifications.map((notif) => (
               <div 
@@ -112,13 +113,13 @@ export default function NotificationsPage() {
               </div>
             ))}
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="text-center pt-8">
+        <MotionRise delay={0.14} className="text-center pt-8">
            <Button variant="ghost" className="text-xs font-bold text-gray-500 hover:text-gray-900">
               View Older Notifications
            </Button>
-        </div>
+        </MotionRise>
       </main>
     </div>
   );

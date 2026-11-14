@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 import {
   Select,
   SelectContent,
@@ -61,7 +62,7 @@ export default function SchoolsOverview() {
       
       
       <main className="p-8 space-y-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <MotionRise className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2 font-display">School Management</h2>
             <p className="text-sm text-gray-500">Monitor and manage all schools registered on the platform.</p>
@@ -69,10 +70,10 @@ export default function SchoolsOverview() {
           <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-12 px-6 shadow-lg shadow-green/10">
             <Plus className="w-5 h-5 mr-2" /> Onboard New School
           </Button>
-        </div>
+        </MotionRise>
 
         {/* Search & Filters */}
-        <div className="flex flex-col md:flex-row gap-4">
+        <MotionRise delay={0.05} className="flex flex-col md:flex-row gap-4">
            <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
               <Input 
@@ -93,10 +94,10 @@ export default function SchoolsOverview() {
                  <option>Enterprise</option>
               </select>
            </div>
-        </div>
+        </MotionRise>
 
         {/* Schools Table */}
-        <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
+        <MotionRise delay={0.1} className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
            <div className="overflow-x-auto">
              <table className="w-full text-left text-sm border-collapse">
                 <thead>
@@ -269,7 +270,7 @@ export default function SchoolsOverview() {
                 No schools found matching your search.
              </div>
            )}
-        </div>
+        </MotionRise>
       </main>
     </div>
   );

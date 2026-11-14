@@ -4,6 +4,7 @@ import { IconCalendar as Calendar, IconClock as Clock, IconBook as BookOpen, Ico
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { RoleGate } from '@/components/RoleGate';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function StudentClasses() {
   const [data, setData] = useState<any>(null);
@@ -41,12 +42,14 @@ export default function StudentClasses() {
       <main className="min-h-screen bg-gray-50 pb-24">
                 
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-8">
-             My Schedule
-          </h1>
+          <MotionRise>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-8">
+               My Schedule
+            </h1>
+          </MotionRise>
 
           {/* Weekly Calendar Strip */}
-          <div className="flex justify-between items-center mb-8 p-6 rounded-[1.5rem] bg-white border border-gray-100 shadow-sm overflow-x-auto gap-4 scrollbar-hide">
+          <MotionRise delay={0.05} className="flex justify-between items-center mb-8 p-6 rounded-[1.5rem] bg-white border border-gray-100 shadow-sm overflow-x-auto gap-4 scrollbar-hide">
              {weekDays.map((day, i) => (
                <div key={day} className={`flex flex-col items-center min-w-[60px] p-4 rounded-xl transition-all ${
                  i === currentDay ? 'bg-[#146ef5] text-white shadow-md shadow-[#146ef5]/20' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
@@ -56,11 +59,11 @@ export default function StudentClasses() {
                   {i === currentDay && <div className="w-1 h-1 rounded-full bg-white mt-2" />}
                </div>
              ))}
-          </div>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-6">
              {/* Classes List */}
-             <div className="lg:col-span-2 space-y-4">
+             <MotionRise className="lg:col-span-2 space-y-4">
                 <h2 className="text-xl font-normal text-gray-900 mb-4">Upcoming Sessions</h2>
                 {classes.length > 0 ? classes.map((cls: any) => (
                   <div key={cls.id} className="p-6 rounded-[1.5rem] bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all group">
@@ -104,10 +107,10 @@ export default function StudentClasses() {
                      <p className="text-gray-500 font-medium text-sm">No upcoming sessions found</p>
                   </div>
                 )}
-             </div>
+             </MotionRise>
 
              {/* Quick Actions / Sidebar */}
-             <div className="space-y-6">
+             <MotionRise delay={0.1} className="space-y-6">
                 <section className="p-6 rounded-[1.5rem] bg-white border border-gray-100 shadow-sm">
                    <h3 className="text-xl font-normal text-gray-900 mb-6">Learning Goal</h3>
                    <div className="flex items-end gap-2 mb-2">
@@ -136,8 +139,8 @@ export default function StudentClasses() {
                       </div>
                    </div>
                 </section>
-             </div>
-          </div>
+             </MotionRise>
+          </MotionStagger>
         </div>
       </main>
     </RoleGate>

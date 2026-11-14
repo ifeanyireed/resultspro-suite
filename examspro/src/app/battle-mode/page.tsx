@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { IconSword as Sword, IconUsers as Users, IconTrophy as Trophy, IconSearch as Search, IconPlayerPlay as Play, IconBolt as Zap, IconPlus as Plus, IconChevronRight as ChevronRight, IconShield as Shield, IconCoins as Coins, IconLoader2 as Loader2, IconGlobe as Globe, IconLock as Lock, IconCopy as Copy, IconCheck as Check } from '@tabler/icons-react';
 import { 
   Dialog, 
@@ -305,7 +306,7 @@ export default function BattleLobbyPage() {
       
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
           <div className="text-center md:text-left">
             <h1 className="text-4xl md:text-6xl font-display font-black text-navy mb-4 italic tracking-tighter">
               BATTLE <span className="text-red-600">MODE</span>
@@ -338,10 +339,10 @@ export default function BattleLobbyPage() {
               </div>
             </div>
           )}
-        </div>
+        </MotionRise>
 
         {/* Quick Match CTA */}
-        <div className="relative p-1 rounded-[40px] mb-16 group overflow-hidden">
+        <MotionRise delay={0.08} className="relative p-1 rounded-[40px] mb-16 group overflow-hidden">
           <motion.div 
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 5, ease: "linear" }}
@@ -436,10 +437,10 @@ export default function BattleLobbyPage() {
               </Button>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Battle Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <MotionRise delay={0.14} className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Create / Join Custom */}
           <div className="lg:col-span-1 space-y-6">
             <div className="p-8 rounded-[32px] relative overflow-hidden shadow-lg bg-gradient-to-br from-[#146ef5] to-[#0a2e70] text-white">
@@ -597,7 +598,7 @@ export default function BattleLobbyPage() {
               )}
             </div>
           </div>
-        </div>
+        </MotionRise>
       </div>
 
       <LoginPromptModal 

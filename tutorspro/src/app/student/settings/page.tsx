@@ -4,6 +4,7 @@ import { IconUser as User, IconBell as Bell, IconShield as Shield, IconCreditCar
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
@@ -65,15 +66,15 @@ export default function StudentSettings() {
       <main className="min-h-screen bg-gray-50 pb-24">
         <div className="max-w-6xl mx-auto px-4 md:px-8 pt-12">
           
-          <div className="mb-10">
+          <MotionRise className="mb-10">
              <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">Settings</h1>
              <p className="text-sm text-gray-500">Manage your profile, preferences, and account settings.</p>
-          </div>
+          </MotionRise>
 
-          <div className="flex flex-col lg:flex-row gap-8 items-start">
+          <MotionStagger className="flex flex-col lg:flex-row gap-8 items-start">
             
             {/* Sidebar Navigation */}
-            <div className="w-full lg:w-64 shrink-0 space-y-2">
+            <MotionRise className="w-full lg:w-64 shrink-0 space-y-2">
               {TABS.map((tab) => (
                 <button
                   key={tab.id}
@@ -97,10 +98,10 @@ export default function StudentSettings() {
                   <span className="text-sm">Sign Out</span>
                 </button>
               </div>
-            </div>
+            </MotionRise>
 
             {/* Settings Content */}
-            <div className="flex-1 w-full">
+            <MotionRise delay={0.08} className="flex-1 w-full">
               <div className="bg-white border border-gray-200 rounded-3xl p-8 shadow-sm">
                  {activeTab === 'profile' && (
                    <form onSubmit={handleUpdateProfile} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -208,8 +209,8 @@ export default function StudentSettings() {
                    </div>
                  )}
               </div>
-            </div>
-          </div>
+            </MotionRise>
+          </MotionStagger>
         </div>
       </main>
     </RoleGate>

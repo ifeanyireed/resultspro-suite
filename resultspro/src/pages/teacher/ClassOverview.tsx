@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { BarChart01, Users } from '@/lib/hugeicons-compat';
 import { IconTrendingUp as TrendingUp } from '@tabler/icons-react';
 import { axiosInstance as axios } from '@/lib/axiosConfig';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface SubjectStat {
   subjectName: string;
@@ -83,7 +84,7 @@ const TeacherClassOverview: React.FC = () => {
     <div className="min-h-screen text-white">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <button
             onClick={() => navigate(-1)}
             className="text-blue-400 hover:text-blue-300 mb-4"
@@ -92,10 +93,10 @@ const TeacherClassOverview: React.FC = () => {
           </button>
           <h1 className="text-3xl font-bold mb-2">{data.className} - Class Overview</h1>
           <p className="text-slate-400">Performance metrics and subject analysis</p>
-        </div>
+        </MotionRise>
 
         {/* Performance Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-6 rounded-lg">
             <p className="text-blue-100 text-sm">Class Average</p>
             <p className="text-4xl font-bold mt-2">{data.classAverage.toFixed(1)}</p>
@@ -125,10 +126,10 @@ const TeacherClassOverview: React.FC = () => {
             </p>
             <p className="text-orange-100 text-xs mt-2">Class Average</p>
           </div>
-        </div>
+        </MotionStagger>
 
         {/* Grade Distribution and Subject Stats */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           {/* Grade Distribution */}
           <div className="bg-slate-800 rounded-lg p-6">
             <h2 className="text-xl font-bold mb-4">Grade Distribution</h2>
@@ -213,10 +214,10 @@ const TeacherClassOverview: React.FC = () => {
                 ))}
             </div>
           </div>
-        </div>
+        </MotionStagger>
 
         {/* Subject Details Table */}
-        <div className="bg-slate-800 rounded-lg p-6">
+        <MotionRise className="bg-slate-800 rounded-lg p-6">
           <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
             <BarChart01 size={20} />
             Subject Performance Details
@@ -277,10 +278,10 @@ const TeacherClassOverview: React.FC = () => {
               </tbody>
             </table>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Action Buttons */}
-        <div className="mt-8 flex gap-4">
+        <MotionRise className="mt-8 flex gap-4">
           <button
             onClick={() =>
               navigate(`/teacher/class/${classId}/at-risk`, {
@@ -303,7 +304,7 @@ const TeacherClassOverview: React.FC = () => {
             <Users size={18} />
             Cohort Analysis
           </button>
-        </div>
+        </MotionRise>
       </div>
     </div>
   );

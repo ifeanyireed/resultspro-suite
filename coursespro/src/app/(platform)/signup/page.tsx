@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Mail, Lock, User, ArrowRight, Loader2, Sparkles, Building2, Users, ShieldCheck } from 'lucide-react';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function PlatformSignupPage() {
   const router = useRouter();
@@ -44,7 +45,7 @@ export default function PlatformSignupPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex">
+    <MotionRise className="min-h-screen w-full flex">
       {/* Left Panel - Branding & Aesthetic */}
       <div className="hidden lg:flex w-[55%] relative overflow-hidden bg-[#0B1021]">
         {/* Abstract Background Elements */}
@@ -178,6 +179,6 @@ export default function PlatformSignupPage() {
           </div>
         </div>
       </div>
-    </div>
+    </MotionRise>
   );
 }

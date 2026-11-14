@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { toast } from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const steps = [
   { id: 1, name: 'Personal Info', icon: User },
@@ -74,7 +75,7 @@ export default function TutorOnboarding() {
 
       <div className="flex-1 max-w-5xl mx-auto w-full px-4 py-12">
         {/* Progress Tracker */}
-        <div className="mb-12">
+        <MotionRise className="mb-12">
           <div className="flex justify-between items-center relative">
             <div className="absolute top-1/2 left-0 w-full h-0.5 bg-white/5 -translate-y-1/2 z-0" />
             <div 
@@ -97,10 +98,10 @@ export default function TutorOnboarding() {
               </div>
             ))}
           </div>
-        </div>
+        </MotionRise>
 
         {/* Content Area */}
-        <div className="bg-white/5 border border-white/10 rounded-[40px] p-8 md:p-12 shadow-2xl relative overflow-hidden">
+        <MotionRise delay={0.1} className="bg-white/5 border border-white/10 rounded-[40px] p-8 md:p-12 shadow-2xl relative overflow-hidden">
           {/* Subtle Background Glow */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-green/5 rounded-full blur-[100px] -mr-32 -mt-32" />
 
@@ -260,17 +261,17 @@ export default function TutorOnboarding() {
               </button>
             )}
           </div>
-        </div>
+        </MotionRise>
 
         {/* Support Footer */}
-        <div className="mt-12 flex flex-col items-center gap-4 text-center">
+        <MotionRise delay={0.2} className="mt-12 flex flex-col items-center gap-4 text-center">
            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
               <ShieldCheck className="w-3 h-3 text-green" /> Secure & Encrypted Application
            </div>
            <p className="text-xs text-gray-600 max-w-sm">
              By continuing, you agree to our Tutor Terms of Service and Privacy Policy. Our team typically reviews applications within 3-5 business days.
            </p>
-        </div>
+        </MotionRise>
       </div>
     </main>
   );

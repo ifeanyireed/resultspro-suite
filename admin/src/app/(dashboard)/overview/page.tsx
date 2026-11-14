@@ -9,6 +9,7 @@ import { SuiteStats, School, PayoutRequest } from '@/lib/types';
 import Link from 'next/link';
 
 import { Header } from '@/components/Header';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function OverviewPage() {
   const [stats, setStats] = useState<SuiteStats | null>(null);
@@ -33,14 +34,16 @@ export default function OverviewPage() {
   }, []);
 
   return (
-    <div className="w-full">
-      <Header
-        title="Suite Executive Overview"
-        subtitle="Live cross-microservice telemetrics and control hub"
-      />
+    <MotionStagger className="w-full">
+      <MotionRise>
+        <Header
+          title="Suite Executive Overview"
+          subtitle="Live cross-microservice telemetrics and control hub"
+        />
+      </MotionRise>
       <div className="flex flex-col gap-6">
         {/* Top-Level KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <MotionRise delay={0.05} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           <GradientMetricCard
             title="Suite Revenue"
             value={`₦${((stats?.totalRevenue ?? 0) / 1000).toLocaleString()}k`}
@@ -72,10 +75,10 @@ export default function OverviewPage() {
             trendColor="green"
             icon={LifeBuoy}
           />
-        </div>
+        </MotionRise>
 
         {/* Lower Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+        <MotionRise delay={0.1} className="grid grid-cols-1 lg:grid-cols-12 gap-3">
           <div className="lg:col-span-9 flex flex-col gap-3">
             
             {/* Top Row of Left Side */}
@@ -242,8 +245,8 @@ export default function OverviewPage() {
               </div>
             </WidgetCard>
           </div>
-        </div>
+        </MotionRise>
       </div>
-    </div>
+    </MotionStagger>
   );
 }

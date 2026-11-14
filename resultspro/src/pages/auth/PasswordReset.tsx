@@ -4,6 +4,7 @@ import { ArrowRight01 } from '@/lib/hugeicons-compat';
 import { InlineLoadingSpinner } from '@/components/LoadingSpinner';
 import Navigation from '@/components/Navigation';
 import axios from 'axios';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.VITE_API_URL || '');
 
@@ -65,7 +66,7 @@ const PasswordReset: React.FC = () => {
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
-          <div className="relative z-10 max-w-md mx-auto text-center w-full">
+          <MotionRise className="relative z-10 max-w-md mx-auto text-center w-full">
             <div className="flex justify-center mb-6">
               <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.3)]">
                 <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,7 +113,7 @@ const PasswordReset: React.FC = () => {
                 Sign in
               </Link>
             </p>
-          </div>
+          </MotionRise>
         </section>
 
         {/* Footer */}
@@ -170,7 +171,7 @@ const PasswordReset: React.FC = () => {
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
-        <div className="relative z-10 max-w-md mx-auto text-center w-full">          <h1 className="text-5xl md:text-6xl font-bold mb-2 tracking-tight leading-tight text-white">
+        <MotionRise className="relative z-10 max-w-md mx-auto text-center w-full">          <h1 className="text-5xl md:text-6xl font-bold mb-2 tracking-tight leading-tight text-white">
             Reset Password
           </h1>
           <p className="text-gray-400 text-sm mb-12">Enter your email to receive a reset link</p>
@@ -228,7 +229,7 @@ const PasswordReset: React.FC = () => {
               Back to Sign In
             </Link>
           </p>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Footer */}

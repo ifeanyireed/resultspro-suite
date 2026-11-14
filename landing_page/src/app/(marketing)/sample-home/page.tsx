@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { 
   AcademicCapIcon, 
   ChartBarIcon, 
@@ -49,7 +50,7 @@ export default function SampleHomepage() {
         <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-[800px] h-[800px] bg-[#0EA5E9]/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-[600px] h-[600px] bg-[#F97316]/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
+        <MotionRise className="max-w-7xl mx-auto px-6 relative z-10 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-[#0EA5E9] text-sm font-medium mb-8 animate-fade-in-up">
             <span className="flex h-2 w-2 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0EA5E9] opacity-75"></span>
@@ -88,16 +89,16 @@ export default function SampleHomepage() {
               <div className="text-xl font-bold italic">Lighthouse</div>
             </div>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Bento Grid Features Section */}
       <section id="features" className="py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <MotionRise className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Everything you need to run a world-class institution.</h2>
             <p className="text-slate-600 text-lg">Four powerful modules. One seamless digital campus.</p>
-          </div>
+          </MotionRise>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Bento Item 1 - Large */}

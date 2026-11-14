@@ -15,6 +15,7 @@ import {
   ClockIcon,
   SparklesIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface MentorSession {
   id: string;
@@ -64,7 +65,7 @@ export default function MentorSessions() {
   const displaySessions = activeTab === 'UPCOMING' ? upcomingSessions : pastSessions;
 
   return (
-    <div className="space-y-8 pb-16">
+    <MotionRise className="space-y-8 pb-16">
       {/* Header & Quick Action Buttons */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-2">
         <div>
@@ -186,7 +187,7 @@ export default function MentorSessions() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#146ef5]"></div>
         </div>
       ) : displaySessions.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {displaySessions.map((session, idx) => {
             const dateObj = new Date(session.live_date);
             const isValidDate = !isNaN(dateObj.getTime());
@@ -266,7 +267,7 @@ export default function MentorSessions() {
               </div>
             );
           })}
-        </div>
+        </MotionStagger>
       ) : (
         <div className="bg-white rounded-2xl p-12 border border-gray-100 shadow-sm text-center">
           <CalendarDaysIcon className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -287,6 +288,6 @@ export default function MentorSessions() {
           </Link>
         </div>
       )}
-    </div>
+    </MotionRise>
   );
 }

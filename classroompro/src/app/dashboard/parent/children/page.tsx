@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const childrenData = [
   { id: 1, name: "Jessica Alabi", school: "Lekki British School", class: "SSS 1", studentId: "LBS-2024-042", status: "Linked", email: "jessica@student.com" },
@@ -45,7 +46,7 @@ export default function MyChildren() {
       
       
       <main className="p-8 max-w-6xl mx-auto space-y-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <MotionRise className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Child Management</h2>
             <p className="text-sm text-gray-500">Link and manage your children's accounts to monitor their academic progress.</p>
@@ -53,11 +54,11 @@ export default function MyChildren() {
           <Button className="bg-emerald-600 text-white font-bold h-12 px-6">
             <UserPlus className="w-5 h-5 mr-2" /> Link New Child
           </Button>
-        </div>
+        </MotionRise>
 
-        <div className="grid gap-6">
-           {childrenData.map((child) => (
-              <div key={child.id} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 hover:border-gray-200 transition-all group">
+        <MotionStagger className="grid gap-6">
+           {childrenData.map((child, i) => (
+              <MotionRise key={child.id} delay={i * 0.06} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 hover:border-gray-200 transition-all group">
                  <div className="flex flex-col lg:flex-row lg:items-center gap-8">
                     <div className="w-24 h-24 rounded-[32px] bg-[#146ef5] border border-gray-100 flex items-center justify-center text-3xl font-bold text-white shrink-0 shadow-2xl">
                        {child.name.split(' ').map(n => n[0]).join('')}
@@ -100,12 +101,12 @@ export default function MyChildren() {
                        </Button>
                     </div>
                  </div>
-              </div>
+              </MotionRise>
            ))}
-        </div>
+        </MotionStagger>
 
         {/* Info Card */}
-        <div className="bg-blue/5 border border-blue/20 p-8 rounded-[40px] flex items-start gap-6">
+        <MotionRise delay={0.1} className="bg-blue/5 border border-blue/20 p-8 rounded-[40px] flex items-start gap-6">
            <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-[#146ef5] shrink-0">
               <Heart className="w-6 h-6" />
            </div>
@@ -116,7 +117,7 @@ export default function MyChildren() {
                  and see exactly which areas they are struggling with in real-time. You can link up to 5 children under one parent account.
               </p>
            </div>
-        </div>
+        </MotionRise>
       </main>
     </div>
   );

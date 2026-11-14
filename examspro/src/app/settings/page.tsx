@@ -3,6 +3,7 @@
 import { IconBell as Bell, IconMoon as Moon, IconGlobe as Globe, IconUser as User, IconShield as Shield, IconCreditCard as CreditCard, IconLogout as LogOut, IconChevronRight as ChevronRight, IconArrowLeft as ArrowLeft, IconGift as Gift } from '@tabler/icons-react';
 import Link from 'next/link';
 import { WidgetCard } from '@/components/ui/Cards';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -60,7 +61,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-4xl">
+    <MotionRise className="flex flex-col gap-6 max-w-4xl">
       <div>
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Settings</h1>
         <p className="text-sm text-gray-500 mt-1">Manage your account preferences and configurations.</p>
@@ -97,6 +98,6 @@ export default function SettingsPage() {
           <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">ResultsPRO Exams v1.0.4 (Beta)</p>
         </div>
       </div>
-    </div>
+    </MotionRise>
   );
 }

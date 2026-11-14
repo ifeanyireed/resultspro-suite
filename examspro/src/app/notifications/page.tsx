@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconSword as Sword, IconTrophy as Trophy, IconCoins as Coins, IconCircleCheck as CheckCircle2, IconInfoCircle as Info, IconAlertTriangle as AlertTriangle, IconCircleX as XCircle, IconBell as Bell } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { getNotifications, markAsRead, markAllAsRead, Notification } from '@/lib/notifications.api';
@@ -75,7 +76,7 @@ export default function NotificationsPage() {
     <main className="min-h-screen bg-white pb-24">
       <Navbar />
       
-      <div className="max-w-2xl mx-auto px-4 pt-12">
+      <MotionRise className="max-w-2xl mx-auto px-4 pt-12">
         <div className="flex justify-between items-end mb-10">
           <div>
             <h1 className="text-3xl font-display font-bold text-navy mb-2">Notifications</h1>
@@ -158,7 +159,7 @@ export default function NotificationsPage() {
             <p className="text-xs text-gray-400 font-bold uppercase tracking-[0.2em]">End of notifications</p>
           </div>
         )}
-      </div>
+      </MotionRise>
     </main>
   );
 }

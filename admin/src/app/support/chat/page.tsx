@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface ChatMessage {
   id: string;
@@ -112,7 +113,8 @@ export default function SupportChatPage() {
   const activeSessionIds = Array.from(new Set([...sessionsData.map(s => s.session_id), ...messages.map(m => m.session_id).filter(Boolean)]));
 
   return (
-    <div className="flex h-[calc(100vh-120px)] bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
+    <MotionStagger className="w-full">
+      <MotionRise className="flex h-[calc(100vh-120px)] bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
       
       {/* Sessions Sidebar */}
       <div className="w-1/3 border-r border-gray-100 flex flex-col bg-gray-50/30">
@@ -214,6 +216,7 @@ export default function SupportChatPage() {
           </form>
         </div>
       </div>
-    </div>
+      </MotionRise>
+    </MotionStagger>
   );
 }

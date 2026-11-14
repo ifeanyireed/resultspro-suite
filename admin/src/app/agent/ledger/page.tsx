@@ -7,11 +7,12 @@ import {
   ClockIcon
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function LedgerPage() {
   return (
-    <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+    <MotionStagger className="w-full">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Ledger & Payouts</h1>
           <p className="text-sm text-gray-500 mt-1">Track your earnings, bounties, and withdrawal history.</p>
@@ -20,9 +21,9 @@ export default function LedgerPage() {
           <ArrowDownTrayIcon className="w-4 h-4" />
           Request Withdrawal
         </button>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <MotionRise delay={0.05} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {/* Available Balance */}
         <div className="bg-[#111827] rounded-[1.5rem] p-6 text-white relative overflow-hidden flex flex-col justify-between shadow-lg h-[160px]">
           <div className="absolute inset-0 opacity-40 mix-blend-overlay">
@@ -70,10 +71,10 @@ export default function LedgerPage() {
             </div>
           </div>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Transaction Table */}
-      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
+      <MotionRise delay={0.1} className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
           <h3 className="font-bold text-gray-900">Transaction History</h3>
           <button className="text-sm font-medium text-[#146ef5] hover:text-[#105bd1]">View All</button>
@@ -121,7 +122,7 @@ export default function LedgerPage() {
             </tbody>
           </table>
         </div>
-      </div>
-    </>
+      </MotionRise>
+    </MotionStagger>
   );
 }

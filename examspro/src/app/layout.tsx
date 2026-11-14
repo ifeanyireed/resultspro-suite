@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { ClientProviders } from "./providers";
+import { ScrollRiseProvider } from "@/components/ScrollRiseProvider";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import "./nets.css";
@@ -50,7 +51,9 @@ export default function RootLayout({
           />
         </noscript>
         <ClientProviders>
-          {children}
+          <ScrollRiseProvider>
+            {children}
+          </ScrollRiseProvider>
         </ClientProviders>
         <Toaster position="top-right" />
       </body>

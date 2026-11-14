@@ -18,6 +18,7 @@ import { soundManager } from '@/utils/sound';
 import { GAME_ENGINE_API_URL, PLAYER_SERVICE_API_URL } from '@/utils/api';
 import { getCdnUrl } from '@/utils/cdn';
 import { verifyEmbedToken } from '@/services/api';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'studio' | 'customizer' | 'map'>('map');
@@ -1406,7 +1407,7 @@ export default function Home() {
       <div className="flex-1 w-full h-full p-0 flex flex-col items-center justify-center relative z-20 overflow-hidden pt-[72px]">
         
         {/* MAZE CANVAS IS PERMANENTLY RENDERED ON-SCREEN AS THE BASE BOARD SCREEN */}
-        <div className="w-full h-full relative z-10">
+        <div data-no-rise className="w-full h-full relative z-10">
 
           {/* WORLD 2 KINGDOM SCROLL: Mounted to the right beside sidebar buttons, just below top menu */}
           <AnimatePresence>
@@ -1475,7 +1476,7 @@ export default function Home() {
 
           {/* FLOATING COLLAPSIBLE SCRATCH BLOCK EDITOR MODAL (STUDIO TAB) */}
           {activeTab === 'studio' && (
-            <div className="fixed left-6 bottom-6 z-40">
+            <div data-no-rise className="fixed left-6 bottom-6 z-40">
               <BlocklyEditor 
                 availableBlocks={currentLevel.availableBlocks}
                 maxBlocks={currentLevel.maxBlocks}
@@ -1503,19 +1504,13 @@ export default function Home() {
         <AnimatePresence>
           {activeTab === 'customizer' && (
             <div className="fixed inset-0 z-50 flex items-center justify-center pt-12 sm:pt-16 pb-6 px-4 bg-slate-950/50 backdrop-blur-sm pointer-events-auto overflow-y-auto">
-              <motion.div
-                key="customizer-modal"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="w-full max-w-3xl flex justify-center"
-              >
+              <MotionRise className="w-full max-w-3xl flex justify-center">
                 <CustomizerLeaderboard 
                   onClose={() => setActiveTab('studio')}
                   groupId={userContext.groupId}
                   groupName={userContext.groupName}
                 />
-              </motion.div>
+              </MotionRise>
             </div>
           )}
         </AnimatePresence>
@@ -1582,9 +1577,7 @@ export default function Home() {
               )}
 
               {/* Map Title Header */}
-              <motion.div
-                initial={{ opacity: 0, y: -15 }}
-                animate={{ opacity: 1, y: 0 }}
+              <MotionRise
                 className="w-full text-center py-2 px-4 flex flex-col items-center shrink-0 z-30"
               >
                 {selectedAdventureId === null ? (
@@ -1611,7 +1604,7 @@ export default function Home() {
                     );
                   })()
                 )}
-              </motion.div>
+              </MotionRise>
 
               {/* TIER 1: TOP LEVEL ADVENTURES DIRECTORY PAGE (Monkeys & Padlocks styling) */}
               {selectedAdventureId === null ? (

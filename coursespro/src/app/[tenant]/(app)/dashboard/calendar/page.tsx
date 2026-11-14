@@ -26,6 +26,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { coursesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface EventItem {
   id: string;
@@ -185,7 +186,7 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto pb-16">
+    <MotionRise className="max-w-7xl mx-auto pb-16">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 mt-2">
         <div>
@@ -545,6 +546,6 @@ export default function CalendarPage() {
           </div>
         </div>
       )}
-    </div>
+    </MotionRise>
   );
 }

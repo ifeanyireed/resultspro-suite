@@ -43,6 +43,7 @@ const Hero = () => {
   return (
     <section
       id="hero"
+      data-no-rise="true"
       aria-label={`Hero — ${schoolName}`}
       style={{
         position: 'relative',

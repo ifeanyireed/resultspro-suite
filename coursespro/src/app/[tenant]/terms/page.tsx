@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { IconShieldCheck, IconArrowLeft } from '@tabler/icons-react';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export async function generateMetadata({ params }: { params: Promise<{ tenant: string }> }) {
   const resolvedParams = await params;
@@ -50,7 +51,7 @@ export default async function TenantTermsPage({ params }: { params: Promise<{ te
             color: '#ffffff',
           }}
         >
-          <div className="container-nets max-w-4xl mx-auto px-4 sm:px-6">
+          <MotionRise className="container-nets max-w-4xl mx-auto px-4 sm:px-6">
             <Link
               href="/login"
               className="inline-flex items-center text-xs uppercase tracking-widest text-slate-400 hover:text-white mb-6 transition-colors"
@@ -72,12 +73,12 @@ export default async function TenantTermsPage({ params }: { params: Promise<{ te
               Terms and conditions governing enrollment, participation, and account use at{' '}
               <span className="font-semibold text-white">{tenantName}</span>.
             </p>
-          </div>
+          </MotionRise>
         </section>
 
         {/* Content Section */}
         <section className="py-12 md:py-16 bg-white border-b border-gray-200">
-          <div className="container-nets max-w-4xl mx-auto px-4 sm:px-6">
+          <MotionRise className="container-nets max-w-4xl mx-auto px-4 sm:px-6">
             <div className="prose prose-slate max-w-none text-slate-700 space-y-8">
               <div className="flex items-center justify-between pb-6 border-b border-slate-100 text-xs sm:text-sm text-slate-500">
                 <span>Institution: <strong className="text-slate-900">{tenantName}</strong></span>
@@ -170,7 +171,7 @@ export default async function TenantTermsPage({ params }: { params: Promise<{ te
                 </div>
               </section>
             </div>
-          </div>
+          </MotionRise>
         </section>
       </article>
 

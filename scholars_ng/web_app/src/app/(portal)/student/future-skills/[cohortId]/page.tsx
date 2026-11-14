@@ -8,6 +8,7 @@ import {
   LockIcon,
   PlayCircle02Icon
 } from 'hugeicons-react';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function CohortJourneyMap({ params }: { params: Promise<{ cohortId: string }> }) {
@@ -38,18 +39,20 @@ export default function CohortJourneyMap({ params }: { params: Promise<{ cohortI
         <ArrowLeft01Icon size={20} /> Back to Cohorts
       </button>
       
-      <header style={{ marginBottom: '3rem' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem' }}>Journey Map</h1>
-        <p style={{ color: '#64748b', fontSize: '1.1rem', fontWeight: '500' }}>Your path through this cohort</p>
-      </header>
+      <MotionRise>
+        <header style={{ marginBottom: '3rem' }}>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem' }}>Journey Map</h1>
+          <p style={{ color: '#64748b', fontSize: '1.1rem', fontWeight: '500' }}>Your path through this cohort</p>
+        </header>
+      </MotionRise>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+      <MotionStagger style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
         {stages.map((stage: any, index: number) => {
           const stageModules = modules.filter(m => m.stage_id === stage.id).sort((a, b) => a.order_index - b.order_index);
           const isLocked = index > 0; // Simplified logic: first stage unlocked, others locked
 
           return (
-            <div key={stage.id}>
+            <MotionRise key={stage.id}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem', opacity: isLocked ? 0.5 : 1 }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: isLocked ? '#e2e8f0' : '#1e293b', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
                   {isLocked ? <LockIcon size={20} /> : stage.stage_number}
@@ -81,10 +84,10 @@ export default function CohortJourneyMap({ params }: { params: Promise<{ cohortI
                   </div>
                 ))}
               </div>
-            </div>
+            </MotionRise>
           );
         })}
-      </div>
+      </MotionStagger>
     </div>
   );
 }

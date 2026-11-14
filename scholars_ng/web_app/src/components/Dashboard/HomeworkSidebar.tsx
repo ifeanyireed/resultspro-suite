@@ -2,10 +2,11 @@
 
 import React from 'react';
 import { Tick02Icon, AlertCircleIcon } from 'hugeicons-react';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function HomeworkSidebar() {
   return (
-    <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col h-full">
+    <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col h-full">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-bold text-gray-900 tracking-tight">Homework progress</h2>
         <select className="border-none font-bold text-gray-900 outline-none bg-transparent cursor-pointer text-sm">
@@ -14,7 +15,7 @@ export default function HomeworkSidebar() {
       </div>
 
       <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">To do</div>
-      <div className="flex flex-col gap-4 mb-6">
+      <MotionStagger className="flex flex-col gap-4 mb-6">
         {[
           { title: 'Rational inequalities. AI Assessment #5', date: '30 Mar, 2024' },
           { title: 'All about Homestas. Quize', date: '28 Mar, 2024' },
@@ -35,10 +36,10 @@ export default function HomeworkSidebar() {
             </div>
           </div>
         ))}
-      </div>
+      </MotionStagger>
 
       <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">On review</div>
-      <div className="flex flex-col gap-4 mb-6">
+      <MotionStagger className="flex flex-col gap-4 mb-6">
         {[
           { title: 'Historical Chronicles: Exploring the Past', date: '30 Mar, 2024' },
           { title: 'Epoch Explorations: Unraveling Timelines', date: '30 Mar, 2024' },
@@ -57,10 +58,10 @@ export default function HomeworkSidebar() {
             </div>
           </div>
         ))}
-      </div>
+      </MotionStagger>
 
       <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Completed</div>
-      <div className="flex flex-col gap-4">
+      <MotionStagger className="flex flex-col gap-4">
         {[
           { title: 'Physics Phantoms: Unraveling the Laws of Nature', date: '25 Mar, 2024' },
           { title: 'Language Landscapes: Exploring Vocabulary', date: '24 Mar, 2024' },
@@ -81,7 +82,7 @@ export default function HomeworkSidebar() {
             </div>
           </div>
         ))}
-      </div>
-    </div>
+      </MotionStagger>
+    </MotionRise>
   );
 }

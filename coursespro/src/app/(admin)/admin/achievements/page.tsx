@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { PlusIcon, PencilSquareIcon, TrashIcon, TrophyIcon } from '@heroicons/react/24/outline';
 import { coursesApi } from '@/lib/api';
 import toast from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function AdminAchievementsPage() {
   const queryClient = useQueryClient();
@@ -88,7 +89,7 @@ export default function AdminAchievementsPage() {
   };
 
   return (
-    <div className="p-8">
+    <MotionRise className="p-8">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Achievements</h1>
@@ -110,7 +111,7 @@ export default function AdminAchievementsPage() {
           <p className="text-gray-500 text-sm">No achievements defined yet.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {achievements.map((ach: any) => (
             <div key={ach.id} className="bg-white border border-gray-200 rounded-xl p-6 relative group">
               <div className="absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -150,7 +151,7 @@ export default function AdminAchievementsPage() {
               </div>
             </div>
           ))}
-        </div>
+        </MotionStagger>
       )}
 
       {/* Modal */}
@@ -248,6 +249,6 @@ export default function AdminAchievementsPage() {
           </div>
         </div>
       )}
-    </div>
+    </MotionRise>
   );
 }

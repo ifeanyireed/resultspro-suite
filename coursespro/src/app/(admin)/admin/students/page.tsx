@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import api, { coursesApi, getTenantSlug } from '@/lib/api';
 import { UserGroupIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/outline';
 import AddStudentModal from './AddStudentModal';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 const getDeterministicAvatar = (id: string) => {
   if (!id) return '/avatars/character1.jpg';
@@ -227,7 +228,7 @@ export default function StudentsPage() {
   });
 
   return (
-    <>
+    <MotionRise>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Student Management</h2>
@@ -242,7 +243,7 @@ export default function StudentsPage() {
         </button>
       </div>
 
-      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden mb-8">
+      <MotionRise className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden mb-8">
         <div className="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gray-50/50">
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             <select
@@ -385,7 +386,7 @@ export default function StudentsPage() {
             )}
           </tbody>
         </table>
-      </div>
+      </MotionRise>
       {isManageModalOpen && managingStudent && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
@@ -476,6 +477,6 @@ export default function StudentsPage() {
         onSaved={() => refetch()} 
         cohorts={cohorts} 
       />
-    </>
+    </MotionRise>
   );
 }

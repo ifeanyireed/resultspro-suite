@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 import { IconLoader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
@@ -60,7 +61,7 @@ export default function DashboardSupport() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <MotionRise className="max-w-4xl mx-auto space-y-8">
       <div>
         <h1 className="text-3xl font-display font-black text-navy mb-2">Support Center</h1>
         <p className="text-gray-500">Need help? Submit a ticket and our team will get back to you shortly.</p>
@@ -153,6 +154,6 @@ export default function DashboardSupport() {
           </div>
         )}
       </div>
-    </div>
+    </MotionRise>
   );
 }

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function SchoolAdminDashboard() {
   const [loading, setLoading] = useState(true);
@@ -63,7 +64,7 @@ export default function SchoolAdminDashboard() {
       
       <main className="p-8 space-y-8">
         {/* Welcome Section */}
-        <div className="flex justify-between items-end">
+        <MotionRise className="flex justify-between items-end">
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2 font-display">Welcome, Principal</h2>
             <p className="text-gray-500">Here's what's happening at your school today.</p>
@@ -76,12 +77,12 @@ export default function SchoolAdminDashboard() {
               <Plus className="w-4 h-4 mr-2" /> Add Teacher
             </Button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, i) => (
-            <div key={i} className="bg-white shadow-sm border border-gray-100 p-6 rounded-2xl hover:border-gray-200 transition-all">
+            <MotionRise key={i} delay={i * 0.06} className="bg-white shadow-sm border border-gray-100 p-6 rounded-2xl hover:border-gray-200 transition-all">
               <div className="flex justify-between items-start mb-4">
                 <div className={cn("p-2 rounded-lg", stat.bg, stat.color)}>
                   {stat.icon}
@@ -94,11 +95,11 @@ export default function SchoolAdminDashboard() {
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
               <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">{stat.label}</div>
-            </div>
+            </MotionRise>
           ))}
-        </div>
+        </MotionStagger>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Teachers List */}
           <div className="lg:col-span-2 bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden">
             <div className="p-6 border-b border-gray-100 flex justify-between items-center">
@@ -159,7 +160,7 @@ export default function SchoolAdminDashboard() {
               </div>
             </div>
           </div>
-        </div>
+        </MotionStagger>
       </main>
     </div>
   );

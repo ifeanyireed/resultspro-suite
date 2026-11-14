@@ -13,6 +13,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { GoogleLoginButton } from '@/components/GoogleLoginButton';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 function LoginForm() {
   const router = useRouter();
@@ -186,7 +187,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="relative z-10 w-full max-w-md">
+    <MotionRise className="relative z-10 w-full max-w-md">
       <div className="w-full">
         {!mfaRequired ? (
           <>
@@ -320,7 +321,7 @@ function LoginForm() {
       <p className="text-center mt-8 text-slate-400 text-sm">
         Don&apos;t have an account? <Link href="/signup" className="text-blue-600 font-semibold hover:underline">Sign up for free</Link>
       </p>
-    </div>
+    </MotionRise>
   );
 }
 

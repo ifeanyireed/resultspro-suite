@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { IconBook, IconBrain, IconTrophy, IconUserPlus } from '@tabler/icons-react';
 import Link from 'next/link';
 
@@ -13,12 +14,12 @@ export default function Home() {
       {/* Services Grid (Mimicking NETS ServicesGrid) */}
       <section className="section-py bg-light">
         <div className="container-nets">
-          <div style={{ marginBottom: '4rem', maxWidth: '600px' }}>
+          <MotionRise style={{ marginBottom: '4rem', maxWidth: '600px' }}>
             <div className="overline" style={{ marginBottom: '1rem' }}>Features</div>
             <h2 className="text-d4 fw-400">End-to-End Result Management.</h2>
-          </div>
+          </MotionRise>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[{ title: 'Result Checking', exams: 'Instant access via scratch cards' }, { title: 'Broadsheets', exams: 'Automated termly reports' }, { title: 'Analytics', exams: 'Deep dive into student performance' }, { title: 'Security', exams: 'Anti-fraud and encryption' }].map((cat, i) => (
               <div key={i} className="card p-8">
                 <IconBook className="w-8 h-8 text-red mb-6" />
@@ -29,7 +30,7 @@ export default function Home() {
                 </Link>
               </div>
             ))}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
@@ -37,14 +38,14 @@ export default function Home() {
       <section className="section-py bg-white border-y border-gray-200">
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <MotionRise>
               <div className="overline" style={{ marginBottom: '1rem' }}>Why Choose Us</div>
               <h2 className="text-d3 fw-300 mb-6">Speed, Accuracy, Security.</h2>
               <p className="text-body-lg text-muted mb-8">
                 Say goodbye to manual calculations and errors. Generate thousands of results instantly and accurately.
               </p>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+              <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
                 {[ 
                   { title: 'Fast Access', reward: 'Instant PDF generation', icon: IconUserPlus },
                   { title: 'Detailed Reports', reward: 'Granular analytics', icon: IconBrain },
@@ -61,20 +62,20 @@ export default function Home() {
                     </div>
                   </div>
                 ))}
-              </div>
+              </MotionStagger>
               <Link href="/features" className="btn btn-navy">Learn More</Link>
-            </div>
+            </MotionRise>
             
-            <div className="relative">
+            <MotionRise delay={0.15} className="relative">
               <img src="/images/Students1.jpeg" alt="Students learning" className="rounded-sm shadow-card-lg" />
-            </div>
+            </MotionRise>
           </div>
         </div>
       </section>
 
       {/* CTA Banner (Mimicking CTABanner) */}
       <section className="section-py bg-navy text-white text-center">
-        <div className="container-nets max-w-3xl">
+        <MotionRise className="container-nets max-w-3xl">
           <h2 className="text-d3 fw-300 mb-6 text-white">Digitize your examination records</h2>
           <p className="text-body-lg text-muted-light mb-10">
             Say goodbye to manual calculations and errors. Generate thousands of results instantly and accurately.
@@ -83,7 +84,7 @@ export default function Home() {
             <Link href="/signup" className="btn btn-red btn-lg">Create Free Account</Link>
             <Link href="/login" className="btn btn-outline-white btn-lg">Sign In</Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       <Footer />

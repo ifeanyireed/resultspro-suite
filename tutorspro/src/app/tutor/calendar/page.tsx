@@ -1,6 +1,7 @@
 "use client";
 
 import api from '../../../lib/api';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { IconCalendar as CalendarIcon, IconClock as Clock, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight, IconPlus as Plus, IconLock as Lock, IconCircleCheck as CheckCircle2, IconRefresh as RefreshCcw, IconSettings as Settings, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from '../../../lib/toast';
@@ -44,7 +45,7 @@ export default function TutorCalendar() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Teaching <span className="text-green">Calendar</span>
@@ -59,10 +60,10 @@ export default function TutorCalendar() {
                 <Plus className="w-5 h-5" /> ADD TIME SLOT
              </button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Calendar Navigation */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8 bg-white/5 border border-white/10 p-6 rounded-[32px]">
+        <MotionRise delay={0.05} className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8 bg-white/5 border border-white/10 p-6 rounded-[32px]">
            <div className="flex items-center gap-4">
               <button className="p-2 rounded-xl hover:bg-white/5 text-gray-400 hover:text-white transition-all"><ChevronLeft size={24} /></button>
               <h2 className="text-xl font-display font-bold text-white">May 11 - 17, 2026</h2>
@@ -83,7 +84,7 @@ export default function TutorCalendar() {
                  <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Blocked</span>
               </div>
            </div>
-        </div>
+        </MotionRise>
 
         {loading ? (
            <div className="flex flex-col items-center justify-center py-24 opacity-50">

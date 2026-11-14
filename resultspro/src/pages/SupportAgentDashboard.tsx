@@ -22,6 +22,7 @@ import { User, LogOut, BarChart01 } from '@/lib/hugeicons-compat';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const API_BASE = (import.meta.env.VITE_API_URL || '');
 
@@ -305,13 +306,13 @@ const SupportAgentDashboard: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
           <div className="space-y-6">
       {/* Header */}
-      <div>
+      <MotionRise>
         <h1 className="text-3xl font-bold text-white">My Support Tickets</h1>
         <p className="text-gray-400 mt-2">Manage and respond to your assigned tickets</p>
-      </div>
+      </MotionRise>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+      <MotionStagger className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6 hover:bg-white/5 transition-colors">
           <div className="text-center">
             <div className="text-3xl font-bold text-white">{stats.total}</div>
@@ -346,10 +347,10 @@ const SupportAgentDashboard: React.FC = () => {
             <p className="text-sm text-gray-400 mt-1">Resolved</p>
           </div>
         </div>
-      </div>
+      </MotionStagger>
 
       {/* Filters */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="text-sm font-medium text-white mb-2 block">
@@ -388,10 +389,10 @@ const SupportAgentDashboard: React.FC = () => {
               </Select>
           </div>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Tickets List */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6">
+      <MotionRise delay={0.1} className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6">
         <h2 className="text-xl font-bold text-white mb-6">Assigned Tickets ({tickets.length})</h2>
         <div>
         {loading ? (
@@ -478,7 +479,7 @@ const SupportAgentDashboard: React.FC = () => {
           </div>
         )}
         </div>
-      </div>
+      </MotionRise>
 
       {/* Ticket Detail Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

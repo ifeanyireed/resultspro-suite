@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { coursesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { 
   BookOpenIcon, 
   ArchiveBoxIcon, 
@@ -85,7 +86,7 @@ export default function DashboardStorePage() {
   };
 
   return (
-    <div className="space-y-8 pb-16">
+    <MotionRise className="space-y-8 pb-16">
       {/* Header & KPI Summary */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mt-2">
         <div>
@@ -185,7 +186,7 @@ export default function DashboardStorePage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredProducts.map((prod) => {
             const isBookOutOfStock = prod.product_type === 'BOOK' && typeof prod.stock === 'number' && prod.stock <= 0;
             const hasStock = prod.product_type === 'BOOK' && typeof prod.stock === 'number';
@@ -269,8 +270,8 @@ export default function DashboardStorePage() {
               </div>
             );
           })}
-        </div>
+        </MotionStagger>
       )}
-    </div>
+    </MotionRise>
   );
 }

@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/form';
 import { AlertCircle, Upload01, CheckCircle } from '@/lib/hugeicons-compat';
 import { useOnboardingStore, Step6Data } from '@/stores/onboardingStore';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const step6Schema = z.object({
   csvFile: z.instanceof(File).optional(),
@@ -92,35 +93,35 @@ export const Step6CsvUpload = ({
   const fileName = form.watch('csvFile')?.name;
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <MotionRise className="w-full max-w-2xl mx-auto">
       <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-8 backdrop-blur-xl">
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <h2 className="text-3xl font-bold text-white">CSV Upload (Optional)</h2>
           <p className="text-gray-400 mt-2">
             Bulk import student and teacher data using a CSV file. You can skip this and add users manually later.
           </p>
-        </div>
+        </MotionRise>
 
         {submitError && (
-          <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex gap-3">
+          <MotionRise className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex gap-3">
             <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
             <p className="text-red-400 text-sm">{submitError}</p>
-          </div>
+          </MotionRise>
         )}
 
         {uploadComplete && (
-          <div className="mb-6 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex gap-3">
+          <MotionRise className="mb-6 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex gap-3">
             <CheckCircle className="h-5 w-5 text-emerald-400 flex-shrink-0 mt-0.5" />
             <p className="text-emerald-300 text-sm">
               Onboarding complete! Your school is now set up and ready to use.
             </p>
-          </div>
+          </MotionRise>
         )}
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             {/* File Upload Section */}
-            <div>
+            <MotionRise>
               <h3 className="text-lg font-semibold text-white mb-6">
                 Import Data
               </h3>
@@ -163,11 +164,11 @@ export const Step6CsvUpload = ({
                 onChange={handleFileChange}
                 className="hidden"
               />
-            </div>
+            </MotionRise>
 
             {/* File Info */}
             {fileName && (
-              <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
+              <MotionRise className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-emerald-400" />
                   <div>
@@ -179,11 +180,11 @@ export const Step6CsvUpload = ({
                     </p>
                   </div>
                 </div>
-              </div>
+              </MotionRise>
             )}
 
             {/* CSV Format Info */}
-            <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.07)] rounded-lg p-4">
+            <MotionRise className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.07)] rounded-lg p-4">
               <h4 className="font-semibold text-white mb-4 text-sm">
                 CSV File Format
               </h4>
@@ -201,18 +202,18 @@ export const Step6CsvUpload = ({
                 For students: role=&quot;student&quot;, class=class name (e.g., SS1A)<br/>
                 For teachers: role=&quot;teacher&quot;, class can be empty
               </p>
-            </div>
+            </MotionRise>
 
             {/* Skip Option */}
-            <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+            <MotionRise className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
               <p className="text-sm text-blue-300">
                 <strong>Can't find the file?</strong> Don't worry! You can skip this step 
                 and add users manually later from the admin dashboard.
               </p>
-            </div>
+            </MotionRise>
 
             {/* Action Buttons */}
-            <div className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
+            <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
               <Button
                 type="button"
                 variant="outline"
@@ -240,10 +241,10 @@ export const Step6CsvUpload = ({
                   {isLoading ? 'Uploading...' : 'Upload & Complete'}
                 </Button>
               </div>
-            </div>
+            </MotionRise>
           </form>
         </Form>
       </div>
-    </div>
+    </MotionRise>
   );
 };

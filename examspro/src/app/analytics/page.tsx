@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { IconTarget as Target, IconCoins as Coins, IconTrophy as Trophy, IconCalendar as Calendar, IconAlertCircle as AlertCircle, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconBrain as Brain, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
@@ -54,22 +55,22 @@ export default function AnalyticsPage() {
       
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         {/* Header */}
-        <div className="mb-12">
+        <MotionRise className="mb-12">
           <h1 className="text-3xl md:text-5xl font-display font-bold text-white mb-4">
             Performance <span className="text-blue">Insights</span>
           </h1>
           <p className="text-gray-500">Track your progress and identify areas for improvement.</p>
-        </div>
+        </MotionRise>
 
         {/* Top Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {[
             { label: "Overall Accuracy", value: data.stats.accuracy, sub: "Based on all attempts", icon: Target, color: "green" },
             { label: "Questions Solved", value: data.stats.questionsSolved, sub: "Total lifetime", icon: Brain, color: "blue" },
             { label: "Coin Balance", value: data.stats.coinEarnings, sub: "Current available", icon: Coins, color: "amber" },
             { label: "Global Rank", value: data.stats.globalRank, sub: "Based on ELO Rating", icon: Trophy, color: "purple" },
           ].map((stat, i) => (
-            <div key={i} className="p-8 rounded-[32px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] relative overflow-hidden group">
+            <MotionRise key={i} delay={i * 0.06} className="p-8 rounded-[32px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] relative overflow-hidden group">
               <div className={`absolute -right-4 -bottom-4 w-24 h-24 rounded-full bg-${stat.color}/10 group-hover:scale-150 transition-transform`} />
               <div className="relative z-10">
                 <div className={`w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-${stat.color} mb-6`}>
@@ -79,12 +80,12 @@ export default function AnalyticsPage() {
                 <div className="text-3xl font-display font-black text-white mb-1">{stat.value}</div>
                 <div className="text-xs text-gray-400">{stat.sub}</div>
               </div>
-            </div>
+            </MotionRise>
           ))}
-        </div>
+        </MotionStagger>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        <MotionRise delay={0.1} className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
           {/* Chart Section */}
           <div className="lg:col-span-2 p-8 rounded-[32px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] backdrop-blur-xl backdrop-saturate-[1.2] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
             <div className="flex justify-between items-center mb-12">
@@ -143,10 +144,10 @@ export default function AnalyticsPage() {
               View Detailed Breakdown
             </Button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Bottom Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <MotionRise delay={0.14} className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Weak Topics */}
           <div className="p-8 rounded-[32px] bg-red-500/5 border border-red-500/10 backdrop-blur-sm">
             <div className="flex items-center gap-3 mb-8">
@@ -206,7 +207,7 @@ export default function AnalyticsPage() {
               <span>Today</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
       </div>
     </main>
   );

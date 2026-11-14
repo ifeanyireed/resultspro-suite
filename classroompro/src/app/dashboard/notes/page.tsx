@@ -16,6 +16,7 @@ import {
 } from "../../../components/ui/select";
 import { Button } from "../../../components/ui/button";
 import { Skeleton } from "../../../components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function NotesListPage() {
   const user = useAuthStore((state) => state.user);
@@ -137,7 +138,7 @@ export default function NotesListPage() {
       
       <div className="p-8 max-w-7xl mx-auto space-y-10">
         {/* Stats Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
            <div className="bg-white shadow-sm border border-gray-100 p-6 rounded-[32px] flex items-center gap-4 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-blue/5 blur-2xl rounded-full" />
               <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-[#146ef5] group-hover:scale-110 transition-transform">
@@ -182,11 +183,11 @@ export default function NotesListPage() {
                  <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Total Subjects</div>
               </div>
            </div>
-        </div>
+        </MotionStagger>
 
         <div className="grid lg:grid-cols-12 gap-10">
            {/* Sidebar Filters */}
-           <div className="lg:col-span-3 space-y-8">
+           <MotionRise className="lg:col-span-3 space-y-8">
               {/* Subject Quick Filter */}
               <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-6">
                  <div className="flex items-center justify-between mb-6">
@@ -249,10 +250,10 @@ export default function NotesListPage() {
                     </div>
                  </div>
               </div>
-           </div>
+           </MotionRise>
 
            {/* Main Content */}
-           <div className="lg:col-span-9 space-y-6">
+           <MotionRise delay={0.1} className="lg:col-span-9 space-y-6">
               {/* Toolbar */}
               <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
                  <div className="relative flex-1 w-full">
@@ -383,7 +384,7 @@ export default function NotesListPage() {
                    </div>
                 </div>
               )}
-           </div>
+           </MotionRise>
         </div>
       </div>
     </div>

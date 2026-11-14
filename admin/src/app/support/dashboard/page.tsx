@@ -15,6 +15,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/react/24/solid';
 import api from '@/lib/api';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function SupportDashboard() {
   const [tickets, setTickets] = useState<any[]>([]);
@@ -61,8 +62,8 @@ export default function SupportDashboard() {
   const resolvedTickets = tickets.filter(t => t.status === 'resolved').length;
 
   return (
-    <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+    <MotionStagger className="w-full">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Support Dashboard</h1>
           <p className="text-sm text-gray-500 mt-1">Manage tickets, resolve issues, and delight our users.</p>
@@ -73,9 +74,9 @@ export default function SupportDashboard() {
             New Ticket
           </button>
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <MotionRise delay={0.05} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group">
           <div className="flex justify-between items-start z-10">
             <h3 className="text-xl font-normal text-white">Resolved Tickets</h3>
@@ -111,9 +112,9 @@ export default function SupportDashboard() {
             <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">98%</h2>
           </div>
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+      <MotionRise delay={0.1} className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         <div className="lg:col-span-9 flex flex-col gap-3">
           <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 min-h-[500px]">
             <div className="flex justify-between items-center mb-6">
@@ -192,7 +193,7 @@ export default function SupportDashboard() {
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </MotionRise>
+    </MotionStagger>
   );
 }

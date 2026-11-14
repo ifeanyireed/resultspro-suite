@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Link as LinkIcon, Plus, Copy, Trash2, Check, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Receipt, Search, Filter } from 'lucide-react';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function InvoicesPage() {
   const [activeTab, setActiveTab] = useState('Invoices');
@@ -113,8 +114,8 @@ export default function InvoicesPage() {
   };
 
   return (
-    <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 max-w-7xl mx-auto">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+    <MotionStagger className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 max-w-7xl mx-auto">
+      <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
             <Receipt className="w-6 h-6 text-blue-600" />
@@ -137,10 +138,10 @@ export default function InvoicesPage() {
             Discount Links
           </button>
         </div>
-      </div>
+      </MotionRise>
 
       {activeTab === 'Invoices' && (
-        <>
+        <MotionRise delay={0.08}>
           <div className="flex space-x-3 w-full md:w-auto mb-4 justify-end">
             <div className="relative flex-1 md:w-64 max-w-xs">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -192,11 +193,11 @@ export default function InvoicesPage() {
               </table>
             </div>
           </div>
-        </>
+        </MotionRise>
       )}
 
       {activeTab === 'Discount Links' && (
-        <>
+        <MotionRise delay={0.08}>
           <div className="flex justify-between items-center mb-4">
             <p className="text-sm text-slate-500">Create shareable links that auto-apply a discount to a specific plan.</p>
             <button onClick={() => {
@@ -260,7 +261,7 @@ export default function InvoicesPage() {
               </div>
             )}
           </div>
-        </>
+        </MotionRise>
       )}
 
       {/* CREATE MODAL */}
@@ -356,6 +357,6 @@ export default function InvoicesPage() {
           </div>
         </div>
       )}
-    </div>
+    </MotionStagger>
   );
 }

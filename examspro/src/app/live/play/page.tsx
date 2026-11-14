@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from 'react';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconClock as Timer, IconUsers as Users, IconTrophy as Trophy, IconCircleCheck as CheckCircle2, IconBolt as Zap, IconStar as Star, IconChevronRight as ChevronRight, IconLoader2 as Loader2, IconVolume as Volume, IconVolumeOff as VolumeOff } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useLiveGame } from '@/hooks/useLiveGame';
@@ -183,7 +184,7 @@ function LiveGamePlayContent() {
       </div>
 
       {/* Main Play Area */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 max-w-5xl mx-auto w-full">
+      <MotionRise className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 max-w-5xl mx-auto w-full">
         <div className="w-full mb-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
           <div className="flex items-center gap-3 mb-6">
             <span className="px-3 py-1 rounded-full bg-blue/10 border border-blue/20 text-[10px] font-bold text-blue tracking-widest uppercase">Live Challenge</span>
@@ -248,7 +249,7 @@ function LiveGamePlayContent() {
             </div>
           </div>
         )}
-      </div>
+      </MotionRise>
 
       {/* Live Mini Leaderboard Overlay */}
       <div className={`

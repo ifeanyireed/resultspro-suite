@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
 import { IconCamera as Camera, IconPhoto as ImageIcon, IconGlobe as Globe, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCircleCheck as CheckCircle2, IconBuilding as Building2, IconPalette as Palette, IconBook as BookOpen, IconQuote as Quote, IconPlus as Plus, IconCalendar as Calendar, IconStack2 as Layers, IconUsers as Users, IconCertificate as GraduationCap, IconUpload as Upload, IconCheck as Check, IconCreditCard as CreditCard, IconLock as Lock, IconLink as Link } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
@@ -202,10 +203,10 @@ export default function SchoolOnboarding() {
                 className="space-y-8 flex flex-col"
               >
                 <div style={{ height: '4rem' }} />
-                <div className="text-center mb-6 flex flex-col items-center">
+                <MotionRise className="text-center mb-6 flex flex-col items-center">
                   <h1 className="!text-[2.25rem] md:!text-[3rem] font-bold text-[#0f172a] !text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">School Basics</h1>
                   <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-base font-medium mb-4">Tell us a bit about your institution.</p>
-                </div>
+                </MotionRise>
 
                 <div style={{ height: '1.5rem' }} />
 

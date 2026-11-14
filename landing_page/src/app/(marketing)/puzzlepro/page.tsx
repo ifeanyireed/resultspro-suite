@@ -1,4 +1,5 @@
 import HeroAnimationWrapper from '@/components/HeroAnimationWrapper';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import Link from 'next/link';
 import { 
   IconPuzzle, 
@@ -75,7 +76,7 @@ export default function PuzzleProPage() {
       <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div>
+            <MotionRise>
               <h2 className="text-3xl fw-600 text-navy mb-6 leading-tight">
                 A complete computer science curriculum in a box.
               </h2>
@@ -97,11 +98,11 @@ export default function PuzzleProPage() {
                   </li>
                 ))}
               </ul>
-            </div>
-            <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl bg-orange-50 flex items-center justify-center">
+            </MotionRise>
+            <MotionRise delay={0.15} className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl bg-orange-50 flex items-center justify-center">
               <IconPuzzle size={120} className="text-orange-200" />
               {/* Optional: <img src="/puzzlepro.jpeg" alt="PuzzlePro" className="absolute inset-0 w-full h-full object-cover" /> */}
-            </div>
+            </MotionRise>
           </div>
         </div>
       </section>
@@ -109,21 +110,21 @@ export default function PuzzleProPage() {
       {/* Feature Grid */}
       <section id="features" className="section-py bg-light">
         <div className="container-nets">
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <MotionRise className="text-center max-w-2xl mx-auto mb-16">
             <div className="overline-dark mb-4">Core Capabilities</div>
             <h2 className="text-4xl fw-600 text-navy mb-4 tracking-tight">Gamified STEM education.</h2>
             <p className="text-muted text-lg">Everything you need to successfully launch coding in your school.</p>
-          </div>
+          </MotionRise>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {FEATURES.map((feat, i) => (
-              <div key={i} className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 hover:shadow-card-lg transition-all">
+              <MotionRise key={i} delay={i * 0.08} className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 hover:shadow-card-lg transition-all">
                 <div className="w-12 h-12 bg-orange-50 rounded-lg flex items-center justify-center mb-6 text-orange-600">
                   <feat.icon size={24} />
                 </div>
                 <h3 className="text-xl fw-600 text-navy mb-3">{feat.title}</h3>
                 <p className="text-muted leading-relaxed">{feat.desc}</p>
-              </div>
+              </MotionRise>
             ))}
           </div>
         </div>
@@ -131,13 +132,13 @@ export default function PuzzleProPage() {
 
       {/* CTA Section */}
       <section className="py-24 bg-navy text-white relative overflow-hidden" style={{ background: 'var(--color-nets-navy-dark)' }}>
-        <div className="container-nets relative z-10 text-center max-w-3xl mx-auto">
+        <MotionRise className="container-nets relative z-10 text-center max-w-3xl mx-auto">
           <h2 className="text-4xl fw-600 mb-6">Ready to empower your students?</h2>
           <p className="text-xl text-white/70 mb-10">Discover why schools trust PuzzlePRO to deliver engaging coding curriculum.</p>
           <Link href="https://www.learn2earnhq.com/schools" className="btn inline-flex items-center gap-2" style={{ backgroundColor: 'var(--color-nets-red)', color: '#0D1060', fontWeight: 700, padding: '1rem 2.5rem', fontSize: '1.125rem' }}>
             Learn More on PuzzlePRO <IconArrowRight size={20} />
           </Link>
-        </div>
+        </MotionRise>
       </section>
     </main>
   );

@@ -12,6 +12,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function TenantPaymentConfig() {
   const params = useParams();
@@ -108,7 +109,7 @@ export default function TenantPaymentConfig() {
         </div>
       }
     >
-      <div className="p-8 max-w-4xl mx-auto">
+      <MotionRise className="p-8 max-w-4xl mx-auto">
         <button onClick={() => router.back()} className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 font-medium mb-6 transition-colors">
           <ArrowLeftIcon className="w-4 h-4" />
           Back to Tenants
@@ -299,7 +300,7 @@ export default function TenantPaymentConfig() {
             </div>
           )}
         </div>
-      </div>
+      </MotionRise>
     </ModernDashboardLayout>
   );
 }

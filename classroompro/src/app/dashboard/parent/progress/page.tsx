@@ -6,6 +6,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function ChildProgressReport() {
   const childName = "Jessica Alabi";
@@ -55,7 +56,7 @@ export default function ChildProgressReport() {
 
   return (
     <div className="flex-1 pb-12">
-      <div className="h-16 border-b border-gray-100 flex items-center justify-between px-8 bg-gray-50 backdrop-blur-md sticky top-0 z-40">
+      <MotionRise className="h-16 border-b border-gray-100 flex items-center justify-between px-8 bg-gray-50 backdrop-blur-md sticky top-0 z-40">
         <div className="flex items-center gap-4">
           <Link href="/dashboard/parent" className="w-10 h-10 rounded-full hover:bg-gray-50 flex items-center justify-center transition-colors">
             <ArrowLeft className="w-5 h-5 text-gray-900" />
@@ -69,12 +70,12 @@ export default function ChildProgressReport() {
           </Button>
           <Button className="bg-emerald-600 text-white font-bold h-9 text-xs">Download PDF</Button>
         </div>
-      </div>
+      </MotionRise>
       
       <main className="p-8 max-w-7xl mx-auto space-y-10">
         {/* Overview Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-           <div className="p-8 rounded-[32px] bg-white shadow-sm border border-gray-100 flex items-center gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-6">
+           <MotionRise delay={0.05} className="p-8 rounded-[32px] bg-white shadow-sm border border-gray-100 flex items-center gap-6">
               <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-[#146ef5] shadow-lg shadow-blue/5">
                  <Target className="w-7 h-7" />
               </div>
@@ -82,8 +83,8 @@ export default function ChildProgressReport() {
                  <p className="text-[10px] text-gray-500 font-black uppercase tracking-[0.2em] mb-1">Overall Mastery</p>
                  <h4 className="text-3xl font-bold text-gray-900">82%</h4>
               </div>
-           </div>
-           <div className="p-8 rounded-[32px] bg-white shadow-sm border border-gray-100 flex items-center gap-6">
+           </MotionRise>
+           <MotionRise delay={0.1} className="p-8 rounded-[32px] bg-white shadow-sm border border-gray-100 flex items-center gap-6">
               <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 shadow-lg shadow-green/5">
                  <Award className="w-7 h-7" />
               </div>
@@ -91,8 +92,8 @@ export default function ChildProgressReport() {
                  <p className="text-[10px] text-gray-500 font-black uppercase tracking-[0.2em] mb-1">Total Points</p>
                  <h4 className="text-3xl font-bold text-gray-900">15,840</h4>
               </div>
-           </div>
-           <div className="p-8 rounded-[32px] bg-white shadow-sm border border-gray-100 flex items-center gap-6">
+           </MotionRise>
+           <MotionRise delay={0.15} className="p-8 rounded-[32px] bg-white shadow-sm border border-gray-100 flex items-center gap-6">
               <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-600 shadow-lg shadow-amber/5">
                  <TrendingUp className="w-7 h-7" />
               </div>
@@ -100,12 +101,12 @@ export default function ChildProgressReport() {
                  <p className="text-[10px] text-gray-500 font-black uppercase tracking-[0.2em] mb-1">Class Rank</p>
                  <h4 className="text-3xl font-bold text-gray-900">4th / 42</h4>
               </div>
-           </div>
-        </div>
+           </MotionRise>
+        </MotionStagger>
 
         {/* Subject Breakdown */}
-        <div className="grid lg:grid-cols-2 gap-8">
-           <div className="space-y-6">
+        <MotionStagger className="grid lg:grid-cols-2 gap-8">
+           <MotionRise delay={0.05} className="space-y-6">
               <h3 className="text-xl font-bold text-gray-900 font-display px-2">Syllabus Completion</h3>
               <div className="space-y-6 p-8 rounded-[40px] bg-white shadow-sm border border-gray-100">
                  {subjectProgress.map((item, idx) => (
@@ -116,24 +117,24 @@ export default function ChildProgressReport() {
                        </div>
                        <div className="h-2 w-full bg-white shadow-sm border border-gray-100 rounded-full overflow-hidden">
                           <div 
-                             className={`h-full ${item.color} transition-all duration-1000`} 
-                             style={{ width: `${item.completion}%` }}
+                              className={`h-full ${item.color} transition-all duration-1000`} 
+                              style={{ width: `${item.completion}%` }}
                           />
                        </div>
                     </div>
                  ))}
               </div>
-           </div>
+           </MotionRise>
 
-           <div className="space-y-6">
+           <MotionRise delay={0.1} className="space-y-6">
               <h3 className="text-xl font-bold text-gray-900 font-display px-2">Average Quiz Scores</h3>
               <div className="space-y-4 p-8 rounded-[40px] bg-white shadow-sm border border-gray-100">
                  <div className="flex items-end gap-3 h-48 px-4">
                     {subjectProgress.map((item, idx) => (
                        <div key={idx} className="flex-1 flex flex-col items-center gap-4">
                           <div 
-                             className={`w-full ${item.color} rounded-t-xl transition-all duration-1000 opacity-80 hover:opacity-100 relative group`}
-                             style={{ height: `${item.score}%` }}
+                              className={`w-full ${item.color} rounded-t-xl transition-all duration-1000 opacity-80 hover:opacity-100 relative group`}
+                              style={{ height: `${item.score}%` }}
                           >
                              <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-white text-[10px] font-black px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                                 {item.score}%
@@ -149,12 +150,12 @@ export default function ChildProgressReport() {
                     <span className="text-emerald-600">+8% from last month</span>
                  </div>
               </div>
-           </div>
-        </div>
+           </MotionRise>
+        </MotionStagger>
 
         {/* Detailed Insights */}
-        <div className="grid md:grid-cols-2 gap-8">
-           <div className="bg-white shadow-sm border border-gray-100 rounded-[40px] p-8">
+        <MotionStagger className="grid md:grid-cols-2 gap-8">
+           <MotionRise delay={0.05} className="bg-white shadow-sm border border-gray-100 rounded-[40px] p-8">
               <h4 className="text-xs font-black text-emerald-600 uppercase tracking-[0.2em] mb-6">Learning Streaks</h4>
               <div className="flex items-center gap-6">
                  <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 text-3xl font-black">14</div>
@@ -163,8 +164,8 @@ export default function ChildProgressReport() {
                     <p className="text-xs text-gray-500 leading-relaxed">Jessica has been active every day for the past two weeks. Keep up the great work!</p>
                  </div>
               </div>
-           </div>
-           <div className="bg-white shadow-sm border border-gray-100 rounded-[40px] p-8">
+           </MotionRise>
+           <MotionRise delay={0.1} className="bg-white shadow-sm border border-gray-100 rounded-[40px] p-8">
               <h4 className="text-xs font-black text-[#146ef5] uppercase tracking-[0.2em] mb-6">Topic Mastery</h4>
               <div className="flex items-center gap-6">
                  <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-[#146ef5] text-3xl font-black">28</div>
@@ -173,8 +174,8 @@ export default function ChildProgressReport() {
                     <p className="text-xs text-gray-500 leading-relaxed">Mastery is achieved by scoring 80% or higher in topic-specific quizzes.</p>
                  </div>
               </div>
-           </div>
-        </div>
+           </MotionRise>
+        </MotionStagger>
       </main>
     </div>
   );

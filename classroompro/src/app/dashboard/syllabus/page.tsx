@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 import { getSubjectSyllabus } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function SyllabusPage() {
   const searchParams = useSearchParams();
@@ -70,7 +71,7 @@ export default function SyllabusPage() {
       
       
       <main className="p-8 max-w-4xl space-y-10">
-        <div className="flex justify-between items-center">
+        <MotionRise className="flex justify-between items-center">
            <div>
               <Link href="/dashboard/subjects" className="inline-flex items-center text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors mb-4 uppercase tracking-widest">
                  <ArrowLeft className="w-3 h-3 mr-1" /> All Subjects
@@ -82,11 +83,11 @@ export default function SyllabusPage() {
            <Button variant="outline" className="border-gray-100 text-gray-900 h-11 px-6 rounded-xl font-bold">
               <Filter className="w-4 h-4 mr-2" /> All Terms
            </Button>
-        </div>
+        </MotionRise>
 
-        <div className="space-y-16">
-          {(data?.terms || []).map((term: any) => (
-            <div key={term.number} className="space-y-8 relative">
+        <MotionStagger className="space-y-16">
+          {(data?.terms || []).map((term: any, idx: number) => (
+            <MotionRise key={term.number} delay={idx * 0.08} className="space-y-8 relative">
               {/* Vertical timeline line */}
               <div className="absolute left-6 top-14 bottom-0 w-px bg-white shadow-sm border border-gray-100" />
               
@@ -133,12 +134,12 @@ export default function SyllabusPage() {
                   </div>
                 ))}
               </div>
-            </div>
+            </MotionRise>
           ))}
           {(!data?.terms || data.terms.length === 0) && (
             <p className="text-gray-500 italic text-center py-20">No syllabus items found for this subject.</p>
           )}
-        </div>
+        </MotionStagger>
       </main>
     </div>
   );

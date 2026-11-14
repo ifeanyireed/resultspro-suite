@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Header } from '@/components/Header';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { RichTextEditor } from '@/components/RichTextEditor';
 import { TagsInput } from '@/components/TagsInput';
 import { ArrowLeft, Save, Send, Globe, Eye, Search, User, Upload, Trash2 } from 'lucide-react';
@@ -225,15 +226,17 @@ function CreateBlogPostContent() {
   };
 
   return (
-    <div className="w-full">
-      <Header
-        title="Create Blog Post"
-        subtitle="Write and publish a new article to the suite blog"
-      />
+    <MotionStagger className="w-full">
+      <MotionRise>
+        <Header
+          title="Create Blog Post"
+          subtitle="Write and publish a new article to the suite blog"
+        />
+      </MotionRise>
 
       <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 space-y-4 sm:space-y-6 max-w-[1200px] mx-auto w-full">
         {/* Actions Header */}
-        <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+        <MotionRise delay={0.05} className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
           <Link href="/cms/blog" className="flex items-center gap-2 text-slate-500 hover:text-slate-700 text-sm font-medium transition-colors">
             <ArrowLeft className="w-4 h-4" />
             Back to Posts
@@ -267,9 +270,9 @@ function CreateBlogPostContent() {
               {isSaving ? 'Publishing...' : (editId ? 'Update Post' : 'Publish Post')}
             </button>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <MotionRise delay={0.1} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content Area */}
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
@@ -553,8 +556,8 @@ function CreateBlogPostContent() {
             </div>
           </div>
 
-        </div>
+        </MotionRise>
       </div>
-    </div>
+    </MotionStagger>
   );
 }

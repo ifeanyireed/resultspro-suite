@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { CreditCard, CheckCircle2, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
 import { COURSES_API } from '@/lib/api';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function PlanSelectionPage() {
   const router = useRouter();
@@ -110,7 +111,7 @@ export default function PlanSelectionPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex">
+    <MotionRise className="min-h-screen w-full flex">
       {/* Left Panel - Branding & Aesthetic */}
       <div className="hidden lg:flex w-[35%] relative overflow-hidden bg-[#0B1021]">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[120px]" />
@@ -249,6 +250,6 @@ export default function PlanSelectionPage() {
           </div>
         </div>
       </div>
-    </div>
+    </MotionRise>
   );
 }

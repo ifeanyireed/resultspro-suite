@@ -4,6 +4,7 @@ import api from '@/lib/api';
 import { IconBuilding as Building2, IconCreditCard as CreditCard, IconChevronRight as ChevronRight, IconPlus as Plus, IconCircleCheck as CheckCircle2, IconClock as Clock, IconAlertCircle as AlertCircle, IconArrowUpRight as ArrowUpRight, IconShieldCheck as ShieldCheck, IconDeviceMobile as Smartphone, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function TutorPayouts() {
   const [mounted, setMounted] = useState(false);
@@ -66,14 +67,14 @@ export default function TutorPayouts() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Payout <span className="text-green">Requests</span>
             </h1>
             <p className="text-gray-400">Request disbursements and manage your withdrawal methods.</p>
           </div>
-        </div>
+        </MotionRise>
 
         {loading ? (
            <div className="flex flex-col items-center justify-center py-24 opacity-50">
@@ -83,7 +84,7 @@ export default function TutorPayouts() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
              {/* Payout Request Area (Left) */}
-             <div className="lg:col-span-2 space-y-12">
+             <MotionRise delay={0.1} className="lg:col-span-2 space-y-12">
                 <section className="p-10 rounded-[40px] bg-gradient-to-br from-green/10 to-blue/10 border border-white/10 relative overflow-hidden">
                    <div className="relative z-10">
                       <h2 className="text-2xl font-display font-bold text-white mb-2">Available Balance</h2>
@@ -139,7 +140,7 @@ export default function TutorPayouts() {
 
                 <section>
                    <h3 className="text-xl font-display font-bold text-white mb-6">Payout History</h3>
-                   <div className="space-y-3">
+                   <MotionStagger className="space-y-3">
                       {payoutData?.payouts?.length > 0 ? payoutData.payouts.map((p: any) => (
                         <div key={p.id} className="p-6 rounded-3xl bg-white/5 border border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 hover:bg-white/[0.08] transition-all">
                            <div className="flex gap-4 items-center">
@@ -160,12 +161,12 @@ export default function TutorPayouts() {
                            <p className="text-white font-bold">No payout history yet.</p>
                         </div>
                       )}
-                   </div>
+                   </MotionStagger>
                 </section>
-             </div>
+             </MotionRise>
 
              {/* Sidebar (Right) */}
-             <div className="space-y-8">
+             <MotionRise delay={0.2} className="space-y-8">
                 <section className="p-8 rounded-[40px] bg-white/5 border border-white/10">
                    <div className="flex items-center gap-3 text-blue font-bold mb-6">
                       <ShieldCheck size={20} /> Verified Accounts
@@ -210,7 +211,7 @@ export default function TutorPayouts() {
                       Disbursements to new bank accounts require a 24-hour security hold for your protection.
                    </p>
                 </section>
-             </div>
+             </MotionRise>
           </div>
         )}
       </div>

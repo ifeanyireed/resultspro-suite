@@ -4,6 +4,7 @@ import { IconSend as Send, IconPaperclip as Paperclip, IconSearch as Search, Ico
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function StudentMessages() {
@@ -72,7 +73,7 @@ export default function StudentMessages() {
   return (
     <RoleGate allowedRoles={['STUDENT', 'PARENT', 'TUTOR', 'SUPERADMIN']}>
       <main className="min-h-screen bg-gray-50 flex flex-col pt-4 pb-20 md:pb-4 md:pt-10 px-4 md:px-8">
-        <div className="w-full max-w-7xl mx-auto flex-1 flex overflow-hidden rounded-[2rem] bg-white border border-gray-200 shadow-sm min-h-[750px]">
+        <MotionRise className="w-full max-w-7xl mx-auto flex-1 flex overflow-hidden rounded-[2rem] bg-white border border-gray-200 shadow-sm min-h-[750px]">
           
           {/* Contacts Sidebar */}
           <div className={`w-full md:w-80 lg:w-[400px] flex-col border-r border-gray-100 bg-white ${selectedChat ? 'hidden md:flex' : 'flex'}`}>
@@ -221,7 +222,7 @@ export default function StudentMessages() {
                </div>
              )}
           </div>
-        </div>
+        </MotionRise>
       </main>
     </RoleGate>
   );

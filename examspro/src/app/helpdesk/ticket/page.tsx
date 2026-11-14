@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconArrowLeft as ArrowLeftIcon, IconSend as PaperAirplaneIcon, IconUser as UserCircleIcon } from '@tabler/icons-react';
 import api from '@/lib/api';
 import Link from 'next/link';
@@ -68,7 +69,7 @@ function TicketContent() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-10rem)] bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+    <MotionRise className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-10rem)] bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
       {/* Header */}
       <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 shrink-0">
         <div className="flex items-center gap-4">
@@ -165,7 +166,7 @@ function TicketContent() {
           This ticket has been marked as resolved and is closed to new replies.
         </div>
       )}
-    </div>
+    </MotionRise>
   );
 }
 

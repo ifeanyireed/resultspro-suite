@@ -3,6 +3,7 @@ import { Building2, Plus, MoreVertical, BarChart01, Users, TrendingUp, Trophy, D
 import { useNavigate } from 'react-router-dom';
 import { useAgentSchools, useAgentProfile } from '@/hooks/useAgentAnalytics';
 import RegisterSchoolModal from '@/components/RegisterSchoolModal';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export const SchoolsManaged: React.FC = () => {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ export const SchoolsManaged: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
           <div className="space-y-6">
             {/* Header */}
-            <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-6 text-white border border-[rgba(255,255,255,0.07)] shadow-xl">
+            <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-6 text-white border border-[rgba(255,255,255,0.07)] shadow-xl">
               <div className="flex items-center justify-between">
                 <div>
                   <h1 className="text-3xl font-bold mb-2">Schools Managed</h1>
@@ -64,21 +65,21 @@ export const SchoolsManaged: React.FC = () => {
                   Add School
                 </button>
               </div>
-            </div>
+            </MotionRise>
 
             {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-6 border border-[rgba(255,255,255,0.07)] backdrop-blur-md">
+            <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-6 border border-[rgba(255,255,255,0.07)] backdrop-blur-md">
                 <div className="text-gray-400 text-xs uppercase font-black tracking-widest mb-2">Total Schools</div>
                 <div className="text-4xl font-bold text-white font-mono">{schools.length}</div>
-              </div>
-              <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-6 border border-[rgba(255,255,255,0.07)] backdrop-blur-md">
+              </MotionRise>
+              <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-6 border border-[rgba(255,255,255,0.07)] backdrop-blur-md">
                 <div className="text-gray-400 text-xs uppercase font-black tracking-widest mb-2">Active Technical Lead</div>
                 <div className="text-4xl font-bold text-green-400 font-mono">
                   {schools.filter((s: any) => s.status === 'ACTIVE').length}
                 </div>
-              </div>
-              <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-6 border border-[rgba(255,255,255,0.07)] backdrop-blur-md">
+              </MotionRise>
+              <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-6 border border-[rgba(255,255,255,0.07)] backdrop-blur-md">
                 <div className="text-gray-400 text-xs uppercase font-black tracking-widest mb-2">Avg. Commission</div>
                 <div className="text-4xl font-bold text-blue-400 font-mono">
                   {schools.length > 0
@@ -89,11 +90,11 @@ export const SchoolsManaged: React.FC = () => {
                     : '—'}
                   <span className="text-xl ml-1">%</span>
                 </div>
-              </div>
-            </div>
+              </MotionRise>
+            </MotionStagger>
 
             {/* Schools List */}
-            <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] overflow-hidden shadow-2xl backdrop-blur-sm">
+            <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] overflow-hidden shadow-2xl backdrop-blur-sm">
               {loading ? (
                 <div className="p-20 text-center text-gray-400">
                   <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-4"></div>
@@ -180,7 +181,7 @@ export const SchoolsManaged: React.FC = () => {
                   </table>
                 </div>
               )}
-            </div>
+            </MotionRise>
           </div>
         </div>
       </main>

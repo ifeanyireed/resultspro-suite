@@ -4,6 +4,7 @@ import { BarChart01, Mail, Phone } from '@/lib/hugeicons-compat';
 import { IconTrendingUp as TrendingUp } from '@tabler/icons-react';
 import { axiosInstance as axios } from '@/lib/axiosConfig';
 import { useToast } from '@/hooks/use-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface StudentDetailData {
   studentId: string;
@@ -121,7 +122,7 @@ const TeacherStudentDetail: React.FC = () => {
     <div className="min-h-screen text-white">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <button
             onClick={() => navigate(-1)}
             className="text-blue-400 hover:text-blue-300 mb-4"
@@ -144,10 +145,10 @@ const TeacherStudentDetail: React.FC = () => {
               {contacting ? 'Connecting...' : 'Contact Parent'}
             </button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Overall Performance */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-6 rounded-lg">
             <p className="text-blue-100 text-sm">Overall Average</p>
             <p className="text-4xl font-bold mt-2">{data.overallAverage.toFixed(1)}</p>
@@ -174,10 +175,10 @@ const TeacherStudentDetail: React.FC = () => {
             <p className="text-purple-100 text-sm">Parent Contact</p>
             <p className="text-lg font-bold mt-2 truncate">{data.parentContact || 'Not available'}</p>
           </div>
-        </div>
+        </MotionStagger>
 
         {/* Subject Performance */}
-        <div className="bg-slate-800 rounded-lg p-6 mb-8">
+        <MotionRise className="bg-slate-800 rounded-lg p-6 mb-8">
           <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
             <BarChart01 size={20} />
             Subject Performance
@@ -228,10 +229,10 @@ const TeacherStudentDetail: React.FC = () => {
               </tbody>
             </table>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Affective and Psychomotor */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-slate-800 rounded-lg p-6">
             <h3 className="text-lg font-bold mb-4">Affective Traits</h3>
             <div className="space-y-3">
@@ -271,10 +272,10 @@ const TeacherStudentDetail: React.FC = () => {
               ))}
             </div>
           </div>
-        </div>
+        </MotionStagger>
 
         {/* Notes/Recommendations Section */}
-        <div className="mt-8 bg-slate-800 rounded-lg p-6">
+        <MotionRise className="mt-8 bg-slate-800 rounded-lg p-6">
           <h3 className="text-lg font-bold mb-4">📝 Teacher Notes</h3>
           <textarea
             className="w-full bg-slate-700 text-white p-3 rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -283,7 +284,7 @@ const TeacherStudentDetail: React.FC = () => {
           <button className="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition font-semibold">
             Save Notes
           </button>
-        </div>
+        </MotionRise>
       </div>
     </div>
   );

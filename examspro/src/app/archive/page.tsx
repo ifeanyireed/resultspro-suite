@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from '@/components/Navbar';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { IconArchive as Archive, IconSearch as Search, IconDownload as Download, IconPlayerPlay as Play, IconBook as BookOpen, IconClock as Clock, IconFilter as Filter, IconChevronRight as ChevronRight, IconFileText as FileText } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -20,7 +21,7 @@ export default function ArchivePage() {
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
           <div className="text-center md:text-left">
             <h1 className="text-4xl md:text-6xl font-display font-black text-white mb-4 italic tracking-tighter uppercase">
               Past <span className="text-blue">Questions</span>
@@ -39,10 +40,10 @@ export default function ArchivePage() {
               className="w-full bg-white/5 border border-white/[0.1] border-t-white/[0.15] rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-blue/50 transition-colors"
             />
           </div>
-        </div>
+        </MotionRise>
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-3 mb-12">
+        <MotionRise delay={0.06} className="flex flex-wrap gap-3 mb-12">
           {['All Exams', 'JAMB', 'WAEC', 'NECO', 'Post-UTME'].map((f, i) => (
             <button 
               key={f} 
@@ -55,13 +56,14 @@ export default function ArchivePage() {
             <Filter className="w-4 h-4 mr-2" />
             Advanced Filters
           </Button>
-        </div>
+        </MotionRise>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {papers.map((paper, i) => (
-            <div 
+            <MotionRise 
               key={i}
+              delay={i * 0.06}
               className="group p-8 rounded-[40px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] hover:bg-white/5 hover:border-white/10 transition-all relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -100,11 +102,11 @@ export default function ArchivePage() {
                   </Button>
                 </div>
               </div>
-            </div>
+            </MotionRise>
           ))}
-        </div>
+        </MotionStagger>
 
-        <div className="mt-20 p-12 rounded-[48px] bg-gradient-to-br from-blue/20 to-transparent border border-white/10 text-center">
+        <MotionRise delay={0.12} className="mt-20 p-12 rounded-[48px] bg-gradient-to-br from-blue/20 to-transparent border border-white/10 text-center">
           <Archive className="w-12 h-12 text-blue mx-auto mb-6" />
           <h2 className="text-2xl font-display font-bold text-white mb-4">Request a Paper</h2>
           <p className="text-gray-400 max-w-md mx-auto mb-8">
@@ -114,7 +116,7 @@ export default function ArchivePage() {
           <Button className="bg-white text-navy hover:bg-white/90 rounded-2xl px-10 h-14 font-bold">
             Submit Request
           </Button>
-        </div>
+        </MotionRise>
       </div>
     </main>
   );

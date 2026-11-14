@@ -3,6 +3,7 @@
 import React, { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft01Icon, UserGroupIcon, Award01Icon as Trophy01Icon, Message01Icon } from 'hugeicons-react';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function PeersDirectory({ params }: { params: Promise<{ cohortId: string }> }) {
@@ -61,7 +62,7 @@ export default function PeersDirectory({ params }: { params: Promise<{ cohortId:
         <ArrowLeft01Icon size={20} /> Back to Journey Map
       </button>
 
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
+      <MotionRise style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
         <div>
           <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
             Cohort Roster & Leaderboard
@@ -76,18 +77,18 @@ export default function PeersDirectory({ params }: { params: Promise<{ cohortId:
              <span style={{ fontWeight: '700', color: '#1e293b', fontSize: '0.9rem' }}>{activeSessions.length} Online Now</span>
           </div>
         </div>
-      </header>
+      </MotionRise>
 
       {loading ? (
         <div style={{ padding: '2rem', color: '#64748b' }}>Loading peers...</div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+        <MotionStagger style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
           {peers.map((peer, index) => {
             const rank = index + 1;
             const online = isOnline(peer.user_id);
             
             return (
-              <div key={peer.id} style={{ background: 'white', borderRadius: '1.5rem', border: '1px solid #f1f5f9', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem', position: 'relative', overflow: 'hidden', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
+              <MotionRise key={peer.id} style={{ background: 'white', borderRadius: '1.5rem', border: '1px solid #f1f5f9', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem', position: 'relative', overflow: 'hidden', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
                 {rank <= 3 && (
                   <div style={{ position: 'absolute', top: 0, right: 0, width: '60px', height: '60px', background: rank === 1 ? '#fef3c7' : rank === 2 ? '#f1f5f9' : '#ffedd5', borderBottomLeftRadius: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                      <Trophy01Icon size={24} color={rank === 1 ? '#f59e0b' : rank === 2 ? '#94a3b8' : '#d97706'} />
@@ -124,10 +125,10 @@ export default function PeersDirectory({ params }: { params: Promise<{ cohortId:
                      <UserGroupIcon size={18} />
                    </button>
                 </div>
-              </div>
+              </MotionRise>
             );
           })}
-        </div>
+        </MotionStagger>
       )}
     </div>
   );

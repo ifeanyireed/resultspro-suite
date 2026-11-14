@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import api from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function PublicNotesIndex() {
   const [search, setSearch] = useState("");
@@ -89,7 +90,7 @@ export default function PublicNotesIndex() {
       <main className="flex-1 pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
+          <MotionRise className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold font-display text-white mb-4">
               Explore <span className="text-green">Class Notes</span>
             </h1>
@@ -97,10 +98,10 @@ export default function PublicNotesIndex() {
               Access high-quality notes across all subjects and grade levels, 
               written by expert teachers.
             </p>
-          </div>
+          </MotionRise>
 
           {/* Search and Filters */}
-          <div className="space-y-4 mb-12 bg-white/5 p-6 rounded-[32px] border border-white/10 backdrop-blur-xl">
+          <MotionRise delay={0.08} className="space-y-4 mb-12 bg-white/5 p-6 rounded-[32px] border border-white/10 backdrop-blur-xl">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
@@ -172,7 +173,7 @@ export default function PublicNotesIndex() {
                   </Select>
                </div>
             </div>
-          </div>
+          </MotionRise>
 
           {/* Notes Grid */}
           {loading ? (
@@ -180,10 +181,10 @@ export default function PublicNotesIndex() {
                <Loader2 className="w-12 h-12 text-green animate-spin" />
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 min-h-[400px]">
-              {currentItems.map((note) => (
+            <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 min-h-[400px]">
+              {currentItems.map((note, idx) => (
+                <MotionRise key={note.id} delay={idx * 0.05}>
                 <Link 
-                  key={note.id} 
                   href={`/notes/${note.id}`}
                   className="group bg-white/5 border border-white/10 rounded-[32px] p-8 hover:border-green/50 transition-all duration-300 flex flex-col md:flex-row gap-6"
                 >
@@ -231,8 +232,9 @@ export default function PublicNotesIndex() {
                     </div>
                   </div>
                 </Link>
+                </MotionRise>
               ))}
-            </div>
+            </MotionStagger>
           )}
 
           {!loading && filteredNotes.length === 0 && (

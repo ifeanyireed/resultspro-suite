@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/select';
 import { AlertCircle, Plus, Trash01 } from '@/lib/hugeicons-compat';
 import { useOnboardingStore, Step5Data } from '@/stores/onboardingStore';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const gradeSchema = z.object({
   grade: z.string().min(1, 'Grade is required'),
@@ -127,31 +128,31 @@ export const Step5GradingSystem = ({
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <MotionRise className="w-full max-w-3xl mx-auto">
       <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-8 backdrop-blur-xl">
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <h2 className="text-3xl font-bold text-white">Grading System</h2>
           <p className="text-gray-400 mt-2">
             Define the grading scale and criteria for your school.
           </p>
-        </div>
+        </MotionRise>
 
         {submitError && (
-          <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex gap-3">
+          <MotionRise className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex gap-3">
             <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
             <p className="text-red-400 text-sm">{submitError}</p>
-          </div>
+          </MotionRise>
         )}
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             {/* Template Selection */}
-            <div>
+            <MotionRise>
               <h3 className="text-lg font-semibold text-white mb-6">
                 Grading Template
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button
                   type="button"
                   onClick={() => {
@@ -205,16 +206,16 @@ export const Step5GradingSystem = ({
                     A1 to F9 (9 grades, West African standard)
                   </p>
                 </button>
-              </div>
-            </div>
+              </MotionStagger>
+            </MotionRise>
 
             {/* Grade Scale */}
-            <div className="border-t border-[rgba(255,255,255,0.07)] pt-8">
+            <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8">
               <h3 className="text-lg font-semibold text-white mb-6">
                 Grade Scale
               </h3>
 
-              <div className="space-y-3">
+              <MotionStagger className="space-y-3">
                 {fields.map((field, index) => (
                   <div
                     key={field.id}
@@ -297,7 +298,7 @@ export const Step5GradingSystem = ({
                     )}
                   </div>
                 ))}
-              </div>
+              </MotionStagger>
 
               {/* Add More Button */}
               <button
@@ -308,10 +309,10 @@ export const Step5GradingSystem = ({
                 <Plus className="w-4 h-4" />
                 Add Grade
               </button>
-            </div>
+            </MotionRise>
 
             {/* Preview Table */}
-            <div className="bg-[rgba(255,255,255,0.02)] rounded-lg p-4 overflow-x-auto border border-[rgba(255,255,255,0.07)]">
+            <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-lg p-4 overflow-x-auto border border-[rgba(255,255,255,0.07)]">
               <h4 className="font-semibold text-sm text-white mb-4">
                 Grade Scale Preview
               </h4>
@@ -333,10 +334,10 @@ export const Step5GradingSystem = ({
                   ))}
                 </tbody>
               </table>
-            </div>
+            </MotionRise>
 
             {/* Action Buttons */}
-            <div className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
+            <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
               <Button
                 type="button"
                 variant="outline"
@@ -353,10 +354,10 @@ export const Step5GradingSystem = ({
               >
                 {isLoading ? 'Saving...' : 'Next: Select Plan'}
               </Button>
-            </div>
+            </MotionRise>
           </form>
         </Form>
       </div>
-    </div>
+    </MotionRise>
   );
 };

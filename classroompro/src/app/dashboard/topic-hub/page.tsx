@@ -6,6 +6,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function TopicHubPage() {
   const [loading, setLoading] = useState(true);
@@ -96,7 +97,7 @@ export default function TopicHubPage() {
         </Link>
 
         {/* Hero Section */}
-        <div className="bg-gradient-to-br from-navy to-navy/40 border border-gray-100 rounded-[32px] p-8 relative overflow-hidden">
+        <MotionRise className="bg-gradient-to-br from-navy to-navy/40 border border-gray-100 rounded-[32px] p-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/5 blur-[80px] rounded-full" />
           
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
@@ -130,11 +131,11 @@ export default function TopicHubPage() {
               </div>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Resource List */}
-          <div className="lg:col-span-2 space-y-4">
+          <MotionRise className="lg:col-span-2 space-y-4">
             <h3 className="text-xl font-bold text-gray-900 font-display mb-2">Learning Resources</h3>
             {resources.map((res, i) => (
               <Link 
@@ -172,10 +173,10 @@ export default function TopicHubPage() {
                 </div>
               </Link>
             ))}
-          </div>
+          </MotionRise>
 
           {/* Related Content */}
-          <div className="space-y-6">
+          <MotionRise delay={0.1} className="space-y-6">
             <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
                <h3 className="text-lg font-bold text-gray-900 font-display mb-4">Exam Connections</h3>
                <p className="text-xs text-gray-500 mb-4">This topic frequently appears in these past exams:</p>
@@ -202,8 +203,8 @@ export default function TopicHubPage() {
                   <span className="text-[10px] font-bold text-amber-600">Mr. Adeniyi</span>
                </div>
             </div>
-          </div>
-        </div>
+          </MotionRise>
+        </MotionStagger>
       </main>
     </div>
   );

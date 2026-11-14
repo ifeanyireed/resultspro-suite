@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { LayoutDashboard, BookOpen, Swords, Users, Trophy, DollarSign, FileText, ShoppingCart } from 'lucide-react';
 
 import OverviewTab from './tabs/OverviewTab';
@@ -32,13 +33,15 @@ export default function ExamsProCommandCenter() {
   ];
 
   return (
-    <div className="w-full">
-      <Header
-        title="ExamsPRO Command Center"
-        subtitle="Master administration panel for computer-based testing and live battles"
-      />
+    <MotionStagger className="w-full">
+      <MotionRise>
+        <Header
+          title="ExamsPRO Command Center"
+          subtitle="Master administration panel for computer-based testing and live battles"
+        />
+      </MotionRise>
 
-      <div className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4 w-full">
+      <MotionRise delay={0.05} className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4 w-full">
         <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto scrollbar-hide pb-px">
           {tabs.map(tab => {
             const Icon = tab.icon;
@@ -59,9 +62,9 @@ export default function ExamsProCommandCenter() {
             )
           })}
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 w-full">
+      <MotionRise delay={0.1} className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 w-full">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'subjects' && <SubjectsTab />}
         {activeTab === 'questions' && <QuestionsTab />}
@@ -72,7 +75,7 @@ export default function ExamsProCommandCenter() {
         {activeTab === 'moderation' && <ModerationTab />}
         {activeTab === 'financials' && <FinancialsTab />}
         {activeTab === 'store' && <StoreTab />}
-      </div>
-    </div>
+      </MotionRise>
+    </MotionStagger>
   );
 }

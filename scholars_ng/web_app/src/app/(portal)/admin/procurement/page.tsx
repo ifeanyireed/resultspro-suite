@@ -9,6 +9,7 @@ import {
   CheckCircleIcon,
   PlusIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function ProcurementDashboard() {
@@ -77,7 +78,7 @@ export default function ProcurementDashboard() {
 
   return (
     <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Inventory & Procurement</h1>
           <p className="text-sm text-gray-500 mt-1">Manage tenant-scoped store inventory, reorder thresholds, and purchase orders.</p>
@@ -91,10 +92,10 @@ export default function ProcurementDashboard() {
             Add Store Item
           </button>
         </div>
-      </div>
+      </MotionRise>
 
       {showAddModal && (
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-blue-200 mb-6">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-blue-200 mb-6">
           <h3 className="text-lg font-bold text-gray-900 mb-4">Add New Campus Store Item</h3>
           <form onSubmit={handleAddItem} className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <input
@@ -144,11 +145,11 @@ export default function ProcurementDashboard() {
               </button>
             </div>
           </form>
-        </div>
+        </MotionRise>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between aspect-square text-white">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        <MotionRise className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between aspect-square text-white">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal">Pending POs</h3>
             <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
@@ -159,9 +160,9 @@ export default function ProcurementDashboard() {
             <h2 className="text-5xl font-medium tracking-tight mb-2">{requests.length}</h2>
             <p className="text-xs text-white/80">Active purchase orders</p>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Inventory Value</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -172,9 +173,9 @@ export default function ProcurementDashboard() {
             <h2 className="text-3xl font-medium tracking-tight text-gray-900 mb-2">₦{inventoryValue.toLocaleString()}</h2>
             <p className="text-xs text-gray-500">Total asset valuation</p>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Low Stock Alerts</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -185,9 +186,9 @@ export default function ProcurementDashboard() {
             <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">{lowStockCount}</h2>
             <p className="text-xs text-amber-600 font-semibold">Below reorder threshold</p>
           </div>
-        </div>
+        </MotionRise>
 
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">SKUs Tracked</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
@@ -198,10 +199,10 @@ export default function ProcurementDashboard() {
             <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">{inventory.length}</h2>
             <p className="text-xs text-gray-500">Store items persisted</p>
           </div>
-        </div>
-      </div>
+        </MotionRise>
+      </MotionStagger>
 
-      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden mb-6">
+      <MotionRise delay={0.08} className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden mb-6">
         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
           <h3 className="text-lg font-bold text-gray-900">Campus Store Inventory</h3>
           <span className="text-xs font-semibold text-[#146ef5] bg-blue-50 px-3 py-1 rounded-full">
@@ -241,7 +242,7 @@ export default function ProcurementDashboard() {
             ))}
           </tbody>
         </table>
-      </div>
+      </MotionRise>
     </>
   );
 }

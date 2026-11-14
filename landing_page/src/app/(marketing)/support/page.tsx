@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { IconHelp, IconBook, IconMessageCircle, IconArrowRight, IconSearch } from '@tabler/icons-react';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export const metadata = {
   title: 'Help Center | ResultsPro Edu Suite',
@@ -13,7 +14,7 @@ export default function SupportPage() {
       <section className="bg-navy text-white relative overflow-hidden" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '8rem' }}>
         <div className="absolute top-0 right-0 w-[50%] h-[100%] bg-amber-600/10 blur-[120px] rounded-full pointer-events-none" />
         
-        <div className="container-nets relative z-10 text-center max-w-3xl mx-auto">
+        <MotionRise className="container-nets relative z-10 text-center max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-sm fw-600 mb-6 backdrop-blur-sm text-amber-300 mx-auto">
             <IconHelp size={16} />
             <span>Help Center</span>
@@ -32,13 +33,13 @@ export default function SupportPage() {
               className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-300 focus:outline-none focus:bg-white/20 transition-all backdrop-blur-md"
             />
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Support Categories */}
       <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <MotionRise delay={0.1} className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <Link href="/contact" className="p-8 rounded-2xl border border-gray-200 hover:border-blue-500 hover:shadow-card-lg transition-all group block">
               <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-6">
                 <IconMessageCircle size={24} />
@@ -61,7 +62,7 @@ export default function SupportPage() {
               </h3>
               <p className="text-muted">Browse step-by-step documentation for deploying ScholarsNG.</p>
             </div>
-          </div>
+          </MotionRise>
         </div>
       </section>
     </main>

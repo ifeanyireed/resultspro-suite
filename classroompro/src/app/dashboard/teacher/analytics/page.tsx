@@ -5,6 +5,7 @@ import { Button } from "../../../../components/ui/button";
 import { cn } from "../../../../lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "../../../../components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const stats = [
   { label: "Content Engagement", value: "84%", trend: "+5.2%", positive: true, icon: <BookOpen className="w-5 h-5" />, color: "text-emerald-600", bg: "bg-emerald-50" },
@@ -60,7 +61,7 @@ export default function TeacherAnalyticsPage() {
       
       
       <main className="p-8 space-y-8">
-        <div className="flex justify-between items-center">
+        <MotionRise className="flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 font-display">Teaching Insights</h2>
             <p className="text-sm text-gray-500">Detailed breakdown of how your students are performing.</p>
@@ -73,12 +74,12 @@ export default function TeacherAnalyticsPage() {
                 <Filter className="w-4 h-4 mr-2" /> All Classes
              </Button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, i) => (
-            <div key={i} className="bg-white shadow-sm border border-gray-100 p-6 rounded-[24px] hover:border-gray-200 transition-all">
+            <MotionRise key={i} delay={i * 0.05} className="bg-white shadow-sm border border-gray-100 p-6 rounded-[24px] hover:border-gray-200 transition-all">
               <div className="flex justify-between items-start mb-4">
                 <div className={cn("p-2.5 rounded-xl", stat.bg, stat.color)}>
                   {stat.icon}
@@ -92,13 +93,13 @@ export default function TeacherAnalyticsPage() {
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
               <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{stat.label}</div>
-            </div>
+            </MotionRise>
           ))}
-        </div>
+        </MotionStagger>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
            {/* Chart Placeholder */}
-           <div className="lg:col-span-2 bg-white shadow-sm border border-gray-100 rounded-[32px] p-8">
+           <MotionRise className="lg:col-span-2 bg-white shadow-sm border border-gray-100 rounded-[32px] p-8">
               <div className="flex justify-between items-center mb-8">
                  <h3 className="text-lg font-bold text-gray-900 font-display">Student Activity Over Time</h3>
                  <div className="flex gap-4">
@@ -132,10 +133,10 @@ export default function TeacherAnalyticsPage() {
                     </div>
                  ))}
               </div>
-           </div>
+           </MotionRise>
 
            {/* Topic performance */}
-           <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8">
+           <MotionRise delay={0.1} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8">
               <h3 className="text-lg font-bold text-gray-900 font-display mb-6">Topic Performance</h3>
               <div className="space-y-6">
                  {topicPerformance.map((item, i) => (
@@ -163,8 +164,8 @@ export default function TeacherAnalyticsPage() {
               <Button className="w-full mt-8 bg-white shadow-sm border border-gray-100 hover:bg-gray-100 text-gray-900 border border-gray-100 h-11 font-bold text-xs">
                  Generate Full Report
               </Button>
-           </div>
-        </div>
+           </MotionRise>
+        </MotionStagger>
       </main>
     </div>
   );

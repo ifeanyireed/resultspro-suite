@@ -4,6 +4,7 @@ import { IconWallet as Wallet, IconPlus as Plus, IconArrowUpRight as ArrowUpRigh
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function StudentWallet() {
@@ -42,16 +43,16 @@ export default function StudentWallet() {
       <main className="min-h-screen bg-navy pb-24">
                 
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-          <div className="mb-12">
+          <MotionRise className="mb-12">
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               My <span className="text-green">Wallet</span>
             </h1>
             <p className="text-gray-400">Manage your balance, payments, and transaction history.</p>
-          </div>
+          </MotionRise>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Wallet Overview */}
-            <div className="lg:col-span-2 space-y-8">
+            <MotionRise className="lg:col-span-2 space-y-8">
               <div className="p-8 md:p-12 rounded-[40px] bg-gradient-to-br from-green to-blue/20 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:scale-110 transition-transform duration-700">
                    <Wallet className="w-64 h-64 -mr-16 -mt-16" />
@@ -111,10 +112,10 @@ export default function StudentWallet() {
                   )}
                 </div>
               </section>
-            </div>
+            </MotionRise>
 
             {/* Sidebar */}
-            <div className="space-y-8">
+            <MotionRise delay={0.1} className="space-y-8">
               {/* Quick Stats */}
               <div className="p-8 rounded-[40px] bg-white/5 border border-white/10">
                 <h3 className="text-xl font-display font-bold text-white mb-6">Financial Overview</h3>
@@ -151,8 +152,8 @@ export default function StudentWallet() {
                   Invite Friends <ChevronRight className="w-4 h-4" />
                 </div>
               </div>
-            </div>
-          </div>
+            </MotionRise>
+          </MotionStagger>
         </div>
       </main>
     </RoleGate>

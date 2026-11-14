@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { IconSearch as Search, IconBook as BookOpen, IconHelpCircle as HelpCircle, IconShieldCheck as ShieldCheck, IconBolt as Zap, IconUsers as Users, IconChevronRight as ChevronRight, IconMessage as MessageSquare, IconLifebuoy as LifeBuoy } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const categories = [
   { icon: <Users className="w-6 h-6 text-blue" />, title: "Getting Started", count: "12 articles", desc: "Learn the basics of setting up your account." },
@@ -21,7 +22,7 @@ export default function SupportPage() {
       <main className="flex-1 pt-28 pb-20 px-4">
         <div className="max-w-7xl mx-auto space-y-20">
           {/* Hero Section */}
-          <div className="bg-white/5 border border-white/10 rounded-[48px] p-8 md:p-20 relative overflow-hidden text-center space-y-8">
+          <MotionRise className="bg-white/5 border border-white/10 rounded-[48px] p-8 md:p-20 relative overflow-hidden text-center space-y-8">
              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-96 bg-blue/5 blur-[120px] rounded-full -mt-48" />
              
              <div className="relative z-10 space-y-4">
@@ -43,14 +44,14 @@ export default function SupportPage() {
                    className="pl-12 h-16 bg-navy/80 border-white/20 text-white rounded-2xl shadow-2xl focus-visible:ring-blue/50 text-lg"
                 />
              </div>
-          </div>
+          </MotionRise>
 
           {/* Categories */}
-          <div className="space-y-8">
+          <MotionRise className="space-y-8">
              <h2 className="text-2xl font-bold text-white font-display px-4">Browse by Category</h2>
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+             <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {categories.map((cat, i) => (
-                   <div key={i} className="p-8 rounded-[32px] bg-white/5 border border-white/10 hover:border-blue/30 transition-all group cursor-pointer">
+                   <MotionRise key={i} delay={i * 0.06} className="p-8 rounded-[32px] bg-white/5 border border-white/10 hover:border-blue/30 transition-all group cursor-pointer">
                       <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                          {cat.icon}
                       </div>
@@ -60,14 +61,14 @@ export default function SupportPage() {
                          <span className="text-[10px] font-bold text-blue uppercase tracking-widest">{cat.count}</span>
                          <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-blue transition-colors" />
                       </div>
-                   </div>
+                   </MotionRise>
                 ))}
-             </div>
-          </div>
+             </MotionStagger>
+          </MotionRise>
 
           {/* Popular Articles */}
-          <div className="grid lg:grid-cols-2 gap-12">
-             <div className="space-y-8">
+          <MotionStagger className="grid lg:grid-cols-2 gap-12">
+             <MotionRise className="space-y-8">
                 <h2 className="text-2xl font-bold text-white font-display px-4">Popular Articles</h2>
                 <div className="space-y-4">
                    {[
@@ -83,9 +84,9 @@ export default function SupportPage() {
                       </div>
                    ))}
                 </div>
-             </div>
+             </MotionRise>
 
-             <div className="bg-gradient-to-br from-green/20 to-blue/20 border border-white/10 rounded-[48px] p-12 flex flex-col justify-center text-center space-y-8">
+             <MotionRise delay={0.1} className="bg-gradient-to-br from-green/20 to-blue/20 border border-white/10 rounded-[48px] p-12 flex flex-col justify-center text-center space-y-8">
                 <div className="w-20 h-20 rounded-3xl bg-white/10 flex items-center justify-center mx-auto text-white">
                    <MessageSquare className="w-10 h-10" />
                 </div>
@@ -103,8 +104,8 @@ export default function SupportPage() {
                       Submit a Ticket
                    </Button>
                 </div>
-             </div>
-          </div>
+             </MotionRise>
+          </MotionStagger>
         </div>
       </main>
 

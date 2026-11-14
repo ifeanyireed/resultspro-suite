@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { Users, Link2, Building2 } from 'lucide-react';
 
 import AgentsListTab from './tabs/AgentsListTab';
@@ -21,13 +22,15 @@ export default function AgentsPage() {
   ];
 
   return (
-    <div className="w-full">
-      <Header
-        title="Agent Referral Network"
-        subtitle="Manage sales partners, track referrals, and handle school assignments"
-      />
+    <MotionStagger className="w-full">
+      <MotionRise>
+        <Header
+          title="Agent Referral Network"
+          subtitle="Manage sales partners, track referrals, and handle school assignments"
+        />
+      </MotionRise>
 
-      <div className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4">
+      <MotionRise delay={0.05} className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4">
         <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto pb-px scrollbar-hide">
           {tabs.map(tab => {
             const Icon = tab.icon;
@@ -48,14 +51,14 @@ export default function AgentsPage() {
             )
           })}
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 w-full">
+      <MotionRise delay={0.1} className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 w-full">
         {activeTab === 'agents' && <AgentsListTab />}
         {activeTab === 'referrals' && <ReferralsTab />}
         {activeTab === 'assignments' && <AssignmentsTab />}
         {activeTab === 'payouts' && <PayoutsTab />}
-      </div>
-    </div>
+      </MotionRise>
+    </MotionStagger>
   );
 }

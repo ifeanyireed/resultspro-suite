@@ -1,7 +1,8 @@
 "use client";
 
-import { IconFolderPlus as FolderPlus, IconFileText as FileText, IconImage as ImageIcon, IconVideo as Video, IconSearch as Search, IconFilter as Filter, IconDotsVertical as MoreVertical, IconDownload as Download, IconShare2 as Share2, IconTrash as Trash2, IconFolder as Folder, IconChevronRight as ChevronRight, IconPlus as Plus } from '@tabler/icons-react';
+import { IconFolderPlus as FolderPlus, IconFileText as FileText, IconPhoto as ImageIcon, IconVideo as Video, IconSearch as Search, IconFilter as Filter, IconDotsVertical as MoreVertical, IconDownload as Download, IconShare2 as Share2, IconTrash as Trash2, IconFolder as Folder, IconChevronRight as ChevronRight, IconPlus as Plus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function TutorResources() {
   const [mounted, setMounted] = useState(false);
@@ -25,7 +26,7 @@ export default function TutorResources() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Resource <span className="text-green">Library</span>
@@ -40,10 +41,10 @@ export default function TutorResources() {
                 <Plus className="w-5 h-5" /> UPLOAD FILE
              </button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Search and Filters */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-10">
+        <MotionRise delay={0.05} className="flex flex-col md:flex-row justify-between items-center gap-6 mb-10">
            <div className="relative w-full md:w-96">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <input type="text" placeholder="Search resources..." className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-green/50 transition-all" />
@@ -56,11 +57,11 @@ export default function TutorResources() {
               ))}
               <button className="p-2 rounded-xl bg-white/5 border border-white/10 text-gray-500 hover:text-white transition-all"><Filter size={18} /></button>
            </div>
-        </div>
+        </MotionRise>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
           {/* Folders Sidebar */}
-          <div className="space-y-8">
+          <MotionRise delay={0.1} className="space-y-8">
              <section>
                 <h3 className="text-sm font-black text-gray-600 uppercase tracking-[0.2em] mb-6">FOLDERS</h3>
                 <div className="space-y-2">
@@ -86,11 +87,11 @@ export default function TutorResources() {
                    Upgrade Storage
                 </button>
              </section>
-          </div>
+          </MotionRise>
 
           {/* Files Grid */}
-          <div className="lg:col-span-3">
-             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <MotionRise delay={0.15} className="lg:col-span-3">
+             <MotionStagger className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {files.map((file) => (
                   <div key={file.id} className="p-6 rounded-[32px] bg-white/5 border border-white/10 hover:bg-white/[0.08] transition-all group relative">
                      <div className="flex justify-between items-start mb-6">
@@ -117,8 +118,8 @@ export default function TutorResources() {
                      </div>
                   </div>
                 ))}
-             </div>
-          </div>
+             </MotionStagger>
+          </MotionRise>
         </div>
       </div>
     </main>

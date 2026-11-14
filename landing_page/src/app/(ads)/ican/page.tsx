@@ -1,5 +1,6 @@
 import React from 'react';
 import ScrollReveal from '@/components/ScrollReveal';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import Link from 'next/link';
 import { 
   IconArrowRight as ArrowRight, 
@@ -398,7 +399,7 @@ export default function IcanLandingPage() {
 
       {/* 6. Final CTA */}
       <section className="py-24 bg-gradient-to-br from-blue-700 to-indigo-900 text-white text-center">
-        <div className="container mx-auto px-4 max-w-3xl">
+        <MotionRise className="container mx-auto px-4 max-w-3xl">
           <ScrollReveal>
             <h2 className="text-4xl md:text-5xl font-black mb-6">STUDY SMARTER. PRACTISE WITH PURPOSE.</h2>
             <p className="text-xl text-slate-400 mb-10">Stop asking: "What should I do next?" Start using your performance to guide your preparation.</p>
@@ -406,7 +407,7 @@ export default function IcanLandingPage() {
               Create Free Account
             </a>
           </ScrollReveal>
-        </div>
+        </MotionRise>
       </section>
     </div>
   );

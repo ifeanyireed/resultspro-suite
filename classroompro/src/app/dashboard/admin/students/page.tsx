@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 
 const studentsData = [
   { id: 1, name: "Daniel Smith", class: "SSS 3", parentEmail: "p.smith@example.com", attendance: "95%", performance: "Excellent", status: "Active" },
@@ -50,7 +51,7 @@ export default function ManageStudentsPage() {
       
       
       <main className="p-8 space-y-6">
-        <div className="flex justify-between items-center">
+        <MotionRise className="flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 font-display">Student Enrollment</h2>
             <p className="text-sm text-gray-500">Monitor student attendance, performance, and account status.</p>
@@ -63,10 +64,10 @@ export default function ManageStudentsPage() {
               <UserPlus className="w-4 h-4 mr-2" /> Enroll Student
             </Button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Search and Quick Filters */}
-        <div className="flex flex-col md:flex-row gap-4 bg-white shadow-sm border border-gray-100 p-4 rounded-2xl border border-gray-100">
+        <MotionRise delay={0.06} className="flex flex-col md:flex-row gap-4 bg-white shadow-sm border border-gray-100 p-4 rounded-2xl border border-gray-100">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
             <Input 
@@ -82,10 +83,10 @@ export default function ManageStudentsPage() {
               <Filter className="w-4 h-4 mr-2" /> Performance
             </Button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Students Table */}
-        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden text-sm">
+        <MotionRise delay={0.12} className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden text-sm">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-gray-100 bg-white/[0.02]">
@@ -147,7 +148,7 @@ export default function ManageStudentsPage() {
               ))}
             </tbody>
           </table>
-        </div>
+        </MotionRise>
       </main>
     </div>
   );

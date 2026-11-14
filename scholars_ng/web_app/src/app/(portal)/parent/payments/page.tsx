@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { 
   ArrowDownTrayIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function ParentPaymentsPage() {
@@ -22,7 +23,7 @@ export default function ParentPaymentsPage() {
 
   return (
     <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Payments & Fees</h1>
           <p className="text-sm text-gray-500 mt-1">Manage tuition, outstanding balances, and receipts.</p>
@@ -30,26 +31,26 @@ export default function ParentPaymentsPage() {
         <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
           Make a Payment
         </button>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-video group hover:-translate-y-1 transition-transform">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-video group hover:-translate-y-1 transition-transform">
           <h3 className="text-xl font-normal text-gray-900">Total Outstanding</h3>
           <div>
             <h2 className="text-4xl font-medium tracking-tight text-orange-500 mb-2">₦{totalOutstanding.toLocaleString()}</h2>
             <p className="text-xs text-gray-500">Live Bursary Balance</p>
           </div>
-        </div>
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-video group hover:-translate-y-1 transition-transform">
+        </MotionRise>
+        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-video group hover:-translate-y-1 transition-transform">
           <h3 className="text-xl font-normal text-gray-900">Total Paid (YTD)</h3>
           <div>
             <h2 className="text-4xl font-medium tracking-tight text-gray-900 mb-2">₦{totalPaid.toLocaleString()}</h2>
             <p className="text-xs text-gray-500">2026/2027 Academic Year</p>
           </div>
-        </div>
-      </div>
+        </MotionRise>
+      </MotionStagger>
 
-      <div className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
+      <MotionRise delay={0.08} className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
           <h3 className="text-lg font-medium text-gray-900">Payment & Invoice History</h3>
         </div>
@@ -89,7 +90,7 @@ export default function ParentPaymentsPage() {
             ))}
           </tbody>
         </table>
-      </div>
+      </MotionRise>
     </>
   );
 }

@@ -9,6 +9,7 @@ import jsPDF from 'jspdf';
 import { ArrowRight01, Download01, Share01, Mail, X, AlertCircle } from '@/lib/hugeicons-compat';
 import { Camera, FileText } from '@/lib/hugeicons-compat';
 import { getTemplate } from '@/lib/gradebookTemplates';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 const ResultChecker: React.FC = () => {
   const { schoolSlug } = useParams<{ schoolSlug: string }>();
@@ -213,7 +214,7 @@ const ResultChecker: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
         </div>
 
-        <div className="relative z-10 max-w-2xl mx-auto text-center w-full">
+        <MotionRise className="relative z-10 max-w-2xl mx-auto text-center w-full">
           <div className="flex items-center justify-start gap-6 mb-6">
             {(school.logoUrl || school.logo) && (
               <img 
@@ -288,7 +289,7 @@ const ResultChecker: React.FC = () => {
               </p>
             </form>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Results View Modal (Triggered when result is fetched) */}

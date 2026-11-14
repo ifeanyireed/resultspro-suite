@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { IconSword as Sword, IconUsers as Users, IconShield as Shield, IconBolt as Zap, IconCoins as Coins, IconChevronRight as ChevronRight, IconUser as User, IconSearch as Search, IconSparkles as Sparkles, IconLoader2 as Loader2, IconCopy as Copy, IconCheck as Check, IconTrophy as Trophy } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { useBattle } from '@/hooks/useBattle';
@@ -111,7 +112,7 @@ function MatchmakingContent() {
         </div>
       </div>
 
-      <div className="relative z-10 w-full max-w-4xl">
+      <MotionRise className="relative z-10 w-full max-w-4xl">
         {/* Header Stats */}
         <div className="flex justify-between items-center mb-16 opacity-50">
           <div className="flex items-center gap-3">
@@ -288,7 +289,7 @@ function MatchmakingContent() {
             )}
           </div>
         )}
-      </div>
+      </MotionRise>
     </main>
   );
 }

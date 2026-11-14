@@ -4,6 +4,7 @@ import { IconChartBar as BarChart3, IconTrendingUp as TrendingUp, IconCalendar a
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RoleGate } from '@/components/RoleGate';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
 export default function StudentProgress() {
@@ -53,7 +54,7 @@ export default function StudentProgress() {
       <main className="min-h-screen bg-gray-50 pb-24">
                 
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+          <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
                 My Progress
@@ -63,27 +64,27 @@ export default function StudentProgress() {
             <button className="px-5 py-2.5 rounded-full bg-white border border-gray-200 text-gray-700 font-semibold text-sm flex items-center gap-2 hover:bg-gray-50 shadow-sm transition-all">
               <Download className="w-4 h-4" /> EXPORT REPORT
             </button>
-          </div>
+          </MotionRise>
 
           {/* Top Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {stats.map((stat: any, i: number) => {
                const Icon = getIcon(stat.icon || stat.label);
                return (
-                  <div key={i} className="p-6 rounded-[1.5rem] bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                  <MotionRise key={i} delay={i * 0.06} className="p-6 rounded-[1.5rem] bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                      <div className={`w-12 h-12 rounded-2xl ${stat.bg?.replace('bg-white/5', 'bg-blue-50') || 'bg-gray-50'} ${stat.color?.replace('text-white', 'text-gray-900') || 'text-[#146ef5]'} flex items-center justify-center mb-4`}>
                         <Icon className="w-6 h-6" />
                      </div>
                      <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">{stat.label}</div>
                      <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
-                  </div>
+                  </MotionRise>
                );
             })}
-          </div>
+          </MotionStagger>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Subject Mastery (Left) */}
-            <div className="lg:col-span-2 space-y-6">
+            <MotionRise className="lg:col-span-2 space-y-6">
               <section className="p-8 rounded-[1.5rem] bg-white border border-gray-100 shadow-sm">
                 <div className="flex items-center justify-between mb-8">
                   <h2 className="text-xl font-normal text-gray-900 flex items-center gap-2">
@@ -141,10 +142,10 @@ export default function StudentProgress() {
                   ))}
                 </div>
               </section>
-            </div>
+            </MotionRise>
 
             {/* Sidebar (Right) */}
-            <div className="space-y-6">
+            <MotionRise delay={0.1} className="space-y-6">
               {/* Study Time Stats */}
               <section className="p-6 rounded-[1.5rem] bg-gradient-to-br from-[#146ef5]/5 to-transparent border border-[#146ef5]/10 shadow-sm">
                  <div className="flex items-center gap-2 text-[#146ef5] font-semibold text-sm mb-4">
@@ -179,8 +180,8 @@ export default function StudentProgress() {
                    ))}
                  </div>
               </section>
-            </div>
-          </div>
+            </MotionRise>
+          </MotionStagger>
         </div>
       </main>
     </RoleGate>

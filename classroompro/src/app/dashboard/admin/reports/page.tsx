@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const schoolStatsData = [
   { label: "Active Students", value: "1,240", trend: "+12%", positive: true, icon: <Users className="w-5 h-5" />, color: "text-[#146ef5]", bg: "bg-blue-50" },
@@ -53,7 +54,7 @@ export default function AdminReportsPage() {
       
       
       <main className="p-8 space-y-8">
-        <div className="flex justify-between items-center">
+        <MotionRise className="flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 font-display">Academic Analytics</h2>
             <p className="text-sm text-gray-500">Comprehensive insights into your school's performance.</p>
@@ -66,12 +67,12 @@ export default function AdminReportsPage() {
                 <Download className="w-4 h-4 mr-2" /> Export PDF
              </Button>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {schoolStatsData.map((stat, i) => (
-            <div key={i} className="bg-white shadow-sm border border-gray-100 p-6 rounded-[24px]">
+            <MotionRise key={i} delay={i * 0.06} className="bg-white shadow-sm border border-gray-100 p-6 rounded-[24px]">
               <div className="flex justify-between items-start mb-4">
                 <div className={cn("p-2.5 rounded-xl", stat.bg, stat.color)}>
                   {stat.icon}
@@ -84,11 +85,11 @@ export default function AdminReportsPage() {
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
               <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{stat.label}</div>
-            </div>
+            </MotionRise>
           ))}
-        </div>
+        </MotionStagger>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
            {/* Performance by Class */}
            <div className="lg:col-span-2 bg-white shadow-sm border border-gray-100 rounded-[32px] p-8">
               <h3 className="text-lg font-bold text-gray-900 font-display mb-8">Performance by Class</h3>
@@ -143,7 +144,7 @@ export default function AdminReportsPage() {
                  ))}
               </div>
            </div>
-        </div>
+        </MotionStagger>
       </main>
     </div>
   );

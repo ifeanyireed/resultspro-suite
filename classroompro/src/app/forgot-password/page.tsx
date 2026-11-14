@@ -9,6 +9,7 @@ import { IconMail as Mail, IconArrowLeft as ArrowLeft } from '@tabler/icons-reac
 import Link from "next/link";
 import api from "@/lib/api";
 import { toast } from "react-hot-toast";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 
 export default function ForgotPasswordPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +40,7 @@ export default function ForgotPasswordPage() {
         title="Check your email" 
         subtitle="We've sent a password reset link to your email address."
       >
-        <div className="space-y-6">
+        <MotionRise className="space-y-6">
           <div className="bg-green/10 border border-green/20 rounded-xl p-4 flex items-center gap-3 text-green text-sm">
             <Mail className="w-5 h-5" />
             <span>If an account exists, you will receive an email shortly.</span>
@@ -49,7 +50,7 @@ export default function ForgotPasswordPage() {
               Back to log in
             </Button>
           </Link>
-        </div>
+        </MotionRise>
       </AuthLayout>
     );
   }
@@ -59,6 +60,7 @@ export default function ForgotPasswordPage() {
       title="Forgot password?" 
       subtitle="Enter your email address and we'll send you a link to reset your password."
     >
+      <MotionRise>
       <form onSubmit={onSubmit} className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="email" className="text-white">Email address</Label>
@@ -96,6 +98,7 @@ export default function ForgotPasswordPage() {
           Back to log in
         </Link>
       </form>
+      </MotionRise>
     </AuthLayout>
   );
 }

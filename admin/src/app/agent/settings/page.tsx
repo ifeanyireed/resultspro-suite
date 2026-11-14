@@ -8,11 +8,12 @@ import {
   ShieldCheckIcon,
   CheckCircleIcon
 } from '@heroicons/react/24/outline';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function SettingsPage() {
   return (
-    <>
-      <div className="flex items-end justify-between mb-8 mt-2">
+    <MotionStagger className="w-full">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Settings</h1>
           <p className="text-sm text-gray-500 mt-1">Manage your profile, payout details, and account preferences.</p>
@@ -21,9 +22,9 @@ export default function SettingsPage() {
           <CheckCircleIcon className="w-4 h-4" />
           Save Changes
         </button>
-      </div>
+      </MotionRise>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <MotionRise delay={0.05} className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         
         {/* Settings Navigation Sidebar */}
         <div className="lg:col-span-1 space-y-2">
@@ -124,7 +125,7 @@ export default function SettingsPage() {
           </div>
 
         </div>
-      </div>
-    </>
+      </MotionRise>
+    </MotionStagger>
   );
 }

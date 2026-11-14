@@ -13,6 +13,7 @@ import {
   ShoppingCartIcon
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function AgentDashboard() {
   const [data, setData] = useState<any>(null);
@@ -34,9 +35,9 @@ export default function AgentDashboard() {
   if (!data) return <div className="p-8 text-center text-gray-500">Loading Dashboard...</div>;
 
   return (
-    <>
+    <MotionStagger className="w-full">
       {/* Dashboard Title & Actions */}
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Agent Dashboard</h1>
           <p className="text-sm text-gray-500 mt-1">Plan, prioritize, and accomplish your tasks with ease.</p>
@@ -50,10 +51,10 @@ export default function AgentDashboard() {
             Buy Cards
           </button>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Top Metric Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <MotionRise delay={0.05} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         
         {/* Card 1: Primary Dark */}
         <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
@@ -126,10 +127,10 @@ export default function AgentDashboard() {
           </div>
         </div>
 
-      </div>
+      </MotionRise>
 
       {/* Main Content Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+      <MotionRise delay={0.1} className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         
         {/* Left Side (Analytics, Reminders, Leads, etc) */}
         <div className="lg:col-span-9 flex flex-col gap-3">
@@ -315,7 +316,7 @@ export default function AgentDashboard() {
 
         </div>
 
-      </div>
-    </>
+      </MotionRise>
+    </MotionStagger>
   );
 }

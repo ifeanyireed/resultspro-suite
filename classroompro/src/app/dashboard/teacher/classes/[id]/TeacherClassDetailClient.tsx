@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const studentsData = [
   { id: 1, name: "Jessica Alabi", email: "jessica.alabi@school.com", score: "96%", status: "Active" },
@@ -60,7 +61,7 @@ export function TeacherClassDetailClient() {
       
       <div className="p-8 max-w-7xl mx-auto space-y-8">
         {/* Header Section */}
-        <div className="flex items-center justify-between">
+        <MotionRise className="flex items-center justify-between">
            <div className="flex items-center gap-4">
               <Link href="/dashboard/teacher/classes" className="w-10 h-10 rounded-full hover:bg-gray-50 flex items-center justify-center transition-colors">
                  <ArrowLeft className="w-5 h-5 text-gray-900" />
@@ -80,43 +81,43 @@ export function TeacherClassDetailClient() {
                  <FilePlus className="w-4 h-4 mr-2" /> Add Material
               </Button>
            </div>
-        </div>
+        </MotionRise>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-           <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+        <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+           <MotionRise delay={0.05} className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
               <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#146ef5] mb-4">
                  <BarChart3 className="w-5 h-5" />
               </div>
               <p className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Avg. Performance</p>
               <h4 className="text-2xl font-bold text-gray-900">78%</h4>
-           </div>
-           <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+           </MotionRise>
+           <MotionRise delay={0.1} className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
               <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 mb-4">
                  <BookOpen className="w-5 h-5" />
               </div>
               <p className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Notes Assigned</p>
               <h4 className="text-2xl font-bold text-gray-900">12</h4>
-           </div>
-           <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+           </MotionRise>
+           <MotionRise delay={0.15} className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
               <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 mb-4">
                  <BrainCircuit className="w-5 h-5" />
               </div>
               <p className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Active Quizzes</p>
               <h4 className="text-2xl font-bold text-gray-900">4</h4>
-           </div>
-           <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+           </MotionRise>
+           <MotionRise delay={0.2} className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
               <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500 mb-4">
                  <GraduationCap className="w-5 h-5" />
               </div>
               <p className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Next Assessment</p>
               <h4 className="text-2xl font-bold text-gray-900">May 15</h4>
-           </div>
-        </div>
+           </MotionRise>
+        </MotionStagger>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <MotionStagger className="grid lg:grid-cols-3 gap-8">
            {/* Student List */}
-           <div className="lg:col-span-2 space-y-6">
+           <MotionRise className="lg:col-span-2 space-y-6">
               <div className="flex items-center justify-between">
                  <h3 className="text-xl font-bold text-gray-900">Student Roster</h3>
                  <div className="relative w-64">
@@ -175,10 +176,10 @@ export function TeacherClassDetailClient() {
                     </tbody>
                  </table>
               </div>
-           </div>
+           </MotionRise>
 
            {/* Quick Actions / Activity */}
-           <div className="space-y-6">
+           <MotionRise delay={0.1} className="space-y-6">
               <h3 className="text-xl font-bold text-gray-900">Class Activity</h3>
               <div className="p-6 rounded-3xl bg-white shadow-sm border border-gray-100 space-y-6">
                  {[
@@ -200,8 +201,8 @@ export function TeacherClassDetailClient() {
                     <Button variant="ghost" className="w-full text-xs text-[#146ef5] font-bold">Create new assessment</Button>
                  </div>
               </div>
-           </div>
-        </div>
+           </MotionRise>
+        </MotionStagger>
       </div>
     </div>
   );

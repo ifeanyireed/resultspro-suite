@@ -3,6 +3,7 @@
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export default function TermsPage() {
   const sections = [
@@ -38,7 +39,7 @@ export default function TermsPage() {
 
       <section style={{ paddingTop: '160px', paddingBottom: '120px', background: 'white', flex: 1 }}>
         <div className="container-nets">
-          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <MotionRise style={{ maxWidth: '800px', margin: '0 auto' }}>
             
             <div style={{ marginBottom: '4rem' }}>
               <span className="overline" style={{ color: 'var(--color-nets-red)', marginBottom: '1rem', display: 'block' }}>Legal</span>
@@ -67,7 +68,7 @@ export default function TermsPage() {
               </p>
             </div>
 
-          </div>
+          </MotionRise>
         </div>
       </section>
 

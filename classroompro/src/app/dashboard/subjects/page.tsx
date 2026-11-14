@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getStudentSubjects } from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function SubjectsPage() {
   const [data, setData] = useState<any>(null);
@@ -73,7 +74,7 @@ export default function SubjectsPage() {
       
       <div className="p-8 max-w-7xl mx-auto space-y-10">
         {/* Header and Search */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2 font-display">Academic Subjects</h2>
             <p className="text-gray-500 text-sm">Explore your curriculum and master every topic.</p>
@@ -88,14 +89,14 @@ export default function SubjectsPage() {
                onChange={(e) => setSearch(e.target.value)}
              />
           </div>
-        </div>
+        </MotionRise>
 
         {/* Subjects Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredSubjects.map((subject: any) => {
+        <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredSubjects.map((subject: any, idx: number) => {
             const style = getSubjectStyle(subject.name);
             return (
-              <div key={subject.id} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 hover:border-gray-200 transition-all group flex flex-col relative overflow-hidden">
+              <MotionRise key={subject.id} delay={idx * 0.05} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 hover:border-gray-200 transition-all group flex flex-col relative overflow-hidden">
                 <div className={`absolute top-0 right-0 w-32 h-32 ${style.bg} blur-[40px] rounded-full -z-10`} />
                 
                 <div className="flex justify-between items-start mb-8">
@@ -130,10 +131,10 @@ export default function SubjectsPage() {
                       </button>
                    </Link>
                 </div>
-              </div>
+              </MotionRise>
             );
           })}
-        </div>
+        </MotionStagger>
 
         {filteredSubjects.length === 0 && (
            <div className="py-32 text-center bg-white shadow-sm border border-gray-100 rounded-[40px] border border-gray-100 border-dashed">

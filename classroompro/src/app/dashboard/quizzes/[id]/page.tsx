@@ -1,4 +1,5 @@
 import QuizPlayerClient from "./QuizPlayerClient";
+import { MotionRise } from "@/components/ScrollRiseProvider";
 
 export const dynamicParams = false;
 
@@ -22,5 +23,9 @@ export async function generateStaticParams() {
 }
 
 export default function QuizPlayerPage() {
-  return <QuizPlayerClient />;
+  return (
+    <MotionRise>
+      <QuizPlayerClient />
+    </MotionRise>
+  );
 }

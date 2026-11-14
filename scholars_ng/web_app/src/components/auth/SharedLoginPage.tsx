@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { IconMail as Mail, IconLock as Lock, IconShieldCheck as ShieldCheck, IconArrowRight as ArrowRight, IconLoader2 as Loader2, IconSparkles as Sparkles, IconBuilding as Building2, IconUsers as Users } from '@tabler/icons-react';
 
 import { useAuthStore } from '@/store/useAuthStore';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 import api from '@/lib/api';
 
@@ -69,18 +70,18 @@ export default function SharedLoginPage({
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-600/20 blur-[150px]" />
         
-        <div className="relative z-10 w-full h-full flex flex-col justify-between p-16">
+        <MotionStagger className="relative z-10 w-full h-full flex flex-col justify-between p-16">
           {/* Brand Logo */}
-          <div className="flex items-center space-x-3">
+          <MotionRise className="flex items-center space-x-3">
             <Image src={logoSrc} alt={brandTitle} width={64} height={64} className="object-contain" priority />
             <div>
               <h1 className="font-bold text-white text-3xl tracking-tight">{brandTitle}</h1>
               <p className="text-blue-400 font-semibold text-xs uppercase tracking-widest">{brandSubtitle}</p>
             </div>
-          </div>
+          </MotionRise>
 
           {/* Value Proposition */}
-          <div className="max-w-xl">
+          <MotionRise className="max-w-xl">
             <div className="inline-flex items-center space-x-2 bg-blue-500/10 border border-blue-500/20 text-blue-300 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4" />
               <span>Version 2.0 Released</span>
@@ -112,14 +113,14 @@ export default function SharedLoginPage({
                 </div>
               </div>
             </div>
-          </div>
+          </MotionRise>
 
           {/* Footer Note */}
-          <div className="flex items-center space-x-2 text-slate-500 text-sm font-medium">
+          <MotionRise className="flex items-center space-x-2 text-slate-500 text-sm font-medium">
             <ShieldCheck className="w-5 h-5 text-emerald-500" />
             <span>End-to-end encrypted infrastructure</span>
-          </div>
-        </div>
+          </MotionRise>
+        </MotionStagger>
       </div>
 
       {/* Right Panel - Login Form */}
@@ -130,7 +131,7 @@ export default function SharedLoginPage({
            <span className="font-bold text-slate-900">{brandTitle}</span>
         </div>
 
-        <div className="w-full max-w-md">
+        <MotionRise className="w-full max-w-md">
           <div className="mb-10 text-center lg:text-left">
             <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Welcome Back</h2>
             <p className="text-slate-500 font-medium">Enter your credentials to access the admin hub.</p>
@@ -201,7 +202,7 @@ export default function SharedLoginPage({
               <a href="https://www.resultspro.ng/terms" className="text-slate-600 hover:underline">Terms of Service</a>.
             </p>
           </div>
-        </div>
+        </MotionRise>
       </div>
     </div>
   );

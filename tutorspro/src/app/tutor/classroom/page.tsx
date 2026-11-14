@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconMicrophone as Mic, IconMicrophoneOff as MicOff, IconVideo as Video, IconVideoOff as VideoOff, IconDeviceDesktop as Monitor, IconSettings as Settings, IconMessage as MessageSquare, IconUsers as Users, IconHand as Hand, IconLayout as Layout, IconDotsVertical as MoreVertical, IconLogout as LogOut, IconPencil as PenTool, IconBrain as Brain, IconShare2 as Share2, IconChevronRight as ChevronRight, IconShieldExclamation as ShieldAlert, IconCircleDot as CircleDot } from '@tabler/icons-react';
 import Link from 'next/link';
 
@@ -46,7 +47,7 @@ export default function TutorClassroom() {
       </header>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex overflow-hidden">
+      <MotionRise className="flex-1 flex overflow-hidden">
          {/* Sidebar - Tools (Left) */}
          <div className="w-20 border-r border-white/5 flex flex-col items-center py-8 gap-8 bg-navy/30 shrink-0">
             {[
@@ -161,7 +162,7 @@ export default function TutorClassroom() {
                </div>
             </div>
          </div>
-      </div>
+      </MotionRise>
 
       {/* Bottom Controls */}
       <div className="h-24 px-12 border-t border-white/5 flex items-center justify-between bg-[#08080c] shrink-0">

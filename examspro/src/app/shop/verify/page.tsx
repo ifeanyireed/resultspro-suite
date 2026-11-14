@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import Navbar from '@/components/Navbar';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 // Separate component to handle search params
 function VerifyContent() {
@@ -45,7 +46,7 @@ function VerifyContent() {
   }, [reference, fetchUser]);
 
   return (
-    <div className="max-w-xl w-full mx-auto p-8 rounded-[40px] bg-white border border-slate-200 shadow-xl text-center">
+    <MotionRise className="max-w-xl w-full mx-auto p-8 rounded-[40px] bg-white border border-slate-200 shadow-xl text-center">
       {status === 'loading' && (
         <div className="py-12 space-y-6">
           <div className="relative">
@@ -127,7 +128,7 @@ function VerifyContent() {
           </div>
         </div>
       )}
-    </div>
+    </MotionRise>
   );
 }
 

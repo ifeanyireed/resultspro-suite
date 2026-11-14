@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { Settings, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -28,13 +29,15 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="w-full">
-      <Header
-        title="Global Suite Configuration"
-        subtitle="Ecosystem secrets, token expiration intervals, and central microservice gateways"
-      />
+    <MotionStagger className="w-full">
+      <MotionRise>
+        <Header
+          title="Global Suite Configuration"
+          subtitle="Ecosystem secrets, token expiration intervals, and central microservice gateways"
+        />
+      </MotionRise>
 
-      <div className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4">
+      <MotionRise delay={0.05} className="px-1 sm:px-4 md:px-8 pt-2 sm:pt-4">
         <div className="flex space-x-2 border-b border-slate-200 overflow-x-auto pb-px scrollbar-hide">
           {tabs.map(tab => {
             const Icon = tab.icon;
@@ -55,12 +58,12 @@ export default function SettingsPage() {
             )
           })}
         </div>
-      </div>
+      </MotionRise>
 
-      <div className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 w-full">
+      <MotionRise delay={0.1} className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 w-full">
         {activeTab === 'global' && <GlobalConfigTab />}
         {activeTab === 'referrals' && <ReferralsTab />}
-      </div>
-    </div>
+      </MotionRise>
+    </MotionStagger>
   );
 }

@@ -2,6 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 import { IconCheck as Check, IconShieldCheck as ShieldCheck, IconChartBar as BarChart3, IconUsers as Users, IconLayout as Layout, IconBolt as Zap, IconArrowRight as ArrowRight, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -77,7 +78,7 @@ export default function SchoolsPage() {
       <section className="bg-navy text-white" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '6rem' }}>
         <div className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="max-w-3xl">
+            <MotionRise className="max-w-3xl">
               <div className="overline-dark" style={{ marginBottom: '1.5rem' }}>Enterprise SaaS</div>
               <h1 className="fw-300" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
                 Scale Your School <br />with <span style={{ fontWeight: 700, color: 'var(--primary)' }}>TutorsPro.</span>
@@ -93,22 +94,22 @@ export default function SchoolsPage() {
                     Start Free Trial
                  </Link>
               </div>
-            </div>
+            </MotionRise>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                {features.map((feature, i) => {
                  const Icon = getIcon(feature.icon);
                  return (
-                   <div key={i} className="p-6 bg-white/5 border border-white/10 rounded-sm hover:bg-white/10 transition-colors">
+                   <MotionRise key={i} delay={i * 0.08} className="p-6 bg-white/5 border border-white/10 rounded-sm hover:bg-white/10 transition-colors">
                       <div className="mb-4 text-white">
                          <Icon size={32} />
                       </div>
                       <h3 className="text-lg fw-600 text-white mb-2">{feature.title}</h3>
                       <p className="text-sm text-white/60 leading-relaxed">{feature.desc}</p>
-                   </div>
+                   </MotionRise>
                  );
                })}
-            </div>
+            </MotionStagger>
           </div>
         </div>
       </section>
@@ -116,10 +117,12 @@ export default function SchoolsPage() {
       {/* Pricing Section */}
       <section className="section-py bg-white border-b border-gray-200">
         <div className="container-nets text-center">
-           <div className="overline" style={{ marginBottom: '1rem' }}>Clear Pricing</div>
-           <h2 className="text-d4 fw-400 mb-16 text-navy">School Multi-Tenant <span style={{ fontWeight: 700 }}>Pricing</span></h2>
+           <MotionRise>
+             <div className="overline" style={{ marginBottom: '1rem' }}>Clear Pricing</div>
+             <h2 className="text-d4 fw-400 mb-16 text-navy">School Multi-Tenant <span style={{ fontWeight: 700 }}>Pricing</span></h2>
+           </MotionRise>
            
-           <div className="max-w-4xl mx-auto p-12 rounded-sm bg-light border border-gray-200 text-left relative overflow-hidden shadow-sm">
+           <MotionRise delay={0.1} className="max-w-4xl mx-auto p-12 rounded-sm bg-light border border-gray-200 text-left relative overflow-hidden shadow-sm">
               <div className="absolute top-0 right-0 p-12 opacity-5 -rotate-12 translate-x-12 -translate-y-12">
                  <Layout size={240} className="text-navy" />
               </div>
@@ -147,7 +150,7 @@ export default function SchoolsPage() {
                     ))}
                  </div>
               </div>
-           </div>
+           </MotionRise>
         </div>
       </section>
 

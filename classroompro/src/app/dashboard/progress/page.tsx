@@ -8,6 +8,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function ProgressPage() {
   const user = useAuthStore((state) => state.user);
@@ -60,7 +61,7 @@ export default function ProgressPage() {
       
       
       <main className="p-8 max-w-7xl mx-auto space-y-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2 font-display">Performance Analytics</h2>
             <p className="text-gray-500 text-sm">Detailed breakdown of your learning journey and mastery.</p>
@@ -68,22 +69,22 @@ export default function ProgressPage() {
           <Button variant="outline" className="border-gray-100 text-gray-900 h-11 px-6 rounded-xl font-bold">
             <Calendar className="w-4 h-4 mr-2" /> 1st Term 2024
           </Button>
-        </div>
+        </MotionRise>
 
         {/* Overview Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
            {stats.map((stat, i) => (
-              <div key={i} className="bg-white shadow-sm border border-gray-100 p-6 rounded-[32px] hover:border-gray-200 transition-all group">
+              <MotionRise key={i} delay={i * 0.06} className="bg-white shadow-sm border border-gray-100 p-6 rounded-[32px] hover:border-gray-200 transition-all group">
                  <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110", stat.bg, stat.color)}>
                     {stat.icon}
                  </div>
                  <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
                  <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">{stat.label}</div>
-              </div>
+              </MotionRise>
            ))}
-        </div>
+        </MotionStagger>
 
-        <div className="grid lg:grid-cols-12 gap-8">
+        <MotionStagger className="grid lg:grid-cols-12 gap-8">
            {/* Subject Progress */}
            <div className="lg:col-span-8 bg-white shadow-sm border border-gray-100 rounded-[40px] p-8">
               <div className="flex items-center justify-between mb-8">
@@ -147,10 +148,10 @@ export default function ProgressPage() {
                  </div>
               </div>
            </div>
-        </div>
+        </MotionStagger>
 
         {/* Activity Heatmap Area */}
-        <div className="bg-white shadow-sm border border-gray-100 rounded-[40px] p-8">
+        <MotionRise className="bg-white shadow-sm border border-gray-100 rounded-[40px] p-8">
            <div className="flex items-center justify-between mb-8">
               <h3 className="text-xl font-bold text-gray-900 font-display">Study Consistency</h3>
               <div className="flex items-center gap-2 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
@@ -186,7 +187,7 @@ export default function ProgressPage() {
               <span>November</span>
               <span>December</span>
            </div>
-        </div>
+        </MotionRise>
       </main>
     </div>
   );

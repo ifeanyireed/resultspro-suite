@@ -23,6 +23,7 @@ import {
   IconAward,
   IconCircleCheck
 } from '@tabler/icons-react';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export const dynamic = 'force-dynamic';
 
@@ -60,7 +61,7 @@ export default async function PublicPortfolioPage({ params }: PublicPortfolioPro
   if (!portfolioData || !portfolioData.portfolio || !portfolioData.portfolio.is_published) {
     return (
       <main className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-        <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-slate-200 text-center shadow-sm">
+        <MotionRise className="max-w-md w-full bg-white rounded-3xl p-8 border border-slate-200 text-center shadow-sm">
           <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <BriefcaseIcon className="w-8 h-8" />
           </div>
@@ -75,7 +76,7 @@ export default async function PublicPortfolioPage({ params }: PublicPortfolioPro
             <ArrowLeftIcon className="w-4 h-4" />
             Back to {tenant.name}
           </Link>
-        </div>
+        </MotionRise>
       </main>
     );
   }
@@ -156,7 +157,7 @@ export default async function PublicPortfolioPage({ params }: PublicPortfolioPro
 
       {/* Hero Profile Section */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-6">
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm">
+        <MotionRise className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
             {/* Avatar / Monogram */}
             <div className="relative">
@@ -257,13 +258,13 @@ export default async function PublicPortfolioPage({ params }: PublicPortfolioPro
               </div>
             </div>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Main Content Layout */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Case Studies & Projects */}
-        <div className="lg:col-span-2 space-y-6">
+        <MotionRise className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -286,7 +287,7 @@ export default async function PublicPortfolioPage({ params }: PublicPortfolioPro
                 </p>
               </div>
             ) : (
-              <div className="space-y-6">
+              <MotionStagger className="space-y-6">
                 {caseStudies.map((project, idx) => (
                   <div
                     key={project.id || idx}
@@ -373,13 +374,13 @@ export default async function PublicPortfolioPage({ params }: PublicPortfolioPro
                     </div>
                   </div>
                 ))}
-              </div>
+              </MotionStagger>
             )}
           </div>
-        </div>
+        </MotionRise>
 
         {/* Right Column: Skills, Endorsements & Academy Info */}
-        <div className="space-y-6">
+        <MotionRise className="space-y-6">
           {/* Skills Card */}
           <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm">
             <h3 className="text-base font-bold text-slate-900 mb-1">Core Tech Stack & Skills</h3>
@@ -454,7 +455,7 @@ export default async function PublicPortfolioPage({ params }: PublicPortfolioPro
               All portfolio capstones and milestones undergo rigorous code reviews and rubric evaluations on {tenant.name} CoursesPRO platform.
             </p>
           </div>
-        </div>
+        </MotionRise>
       </section>
     </div>
   );

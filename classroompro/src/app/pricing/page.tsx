@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { IconCheck as Check, IconShieldCheck as ShieldCheck, IconBolt as Zap, IconSchool as School, IconBuilding as Building2, IconHeart as Heart } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function PricingPage() {
   const [isAnnual, setIsAnnual] = useState(false);
@@ -92,7 +93,7 @@ export default function PricingPage() {
       <main className="flex-1 pt-32 pb-20 px-4">
         <div className="">
           {/* Header */}
-          <div className="text-center mb-12">
+          <MotionRise className="text-center mb-12">
             <h1 className="text-4xl md:text-6xl font-bold font-display text-white mb-6">
               Invest in <span className="text-green">Academic Success</span>
             </h1>
@@ -118,13 +119,14 @@ export default function PricingPage() {
                 <span className="px-2 py-0.5 rounded-full bg-green/20 text-green text-[10px] font-black uppercase tracking-widest">Save 20%</span>
               </div>
             </div>
-          </div>
+          </MotionRise>
 
           {/* Tiers Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {tiers.map((tier, i) => (
-              <div 
+              <MotionRise 
                 key={i} 
+                delay={i * 0.08}
                 className={cn(
                   "relative p-6 rounded-[32px] border flex flex-col transition-all duration-500",
                   tier.highlight 
@@ -173,12 +175,12 @@ export default function PricingPage() {
                 >
                   {tier.buttonText}
                 </Button>
-              </div>
+              </MotionRise>
             ))}
-          </div>
+          </MotionStagger>
 
           {/* Guarantee Section */}
-          <div className="mt-24 bg-white/5 border border-white/10 rounded-[40px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+          <MotionRise className="mt-24 bg-white/5 border border-white/10 rounded-[40px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center gap-6">
               <div className="w-16 h-16 rounded-2xl bg-green/10 flex items-center justify-center text-green shrink-0">
                 <ShieldCheck className="w-10 h-10" />
@@ -193,7 +195,7 @@ export default function PricingPage() {
                <div className="h-8 w-24 bg-white/10 rounded" />
                <div className="h-8 w-24 bg-white/10 rounded" />
             </div>
-          </div>
+          </MotionRise>
         </div>
       </main>
 

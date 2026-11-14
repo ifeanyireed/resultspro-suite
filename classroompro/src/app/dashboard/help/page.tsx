@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 const faqs = [
   {
@@ -34,7 +35,7 @@ export default function HelpPage() {
       
       <main className="p-8 max-w-5xl mx-auto space-y-12">
         {/* Hero Search */}
-        <div className="text-center space-y-6 py-8">
+        <MotionRise className="text-center space-y-6 py-8">
            <h2 className="text-4xl font-bold text-gray-900 font-display">How can we help you?</h2>
            <div className="relative max-w-2xl mx-auto">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -43,10 +44,10 @@ export default function HelpPage() {
                  className="pl-12 h-14 bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900 rounded-2xl shadow-2xl focus-visible:ring-green/50"
               />
            </div>
-        </div>
+        </MotionRise>
 
         {/* Quick Links */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-6">
            <div className="p-8 rounded-[32px] bg-white shadow-sm border border-gray-100 hover:border-blue/50 transition-all group cursor-pointer">
               <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-[#146ef5] mb-6 group-hover:scale-110 transition-transform">
                  <Book className="w-6 h-6" />
@@ -68,10 +69,10 @@ export default function HelpPage() {
               <h3 className="text-lg font-bold text-gray-900 mb-2">Live Chat</h3>
               <p className="text-xs text-gray-500 leading-relaxed">Chat with our support team for immediate assistance with any issues.</p>
            </div>
-        </div>
+        </MotionStagger>
 
         {/* FAQ Section */}
-        <div className="space-y-6">
+        <MotionRise className="space-y-6">
            <h3 className="text-2xl font-bold text-gray-900 font-display px-2">Frequently Asked Questions</h3>
            <div className="space-y-3">
               {faqs.map((faq, i) => (
@@ -96,10 +97,10 @@ export default function HelpPage() {
                  </div>
               ))}
            </div>
-        </div>
+        </MotionRise>
 
         {/* Contact Support Footer */}
-        <div className="p-10 rounded-[40px] bg-[#146ef5] border border-gray-100 text-center space-y-6 relative overflow-hidden">
+        <MotionRise className="p-10 rounded-[40px] bg-[#146ef5] border border-gray-100 text-center space-y-6 relative overflow-hidden">
            <div className="relative z-10">
               <h3 className="text-2xl font-bold text-gray-900">Still have questions?</h3>
               <p className="text-gray-500 text-sm max-w-xl mx-auto">
@@ -117,7 +118,7 @@ export default function HelpPage() {
            
            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/5 blur-[100px] -mr-32 -mt-32 rounded-full" />
            <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue/5 blur-[100px] -ml-32 -mb-32 rounded-full" />
-        </div>
+        </MotionRise>
       </main>
     </div>
   );

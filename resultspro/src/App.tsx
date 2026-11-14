@@ -99,6 +99,7 @@ import {
 } from "./pages/school-admin";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import { ScrollRiseProvider } from "./components/ScrollRiseProvider";
 
 const queryClient = new QueryClient();
 
@@ -108,6 +109,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollRiseProvider>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/agents" element={<AgentLanding />} />
@@ -220,6 +222,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </ScrollRiseProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

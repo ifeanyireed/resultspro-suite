@@ -1,4 +1,5 @@
 import { BlogList } from '@/components/BlogList';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export const dynamic = 'force-dynamic';
 
@@ -64,7 +65,7 @@ export default async function BlogPage() {
     <main className="min-h-screen bg-light" style={{ background: 'var(--color-nets-light)' }}>
       <section className="bg-navy text-white" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '12rem', paddingBottom: '6rem' }}>
         <div className="container-nets">
-          <div className="max-w-3xl">
+          <MotionRise className="max-w-3xl">
             <div className="overline-dark" style={{ marginBottom: '1.5rem' }}>Our Blog</div>
             <h1 className="fw-300" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
               Insights, Updates <br />&amp; <span style={{ fontWeight: 700 }}>Transformations.</span>
@@ -72,14 +73,14 @@ export default async function BlogPage() {
             <p className="text-body-lg text-white/70">
               Read the latest news from the ResultsPRO suite, deep-dives into educational technology, and success stories from our partner schools.
             </p>
-          </div>
+          </MotionRise>
         </div>
       </section>
 
       <section className="section-py">
-        <div className="container-nets">
+        <MotionRise delay={0.1} className="container-nets">
           <BlogList initialPosts={posts} />
-        </div>
+        </MotionRise>
       </section>
     </main>
   );

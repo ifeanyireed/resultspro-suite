@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useChildSummary, useChildProgress, useChildAttendance } from '@/hooks/useParentAnalytics';
 import { KPICard } from '@/components/analytics/KPICard';
 import { RiskLevelBadge, PerformanceBar } from '@/components/analytics/Badges';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const ChildDetailPage: React.FC = () => {
   const { studentId } = useParams<{ studentId: string }>();
@@ -55,7 +56,7 @@ const ChildDetailPage: React.FC = () => {
 
       <div className="sticky top-0 z-20 backdrop-blur-md bg-[rgba(0,0,0,0.40)] border-b border-[rgba(255,255,255,0.07)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex justify-between items-start">
+          <MotionRise className="flex justify-between items-start">
             <div>
               <button
                 onClick={() => navigate('/parent')}
@@ -74,14 +75,14 @@ const ChildDetailPage: React.FC = () => {
               <MessageCircle size={20} />
               Message Teacher
             </button>
-          </div>
+          </MotionRise>
         </div>
       </div>
 
       <main className="relative z-10 flex-1 overflow-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <KPICard
             label="Overall Average"
             value={summary.overallAverage.toFixed(1)}
@@ -116,10 +117,10 @@ const ChildDetailPage: React.FC = () => {
             color={parseFloat(summary.attendance.percentage) >= 75 ? 'green' : 'amber'}
             subtext={`${summary.attendance.daysPresent}/${summary.attendance.daysSchoolOpen} days`}
           />
-        </div>
+        </MotionStagger>
 
         {/* Tab Navigation */}
-        <div className="flex gap-4 mb-6 border-b border-slate-700">
+        <MotionRise className="flex gap-4 mb-6 border-b border-slate-700">
           {(['overview', 'subjects', 'attendance'] as const).map((tab) => (
             <button
               key={tab}
@@ -135,14 +136,14 @@ const ChildDetailPage: React.FC = () => {
               {tab === 'attendance' && 'Attendance'}
             </button>
           ))}
-        </div>
+        </MotionRise>
 
         {/* Tab Content */}
         <div className="space-y-6">
           {activeTab === 'overview' && (
             <>
               {/* Strengths and Weaknesses */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <MotionStagger className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6">
                   <h3 className="text-lg font-bold text-green-400 mb-4 flex items-center gap-2">
                     <Award className="w-5 h-5" />
@@ -184,10 +185,10 @@ const ChildDetailPage: React.FC = () => {
                     )}
                   </div>
                 </div>
-              </div>
+              </MotionStagger>
 
               {/* Recommendations */}
-              <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6">
+              <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6">
                 <h3 className="text-lg font-bold text-white mb-4">Recommendations</h3>
                 <div className="space-y-3">
                   {summary.recommendations && summary.recommendations.length > 0 ? (
@@ -201,11 +202,11 @@ const ChildDetailPage: React.FC = () => {
                     <p className="text-slate-400">No specific recommendations at this time</p>
                   )}
                 </div>
-              </div>
+              </MotionRise>
 
               {/* Progress Trend */}
               {!progressLoading && progress.length > 0 && (
-                <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6">
+                <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6">
                   <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                     <Award className="w-5 h-5 text-blue-400" />
                     Progress Trend
@@ -225,13 +226,13 @@ const ChildDetailPage: React.FC = () => {
                       </div>
                     ))}
                   </div>
-                </div>
+                </MotionRise>
               )}
             </>
           )}
 
           {activeTab === 'subjects' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <MotionStagger className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {summary.subjectBreakdown.length > 0 ? (
                 summary.subjectBreakdown.map((subject, idx) => (
                   <div
@@ -271,17 +272,17 @@ const ChildDetailPage: React.FC = () => {
                   <p className="text-slate-400">No subject data available</p>
                 </div>
               )}
-            </div>
+            </MotionStagger>
           )}
 
           {activeTab === 'attendance' && (
-            <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6">
+            <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-6">
               <h3 className="text-lg font-bold text-white mb-6">Attendance Analysis</h3>
 
               {attendance ? (
                 <div className="space-y-6">
                   {/* Current Attendance */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-[rgba(0,0,0,0.40)] rounded-[15px] p-4 border border-[rgba(255,255,255,0.07)]">
                       <p className="text-slate-400 text-sm mb-1">Days Present</p>
                       <p className="text-2xl font-bold text-blue-400">{attendance.current.daysPresent}</p>
@@ -294,7 +295,7 @@ const ChildDetailPage: React.FC = () => {
                       <p className="text-slate-400 text-sm mb-1">Attendance Rate</p>
                       <p className="text-2xl font-bold text-green-400">{attendance.current.percentage}%</p>
                     </div>
-                  </div>
+                  </MotionStagger>
 
                   {/* Attendance History */}
                   <div>
@@ -342,7 +343,7 @@ const ChildDetailPage: React.FC = () => {
                   <p className="text-slate-400">No attendance data available</p>
                 </div>
               )}
-            </div>
+            </MotionRise>
           )}
         </div>
         </div>

@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/select';
 import { AlertCircle, Trash01, Plus } from '@/lib/hugeicons-compat';
 import { useOnboardingStore, Step4Data } from '@/stores/onboardingStore';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const subjectSchema = z.object({
   name: z.string().min(1, 'Subject name is required'),
@@ -177,35 +178,35 @@ export const Step4Subjects = ({
   }).length;
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <MotionRise className="w-full max-w-4xl mx-auto">
       <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-8 backdrop-blur-xl">
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <h2 className="text-3xl font-bold text-white">Subjects per Class</h2>
           <p className="text-gray-400 mt-2">
             Add subjects for each class in your school.
           </p>
-        </div>
+        </MotionRise>
 
         {submitError && (
-          <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex gap-3">
+          <MotionRise className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex gap-3">
             <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
             <p className="text-red-400 text-sm">{submitError}</p>
-          </div>
+          </MotionRise>
         )}
 
         {classes.length === 0 ? (
-          <div className="mb-6 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30 flex gap-3">
+          <MotionRise className="mb-6 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30 flex gap-3">
             <AlertCircle className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
             <p className="text-yellow-400 text-sm">
               No classes created. Please complete Step 3 (Classes) first.
             </p>
-          </div>
+          </MotionRise>
         ) : (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8">
               
               {/* Class Selection */}
-              <div>
+              <MotionRise>
                 <FormLabel className="text-base font-semibold text-white block mb-3">
                   Select Class to Manage Subjects
                 </FormLabel>
@@ -221,12 +222,12 @@ export const Step4Subjects = ({
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
+              </MotionRise>
 
               {selectedClass && (
                 <>
                   {/* Quick Add Common Subjects */}
-                  <div>
+                  <MotionRise>
                     <h3 className="text-sm font-semibold text-gray-300 mb-4 uppercase tracking-wider">
                       Quick Add Common Subjects for {classes.find(c => c.id === selectedClass)?.name}
                     </h3>
@@ -247,15 +248,15 @@ export const Step4Subjects = ({
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </MotionRise>
 
                   {/* Subjects for Selected Class */}
-                  <div className="border-t border-[rgba(255,255,255,0.07)] pt-8">
+                  <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8">
                     <h3 className="text-lg font-semibold text-white mb-6">
                       Subjects for {classes.find(c => c.id === selectedClass)?.name}
                     </h3>
 
-                    <div className="space-y-4">
+                    <MotionStagger className="space-y-4">
                       {fields.map((field, idx) => {
                         // Watch the specific field to check its classId
                         const itemClassId = form.watch(`subjects.${idx}.classId`);
@@ -306,7 +307,7 @@ export const Step4Subjects = ({
                           <p className="text-gray-500">No subjects added to this class yet.</p>
                         </div>
                       )}
-                    </div>
+                    </MotionStagger>
 
                     {/* Add More Button */}
                     <button
@@ -317,14 +318,14 @@ export const Step4Subjects = ({
                       <Plus className="w-4 h-4" />
                       Add Another Subject to {classes.find(c => c.id === selectedClass)?.name}
                     </button>
-                  </div>
+                  </MotionRise>
                 </>
               )}
 
               {/* Summary by Class */}
-              <div className="border-t border-[rgba(255,255,255,0.07)] pt-8">
+              <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8">
                 <h3 className="text-lg font-semibold text-white mb-4">Summary</h3>
-                <div className="space-y-3">
+                <MotionStagger className="space-y-3">
                   {classes.map((cls) => {
                     const classSubjects = getSubjectsForClass(cls.id).filter(s => s.name.trim());
                     return (
@@ -348,11 +349,11 @@ export const Step4Subjects = ({
                       </div>
                     );
                   })}
-                </div>
-              </div>
+                </MotionStagger>
+              </MotionRise>
 
               {/* Action Buttons */}
-              <div className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
+              <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
                 <Button
                   type="button"
                   variant="outline"
@@ -369,11 +370,11 @@ export const Step4Subjects = ({
                 >
                   {isLoading ? 'Saving...' : 'Next: Grading System'}
                 </Button>
-              </div>
+              </MotionRise>
             </form>
           </Form>
         )}
       </div>
-    </div>
+    </MotionRise>
   );
 };

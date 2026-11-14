@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function CreateFlashcardsPage() {
   const [loading, setLoading] = useState(true);
@@ -41,17 +42,17 @@ export default function CreateFlashcardsPage() {
       
       
       <main className="p-8 max-w-5xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <MotionRise className="flex justify-between items-center mb-8">
           <Link href="/dashboard/teacher" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 transition-colors">
             <ChevronLeft className="w-4 h-4 mr-1" /> Back
           </Link>
           <Button className="bg-blue hover:bg-blue/90 text-gray-900 font-bold">
             <Save className="w-4 h-4 mr-2" /> Save Deck
           </Button>
-        </div>
+        </MotionRise>
 
         <div className="space-y-8">
-          <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 space-y-6">
+          <MotionRise delay={0.05} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8 space-y-6">
             <div className="flex items-center gap-4 mb-2">
                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-[#146ef5]">
                   <Layers className="w-6 h-6" />
@@ -81,22 +82,22 @@ export default function CreateFlashcardsPage() {
                   </select>
                </div>
             </div>
-          </div>
+          </MotionRise>
 
-          <div className="grid md:grid-cols-2 gap-6">
-             <div className="p-12 text-center border-2 border-dashed border-white/5 rounded-[40px] bg-white/[0.02] flex flex-col items-center justify-center group hover:border-blue/30 transition-all cursor-pointer">
+          <MotionStagger className="grid md:grid-cols-2 gap-6">
+             <MotionRise delay={0.05} className="p-12 text-center border-2 border-dashed border-white/5 rounded-[40px] bg-white/[0.02] flex flex-col items-center justify-center group hover:border-blue/30 transition-all cursor-pointer">
                 <Plus className="w-10 h-10 text-gray-900/10 mb-4 group-hover:text-[#146ef5] group-hover:scale-110 transition-all" />
                 <h4 className="text-gray-900 font-bold mb-1">Add Card Manually</h4>
                 <p className="text-[10px] text-gray-500">Create cards one by one</p>
-             </div>
+             </MotionRise>
              
-             <div className="p-12 text-center border-2 border-dashed border-white/5 rounded-[40px] bg-blue/5 flex flex-col items-center justify-center group hover:bg-blue-50 transition-all cursor-pointer">
+             <MotionRise delay={0.1} className="p-12 text-center border-2 border-dashed border-white/5 rounded-[40px] bg-blue/5 flex flex-col items-center justify-center group hover:bg-blue-50 transition-all cursor-pointer">
                 <Sparkles className="w-10 h-10 text-[#146ef5]/40 mb-4 group-hover:scale-110 transition-all" />
                 <h4 className="text-[#146ef5] font-bold mb-1">AI Deck Generator</h4>
                 <p className="text-[10px] text-[#146ef5]/60 uppercase font-black tracking-tighter">Premium</p>
                 <p className="text-[10px] text-[#146ef5]/40 mt-2">Generate deck from your notes</p>
-             </div>
-          </div>
+             </MotionRise>
+          </MotionStagger>
         </div>
       </main>
     </div>

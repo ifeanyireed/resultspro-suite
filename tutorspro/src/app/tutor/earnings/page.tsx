@@ -1,9 +1,10 @@
 "use client";
 
 import api from '@/lib/api';
-import { IconWallet as Wallet, IconTrendingUp as TrendingUp, IconCalendar as Calendar, IconChevronRight as ChevronRight, IconArrowUpRight as ArrowUpRight, IconDownload as Download, IconHistory as History, IconDollarSign as DollarSign, IconPieChart as PieChart, IconTarget as Target, IconLoader2 as Loader2 } from '@tabler/icons-react';
+import { IconWallet as Wallet, IconTrendingUp as TrendingUp, IconCalendar as Calendar, IconChevronRight as ChevronRight, IconArrowUpRight as ArrowUpRight, IconDownload as Download, IconHistory as History, IconCurrencyDollar as DollarSign, IconChartPie as PieChart, IconTarget as Target, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function TutorEarnings() {
   const [mounted, setMounted] = useState(false);
@@ -33,7 +34,7 @@ export default function TutorEarnings() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Earnings <span className="text-green">Dashboard</span>
@@ -43,7 +44,7 @@ export default function TutorEarnings() {
           <button className="px-8 py-4 rounded-2xl bg-green-600 text-white font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20">
              <Wallet className="w-5 h-5" /> REQUEST PAYOUT
           </button>
-        </div>
+        </MotionRise>
 
         {loading ? (
            <div className="flex flex-col items-center justify-center py-24 opacity-50">
@@ -53,7 +54,7 @@ export default function TutorEarnings() {
         ) : (
           <>
             {/* Financial Highlights */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
                <div className="p-8 rounded-[40px] bg-gradient-to-br from-green/20 to-blue/10 border border-white/10 relative overflow-hidden group">
                   <div className="relative z-10">
                      <div className="text-[10px] text-gray-500 font-black uppercase tracking-[0.2em] mb-2">Available for Payout</div>
@@ -100,11 +101,11 @@ export default function TutorEarnings() {
                      ))}
                   </div>
                </div>
-            </div>
+            </MotionStagger>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                {/* Detailed Log */}
-               <div className="lg:col-span-2 space-y-8">
+               <MotionRise delay={0.1} className="lg:col-span-2 space-y-8">
                   <section>
                      <div className="flex items-center justify-between mb-8">
                         <h2 className="text-2xl font-display font-bold text-white flex items-center gap-3">
@@ -159,10 +160,10 @@ export default function TutorEarnings() {
                         </table>
                      </div>
                   </section>
-               </div>
+               </MotionRise>
 
                {/* Sidebar */}
-               <div className="space-y-8">
+               <MotionRise delay={0.2} className="space-y-8">
                   <section className="p-8 rounded-[40px] bg-white/5 border border-white/10">
                      <h3 className="text-xl font-display font-bold text-white mb-6">Revenue Targets</h3>
                      <div className="space-y-8">
@@ -192,7 +193,7 @@ export default function TutorEarnings() {
                         VIEW FEE BREAKDOWN
                      </button>
                   </section>
-               </div>
+               </MotionRise>
             </div>
           </>
         )}

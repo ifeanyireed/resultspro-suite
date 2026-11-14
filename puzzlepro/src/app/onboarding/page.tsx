@@ -24,6 +24,7 @@ import {
   IconX,
 } from '@tabler/icons-react';
 import { getCharacterAvatarUrl } from '@/utils/cdn';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const AVATAR_OPTIONS = Array.from(
   { length: 20 },
@@ -265,7 +266,8 @@ export default function OnboardingPage() {
       </header>
 
       {/* Main Wizard Card */}
-      <main className="max-w-2xl w-full mx-auto my-auto bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl flex flex-col gap-6 animate-fade-in-up">
+      <MotionRise className="max-w-2xl w-full mx-auto my-auto">
+      <main className="w-full bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl flex flex-col gap-6">
         {/* Progress Bar (Mobile) */}
         <div className="sm:hidden flex items-center justify-between text-xs text-slate-500 pb-2 border-b border-slate-150">
           <span>Step {step} of 4</span>
@@ -279,7 +281,7 @@ export default function OnboardingPage() {
 
         {/* STEP 1: SELECT ACCOUNT TYPE */}
         {step === 1 && (
-          <div className="flex flex-col gap-6 animate-fade-in-up">
+          <MotionRise className="flex flex-col gap-6">
             <div>
               <h2 className="text-2xl font-medium text-slate-900 tracking-tight">Welcome to PuzzlePro!</h2>
               <p className="text-xs text-slate-500 font-normal mt-1">
@@ -287,7 +289,7 @@ export default function OnboardingPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div
                 onClick={() => setRole('school')}
                 className={`p-6 rounded-3xl border-2 transition-all cursor-pointer flex flex-col gap-3 ${
@@ -325,8 +327,8 @@ export default function OnboardingPage() {
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
+            </MotionStagger>
+          </MotionRise>
         )}
 
         {/* STEP 2: DETAILS */}
@@ -670,6 +672,7 @@ export default function OnboardingPage() {
           </div>
         )}
       </main>
+      </MotionRise>
 
       <footer className="text-center text-[11px] text-slate-400 font-medium py-3 space-x-4">
         <Link href="/about" className="hover:text-amber-500 transition">About Us</Link>

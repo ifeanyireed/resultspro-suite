@@ -6,6 +6,7 @@ import { IconClock as Clock, IconTrash as Trash2, IconMail as Mail, IconCircleCh
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { useNotifications } from '@/hooks/useNotifications';
 import { toast } from 'sonner';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const NotificationsPage: React.FC = () => {
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead, deleteNotification, clearAll } =
@@ -91,7 +92,7 @@ const NotificationsPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <MotionRise className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Notifications</h1>
@@ -259,7 +260,7 @@ const NotificationsPage: React.FC = () => {
       </Card>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
@@ -299,8 +300,8 @@ const NotificationsPage: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-      </div>
-    </div>
+      </MotionStagger>
+    </MotionRise>
   );
 };
 

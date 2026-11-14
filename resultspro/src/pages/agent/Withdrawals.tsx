@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { DollarSign, CreditCard, Wallet, Clock, CheckCircle, AlertTriangle, BarChart01, Building2, TrendingUp, Trophy, Calendar, User, LogOut } from '@/lib/hugeicons-compat';
 import { useAgentWithdrawals } from '@/hooks/useAgentAnalytics';
 import { useNavigate } from 'react-router-dom';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export const Withdrawals: React.FC = () => {
   const navigate = useNavigate();
@@ -90,23 +91,23 @@ export const Withdrawals: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
           <div className="space-y-6">
       {/* Header */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-6 text-white border border-[rgba(255,255,255,0.07)]">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-6 text-white border border-[rgba(255,255,255,0.07)]">
         <h1 className="text-3xl font-bold mb-2">Withdrawal Management</h1>
         <p className="text-gray-300">Manage your commission withdrawals</p>
-      </div>
+      </MotionRise>
 
       {/* Stats Cards */}
       {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-4 border border-[rgba(255,255,255,0.07)]">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-4 border border-[rgba(255,255,255,0.07)]">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-400 text-sm">Pending</span>
               <Clock className="w-5 h-5 text-yellow-400" />
             </div>
             <div className="text-2xl font-bold text-white">{stats.pending}</div>
-          </div>
+          </MotionRise>
 
-          <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-4 border border-[rgba(255,255,255,0.07)]">
+          <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-4 border border-[rgba(255,255,255,0.07)]">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-400 text-sm">Total Withdrawn</span>
               <CheckCircle className="w-5 h-5 text-green-400" />
@@ -114,20 +115,20 @@ export const Withdrawals: React.FC = () => {
             <div className="text-2xl font-bold text-white">
               ₦{stats.totalWithdrawn.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
-          </div>
+          </MotionRise>
 
-          <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-4 border border-[rgba(255,255,255,0.07)]">
+          <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[20px] p-4 border border-[rgba(255,255,255,0.07)]">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-400 text-sm">Total Requests</span>
               <DollarSign className="w-5 h-5 text-blue-400" />
             </div>
             <div className="text-2xl font-bold text-white">{stats.totalWithdrawals}</div>
-          </div>
-        </div>
+          </MotionRise>
+        </MotionStagger>
       )}
 
       {/* New Withdrawal Button */}
-      <div className="flex justify-end">
+      <MotionRise className="flex justify-end">
         <button
           onClick={() => setShowForm(!showForm)}
           className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded flex items-center gap-2 transition"
@@ -135,11 +136,11 @@ export const Withdrawals: React.FC = () => {
           <DollarSign className="w-4 h-4" />
           {showForm ? 'Cancel' : 'Request Withdrawal'}
         </button>
-      </div>
+      </MotionRise>
 
       {/* New Withdrawal Form */}
       {showForm && (
-        <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-6 border border-[rgba(255,255,255,0.07)]">
+        <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] p-6 border border-[rgba(255,255,255,0.07)]">
           <h2 className="text-lg font-semibold text-white mb-4">New Withdrawal Request</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 gap-4">
@@ -213,11 +214,11 @@ export const Withdrawals: React.FC = () => {
               </button>
             </div>
           </form>
-        </div>
+        </MotionRise>
       )}
 
       {/* Withdrawals Table */}
-      <div className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] overflow-hidden">
+      <MotionRise className="bg-[rgba(255,255,255,0.02)] rounded-[30px] border border-[rgba(255,255,255,0.07)] overflow-hidden">
         <div className="p-6 border-b border-[rgba(255,255,255,0.07)]">
           <h2 className="text-lg font-semibold text-white">Withdrawal History</h2>
         </div>
@@ -295,7 +296,7 @@ export const Withdrawals: React.FC = () => {
             Next
           </button>
         </div>
-      </div>
+      </MotionRise>
           </div>
         </div>
       </main>

@@ -27,6 +27,7 @@ import { useQuery } from '@tanstack/react-query';
 import { coursesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface Resource {
   id: string;
@@ -213,7 +214,7 @@ export default function ResourcesPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto pb-16">
+    <MotionRise className="max-w-6xl mx-auto pb-16">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 mt-2">
         <div>
@@ -259,7 +260,7 @@ export default function ResourcesPage() {
       </div>
 
       {/* KPI Summary Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+      <MotionStagger className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
             <FolderOpenIcon className="w-6 h-6" />
@@ -299,7 +300,7 @@ export default function ResourcesPage() {
             <div className="text-xs text-slate-500 font-medium">Code Repos & Links</div>
           </div>
         </div>
-      </div>
+      </MotionStagger>
 
       {/* Filter Tabs & Search Bar */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6">
@@ -392,7 +393,7 @@ export default function ResourcesPage() {
         </div>
       ) : viewMode === 'GRID' ? (
         /* Grid View Layout */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredResources.map((resource) => (
             <div
               key={resource.id}
@@ -460,7 +461,7 @@ export default function ResourcesPage() {
               </div>
             </div>
           ))}
-        </div>
+        </MotionStagger>
       ) : (
         /* Table List View Layout */
         <div className="bg-white rounded-3xl shadow-xs border border-slate-200/80 overflow-hidden">
@@ -604,6 +605,6 @@ export default function ResourcesPage() {
           </div>
         </div>
       )}
-    </div>
+    </MotionRise>
   );
 }

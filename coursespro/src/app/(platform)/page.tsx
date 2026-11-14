@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import { IconBook, IconBrain, IconTrophy, IconUserPlus, IconChartBar, IconDeviceLaptop, IconCertificate, IconSchool } from '@tabler/icons-react';
 import Link from 'next/link';
 import { getTenant } from '@/lib/tenant';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default async function PlatformLandingPage() {
   const tenant = await getTenant('coursespro');
@@ -27,13 +28,13 @@ export default async function PlatformLandingPage() {
 
       {/* Services Grid (Matches Tenant Styling) */}
       <section id="features" className="section-py bg-light">
-        <div className="container-nets">
+        <MotionRise className="container-nets">
           <div style={{ marginBottom: '4rem', maxWidth: '600px' }}>
             <div className="overline" style={{ marginBottom: '1rem' }}>One connected platform</div>
             <h2 className="text-d4 fw-400">More ways to teach.<br/>More ways to earn.</h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { title: 'Course builder', desc: 'Build self-paced programs with video and paths.', icon: IconBook },
               { title: 'Live learning', desc: 'Schedule instructor-led cohorts and attendance.', icon: IconDeviceLaptop },
@@ -53,14 +54,14 @@ export default async function PlatformLandingPage() {
                 </Link>
               </div>
             ))}
-          </div>
-        </div>
+          </MotionStagger>
+        </MotionRise>
       </section>
 
       {/* The Standard Manifesto & Pedagogy Callout */}
       <section className="py-20 bg-[#0B1021] text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="container-nets relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
+        <MotionRise className="container-nets relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
           <div className="max-w-2xl">
             <div className="inline-flex items-center space-x-2 bg-white/10 border border-white/15 px-3.5 py-1 rounded-full text-blue-400 text-xs font-mono font-bold uppercase tracking-wider mb-5">
               <span>The CoursesPRO Standard</span>
@@ -81,12 +82,12 @@ export default async function PlatformLandingPage() {
               <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
             </Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Academy Commerce (Matches Tenant Styling) */}
       <section className="section-py bg-white border-y border-nets-border">
-        <div className="container-nets">
+        <MotionRise className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
               <div className="overline" style={{ marginBottom: '1rem' }}>Academy Commerce</div>
@@ -123,12 +124,12 @@ export default async function PlatformLandingPage() {
               </div>
             </div>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* The Learner Experience (Matches Tenant Styling, Alt layout) */}
       <section className="section-py bg-light border-b border-nets-border">
-        <div className="container-nets">
+        <MotionRise className="container-nets">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left side placeholder for UI illustration */}
             <div className="relative order-2 lg:order-1 w-full h-full min-h-[400px] lg:aspect-square">
@@ -165,18 +166,18 @@ export default async function PlatformLandingPage() {
               </ul>
             </div>
           </div>
-        </div>
+        </MotionRise>
       </section>
 
       {/* Build your academy in three steps */}
       <section className="section-py bg-white border-b border-nets-border">
-        <div className="container-nets">
+        <MotionRise className="container-nets">
           <div style={{ marginBottom: '4rem', textAlign: 'center' }}>
             <div className="overline" style={{ marginBottom: '1rem' }}>Your first cohort</div>
             <h2 className="text-d4 fw-400">Build your academy in three steps.</h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { step: '01', title: 'Set up your workspace', desc: 'Create your account, name your academy, and customize your theme colors and domain.' },
               { step: '02', title: 'Add your content', desc: 'Upload your course videos, set up live sessions, and list your books in the store.' },
@@ -193,13 +194,13 @@ export default async function PlatformLandingPage() {
                 <p className="text-muted text-base relative z-10">{feature.desc}</p>
               </div>
             ))}
-          </div>
-        </div>
+          </MotionStagger>
+        </MotionRise>
       </section>
 
       {/* Simple CTA (Matches Tenant Styling) */}
       <section className="section-py" style={{ background: 'var(--color-nets-navy)', color: '#fff' }}>
-        <div className="container-nets text-center">
+        <MotionRise className="container-nets text-center">
           <h2 className="text-d3 fw-300 mb-6">Ready to launch your own academy?</h2>
           <p className="text-body-lg mb-8 opacity-80 max-w-[600px] mx-auto">
             Get everything you need to sell courses, books, and live sessions under your own brand in minutes.
@@ -209,7 +210,7 @@ export default async function PlatformLandingPage() {
               Start building for free
             </Link>
           </div>
-        </div>
+        </MotionRise>
       </section>
       
       <Footer hideInstructorLink={true} isPlatform={true} flattenLogo={false} />

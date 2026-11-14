@@ -13,12 +13,13 @@ import {
   UserPlusIcon
 } from '@heroicons/react/24/outline';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function ClassroomPRODashboard() {
   return (
-    <>
+    <MotionRise>
       {/* Dashboard Title & Actions */}
-      <div className="flex items-end justify-between mb-8 mt-2">
+      <MotionRise delay={0.04} className="flex items-end justify-between mb-8 mt-2">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Classroom Command</h1>
           <p className="text-sm text-gray-500 mt-1">Manage physical and virtual learning spaces.</p>
@@ -33,13 +34,13 @@ export default function ClassroomPRODashboard() {
             View Analytics
           </button>
         </div>
-      </div>
+      </MotionRise>
 
       {/* Top Metric Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         
         {/* Card 1: Primary Dark */}
-        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
+        <MotionRise delay={0.06} className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
           <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
           <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
           
@@ -56,10 +57,10 @@ export default function ClassroomPRODashboard() {
               <span>vs Last Month</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Card 2: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise delay={0.1} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Attendance Rate</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
@@ -73,10 +74,10 @@ export default function ClassroomPRODashboard() {
               <span>vs Last Month</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Card 3: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise delay={0.14} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Teachers Present</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
@@ -89,10 +90,10 @@ export default function ClassroomPRODashboard() {
               <span className="text-gray-400">Total this week</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Card 4: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
+        <MotionRise delay={0.18} className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-normal text-gray-900">Room Utilization</h3>
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
@@ -105,15 +106,15 @@ export default function ClassroomPRODashboard() {
               <span className="text-gray-400">Overall average</span>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-      </div>
+      </MotionStagger>
 
       {/* Main Content Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+      <MotionStagger className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         
         {/* Left Side (Analytics, Reminders, Leads, etc) */}
-        <div className="lg:col-span-9 flex flex-col gap-3">
+        <MotionRise delay={0.1} className="lg:col-span-9 flex flex-col gap-3">
           
           {/* Top Row of Left Side */}
           <div className="grid grid-cols-1 lg:grid-cols-9 gap-3">
@@ -182,10 +183,10 @@ export default function ClassroomPRODashboard() {
               </div>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Right Sidebar Stack */}
-        <div className="lg:col-span-3 flex flex-col gap-3">
+        <MotionRise delay={0.14} className="lg:col-span-3 flex flex-col gap-3">
           
           {/* Recent Activity */}
           <div className="w-full bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
@@ -211,9 +212,9 @@ export default function ClassroomPRODashboard() {
               </div>
             </div>
           </div>
-        </div>
+        </MotionRise>
 
-      </div>
-    </>
+      </MotionStagger>
+    </MotionRise>
   );
 }

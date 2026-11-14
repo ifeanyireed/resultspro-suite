@@ -1,6 +1,7 @@
 "use client";
 
 import api from '@/lib/api';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { IconStar as Star, IconMessage as MessageSquare, IconThumbUp as ThumbsUp, IconAlertCircle as AlertCircle, IconChevronRight as ChevronRight, IconUser as User, IconCircleCheck as CheckCircle2, IconFilter as Filter, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -64,7 +65,7 @@ export default function ParentFeedback() {
     <main className="min-h-screen bg-navy pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
               Tutor <span className="text-blue">Feedback</span>
@@ -74,7 +75,7 @@ export default function ParentFeedback() {
           <button className="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 text-gray-400 font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:text-white transition-all">
              <Filter className="w-4 h-4" /> Filter Tutors
           </button>
-        </div>
+        </MotionRise>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 opacity-50">
@@ -82,9 +83,9 @@ export default function ParentFeedback() {
             <p className="text-white font-bold">Loading feedback data...</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Feedback Form / List (Left) */}
-            <div className="lg:col-span-2 space-y-12">
+            <MotionRise className="lg:col-span-2 space-y-12">
                <section>
                   <h2 className="text-2xl font-display font-bold text-white mb-8">Pending Reviews</h2>
                   
@@ -188,10 +189,10 @@ export default function ParentFeedback() {
                      )}
                   </div>
                </section>
-            </div>
+            </MotionRise>
 
           {/* Sidebar (Right) - Quality Standards */}
-          <div className="space-y-8">
+          <MotionRise delay={0.1} className="space-y-8">
              <section className="p-8 rounded-[40px] bg-white/5 border border-white/10">
                 <div className="w-12 h-12 rounded-2xl bg-green/10 text-green flex items-center justify-center mb-6">
                    <ThumbsUp className="w-6 h-6" />
@@ -226,8 +227,9 @@ export default function ParentFeedback() {
                    CONTACT SUPPORT
                 </button>
              </section>
-          </div>
-        </div>
+          </MotionRise>
+        </MotionStagger>
+        )}
       </div>
     </main>
   );

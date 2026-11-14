@@ -4,6 +4,7 @@ import { IconBrain as Brain, IconTrophy as Trophy, IconChevronRight as ChevronRi
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';
 import { RoleGate } from '@/components/RoleGate';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function Quizzes() {
   const [quizzes, setQuizzes] = useState<any[]>([]);
@@ -37,7 +38,7 @@ export default function Quizzes() {
                 
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
           {/* ... rest of header ... */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+          <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
              <div>
                 <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
                    Quiz <span className="text-purple">Arena</span>
@@ -53,12 +54,12 @@ export default function Quizzes() {
                    </div>
                 </div>
              </div>
-          </div>
+          </MotionRise>
 
           {quizzes.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {quizzes.map((quiz, i) => (
-                <div key={i} className="p-8 rounded-[40px] bg-white/[0.02] border border-white/10 hover:bg-white/[0.05] transition-all relative group overflow-hidden">
+                <MotionRise key={i} delay={(i % 6) * 0.06} className="p-8 rounded-[40px] bg-white/[0.02] border border-white/10 hover:bg-white/[0.05] transition-all relative group overflow-hidden">
                    {quiz.status === 'Completed' && (
                      <div className="absolute top-0 right-0 p-6">
                         <div className="w-12 h-12 rounded-full bg-green/10 flex items-center justify-center text-green font-black text-xs">
@@ -96,9 +97,9 @@ export default function Quizzes() {
                       <Play className="w-4 h-4 fill-current" />
                       {quiz.status === 'Completed' ? 'Retake Quiz' : 'Start Quiz'}
                    </button>
-                </div>
+                </MotionRise>
               ))}
-            </div>
+            </MotionStagger>
           ) : (
             <div className="py-20 text-center bg-white/5 rounded-[40px] border border-dashed border-white/10">
                <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">No quizzes available for your subjects</p>

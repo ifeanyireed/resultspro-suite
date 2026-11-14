@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { IconUsers as UsersIcon, IconMessage as MessageIcon, IconSend as SendIcon, IconMoodSmile as SmileIcon, IconShieldCheck as ShieldIcon, IconCoins as CoinsIcon, IconArrowLeft as ArrowLeftIcon, IconLoader2 as Loader2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -105,7 +106,7 @@ function LiveWaitingRoomContent() {
       
       <div className="flex-1 flex flex-col lg:flex-row">
         {/* Main Content: Participant Grid */}
-        <div className="flex-1 p-6 md:p-12 overflow-y-auto">
+        <MotionRise className="flex-1 p-6 md:p-12 overflow-y-auto">
           <div className="max-w-4xl mx-auto">
             <Link 
               href="/live" 
@@ -200,7 +201,7 @@ function LiveWaitingRoomContent() {
               )}
             </div>
           </div>
-        </div>
+        </MotionRise>
 
         {/* Sidebar: Live Chat */}
         <aside className="w-full lg:w-96 bg-white/[0.02] border-l border-white/[0.05] border-t-white/[0.1] flex flex-col h-[600px] lg:h-auto">

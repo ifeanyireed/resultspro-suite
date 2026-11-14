@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/select';
 import { AlertCircle, Trash01, Plus } from '@/lib/hugeicons-compat';
 import { useOnboardingStore, Step3Data } from '@/stores/onboardingStore';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 const classSchema = z.object({
   name: z.string().min(1, 'Class name is required'),
@@ -119,31 +120,31 @@ export const Step3Classes = ({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <MotionRise className="w-full max-w-2xl mx-auto">
       <div className="bg-[rgba(255,255,255,0.02)] rounded-[20px] border border-[rgba(255,255,255,0.07)] p-8 backdrop-blur-xl">
-        <div className="mb-8">
+        <MotionRise className="mb-8">
           <h2 className="text-3xl font-bold text-white">Classes</h2>
           <p className="text-gray-400 mt-2">
             Define all the classes in your school. You can add more classes later.
           </p>
-        </div>
+        </MotionRise>
 
         {submitError && (
-          <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex gap-3">
+          <MotionRise className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex gap-3">
             <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
             <p className="text-red-400 text-sm">{submitError}</p>
-          </div>
+          </MotionRise>
         )}
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             {/* Classes List */}
-            <div>
+            <MotionRise>
               <h3 className="text-lg font-semibold text-white mb-6">
                 Class List
               </h3>
 
-              <div className="space-y-4">
+              <MotionStagger className="space-y-4">
                 {fields.map((field, index) => (
                   <div
                     key={field.id}
@@ -210,7 +211,7 @@ export const Step3Classes = ({
                     )}
                   </div>
                 ))}
-              </div>
+              </MotionStagger>
 
               {/* Add More Button */}
               <button
@@ -221,18 +222,18 @@ export const Step3Classes = ({
                 <Plus className="w-4 h-4" />
                 Add Another Class
               </button>
-            </div>
+            </MotionRise>
 
             {/* Summary */}
-            <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+            <MotionRise className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
               <p className="text-sm text-blue-300">
                 <strong>Added {fields.length} class{fields.length !== 1 ? 'es' : ''}:</strong>{' '}
                 {form.watch('classes').filter(c => c.name && c.classLevel).map(c => c.name).join(', ') || 'None yet'}
               </p>
-            </div>
+            </MotionRise>
 
             {/* Action Buttons */}
-            <div className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
+            <MotionRise className="border-t border-[rgba(255,255,255,0.07)] pt-8 flex gap-4 justify-between">
               <Button
                 type="button"
                 variant="outline"
@@ -249,10 +250,10 @@ export const Step3Classes = ({
               >
                 {isLoading ? 'Saving...' : 'Next: Subjects'}
               </Button>
-            </div>
+            </MotionRise>
           </form>
         </Form>
       </div>
-    </div>
+    </MotionRise>
   );
 };

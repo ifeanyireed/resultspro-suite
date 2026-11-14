@@ -24,6 +24,7 @@ import { useQuery } from '@tanstack/react-query';
 import { coursesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
+import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 interface MentorProfile {
   user_id: string;
@@ -116,7 +117,7 @@ export default function MentorsPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto pb-16">
+    <MotionRise className="max-w-7xl mx-auto pb-16">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 mt-2">
         <div>
@@ -144,7 +145,7 @@ export default function MentorsPage() {
       </div>
 
       {/* KPI Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <MotionStagger className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
             <AcademicCapIcon className="w-6 h-6" />
@@ -174,7 +175,7 @@ export default function MentorsPage() {
             <div className="text-xs text-slate-500 font-medium">Completed Code Reviews</div>
           </div>
         </div>
-      </div>
+      </MotionStagger>
 
       {/* Filter Tabs & Search Bar */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6">
@@ -255,7 +256,7 @@ export default function MentorsPage() {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredMentors.map((mentor) => (
             <div
               key={mentor.user_id}
@@ -345,8 +346,8 @@ export default function MentorsPage() {
               </div>
             </div>
           ))}
-        </div>
+        </MotionStagger>
       )}
-    </div>
+    </MotionRise>
   );
 }

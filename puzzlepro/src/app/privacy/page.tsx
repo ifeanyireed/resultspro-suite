@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 import { 
   IconShieldCheck, 
   IconLock, 
@@ -36,6 +37,7 @@ export default function PrivacyPage() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
         
         {/* HERO BANNER */}
+        <MotionRise>
         <section className="text-center space-y-4 pt-4">
           <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-bold uppercase tracking-wider">
             <IconShieldCheck className="w-4 h-4 text-emerald-600" />
@@ -50,12 +52,13 @@ export default function PrivacyPage() {
             Last Updated: August 2026 • Your privacy and child safety are our highest priority at ResultsPro.
           </p>
         </section>
+        </MotionRise>
 
         {/* MAIN LAYOUT WITH TABLE OF CONTENTS AND CONTENT */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* STICKY TABLE OF CONTENTS (4 COLS) */}
-          <div className="lg:col-span-4 hidden lg:block sticky top-24 space-y-4">
+          <MotionRise delay={0.05} className="lg:col-span-4 hidden lg:block sticky top-24 space-y-4">
             <div className="bg-white border border-slate-200/80 p-6 rounded-3xl space-y-4 shadow-sm">
               <h3 className="text-xs font-black uppercase tracking-wider text-amber-600 font-varela flex items-center space-x-2">
                 <IconLock className="w-4 h-4" />
@@ -73,10 +76,10 @@ export default function PrivacyPage() {
                 ))}
               </nav>
             </div>
-          </div>
+          </MotionRise>
 
           {/* DOCUMENT CONTENT (8 COLS) */}
-          <div className="lg:col-span-8 bg-white border border-slate-200/80 p-6 sm:p-10 rounded-3xl space-y-10 text-slate-700 text-sm leading-relaxed shadow-md">
+          <MotionRise delay={0.1} className="lg:col-span-8 bg-white border border-slate-200/80 p-6 sm:p-10 rounded-3xl space-y-10 text-slate-700 text-sm leading-relaxed shadow-md">
             
             <section id="commitment" className="space-y-3">
               <h2 className="text-xl font-bold font-varela text-slate-900 border-b border-slate-200 pb-2">
@@ -189,7 +192,7 @@ export default function PrivacyPage() {
               </div>
             </section>
 
-          </div>
+          </MotionRise>
 
         </div>
 
