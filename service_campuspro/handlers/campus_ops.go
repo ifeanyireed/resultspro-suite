@@ -574,13 +574,39 @@ func HandleCampusLibrary(w http.ResponseWriter, r *http.Request) {
 	}
 	seedTenantOperationalDataIfEmpty(tenantID)
 
+	today := time.Now().UTC().Format("2006-01-02")
+
 	switch r.Method {
 	case http.MethodGet:
-		bRows, _ := db.DB.Query(`
-			SELECT id, tenant_id, COALESCE(isbn, ''), title, author, COALESCE(category, 'General'), COALESCE(shelf_location, ''), total_copies, available_copies, COALESCE(status, 'AVAILABLE')
-			FROM campus_library_books WHERE tenant_id = ? ORDER BY title ASC`, tenantID)
+		searchQuery := strings.TrimSpace(r.URL.Query().Get("search"))
+		categoryFilter := strings.TrimSpace(r.URL.Query().Get("category"))
+		statusFilter := strings.TrimSpace(r.URL.Query().Get("status"))
+
+		bookQuery := `
+			SELECT id, tenant_id, COALESCE(isbn, ''), title, author, COALESCE(category, 'General'),
+			       COALESCE(shelf_location, ''), total_copies, available_copies, COALESCE(status, 'AVAILABLE')
+			FROM campus_library_books
+			WHERE tenant_id = ?`
+		bookArgs := []interface{}{tenantID}
+
+		if categoryFilter != "" && categoryFilter != "ALL" && categoryFilter != "All Categories" {
+			bookQuery += " AND category = ?"
+			bookArgs = append(bookArgs, categoryFilter)
+		}
+		if statusFilter != "" && statusFilter != "ALL" {
+			bookQuery += " AND status = ?"
+			bookArgs = append(bookArgs, statusFilter)
+		}
+		if searchQuery != "" {
+			bookQuery += " AND (LOWER(title) LIKE ? OR LOWER(author) LIKE ? OR LOWER(isbn) LIKE ? OR LOWER(shelf_location) LIKE ?)"
+			likePattern := "%" + strings.ToLower(searchQuery) + "%"
+			bookArgs = append(bookArgs, likePattern, likePattern, likePattern, likePattern)
+		}
+		bookQuery += " ORDER BY title ASC"
+
+		bRows, err := db.DB.Query(bookQuery, bookArgs...)
 		books := []map[string]interface{}{}
-		if bRows != nil {
+		if err == nil && bRows != nil {
 			defer bRows.Close()
 			for bRows.Next() {
 				var id, tID, isbn, title, author, cat, shelf, status string
@@ -602,22 +628,36 @@ func HandleCampusLibrary(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		lRows, _ := db.DB.Query(`
-			SELECT id, tenant_id, book_id, book_title, borrower_name, COALESCE(borrower_role, 'student'), COALESCE(class_name, ''), COALESCE(issued_date, ''), COALESCE(due_date, ''), COALESCE(returned_date, ''), fine_amount, COALESCE(status, 'BORROWED')
-			FROM campus_library_loans WHERE tenant_id = ? ORDER BY created_at DESC`, tenantID)
+		// Fetch loans
+		lRows, err := db.DB.Query(`
+			SELECT id, tenant_id, book_id, COALESCE(book_title, ''), borrower_name,
+			       COALESCE(borrower_id, ''), COALESCE(borrower_role, 'student'), COALESCE(class_name, ''),
+			       COALESCE(issued_date, ''), COALESCE(due_date, ''), COALESCE(returned_date, ''),
+			       COALESCE(fine_amount, 0), COALESCE(status, 'BORROWED')
+			FROM campus_library_loans
+			WHERE tenant_id = ?
+			ORDER BY created_at DESC`, tenantID)
 		loans := []map[string]interface{}{}
-		if lRows != nil {
+		if err == nil && lRows != nil {
 			defer lRows.Close()
 			for lRows.Next() {
-				var id, tID, bookID, bookTitle, borrower, role, cls, issued, due, ret, status string
+				var id, tID, bookID, bookTitle, borrower, bID, role, cls, issued, due, ret, status string
 				var fine float64
-				if err := lRows.Scan(&id, &tID, &bookID, &bookTitle, &borrower, &role, &cls, &issued, &due, &ret, &fine, &status); err == nil {
+				if err := lRows.Scan(&id, &tID, &bookID, &bookTitle, &borrower, &bID, &role, &cls, &issued, &due, &ret, &fine, &status); err == nil {
+					// Mark as overdue dynamically if past due date and still active
+					if status == "BORROWED" && due != "" && due < today {
+						status = "OVERDUE"
+						if fine == 0 {
+							fine = 500 // ₦500 default late return fine
+						}
+					}
 					loans = append(loans, map[string]interface{}{
 						"id":            id,
 						"tenant_id":     tID,
 						"book_id":       bookID,
 						"book_title":    bookTitle,
 						"borrower_name": borrower,
+						"borrower_id":   bID,
 						"borrower_role": role,
 						"class_name":    cls,
 						"issued_date":   issued,
@@ -639,7 +679,7 @@ func HandleCampusLibrary(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPost:
 		var input map[string]interface{}
 		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-			JSONError(w, http.StatusBadRequest, "Invalid JSON")
+			JSONError(w, http.StatusBadRequest, "Invalid JSON payload")
 			return
 		}
 		recordType, _ := input["record_type"].(string)
@@ -649,6 +689,11 @@ func HandleCampusLibrary(w http.ResponseWriter, r *http.Request) {
 			bookID, _ := input["book_id"].(string)
 			bookTitle, _ := input["book_title"].(string)
 			borrower, _ := input["borrower_name"].(string)
+			borrowerID, _ := input["borrower_id"].(string)
+			borrowerRole, _ := input["borrower_role"].(string)
+			if borrowerRole == "" {
+				borrowerRole = "student"
+			}
 			cls, _ := input["class_name"].(string)
 			due, _ := input["due_date"].(string)
 			issued := time.Now().UTC().Format("2006-01-02")
@@ -656,64 +701,188 @@ func HandleCampusLibrary(w http.ResponseWriter, r *http.Request) {
 				due = time.Now().UTC().AddDate(0, 0, 14).Format("2006-01-02")
 			}
 
+			// If bookTitle wasn't provided, lookup from bookID
+			if bookTitle == "" && bookID != "" {
+				_ = db.DB.QueryRow("SELECT title FROM campus_library_books WHERE id = ? AND tenant_id = ?", bookID, tenantID).Scan(&bookTitle)
+			}
+
 			_, err := db.DB.Exec(`
-				INSERT INTO campus_library_loans (id, tenant_id, book_id, book_title, borrower_name, class_name, issued_date, due_date, status)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'BORROWED')`,
-				id, tenantID, bookID, bookTitle, borrower, cls, issued, due,
+				INSERT INTO campus_library_loans (
+					id, tenant_id, book_id, book_title, borrower_name, borrower_id, borrower_role,
+					class_name, issued_date, due_date, status
+				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'BORROWED')`,
+				id, tenantID, bookID, bookTitle, strings.TrimSpace(borrower), strings.TrimSpace(borrowerID),
+				borrowerRole, strings.TrimSpace(cls), issued, due,
 			)
 			if err != nil {
-				JSONError(w, http.StatusInternalServerError, "Failed to issue book loan")
+				JSONError(w, http.StatusInternalServerError, "Failed to issue book loan in database")
 				return
 			}
 			if bookID != "" {
-				_, _ = db.DB.Exec("UPDATE campus_library_books SET available_copies = GREATEST(available_copies - 1, 0) WHERE id = ? AND tenant_id = ?", bookID, tenantID)
+				_, _ = db.DB.Exec("UPDATE campus_library_books SET available_copies = GREATEST(available_copies - 1, 0), updated_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_id = ?", bookID, tenantID)
 			}
-			JSONResponse(w, http.StatusCreated, map[string]interface{}{"id": id, "message": "Book loan issued"})
+			JSONResponse(w, http.StatusCreated, map[string]interface{}{"id": id, "message": "Book loan issued successfully"})
 			return
 		}
 
+		// Catalog a new book
 		title, _ := input["title"].(string)
 		author, _ := input["author"].(string)
 		isbn, _ := input["isbn"].(string)
 		cat, _ := input["category"].(string)
+		if cat == "" {
+			cat = "General Reference"
+		}
 		shelf, _ := input["shelf_location"].(string)
 		copies := 1
 		if c, ok := input["total_copies"].(float64); ok && c > 0 {
 			copies = int(c)
 		}
+
+		if strings.TrimSpace(title) == "" || strings.TrimSpace(author) == "" {
+			JSONError(w, http.StatusBadRequest, "Book title and author are required")
+			return
+		}
+
 		_, err := db.DB.Exec(`
 			INSERT INTO campus_library_books (id, tenant_id, isbn, title, author, category, shelf_location, total_copies, available_copies, status)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'AVAILABLE')`,
-			id, tenantID, isbn, title, author, cat, shelf, copies, copies,
+			id, tenantID, strings.TrimSpace(isbn), strings.TrimSpace(title), strings.TrimSpace(author),
+			strings.TrimSpace(cat), strings.TrimSpace(shelf), copies, copies,
 		)
 		if err != nil {
-			JSONError(w, http.StatusInternalServerError, "Failed to catalog book")
+			JSONError(w, http.StatusInternalServerError, "Failed to catalog book into database")
 			return
 		}
-		JSONResponse(w, http.StatusCreated, map[string]interface{}{"id": id, "message": "Book added to catalog"})
+		JSONResponse(w, http.StatusCreated, map[string]interface{}{"id": id, "message": "Book cataloged successfully"})
 
 	case http.MethodPatch, http.MethodPut:
-		var input struct {
-			LoanID string `json:"loan_id"`
-			Status string `json:"status"`
+		var input map[string]interface{}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			JSONError(w, http.StatusBadRequest, "Invalid JSON payload")
+			return
 		}
-		if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.LoanID == "" {
+
+		recordType, _ := input["record_type"].(string)
+
+		// Updating Book Catalog Record
+		if recordType == "book" || input["title"] != nil {
+			bookID, _ := input["id"].(string)
+			if bookID == "" {
+				bookID, _ = input["book_id"].(string)
+			}
+			if bookID == "" {
+				JSONError(w, http.StatusBadRequest, "Book ID is required")
+				return
+			}
+
+			title, _ := input["title"].(string)
+			author, _ := input["author"].(string)
+			isbn, _ := input["isbn"].(string)
+			cat, _ := input["category"].(string)
+			shelf, _ := input["shelf_location"].(string)
+			status, _ := input["status"].(string)
+			if status == "" {
+				status = "AVAILABLE"
+			}
+
+			var totalCopies, availCopies int
+			if tc, ok := input["total_copies"].(float64); ok {
+				totalCopies = int(tc)
+			}
+			if ac, ok := input["available_copies"].(float64); ok {
+				availCopies = int(ac)
+			} else {
+				availCopies = totalCopies
+			}
+
+			_, err := db.DB.Exec(`
+				UPDATE campus_library_books
+				SET title = ?, author = ?, isbn = ?, category = ?, shelf_location = ?,
+				    total_copies = ?, available_copies = ?, status = ?, updated_at = CURRENT_TIMESTAMP
+				WHERE id = ? AND tenant_id = ?`,
+				strings.TrimSpace(title), strings.TrimSpace(author), strings.TrimSpace(isbn),
+				strings.TrimSpace(cat), strings.TrimSpace(shelf), totalCopies, availCopies, status,
+				bookID, tenantID,
+			)
+			if err != nil {
+				JSONError(w, http.StatusInternalServerError, "Failed to update book in catalog")
+				return
+			}
+			JSONResponse(w, http.StatusOK, map[string]string{"message": "Book updated successfully"})
+			return
+		}
+
+		// Updating Loan Status (e.g. Return, Overdue, Extend)
+		loanID, _ := input["loan_id"].(string)
+		if loanID == "" {
+			loanID, _ = input["id"].(string)
+		}
+		status, _ := input["status"].(string)
+		if loanID == "" {
 			JSONError(w, http.StatusBadRequest, "loan_id is required")
 			return
 		}
-		today := time.Now().UTC().Format("2006-01-02")
-		var bookID string
-		_ = db.DB.QueryRow("SELECT book_id FROM campus_library_loans WHERE id = ? AND tenant_id = ?", input.LoanID, tenantID).Scan(&bookID)
-		_, _ = db.DB.Exec("UPDATE campus_library_loans SET status = ?, returned_date = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_id = ?", input.Status, today, input.LoanID, tenantID)
-		if input.Status == "RETURNED" && bookID != "" {
-			_, _ = db.DB.Exec("UPDATE campus_library_books SET available_copies = LEAST(available_copies + 1, total_copies) WHERE id = ? AND tenant_id = ?", bookID, tenantID)
+		if status == "" {
+			status = "RETURNED"
 		}
-		JSONResponse(w, http.StatusOK, map[string]string{"message": "Loan updated"})
+
+		var bookID string
+		_ = db.DB.QueryRow("SELECT book_id FROM campus_library_loans WHERE id = ? AND tenant_id = ?", loanID, tenantID).Scan(&bookID)
+
+		retDate := today
+		if status != "RETURNED" {
+			retDate = ""
+		}
+
+		_, err := db.DB.Exec(`
+			UPDATE campus_library_loans
+			SET status = ?, returned_date = ?, updated_at = CURRENT_TIMESTAMP
+			WHERE id = ? AND tenant_id = ?`,
+			status, retDate, loanID, tenantID,
+		)
+		if err != nil {
+			JSONError(w, http.StatusInternalServerError, "Failed to update loan status")
+			return
+		}
+
+		if status == "RETURNED" && bookID != "" {
+			_, _ = db.DB.Exec(`
+				UPDATE campus_library_books
+				SET available_copies = LEAST(available_copies + 1, total_copies), updated_at = CURRENT_TIMESTAMP
+				WHERE id = ? AND tenant_id = ?`, bookID, tenantID)
+		}
+
+		JSONResponse(w, http.StatusOK, map[string]string{"message": "Loan record updated successfully"})
 
 	case http.MethodDelete:
-		id := r.URL.Query().Get("id")
-		_, _ = db.DB.Exec("DELETE FROM campus_library_books WHERE id = ? AND tenant_id = ?", id, tenantID)
-		JSONResponse(w, http.StatusOK, map[string]string{"message": "Library item removed"})
+		id := strings.TrimSpace(r.URL.Query().Get("id"))
+		itemType := strings.TrimSpace(r.URL.Query().Get("type"))
+
+		if id == "" {
+			JSONError(w, http.StatusBadRequest, "ID is required")
+			return
+		}
+
+		if itemType == "loan" {
+			_, err := db.DB.Exec("DELETE FROM campus_library_loans WHERE id = ? AND tenant_id = ?", id, tenantID)
+			if err != nil {
+				JSONError(w, http.StatusInternalServerError, "Failed to delete loan record")
+				return
+			}
+			JSONResponse(w, http.StatusOK, map[string]string{"message": "Loan record removed"})
+			return
+		}
+
+		_, err := db.DB.Exec("DELETE FROM campus_library_books WHERE id = ? AND tenant_id = ?", id, tenantID)
+		if err != nil {
+			JSONError(w, http.StatusInternalServerError, "Failed to delete book from catalog")
+			return
+		}
+		// Also clean up any loans referencing this book
+		_, _ = db.DB.Exec("DELETE FROM campus_library_loans WHERE book_id = ? AND tenant_id = ?", id, tenantID)
+
+		JSONResponse(w, http.StatusOK, map[string]string{"message": "Library book and associated loans removed"})
 
 	default:
 		JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
