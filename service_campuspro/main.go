@@ -102,6 +102,8 @@ func main() {
 		"/api/campus/classes/arms":             handlers.HandleCampusArms,
 		"/api/v1/campus/classes/arms/students": handlers.HandleCampusArmStudents,
 		"/api/campus/classes/arms/students":    handlers.HandleCampusArmStudents,
+		"/api/v1/campus/students":              handlers.HandleCampusArmStudents,
+		"/api/campus/students":                 handlers.HandleCampusArmStudents,
 
 		// Academic Sessions & Term Calendar
 		"/api/v1/campus/academic-sessions": handlers.HandleCampusAcademicSessions,
