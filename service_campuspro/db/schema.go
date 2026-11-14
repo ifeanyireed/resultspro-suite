@@ -290,9 +290,54 @@ func InitCampusSchema() {
 			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		)`,
+		`CREATE TABLE IF NOT EXISTS campus_subjects (
+			id VARCHAR(64) PRIMARY KEY,
+			tenant_id VARCHAR(64) NOT NULL,
+			code VARCHAR(32) NOT NULL,
+			title VARCHAR(128) NOT NULL,
+			department VARCHAR(64) NOT NULL,
+			category VARCHAR(64) NOT NULL,
+			curriculum VARCHAR(64) NOT NULL,
+			level_category VARCHAR(32) NOT NULL DEFAULT 'ALL',
+			periods_per_week INT NOT NULL DEFAULT 4,
+			credit_units INT NOT NULL DEFAULT 1,
+			ca_weight INT NOT NULL DEFAULT 40,
+			exam_weight INT NOT NULL DEFAULT 60,
+			pass_mark INT NOT NULL DEFAULT 50,
+			status VARCHAR(32) NOT NULL DEFAULT 'ACTIVE',
+			description TEXT,
+			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		)`,
+		`CREATE TABLE IF NOT EXISTS campus_class_subjects (
+			id VARCHAR(64) PRIMARY KEY,
+			tenant_id VARCHAR(64) NOT NULL,
+			subject_id VARCHAR(64) NOT NULL REFERENCES campus_subjects(id) ON DELETE CASCADE,
+			class_id VARCHAR(64) NOT NULL,
+			class_name VARCHAR(64),
+			arm_id VARCHAR(64),
+			arm_name VARCHAR(64),
+			is_compulsory BOOLEAN NOT NULL DEFAULT TRUE,
+			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		)`,
+		`CREATE TABLE IF NOT EXISTS campus_subject_teachers (
+			id VARCHAR(64) PRIMARY KEY,
+			tenant_id VARCHAR(64) NOT NULL,
+			subject_id VARCHAR(64) NOT NULL REFERENCES campus_subjects(id) ON DELETE CASCADE,
+			arm_id VARCHAR(64),
+			arm_name VARCHAR(64),
+			teacher_id VARCHAR(64),
+			teacher_name VARCHAR(128) NOT NULL,
+			role VARCHAR(64) DEFAULT 'Subject Teacher',
+			weekly_periods INT DEFAULT 4,
+			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_classes_tenant ON campus_classes(tenant_id, level_order)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_arms_tenant ON campus_class_arms(tenant_id, class_id)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_students_arm ON campus_class_students(tenant_id, arm_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_subjects_tenant ON campus_subjects(tenant_id, department)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_class_subjects_tenant ON campus_class_subjects(tenant_id, subject_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_subject_teachers_tenant ON campus_subject_teachers(tenant_id, subject_id)`,
 	}
 
 	for _, stmt := range tables {

@@ -106,6 +106,12 @@ func main() {
 		"/api/campus/academic-terms":       handlers.HandleCampusAcademicTerms,
 		"/api/v1/campus/academic-events":   handlers.HandleCampusAcademicEvents,
 		"/api/campus/academic-events":      handlers.HandleCampusAcademicEvents,
+
+		// Academic Curriculum Subjects & Allocations
+		"/api/v1/campus/subjects":             handlers.HandleCampusSubjects,
+		"/api/campus/subjects":                handlers.HandleCampusSubjects,
+		"/api/v1/campus/subjects/allocations": handlers.HandleCampusSubjectAllocations,
+		"/api/campus/subjects/allocations":    handlers.HandleCampusSubjectAllocations,
 	}
 
 	for path, handler := range routes {
