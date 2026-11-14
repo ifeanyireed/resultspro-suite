@@ -27,7 +27,7 @@ const Contact: React.FC = () => {
     setFormStatus('submitting');
     
     try {
-      const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.VITE_API_URL || '');
+      const baseURL = (typeof process !== 'undefined' && (process.env?.NEXT_PUBLIC_API_URL || process.env?.NEXT_PUBLIC_USERS_API)) || import.meta.env.VITE_API_URL || '';
       await axios.post(`${baseURL}/support/contact`, formData);
       
       setFormStatus('success');

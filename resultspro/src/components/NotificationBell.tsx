@@ -11,7 +11,7 @@ import { IconBell as Bell, IconX as X, IconCircleCheck as CheckCircle, IconClock
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import axios from 'axios';
 
-const API_BASE = (import.meta.env.VITE_API_URL || '');
+const API_BASE = (typeof process !== 'undefined' && (process.env?.NEXT_PUBLIC_API_URL || process.env?.NEXT_PUBLIC_USERS_API)) || (import.meta.env.VITE_API_URL || '');
 
 interface Notification {
   id: string;

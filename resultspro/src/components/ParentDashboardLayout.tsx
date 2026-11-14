@@ -36,7 +36,8 @@ const ParentDashboardLayout: React.FC<{ children: React.ReactNode }> = ({ childr
 
         // Fetch school motto from the server only if schoolId exists and is valid
         if (schoolId && schoolId !== 'undefined' && schoolId.trim() && token) {
-          const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/onboarding/school/${schoolId}`, {
+          const apiBase = (typeof process !== 'undefined' && (process.env?.NEXT_PUBLIC_API_URL || process.env?.NEXT_PUBLIC_USERS_API)) || (import.meta.env.VITE_API_URL || '');
+          const response = await fetch(`${apiBase}/onboarding/school/${schoolId}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           if (response.ok) {

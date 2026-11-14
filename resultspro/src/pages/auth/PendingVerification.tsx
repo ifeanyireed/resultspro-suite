@@ -5,7 +5,7 @@ import Navigation from '@/components/Navigation';
 import axios from 'axios';
 import { MotionRise } from '@/components/ScrollRiseProvider';
 
-const API_BASE = (import.meta.env.VITE_API_URL || '');
+const API_BASE = (typeof process !== 'undefined' && (process.env?.NEXT_PUBLIC_API_URL || process.env?.NEXT_PUBLIC_USERS_API)) || (import.meta.env.VITE_API_URL || '');
 
 // Animation styles
 const animationStyles = `

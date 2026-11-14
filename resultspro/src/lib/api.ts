@@ -1,7 +1,10 @@
 // API client for analytics endpoints
 import axios from 'axios';
 
-const baseURL = import.meta.env.VITE_API_URL || '';
+const baseURL =
+  (typeof process !== 'undefined' && (process.env?.NEXT_PUBLIC_RESULTS_API || process.env?.NEXT_PUBLIC_API_URL || process.env?.NEXT_PUBLIC_USERS_API)) ||
+  import.meta.env.VITE_API_URL ||
+  '';
 
 export const api = axios.create({
   baseURL,

@@ -2,8 +2,9 @@ import axios from 'axios';
 
 // Create axios instance with defaults
 const getApiUrl = () => {
-  if (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL;
+  if (typeof process !== 'undefined') {
+    if (process.env?.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+    if (process.env?.NEXT_PUBLIC_USERS_API) return process.env.NEXT_PUBLIC_USERS_API;
   }
   try {
     return import.meta.env.VITE_API_URL || '';
@@ -17,7 +18,7 @@ export const axiosInstance = axios.create({
   timeout: 30000,
 });
 
-// Add request interceptor to include auth token and tenant id
+// Add request interceptor to include auth token, tenant id, and microservice routing
 axiosInstance.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
@@ -25,11 +26,20 @@ axiosInstance.interceptors.request.use(
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-      const tenantId = localStorage.getItem('tenantId') || localStorage.getItem('x-tenant-id');
+      const tenantId = localStorage.getItem('tenantId') || localStorage.getItem('x-tenant-id') || localStorage.getItem('active_tenant_id');
       if (tenantId) {
         config.headers['x-tenant-id'] = tenantId;
+        config.headers['X-Tenant-ID'] = tenantId;
       }
     }
+
+    // Dynamic microservice routing for CampusPRO
+    const campusApi = typeof process !== 'undefined' ? process.env?.NEXT_PUBLIC_CAMPUS_API : '';
+    if (campusApi && config.url && (config.url.includes('/campus/') || config.url.startsWith('/campus') || config.url.startsWith('campus/'))) {
+      const cleanCampus = campusApi.replace(/\/+$/, '');
+      config.baseURL = `${cleanCampus}/`;
+    }
+
     return config;
   },
   (error) => {

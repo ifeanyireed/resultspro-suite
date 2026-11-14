@@ -24,7 +24,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
-const API_BASE = (import.meta.env.VITE_API_URL || '');
+const API_BASE = (typeof process !== 'undefined' && (process.env?.NEXT_PUBLIC_API_URL || process.env?.NEXT_PUBLIC_USERS_API)) || (import.meta.env.VITE_API_URL || '');
 
 interface Ticket {
   id: string;
