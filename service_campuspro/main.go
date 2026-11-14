@@ -124,6 +124,12 @@ func main() {
 		"/api/campus/staff":     handlers.HandleCampusStaff,
 		"/api/v1/campus/tutors": handlers.HandleCampusTutors,
 		"/api/campus/tutors":    handlers.HandleCampusTutors,
+
+		// Parent & Guardian CRM Directory
+		"/api/v1/campus/parents":       handlers.HandleCampusParents,
+		"/api/campus/parents":          handlers.HandleCampusParents,
+		"/api/v1/campus/parents/wards": handlers.HandleCampusParentWards,
+		"/api/campus/parents/wards":    handlers.HandleCampusParentWards,
 	}
 
 	for path, handler := range routes {

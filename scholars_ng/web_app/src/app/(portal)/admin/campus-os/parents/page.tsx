@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { ParentsDashboard } from '../components';
+import ParentManager from '../ParentManager';
 
 export default function CampusOSParentsPage() {
-  return <ParentsDashboard />;
+  return <ParentManager />;
 }
