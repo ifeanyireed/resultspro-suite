@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import LibraryDashboard from '../../library/page';
+import LibraryManager from '../LibraryManager';
 
 export default function CampusOSLibraryPage() {
-  return <LibraryDashboard />;
+  return <LibraryManager />;
 }
