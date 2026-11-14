@@ -535,6 +535,15 @@ func InitCampusSchema() {
 		"ALTER TABLE campus_student_invoices ADD COLUMN IF NOT EXISTS last_payment_at TIMESTAMP WITH TIME ZONE",
 		"UPDATE campus_student_invoices SET total_billed = total_amount WHERE (total_billed IS NULL OR total_billed = 0) AND total_amount > 0",
 		"UPDATE campus_student_invoices SET balance_due = balance WHERE (balance_due IS NULL OR balance_due = 0) AND balance > 0",
+		"ALTER TABLE campus_library_books ADD COLUMN IF NOT EXISTS status VARCHAR(32) DEFAULT 'AVAILABLE'",
+		"ALTER TABLE campus_library_loans ADD COLUMN IF NOT EXISTS book_title VARCHAR(255)",
+		"ALTER TABLE campus_library_loans ADD COLUMN IF NOT EXISTS borrower_id VARCHAR(64) DEFAULT ''",
+		"ALTER TABLE campus_library_loans ADD COLUMN IF NOT EXISTS borrower_role VARCHAR(32) DEFAULT 'student'",
+		"ALTER TABLE campus_library_loans ADD COLUMN IF NOT EXISTS class_name VARCHAR(64) DEFAULT ''",
+		"ALTER TABLE campus_library_loans ADD COLUMN IF NOT EXISTS issued_date VARCHAR(32)",
+		"ALTER TABLE campus_library_loans ADD COLUMN IF NOT EXISTS due_date VARCHAR(32)",
+		"ALTER TABLE campus_library_loans ADD COLUMN IF NOT EXISTS returned_date VARCHAR(32)",
+		"ALTER TABLE campus_library_loans ADD COLUMN IF NOT EXISTS fine_amount NUMERIC(10,2) DEFAULT 0",
 	}
 	for _, mig := range migrations {
 		_, _ = DB.Exec(mig)

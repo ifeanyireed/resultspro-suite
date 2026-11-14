@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import FeesDashboard from '../../fees/page';
+import FinancialsManager from '../FinancialsManager';
 
 export default function CampusOSFinancialsPage() {
-  return <FeesDashboard />;
+  return <FinancialsManager />;
 }
