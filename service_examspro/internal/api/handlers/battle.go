@@ -43,6 +43,9 @@ func (h *BattleHandler) StartBattleCleanupTask() {
 	ticker := time.NewTicker(10 * time.Second)
 	go func() {
 		for range ticker.C {
+			if database.DB == nil {
+				continue
+			}
 			// 1. Cleanup WAITING rooms
 			var timeoutMins int = 10 // Default fallback
 			var settings []models.SystemSetting

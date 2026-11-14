@@ -94,6 +94,7 @@ func main() {
 		api.POST("/exams/session/:sessionId/submit", examHandler.SubmitExamSession)
 		api.POST("/quiz/session/start", examHandler.StartExamSession)
 		api.GET("/quiz/session/:sessionId/timer", examHandler.GetExamSessionTimer)
+		api.POST("/quiz/session/:sessionId/submit", examHandler.SubmitExamSession)
 
 
 		
@@ -122,9 +123,6 @@ func main() {
 				examGroup.GET("/subjects/:subjectId/years", examHandler.GetYearsBySubject)
 				examGroup.GET("/subjects/:subjectId/topics", examHandler.GetTopicsBySubject)
 				examGroup.GET("/subjects/:subjectId/questions", examHandler.GetQuestionsBySubject)
-				examGroup.POST("/session/start", examHandler.StartExamSession)
-				examGroup.GET("/session/:sessionId/timer", examHandler.GetExamSessionTimer)
-				examGroup.POST("/session/:sessionId/submit", examHandler.SubmitExamSession)
 			}
 
 			// Quiz
@@ -133,9 +131,6 @@ func main() {
 				quizGroup.GET("/available-types", quizHandler.GetAvailableQuestionTypes)
 				quizGroup.POST("/submit", quizHandler.SubmitAnswer)
 				quizGroup.POST("/hint", quizHandler.GetHint)
-				quizGroup.POST("/session/start", examHandler.StartExamSession)
-				quizGroup.GET("/session/:sessionId/timer", examHandler.GetExamSessionTimer)
-				quizGroup.POST("/session/:sessionId/submit", examHandler.SubmitExamSession)
 			}
 			authenticated.GET("/quiz/topics/:topicId/questions", quizHandler.GetQuestionsByTopic)
 
