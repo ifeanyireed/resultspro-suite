@@ -52,9 +52,23 @@ var (
 func InitDB(dataSourceName string) {
 	var err error
 
-	rawDB, err := sql.Open("postgres", dataSourceName)
+	// PreferSimpleProtocol disables prepared statements, preventing "unnamed prepared statement does not exist (26000)" on PgBouncer/Neon Poolers
+	gormDB, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  dataSourceName,
+		PreferSimpleProtocol: true,
+	}), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Warn),
+	})
 	if err != nil {
-		log.Printf("⚠️ Failed to open database: %v", err)
+		log.Printf("⚠️ GORM open error: %v", err)
+		return
+	}
+
+	GormDB = gormDB
+
+	rawDB, err := gormDB.DB()
+	if err != nil {
+		log.Printf("⚠️ Failed to get underlying sql.DB: %v", err)
 		return
 	}
 
@@ -65,17 +79,8 @@ func InitDB(dataSourceName string) {
 	if err = rawDB.Ping(); err != nil {
 		log.Printf("Note: Postgres ping timeout: %v", err)
 	} else {
-		log.Println("Microservice connected to Postgres successfully")
+		log.Println("Microservice connected to Postgres successfully (Simple Protocol)")
 	}
 
 	DB = &DBWrapper{DB: rawDB}
-
-	GormDB, err = gorm.Open(postgres.New(postgres.Config{
-		Conn: rawDB,
-	}), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Warn),
-	})
-	if err != nil {
-		log.Printf("GORM open warning: %v", err)
-	}
 }

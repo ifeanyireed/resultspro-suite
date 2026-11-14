@@ -68,7 +68,8 @@ func InitDB(dataSourceName string) {
 	DB = &DBWrapper{DB: rawDB}
 
 	GormDB, err = gorm.Open(postgres.New(postgres.Config{
-		Conn: rawDB,
+		Conn:                 rawDB,
+		PreferSimpleProtocol: true,
 	}), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Warn),
 	})

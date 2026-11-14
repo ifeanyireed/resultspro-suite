@@ -230,7 +230,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if err != nil {
 		log.Printf("Login error: %v", err)
-		utils.JSONError(w, http.StatusInternalServerError, "Database error")
+		utils.JSONError(w, http.StatusInternalServerError, "Database error: "+err.Error())
 		return
 	}
 
