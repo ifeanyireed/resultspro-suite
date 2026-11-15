@@ -46,10 +46,30 @@ func main() {
 		"/api/v1/campus/summary": handlers.HandleCampusSummary,
 		"/api/campus/summary":    handlers.HandleCampusSummary,
 
-		// Student Command Dashboard
-		"/api/v1/campus/student/dashboard": handlers.HandleStudentDashboard,
-		"/api/campus/student/dashboard":    handlers.HandleStudentDashboard,
-		"/api/student/dashboard":           handlers.HandleStudentDashboard,
+		// Student Command Dashboard & Self-Service Operations
+		"/api/v1/campus/student/dashboard":          handlers.HandleStudentDashboard,
+		"/api/campus/student/dashboard":             handlers.HandleStudentDashboard,
+		"/api/student/dashboard":                    handlers.HandleStudentDashboard,
+		"/api/v1/campus/student/exeat":              handlers.HandleStudentExeat,
+		"/api/campus/student/exeat":                 handlers.HandleStudentExeat,
+		"/api/v1/campus/student/facility-report":    handlers.HandleStudentFacilityReport,
+		"/api/campus/student/facility-report":       handlers.HandleStudentFacilityReport,
+		"/api/v1/campus/student/clinic-appointment": handlers.HandleStudentClinicAppointment,
+		"/api/campus/student/clinic-appointment":    handlers.HandleStudentClinicAppointment,
+		"/api/v1/campus/student/library-reserve":    handlers.HandleStudentLibraryReserve,
+		"/api/campus/student/library-reserve":       handlers.HandleStudentLibraryReserve,
+
+		// Parent Command Dashboard
+		"/api/v1/campus/parent/dashboard": handlers.HandleParentDashboard,
+		"/api/campus/parent/dashboard":    handlers.HandleParentDashboard,
+		"/api/parent/dashboard":           handlers.HandleParentDashboard,
+
+		// Teacher Command Dashboard & Class Operations
+		"/api/v1/campus/teacher/dashboard":   handlers.HandleTeacherDashboard,
+		"/api/campus/teacher/dashboard":      handlers.HandleTeacherDashboard,
+		"/api/teacher/dashboard":             handlers.HandleTeacherDashboard,
+		"/api/v1/campus/attendance/rollcall": handlers.HandleCampusAttendanceRollCall,
+		"/api/campus/attendance/rollcall":    handlers.HandleCampusAttendanceRollCall,
 
 		// Multi-Campus Sites & Branch Locations
 		"/api/v1/campus/branches": handlers.HandleCampusBranches,

@@ -666,6 +666,9 @@ func main() {
 	mux.HandleFunc("/api/v1/campus/academic-terms", middleware.RequireTenantScope(handlers.HandleCampusAcademicTerms))
 	mux.HandleFunc("/api/v1/campus/academic-events", middleware.RequireTenantScope(handlers.HandleCampusAcademicEvents))
 	mux.HandleFunc("/api/v1/campus/tutors", middleware.RequireTenantScope(handlers.HandleCampusTutors))
+	mux.HandleFunc("/api/v1/campus/parent/dashboard", middleware.RequireTenantScope(handlers.HandleParentDashboard))
+	mux.HandleFunc("/api/campus/parent/dashboard", middleware.RequireTenantScope(handlers.HandleParentDashboard))
+	mux.HandleFunc("/api/parent/dashboard", middleware.RequireTenantScope(handlers.HandleParentDashboard))
 
 	// Mirror routes with /api prefix when NEXT_PUBLIC_API_URL ends with /api
 	mux.HandleFunc("/api/campus/website-config", middleware.RequireTenantScope(handlers.HandleCampusWebsiteConfig))
@@ -693,6 +696,7 @@ func main() {
 	mux.HandleFunc("/api/campus/academic-terms", middleware.RequireTenantScope(handlers.HandleCampusAcademicTerms))
 	mux.HandleFunc("/api/campus/academic-events", middleware.RequireTenantScope(handlers.HandleCampusAcademicEvents))
 	mux.HandleFunc("/api/campus/tutors", middleware.RequireTenantScope(handlers.HandleCampusTutors))
+	mux.HandleFunc("/api/v1/parent/dashboard", middleware.RequireTenantScope(handlers.HandleParentDashboard))
 
 	// Wrap entire handler tree with CORS middleware
 	handler := middleware.EnableCORS(mux)
