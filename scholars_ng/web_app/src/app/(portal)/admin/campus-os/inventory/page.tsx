@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import ProcurementDashboard from '../../procurement/page';
+import InventoryManager from '../InventoryManager';
 
 export default function CampusOSInventoryPage() {
-  return <ProcurementDashboard />;
+  return <InventoryManager />;
 }
