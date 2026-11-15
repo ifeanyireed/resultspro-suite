@@ -37,10 +37,13 @@ func main() {
 
 	// --- Campus Operations Endpoints ---
 	routes := map[string]http.HandlerFunc{
-		// Website CMS
-		"/api/public/campus/website-config": handlers.HandleCampusWebsiteConfig,
-		"/api/v1/campus/website-config":     handlers.HandleCampusWebsiteConfig,
-		"/api/campus/website-config":        handlers.HandleCampusWebsiteConfig,
+		// Website CMS & Public Webinar Registration
+		"/api/public/campus/website-config":         handlers.HandleCampusWebsiteConfig,
+		"/api/v1/campus/website-config":             handlers.HandleCampusWebsiteConfig,
+		"/api/campus/website-config":                handlers.HandleCampusWebsiteConfig,
+		"/api/public/campus/webinar/register":       handlers.HandlePublicWebinarRegister,
+		"/api/v1/campus/webinar/register":           handlers.HandlePublicWebinarRegister,
+		"/api/v1/campus/webinar/registrations":      handlers.HandleCampusWebinarRegistrations,
 
 		// Executive Dashboard Summary
 		"/api/v1/campus/summary": handlers.HandleCampusSummary,

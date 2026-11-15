@@ -28,6 +28,7 @@ export default function Navbar() {
     { label: 'Why ScholarsNG', href: '/#why-us' },
     { label: 'Role Workspaces', href: '/#roles' },
     { label: 'Mobile App', href: '/#mobile-app' },
+    { label: 'Smart School Webinar', href: '/smart_school' },
     { label: 'Pricing', href: '/#pricing' },
   ];
 

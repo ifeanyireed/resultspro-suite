@@ -18,6 +18,7 @@ const footerSections = [
     title: 'Platform',
     links: [
       { label: 'The Engine (#apps)',           href: '/#apps' },
+      { label: 'Smart School Webinar Series',  href: '/smart_school' },
       { label: 'Institutional Power (#why-us)',href: '/#why-us' },
       { label: 'Role Workspaces (#roles)',     href: '/#roles' },
       { label: 'Campus Mobile App (#mobile-app)', href: '/#mobile-app' },

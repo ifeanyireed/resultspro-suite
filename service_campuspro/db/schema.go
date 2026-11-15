@@ -1042,9 +1042,29 @@ func InitCampusSchema() {
 			verified_count INT DEFAULT 1,
 			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		)`,
+		`CREATE TABLE IF NOT EXISTS campus_webinar_registrations (
+			id VARCHAR(64) PRIMARY KEY,
+			tenant_id VARCHAR(64) NOT NULL DEFAULT 'default',
+			series_name VARCHAR(128) NOT NULL DEFAULT 'Smart School Webinar Series',
+			edition_title VARCHAR(191) NOT NULL DEFAULT 'Free & Easy EOT Results Processing',
+			full_name VARCHAR(128) NOT NULL,
+			email VARCHAR(128) NOT NULL,
+			phone VARCHAR(64) NOT NULL,
+			school_name VARCHAR(191) NOT NULL,
+			role VARCHAR(64) NOT NULL,
+			state_location VARCHAR(64) DEFAULT 'Lagos',
+			estimated_students VARCHAR(64) DEFAULT '',
+			pain_points TEXT DEFAULT '',
+			attendance_mode VARCHAR(32) DEFAULT 'ONLINE_ZOOM',
+			status VARCHAR(32) DEFAULT 'REGISTERED',
+			notes TEXT DEFAULT '',
+			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_alumni_tenant ON campus_alumni_directory(tenant_id, graduation_year)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_transcripts_tenant ON campus_transcript_requests(tenant_id, processing_status)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_credentials_tenant ON campus_credential_verifications(tenant_id, verification_code)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_webinar_email ON campus_webinar_registrations(email)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_webinar_tenant ON campus_webinar_registrations(tenant_id, series_name)`,
 	}
 
 	for _, stmt := range tables {
