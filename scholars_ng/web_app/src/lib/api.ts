@@ -132,7 +132,8 @@ api.interceptors.request.use((config) => {
     config.url.startsWith('/campus') || 
     config.url.startsWith('/public/campus') ||
     config.url.includes('/parent/dashboard') ||
-    config.url.includes('/student/dashboard')
+    config.url.includes('/student/dashboard') ||
+    config.url.includes('/teacher/dashboard')
   )) {
     const cleanCampus = campusApi.replace(/\/+$/, '');
     config.baseURL = cleanCampus.endsWith('/api') ? cleanCampus : `${cleanCampus}/api`;

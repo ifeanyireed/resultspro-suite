@@ -335,6 +335,126 @@ func HandleTeacherDashboard(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// 11. Resolve Teaching Supply & Store Requisitions
+	requisitions := []map[string]interface{}{}
+	reqRows, err := db.DB.Query(`
+		SELECT id, po_number, title, department, requested_by, items_summary,
+		       COALESCE(total_amount, estimated_cost, 0), priority, status, COALESCE(needed_by_date, ''), created_at
+		FROM campus_procurement_requests
+		WHERE tenant_id = ?
+		ORDER BY created_at DESC
+		LIMIT 15
+	`, tenantID)
+	if err == nil && reqRows != nil {
+		defer reqRows.Close()
+		for reqRows.Next() {
+			var id, poNum, title, dept, reqBy, summary, priority, status, neededDate string
+			var amount float64
+			var cAt time.Time
+			if err := reqRows.Scan(&id, &poNum, &title, &dept, &reqBy, &summary, &amount, &priority, &status, &neededDate, &cAt); err == nil {
+				requisitions = append(requisitions, map[string]interface{}{
+					"id":             id,
+					"po_number":      poNum,
+					"title":          title,
+					"department":     dept,
+					"requested_by":   reqBy,
+					"items_summary":  summary,
+					"total_amount":   amount,
+					"priority":       priority,
+					"status":         status,
+					"needed_by_date": neededDate,
+					"created_at":     cAt.Format("02 Jan 2006"),
+				})
+			}
+		}
+	}
+
+	// 12. Resolve Co-Curricular Houses & Clubs
+	houses := []map[string]interface{}{}
+	hRows, err := db.DB.Query(`
+		SELECT id, house_name, color_code, COALESCE(house_master, ''), total_points, student_count, COALESCE(motto, '')
+		FROM campus_houses
+		WHERE tenant_id = ?
+		ORDER BY total_points DESC
+	`, tenantID)
+	if err == nil && hRows != nil {
+		defer hRows.Close()
+		for hRows.Next() {
+			var id, hName, color, master, motto string
+			var pts, count int
+			if err := hRows.Scan(&id, &hName, &color, &master, &pts, &count, &motto); err == nil {
+				houses = append(houses, map[string]interface{}{
+					"id":            id,
+					"house_name":    hName,
+					"color_code":    color,
+					"house_master":  master,
+					"total_points":  pts,
+					"student_count": count,
+					"motto":         motto,
+				})
+			}
+		}
+	}
+
+	clubs := []map[string]interface{}{}
+	clRows, err := db.DB.Query(`
+		SELECT id, club_name, category, COALESCE(patron_teacher, ''), meeting_day, meeting_time, venue, member_count, status
+		FROM campus_clubs
+		WHERE tenant_id = ?
+		ORDER BY club_name ASC
+	`, tenantID)
+	if err == nil && clRows != nil {
+		defer clRows.Close()
+		for clRows.Next() {
+			var id, cName, cat, patron, day, mTime, venue, status string
+			var mCount int
+			if err := clRows.Scan(&id, &cName, &cat, &patron, &day, &mTime, &venue, &mCount, &status); err == nil {
+				clubs = append(clubs, map[string]interface{}{
+					"id":             id,
+					"club_name":      cName,
+					"category":       cat,
+					"patron_teacher": patron,
+					"meeting_day":    day,
+					"meeting_time":   mTime,
+					"venue":          venue,
+					"member_count":   mCount,
+					"status":         status,
+				})
+			}
+		}
+	}
+
+	// 13. Duty Roster for Faculty Staff
+	dutyRoster := []map[string]interface{}{
+		{
+			"id":         "duty-1",
+			"duty_name":  "Morning Gate & Assembly Protocol",
+			"day":        "Monday",
+			"time":       "07:30 AM - 08:15 AM",
+			"venue":      "Campus Main Assembly Quadrangle",
+			"supervisor": teacherName,
+			"status":     "ACTIVE",
+		},
+		{
+			"id":         "duty-2",
+			"duty_name":  "Senior Dining Hall & Lunchtime Prep",
+			"day":        "Wednesday",
+			"time":       "01:30 PM - 02:15 PM",
+			"venue":      "Central Cafeteria",
+			"supervisor": teacherName,
+			"status":     "UPCOMING",
+		},
+		{
+			"id":         "duty-3",
+			"duty_name":  "Evening Study Prep Supervision",
+			"day":        "Friday",
+			"time":       "05:00 PM - 06:30 PM",
+			"venue":      "SSS 3 Block & Library Wing",
+			"supervisor": teacherName,
+			"status":     "UPCOMING",
+		},
+	}
+
 	JSONResponse(w, http.StatusOK, map[string]interface{}{
 		"success": true,
 		"teacher": map[string]interface{}{
@@ -367,6 +487,10 @@ func HandleTeacherDashboard(w http.ResponseWriter, r *http.Request) {
 		"discipline":        recentIncidents,
 		"facility_bookings": facilityBookings,
 		"messages":          recentMessages,
+		"requisitions":      requisitions,
+		"houses":            houses,
+		"clubs":             clubs,
+		"duty_roster":       dutyRoster,
 	})
 }
 

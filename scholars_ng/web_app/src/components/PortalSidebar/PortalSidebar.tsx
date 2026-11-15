@@ -66,7 +66,7 @@ const parentMenu: MenuItem[] = [
   { name: 'TutorsPRO', icon: UserGroupIcon, activeIcon: UserGroupIcon, slug: '/parent/dashboard?tab=modular&subtab=tutorspro' },
   { name: 'PuzzlePRO', icon: PuzzlePieceIcon, activeIcon: PuzzlePieceIcon, slug: '/parent/dashboard?tab=modular&subtab=puzzlepro' },
   { name: 'ResultsPRO', icon: ChartPieIcon, activeIcon: ChartPieIcon, slug: '/parent/dashboard?tab=modular&subtab=resultspro' },
-  { section: 'Operations', name: 'CampusPRO', icon: HomeModernIcon, activeIcon: HomeModernIcon, slug: '/parent/dashboard?tab=campuspro' },
+  { section: 'Operations', name: 'CampusPRO', icon: HomeModernIcon, activeIcon: HomeModernIcon, slug: '/parent/campus-os' },
 ];
 
 const adminMenu: MenuItem[] = [
