@@ -79,6 +79,18 @@ func main() {
 		"/api/v1/campus/transport/riders": handlers.HandleCampusTransportRiders,
 		"/api/campus/transport/riders":    handlers.HandleCampusTransportRiders,
 
+		// Biometric Attendance & Punctuality Engine
+		"/api/v1/campus/attendance/summary":  handlers.HandleCampusAttendanceSummary,
+		"/api/campus/attendance/summary":     handlers.HandleCampusAttendanceSummary,
+		"/api/v1/campus/attendance/logs":     handlers.HandleCampusAttendanceLogs,
+		"/api/campus/attendance/logs":        handlers.HandleCampusAttendanceLogs,
+		"/api/v1/campus/attendance/clock":    handlers.HandleCampusAttendanceClock,
+		"/api/campus/attendance/clock":       handlers.HandleCampusAttendanceClock,
+		"/api/v1/campus/attendance/profiles": handlers.HandleCampusAttendanceProfiles,
+		"/api/campus/attendance/profiles":    handlers.HandleCampusAttendanceProfiles,
+		"/api/v1/campus/attendance/policies": handlers.HandleCampusAttendancePolicies,
+		"/api/campus/attendance/policies":    handlers.HandleCampusAttendancePolicies,
+
 		// Hostel Halls & Bed Allocations
 		"/api/v1/campus/hostel": handlers.HandleCampusHostel,
 		"/api/campus/hostel":    handlers.HandleCampusHostel,

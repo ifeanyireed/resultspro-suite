@@ -16,6 +16,7 @@ import {
   HeartIcon,
   ChatBubbleLeftRightIcon,
   DevicePhoneMobileIcon,
+  FingerPrintIcon,
 } from '@heroicons/react/24/outline';
 import { MotionRise } from '@/components/ScrollRiseProvider';
 import { CampusOSProvider, type CampusOSTab } from './components';
@@ -34,6 +35,7 @@ export default function CampusOSLayout({
 
   const tabs: { id: CampusOSTab; label: string; icon: any; badge?: string; href: string }[] = [
     { id: 'academic', label: 'Academic', icon: AcademicCapIcon, badge: 'Timetable', href: '/admin/campus-os/academic' },
+    { id: 'attendance', label: 'Attendance', icon: FingerPrintIcon, badge: 'Biometric', href: '/admin/campus-os/attendance' },
     { id: 'staff', label: 'Staff', icon: UserGroupIcon, badge: 'HR & KPIs', href: '/admin/campus-os/staff' },
     { id: 'students', label: 'Students', icon: UsersIcon, badge: '1,248', href: '/admin/campus-os/students' },
     { id: 'parents', label: 'Parents', icon: HeartIcon, badge: '892', href: '/admin/campus-os/parents' },

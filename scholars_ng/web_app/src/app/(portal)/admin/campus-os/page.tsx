@@ -7,6 +7,7 @@ export {
   AcademicOperationsHub,
   ParentsDashboard,
   MessagingDashboard,
+  MessagingManager,
   MobileAppDashboard,
   useCampusOS,
   CampusOSProvider,
@@ -22,6 +23,7 @@ function CampusOSRedirector() {
 
     const validTabs = [
       'academic',
+      'attendance',
       'staff',
       'students',
       'parents',

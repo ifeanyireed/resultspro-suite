@@ -324,13 +324,20 @@ func InitCampusSchema() {
 		`CREATE TABLE IF NOT EXISTS campus_messages (
 			id VARCHAR(64) PRIMARY KEY,
 			tenant_id VARCHAR(64) NOT NULL,
+			sender_id VARCHAR(64) DEFAULT '',
 			sender_name VARCHAR(128) NOT NULL,
-			sender_role VARCHAR(64) NOT NULL,
-			recipient_group VARCHAR(64) NOT NULL,
+			sender_role VARCHAR(64) NOT NULL DEFAULT 'admin',
+			recipient_group VARCHAR(64) NOT NULL DEFAULT 'ALL_PARENTS',
+			recipient_id VARCHAR(64) DEFAULT '',
+			recipient_name VARCHAR(128) DEFAULT '',
 			subject VARCHAR(255) NOT NULL,
-			message TEXT NOT NULL,
+			body TEXT NOT NULL,
+			message TEXT,
 			channel VARCHAR(32) NOT NULL DEFAULT 'PORTAL',
-			sent_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+			delivery_status VARCHAR(50) NOT NULL DEFAULT 'DELIVERED',
+			read_count INT NOT NULL DEFAULT 0,
+			sent_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		)`,
 		`CREATE TABLE IF NOT EXISTS campus_mobile_app_accounts (
 			id VARCHAR(64) PRIMARY KEY,
@@ -599,6 +606,60 @@ func InitCampusSchema() {
 		`CREATE INDEX IF NOT EXISTS idx_campus_admissions_grade ON campus_admissions_inquiries(tenant_id, target_grade)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_admission_tours_tenant ON campus_admission_tours(tenant_id, tour_date)`,
 		`CREATE INDEX IF NOT EXISTS idx_campus_admission_cbt_tenant ON campus_admission_cbt_exams(tenant_id, exam_date)`,
+		`CREATE TABLE IF NOT EXISTS campus_biometric_profiles (
+			id VARCHAR(64) PRIMARY KEY,
+			tenant_id VARCHAR(64) NOT NULL,
+			person_type VARCHAR(32) NOT NULL,
+			person_id VARCHAR(64) NOT NULL,
+			person_name VARCHAR(128) NOT NULL,
+			identifier VARCHAR(64) NOT NULL,
+			biometric_type VARCHAR(32) NOT NULL DEFAULT 'FINGERPRINT',
+			biometric_token VARCHAR(255) NOT NULL,
+			device_serial VARCHAR(64) DEFAULT '',
+			enrolled_by VARCHAR(128) DEFAULT 'Administrator',
+			status VARCHAR(32) NOT NULL DEFAULT 'ENROLLED',
+			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		)`,
+		`CREATE TABLE IF NOT EXISTS campus_attendance_logs (
+			id VARCHAR(64) PRIMARY KEY,
+			tenant_id VARCHAR(64) NOT NULL,
+			person_type VARCHAR(32) NOT NULL,
+			person_id VARCHAR(64) NOT NULL,
+			person_name VARCHAR(128) NOT NULL,
+			identifier VARCHAR(64) NOT NULL,
+			class_arm_name VARCHAR(64) DEFAULT '',
+			department VARCHAR(64) DEFAULT '',
+			log_date VARCHAR(32) NOT NULL,
+			time_in VARCHAR(32) DEFAULT '',
+			time_out VARCHAR(32) DEFAULT '',
+			duration_minutes INT DEFAULT 0,
+			status VARCHAR(32) NOT NULL DEFAULT 'PRESENT',
+			verification_mode VARCHAR(32) DEFAULT 'BIOMETRIC',
+			terminal_name VARCHAR(128) DEFAULT 'Main Gate Biometric Turnstile',
+			notes TEXT DEFAULT '',
+			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		)`,
+		`CREATE TABLE IF NOT EXISTS campus_attendance_policies (
+			id VARCHAR(64) PRIMARY KEY,
+			tenant_id VARCHAR(64) NOT NULL,
+			policy_type VARCHAR(32) NOT NULL,
+			morning_start VARCHAR(32) DEFAULT '07:00 AM',
+			late_cutoff VARCHAR(32) DEFAULT '07:45 AM',
+			absence_cutoff VARCHAR(32) DEFAULT '08:30 AM',
+			afternoon_closing VARCHAR(32) DEFAULT '03:30 PM',
+			auto_notify_parents BOOLEAN DEFAULT TRUE,
+			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_biometric_tenant ON campus_biometric_profiles(tenant_id, person_type)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_biometric_token ON campus_biometric_profiles(tenant_id, biometric_token)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_biometric_person ON campus_biometric_profiles(tenant_id, person_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_attendance_tenant_date ON campus_attendance_logs(tenant_id, log_date)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_attendance_person ON campus_attendance_logs(tenant_id, person_id, log_date)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_attendance_status ON campus_attendance_logs(tenant_id, status)`,
+		`CREATE INDEX IF NOT EXISTS idx_campus_attendance_policies ON campus_attendance_policies(tenant_id, policy_type)`,
 	}
 
 	for _, stmt := range tables {
@@ -728,6 +789,17 @@ func InitCampusSchema() {
 		"UPDATE campus_admissions_inquiries SET parent_name = guardian_name WHERE (parent_name IS NULL OR parent_name = '') AND guardian_name IS NOT NULL",
 		"UPDATE campus_admissions_inquiries SET parent_email = email WHERE (parent_email IS NULL OR parent_email = '') AND email IS NOT NULL",
 		"UPDATE campus_admissions_inquiries SET parent_phone = phone WHERE (parent_phone IS NULL OR parent_phone = '') AND phone IS NOT NULL",
+
+		// Messaging & Broadcast Column Migrations
+		"ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS body TEXT DEFAULT ''",
+		"ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS delivery_status VARCHAR(50) DEFAULT 'DELIVERED'",
+		"ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS read_count INT DEFAULT 0",
+		"ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS sender_id VARCHAR(64) DEFAULT ''",
+		"ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS recipient_id VARCHAR(64) DEFAULT ''",
+		"ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS recipient_name VARCHAR(128) DEFAULT ''",
+		"ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP",
+		"UPDATE campus_messages SET body = message WHERE (body IS NULL OR body = '') AND message IS NOT NULL",
+		"UPDATE campus_messages SET created_at = sent_at WHERE created_at IS NULL AND sent_at IS NOT NULL",
 	}
 	for _, mig := range migrations {
 		_, _ = DB.Exec(mig)
