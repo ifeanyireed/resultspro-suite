@@ -151,11 +151,16 @@ func seedTenantOperationalDataIfEmpty(tenantID string) {
 	`, uuid.New().String(), tenantID, uuid.New().String(), tenantID)
 
 	_, _ = db.DB.Exec(`
-		INSERT INTO campus_messages (id, tenant_id, sender_name, sender_role, recipient_group, channel, subject, body, delivery_status, read_count)
+		INSERT INTO campus_messages (id, tenant_id, sender_name, sender_role, recipient_group, recipient_name, channel, subject, body, delivery_status, read_count)
 		VALUES
-		(?, ?, 'Bursary Department', 'admin', 'ALL_PARENTS', 'SMS_AND_EMAIL', 'First Term Fee Completion Reminder', 'Dear Parents, kindly settle any outstanding First Term balance via your dedicated Paystack Virtual Account on the Parent Portal.', 'DELIVERED', 142),
-		(?, ?, 'Academic Vice Principal', 'admin', 'ALL_TEACHERS', 'IN_APP', 'Continuous Assessment Broadsheet Submission Deadline', 'All subject teachers must publish CA1 and CA2 scores on ResultsPRO before Friday 4:00 PM.', 'DELIVERED', 28)
-	`, uuid.New().String(), tenantID, uuid.New().String(), tenantID)
+		(?, ?, 'Bursary Department', 'admin', 'ALL_PARENTS', 'All Parents & Guardians', 'SMS_AND_EMAIL', 'First Term Fee Completion Reminder', 'Dear Parents, kindly settle any outstanding First Term balance via your dedicated Paystack Virtual Account on the Parent Portal.', 'DELIVERED', 142),
+		(?, ?, 'Academic Vice Principal', 'admin', 'ALL_TEACHERS', 'All Academic Staff', 'IN_APP', 'Continuous Assessment Broadsheet Submission Deadline', 'All subject teachers must publish CA1 and CA2 scores on ResultsPRO before Friday 4:00 PM.', 'DELIVERED', 28),
+		(?, ?, 'School Administration', 'admin', 'SENIOR_SECONDARY', 'Senior Secondary (SS 1 - SS 3)', 'WHATSAPP', 'WAEC & JAMB Registration Profile Verification', 'Notice to all SS 3 Parents: Biometric NIN and date-of-birth verification commences on Monday at the CBT Hall.', 'DELIVERED', 86),
+		(?, ?, 'Chief & Mrs. O. Adeleke', 'parent', 'DIRECT_THREAD', 'Chief & Mrs. O. Adeleke', 'WHATSAPP', 'Confirmation of 1st Term Mid-Term Excursion Fee', 'Good morning Principal, we have completed the transfer for Tomiwa and Kemi’s STEM Robotics Excursion. Kindly confirm receipt on the portal.', 'DELIVERED', 1),
+		(?, ?, 'School Administration', 'admin', 'DIRECT_THREAD', 'Chief & Mrs. O. Adeleke', 'WHATSAPP', 'Re: Confirmation of 1st Term Mid-Term Excursion Fee', 'Good morning Chief Adeleke! Payment has been verified by the Bursary and both students are cleared for the excursion.', 'DELIVERED', 1),
+		(?, ?, 'Mr. David Jenkins', 'teacher', 'DIRECT_THREAD', 'Mr. David Jenkins', 'PORTAL', 'SS 3 WAEC Mock CBT Question Bank Ready', 'All 120 objective and theory questions for Further Maths have been uploaded to ClassroomPRO for the SS 3 Mock Exam.', 'DELIVERED', 1),
+		(?, ?, 'School Administration', 'admin', 'DIRECT_THREAD', 'Mr. David Jenkins', 'PORTAL', 'Re: SS 3 WAEC Mock CBT Question Bank Ready', 'Thank you Mr. Jenkins. The Academic Office has scheduled the CBT slot for Friday Period 6.', 'DELIVERED', 1)
+	`, uuid.New().String(), tenantID, uuid.New().String(), tenantID, uuid.New().String(), tenantID, uuid.New().String(), tenantID, uuid.New().String(), tenantID, uuid.New().String(), tenantID, uuid.New().String(), tenantID)
 
 	// 9. Seed Mobile App Accounts
 	_, _ = db.DB.Exec(`
@@ -969,9 +974,35 @@ func HandleCampusMessages(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case http.MethodGet:
-		rows, err := db.DB.Query(`
-			SELECT id, tenant_id, sender_name, COALESCE(sender_role, 'admin'), COALESCE(recipient_group, 'ALL_PARENTS'), COALESCE(channel, 'IN_APP'), subject, body, COALESCE(delivery_status, 'DELIVERED'), read_count, created_at
-			FROM campus_messages WHERE tenant_id = ? ORDER BY created_at DESC`, tenantID)
+		channelFilter := strings.TrimSpace(r.URL.Query().Get("channel"))
+		groupFilter := strings.TrimSpace(r.URL.Query().Get("recipient_group"))
+		search := strings.TrimSpace(r.URL.Query().Get("search"))
+
+		query := `
+			SELECT id, tenant_id, COALESCE(sender_id, ''), sender_name, COALESCE(sender_role, 'admin'),
+			       COALESCE(recipient_group, 'ALL_PARENTS'), COALESCE(recipient_id, ''), COALESCE(recipient_name, ''),
+			       COALESCE(channel, 'IN_APP'), subject, COALESCE(body, ''),
+			       COALESCE(delivery_status, 'DELIVERED'), read_count, created_at
+			FROM campus_messages WHERE tenant_id = ?`
+		args := []interface{}{tenantID}
+
+		if channelFilter != "" && !strings.EqualFold(channelFilter, "all") {
+			query += ` AND UPPER(channel) = ?`
+			args = append(args, strings.ToUpper(channelFilter))
+		}
+		if groupFilter != "" && !strings.EqualFold(groupFilter, "all") {
+			query += ` AND UPPER(recipient_group) = ?`
+			args = append(args, strings.ToUpper(groupFilter))
+		}
+		if search != "" {
+			query += ` AND (subject ILIKE ? OR body ILIKE ? OR sender_name ILIKE ? OR recipient_name ILIKE ?)`
+			searchPattern := "%" + search + "%"
+			args = append(args, searchPattern, searchPattern, searchPattern, searchPattern)
+		}
+
+		query += ` ORDER BY created_at DESC`
+
+		rows, err := db.DB.Query(query, args...)
 		if err != nil {
 			utils.JSONError(w, http.StatusInternalServerError, "Failed to load messages")
 			return
@@ -980,22 +1011,25 @@ func HandleCampusMessages(w http.ResponseWriter, r *http.Request) {
 
 		list := []map[string]interface{}{}
 		for rows.Next() {
-			var id, tID, sender, role, group, chanType, subj, body, status string
+			var id, tID, senderID, sender, role, group, recipientID, recipientName, chanType, subj, body, status string
 			var reads int
 			var created time.Time
-			if err := rows.Scan(&id, &tID, &sender, &role, &group, &chanType, &subj, &body, &status, &reads, &created); err == nil {
+			if err := rows.Scan(&id, &tID, &senderID, &sender, &role, &group, &recipientID, &recipientName, &chanType, &subj, &body, &status, &reads, &created); err == nil {
 				list = append(list, map[string]interface{}{
-					"id":               id,
-					"tenant_id":        tID,
-					"sender_name":      sender,
-					"sender_role":      role,
-					"recipient_group":  group,
-					"channel":          chanType,
-					"subject":          subj,
-					"body":             body,
-					"delivery_status":  status,
-					"read_count":       reads,
-					"created_at":       created.Format(time.RFC3339),
+					"id":              id,
+					"tenant_id":       tID,
+					"sender_id":       senderID,
+					"sender_name":     sender,
+					"sender_role":     role,
+					"recipient_group": group,
+					"recipient_id":    recipientID,
+					"recipient_name":  recipientName,
+					"channel":         chanType,
+					"subject":         subj,
+					"body":            body,
+					"delivery_status": status,
+					"read_count":      reads,
+					"created_at":      created.Format(time.RFC3339),
 				})
 			}
 		}
@@ -1003,28 +1037,48 @@ func HandleCampusMessages(w http.ResponseWriter, r *http.Request) {
 
 	case http.MethodPost:
 		var input struct {
+			SenderID       string `json:"sender_id"`
 			SenderName     string `json:"sender_name"`
 			SenderRole     string `json:"sender_role"`
 			RecipientGroup string `json:"recipient_group"`
+			RecipientID    string `json:"recipient_id"`
+			RecipientName  string `json:"recipient_name"`
 			Channel        string `json:"channel"`
 			Subject        string `json:"subject"`
 			Body           string `json:"body"`
+			DeliveryStatus string `json:"delivery_status"`
+			ReadCount      int    `json:"read_count"`
 		}
-		if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.Subject == "" || input.Body == "" {
-			utils.JSONError(w, http.StatusBadRequest, "subject and body are required")
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.Body == "" {
+			utils.JSONError(w, http.StatusBadRequest, "body is required")
 			return
+		}
+		if input.Subject == "" {
+			input.Subject = "Campus Notice"
 		}
 		if input.SenderName == "" {
 			input.SenderName = "School Administration"
 		}
+		if input.SenderRole == "" {
+			input.SenderRole = "admin"
+		}
+		if input.RecipientGroup == "" {
+			input.RecipientGroup = "ALL_PARENTS"
+		}
 		if input.Channel == "" {
 			input.Channel = "IN_APP"
 		}
+		if input.DeliveryStatus == "" {
+			input.DeliveryStatus = "DELIVERED"
+		}
+		if input.ReadCount == 0 {
+			input.ReadCount = 1
+		}
 		id := uuid.New().String()
 		_, err := db.DB.Exec(`
-			INSERT INTO campus_messages (id, tenant_id, sender_name, sender_role, recipient_group, channel, subject, body, delivery_status, read_count)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'DELIVERED', 1)`,
-			id, tenantID, input.SenderName, input.SenderRole, input.RecipientGroup, input.Channel, input.Subject, input.Body,
+			INSERT INTO campus_messages (id, tenant_id, sender_id, sender_name, sender_role, recipient_group, recipient_id, recipient_name, channel, subject, body, delivery_status, read_count, created_at)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
+			id, tenantID, input.SenderID, input.SenderName, input.SenderRole, input.RecipientGroup, input.RecipientID, input.RecipientName, input.Channel, input.Subject, input.Body, input.DeliveryStatus, input.ReadCount,
 		)
 		if err != nil {
 			utils.JSONError(w, http.StatusInternalServerError, "Failed to dispatch message")
@@ -1032,9 +1086,35 @@ func HandleCampusMessages(w http.ResponseWriter, r *http.Request) {
 		}
 		utils.JSONResponse(w, http.StatusCreated, map[string]interface{}{"id": id, "message": "Broadcast message dispatched"})
 
+	case http.MethodPatch, http.MethodPut:
+		var input struct {
+			ID             string `json:"id"`
+			DeliveryStatus string `json:"delivery_status"`
+			ReadIncrement  bool   `json:"read_increment"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.ID == "" {
+			utils.JSONError(w, http.StatusBadRequest, "id is required")
+			return
+		}
+		if input.ReadIncrement {
+			_, _ = db.DB.Exec("UPDATE campus_messages SET read_count = read_count + 1 WHERE id = ? AND tenant_id = ?", input.ID, tenantID)
+		}
+		if input.DeliveryStatus != "" {
+			_, _ = db.DB.Exec("UPDATE campus_messages SET delivery_status = ? WHERE id = ? AND tenant_id = ?", input.DeliveryStatus, input.ID, tenantID)
+		}
+		utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Message updated"})
+
 	case http.MethodDelete:
 		id := r.URL.Query().Get("id")
-		_, _ = db.DB.Exec("DELETE FROM campus_messages WHERE id = ? AND tenant_id = ?", id, tenantID)
+		if id == "" {
+			utils.JSONError(w, http.StatusBadRequest, "id is required")
+			return
+		}
+		_, err := db.DB.Exec("DELETE FROM campus_messages WHERE id = ? AND tenant_id = ?", id, tenantID)
+		if err != nil {
+			utils.JSONError(w, http.StatusInternalServerError, "Failed to delete message")
+			return
+		}
 		utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Message deleted"})
 
 	default:

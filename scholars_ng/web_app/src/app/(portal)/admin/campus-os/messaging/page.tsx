@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { MessagingDashboard } from '../components';
+import MessagingManager from '../MessagingManager';
 
 export default function CampusOSMessagingPage() {
-  return <MessagingDashboard />;
+  return <MessagingManager />;
 }

@@ -705,6 +705,13 @@ func InitTenantIsolationSchema() {
 		`ALTER TABLE campus_admissions_inquiries ADD COLUMN IF NOT EXISTS cbt_venue VARCHAR(191) DEFAULT ''`,
 		`ALTER TABLE campus_admissions_inquiries ADD COLUMN IF NOT EXISTS offer_date VARCHAR(50) DEFAULT ''`,
 		`ALTER TABLE campus_admissions_inquiries ADD COLUMN IF NOT EXISTS acceptance_fee_status VARCHAR(50) DEFAULT 'PENDING'`,
+		`ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS body TEXT DEFAULT ''`,
+		`ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS delivery_status VARCHAR(50) DEFAULT 'DELIVERED'`,
+		`ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS read_count INT DEFAULT 0`,
+		`ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS sender_id VARCHAR(191) DEFAULT ''`,
+		`ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS recipient_id VARCHAR(191) DEFAULT ''`,
+		`ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS recipient_name VARCHAR(191) DEFAULT ''`,
+		`ALTER TABLE campus_messages ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP`,
 	}
 
 	for _, stmt := range alterStatements {
