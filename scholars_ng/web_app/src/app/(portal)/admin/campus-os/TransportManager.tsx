@@ -164,26 +164,40 @@ export default function TransportManager() {
       const qs = params.toString() ? `?${params.toString()}` : '';
 
       // 1. Fetch Routes
-      const routesRes = await api.get(`/v1/campus/transport${qs}`).catch(async () => {
-        return await api.get(`/campus/transport${qs}`);
-      });
+      let fetchedRoutes: TransportRouteRecord[] = [];
+      try {
+        const routesRes = await api.get(`/v1/campus/transport${qs}`);
+        if (routesRes.data && Array.isArray(routesRes.data)) {
+          fetchedRoutes = routesRes.data;
+        }
+      } catch (err: any) {
+        // Fallback attempt to unversioned endpoint
+        const altRoutesRes = await api.get(`/campus/transport${qs}`).catch(() => null);
+        if (altRoutesRes?.data && Array.isArray(altRoutesRes.data)) {
+          fetchedRoutes = altRoutesRes.data;
+        } else {
+          throw err;
+        }
+      }
+      setRoutes(fetchedRoutes);
 
       // 2. Fetch Riders
-      const ridersRes = await api.get(`/v1/campus/transport/riders${qs}`).catch(async () => {
-        return await api.get(`/campus/transport/riders${qs}`);
-      });
-
-      if (routesRes.data && Array.isArray(routesRes.data)) {
-        setRoutes(routesRes.data);
-      } else {
-        setRoutes([]);
+      let fetchedRiders: TransportRiderRecord[] = [];
+      try {
+        const ridersRes = await api.get(`/v1/campus/transport/riders${qs}`);
+        if (ridersRes.data && Array.isArray(ridersRes.data)) {
+          fetchedRiders = ridersRes.data;
+        }
+      } catch (err: any) {
+        // Fallback attempt to unversioned endpoint
+        const altRidersRes = await api.get(`/campus/transport/riders${qs}`).catch(() => null);
+        if (altRidersRes?.data && Array.isArray(altRidersRes.data)) {
+          fetchedRiders = altRidersRes.data;
+        } else {
+          console.warn('Could not load riders manifest:', err);
+        }
       }
-
-      if (ridersRes.data && Array.isArray(ridersRes.data)) {
-        setRiders(ridersRes.data);
-      } else {
-        setRiders([]);
-      }
+      setRiders(fetchedRiders);
     } catch (err: any) {
       console.error('Failed to load transport data:', err);
       setError(err?.response?.data?.error || err?.message || 'Failed to communicate with Campus OS Transport service');

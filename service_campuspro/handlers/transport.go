@@ -59,6 +59,59 @@ func seedTenantTransportIfEmpty(tenantID string) {
 		return
 	}
 
+	// 1. Ensure table and column integrity on live database
+	_, _ = db.DB.Exec(`
+		CREATE TABLE IF NOT EXISTS campus_transport_routes (
+			id VARCHAR(64) PRIMARY KEY,
+			tenant_id VARCHAR(64) NOT NULL,
+			route_name VARCHAR(128) NOT NULL,
+			bus_number VARCHAR(64) NOT NULL DEFAULT '',
+			driver_name VARCHAR(128) NOT NULL DEFAULT '',
+			driver_phone VARCHAR(64) DEFAULT '',
+			attendant_name VARCHAR(128) DEFAULT '',
+			capacity INT NOT NULL DEFAULT 30,
+			assigned_students INT NOT NULL DEFAULT 0,
+			stops_summary TEXT DEFAULT '',
+			morning_departure VARCHAR(32) DEFAULT '06:45 AM',
+			afternoon_return VARCHAR(32) DEFAULT '03:30 PM',
+			term_fee NUMERIC(12,2) DEFAULT 0,
+			gps_status VARCHAR(32) DEFAULT 'ACTIVE',
+			status VARCHAR(32) DEFAULT 'ACTIVE',
+			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		)
+	`)
+	_, _ = db.DB.Exec("ALTER TABLE campus_transport_routes ADD COLUMN IF NOT EXISTS bus_number VARCHAR(64) DEFAULT ''")
+	_, _ = db.DB.Exec("ALTER TABLE campus_transport_routes ADD COLUMN IF NOT EXISTS attendant_name VARCHAR(128) DEFAULT ''")
+	_, _ = db.DB.Exec("ALTER TABLE campus_transport_routes ADD COLUMN IF NOT EXISTS assigned_students INT NOT NULL DEFAULT 0")
+	_, _ = db.DB.Exec("ALTER TABLE campus_transport_routes ADD COLUMN IF NOT EXISTS stops_summary TEXT DEFAULT ''")
+	_, _ = db.DB.Exec("ALTER TABLE campus_transport_routes ADD COLUMN IF NOT EXISTS morning_departure VARCHAR(32) DEFAULT '06:45 AM'")
+	_, _ = db.DB.Exec("ALTER TABLE campus_transport_routes ADD COLUMN IF NOT EXISTS afternoon_return VARCHAR(32) DEFAULT '03:30 PM'")
+	_, _ = db.DB.Exec("ALTER TABLE campus_transport_routes ADD COLUMN IF NOT EXISTS term_fee NUMERIC(12,2) DEFAULT 0")
+	_, _ = db.DB.Exec("ALTER TABLE campus_transport_routes ADD COLUMN IF NOT EXISTS gps_status VARCHAR(32) DEFAULT 'ACTIVE'")
+	_, _ = db.DB.Exec("ALTER TABLE campus_transport_routes ADD COLUMN IF NOT EXISTS status VARCHAR(32) DEFAULT 'ACTIVE'")
+
+	_, _ = db.DB.Exec(`
+		CREATE TABLE IF NOT EXISTS campus_transport_riders (
+			id VARCHAR(64) PRIMARY KEY,
+			tenant_id VARCHAR(64) NOT NULL,
+			route_id VARCHAR(64) NOT NULL,
+			route_name VARCHAR(128) NOT NULL,
+			student_id VARCHAR(64) NOT NULL,
+			student_name VARCHAR(128) NOT NULL,
+			admission_number VARCHAR(64) DEFAULT '',
+			class_arm_name VARCHAR(64) DEFAULT '',
+			pickup_stop VARCHAR(128) NOT NULL,
+			morning_pickup_time VARCHAR(32) DEFAULT '06:45 AM',
+			afternoon_dropoff_time VARCHAR(32) DEFAULT '03:45 PM',
+			parent_phone VARCHAR(64) DEFAULT '',
+			fee_status VARCHAR(32) DEFAULT 'CLEARED',
+			status VARCHAR(32) DEFAULT 'ACTIVE',
+			created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		)
+	`)
+
 	var routesCount int
 	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_transport_routes WHERE tenant_id = ?", tenantID).Scan(&routesCount)
 	if routesCount > 0 {
@@ -258,21 +311,21 @@ func HandleCampusTransport(w http.ResponseWriter, r *http.Request) {
 		query := `
 			SELECT 
 				r.id, r.tenant_id, r.route_name, 
-				COALESCE(r.bus_number, r.vehicle_plate, ''), 
+				COALESCE(r.bus_number, ''), 
 				r.driver_name, COALESCE(r.driver_phone, ''), COALESCE(r.attendant_name, ''), 
-				r.capacity,
-				GREATEST(r.assigned_students, (SELECT COUNT(*) FROM campus_transport_riders WHERE route_id = r.id AND tenant_id = ? AND status = 'ACTIVE')) as assigned_students,
-				COALESCE(r.stops_summary, r.corridor_areas, ''), 
+				COALESCE(r.capacity, 30),
+				COALESCE(r.assigned_students, 0),
+				COALESCE(r.stops_summary, ''), 
 				COALESCE(r.morning_departure, '06:45 AM'), 
 				COALESCE(r.afternoon_return, '03:30 PM'), 
-				r.term_fee, 
+				COALESCE(r.term_fee, 0), 
 				COALESCE(r.gps_status, 'ACTIVE'), 
 				COALESCE(r.status, 'ACTIVE'), 
 				r.created_at, r.updated_at
 			FROM campus_transport_routes r
 			WHERE r.tenant_id = ?
 		`
-		args := []interface{}{tenantID, tenantID}
+		args := []interface{}{tenantID}
 
 		if search != "" {
 			query += " AND (r.route_name ILIKE ? OR r.bus_number ILIKE ? OR r.driver_name ILIKE ? OR r.stops_summary ILIKE ?)"
@@ -301,14 +354,42 @@ func HandleCampusTransport(w http.ResponseWriter, r *http.Request) {
 		for rows.Next() {
 			var item CampusTransportRoute
 			var cAt, uAt time.Time
+			var driverPhone, attendantName, stopsSummary, morn, aft, gps, st sql.NullString
+			var termFee sql.NullFloat64
+			var cap, assigned sql.NullInt64
 			if err := rows.Scan(
 				&item.ID, &item.TenantID, &item.RouteName,
-				&item.BusNumber, &item.DriverName, &item.DriverPhone, &item.AttendantName,
-				&item.Capacity, &item.AssignedStudents,
-				&item.StopsSummary, &item.MorningDeparture, &item.AfternoonReturn,
-				&item.TermFee, &item.GpsStatus, &item.Status,
+				&item.BusNumber, &item.DriverName, &driverPhone, &attendantName,
+				&cap, &assigned,
+				&stopsSummary, &morn, &aft,
+				&termFee, &gps, &st,
 				&cAt, &uAt,
 			); err == nil {
+				item.DriverPhone = driverPhone.String
+				item.AttendantName = attendantName.String
+				item.Capacity = int(cap.Int64)
+				if item.Capacity <= 0 {
+					item.Capacity = 30
+				}
+				item.AssignedStudents = int(assigned.Int64)
+				item.StopsSummary = stopsSummary.String
+				item.MorningDeparture = morn.String
+				if item.MorningDeparture == "" {
+					item.MorningDeparture = "06:45 AM"
+				}
+				item.AfternoonReturn = aft.String
+				if item.AfternoonReturn == "" {
+					item.AfternoonReturn = "03:30 PM"
+				}
+				item.TermFee = termFee.Float64
+				item.GpsStatus = gps.String
+				if item.GpsStatus == "" {
+					item.GpsStatus = "ACTIVE"
+				}
+				item.Status = st.String
+				if item.Status == "" {
+					item.Status = "ACTIVE"
+				}
 				item.CreatedAt = cAt
 				item.UpdatedAt = uAt
 				routes = append(routes, item)
@@ -516,13 +597,33 @@ func HandleCampusTransportRiders(w http.ResponseWriter, r *http.Request) {
 		for rows.Next() {
 			var rd CampusTransportRider
 			var cAt, uAt time.Time
+			var admNo, classArm, parentPhone, morn, aft, feeSt, st sql.NullString
 			if err := rows.Scan(
 				&rd.ID, &rd.TenantID, &rd.RouteID, &rd.RouteName, &rd.StudentID, &rd.StudentName,
-				&rd.AdmissionNumber, &rd.ClassArmName,
-				&rd.PickupStop, &rd.MorningPickupTime, &rd.AfternoonDropoffTime,
-				&rd.ParentPhone, &rd.FeeStatus, &rd.Status,
+				&admNo, &classArm,
+				&rd.PickupStop, &morn, &aft,
+				&parentPhone, &feeSt, &st,
 				&cAt, &uAt,
 			); err == nil {
+				rd.AdmissionNumber = admNo.String
+				rd.ClassArmName = classArm.String
+				rd.MorningPickupTime = morn.String
+				if rd.MorningPickupTime == "" {
+					rd.MorningPickupTime = "06:45 AM"
+				}
+				rd.AfternoonDropoffTime = aft.String
+				if rd.AfternoonDropoffTime == "" {
+					rd.AfternoonDropoffTime = "03:45 PM"
+				}
+				rd.ParentPhone = parentPhone.String
+				rd.FeeStatus = feeSt.String
+				if rd.FeeStatus == "" {
+					rd.FeeStatus = "CLEARED"
+				}
+				rd.Status = st.String
+				if rd.Status == "" {
+					rd.Status = "ACTIVE"
+				}
 				rd.CreatedAt = cAt
 				rd.UpdatedAt = uAt
 				riders = append(riders, rd)
