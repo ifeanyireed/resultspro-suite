@@ -966,17 +966,18 @@ export default function TeacherDashboard() {
       {/* ========================================================================= */}
       {activeTab === 'campuspro' && (
         <div className="space-y-6">
-          {/* Subtab Navigation */}
-          <div className="flex flex-wrap items-center gap-2 p-1 bg-gray-100 rounded-xl w-fit border border-gray-200">
-            <button
-              onClick={() => handleCampusSubtabChange('timetable')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-                campusSubtab === 'timetable' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              <CalendarIcon className="w-3.5 h-3.5 text-[#146ef5]" />
-              Academic Timetable
-            </button>
+          {/* Subtab Navigation & Full Workspace Link */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2 p-1 bg-gray-100 rounded-xl w-fit border border-gray-200">
+              <button
+                onClick={() => handleCampusSubtabChange('timetable')}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  campusSubtab === 'timetable' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <CalendarIcon className="w-3.5 h-3.5 text-[#146ef5]" />
+                Academic Timetable
+              </button>
             <button
               onClick={() => handleCampusSubtabChange('attendance')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
@@ -1014,6 +1015,15 @@ export default function TeacherDashboard() {
               Circulars &amp; Notices
             </button>
           </div>
+
+          <Link
+            href="/teacher/campus-os"
+            className="px-4 py-2 bg-[#146ef5] hover:bg-[#105bd1] text-white rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5 w-fit"
+          >
+            <HomeModernIcon className="w-4 h-4" />
+            Launch Full CampusPRO Workspace &rarr;
+          </Link>
+        </div>
 
           {/* CampusPRO Subtab: Timetable */}
           {campusSubtab === 'timetable' && (
