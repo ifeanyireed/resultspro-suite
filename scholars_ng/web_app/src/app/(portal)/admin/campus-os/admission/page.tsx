@@ -2,15 +2,15 @@
 
 import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import AdmissionsDashboard, { type AdmissionSubtab } from '@/components/Dashboard/AdmissionsDashboard';
+import AdmissionsManager, { type AdmissionSubtab } from '../AdmissionsManager';
 
 function AdmissionContent() {
   const searchParams = useSearchParams();
   const subtabParam = searchParams.get('subtab') as AdmissionSubtab | null;
-  const validSubtabs: AdmissionSubtab[] = ['overview', 'inquiries', 'applications', 'pipeline'];
+  const validSubtabs: AdmissionSubtab[] = ['overview', 'inquiries', 'applications', 'tours_cbt', 'pipeline'];
   const initialSubtab = subtabParam && validSubtabs.includes(subtabParam) ? subtabParam : 'overview';
 
-  return <AdmissionsDashboard initialSubtab={initialSubtab} />;
+  return <AdmissionsManager initialSubtab={initialSubtab} />;
 }
 
 export default function CampusOSAdmissionPage() {
