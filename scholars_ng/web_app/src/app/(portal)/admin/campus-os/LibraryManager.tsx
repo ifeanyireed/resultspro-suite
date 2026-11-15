@@ -16,7 +16,7 @@ import {
   AcademicCapIcon,
   ClockIcon,
   ShieldCheckIcon,
-  ArrowRightLeftIcon,
+  ArrowsRightLeftIcon,
   SparklesIcon,
   BuildingOffice2Icon,
   ArchiveBoxIcon,
@@ -515,7 +515,7 @@ export default function LibraryManager({ onBooksCountChange }: { onBooksCountCha
             onClick={() => handleOpenIssueLoan()}
             className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-blue-50 text-sm font-semibold px-4 py-2.5 rounded-full shadow-sm transition-all flex items-center gap-2"
           >
-            <ArrowRightLeftIcon className="w-4 h-4" />
+            <ArrowsRightLeftIcon className="w-4 h-4" />
             Issue Book Loan
           </button>
           <button
@@ -553,7 +553,7 @@ export default function LibraryManager({ onBooksCountChange }: { onBooksCountCha
         <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
           <div className="flex items-center justify-between text-gray-400 mb-2">
             <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Active Loans</span>
-            <ArrowRightLeftIcon className="w-4 h-4 text-emerald-500" />
+            <ArrowsRightLeftIcon className="w-4 h-4 text-emerald-500" />
           </div>
           <div className="text-2xl font-bold text-emerald-600">{activeLoans}</div>
           <div className="text-[11px] text-gray-400 mt-0.5">Checked out to pupils &amp; staff</div>
@@ -593,7 +593,7 @@ export default function LibraryManager({ onBooksCountChange }: { onBooksCountCha
               : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
           }`}
         >
-          <ArrowRightLeftIcon className="w-4 h-4" />
+          <ArrowsRightLeftIcon className="w-4 h-4" />
           <span>Circulation &amp; Borrowing Ledger ({loans.length})</span>
           {overdueLoans > 0 && (
             <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-rose-500 text-white font-bold ml-1">
@@ -782,7 +782,7 @@ export default function LibraryManager({ onBooksCountChange }: { onBooksCountCha
                               title={available <= 0 ? 'No copies available to loan' : 'Issue Book Loan'}
                               className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-[#146ef5] font-bold rounded-lg text-xs transition-colors inline-flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed"
                             >
-                              <ArrowRightLeftIcon className="w-3 h-3" />
+                              <ArrowsRightLeftIcon className="w-3 h-3" />
                               <span>Loan</span>
                             </button>
                             <button
@@ -821,7 +821,7 @@ export default function LibraryManager({ onBooksCountChange }: { onBooksCountCha
             </div>
           ) : filteredLoans.length === 0 ? (
             <div className="py-20 text-center px-4">
-              <ArrowRightLeftIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <ArrowsRightLeftIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
               <h3 className="text-base font-bold text-gray-800">No circulation records found</h3>
               <p className="text-xs text-gray-500 mt-1 max-w-sm mx-auto">
                 {searchTerm || selectedLoanStatus !== 'ALL'
@@ -832,7 +832,7 @@ export default function LibraryManager({ onBooksCountChange }: { onBooksCountCha
                 onClick={() => handleOpenIssueLoan()}
                 className="mt-4 bg-[#146ef5] hover:bg-[#105bd1] text-white text-xs font-semibold px-4 py-2 rounded-full transition-all inline-flex items-center gap-1.5"
               >
-                <ArrowRightLeftIcon className="w-3.5 h-3.5" />
+                <ArrowsRightLeftIcon className="w-3.5 h-3.5" />
                 Issue First Loan
               </button>
             </div>
