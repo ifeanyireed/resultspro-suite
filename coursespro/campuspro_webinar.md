@@ -1,16 +1,15 @@
-# CampusPRO Webinar & Training Masterclass: Faculty & Student Operations Guide
-**Document:** Institutional Educator & Learner Enablement Manual & Live Webinar Narration Guide  
-**Module Target:** ResultsPro & Scholars.ng Teacher Command Center, Student Portal & CampusPRO Suite  
-**Version:** 3.1.0 (November 2026 Edition)  
-**Primary URLs:**
-* **Teacher Command Dashboard:** [`/teacher/dashboard`](file:///Volumes/ReedBreedCC/resultspro-suite/scholars_ng/web_app/src/app/(portal)/teacher/dashboard/page.tsx)
-* **Teacher CampusPRO Workspace:** [`/teacher/campus-os`](file:///Volumes/ReedBreedCC/resultspro-suite/scholars_ng/web_app/src/app/(portal)/teacher/campus-os/page.tsx)
-* **Student Command Dashboard (Pulse):** [`/student/dashboard`](file:///Volumes/ReedBreedCC/resultspro-suite/scholars_ng/web_app/src/components/Dashboard/StudentDashboard.tsx)
-* **Student Campus Operations Hub:** [`/student/campus-os`](file:///Volumes/ReedBreedCC/resultspro-suite/scholars_ng/web_app/src/app/(portal)/student/campus-os/page.tsx)
-* **Go CampusPRO Engine:** [`service_campuspro`](file:///Volumes/ReedBreedCC/resultspro-suite/service_campuspro/handlers/student_dashboard.go)
+# CampusPRO Master Webinar & Institutional Operations Manual
+**Document Reference:** `coursespro/campuspro_webinar.md`  
+**Edition:** 2026 Enterprise Release (Institutional ERP & Campus Operating System)  
+**Target Platform:** ResultsPRO Suite · Scholars Portal · CampusPRO Go Engine (`service_campuspro`)  
+**Scope:** Complete 4-Pillar Operations Manual (Teacher, Student, Administrator, Parent)  
+**Primary Portal URLs:**
+* **Admin Command Center:** [`/admin/campus-os`](file:///Volumes/ReedBreedCC/resultspro-suite/scholars_ng/web_app/src/app/(portal)/admin/campus-os)
+* **Parent Command Portal:** [`/parent/campus-os`](file:///Volumes/ReedBreedCC/resultspro-suite/scholars_ng/web_app/src/app/(portal)/parent/campus-os/page.tsx)
+* **Teacher Workspace:** [`/teacher/campus-os`](file:///Volumes/ReedBreedCC/resultspro-suite/scholars_ng/web_app/src/app/(portal)/teacher/campus-os/page.tsx)
+* **Student Operations Hub:** [`/student/campus-os`](file:///Volumes/ReedBreedCC/resultspro-suite/scholars_ng/web_app/src/app/(portal)/student/campus-os/page.tsx)
 
 ---
-
 # 🧑‍🏫 PART 1: TEACHER PORTAL & CAMPUS OPERATIONS GUIDE
 
 ---
@@ -621,3 +620,388 @@ Students can execute 4 critical institutional actions directly from their portal
 
 ### Q5: Will my conduct rating improve if I earn merit awards?
 **Answer:** Yes. Commendation merits awarded by teachers and the principal (+10 to +25 points) directly contribute to your overall conduct scorebook, house championship standings, and eligibility for prefect council appointments.
+
+
+---
+
+# 🏛️ PART 3: ADMINISTRATOR & EXECUTIVE COMMAND PORTAL (`/admin/campus-os`)
+
+---
+
+## 🎬 Section 1: Administrator Overview & Governance Philosophy
+The **Administrator Command Portal** serves as the central institutional nervous system for School Proprietors, Board of Trustees, Principals, Vice-Principals, Bursars, Registrars, and Head of Operations.
+
+CampusPRO enforces strict **tenant isolation (`WHERE tenant_id = ?`)**, meaning that campus administrators have comprehensive visibility and governance over their specific school site without any risk of cross-institutional data leakage.
+
+### Administrative Target Personas
+* **School Proprietors & Board Members:** Executive telemetry, term revenue reconciliation, gross fee collections, debtor aging, and regulatory compliance.
+* **Principals & Vice-Principals (Academics / Administration):** Staff punctuality compliance, teacher timetable allocations, pastoral discipline oversight, examination broadsheets, and facility bookings.
+* **Bursars & Finance Officers:** Term tuition tariffs, discount and scholarship waivers, Paystack/Flutterwave automated reconciliation, cafeteria disbursements, and store inventory procurement.
+* **Matrons & Health Officers:** Clinic admissions, pharmaceutical stock levels, boarder allergies, and emergency medical notifications.
+* **Housemasters & Hostel Wardens:** Hall bed allocations, room condition inspections, and digital exeat clearances.
+* **Chief Security Marshalls:** Biometric gate turnstile operation, afternoon pickup verification tokens, and visitor management.
+
+---
+
+## 🧭 Section 2: Administrator Navigation Hierarchy
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     ADMIN PORTAL NAVIGATION                     │
+├─────────────────────────────────────────────────────────────────┤
+│  [1] DASHBOARD                                                  │
+│      ├─ Executive Pulse      -> /admin/pulse                    │
+│      └─ Website CMS          -> /admin/website                  │
+│                                                                 │
+│  [2] MODULAR SUITE                                              │
+│      ├─ ClassroomPRO         -> /admin/classrooms               │
+│      ├─ TutorsPRO            -> /admin/tutors                   │
+│      ├─ PuzzlePRO            -> /admin/puzzlepro                │
+│      └─ ResultsPRO           -> /admin/results                  │
+│                                                                 │
+│  [3] OPERATIONS (CampusPRO)                                      │
+│      ├─ Operations Hub       -> /admin/campus-os                │
+│      ├─ Admission & Intake   -> /admin/campus-os/admission      │
+│      ├─ Students Directory   -> /admin/campus-os/students       │
+│      ├─ Staff & HRMS         -> /admin/campus-os/staff          │
+│      ├─ Academic Calendar    -> /admin/campus-os/academic       │
+│      ├─ Timetable Engine     -> /admin/campus-os/timetable      │
+│      ├─ Biometric Attendance -> /admin/campus-os/attendance     │
+│      ├─ Bursary & Financials -> /admin/campus-os/financials     │
+│      ├─ Discipline & Merits  -> /admin/campus-os/discipline     │
+│      ├─ Clinic & Sick Bay    -> /admin/campus-os/clinic         │
+│      ├─ Hostel & Boarding    -> /admin/campus-os/hostel         │
+│      ├─ Transportation & GPS -> /admin/campus-os/transportation │
+│      ├─ Library & Media      -> /admin/campus-os/library        │
+│      ├─ Store & Procurement  -> /admin/campus-os/inventory      │
+│      ├─ Facilities & Venues  -> /admin/campus-os/facilities     │
+│      ├─ Security & Visitors  -> /admin/campus-os/security       │
+│      ├─ Parent CRM           -> /admin/campus-os/parents        │
+│      ├─ Alumni & Transcripts -> /admin/campus-os/alumni         │
+│      ├─ Messaging & SMS      -> /admin/campus-os/messaging      │
+│      └─ Houses & Clubs       -> /admin/campus-os/co-curricular  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📋 Section 3: The 20 Operational Admin Modules Detailed
+
+### 1. Admissions & Enrollment Funnel (`/admin/campus-os/admission`)
+* **Core Function:** End-to-end recruitment pipeline from online inquiries to digital clearance.
+* **How to Use:**
+  1. Open `/admin/campus-os/admission` to view the candidate pipeline Kanban board.
+  2. Filter applicants by grade (e.g. *Creche*, *Primary 1*, *JSS 1*, *SSS 1*).
+  3. Schedule CBT entrance examinations directly through the ResultsPRO testing integration.
+  4. Generate and email official PDF Admission Letters containing the student's unique admission number and first-term billing schedule.
+
+### 2. Students Master Directory (`/admin/campus-os/students`)
+* **Core Function:** Comprehensive biographical, academic arm, and parental linkage database.
+* **How to Use:**
+  1. Access the student register with multi-criteria search (Name, Admission No, Arm, House).
+  2. Click any learner to inspect their profile: passport photo, blood group, genotype, allergy alerts, bus route, and hostel bed assignment.
+  3. Enroll new pupils individually or execute bulk CSV import with automated validation.
+
+### 3. Staff & Faculty HRMS (`/admin/campus-os/staff`)
+* **Core Function:** Faculty records, biometric turnstile punctuality logs, subject allocations, and payroll records.
+* **How to Use:**
+  1. Review live morning staff clock-ins from the school gate turnstiles (Punctual vs Late Arrival vs Absent).
+  2. Allocate teaching subjects and class arms (e.g., *Mr. Felix* -> *Physics* -> *SSS 3 Diamond*).
+  3. Process casual, maternity, and study leave requests submitted by faculty members.
+
+### 4. Academic Sessions & Term Calendar (`/admin/campus-os/academic`)
+* **Core Function:** Session governance, term bounds (First, Second, Third Term), mid-term assessments, and vacation dates.
+* **How to Use:**
+  1. Define session dates (e.g. *2026/2027 Academic Session*).
+  2. Configure term resumption, midterm break, and terminal examination dates.
+  3. Mark national public holidays to ensure attendance calculations accurately reflect official school days.
+
+### 5. Automated Timetable & Bell Schedule (`/admin/campus-os/timetable`)
+* **Core Function:** Collision-free automated scheduling across teachers, classrooms, and specialized laboratories.
+* **How to Use:**
+  1. Configure period duration (e.g., 40-minute periods, 20-minute morning break, 45-minute lunch break).
+  2. Click **Generate Collision-Free Schedule** to run the constraint solver.
+  3. Resolve any manual room or teacher conflicts, then click **Publish Schedule** to make it immediately visible to teachers and students.
+
+### 6. Biometric Attendance & Punctuality Engine (`/admin/campus-os/attendance`)
+* **Core Function:** Sub-second hardware synchronization with Hikvision, ZKTeco, and Suprema gate turnstiles.
+* **How to Use:**
+  1. View live turnstile feeds across all campus gates (Terminal A, Terminal B, Boarding House Gates).
+  2. Monitor real-time punctuality percentages (e.g., 94.8% on-time arrival rate).
+  3. Enable automated SMS dispatch to notify parents of unexcused absences at 07:45 AM daily.
+
+### 7. Bursary, Tuition Fees & Financials (`/admin/campus-os/financials`)
+* **Core Function:** Tuition invoicing, automated billing schedules, Paystack/Flutterwave gateway reconciliation, and debtor management.
+* **How to Use:**
+  1. Define term fee structures by class level: Tuition, Boarding Levy, STEM Lab Practical Fees, ICT Infrastructure Levy, and Books.
+  2. Apply approved sibling discounts or scholarship fee adjustments.
+  3. View real-time bank settlement balances and send 1-click SMS/Email fee reminders to debtors.
+
+### 8. Continuous Assessment (CA) & Examinations (`/admin/campus-os/results`)
+* **Core Function:** Grading policies, CA broadsheets, score verification, and digital report card generation.
+* **How to Use:**
+  1. Lock or unlock score entry windows for teachers.
+  2. Review cumulative broadsheets (30% First CA + 30% Second CA + 40% Terminal Examination).
+  3. Endorse report cards with the Principal's digital signature and publish them directly to parent and student portals.
+
+### 9. Discipline, Merits & Pastoral Care (`/admin/campus-os/discipline`)
+* **Core Function:** Incident documentation, demerits, detention scheduling, and pastoral counseling referrals.
+* **How to Use:**
+  1. Review infractions logged by teachers across categories (Truancy, Bullying, Uniform Violation, Class Disruption).
+  2. Assign detention periods and track completion.
+  3. Award commendation merit points for outstanding academic or civic behavior.
+
+### 10. Health & Clinic / Sick Bay (`/admin/campus-os/clinic`)
+* **Core Function:** Infirmary admissions, nurse triage, pharmaceutical inventory, and emergency parent dispatch.
+* **How to Use:**
+  1. School Matron logs admitted pupils with vital signs (Temperature, Pulse, Blood Pressure).
+  2. Administer prescribed medications from approved pharmaceutical stock.
+  3. Automatic SMS alerts notify parents immediately if an admission exceeds 2 hours or requires hospital referral.
+
+### 11. Hostel & Boarding Operations (`/admin/campus-os/hostel`)
+* **Core Function:** Dormitory room management, bed allocations, room inspections, and exeat authorizations.
+* **How to Use:**
+  1. Assign boarding students to halls (Nelson Mandela Hall, Queen Amina Hall) and specific bed spaces.
+  2. Review exeat requests submitted by parents or boarders.
+  3. Approve exeat passes with digital Housemaster stamps, which automatically notify gate security marshalls.
+
+### 12. Transportation, Fleet & Bus GPS (`/admin/campus-os/transportation`)
+* **Core Function:** Bus routes, driver licensing, vehicle telemetry, and student transit allocations.
+* **How to Use:**
+  1. Create transport corridors (e.g., *Route 4: Lekki-Ikoyi Expressway*).
+  2. Assign drivers and route wardens with verified phone numbers.
+  3. Monitor morning and afternoon run completion logs and bus maintenance schedules.
+
+### 13. Library & Media Centre (`/admin/campus-os/library`)
+* **Core Function:** Book cataloging, ISBN barcode generation, lending registers, and overdue fine tracking.
+* **How to Use:**
+  1. Catalogue curriculum textbooks, reference encyclopedias, and literature novels.
+  2. Issue books to students by scanning student ID cards.
+  3. Monitor overdue loans and process return clearances before end-of-term examinations.
+
+### 14. Procurement, Stores & Asset Inventory (`/admin/campus-os/inventory`)
+* **Core Function:** Warehouse stock, classroom supplies, teacher requisitions, and purchase orders.
+* **How to Use:**
+  1. Track stock SKUs (whiteboard markers, exam answer booklets, lab reagents, sports equipment).
+  2. Review teaching supply requisitions submitted by classroom teachers.
+  3. Issue official purchase orders (POs) and record vendor deliveries.
+
+### 15. Facilities & Venue Reservations (`/admin/campus-os/facilities`)
+* **Core Function:** Booking centralized infrastructure (Science Labs, CBT Hall, Auditorium, Sports Pitch).
+* **How to Use:**
+  1. Review reservation calendars to prevent double-booking of specialized venues.
+  2. Approve teacher laboratory booking requests for curriculum practical sessions.
+  3. Log facility maintenance trouble-tickets and assign campus technicians.
+
+### 16. Security, Gate Pass & Child Safeguarding (`/admin/campus-os/security`)
+* **Core Function:** Campus access control, visitor QR badging, and afternoon dismissal authorization.
+* **How to Use:**
+  1. Security officers issue digital visitor badges with photo capture.
+  2. At after-school dismissal, gate officers verify the parent's dynamic 6-digit pickup PIN or digital QR code before releasing any child.
+  3. Log incident reports for unauthorized entry attempts.
+
+### 17. Parent & Guardian CRM (`/admin/campus-os/parents`)
+* **Core Function:** Parent directory, PTA roster, contact verification, and communication logs.
+* **How to Use:**
+  1. View verified parents and link multiple wards to a single guardian account.
+  2. Track PTA levy contributions and meeting attendance.
+  3. Verify email and phone number deliverability to guarantee emergency contact readiness.
+
+### 18. Alumni Relations & Credential Verification (`/admin/campus-os/alumni`)
+* **Core Function:** Graduate registry, digital transcript generation, and cryptographic certificate verification.
+* **How to Use:**
+  1. Maintain graduate cohorts, graduation dates, and post-secondary destinations.
+  2. Generate official academic transcripts complete with tamper-proof QR verification codes.
+  3. Process international university and credential evaluation verification requests.
+
+### 19. Messaging Hub, SMS & Broadcast Circulars (`/admin/campus-os/messaging`)
+* **Core Function:** School-wide circulars, emergency announcements, and targeted notifications.
+* **How to Use:**
+  1. Compose announcements with multi-channel dispatch: SMS, Email, In-Portal, and Mobile Push.
+  2. Filter audience: *All School*, *Boarding Parents Only*, *SSS 3 Exam Cohort*, or *Teaching Staff*.
+  3. Track message delivery rates, read receipts, and SMS gateway credit balances.
+
+### 20. Co-Curricular, Houses & Sports System (`/admin/campus-os/co-curricular`)
+* **Core Function:** Inter-house sports championship, house points ledger, and student club coordination.
+* **How to Use:**
+  1. Manage school house rosters (Red, Blue, Yellow, Green House) and House Masters.
+  2. Record inter-house sports and academic competition points.
+  3. Monitor student club memberships (JET Club, Debate Society, Press Club, Robotics).
+
+---
+
+# 👨‍👩‍👧‍👦 PART 4: PARENT & GUARDIAN COMMAND PORTAL (`/parent/campus-os`)
+
+---
+
+## 🎬 Section 1: Parent Experience & Values
+The **Parent Command Portal** eliminates the frustration of uninformative report slips, uncertain child transit, manual bursary lines, and lost paper communications. Designed to run flawlessly on both mobile smartphones and desktop browsers, it gives parents complete 360-degree transparency over their child's academic development, physical safety, health records, and institutional expenses.
+
+### Key Parent Benefits
+* **Zero Guesswork Attendance:** Instant visibility into gate turnstile clock-in times and period attendance.
+* **Seamless Multi-Ward Switching:** Single login to manage children in different classes without repeated logins.
+* **Frictionless Fee Settlement:** Direct integration with Paystack and Flutterwave with instant PDF receipt downloads.
+* **Transit Peace of Mind:** Live school bus route tracking and direct click-to-call links for bus drivers.
+* **Child Safeguarding Assurance:** Dynamic 6-digit gate PINs and QR tokens ensure children are only released to authorized guardians.
+* **Cashless Campus Safety:** Instant tuck shop wallet top-ups ensure pupils never need to carry physical cash to school.
+
+---
+
+## 🧭 Section 2: Parent Navigation & Multi-Ward Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     PARENT PORTAL NAVIGATION                    │
+├─────────────────────────────────────────────────────────────────┤
+│  [TOP BAR] Ward Switcher: [ Alex (SSS 3) ] [ Chiamaka (JSS 2) ] │
+├─────────────────────────────────────────────────────────────────┤
+│  OPERATIONAL SUBTABS:                                           │
+│  ├─ 💳 Bursary & Fees       -> /parent/campus-os?subtab=bursary │
+│  ├─ ⏱️ Gate & Roll Call     -> /parent/campus-os?subtab=attend  │
+│  ├─ 🚌 Bus GPS Corridor     -> /parent/campus-os?subtab=trans   │
+│  ├─ 🛡️ Child Safeguarding   -> /parent/campus-os?subtab=sec     │
+│  ├─ 🩺 Infirmary & Clinic   -> /parent/campus-os?subtab=clinic  │
+│  ├─ 🏢 Hostel & Exeats      -> /parent/campus-os?subtab=hostel  │
+│  ├─ 🥪 Tuck Shop Wallet     -> /parent/campus-os?subtab=cafe    │
+│  └─ 📢 Campus Circulars     -> /parent/campus-os?subtab=notices │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📋 Section 3: The 8 Core Parent Operations Detailed
+
+### 1. Bursary & Fee Settlement (`subtab=bursary`)
+* **What Parents See:**
+  * Top KPI cards displaying *Total Term Billing*, *Total Amount Paid*, and *Outstanding Balance*.
+  * Itemized breakdown of all fee components: Tuition, Boarding Upkeep, STEM Practical Levy, and ICT CBT Infrastructure.
+  * Verified payment history with 1-click **Download Receipt** links.
+* **How to Pay Fees Online:**
+  1. Click **Make Instant Payment** on the Bursary tab.
+  2. Select the specific fee category (or choose *Full Outstanding Balance*).
+  3. Enter payment amount (minimum ₦1,000).
+  4. Click **Pay Securely via Paystack**.
+  5. Complete authorization using your preferred method (Debit Card, Bank Transfer, or USSD).
+  6. Upon completion, the school bursary records update instantly, your outstanding balance updates to ₦0, and an official PDF receipt is generated.
+
+### 2. Biometric Gate Attendance & Punctuality (`subtab=attendance`)
+* **What Parents See:**
+  * Today's turnstile gate-in time (e.g. *07:28 AM* at *Main Gate Terminal B*).
+  * Punctuality rating confirming whether the child entered before the 07:45 AM policy cutoff.
+  * Delivery status of the automated morning arrival notification SMS.
+  * 5-day historical gate attendance ledger cross-referenced with the Form Teacher's period roll call.
+
+### 3. School Bus GPS Corridor & Transit Safety (`subtab=transport`)
+* **What Parents See:**
+  * Assigned bus fleet number (e.g. *Bus 08 Toyota Coaster*) and vehicle license plate number.
+  * Driver's name, road safety certification status, and a direct click-to-call link (`Call Driver`).
+  * Assigned pickup and drop-off stop with morning and afternoon departure times.
+  * Route progress checkpoints (e.g. *Stop 1: Toll Gate 06:30 AM*, *Stop 2: Admiralty Way 06:45 AM*, *Arrived Campus 07:25 AM*).
+
+### 4. Child Safeguarding & Dynamic Pickup Security PIN (`subtab=security`)
+* **What Parents See:**
+  * A dynamic **6-Digit Gate PIN** and cryptographic **QR Token** generated specifically for your child.
+  * Authorized pickup delegate whitelist (Primary Parent, Secondary Guardian, Family Chauffeur).
+* **How Dismissal Works:**
+  * When picking up your child after school, present the 6-digit code or QR badge to the security officer at the gate.
+  * The officer scans the code against the security terminal. Once verified, the gate turnstile releases the pupil safely.
+
+### 5. Infirmary & Clinic Health Records (`subtab=clinic`)
+* **What Parents See:**
+  * Critical health badges showing Blood Group (e.g. *O+*), Genotype (e.g. *AA*), and registered allergies (e.g. *Peanuts, Penicillin*).
+  * Name and telephone extension of the active registered nurse on call in the infirmary.
+  * Chronological log of all clinic visits detailing date, reported symptoms, triage priority, administered medications, and discharge status.
+
+### 6. Boarding Hostel & Digital Exeat Pass Requests (`subtab=hostel`)
+* **What Parents See:**
+  * Boarder dormitory hall (e.g. *Nelson Mandela Hall*), room number, and bed bunk assignment.
+  * Active Housemaster contact details.
+  * History of previous exeat passes and clearances.
+* **How to Request an Exeat Pass:**
+  1. Click the blue **Request Digital Exeat** button.
+  2. Select exeat category: *Weekend Family Pass*, *Medical Specialist Appointment*, or *Special Academic Exeat*.
+  3. Enter departure date, expected return date, destination address, and emergency contact phone number.
+  4. Click **Submit Exeat Request**.
+  5. The request transmits instantly to the Housemaster's portal for digital approval. Once approved, the gate clearance token activates automatically.
+
+### 7. Cashless Tuck Shop & Cafeteria Wallet (`subtab=cafeteria`)
+* **What Parents See:**
+  * Live cashless balance on your child's smart ID card.
+  * Configured daily spending limit (e.g. *₦2,500/day*) to encourage responsible budgeting.
+  * Dietary and kitchen allergy alert tags.
+  * Itemized purchase ledger showing exact food items bought and remaining balance.
+* **How to Top Up the Meal Wallet:**
+  1. Click **Top-Up Wallet**.
+  2. Choose a quick top-up amount (₦5,000, ₦10,000, ₦20,000) or enter a custom sum.
+  3. Authorize payment securely via card.
+  4. The funds reflect immediately on your child's student ID card with zero delay.
+
+### 8. Official Campus Circulars & Bulletins (`subtab=notices`)
+* **What Parents See:**
+  * Official executive memorandums published by the Principal, Vice-Principals, and PTA Secretariat.
+  * Color-coded priority badges (*URGENT*, *PTA MEETING*, *GENERAL*).
+  * Timely notifications regarding terminal examinations, midterm breaks, and campus events.
+
+---
+
+# 🎙️ PART 5: WEBINAR PRESENTATION SCRIPT & DEMONSTRATION RUN-SHEET
+
+---
+
+## 🎬 Master 60-Minute Presentation Schedule
+
+| Segment | Timestamp | Topic & Focus Area | Presenter Demo Screen |
+| :--- | :--- | :--- | :--- |
+| **Intro** | 00:00 – 08:00 | The Institutional ERP Revolution & System Architecture | Slide Deck & Architecture Diagram |
+| **Segment 1** | 08:00 – 22:00 | **Administrator Portal Live Walkthrough:** The 20 Modules | Live Demo: `/admin/campus-os` |
+| **Segment 2** | 22:00 – 35:00 | **Faculty Workspace Live Walkthrough:** Roll Call, Labs & Marks | Live Demo: `/teacher/campus-os` |
+| **Segment 3** | 35:00 – 48:00 | **Parent Operations Portal Live Walkthrough:** Fees, GPS, Exeat | Live Demo: `/parent/campus-os` |
+| **Segment 4** | 48:00 – 55:00 | Security, Turnstile Hardware Integration & Zero Fallbacks | Live Demo: Biometric Hardware Stream |
+| **Segment 5** | 55:00 – 60:00 | Institutional Onboarding, Q&A & Executive Closing | Presenter Camera & Onboarding Steps |
+
+---
+
+## 🗣️ Live Presenter Talk Tracks & Stage Directions
+
+### Opening Remarks (00:00 - 08:00)
+> **Presenter:**  
+> *"Good day, distinguished School Proprietors, Board Members, Principals, Educators, and Parents. Welcome to the master presentation of CampusPRO — the unified institutional operating system built by ResultsPRO.*
+>
+> *For too long, running an educational institution has meant tolerating friction: bursary revenue leaks due to slow payment reconciliation, biometric delay at school gates, paper exeat forms that get misplaced, and fragmented communication between teachers and parents.*
+>
+> *CampusPRO solves this by providing a unified, multi-tenant cloud platform powered by a Go microservice engine and Neon PostgreSQL. Every single database query is tenant-isolated with zero cross-talk, zero fallbacks, and sub-millisecond local processing."*
+
+### Administrator Portal Demo Track (08:00 - 22:00)
+> **Presenter:** *(Screen Share: `/admin/campus-os`)*  
+> *"Let us step into the Administrator Command Center. Look at the left navigation: all 20 modules of campus life are unified in one place.*
+>
+> *Under Biometric Attendance, notice that when hundreds of pupils arrive in the morning, our turnstiles scan face and fingerprint profiles in less than 200 milliseconds. Parents receive automated SMS arrival alerts instantly.*
+>
+> *Under Bursary & Financials, notice that billing is automated by grade level. Payments made by parents reconcile automatically via Paystack with zero manual ledger entry, completely eliminating revenue leakage."*
+
+### Parent Portal Demo Track (35:00 - 48:00)
+> **Presenter:** *(Screen Share: `/parent/campus-os`)*  
+> *"Now let us experience the portal through the eyes of a parent. Mrs. Sarah Okonkwo has two children: Alex in SS3 and Chiamaka in JSS2.*
+>
+> *Watch how easily she switches between them on the top bar. With one click, the fees, attendance, bus route, and tuck shop wallet re-scope to Alex or Chiamaka.*
+>
+> *Look at Child Safeguarding. Notice this dynamic 6-digit PIN: 849201. When picking up a child from school, the gate security marshall must verify this dynamic code before the child is released. This is modern, uncompromising child protection."*
+
+---
+
+## ❓ Master Frequently Asked Questions (FAQ)
+
+### Q1: How does CampusPRO guarantee data privacy between different schools?
+**Answer:** CampusPRO enforces strict multi-tenancy at both the application layer and database layer. Every incoming request resolves the school's unique tenant context (`X-Tenant-Domain` and `X-Tenant-ID`), and all database queries enforce `WHERE tenant_id = ?`. One school can never see or access another school's student, staff, or financial data.
+
+### Q2: What happens if our school has existing biometric turnstile hardware?
+**Answer:** CampusPRO integrates natively with standard biometric hardware brands including Hikvision, ZKTeco, Suprema, and Dahua via REST API and WebSocket webhooks. If your school does not have turnstile hardware, teachers and gate officers can use the built-in software QR scanner on any standard tablet or smartphone.
+
+### Q3: How do parents receive receipts after paying tuition fees?
+**Answer:** When a parent pays fees online via Paystack or bank transfer on `/parent/campus-os`, the payment is verified instantly. The bursary ledger updates in real-time, and a stamped official PDF receipt is immediately available for download directly on the parent's screen.
+
+### Q4: Can parents request exeat passes on weekends?
+**Answer:** Yes. Parents can submit exeat requests 24/7 through `/parent/campus-os?subtab=hostel`. The request routes immediately to the assigned Housemaster's console, and once approved, activates the student's gate clearance pass automatically.
+
+---
+*Authored by the ResultsPRO Engineering & Educational Product Design Team.*

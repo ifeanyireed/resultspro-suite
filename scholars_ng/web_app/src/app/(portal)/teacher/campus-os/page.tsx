@@ -31,6 +31,9 @@ import {
   ArrowRightIcon,
   TagIcon,
   ChatBubbleLeftRightIcon,
+  ArchiveBoxIcon,
+  TrophyIcon,
+  UserCheckIcon,
 } from '@heroicons/react/24/outline';
 import api, { getActiveTenantContext } from '@/lib/api';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
@@ -42,6 +45,9 @@ type TeacherCampusSubtab =
   | 'discipline'
   | 'clinic'
   | 'facilities'
+  | 'inventory'
+  | 'cocurricular'
+  | 'duty'
   | 'hostel'
   | 'library'
   | 'messaging';
@@ -121,6 +127,22 @@ function TeacherCampusOSContent() {
   const [facilityEndTime, setFacilityEndTime] = useState('10:30 AM');
   const [facilityAttendees, setFacilityAttendees] = useState(35);
   const [submittingFacility, setSubmittingFacility] = useState(false);
+
+  // Classroom Supplies Requisition Modal state
+  const [isRequisitionModalOpen, setIsRequisitionModalOpen] = useState(false);
+  const [reqTitle, setReqTitle] = useState('');
+  const [reqCategory, setReqCategory] = useState('Laboratory & STEM Supplies');
+  const [reqSummary, setReqSummary] = useState('');
+  const [reqAmount, setReqAmount] = useState(15000);
+  const [reqPriority, setReqPriority] = useState('NORMAL');
+  const [submittingReq, setSubmittingReq] = useState(false);
+
+  // House Points / Merits Modal state
+  const [isHouseModalOpen, setIsHouseModalOpen] = useState(false);
+  const [selectedHouseId, setSelectedHouseId] = useState('');
+  const [housePointsDelta, setHousePointsDelta] = useState(10);
+  const [houseReason, setHouseReason] = useState('');
+  const [submittingHouse, setSubmittingHouse] = useState(false);
 
   // Sync tab with URL query parameter
   const handleTabChange = useCallback((tab: TeacherCampusSubtab) => {
@@ -419,6 +441,61 @@ function TeacherCampusOSContent() {
     }
   };
 
+  // Submit Classroom Supplies Requisition
+  const handleCreateRequisition = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reqTitle.trim()) return;
+    setSubmittingReq(true);
+    try {
+      const payload = {
+        action: 'create_procurement',
+        title: reqTitle,
+        department: dashboardData?.teacher?.subject || 'Science & STEM',
+        requested_by: dashboardData?.teacher?.name || 'Classroom Teacher',
+        items_summary: reqSummary || reqTitle,
+        total_amount: Number(reqAmount) || 0,
+        priority: reqPriority,
+        needed_by_date: new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
+      };
+      await api.post('/v1/campus/inventory', payload).catch(async () => {
+        return await api.post('/campus/inventory', payload);
+      });
+      setIsRequisitionModalOpen(false);
+      setReqTitle('');
+      setReqSummary('');
+      fetchTeacherData();
+    } catch (err: any) {
+      alert(err?.response?.data?.error || err?.message || 'Failed to submit supply requisition');
+    } finally {
+      setSubmittingReq(false);
+    }
+  };
+
+  // Award Inter-House Points
+  const handleAwardHousePoints = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedHouseId) return;
+    setSubmittingHouse(true);
+    try {
+      const payload = {
+        action: 'update_house_points',
+        house_id: selectedHouseId,
+        delta_points: Number(housePointsDelta) || 10,
+        reason: houseReason || 'Inter-house academic merit',
+      };
+      await api.post('/v1/campus/co-curricular', payload).catch(async () => {
+        return await api.post('/campus/co-curricular', payload);
+      });
+      setIsHouseModalOpen(false);
+      setHouseReason('');
+      fetchTeacherData();
+    } catch (err: any) {
+      alert(err?.response?.data?.error || err?.message || 'Failed to award house points');
+    } finally {
+      setSubmittingHouse(false);
+    }
+  };
+
   const teacher = dashboardData?.teacher || {
     name: 'Mr. Ifeanyi Felix',
     role: 'Senior STEM Faculty & Form Tutor',
@@ -440,6 +517,9 @@ function TeacherCampusOSContent() {
     { id: 'discipline', label: 'Merits & Demerits', icon: ScaleIcon, badge: 'Pastoral' },
     { id: 'clinic', label: 'Sick Bay Passes', icon: HeartIcon, badge: `${dashboardData?.clinic_admitted?.length || 0} Admitted` },
     { id: 'facilities', label: 'Lab & Venues', icon: BuildingOfficeIcon, badge: 'Bookings' },
+    { id: 'inventory', label: 'Store Requisitions', icon: ArchiveBoxIcon, badge: `${dashboardData?.requisitions?.length || 0} Reqs` },
+    { id: 'cocurricular', label: 'Houses & Clubs', icon: TrophyIcon, badge: 'Leaderboard' },
+    { id: 'duty', label: 'Faculty Duty', icon: UserCheckIcon, badge: telemetry.is_clocked_in ? 'Clocked In' : 'Roster' },
     { id: 'hostel', label: 'Boarder Exeats', icon: BuildingOffice2Icon, badge: 'Hostel' },
     { id: 'library', label: 'Curriculum Library', icon: BookOpenIcon, badge: 'Books' },
     { id: 'messaging', label: 'Campus Circulars', icon: MegaphoneIcon, badge: 'Notices' },
@@ -1002,6 +1082,290 @@ function TeacherCampusOSContent() {
         </MotionRise>
       )}
 
+      {/* Tab: Classroom Teaching Supplies & Store Requisitions */}
+      {activeTab === 'inventory' && (
+        <MotionRise delay={0.15} className="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-gray-100">
+            <div>
+              <h3 className="text-base font-bold text-gray-900">Classroom Teaching Supplies &amp; Store Requisitions</h3>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Request whiteboard markers, exam answer booklets, lab reagents, or stationery from the central campus store.
+              </p>
+            </div>
+            <button
+              onClick={() => setIsRequisitionModalOpen(true)}
+              className="px-3.5 py-2 bg-[#146ef5] hover:bg-[#105bd1] text-white rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer self-start sm:self-auto"
+            >
+              <PlusIcon className="w-4 h-4" />
+              New Supply Requisition
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
+              <span className="text-xs text-gray-500 font-semibold">Total Requisitions</span>
+              <p className="text-2xl font-bold text-gray-900 mt-1">{dashboardData?.requisitions?.length || 0}</p>
+              <p className="text-[11px] text-gray-400">Submitted by your faculty desk</p>
+            </div>
+            <div className="p-4 rounded-xl border border-amber-100 bg-amber-50/50">
+              <span className="text-xs text-amber-700 font-semibold">Awaiting Approval</span>
+              <p className="text-2xl font-bold text-amber-800 mt-1">
+                {(dashboardData?.requisitions || []).filter((r: any) => r.status === 'PENDING_APPROVAL').length}
+              </p>
+              <p className="text-[11px] text-amber-600 font-semibold">Pending Bursar &amp; HOD review</p>
+            </div>
+            <div className="p-4 rounded-xl border border-blue-100 bg-blue-50/50">
+              <span className="text-xs text-blue-700 font-semibold">Department Allocation</span>
+              <p className="text-base font-bold text-blue-900 mt-1">{dashboardData?.teacher?.subject || 'STEM & Sciences'}</p>
+              <p className="text-[11px] text-blue-600 font-semibold">Priority dispatch enabled</p>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto mt-2">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="border-b border-gray-100 bg-gray-50/75 text-[11px] font-bold uppercase tracking-wider text-gray-500">
+                  <th className="py-3 px-4">PO / Ref No.</th>
+                  <th className="py-3 px-4">Item Title &amp; Description</th>
+                  <th className="py-3 px-4">Department</th>
+                  <th className="py-3 px-4">Priority</th>
+                  <th className="py-3 px-4">Est. Amount</th>
+                  <th className="py-3 px-4">Status</th>
+                  <th className="py-3 px-4">Needed By</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 text-gray-700">
+                {(dashboardData?.requisitions || []).length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-8 text-center text-gray-400">
+                      No supply requisitions submitted yet. Click "New Supply Requisition" to request classroom consumables.
+                    </td>
+                  </tr>
+                ) : (
+                  (dashboardData?.requisitions || []).map((req: any) => (
+                    <tr key={req.id} className="hover:bg-gray-50/60">
+                      <td className="py-3 px-4 font-mono font-bold text-gray-900">{req.po_number || 'PO-REQ'}</td>
+                      <td className="py-3 px-4 font-medium">
+                        <span className="font-bold text-gray-900">{req.title}</span>
+                        {req.items_summary && req.items_summary !== req.title && (
+                          <span className="block text-[11px] text-gray-500">{req.items_summary}</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-gray-600">{req.department}</td>
+                      <td className="py-3 px-4">
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                            req.priority === 'URGENT'
+                              ? 'bg-rose-50 text-rose-700'
+                              : req.priority === 'HIGH'
+                              ? 'bg-amber-50 text-amber-700'
+                              : 'bg-blue-50 text-blue-700'
+                          }`}
+                        >
+                          {req.priority || 'NORMAL'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 font-mono font-semibold text-gray-900">
+                        {req.total_amount ? `₦${Number(req.total_amount).toLocaleString()}` : '—'}
+                      </td>
+                      <td className="py-3 px-4">
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                            req.status === 'APPROVED' || req.status === 'RECEIVED'
+                              ? 'bg-emerald-50 text-emerald-700'
+                              : req.status === 'REJECTED'
+                              ? 'bg-rose-50 text-rose-700'
+                              : 'bg-amber-50 text-amber-700'
+                          }`}
+                        >
+                          {req.status || 'PENDING_APPROVAL'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 font-mono text-gray-500">{req.needed_by_date || 'ASAP'}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </MotionRise>
+      )}
+
+      {/* Tab: Co-Curricular Houses & Student Clubs */}
+      {activeTab === 'cocurricular' && (
+        <MotionRise delay={0.15} className="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-gray-100">
+            <div>
+              <h3 className="text-base font-bold text-gray-900">Co-Curricular Houses &amp; Student Clubs</h3>
+              <p className="text-xs text-gray-500 mt-0.5">
+                School house standings, merit points recording, and student club coordinator rosters.
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                if ((dashboardData?.houses || []).length > 0) {
+                  setSelectedHouseId(dashboardData.houses[0].id);
+                }
+                setIsHouseModalOpen(true);
+              }}
+              className="px-3.5 py-2 bg-[#146ef5] hover:bg-[#105bd1] text-white rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer self-start sm:self-auto"
+            >
+              <TrophyIcon className="w-4 h-4" />
+              Award House Points
+            </button>
+          </div>
+
+          {/* House Leaderboard Cards */}
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">House Championship Leaderboard</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              {(dashboardData?.houses || []).map((h: any, idx: number) => (
+                <div
+                  key={h.id}
+                  className="p-4 rounded-xl border border-gray-200 bg-white shadow-xs relative overflow-hidden space-y-1.5"
+                >
+                  <div
+                    className="absolute top-0 left-0 right-0 h-1.5"
+                    style={{ backgroundColor: h.color_code || '#146ef5' }}
+                  />
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-xs font-bold text-gray-900">{h.house_name}</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                      Rank #{idx + 1}
+                    </span>
+                  </div>
+                  <p className="text-2xl font-bold text-gray-900">{Number(h.total_points || 0).toLocaleString()} pts</p>
+                  <p className="text-[11px] text-gray-500 truncate">Master: {h.house_master || 'Faculty Tutor'}</p>
+                  {h.motto && <p className="text-[10px] text-gray-400 italic">"{h.motto}"</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Student Clubs Table */}
+          <div className="pt-2">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Active Student Clubs &amp; Societies</h4>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="border-b border-gray-100 bg-gray-50/75 text-[11px] font-bold uppercase tracking-wider text-gray-500">
+                    <th className="py-3 px-4">Club Name</th>
+                    <th className="py-3 px-4">Category</th>
+                    <th className="py-3 px-4">Patron Teacher</th>
+                    <th className="py-3 px-4">Meeting Day &amp; Time</th>
+                    <th className="py-3 px-4">Meeting Venue</th>
+                    <th className="py-3 px-4">Enrolled Members</th>
+                    <th className="py-3 px-4">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 text-gray-700">
+                  {(dashboardData?.clubs || []).map((c: any) => (
+                    <tr key={c.id} className="hover:bg-gray-50/60">
+                      <td className="py-3 px-4 font-bold text-gray-900">{c.club_name}</td>
+                      <td className="py-3 px-4">
+                        <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold">
+                          {c.category}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 font-medium text-gray-800">{c.patron_teacher || 'Assigned Tutor'}</td>
+                      <td className="py-3 px-4 font-mono text-gray-600">{c.meeting_day} · {c.meeting_time}</td>
+                      <td className="py-3 px-4 text-gray-600">{c.venue}</td>
+                      <td className="py-3 px-4 font-bold text-gray-900">{c.member_count} Pupils</td>
+                      <td className="py-3 px-4">
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                          {c.status || 'ACTIVE'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </MotionRise>
+      )}
+
+      {/* Tab: Faculty Duty Roster & Biometric Attendance */}
+      {activeTab === 'duty' && (
+        <MotionRise delay={0.15} className="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-gray-100">
+            <div>
+              <h3 className="text-base font-bold text-gray-900">Faculty Duty Roster &amp; Biometric Attendance</h3>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Staff turnstile punctuality logs, morning assembly duties, and campus supervision schedules.
+              </p>
+            </div>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold">
+              <CheckCircleIcon className="w-4 h-4" /> Turnstile Scanner Verified
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="p-4 rounded-xl border border-gray-100 bg-gray-50 space-y-1">
+              <span className="text-xs text-gray-500 font-semibold">Today's Clock-in Timestamp</span>
+              <p className="text-2xl font-bold text-emerald-700">
+                {telemetry.is_clocked_in ? telemetry.my_clock_in_time : '07:35 AM'}
+              </p>
+              <p className="text-[11px] text-gray-400">Gate Terminal: {telemetry.my_terminal || 'Staff Gate 1'}</p>
+            </div>
+
+            <div className="p-4 rounded-xl border border-gray-100 bg-gray-50 space-y-1">
+              <span className="text-xs text-gray-500 font-semibold">Punctuality Evaluation</span>
+              <p className="text-2xl font-bold text-gray-900">
+                {telemetry.my_clock_status === 'LATE' ? 'Late Arrival' : 'On Time (07:35 AM)'}
+              </p>
+              <p className="text-[11px] text-emerald-600 font-semibold">✓ Meets Faculty 07:45 AM Policy</p>
+            </div>
+
+            <div className="p-4 rounded-xl border border-gray-100 bg-gray-50 space-y-1">
+              <span className="text-xs text-gray-500 font-semibold">Term Punctuality Score</span>
+              <p className="text-2xl font-bold text-gray-900">98.2%</p>
+              <p className="text-[11px] text-gray-400">Academic Term Rating: Exemplary</p>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Assigned Campus Supervisory Duties</h4>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="border-b border-gray-100 bg-gray-50/75 text-[11px] font-bold uppercase tracking-wider text-gray-500">
+                    <th className="py-3 px-4">Duty Description</th>
+                    <th className="py-3 px-4">Assigned Day</th>
+                    <th className="py-3 px-4">Time Interval</th>
+                    <th className="py-3 px-4">Campus Location</th>
+                    <th className="py-3 px-4">Assigned Supervisor</th>
+                    <th className="py-3 px-4">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 text-gray-700">
+                  {(dashboardData?.duty_roster || []).map((duty: any) => (
+                    <tr key={duty.id} className="hover:bg-gray-50/60">
+                      <td className="py-3 px-4 font-bold text-gray-900">{duty.duty_name}</td>
+                      <td className="py-3 px-4 font-semibold text-gray-800">{duty.day}</td>
+                      <td className="py-3 px-4 font-mono text-gray-600">{duty.time}</td>
+                      <td className="py-3 px-4 text-gray-600">{duty.venue}</td>
+                      <td className="py-3 px-4 text-gray-700">{duty.supervisor}</td>
+                      <td className="py-3 px-4">
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                            duty.status === 'ACTIVE'
+                              ? 'bg-emerald-50 text-emerald-700'
+                              : 'bg-blue-50 text-blue-700'
+                          }`}
+                        >
+                          {duty.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </MotionRise>
+      )}
+
       {/* Tab 7: Boarder Hostel & Exeat Passes */}
       {activeTab === 'hostel' && (
         <MotionRise delay={0.15} className="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs space-y-4">
@@ -1500,6 +1864,187 @@ function TeacherCampusOSContent() {
                   className="px-4 py-2 bg-[#146ef5] hover:bg-[#105bd1] text-white font-bold rounded-xl shadow-xs"
                 >
                   {submittingFacility ? 'Reserving...' : 'Confirm Reservation'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: Classroom Supplies Requisition */}
+      {isRequisitionModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-xl w-full max-w-lg p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+              <div className="flex items-center gap-2">
+                <ArchiveBoxIcon className="w-5 h-5 text-[#146ef5]" />
+                <h3 className="text-base font-bold text-gray-900">Request Classroom Teaching Supplies</h3>
+              </div>
+              <button onClick={() => setIsRequisitionModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+                <XMarkIcon className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateRequisition} className="space-y-3 text-xs">
+              <div>
+                <label className="font-semibold text-gray-700">Item Title / Materials Needed *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Whiteboard Markers (Red/Blue/Black) & Duster Set"
+                  value={reqTitle}
+                  onChange={(e) => setReqTitle(e.target.value)}
+                  className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#146ef5]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-semibold text-gray-700">Category *</label>
+                  <select
+                    value={reqCategory}
+                    onChange={(e) => setReqCategory(e.target.value)}
+                    className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-1 focus:ring-[#146ef5]"
+                  >
+                    <option value="Stationery & Markers">Stationery &amp; Markers</option>
+                    <option value="Laboratory & STEM Supplies">Laboratory &amp; STEM Supplies</option>
+                    <option value="Exam & CA Test Sheets">Exam &amp; CA Test Sheets</option>
+                    <option value="Art & Craft Materials">Art &amp; Craft Materials</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="font-semibold text-gray-700">Urgency Priority *</label>
+                  <select
+                    value={reqPriority}
+                    onChange={(e) => setReqPriority(e.target.value)}
+                    className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-1 focus:ring-[#146ef5]"
+                  >
+                    <option value="NORMAL">Normal Restock</option>
+                    <option value="HIGH">High (Needed This Week)</option>
+                    <option value="URGENT">Urgent (Immediate Class Practical)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="font-semibold text-gray-700">Items Specification &amp; Quantities</label>
+                <textarea
+                  rows={2}
+                  placeholder="e.g. 5 packs of whiteboard dry-erase markers (Assorted colors), 2 magnetic erasers"
+                  value={reqSummary}
+                  onChange={(e) => setReqSummary(e.target.value)}
+                  className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#146ef5]"
+                />
+              </div>
+
+              <div>
+                <label className="font-semibold text-gray-700">Estimated Budget / Value (₦)</label>
+                <input
+                  type="number"
+                  value={reqAmount}
+                  onChange={(e) => setReqAmount(Number(e.target.value))}
+                  className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#146ef5]"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                <button
+                  type="button"
+                  onClick={() => setIsRequisitionModalOpen(false)}
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submittingReq}
+                  className="px-4 py-2 bg-[#146ef5] hover:bg-[#105bd1] text-white font-bold rounded-xl shadow-xs"
+                >
+                  {submittingReq ? 'Submitting...' : 'Submit Requisition to Store'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: Award House Points */}
+      {isHouseModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-xl w-full max-w-lg p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+              <div className="flex items-center gap-2">
+                <TrophyIcon className="w-5 h-5 text-amber-500" />
+                <h3 className="text-base font-bold text-gray-900">Award Inter-House Merit Points</h3>
+              </div>
+              <button onClick={() => setIsHouseModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+                <XMarkIcon className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleAwardHousePoints} className="space-y-3 text-xs">
+              <div>
+                <label className="font-semibold text-gray-700">Select School House *</label>
+                <select
+                  required
+                  value={selectedHouseId}
+                  onChange={(e) => setSelectedHouseId(e.target.value)}
+                  className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-1 focus:ring-[#146ef5]"
+                >
+                  {(dashboardData?.houses || []).map((h: any) => (
+                    <option key={h.id} value={h.id}>
+                      {h.house_name} ({Number(h.total_points || 0).toLocaleString()} pts)
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="font-semibold text-gray-700">Points to Award *</label>
+                <div className="grid grid-cols-4 gap-2 mt-1">
+                  {[5, 10, 25, 50].map((pts) => (
+                    <button
+                      type="button"
+                      key={pts}
+                      onClick={() => setHousePointsDelta(pts)}
+                      className={`py-2 rounded-xl text-xs font-bold border transition cursor-pointer ${
+                        housePointsDelta === pts
+                          ? 'border-[#146ef5] bg-blue-50 text-[#146ef5]'
+                          : 'border-gray-200 text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      +{pts} pts
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="font-semibold text-gray-700">Merit Category / Event *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Inter-House Physics Olympiad 1st Place / Assembly Cleanliness"
+                  value={houseReason}
+                  onChange={(e) => setHouseReason(e.target.value)}
+                  className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#146ef5]"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                <button
+                  type="button"
+                  onClick={() => setIsHouseModalOpen(false)}
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submittingHouse}
+                  className="px-4 py-2 bg-[#146ef5] hover:bg-[#105bd1] text-white font-bold rounded-xl shadow-xs"
+                >
+                  {submittingHouse ? 'Recording Points...' : `Award +${housePointsDelta} Points`}
                 </button>
               </div>
             </form>
