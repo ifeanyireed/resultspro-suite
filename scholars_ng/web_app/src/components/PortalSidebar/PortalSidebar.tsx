@@ -43,23 +43,21 @@ type MenuItem = {
 };
 
 const studentMenu: MenuItem[] = [
-  { name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/student/dashboard' },
-  { name: 'Classroom', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/student/classroom' },
-  { name: 'Timetable', icon: CalendarIcon, activeIcon: CalendarIcon, slug: '/student/timetable' },
-  { name: 'Homework', icon: ClipboardDocumentListIcon, activeIcon: ClipboardDocumentListIcon, slug: '/student/homework' },
-  { name: 'Library', icon: BookOpenIcon, activeIcon: BookOpenIcon, slug: '/student/learning' },
-  { name: 'Exams', icon: ChartBarIcon, activeIcon: ChartBarIcon, slug: '/student/exams' },
-  { name: 'Results', icon: ChartPieIcon, activeIcon: ChartPieIcon, slug: '/student/results' },
-  { name: 'Tutors', icon: UserGroupIcon, activeIcon: UserGroupIcon, slug: '/student/tutors' },
-  { name: 'Future Skills', icon: ComputerDesktopIcon, activeIcon: ComputerDesktopIcon, slug: '/student/future-skills' },
+  { section: 'Dashboard', name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/student/dashboard' },
+  { section: 'Modular Suite', name: 'ClassroomPRO', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/student/classroom' },
+  { name: 'TutorsPRO', icon: UserGroupIcon, activeIcon: UserGroupIcon, slug: '/student/tutors' },
+  { name: 'PuzzlePRO', icon: PuzzlePieceIcon, activeIcon: PuzzlePieceIcon, slug: '/student/future-skills' },
+  { name: 'ResultsPRO', icon: ChartPieIcon, activeIcon: ChartPieIcon, slug: '/student/results' },
+  { section: 'Operations', name: 'CampusPRO', icon: HomeModernIcon, activeIcon: HomeModernIcon, slug: '/student/campus-os' },
 ];
 
 const teacherMenu: MenuItem[] = [
-  { name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/teacher/dashboard' },
-  { name: 'Classroom', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/teacher/classroom' },
-  { name: 'My Classes', icon: BookOpenIcon, activeIcon: BookOpenIcon, slug: '/teacher/classes' },
-  { name: 'Homework', icon: ClipboardDocumentListIcon, activeIcon: ClipboardDocumentListIcon, slug: '/teacher/homework' },
-  { name: 'Assessments', icon: ChartBarIcon, activeIcon: ChartBarIcon, slug: '/teacher/assessments' },
+  { section: 'Dashboard', name: 'Overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid, slug: '/teacher/dashboard' },
+  { section: 'Modular Suite', name: 'ClassroomPRO', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/teacher/classroom' },
+  { name: 'TutorsPRO', icon: UserGroupIcon, activeIcon: UserGroupIcon, slug: '/teacher/tutors' },
+  { name: 'PuzzlePRO', icon: PuzzlePieceIcon, activeIcon: PuzzlePieceIcon, slug: '/admin/puzzlepro' },
+  { name: 'ResultsPRO', icon: ChartPieIcon, activeIcon: ChartPieIcon, slug: '/admin/results' },
+  { section: 'Operations', name: 'CampusPRO', icon: HomeModernIcon, activeIcon: HomeModernIcon, slug: '/teacher/dashboard?tab=campuspro' },
 ];
 
 const parentMenu: MenuItem[] = [

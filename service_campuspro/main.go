@@ -46,6 +46,15 @@ func main() {
 		"/api/v1/campus/summary": handlers.HandleCampusSummary,
 		"/api/campus/summary":    handlers.HandleCampusSummary,
 
+		// Student Command Dashboard
+		"/api/v1/campus/student/dashboard": handlers.HandleStudentDashboard,
+		"/api/campus/student/dashboard":    handlers.HandleStudentDashboard,
+		"/api/student/dashboard":           handlers.HandleStudentDashboard,
+
+		// Multi-Campus Sites & Branch Locations
+		"/api/v1/campus/branches": handlers.HandleCampusBranches,
+		"/api/campus/branches":    handlers.HandleCampusBranches,
+
 		// Timetable & Periods Bell Schedule
 		"/api/v1/campus/timetable":               handlers.HandleCampusTimetable,
 		"/api/campus/timetable":                  handlers.HandleCampusTimetable,
@@ -94,6 +103,34 @@ func main() {
 		// Hostel Halls & Bed Allocations
 		"/api/v1/campus/hostel": handlers.HandleCampusHostel,
 		"/api/campus/hostel":    handlers.HandleCampusHostel,
+
+		// Clinic & Infirmary Management
+		"/api/v1/campus/clinic": handlers.HandleCampusClinic,
+		"/api/campus/clinic":    handlers.HandleCampusClinic,
+
+		// Campus Security, Visitors & Child Safeguarding
+		"/api/v1/campus/security": handlers.HandleCampusSecurity,
+		"/api/campus/security":    handlers.HandleCampusSecurity,
+
+		// Pastoral Care & Behavioral Discipline
+		"/api/v1/campus/discipline": handlers.HandleCampusDiscipline,
+		"/api/campus/discipline":    handlers.HandleCampusDiscipline,
+
+		// Cafeteria, Dining Hall & Cashless Tuck Shop
+		"/api/v1/campus/cafeteria": handlers.HandleCampusCafeteria,
+		"/api/campus/cafeteria":    handlers.HandleCampusCafeteria,
+
+		// Co-Curricular, Clubs & Houses
+		"/api/v1/campus/co-curricular": handlers.HandleCampusCoCurricular,
+		"/api/campus/co-curricular":    handlers.HandleCampusCoCurricular,
+
+		// Campus Facilities & Resource Reservation
+		"/api/v1/campus/facilities": handlers.HandleCampusFacilities,
+		"/api/campus/facilities":    handlers.HandleCampusFacilities,
+
+		// Alumni Relations & Registry Credential Verification
+		"/api/v1/campus/alumni": handlers.HandleCampusAlumni,
+		"/api/campus/alumni":    handlers.HandleCampusAlumni,
 
 		// School Circulars, Notices & Events
 		"/api/v1/campus/notices": handlers.HandleCampusNotices,

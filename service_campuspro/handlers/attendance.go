@@ -386,6 +386,11 @@ func HandleCampusAttendanceLogs(w http.ResponseWriter, r *http.Request) {
 			term := "%" + search + "%"
 			args = append(args, term, term, term, term)
 		}
+		campusID := strings.TrimSpace(r.URL.Query().Get("campus_id"))
+		if campusID != "" && campusID != "all" {
+			query += " AND (campus_id = ? OR campus_id = '' OR campus_id IS NULL)"
+			args = append(args, campusID)
+		}
 
 		query += " ORDER BY time_in DESC, created_at DESC"
 

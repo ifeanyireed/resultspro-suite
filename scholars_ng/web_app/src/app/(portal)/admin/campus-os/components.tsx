@@ -48,14 +48,48 @@ import TimetableManager from './TimetableManager';
 import TutorAssignmentManager from './TutorAssignmentManager';
 import MessagingManager from './MessagingManager';
 
-interface CampusOSContextType {
+export interface CampusBranch {
+  id: string;
+  tenant_id?: string;
+  name: string;
+  code: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  phone?: string;
+  email?: string;
+  principal_name?: string;
+  principal_email?: string;
+  is_main: boolean;
+  status: string;
+  student_count?: number;
+  staff_count?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CampusOSContextType {
+  selectedCampusId: string;
   selectedCampus: string;
-  setSelectedCampus: (campus: string) => void;
+  setSelectedCampusId: (id: string) => void;
+  setSelectedCampus: (name: string) => void;
+  campuses: CampusBranch[];
+  isLoadingCampuses: boolean;
+  refreshCampuses: () => Promise<void>;
+  isBranchModalOpen: boolean;
+  setIsBranchModalOpen: (open: boolean) => void;
 }
 
 const CampusOSContext = React.createContext<CampusOSContextType>({
-  selectedCampus: "All Campuses (Multi-Campus)",
+  selectedCampusId: 'all',
+  selectedCampus: 'All Campuses (Multi-Campus)',
+  setSelectedCampusId: () => {},
   setSelectedCampus: () => {},
+  campuses: [],
+  isLoadingCampuses: false,
+  refreshCampuses: async () => {},
+  isBranchModalOpen: false,
+  setIsBranchModalOpen: () => {},
 });
 
 export const useCampusOS = () => React.useContext(CampusOSContext);
@@ -74,7 +108,15 @@ export type CampusOSTab =
   | 'transportation'
   | 'admission'
   | 'messaging'
-  | 'mobile-app';
+  | 'mobile-app'
+  | 'clinic'
+  | 'hostel'
+  | 'security'
+  | 'discipline'
+  | 'cafeteria'
+  | 'co-curricular'
+  | 'facilities'
+  | 'alumni';
 
 type AcademicSubtab = 'overview' | 'session' | 'classes' | 'subjects' | 'assigned-tutors' | 'timetable';
 

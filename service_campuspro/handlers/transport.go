@@ -340,6 +340,11 @@ func HandleCampusTransport(w http.ResponseWriter, r *http.Request) {
 			query += " AND r.status = ?"
 			args = append(args, status)
 		}
+		campusID := strings.TrimSpace(r.URL.Query().Get("campus_id"))
+		if campusID != "" && campusID != "all" {
+			query += " AND (r.campus_id = ? OR r.campus_id = '' OR r.campus_id IS NULL)"
+			args = append(args, campusID)
+		}
 
 		query += " ORDER BY r.route_name ASC"
 

@@ -23,6 +23,7 @@ import {
   EnvelopeIcon,
 } from '@heroicons/react/24/outline';
 import api, { getActiveTenantContext } from '@/lib/api';
+import { useCampusOS } from './components';
 
 export interface AttendanceLogRecord {
   id: string;
@@ -94,6 +95,7 @@ export interface AvailableRosterPerson {
 }
 
 export default function AttendanceManager() {
+  const { selectedCampusId } = useCampusOS();
   const [activeSubtab, setActiveSubtab] = useState<'live' | 'staff' | 'students' | 'biometrics'>('live');
   const [selectedDate, setSelectedDate] = useState<string>(() => new Date().toISOString().split('T')[0]);
   
@@ -229,6 +231,9 @@ export default function AttendanceManager() {
       const params = new URLSearchParams();
       if (tenantId) params.append('tenant_id', tenantId);
       if (tenantSlug) params.append('tenant', tenantSlug);
+      if (selectedCampusId && selectedCampusId !== 'all') {
+        params.append('campus_id', selectedCampusId);
+      }
       params.append('date', selectedDate);
       const qs = `?${params.toString()}`;
 
@@ -274,7 +279,7 @@ export default function AttendanceManager() {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [selectedDate]);
+  }, [selectedDate, selectedCampusId]);
 
   useEffect(() => {
     fetchAttendanceData();

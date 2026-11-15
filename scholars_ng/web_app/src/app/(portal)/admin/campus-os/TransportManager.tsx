@@ -21,6 +21,7 @@ import {
   SignalIcon,
 } from '@heroicons/react/24/outline';
 import api, { getActiveTenantContext } from '@/lib/api';
+import { useCampusOS } from './components';
 
 export interface TransportRouteRecord {
   id: string;
@@ -70,6 +71,7 @@ export interface AvailableStudentRider {
 }
 
 export default function TransportManager() {
+  const { selectedCampusId } = useCampusOS();
   const [routes, setRoutes] = useState<TransportRouteRecord[]>([]);
   const [riders, setRiders] = useState<TransportRiderRecord[]>([]);
   const [availableStudents, setAvailableStudents] = useState<AvailableStudentRider[]>([]);
@@ -137,6 +139,9 @@ export default function TransportManager() {
       const params = new URLSearchParams();
       if (tenantId) params.append('tenant_id', tenantId);
       if (tenantSlug) params.append('tenant', tenantSlug);
+      if (selectedCampusId && selectedCampusId !== 'all') {
+        params.append('campus_id', selectedCampusId);
+      }
       const qs = params.toString() ? `?${params.toString()}` : '';
 
       const sRes = await api.get(`/v1/campus/students${qs}`).catch(async () => {
@@ -161,6 +166,9 @@ export default function TransportManager() {
       const params = new URLSearchParams();
       if (tenantId) params.append('tenant_id', tenantId);
       if (tenantSlug) params.append('tenant', tenantSlug);
+      if (selectedCampusId && selectedCampusId !== 'all') {
+        params.append('campus_id', selectedCampusId);
+      }
       const qs = params.toString() ? `?${params.toString()}` : '';
 
       // 1. Fetch Routes
@@ -205,7 +213,7 @@ export default function TransportManager() {
       setLoading(false);
       setRefreshing(false);
     }
-  }, []);
+  }, [selectedCampusId]);
 
   useEffect(() => {
     fetchTransportData();
@@ -271,6 +279,9 @@ export default function TransportManager() {
       const params = new URLSearchParams();
       if (tenantId) params.append('tenant_id', tenantId);
       if (tenantSlug) params.append('tenant', tenantSlug);
+      if (selectedCampusId && selectedCampusId !== 'all') {
+        params.append('campus_id', selectedCampusId);
+      }
       const qs = params.toString() ? `?${params.toString()}` : '';
 
       await api.post(`/v1/campus/transport${qs}`, {
@@ -308,6 +319,9 @@ export default function TransportManager() {
       const params = new URLSearchParams();
       if (tenantId) params.append('tenant_id', tenantId);
       if (tenantSlug) params.append('tenant', tenantSlug);
+      if (selectedCampusId && selectedCampusId !== 'all') {
+        params.append('campus_id', selectedCampusId);
+      }
       const qs = params.toString() ? `?${params.toString()}` : '';
 
       await api.put(`/v1/campus/transport${qs}`, {
@@ -350,6 +364,9 @@ export default function TransportManager() {
       const params = new URLSearchParams();
       if (tenantId) params.append('tenant_id', tenantId);
       if (tenantSlug) params.append('tenant', tenantSlug);
+      if (selectedCampusId && selectedCampusId !== 'all') {
+        params.append('campus_id', selectedCampusId);
+      }
       const qs = params.toString() ? `?${params.toString()}` : '';
 
       await api.post(`/v1/campus/transport/riders${qs}`, riderForm);
@@ -382,6 +399,9 @@ export default function TransportManager() {
       const params = new URLSearchParams();
       if (tenantId) params.append('tenant_id', tenantId);
       if (tenantSlug) params.append('tenant', tenantSlug);
+      if (selectedCampusId && selectedCampusId !== 'all') {
+        params.append('campus_id', selectedCampusId);
+      }
       const qs = params.toString() ? `?${params.toString()}` : '';
 
       await api.put(`/v1/campus/transport/riders${qs}`, riderForm);

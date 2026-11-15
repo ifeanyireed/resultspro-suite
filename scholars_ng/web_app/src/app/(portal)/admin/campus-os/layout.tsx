@@ -17,9 +17,19 @@ import {
   ChatBubbleLeftRightIcon,
   DevicePhoneMobileIcon,
   FingerPrintIcon,
+  Cog6ToothIcon,
+  ShieldCheckIcon,
+  ScaleIcon,
+  BuildingOffice2Icon,
+  BuildingStorefrontIcon,
+  TrophyIcon,
+  IdentificationIcon,
+  BuildingOfficeIcon,
 } from '@heroicons/react/24/outline';
 import { MotionRise } from '@/components/ScrollRiseProvider';
-import { CampusOSProvider, type CampusOSTab } from './components';
+import api from '@/lib/api';
+import { CampusOSProvider, type CampusOSTab, type CampusBranch } from './components';
+import CampusBranchModal from './CampusBranchModal';
 
 export default function CampusOSLayout({
   children,
@@ -27,7 +37,71 @@ export default function CampusOSLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [selectedCampus, setSelectedCampus] = useState('All Campuses (Multi-Campus)');
+  const [campuses, setCampuses] = useState<CampusBranch[]>([]);
+  const [isLoadingCampuses, setIsLoadingCampuses] = useState(false);
+  const [selectedCampusId, setSelectedCampusId] = useState<string>('all');
+  const [isBranchModalOpen, setIsBranchModalOpen] = useState(false);
+
+  // Initialize selectedCampusId from localStorage or query on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlCampusId = urlParams.get('campus_id');
+      const savedCampusId = localStorage.getItem('scholars_selected_campus_id');
+      if (urlCampusId) {
+        setSelectedCampusId(urlCampusId);
+      } else if (savedCampusId) {
+        setSelectedCampusId(savedCampusId);
+      }
+    }
+  }, []);
+
+  const fetchCampuses = useCallback(async () => {
+    try {
+      setIsLoadingCampuses(true);
+      const res = await api
+        .get('/v1/campus/branches')
+        .catch(async () => await api.get('/campus/branches'));
+      if (res?.data?.branches) {
+        setCampuses(res.data.branches);
+      }
+    } catch (err) {
+      console.error('Failed to load campus branches:', err);
+    } finally {
+      setIsLoadingCampuses(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCampuses();
+  }, [fetchCampuses]);
+
+  // Derive human-readable campus name for backwards-compatibility
+  const activeCampusObj = campuses.find((c) => c.id === selectedCampusId);
+  const selectedCampusName = activeCampusObj ? activeCampusObj.name : 'All Campuses (Multi-Campus)';
+
+  const handleSelectCampusId = useCallback((id: string) => {
+    setSelectedCampusId(id);
+    if (typeof window !== 'undefined') {
+      if (id === 'all') {
+        localStorage.removeItem('scholars_selected_campus_id');
+      } else {
+        localStorage.setItem('scholars_selected_campus_id', id);
+      }
+    }
+  }, []);
+
+  const handleSetSelectedCampusName = useCallback((name: string) => {
+    if (name === 'All Campuses (Multi-Campus)') {
+      handleSelectCampusId('all');
+      return;
+    }
+    const match = campuses.find((c) => c.name === name);
+    if (match) {
+      handleSelectCampusId(match.id);
+    }
+  }, [campuses, handleSelectCampusId]);
+
   const tabsScrollRef = useRef<HTMLDivElement>(null);
   const scrollHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [scrollMetrics, setScrollMetrics] = useState({ thumbWidth: 100, thumbLeft: 0, hasOverflow: false });
@@ -45,6 +119,14 @@ export default function CampusOSLayout({
     { id: 'transportation', label: 'Transportation', icon: TruckIcon, badge: 'Fleet', href: '/admin/campus-os/transportation' },
     { id: 'admission', label: 'Admission', icon: ClipboardDocumentCheckIcon, badge: 'Pipeline', href: '/admin/campus-os/admission' },
     { id: 'messaging', label: 'Messaging', icon: ChatBubbleLeftRightIcon, badge: 'Broadcast', href: '/admin/campus-os/messaging' },
+    { id: 'clinic', label: 'Clinic', icon: HeartIcon, badge: 'Sick Bay', href: '/admin/campus-os/clinic' },
+    { id: 'hostel', label: 'Hostel & Exeat', icon: BuildingOffice2Icon, badge: 'Boarding', href: '/admin/campus-os/hostel' },
+    { id: 'security', label: 'Security & Gate', icon: ShieldCheckIcon, badge: 'Visitor Pass', href: '/admin/campus-os/security' },
+    { id: 'discipline', label: 'Discipline', icon: ScaleIcon, badge: 'Merits/Demerits', href: '/admin/campus-os/discipline' },
+    { id: 'cafeteria', label: 'Cafeteria', icon: BuildingStorefrontIcon, badge: 'POS & Wallet', href: '/admin/campus-os/cafeteria' },
+    { id: 'co-curricular', label: 'Co-Curricular', icon: TrophyIcon, badge: 'Clubs & Houses', href: '/admin/campus-os/co-curricular' },
+    { id: 'facilities', label: 'Facilities', icon: BuildingOfficeIcon, badge: 'Venues', href: '/admin/campus-os/facilities' },
+    { id: 'alumni', label: 'Alumni', icon: IdentificationIcon, badge: 'Registry', href: '/admin/campus-os/alumni' },
     { id: 'mobile-app', label: 'Mobile App', icon: DevicePhoneMobileIcon, badge: 'App IDs', href: '/admin/campus-os/mobile-app' },
   ];
 
@@ -92,7 +174,19 @@ export default function CampusOSLayout({
   }, [updateScrollMetrics]);
 
   return (
-    <CampusOSProvider value={{ selectedCampus, setSelectedCampus }}>
+    <CampusOSProvider
+      value={{
+        selectedCampusId,
+        selectedCampus: selectedCampusName,
+        setSelectedCampusId: handleSelectCampusId,
+        setSelectedCampus: handleSetSelectedCampusName,
+        campuses,
+        isLoadingCampuses,
+        refreshCampuses: fetchCampuses,
+        isBranchModalOpen,
+        setIsBranchModalOpen,
+      }}
+    >
       <div className="min-w-0 w-full max-w-full">
         {/* CampusPRO Module Header */}
         <MotionRise className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-2 mb-5">
@@ -108,20 +202,30 @@ export default function CampusOSLayout({
             </p>
           </div>
 
-          {/* Multi-Campus Selector */}
-          <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-2 shadow-sm self-start sm:self-auto">
+          {/* Dynamic Multi-Campus Selector & Branch Management Modal Trigger */}
+          <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-full px-3 py-1.5 shadow-sm self-start sm:self-auto hover:border-gray-300 transition-colors">
             <HomeModernIcon className="w-4 h-4 text-[#146ef5] shrink-0" />
             <select
-              value={selectedCampus}
-              onChange={(e) => setSelectedCampus(e.target.value)}
-              className="text-xs font-semibold text-gray-800 bg-transparent focus:outline-none cursor-pointer"
+              value={selectedCampusId}
+              onChange={(e) => handleSelectCampusId(e.target.value)}
+              disabled={isLoadingCampuses && campuses.length === 0}
+              className="text-xs font-semibold text-gray-800 bg-transparent focus:outline-none cursor-pointer max-w-[210px] sm:max-w-[280px] truncate"
             >
-              <option>All Campuses (Multi-Campus)</option>
-              <option>Main Campus · Lekki Phase 1</option>
-              <option>Annex Campus · Ikeja GRA</option>
-              <option>Victoria Island Junior Campus</option>
-              <option>Abuja Maitama Campus</option>
+              <option value="all">All Campuses (Multi-Campus)</option>
+              {campuses.map((branch) => (
+                <option key={branch.id} value={branch.id}>
+                  {branch.name} {branch.is_main ? '★ Main' : `[${branch.code}]`}
+                </option>
+              ))}
             </select>
+            <button
+              type="button"
+              onClick={() => setIsBranchModalOpen(true)}
+              title="Manage Institutional Campus Sites"
+              className="p-1 rounded-full text-gray-400 hover:text-[#146ef5] hover:bg-blue-50 transition-colors cursor-pointer"
+            >
+              <Cog6ToothIcon className="w-4 h-4" />
+            </button>
           </div>
         </MotionRise>
 
@@ -200,6 +304,16 @@ export default function CampusOSLayout({
         <MotionRise delay={0.06} className="mt-[4px]">
           {children}
         </MotionRise>
+
+        {/* Multi-Campus & Branch Management Dialog */}
+        <CampusBranchModal
+          isOpen={isBranchModalOpen}
+          onClose={() => setIsBranchModalOpen(false)}
+          campuses={campuses}
+          onRefresh={fetchCampuses}
+          selectedCampusId={selectedCampusId}
+          onSelectCampusId={handleSelectCampusId}
+        />
       </div>
     </CampusOSProvider>
   );
