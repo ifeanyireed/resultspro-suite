@@ -141,7 +141,7 @@ func getCampusFinancials(w http.ResponseWriter, r *http.Request, tenantID string
 		       COALESCE(term_name, 'First Term'), COALESCE(term, 'First Term'), COALESCE(session, '2026/2027'),
 		       COALESCE(amount, 0), COALESCE(tuition_fee, 0), COALESCE(development_levy, 0), COALESCE(ict_stem_fee, 0),
 		       COALESCE(exam_materials_fee, 0), COALESCE(total_due, 0), COALESCE(is_mandatory, true),
-		       COALESCE(due_date, ''), created_at, updated_at
+		       COALESCE(due_date, ''), COALESCE(created_at, CURRENT_TIMESTAMP), COALESCE(updated_at, CURRENT_TIMESTAMP)
 		FROM campus_fee_structures
 		WHERE tenant_id = ?
 		ORDER BY created_at DESC
@@ -164,6 +164,9 @@ func getCampusFinancials(w http.ResponseWriter, r *http.Request, tenantID string
 				if s.Amount == 0 && s.TotalDue > 0 {
 					s.Amount = s.TotalDue
 				}
+				if s.TuitionFee == 0 && s.Amount > 0 && s.DevelopmentLevy == 0 && s.ICTStemFee == 0 && s.ExamMaterialsFee == 0 {
+					s.TuitionFee = s.Amount
+				}
 				structures = append(structures, s)
 			}
 		}
@@ -181,7 +184,7 @@ func getCampusFinancials(w http.ResponseWriter, r *http.Request, tenantID string
 		       COALESCE(balance_due, balance, 0), COALESCE(status, 'UNPAID'),
 		       COALESCE(payment_method, 'Pending'), COALESCE(payment_reference, ''), COALESCE(due_date, ''),
 		       COALESCE(parent_name, ''), COALESCE(parent_phone, ''),
-		       paid_at, last_payment_at, created_at, updated_at
+		       paid_at, last_payment_at, COALESCE(created_at, CURRENT_TIMESTAMP), COALESCE(updated_at, CURRENT_TIMESTAMP)
 		FROM campus_student_invoices
 		WHERE tenant_id = ?
 	`
@@ -235,7 +238,7 @@ func getCampusFinancials(w http.ResponseWriter, r *http.Request, tenantID string
 		SELECT id, tenant_id, invoice_id, COALESCE(student_id, ''), student_name, COALESCE(admission_number, ''),
 		       class_name, amount, COALESCE(payment_method, 'Paystack DVA'), reference, receipt_no,
 		       COALESCE(paid_by, ''), COALESCE(recorded_by, 'Bursary Admin'), payment_date,
-		       COALESCE(status, 'CONFIRMED'), COALESCE(notes, ''), created_at
+		       COALESCE(status, 'CONFIRMED'), COALESCE(notes, ''), COALESCE(created_at, CURRENT_TIMESTAMP)
 		FROM campus_fee_payments
 		WHERE tenant_id = ?
 		ORDER BY created_at DESC

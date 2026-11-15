@@ -30,6 +30,16 @@ import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import api from '@/lib/api';
 
+/**
+ * Robust currency formatter for Nigerian Naira figures.
+ * Safely guards against undefined, null, or non-numeric inputs.
+ */
+export const formatNaira = (val?: number | string | null): string => {
+  if (val === undefined || val === null || val === '') return '0';
+  const num = typeof val === 'number' ? val : Number(val);
+  return isNaN(num) ? '0' : num.toLocaleString();
+};
+
 export interface FeeStructure {
   id: string;
   tenant_id: string;
@@ -40,11 +50,11 @@ export interface FeeStructure {
   term?: string;
   session?: string;
   amount: number;
-  tuition_fee: number;
-  development_levy: number;
-  ict_stem_fee: number;
-  exam_materials_fee: number;
-  total_due: number;
+  tuition_fee?: number;
+  development_levy?: number;
+  ict_stem_fee?: number;
+  exam_materials_fee?: number;
+  total_due?: number;
   is_mandatory: boolean;
   due_date: string;
   created_at?: string;
@@ -64,12 +74,12 @@ export interface StudentInvoice {
   term_name: string;
   term?: string;
   session?: string;
-  tuition_fee: number;
-  development_levy: number;
-  ict_stem_fee: number;
-  exam_materials_fee: number;
-  other_charges: number;
-  discount_amount: number;
+  tuition_fee?: number;
+  development_levy?: number;
+  ict_stem_fee?: number;
+  exam_materials_fee?: number;
+  other_charges?: number;
+  discount_amount?: number;
   total_billed: number;
   amount_paid: number;
   balance_due: number;
@@ -236,16 +246,30 @@ export default function FinancialsManager() {
     setLoading(true);
     setErrorBanner(null);
     try {
-      const res = await api.get('/v1/campus/fees');
+      const qs = typeof window !== 'undefined' && window.location.search ? window.location.search : '';
+      const res = await api.get(`/v1/campus/fees${qs}`).catch(async () => {
+        return await api.get(`/campus/fees${qs}`);
+      });
       const data = res.data;
       if (data) {
         if (data.summary) setSummary(data.summary);
-        if (data.fee_structures) setFeeStructures(data.fee_structures);
-        if (data.invoices) setInvoices(data.invoices);
-        if (data.payments) setPayments(data.payments);
-        if (data.debtors) setDebtors(data.debtors);
-        if (data.students) setStudentsMeta(data.students);
-        if (data.class_arms) setClassArmsMeta(data.class_arms);
+        if (data.fee_structures && Array.isArray(data.fee_structures)) {
+          // Normalize fee structure numbers so tuition_fee / total_due are never undefined
+          const normalized = (data.fee_structures as FeeStructure[]).map((s) => ({
+            ...s,
+            tuition_fee: Number(s.tuition_fee ?? s.amount ?? 0),
+            development_levy: Number(s.development_levy ?? 0),
+            ict_stem_fee: Number(s.ict_stem_fee ?? 0),
+            exam_materials_fee: Number(s.exam_materials_fee ?? 0),
+            total_due: Number(s.total_due ?? s.amount ?? 0),
+          }));
+          setFeeStructures(normalized);
+        }
+        if (data.invoices && Array.isArray(data.invoices)) setInvoices(data.invoices);
+        if (data.payments && Array.isArray(data.payments)) setPayments(data.payments);
+        if (data.debtors && Array.isArray(data.debtors)) setDebtors(data.debtors);
+        if (data.students && Array.isArray(data.students)) setStudentsMeta(data.students);
+        if (data.class_arms && Array.isArray(data.class_arms)) setClassArmsMeta(data.class_arms);
       }
     } catch (err: any) {
       console.error('Failed to load campus fees:', err);
@@ -600,11 +624,11 @@ export default function FinancialsManager() {
               </div>
               <div className="z-10">
                 <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-2">
-                  ₦{summary.total_collected.toLocaleString()}
+                  ₦{formatNaira(summary.total_collected)}
                 </h2>
                 <div className="flex items-center gap-1.5 text-xs text-white/80">
                   <div className="bg-white/20 px-2 py-0.5 rounded text-[10px] font-bold flex items-center gap-1">
-                    <ArrowTrendingUpIcon className="w-3 h-3 text-[#FBBC04]" /> {summary.collection_rate}% Collected
+                    <ArrowTrendingUpIcon className="w-3 h-3 text-[#FBBC04]" /> {summary.collection_rate || 0}% Collected
                   </div>
                   <span>Verified Settlements</span>
                 </div>
@@ -620,9 +644,9 @@ export default function FinancialsManager() {
               </div>
               <div>
                 <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-2">
-                  ₦{summary.total_billed.toLocaleString()}
+                  ₦{formatNaira(summary.total_billed)}
                 </h2>
-                <div className="text-xs text-gray-500">Across {summary.invoices_count} term invoices</div>
+                <div className="text-xs text-gray-500">Across {summary.invoices_count || 0} term invoices</div>
               </div>
             </MotionRise>
 
@@ -635,10 +659,10 @@ export default function FinancialsManager() {
               </div>
               <div>
                 <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-rose-600 mb-2">
-                  ₦{summary.total_outstanding.toLocaleString()}
+                  ₦{formatNaira(summary.total_outstanding)}
                 </h2>
                 <div className="text-xs text-gray-500">
-                  {summary.pending_count} pending invoices ({summary.critical_debtors_count} critical &gt; ₦100k)
+                  {summary.pending_count || 0} pending invoices ({summary.critical_debtors_count || 0} critical &gt; ₦100k)
                 </div>
               </div>
             </MotionRise>
@@ -652,7 +676,7 @@ export default function FinancialsManager() {
               </div>
               <div>
                 <h2 className="text-4xl font-bold tracking-tight text-gray-900 mb-2">
-                  {summary.structures_count} Tiers
+                  {summary.structures_count || 0} Tiers
                 </h2>
                 <div className="text-xs text-gray-500">Junior, Senior &amp; STEM Packages</div>
               </div>
@@ -692,7 +716,7 @@ export default function FinancialsManager() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-xs font-bold text-emerald-700">+₦{pay.amount.toLocaleString()}</div>
+                        <div className="text-xs font-bold text-emerald-700">+₦{formatNaira(pay.amount)}</div>
                         <div className="text-[10px] text-gray-400">{pay.payment_date}</div>
                       </div>
                     </div>
@@ -782,19 +806,19 @@ export default function FinancialsManager() {
                   <div className="mt-4 pt-3 border-t border-gray-100 space-y-1.5 text-xs">
                     <div className="flex justify-between text-gray-600">
                       <span>Tuition Fee</span>
-                      <span className="font-semibold text-gray-800">₦{struct.tuition_fee.toLocaleString()}</span>
+                      <span className="font-semibold text-gray-800">₦{formatNaira(struct.tuition_fee ?? struct.amount)}</span>
                     </div>
                     <div className="flex justify-between text-gray-600">
                       <span>Development Levy</span>
-                      <span className="font-semibold text-gray-800">₦{struct.development_levy.toLocaleString()}</span>
+                      <span className="font-semibold text-gray-800">₦{formatNaira(struct.development_levy)}</span>
                     </div>
                     <div className="flex justify-between text-gray-600">
                       <span>ICT / Coding STEM</span>
-                      <span className="font-semibold text-gray-800">₦{struct.ict_stem_fee.toLocaleString()}</span>
+                      <span className="font-semibold text-gray-800">₦{formatNaira(struct.ict_stem_fee)}</span>
                     </div>
                     <div className="flex justify-between text-gray-600">
                       <span>Exam Materials</span>
-                      <span className="font-semibold text-gray-800">₦{struct.exam_materials_fee.toLocaleString()}</span>
+                      <span className="font-semibold text-gray-800">₦{formatNaira(struct.exam_materials_fee)}</span>
                     </div>
                   </div>
                 </div>
@@ -802,7 +826,7 @@ export default function FinancialsManager() {
                 <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
                   <div>
                     <div className="text-[10px] text-gray-400 uppercase font-semibold">Total Package</div>
-                    <div className="text-lg font-bold text-[#146ef5]">₦{struct.total_due.toLocaleString()}</div>
+                    <div className="text-lg font-bold text-[#146ef5]">₦{formatNaira(struct.total_due ?? struct.amount)}</div>
                   </div>
                   {struct.due_date && (
                     <div className="text-right">
@@ -901,13 +925,13 @@ export default function FinancialsManager() {
                           </div>
                         </td>
                         <td className="px-6 py-4 font-medium text-gray-900">
-                          ₦{inv.total_billed.toLocaleString()}
+                          ₦{formatNaira(inv.total_billed)}
                         </td>
                         <td className="px-6 py-4 font-medium text-emerald-700">
-                          ₦{inv.amount_paid.toLocaleString()}
+                          ₦{formatNaira(inv.amount_paid)}
                         </td>
                         <td className="px-6 py-4 font-medium text-rose-600">
-                          ₦{inv.balance_due.toLocaleString()}
+                          ₦{formatNaira(inv.balance_due)}
                         </td>
                         <td className="px-6 py-4">
                           <span
@@ -1032,7 +1056,7 @@ export default function FinancialsManager() {
                         <div className="text-[11px] text-gray-500">{pay.class_name}</div>
                       </td>
                       <td className="px-6 py-4 font-bold text-emerald-700">
-                        ₦{pay.amount.toLocaleString()}
+                        ₦{formatNaira(pay.amount)}
                       </td>
                       <td className="px-6 py-4">
                         <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-[#146ef5]">
@@ -1101,7 +1125,7 @@ export default function FinancialsManager() {
               </span>
             </div>
             <div className="font-bold text-amber-900 bg-amber-100/80 px-3 py-1.5 rounded-xl">
-              Total Defaulters Debt: ₦{summary.total_outstanding.toLocaleString()}
+              Total Defaulters Debt: ₦{formatNaira(summary.total_outstanding)}
             </div>
           </div>
 
@@ -1133,21 +1157,21 @@ export default function FinancialsManager() {
                         <div className="text-[11px] text-gray-500">{d.admission_number || d.invoice_no}</div>
                       </td>
                       <td className="px-6 py-4 text-gray-700">{d.class_name}</td>
-                      <td className="px-6 py-4 text-gray-900">₦{Number(d.total_billed).toLocaleString()}</td>
+                      <td className="px-6 py-4 text-gray-900">₦{formatNaira(d.total_billed)}</td>
                       <td className="px-6 py-4 font-bold text-rose-600">
-                        ₦{Number(d.balance_due).toLocaleString()}
+                        ₦{formatNaira(d.balance_due)}
                       </td>
                       <td className="px-6 py-4">
                         <span
                           className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
-                            d.aging_category.includes('Critical')
+                            d.aging_category?.includes('Critical')
                               ? 'bg-rose-50 text-rose-700'
-                              : d.aging_category.includes('Overdue')
+                              : d.aging_category?.includes('Overdue')
                               ? 'bg-amber-50 text-amber-700'
                               : 'bg-blue-50 text-blue-700'
                           }`}
                         >
-                          {d.aging_category}
+                          {d.aging_category || 'Active'}
                         </span>
                       </td>
                       <td className="px-6 py-4">
@@ -1158,9 +1182,9 @@ export default function FinancialsManager() {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => {
-                              const text = `Dear Parent, please be reminded of the outstanding tuition balance of ₦${Number(
+                              const text = `Dear Parent, please be reminded of the outstanding tuition balance of ₦${formatNaira(
                                 d.balance_due
-                              ).toLocaleString()} for ${d.student_name} (${d.class_name}). Examination clearance begins shortly. Kindly settle via the school portal or bursary. Thank you.`;
+                              )} for ${d.student_name} (${d.class_name}). Examination clearance begins shortly. Kindly settle via the school portal or bursary. Thank you.`;
                               navigator.clipboard.writeText(text);
                               alert('SMS / WhatsApp payment reminder copied to clipboard!');
                             }}
@@ -1358,7 +1382,7 @@ export default function FinancialsManager() {
                 <div className="flex justify-between items-center pt-2 border-t border-gray-200">
                   <span className="text-xs font-bold text-gray-800">Total Billed Due:</span>
                   <span className="text-base font-bold text-[#146ef5]">
-                    ₦{newInvoice.total_billed.toLocaleString()}
+                    ₦{formatNaira(newInvoice.total_billed)}
                   </span>
                 </div>
               </div>
@@ -1494,7 +1518,7 @@ export default function FinancialsManager() {
                   <option value="">-- Choose Fee Tariff Template --</option>
                   {feeStructures.map((f) => (
                     <option key={f.id} value={f.id}>
-                      {f.title} (₦{f.total_due.toLocaleString()} · {f.class_level})
+                      {f.title} (₦{formatNaira(f.total_due ?? f.amount)} · {f.class_level})
                     </option>
                   ))}
                 </select>
@@ -1698,15 +1722,15 @@ export default function FinancialsManager() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Total Billed:</span>
-                  <span className="font-semibold text-gray-900">₦{paymentModalInvoice.total_billed.toLocaleString()}</span>
+                  <span className="font-semibold text-gray-900">₦{formatNaira(paymentModalInvoice.total_billed)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Already Paid:</span>
-                  <span className="font-semibold text-emerald-700">₦{paymentModalInvoice.amount_paid.toLocaleString()}</span>
+                  <span className="font-semibold text-emerald-700">₦{formatNaira(paymentModalInvoice.amount_paid)}</span>
                 </div>
                 <div className="flex justify-between border-t border-blue-200 pt-1 font-bold">
                   <span className="text-rose-700">Current Balance Due:</span>
-                  <span className="text-rose-700">₦{paymentModalInvoice.balance_due.toLocaleString()}</span>
+                  <span className="text-rose-700">₦{formatNaira(paymentModalInvoice.balance_due)}</span>
                 </div>
               </div>
 
@@ -1838,18 +1862,18 @@ export default function FinancialsManager() {
               <div className="bg-gray-50 p-3 rounded-xl border border-gray-100 space-y-1">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Total Billed:</span>
-                  <span className="font-semibold">₦{receiptModalPayment.invoice.total_billed.toLocaleString()}</span>
+                  <span className="font-semibold">₦{formatNaira(receiptModalPayment.invoice.total_billed)}</span>
                 </div>
                 <div className="flex justify-between font-bold text-emerald-700 text-sm">
                   <span>Amount Settled:</span>
                   <span>
-                    ₦{(receiptModalPayment.payment?.amount || receiptModalPayment.invoice.amount_paid).toLocaleString()}
+                    ₦{formatNaira(receiptModalPayment.payment?.amount || receiptModalPayment.invoice.amount_paid)}
                   </span>
                 </div>
                 <div className="flex justify-between text-gray-600 border-t border-gray-200 pt-1">
                   <span>Outstanding Balance:</span>
                   <span className="font-bold text-rose-600">
-                    ₦{receiptModalPayment.invoice.balance_due.toLocaleString()}
+                    ₦{formatNaira(receiptModalPayment.invoice.balance_due)}
                   </span>
                 </div>
               </div>
