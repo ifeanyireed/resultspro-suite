@@ -92,6 +92,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title,
       description,
       images: [coverImage],
+      site: '@resultsprong',
+      creator: '@resultsprong',
     },
   };
 }

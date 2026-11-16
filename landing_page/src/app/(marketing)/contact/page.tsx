@@ -5,7 +5,12 @@ import {
   IconPhoneCall, 
   IconMapPin, 
   IconMessageCircle, 
-  IconSend 
+  IconSend,
+  IconShare,
+  IconBrandFacebook,
+  IconBrandInstagram,
+  IconBrandLinkedin,
+  IconBrandX
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -82,6 +87,58 @@ export default function ContactPage() {
                   Lagos, Nigeria<br />
                   (Full address available upon appointment)
                 </address>
+              </div>
+
+              <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+                <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center mb-6">
+                  <IconShare size={24} />
+                </div>
+                <h3 className="text-xl fw-600 text-navy mb-2">Follow Us</h3>
+                <p className="text-muted text-sm mb-4">
+                  Connect across our verified channels <span className="text-navy fw-600">@resultsprong</span>
+                </p>
+                <div className="grid grid-cols-2 gap-2.5 pt-1">
+                  <a 
+                    href="https://facebook.com/resultsprong" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-600 text-xs fw-600 transition-colors border border-slate-100"
+                    title="Facebook: @resultsprong"
+                  >
+                    <IconBrandFacebook size={16} />
+                    <span>Facebook</span>
+                  </a>
+                  <a 
+                    href="https://instagram.com/resultsprong" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 hover:bg-pink-50 text-slate-700 hover:text-pink-600 text-xs fw-600 transition-colors border border-slate-100"
+                    title="Instagram: @resultsprong"
+                  >
+                    <IconBrandInstagram size={16} />
+                    <span>Instagram</span>
+                  </a>
+                  <a 
+                    href="https://linkedin.com/company/resultsprong" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 hover:bg-sky-50 text-slate-700 hover:text-sky-700 text-xs fw-600 transition-colors border border-slate-100"
+                    title="LinkedIn: /company/resultsprong"
+                  >
+                    <IconBrandLinkedin size={16} />
+                    <span>LinkedIn</span>
+                  </a>
+                  <a 
+                    href="https://x.com/resultsprong" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-black text-xs fw-600 transition-colors border border-slate-100"
+                    title="X.com: @resultsprong"
+                  >
+                    <IconBrandX size={16} />
+                    <span>X.com</span>
+                  </a>
+                </div>
               </div>
             </MotionRise>
 

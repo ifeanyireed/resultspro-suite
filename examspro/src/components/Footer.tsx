@@ -125,12 +125,33 @@ export default function Footer() {
               </span>
             ))}
           </div>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
-            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="ResultsPRO on Twitter"
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <a href="https://facebook.com/resultsprong" target="_blank" rel="noopener noreferrer" aria-label="ResultsPRO on Facebook (@resultsprong)"
               style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.3)', transition: 'color 0.15s', textDecoration: 'none' }}
               onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}>
-              Twitter
+              Facebook
+            </a>
+            <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '0.75rem' }}>·</span>
+            <a href="https://instagram.com/resultsprong" target="_blank" rel="noopener noreferrer" aria-label="ResultsPRO on Instagram (@resultsprong)"
+              style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.3)', transition: 'color 0.15s', textDecoration: 'none' }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}>
+              Instagram
+            </a>
+            <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '0.75rem' }}>·</span>
+            <a href="https://linkedin.com/company/resultsprong" target="_blank" rel="noopener noreferrer" aria-label="ResultsPRO on LinkedIn (/company/resultsprong)"
+              style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.3)', transition: 'color 0.15s', textDecoration: 'none' }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}>
+              LinkedIn
+            </a>
+            <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '0.75rem' }}>·</span>
+            <a href="https://x.com/resultsprong" target="_blank" rel="noopener noreferrer" aria-label="ResultsPRO on X (@resultsprong)"
+              style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.3)', transition: 'color 0.15s', textDecoration: 'none' }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}>
+              X.com
             </a>
           </div>
         </div>

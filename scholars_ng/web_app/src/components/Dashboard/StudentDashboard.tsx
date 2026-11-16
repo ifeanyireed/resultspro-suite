@@ -43,10 +43,7 @@ export default function StudentDashboard() {
   const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await api
-        .get('/v1/campus/student/dashboard')
-        .catch(async () => await api.get('/campus/student/dashboard'))
-        .catch(async () => await api.get('/student/dashboard'));
+      const res = await api.get('/v1/campus/student/dashboard');
       if (res?.data) {
         setDashboardData(res.data);
       }

@@ -122,7 +122,7 @@ export default function BlogPostContent({ post, relatedPosts = [] }: { post: Blo
     } else if (platform === 'facebook') {
       shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
     } else if (platform === 'twitter') {
-      shareUrl = `https://twitter.com/intent/tweet?text=${title}&url=${url}`;
+      shareUrl = `https://twitter.com/intent/tweet?text=${title}&url=${url}&via=resultsprong`;
     } else if (platform === 'linkedin') {
       shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
     } else if (platform === 'email') {

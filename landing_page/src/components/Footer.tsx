@@ -2,6 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { 
+  IconBrandFacebook, 
+  IconBrandInstagram, 
+  IconBrandLinkedin, 
+  IconBrandX 
+} from '@tabler/icons-react';
 
 const footerSections = [
   {
@@ -52,20 +58,54 @@ export default function Footer() {
             <Link href="/" style={{ display: 'inline-block', marginBottom: '1.5rem', transition: 'opacity 0.2s ease' }} onMouseEnter={e => e.currentTarget.style.opacity = '0.8'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
               <img src="/logo.png" alt="ResultsPRO Logo" style={{ height: '80px', width: 'auto', objectFit: 'contain' }} />
             </Link>
-            <p className="text-muted-light text-sm mb-6 max-w-sm" style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
+            <p className="text-muted-light text-sm mb-4 max-w-sm" style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
               Building the infrastructure to power the needed culture shift in African K12 education.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
-                <span className="sr-only">Twitter</span>
-                {/* SVG placeholder */}
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            <div className="flex items-center gap-3 mb-2">
+              <a 
+                href="https://facebook.com/resultsprong" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 hover:text-white transition-all text-white/80"
+                aria-label="ResultsPRO on Facebook (@resultsprong)"
+                title="Facebook: @resultsprong"
+              >
+                <IconBrandFacebook size={18} stroke={1.5} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
-                <span className="sr-only">LinkedIn</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              <a 
+                href="https://instagram.com/resultsprong" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 hover:text-white transition-all text-white/80"
+                aria-label="ResultsPRO on Instagram (@resultsprong)"
+                title="Instagram: @resultsprong"
+              >
+                <IconBrandInstagram size={18} stroke={1.5} />
+              </a>
+              <a 
+                href="https://linkedin.com/company/resultsprong" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 hover:text-white transition-all text-white/80"
+                aria-label="ResultsPRO on LinkedIn (/company/resultsprong)"
+                title="LinkedIn: /company/resultsprong"
+              >
+                <IconBrandLinkedin size={18} stroke={1.5} />
+              </a>
+              <a 
+                href="https://x.com/resultsprong" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 hover:text-white transition-all text-white/80"
+                aria-label="ResultsPRO on X (@resultsprong)"
+                title="X.com: @resultsprong"
+              >
+                <IconBrandX size={18} stroke={1.5} />
               </a>
             </div>
+            <p className="text-xs text-white/50 tracking-wide">
+              Follow us <span className="text-white/70 font-semibold">@resultsprong</span>
+            </p>
           </div>
 
           {footerSections.map((section, idx) => (

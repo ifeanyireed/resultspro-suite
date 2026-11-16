@@ -105,10 +105,7 @@ function ParentCampusOSContent() {
     setLoading(true);
     setError(null);
     try {
-      const res = await api
-        .get('/v1/campus/parent/dashboard')
-        .catch(async () => await api.get('/campus/parent/dashboard'))
-        .catch(async () => await api.get('/parent/dashboard'));
+      const res = await api.get('/v1/campus/parent/dashboard');
 
       if (res?.data) {
         setDashboardData(res.data);

@@ -123,6 +123,15 @@ export const SiteFooter: React.FC = () => {
       {/* Bottom Copyright Bar */}
       <div className="max-w-7xl mx-auto pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
         <p>© {new Date().getFullYear()} ResultsPro / PuzzlePro. All rights reserved.</p>
+        <div className="flex items-center space-x-3 text-slate-500">
+          <a href="https://facebook.com/resultsprong" target="_blank" rel="noopener noreferrer" className="hover:text-amber-600 transition font-medium" title="Facebook: @resultsprong">Facebook</a>
+          <span>•</span>
+          <a href="https://instagram.com/resultsprong" target="_blank" rel="noopener noreferrer" className="hover:text-amber-600 transition font-medium" title="Instagram: @resultsprong">Instagram</a>
+          <span>•</span>
+          <a href="https://linkedin.com/company/resultsprong" target="_blank" rel="noopener noreferrer" className="hover:text-amber-600 transition font-medium" title="LinkedIn: /company/resultsprong">LinkedIn</a>
+          <span>•</span>
+          <a href="https://x.com/resultsprong" target="_blank" rel="noopener noreferrer" className="hover:text-amber-600 transition font-medium" title="X.com: @resultsprong">X.com</a>
+        </div>
         <div className="flex items-center space-x-4">
           <Link href="/terms" className="hover:text-amber-600 transition">Terms</Link>
           <span>•</span>

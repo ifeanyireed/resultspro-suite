@@ -158,10 +158,7 @@ function TeacherCampusOSContent() {
     setError(null);
     try {
       const qs = selectedCampusId && selectedCampusId !== 'all' ? `?campus_id=${selectedCampusId}` : '';
-      const res = await api
-        .get(`/v1/campus/teacher/dashboard${qs}`)
-        .catch(async () => await api.get(`/campus/teacher/dashboard${qs}`))
-        .catch(async () => await api.get(`/teacher/dashboard${qs}`));
+      const res = await api.get(`/v1/campus/teacher/dashboard${qs}`);
 
       if (res?.data) {
         setDashboardData(res.data);

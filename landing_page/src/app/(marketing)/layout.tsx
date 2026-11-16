@@ -14,6 +14,21 @@ export const metadata: Metadata = {
     shortcut: "/logo.png",
     apple: "/logo.png",
   },
+  openGraph: {
+    title: "ResultsPRO NG | Education Infrastructure",
+    description: "A premium digital campus platform for modern schools.",
+    url: "https://www.resultspro.ng",
+    siteName: "ResultsPRO",
+    locale: "en_NG",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ResultsPRO NG | Education Infrastructure",
+    description: "A premium digital campus platform for modern schools.",
+    site: "@resultsprong",
+    creator: "@resultsprong",
+  },
 };
 
 export default function RootLayout({

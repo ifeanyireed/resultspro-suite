@@ -88,10 +88,7 @@ export default function StudentCampusOSPage() {
   const fetchCampusData = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await api
-        .get('/v1/campus/student/dashboard')
-        .catch(async () => await api.get('/campus/student/dashboard'))
-        .catch(async () => await api.get('/student/dashboard'));
+      const res = await api.get('/v1/campus/student/dashboard');
       if (res?.data) {
         setDashboardData(res.data);
       }
