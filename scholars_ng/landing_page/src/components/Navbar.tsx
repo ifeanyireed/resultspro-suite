@@ -77,15 +77,6 @@ export default function Navbar() {
             )}
           </nav>
 
-          {/* Desktop actions */}
-          <div style={{ alignItems: 'center', gap: '1.25rem' }} className="nav-desktop-actions">
-            {mounted && (
-              <Link href="#quote" className="btn btn-outline-white btn-sm" style={{ textDecoration: 'none' }}>
-                Find School
-              </Link>
-            )}
-          </div>
-
           {/* Mobile hamburger */}
           <button
             className="nav-mobile-toggle"
