@@ -55,6 +55,7 @@ export default function SmartSchoolEventsPage() {
   const [submitting, setSubmitting] = useState(false);
   const [registeredData, setRegisteredData] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [showOptional, setShowOptional] = useState(false);
 
   // FAQ Toggle State
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -160,7 +161,7 @@ export default function SmartSchoolEventsPage() {
   ];
 
   return (
-    <div style={{ background: 'var(--color-nets-navy-dark, #0D1060)', color: '#ffffff' }} className="min-h-screen flex flex-col font-sans">
+    <div className="min-h-screen flex flex-col font-sans bg-white text-slate-900">
       <Navbar />
 
       {/* ── HERO BANNER (MATCHING HOMEPAGE HERO AESTHETIC) ── */}
@@ -220,7 +221,7 @@ export default function SmartSchoolEventsPage() {
         <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-blue-600/20 blur-[130px] rounded-full pointer-events-none z-0" />
         <div className="absolute top-24 right-10 w-[350px] h-[350px] bg-amber-400/15 blur-[120px] rounded-full pointer-events-none z-0" />
 
-        {/* ── Content Grid ── */}
+        {/* ── Content Grid (Top-aligned so form raises near top) ── */}
         <div
           className="container-nets max-w-7xl mx-auto px-4"
           style={{
@@ -229,9 +230,9 @@ export default function SmartSchoolEventsPage() {
             display: 'grid',
             gridTemplateColumns: 'repeat(12, 1fr)',
             gap: '2.5rem',
-            alignItems: 'center',
-            paddingTop: '8rem',
-            paddingBottom: '4rem',
+            alignItems: 'flex-start',
+            paddingTop: '5.5rem',
+            paddingBottom: '3.5rem',
             flex: 1,
           }}
         >
@@ -356,133 +357,136 @@ export default function SmartSchoolEventsPage() {
             </MotionRise>
           </div>
 
-          {/* ── Right Column: Glassmorphic Registration Card (Homepage Card Style) ── */}
-          <div style={{ gridColumn: 'span 12' }} className="lg:col-span-5 flex justify-center lg:justify-end">
-            <MotionRise delay={0.2} className="w-full max-w-[480px]">
+          {/* ── Right Column: Miniature Glassmorphic Registration Card (Raised to Top) ── */}
+          <div style={{ gridColumn: 'span 12', alignSelf: 'flex-start' }} className="lg:col-span-5 flex justify-center lg:justify-end">
+            <MotionRise delay={0.1} className="w-full max-w-[430px]">
               <div
                 id="register"
                 style={{
                   width: '100%',
-                  background: 'rgba(13, 16, 96, 0.88)',
-                  border: '1px solid rgba(255, 255, 255, 0.18)',
+                  background: 'rgba(13, 16, 96, 0.92)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
                   borderRadius: '4px',
-                  padding: '1.75rem',
+                  padding: '1.25rem 1.35rem',
                   backdropFilter: 'blur(20px)',
-                  boxShadow: '0 24px 64px rgba(0, 0, 0, 0.45)',
+                  boxShadow: '0 20px 50px rgba(0, 0, 0, 0.4)',
                 }}
               >
                 {registeredData ? (
                   /* REGISTRATION CONFIRMED STATE */
-                  <div className="text-center py-4 space-y-5">
-                    <div className="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center mx-auto shadow-md">
-                      <IconCheck className="w-8 h-8 stroke-[3]" />
+                  <div className="text-center py-2 space-y-4">
+                    <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center mx-auto shadow-md">
+                      <IconCheck className="w-7 h-7 stroke-[3]" />
                     </div>
 
-                    <div className="space-y-1.5">
-                      <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 font-bold text-xs uppercase tracking-wider border border-emerald-500/30">
+                    <div className="space-y-1">
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 font-bold text-[10px] uppercase tracking-wider border border-emerald-500/30">
                         Registration Confirmed!
                       </span>
-                      <h3 className="text-xl font-bold text-white tracking-tight mt-1">
+                      <h3 className="text-lg font-bold text-white tracking-tight mt-1">
                         Your Seat is Reserved, {registeredData.full_name}!
                       </h3>
-                      <p className="text-xs text-slate-300 max-w-sm mx-auto">
-                        We have logged your pass for <strong>{registeredData.school_name}</strong>. A calendar invite has been queued for <strong>{registeredData.email}</strong>.
+                      <p className="text-[11px] text-slate-300 max-w-sm mx-auto">
+                        Pass logged for <strong>{registeredData.school_name}</strong>. Calendar invite queued for <strong>{registeredData.email}</strong>.
                       </p>
                     </div>
 
                     {/* Virtual Admission Pass Ticket */}
-                    <div style={{ background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '4px' }} className="p-4 text-white text-left space-y-2.5">
-                      <div className="flex justify-between items-start pb-2 border-b border-white/10">
+                    <div style={{ background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '4px' }} className="p-3 text-white text-left space-y-2">
+                      <div className="flex justify-between items-start pb-1.5 border-b border-white/10">
                         <div>
-                          <span className="text-[10px] text-amber-400 font-bold uppercase tracking-widest">Webinar Admission Pass</span>
-                          <h4 className="font-bold text-sm text-white">{registeredData.series_name}</h4>
+                          <span className="text-[9px] text-amber-400 font-bold uppercase tracking-widest">Webinar Pass</span>
+                          <h4 className="font-bold text-xs text-white">{registeredData.series_name}</h4>
                         </div>
-                        <span className="px-2 py-0.5 rounded bg-white/20 text-white font-mono text-xs font-bold">
+                        <span className="px-2 py-0.5 rounded bg-white/20 text-white font-mono text-[11px] font-bold">
                           {registeredData.ticket_code}
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="grid grid-cols-2 gap-2 text-[11px]">
                         <div>
-                          <span className="text-[10px] text-slate-400">Edition</span>
-                          <p className="font-semibold text-white">{registeredData.edition_title}</p>
+                          <span className="text-[9px] text-slate-400">Edition</span>
+                          <p className="font-semibold text-white leading-tight">{registeredData.edition_title}</p>
                         </div>
                         <div>
-                          <span className="text-[10px] text-slate-400">Date &amp; Time</span>
-                          <p className="font-semibold text-white">{registeredData.date_time}</p>
+                          <span className="text-[9px] text-slate-400">Date &amp; Time</span>
+                          <p className="font-semibold text-white leading-tight">{registeredData.date_time}</p>
                         </div>
                       </div>
 
-                      <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs">
+                      <div className="pt-1.5 border-t border-white/10 flex items-center justify-between text-[11px]">
                         <span className="text-slate-300">Access Channel:</span>
                         <span className="font-bold text-amber-300 flex items-center gap-1">
-                          <IconBrandZoom className="w-4 h-4 text-blue-400" /> Zoom Live Stream
+                          <IconBrandZoom className="w-3.5 h-3.5 text-blue-400" /> Zoom Live Stream
                         </span>
                       </div>
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="space-y-2.5 pt-1">
+                    <div className="space-y-2 pt-1">
                       <a
                         href={registeredData.whatsapp_group}
                         target="_blank"
                         rel="noreferrer"
-                        className="w-full py-3 px-4 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer text-decoration-none"
+                        className="w-full py-2.5 px-3 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer text-decoration-none"
                       >
-                        <IconBrandWhatsapp className="w-5 h-5" />
-                        Join VIP WhatsApp Attendees Lounge
+                        <IconBrandWhatsapp className="w-4 h-4" />
+                        Join VIP WhatsApp Lounge
                       </a>
 
                       <a
                         href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Smart+School+Webinar:+Free+%26+Easy+EOT+Results+Processing&dates=20261126T100000Z/20261126T110000Z&details=Live+virtual+masterclass+on+automating+End-of-Term+results+for+Nigerian+schools.+Zoom+Link:+${encodeURIComponent(registeredData.zoom_access)}&location=Online+Zoom+Webcast`}
                         target="_blank"
                         rel="noreferrer"
-                        className="w-full py-2.5 px-4 rounded bg-white/10 hover:bg-white/15 border border-white/15 text-white text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer text-decoration-none"
+                        className="w-full py-2 px-3 rounded bg-white/10 hover:bg-white/15 border border-white/15 text-white text-[11px] font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-decoration-none"
                       >
-                        <IconCalendarEvent className="w-4 h-4 text-amber-400" />
+                        <IconCalendarEvent className="w-3.5 h-3.5 text-amber-400" />
                         Add to Google Calendar
                       </a>
                     </div>
                   </div>
                 ) : (
-                  /* REGISTRATION FORM STATE */
-                  <form onSubmit={handleRegister} className="space-y-3.5">
-                    <div style={{ marginBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.875rem' }}>
-                      <div className="overline-dark" style={{ marginBottom: '0.35rem' }}>Instant Seat Reservation</div>
-                      <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff', letterSpacing: '-0.01em' }}>
+                  /* REGISTRATION FORM STATE (MINIATURE & STREAMLINED) */
+                  <form onSubmit={handleRegister} className="space-y-2.5">
+                    <div style={{ marginBottom: '0.625rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.5rem' }}>
+                      <div className="flex items-center justify-between">
+                        <span className="overline-dark text-[10px] text-amber-400">Free Instant Pass</span>
+                        <span className="text-[10px] text-emerald-400 font-semibold bg-emerald-500/15 px-2 py-0.5 rounded">● 38 Seats Left</span>
+                      </div>
+                      <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#fff', letterSpacing: '-0.01em', marginTop: '0.25rem' }}>
                         Register Your School
                       </h2>
-                      <p style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.65)', marginTop: '0.25rem' }}>
-                        Reserve your free live Zoom seat &amp; receive the EOT Results Starter Pack.
+                      <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.65)', marginTop: '0.125rem' }}>
+                        Live Zoom Webcast &amp; EOT Results Master Broadsheet Pack
                       </p>
                     </div>
 
                     {errorMsg && (
-                      <div className="p-2.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-200 text-xs font-semibold">
+                      <div className="p-2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-200 text-[11px] font-semibold">
                         {errorMsg}
                       </div>
                     )}
 
                     {/* Full Name */}
                     <div>
-                      <label className="field-label-dark" style={{ marginBottom: '0.25rem' }}>
+                      <label className="field-label-dark text-[11px]" style={{ marginBottom: '0.15rem' }}>
                         Your Full Name <span style={{ color: 'var(--color-nets-red, #FBBC04)' }}>*</span>
                       </label>
                       <input
                         type="text"
                         required
-                        placeholder="e.g. Dr. Olumide Adeleke"
+                        placeholder="Dr. / Mr. / Mrs. Full Name"
                         value={formData.full_name}
                         onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                         className="input-dark"
-                        style={{ height: '40px', fontSize: '0.8125rem' }}
+                        style={{ height: '34px', fontSize: '0.75rem' }}
                       />
                     </div>
 
                     {/* Email & Phone */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <div>
-                        <label className="field-label-dark" style={{ marginBottom: '0.25rem' }}>
+                        <label className="field-label-dark text-[11px]" style={{ marginBottom: '0.15rem' }}>
                           Official Email <span style={{ color: 'var(--color-nets-red, #FBBC04)' }}>*</span>
                         </label>
                         <input
@@ -492,13 +496,13 @@ export default function SmartSchoolEventsPage() {
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           className="input-dark"
-                          style={{ height: '40px', fontSize: '0.8125rem' }}
+                          style={{ height: '34px', fontSize: '0.75rem' }}
                         />
                       </div>
 
                       <div>
-                        <label className="field-label-dark" style={{ marginBottom: '0.25rem' }}>
-                          WhatsApp / Phone <span style={{ color: 'var(--color-nets-red, #FBBC04)' }}>*</span>
+                        <label className="field-label-dark text-[11px]" style={{ marginBottom: '0.15rem' }}>
+                          WhatsApp Phone <span style={{ color: 'var(--color-nets-red, #FBBC04)' }}>*</span>
                         </label>
                         <input
                           type="tel"
@@ -507,14 +511,14 @@ export default function SmartSchoolEventsPage() {
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           className="input-dark"
-                          style={{ height: '40px', fontSize: '0.8125rem' }}
+                          style={{ height: '34px', fontSize: '0.75rem' }}
                         />
                       </div>
                     </div>
 
                     {/* School Name */}
                     <div>
-                      <label className="field-label-dark" style={{ marginBottom: '0.25rem' }}>
+                      <label className="field-label-dark text-[11px]" style={{ marginBottom: '0.15rem' }}>
                         School / Institution Name <span style={{ color: 'var(--color-nets-red, #FBBC04)' }}>*</span>
                       </label>
                       <input
@@ -524,21 +528,21 @@ export default function SmartSchoolEventsPage() {
                         value={formData.school_name}
                         onChange={(e) => setFormData({ ...formData, school_name: e.target.value })}
                         className="input-dark"
-                        style={{ height: '40px', fontSize: '0.8125rem' }}
+                        style={{ height: '34px', fontSize: '0.75rem' }}
                       />
                     </div>
 
                     {/* Role & State */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <div>
-                        <label className="field-label-dark" style={{ marginBottom: '0.25rem' }}>
-                          Your Role / Designation
+                        <label className="field-label-dark text-[11px]" style={{ marginBottom: '0.15rem' }}>
+                          Designation
                         </label>
                         <select
                           value={formData.role}
                           onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                           className="input-dark"
-                          style={{ height: '40px', fontSize: '0.8125rem', padding: '0 0.5rem', background: 'var(--color-nets-navy-dark, #0D1060)' }}
+                          style={{ height: '34px', fontSize: '0.75rem', padding: '0 0.35rem', background: 'var(--color-nets-navy-dark, #0D1060)' }}
                         >
                           <option value="School Proprietor / Director">School Proprietor / Director</option>
                           <option value="Principal / Head of School">Principal / Head of School</option>
@@ -551,14 +555,14 @@ export default function SmartSchoolEventsPage() {
                       </div>
 
                       <div>
-                        <label className="field-label-dark" style={{ marginBottom: '0.25rem' }}>
-                          State / Location
+                        <label className="field-label-dark text-[11px]" style={{ marginBottom: '0.15rem' }}>
+                          State Location
                         </label>
                         <select
                           value={formData.state_location}
                           onChange={(e) => setFormData({ ...formData, state_location: e.target.value })}
                           className="input-dark"
-                          style={{ height: '40px', fontSize: '0.8125rem', padding: '0 0.5rem', background: 'var(--color-nets-navy-dark, #0D1060)' }}
+                          style={{ height: '34px', fontSize: '0.75rem', padding: '0 0.35rem', background: 'var(--color-nets-navy-dark, #0D1060)' }}
                         >
                           <option value="Lagos">Lagos State</option>
                           <option value="Abuja (FCT)">Abuja (FCT)</option>
@@ -579,50 +583,63 @@ export default function SmartSchoolEventsPage() {
                       </div>
                     </div>
 
-                    {/* Student Population */}
-                    <div>
-                      <label className="field-label-dark" style={{ marginBottom: '0.25rem' }}>
-                        Approximate Student Enrollment
-                      </label>
-                      <select
-                        value={formData.estimated_students}
-                        onChange={(e) => setFormData({ ...formData, estimated_students: e.target.value })}
-                        className="input-dark"
-                        style={{ height: '40px', fontSize: '0.8125rem', padding: '0 0.5rem', background: 'var(--color-nets-navy-dark, #0D1060)' }}
+                    {/* Optional Toggle */}
+                    <div className="pt-0.5">
+                      <button
+                        type="button"
+                        onClick={() => setShowOptional(!showOptional)}
+                        className="text-[11px] text-amber-300 hover:text-amber-200 flex items-center gap-1.5 transition-colors cursor-pointer py-0.5"
                       >
-                        <option value="Under 200 Students">Under 200 Students</option>
-                        <option value="200 - 500 Students">200 – 500 Students</option>
-                        <option value="500 - 1,000 Students">500 – 1,000 Students</option>
-                        <option value="1,000 - 2,500 Students">1,000 – 2,500 Students</option>
-                        <option value="2,500+ Students (Multi-Campus)">2,500+ Students (Multi-Campus)</option>
-                      </select>
+                        <span>{showOptional ? '− Hide School Size & Challenges' : '+ Add School Size & Challenges (Optional)'}</span>
+                      </button>
                     </div>
 
-                    {/* Challenges Checklist */}
-                    <div>
-                      <label className="field-label-dark" style={{ marginBottom: '0.35rem' }}>
-                        Key Results Challenges (Select all that apply):
-                      </label>
-                      <div className="space-y-1 text-xs text-slate-300">
-                        {[
-                          'Excel formula crashes & arithmetic calculation errors',
-                          'Teachers submitting CA and exam marks late',
-                          'High printing & report card paper booklet costs',
-                          'Manual position ranking (1st, 2nd, 3rd) headaches',
-                          'Report card tampering & fake result forgery risks',
-                        ].map((pain) => (
-                          <label key={pain} className="flex items-center gap-2 cursor-pointer">
-                            <input
-                              type="checkbox"
-                              checked={formData.pain_points.includes(pain)}
-                              onChange={() => handleCheckboxChange(pain)}
-                              style={{ accentColor: 'var(--color-nets-red, #FBBC04)' }}
-                            />
-                            <span>{pain}</span>
+                    {showOptional && (
+                      <div className="space-y-2 pt-1 border-t border-white/10">
+                        <div>
+                          <label className="field-label-dark text-[11px]" style={{ marginBottom: '0.15rem' }}>
+                            Student Enrollment
                           </label>
-                        ))}
+                          <select
+                            value={formData.estimated_students}
+                            onChange={(e) => setFormData({ ...formData, estimated_students: e.target.value })}
+                            className="input-dark"
+                            style={{ height: '32px', fontSize: '0.75rem', padding: '0 0.35rem', background: 'var(--color-nets-navy-dark, #0D1060)' }}
+                          >
+                            <option value="Under 200 Students">Under 200 Students</option>
+                            <option value="200 - 500 Students">200 – 500 Students</option>
+                            <option value="500 - 1,000 Students">500 – 1,000 Students</option>
+                            <option value="1,000 - 2,500 Students">1,000 – 2,500 Students</option>
+                            <option value="2,500+ Students (Multi-Campus)">2,500+ Students (Multi-Campus)</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="field-label-dark text-[11px]" style={{ marginBottom: '0.15rem' }}>
+                            Key Results Challenges:
+                          </label>
+                          <div className="space-y-1 text-[11px] text-slate-300">
+                            {[
+                              'Excel formula crashes & arithmetic calculation errors',
+                              'Teachers submitting CA and exam marks late',
+                              'High printing & report card paper booklet costs',
+                              'Manual position ranking (1st, 2nd, 3rd) headaches',
+                              'Report card tampering & fake result forgery risks',
+                            ].map((pain) => (
+                              <label key={pain} className="flex items-center gap-1.5 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={formData.pain_points.includes(pain)}
+                                  onChange={() => handleCheckboxChange(pain)}
+                                  style={{ accentColor: 'var(--color-nets-red, #FBBC04)' }}
+                                />
+                                <span>{pain}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* Submit Button */}
                     <button
@@ -632,25 +649,25 @@ export default function SmartSchoolEventsPage() {
                       style={{
                         width: '100%',
                         justifyContent: 'center',
-                        padding: '0.875rem 1.25rem',
+                        padding: '0.65rem 1rem',
                         border: 'none',
                         cursor: 'pointer',
-                        fontSize: '0.875rem',
+                        fontSize: '0.8125rem',
                         fontWeight: 700,
-                        marginTop: '0.75rem',
+                        marginTop: '0.4rem',
                       }}
                     >
                       {submitting ? (
                         <span>Reserving Your Seat...</span>
                       ) : (
-                        <span className="flex items-center gap-2">
+                        <span className="flex items-center gap-1.5">
                           <span>Reserve Free Seat &amp; Resource Pack</span>
-                          <IconArrowRight size={16} />
+                          <IconArrowRight size={15} />
                         </span>
                       )}
                     </button>
 
-                    <p style={{ fontSize: '0.6875rem', color: 'rgba(255,255,255,0.5)', textAlign: 'center', marginTop: '0.5rem' }}>
+                    <p style={{ fontSize: '0.625rem', color: 'rgba(255,255,255,0.5)', textAlign: 'center', marginTop: '0.25rem' }}>
                       🔒 100% Free · Exclusively for School Administrators · No Spam
                     </p>
                   </form>
@@ -661,49 +678,49 @@ export default function SmartSchoolEventsPage() {
         </div>
       </section>
 
-      {/* --- SECTION: THE END-OF-TERM REALITY & VALUE MASTERY --- */}
-      <section style={{ background: 'var(--color-nets-navy-dark, #0D1060)', borderTop: '1px solid rgba(255,255,255,0.08)' }} className="py-20 relative">
+      {/* ── SECTION 1: THE END-OF-TERM REALITY & VALUE MASTERY (CLEAN WHITE) ── */}
+      <section className="py-20 relative bg-white border-b border-slate-200">
         <div className="container-nets max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Left: Reality & Outcomes */}
             <div className="lg:col-span-7 space-y-6">
-              <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px' }} className="p-6 sm:p-8 space-y-6">
-                <h3 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
-                  <IconFileSpreadsheet className="w-7 h-7 text-amber-400 shrink-0" />
+              <div className="bg-[#F8F9FC] border border-slate-200 rounded-sm p-6 sm:p-8 space-y-6 shadow-sm">
+                <h3 className="text-xl sm:text-2xl font-bold text-[#0D1060] flex items-center gap-2.5">
+                  <IconFileSpreadsheet className="w-7 h-7 text-[#1A1FA8] shrink-0" />
                   <span>The End-of-Term Reality for Nigerian Schools</span>
                 </h3>
-                <p className="text-sm text-slate-300 leading-relaxed">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   Every December and July, Nigerian school administrators endure 2 to 3 weeks of exhaustion: chasing teachers for marks, manually checking thousands of arithmetic sums, struggling with corrupted Excel formulas, and spending hundreds of thousands of Naira on printed report card booklets that are often delayed or disputed by parents.
                 </p>
 
                 <div className="space-y-4 pt-2">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#1A1FA8]">
                     What You Will Master in This 45-Minute Session:
                   </h4>
-                  <ul className="space-y-3 text-xs sm:text-sm text-slate-200">
+                  <ul className="space-y-3.5 text-xs sm:text-sm text-slate-700">
                     <li className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                      <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
                         <IconCheck className="w-3.5 h-3.5 stroke-[3]" />
                       </div>
-                      <span><strong>1-Click Broadsheet Generation:</strong> Consolidate scores across CA1 (20%), CA2 (20%), and Exam (60%) across all 18 curriculum subjects automatically.</span>
+                      <span><strong className="text-slate-900">1-Click Broadsheet Generation:</strong> Consolidate scores across CA1 (20%), CA2 (20%), and Exam (60%) across all 18 curriculum subjects automatically.</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                      <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
                         <IconCheck className="w-3.5 h-3.5 stroke-[3]" />
                       </div>
-                      <span><strong>Automated WAEC/NECO Grade Pacing:</strong> Dynamic conversion into A1, B2, B3, C4, C5, C6, D7, E8, F9, class positions (1st, 2nd, 3rd), and arm averages without Excel headaches.</span>
+                      <span><strong className="text-slate-900">Automated WAEC/NECO Grade Pacing:</strong> Dynamic conversion into A1, B2, B3, C4, C5, C6, D7, E8, F9, class positions (1st, 2nd, 3rd), and arm averages without Excel headaches.</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                      <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
                         <IconCheck className="w-3.5 h-3.5 stroke-[3]" />
                       </div>
-                      <span><strong>Cognitive, Affective &amp; Psychomotor Ratings:</strong> Standardized 5-point domain rating and auto-generated teacher remarks matching student GPA.</span>
+                      <span><strong className="text-slate-900">Cognitive, Affective &amp; Psychomotor Ratings:</strong> Standardized 5-point domain rating and auto-generated teacher remarks matching student GPA.</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                      <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
                         <IconCheck className="w-3.5 h-3.5 stroke-[3]" />
                       </div>
-                      <span><strong>Tamper-Proof Parent Portal &amp; Scratch Cards:</strong> Issue encrypted scratch card PINs or portal credentials so parents check results instantly on their phones.</span>
+                      <span><strong className="text-slate-900">Tamper-Proof Parent Portal &amp; Scratch Cards:</strong> Issue encrypted scratch card PINs or portal credentials so parents check results instantly on their phones.</span>
                     </li>
                   </ul>
                 </div>
@@ -712,23 +729,23 @@ export default function SmartSchoolEventsPage() {
 
             {/* Right: Exclusive Free Bonuses */}
             <div className="lg:col-span-5 space-y-6">
-              <div style={{ background: 'rgba(251,188,4,0.08)', border: '1px solid rgba(251,188,4,0.25)', borderRadius: '4px' }} className="p-6 sm:p-8 space-y-4">
-                <div className="flex items-center gap-2 text-amber-300 font-bold text-xs uppercase tracking-wide">
-                  <IconTicket className="w-5 h-5 text-amber-400" />
+              <div className="bg-amber-50/70 border border-amber-200 rounded-sm p-6 sm:p-8 space-y-4 shadow-sm">
+                <div className="flex items-center gap-2 text-amber-800 font-bold text-xs uppercase tracking-wide">
+                  <IconTicket className="w-5 h-5 text-amber-600" />
                   <span>Free Exclusive Bonuses for All Attendees:</span>
                 </div>
-                <ul className="space-y-3 text-xs sm:text-sm text-slate-200">
+                <ul className="space-y-3 text-xs sm:text-sm text-slate-700">
                   <li className="flex items-start gap-2.5">
-                    <IconCheck size={16} className="text-amber-400 shrink-0 mt-0.5" />
-                    <span><strong>Free ResultsPRO Trial Setup:</strong> Ready for your school&apos;s upcoming end-of-term results computation.</span>
+                    <IconCheck size={16} className="text-amber-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Free ResultsPRO Trial Setup:</strong> Ready for your school&apos;s upcoming end-of-term results computation.</span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <IconCheck size={16} className="text-amber-400 shrink-0 mt-0.5" />
-                    <span><strong>Pre-Formatted NERDC Excel Templates:</strong> Standardized continuous assessment scoring sheets for all subjects.</span>
+                    <IconCheck size={16} className="text-amber-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Pre-Formatted NERDC Excel Templates:</strong> Standardized continuous assessment scoring sheets for all subjects.</span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <IconCheck size={16} className="text-amber-400 shrink-0 mt-0.5" />
-                    <span><strong>Official Digital Certificate:</strong> Verifiable certificate of professional development for school administration.</span>
+                    <IconCheck size={16} className="text-amber-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Official Digital Certificate:</strong> Verifiable certificate of professional development for school administration.</span>
                   </li>
                 </ul>
                 <div className="pt-2">
@@ -746,60 +763,60 @@ export default function SmartSchoolEventsPage() {
         </div>
       </section>
 
-      {/* --- SECTION 2: THE 4 WORKSHOP MODULES --- */}
-      <section style={{ background: 'var(--color-nets-navy-dark, #0D1060)', borderTop: '1px solid rgba(255,255,255,0.08)' }} className="py-20 relative">
+      {/* ── SECTION 2: THE 4 WORKSHOP MODULES (LIGHT ARCHITECTURAL) ── */}
+      <section className="py-20 relative bg-[#F8F9FC] border-b border-slate-200">
         <div className="container-nets max-w-7xl mx-auto px-4">
           <MotionRise className="text-center max-w-3xl mx-auto space-y-3 mb-16">
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-400">Masterclass Curriculum</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            <span className="overline text-[#1A1FA8]">Masterclass Curriculum</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0D1060] tracking-tight">
               What You Will Learn in 45 Action-Packed Minutes
             </h2>
-            <p className="text-sm sm:text-base text-slate-300">
+            <p className="text-sm sm:text-base text-slate-600">
               A practical, no-fluff walkthrough designed to empower your examination committee before the upcoming examination week.
             </p>
           </MotionRise>
 
           <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Module 1 */}
-            <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px' }} className="p-6 hover:border-amber-400/40 transition-all space-y-4">
-              <div className="w-12 h-12 rounded bg-blue-500/10 text-amber-400 border border-amber-400/20 flex items-center justify-center font-bold text-lg">
+            <div className="bg-white border border-slate-200 rounded-sm p-6 hover:shadow-md hover:border-amber-400/80 transition-all space-y-4 shadow-sm">
+              <div className="w-12 h-12 rounded bg-amber-50 text-[#0D1060] border border-amber-200 flex items-center justify-center font-bold text-lg">
                 01
               </div>
-              <h3 className="text-lg font-bold text-white">1-Click Broadsheet Synthesis</h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <h3 className="text-lg font-bold text-[#0D1060]">1-Click Broadsheet Synthesis</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
                 Learn how subject teachers submit scores online, and how the exam officer generates master class broadsheets in under 60 seconds with automated grade boundary calculations.
               </p>
             </div>
 
             {/* Module 2 */}
-            <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px' }} className="p-6 hover:border-amber-400/40 transition-all space-y-4">
-              <div className="w-12 h-12 rounded bg-blue-500/10 text-amber-400 border border-amber-400/20 flex items-center justify-center font-bold text-lg">
+            <div className="bg-white border border-slate-200 rounded-sm p-6 hover:shadow-md hover:border-amber-400/80 transition-all space-y-4 shadow-sm">
+              <div className="w-12 h-12 rounded bg-amber-50 text-[#0D1060] border border-amber-200 flex items-center justify-center font-bold text-lg">
                 02
               </div>
-              <h3 className="text-lg font-bold text-white">Error-Free WAEC/NECO Grading</h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <h3 className="text-lg font-bold text-[#0D1060]">Error-Free WAEC/NECO Grading</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
                 Eliminate manual arithmetic forever. Automatically compute class rankings (1st, 2nd, 3rd), subject averages, class minimum/maximum, and weighted Continuous Assessment ratios.
               </p>
             </div>
 
             {/* Module 3 */}
-            <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px' }} className="p-6 hover:border-amber-400/40 transition-all space-y-4">
-              <div className="w-12 h-12 rounded bg-blue-500/10 text-amber-400 border border-amber-400/20 flex items-center justify-center font-bold text-lg">
+            <div className="bg-white border border-slate-200 rounded-sm p-6 hover:shadow-md hover:border-amber-400/80 transition-all space-y-4 shadow-sm">
+              <div className="w-12 h-12 rounded bg-amber-50 text-[#0D1060] border border-amber-200 flex items-center justify-center font-bold text-lg">
                 03
               </div>
-              <h3 className="text-lg font-bold text-white">Affective &amp; Psychomotor Domains</h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <h3 className="text-lg font-bold text-[#0D1060]">Affective &amp; Psychomotor Domains</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
                 Standardize teacher evaluation chits. Configure 5-point ratings for punctuality, neatness, and honesty, plus AI-assisted personalized form teacher and principal remarks.
               </p>
             </div>
 
             {/* Module 4 */}
-            <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px' }} className="p-6 hover:border-amber-400/40 transition-all space-y-4">
-              <div className="w-12 h-12 rounded bg-blue-500/10 text-amber-400 border border-amber-400/20 flex items-center justify-center font-bold text-lg">
+            <div className="bg-white border border-slate-200 rounded-sm p-6 hover:shadow-md hover:border-amber-400/80 transition-all space-y-4 shadow-sm">
+              <div className="w-12 h-12 rounded bg-amber-50 text-[#0D1060] border border-amber-200 flex items-center justify-center font-bold text-lg">
                 04
               </div>
-              <h3 className="text-lg font-bold text-white">Digital Results &amp; Scratch Cards</h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <h3 className="text-lg font-bold text-[#0D1060]">Digital Results &amp; Scratch Cards</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
                 Deliver verified report cards directly to parents via WhatsApp, SMS links, or batch-printed scratch cards with cryptographic PIN security that stops tampering dead in its tracks.
               </p>
             </div>
@@ -807,50 +824,50 @@ export default function SmartSchoolEventsPage() {
         </div>
       </section>
 
-      {/* --- SECTION 3: COMPARISON TABLE (MANUAL VS RESULTSPRO) --- */}
-      <section style={{ background: 'var(--color-nets-navy-dark, #0D1060)', borderTop: '1px solid rgba(255,255,255,0.08)' }} className="py-20">
+      {/* ── SECTION 3: COMPARISON TABLE (CLEAN WHITE) ── */}
+      <section className="py-20 bg-white border-b border-slate-200">
         <div className="container-nets max-w-5xl mx-auto px-4">
           <MotionRise className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-400">The Modern Transformation</span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <span className="overline text-[#1A1FA8]">The Modern Transformation</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0D1060] tracking-tight">
               Why 850+ Nigerian Schools Switched from Manual Spreadsheets
             </h2>
           </MotionRise>
 
-          <MotionRise delay={0.1} className="overflow-x-auto rounded border border-white/10 shadow-2xl">
+          <MotionRise delay={0.1} className="overflow-x-auto rounded border border-slate-200 shadow-sm bg-white">
             <table className="w-full text-left text-xs sm:text-sm">
               <thead>
-                <tr className="bg-white/5 border-b border-white/10 text-slate-300">
-                  <th className="py-4 px-6 font-bold">Process Milestone</th>
-                  <th className="py-4 px-6 font-bold text-rose-400">Traditional Excel / Paper</th>
-                  <th className="py-4 px-6 font-bold text-emerald-400">ResultsPRO Automation</th>
+                <tr className="bg-slate-50 border-b border-slate-200 text-slate-700">
+                  <th className="py-4 px-6 font-bold text-slate-900">Process Milestone</th>
+                  <th className="py-4 px-6 font-bold text-rose-700">Traditional Excel / Paper</th>
+                  <th className="py-4 px-6 font-bold text-emerald-700">ResultsPRO Automation</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 text-slate-300">
-                <tr className="hover:bg-white/5">
-                  <td className="py-4 px-6 font-semibold text-white">Scores Compilation Time</td>
-                  <td className="py-4 px-6 text-rose-300">14 to 21 sleepless days</td>
-                  <td className="py-4 px-6 text-emerald-300 font-bold">15 minutes automated</td>
+              <tbody className="divide-y divide-slate-100 text-slate-700">
+                <tr className="hover:bg-slate-50/80 transition-colors">
+                  <td className="py-4 px-6 font-semibold text-slate-900">Scores Compilation Time</td>
+                  <td className="py-4 px-6 text-rose-600 font-medium">14 to 21 sleepless days</td>
+                  <td className="py-4 px-6 text-emerald-700 font-bold bg-emerald-50/40">15 minutes automated</td>
                 </tr>
-                <tr className="hover:bg-white/5">
-                  <td className="py-4 px-6 font-semibold text-white">Arithmetic &amp; Sum Calculation</td>
-                  <td className="py-4 px-6 text-rose-300">Prone to formula breaks &amp; human error</td>
-                  <td className="py-4 px-6 text-emerald-300 font-bold">100% verified zero-error math</td>
+                <tr className="hover:bg-slate-50/80 transition-colors">
+                  <td className="py-4 px-6 font-semibold text-slate-900">Arithmetic &amp; Sum Calculation</td>
+                  <td className="py-4 px-6 text-rose-600 font-medium">Prone to formula breaks &amp; human error</td>
+                  <td className="py-4 px-6 text-emerald-700 font-bold bg-emerald-50/40">100% verified zero-error math</td>
                 </tr>
-                <tr className="hover:bg-white/5">
-                  <td className="py-4 px-6 font-semibold text-white">Printing &amp; Paper Expense</td>
-                  <td className="py-4 px-6 text-rose-300">₦150,000 – ₦450,000+ per term</td>
-                  <td className="py-4 px-6 text-emerald-300 font-bold">₦0 (Instant PDF + Scratch Card)</td>
+                <tr className="hover:bg-slate-50/80 transition-colors">
+                  <td className="py-4 px-6 font-semibold text-slate-900">Printing &amp; Paper Expense</td>
+                  <td className="py-4 px-6 text-rose-600 font-medium">₦150,000 – ₦450,000+ per term</td>
+                  <td className="py-4 px-6 text-emerald-700 font-bold bg-emerald-50/40">₦0 (Instant PDF + Scratch Card)</td>
                 </tr>
-                <tr className="hover:bg-white/5">
-                  <td className="py-4 px-6 font-semibold text-white">Report Card Delivery</td>
-                  <td className="py-4 px-6 text-rose-300">Physical collection on speech day</td>
-                  <td className="py-4 px-6 text-emerald-300 font-bold">Instant mobile portal &amp; SMS delivery</td>
+                <tr className="hover:bg-slate-50/80 transition-colors">
+                  <td className="py-4 px-6 font-semibold text-slate-900">Report Card Delivery</td>
+                  <td className="py-4 px-6 text-rose-600 font-medium">Physical collection on speech day</td>
+                  <td className="py-4 px-6 text-emerald-700 font-bold bg-emerald-50/40">Instant mobile portal &amp; SMS delivery</td>
                 </tr>
-                <tr className="hover:bg-white/5">
-                  <td className="py-4 px-6 font-semibold text-white">Grade Forgery &amp; Alteration</td>
-                  <td className="py-4 px-6 text-rose-300">High risk of student pen alterations</td>
-                  <td className="py-4 px-6 text-emerald-300 font-bold">Cryptographically tamper-proof</td>
+                <tr className="hover:bg-slate-50/80 transition-colors">
+                  <td className="py-4 px-6 font-semibold text-slate-900">Grade Forgery &amp; Alteration</td>
+                  <td className="py-4 px-6 text-rose-600 font-medium">High risk of student pen alterations</td>
+                  <td className="py-4 px-6 text-emerald-700 font-bold bg-emerald-50/40">Cryptographically tamper-proof</td>
                 </tr>
               </tbody>
             </table>
@@ -858,12 +875,12 @@ export default function SmartSchoolEventsPage() {
         </div>
       </section>
 
-      {/* --- SECTION 4: FREQUENTLY ASKED QUESTIONS --- */}
-      <section style={{ background: 'var(--color-nets-navy-dark, #0D1060)', borderTop: '1px solid rgba(255,255,255,0.08)' }} className="py-20">
+      {/* ── SECTION 4: FREQUENTLY ASKED QUESTIONS (LIGHT ARCHITECTURAL) ── */}
+      <section className="py-20 bg-[#F8F9FC] border-b border-slate-200">
         <div className="container-nets max-w-4xl mx-auto px-4">
           <MotionRise className="text-center max-w-xl mx-auto space-y-3 mb-12">
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-400">Questions &amp; Answers</span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <span className="overline text-[#1A1FA8]">Questions &amp; Answers</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0D1060] tracking-tight">
               Frequently Asked Questions
             </h2>
           </MotionRise>
@@ -872,22 +889,21 @@ export default function SmartSchoolEventsPage() {
             {faqs.map((faq, i) => (
               <div
                 key={i}
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px' }}
-                className="overflow-hidden transition-colors"
+                className="bg-white border border-slate-200 rounded-sm overflow-hidden shadow-sm transition-colors"
               >
                 <button
                   onClick={() => toggleFaq(i)}
-                  className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-white text-sm sm:text-base cursor-pointer hover:bg-white/5"
+                  className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-[#0D1060] text-sm sm:text-base cursor-pointer hover:bg-slate-50"
                 >
                   <span>{faq.q}</span>
                   {openFaq === i ? (
-                    <IconChevronUp className="w-5 h-5 text-amber-400 shrink-0" />
+                    <IconChevronUp className="w-5 h-5 text-amber-500 shrink-0" />
                   ) : (
                     <IconChevronDown className="w-5 h-5 text-slate-400 shrink-0" />
                   )}
                 </button>
                 {openFaq === i && (
-                  <div className="px-5 pb-5 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-3">
+                  <div className="px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
                     {faq.a}
                   </div>
                 )}
@@ -896,7 +912,7 @@ export default function SmartSchoolEventsPage() {
           </div>
 
           {/* Bottom Floating CTA Banner */}
-          <div style={{ background: 'linear-gradient(135deg, rgba(26,31,168,0.7) 0%, rgba(13,16,96,0.95) 100%)', border: '1px solid rgba(251,188,4,0.3)', borderRadius: '4px' }} className="mt-16 p-8 text-center space-y-4 shadow-2xl">
+          <div style={{ background: 'linear-gradient(135deg, rgba(13,16,96,0.95) 0%, rgba(26,31,168,0.95) 100%)', border: '1px solid rgba(251,188,4,0.3)', borderRadius: '4px' }} className="mt-16 p-8 text-center space-y-4 shadow-xl">
             <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
               Ready to Transform Your School&apos;s Results This Term?
             </h3>
