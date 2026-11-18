@@ -9,21 +9,19 @@ const TARGET_SELECTOR = [
   "article",
   "footer",
   '[class*="card"]',
-  '[class*="rounded-"]',
   '[class*="grid"] > div',
   "h1",
   "h2",
   "h3",
   "p",
   "blockquote",
-  "form",
   "table",
   "tbody > tr",
   "ul > li",
   ".rise-on-scroll",
 ].join(", ");
 
-const SKIP_ANCESTOR_SELECTOR = 'nav, aside, [data-no-rise], [role="dialog"], header.sticky, header.fixed';
+const SKIP_ANCESTOR_SELECTOR = 'nav, aside, form, [data-no-rise], [data-fm-risen], [role="dialog"], header.sticky, header.fixed, .no-rise';
 const SKIP_TAG_NAMES = new Set([
   "NAV",
   "ASIDE",
@@ -35,6 +33,8 @@ const SKIP_TAG_NAMES = new Set([
   "TEXTAREA",
   "SELECT",
   "OPTION",
+  "BUTTON",
+  "FORM",
   "HEAD",
   "META",
   "LINK",
@@ -43,9 +43,10 @@ const SKIP_TAG_NAMES = new Set([
 function shouldSkipElement(el: HTMLElement): boolean {
   if (!el || !(el instanceof HTMLElement)) return true;
   if (el.dataset.fmRisen === "true" || el.dataset.fmObserved === "true") return true;
-  if (el.hasAttribute("data-no-rise")) return true;
+  if (el.hasAttribute("data-no-rise") || el.hasAttribute("data-fm-risen")) return true;
   if (SKIP_TAG_NAMES.has(el.tagName)) return true;
   if (el.closest(SKIP_ANCESTOR_SELECTOR)) return true;
+  if (el.closest('[data-no-rise="true"]') || el.closest('[data-fm-risen="true"]') || el.closest("form")) return true;
 
   const computed = window.getComputedStyle(el);
   if (
@@ -129,19 +130,27 @@ export function ScrollRiseProvider({ children }: { children: React.ReactNode }) 
       },
       {
         root: null,
-        rootMargin: "0px 0px -40px 0px",
-        threshold: 0.06,
+        rootMargin: "0px 0px 0px 0px",
+        threshold: 0.02,
       }
     );
 
     const registerElements = (scope: ParentNode) => {
       const elements = scope.querySelectorAll<HTMLElement>(TARGET_SELECTOR);
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
       elements.forEach((el) => {
         if (shouldSkipElement(el)) return;
         el.dataset.fmObserved = "true";
         el.style.opacity = "0";
         el.style.transform = "translateY(28px)";
-        intersectionObserver.observe(el);
+
+        const rect = el.getBoundingClientRect();
+        if (rect.top < viewportHeight && rect.bottom > 0) {
+          enqueueRise(el);
+        } else {
+          intersectionObserver.observe(el);
+        }
       });
     };
 
@@ -156,7 +165,13 @@ export function ScrollRiseProvider({ children }: { children: React.ReactNode }) 
               node.dataset.fmObserved = "true";
               node.style.opacity = "0";
               node.style.transform = "translateY(28px)";
-              intersectionObserver.observe(node);
+              const rect = node.getBoundingClientRect();
+              const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+              if (rect.top < viewportHeight && rect.bottom > 0) {
+                enqueueRise(node);
+              } else {
+                intersectionObserver.observe(node);
+              }
             }
             registerElements(node);
           }
@@ -190,6 +205,7 @@ export interface MotionRiseProps extends HTMLMotionProps<"div"> {
   duration?: number;
   yOffset?: number;
   once?: boolean;
+  amount?: "some" | "all" | number;
   children?: React.ReactNode;
 }
 
@@ -198,6 +214,7 @@ export function MotionRise({
   duration = 0.65,
   yOffset = 28,
   once = true,
+  amount = "some",
   children,
   ...rest
 }: MotionRiseProps) {
@@ -206,9 +223,10 @@ export function MotionRise({
   return (
     <motion.div
       data-fm-risen="true"
+      data-no-rise="true"
       initial={prefersReducedMotion ? false : { opacity: 0, y: yOffset }}
       whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once, margin: "0px 0px -40px 0px", amount: 0.08 }}
+      viewport={{ once, margin: "0px 0px 0px 0px", amount: amount as any }}
       transition={{
         duration,
         delay,
@@ -225,6 +243,7 @@ export interface MotionStaggerProps extends HTMLMotionProps<"div"> {
   staggerChildren?: number;
   delayChildren?: number;
   once?: boolean;
+  amount?: "some" | "all" | number;
   children?: React.ReactNode;
 }
 
@@ -232,6 +251,7 @@ export function MotionStagger({
   staggerChildren = 0.08,
   delayChildren = 0.04,
   once = true,
+  amount = "some",
   children,
   ...rest
 }: MotionStaggerProps) {
@@ -240,9 +260,10 @@ export function MotionStagger({
   return (
     <motion.div
       data-fm-risen="true"
+      data-no-rise="true"
       initial={prefersReducedMotion ? false : "hidden"}
       whileInView={prefersReducedMotion ? undefined : "visible"}
-      viewport={{ once, margin: "0px 0px -40px 0px", amount: 0.06 }}
+      viewport={{ once, margin: "0px 0px 0px 0px", amount: amount as any }}
       variants={{
         hidden: { opacity: 0 },
         visible: {

@@ -89,7 +89,7 @@ export default function SharedLoginPage({
   };
 
   return (
-    <div className="min-h-screen w-full flex">
+    <div className="min-h-screen w-full flex" data-no-rise="true">
       {/* Left Panel - Branding & Aesthetic */}
       <div className="hidden lg:flex w-[55%] relative overflow-hidden bg-[#0B1021]">
         {/* Abstract Background Elements */}
@@ -150,13 +150,13 @@ export default function SharedLoginPage({
       </div>
 
       {/* Right Panel - Login Form */}
-      <div className="w-full lg:w-[45%] bg-white flex items-center justify-center p-8 sm:p-16 relative">
+      <div className="w-full lg:w-[45%] bg-white flex flex-col items-center justify-center p-6 sm:p-12 lg:p-16 relative overflow-y-auto min-h-screen">
         {/* Mobile Logo overlay */}
-        <div className="lg:hidden flex items-center justify-center mb-10 w-full absolute top-8 left-0 right-0">
-           <Image src={logoSrc || "/logo.png"} alt="Logo" width={64} height={64} className="object-contain" />
+        <div className="lg:hidden flex items-center justify-center mb-6 w-full">
+           <Image src={logoSrc || "/logo.png"} alt="Logo" width={56} height={56} className="object-contain" priority />
         </div>
 
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md my-auto">
           <div className="mb-10 text-center lg:text-left">
             <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Welcome Back</h2>
             <p className="text-slate-500 font-medium">Enter your credentials to access the admin hub.</p>
