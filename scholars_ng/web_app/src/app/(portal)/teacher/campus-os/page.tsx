@@ -33,7 +33,7 @@ import {
   ChatBubbleLeftRightIcon,
   ArchiveBoxIcon,
   TrophyIcon,
-  UserCheckIcon,
+  CheckBadgeIcon,
 } from '@heroicons/react/24/outline';
 import api, { getActiveTenantContext } from '@/lib/api';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
@@ -516,7 +516,7 @@ function TeacherCampusOSContent() {
     { id: 'facilities', label: 'Lab & Venues', icon: BuildingOfficeIcon, badge: 'Bookings' },
     { id: 'inventory', label: 'Store Requisitions', icon: ArchiveBoxIcon, badge: `${dashboardData?.requisitions?.length || 0} Reqs` },
     { id: 'cocurricular', label: 'Houses & Clubs', icon: TrophyIcon, badge: 'Leaderboard' },
-    { id: 'duty', label: 'Faculty Duty', icon: UserCheckIcon, badge: telemetry.is_clocked_in ? 'Clocked In' : 'Roster' },
+    { id: 'duty', label: 'Faculty Duty', icon: CheckBadgeIcon, badge: telemetry.is_clocked_in ? 'Clocked In' : 'Roster' },
     { id: 'hostel', label: 'Boarder Exeats', icon: BuildingOffice2Icon, badge: 'Hostel' },
     { id: 'library', label: 'Curriculum Library', icon: BookOpenIcon, badge: 'Books' },
     { id: 'messaging', label: 'Campus Circulars', icon: MegaphoneIcon, badge: 'Notices' },
