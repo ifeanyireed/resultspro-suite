@@ -111,8 +111,8 @@ func Connect(dsn string) (*DB, error) {
 		// Set up isolated puzzlepro schema in Postgres to avoid colliding with central platform tables
 		initSchemaCtx, initCancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer initCancel()
-		_, _ = rawDB.ExecContext(initSchemaCtx, "CREATE SCHEMA IF NOT EXISTS puzzlepro; SET search_path TO puzzlepro, public;")
-		log.Println("✅ [service_puzzlepro] Connected to PostgreSQL / Neon database successfully (schema: puzzlepro)!")
+		_, _ = rawDB.ExecContext(initSchemaCtx, "CREATE SCHEMA IF NOT EXISTS puzzlepro; SET search_path TO public, puzzlepro;")
+		log.Println("✅ [service_puzzlepro] Connected to PostgreSQL / Neon database successfully (schema: public, puzzlepro)!")
 	} else {
 		log.Println("✅ [service_puzzlepro] Connected to MySQL database successfully!")
 	}

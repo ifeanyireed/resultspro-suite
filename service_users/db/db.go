@@ -80,6 +80,7 @@ func InitDB(dataSourceName string) {
 		log.Printf("Note: Postgres ping timeout: %v", err)
 	} else {
 		log.Println("Microservice connected to Postgres successfully (Simple Protocol)")
+		_, _ = rawDB.Exec("SET search_path TO public, puzzlepro;")
 	}
 
 	DB = &DBWrapper{DB: rawDB}

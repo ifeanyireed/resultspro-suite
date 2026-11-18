@@ -7,7 +7,9 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 
 	"service_users.resultspro.ng/db"
@@ -55,7 +57,7 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var user models.User
-	err := db.DB.QueryRow("SELECT id, email, password_hash, full_name, avatar_url, account_status, has_ican, coin_balance, mfa_enabled FROM users WHERE email = ? AND deleted_at IS NULL", email).
+	err := db.DB.QueryRow("SELECT id, email, password_hash, full_name, avatar_url, account_status, COALESCE(has_ican, false), COALESCE(coin_balance, 0), COALESCE(mfa_enabled, false) FROM public.users WHERE email = ? AND deleted_at IS NULL", email).
 		Scan(&user.ID, &user.Email, &user.PasswordHash, &user.FullName, &user.AvatarURL, &user.AccountStatus, &user.HasIcan, &user.CoinBalance, &user.MFAEnabled)
 
 	if err == sql.ErrNoRows {
@@ -67,7 +69,8 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 		utils.JSONError(w, http.StatusUnauthorized, "Invalid credentials")
 		return
 	} else if err != nil {
-		utils.JSONError(w, http.StatusInternalServerError, "Database error")
+		log.Printf("⚠️ Admin login query error for %s: %v", email, err)
+		utils.JSONError(w, http.StatusInternalServerError, "Database error: "+err.Error())
 		return
 	}
 	
@@ -99,7 +102,7 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 	isSuperAdmin := false
 	tenantRolesMap := make(map[string]map[string]string)
 
-	rows, err := db.DB.Query("SELECT ur.role, t.id, t.slug FROM user_tenant_roles ur LEFT JOIN tenants t ON ur.tenant_id = t.id WHERE ur.user_id = ? AND ur.status = 'active'", user.ID)
+	rows, err := db.DB.Query("SELECT ur.role, t.id, t.slug FROM public.user_tenant_roles ur LEFT JOIN public.tenants t ON ur.tenant_id = t.id WHERE ur.user_id = ? AND ur.status = 'active'", user.ID)
 	if err == nil {
 		defer rows.Close()
 		for rows.Next() {
@@ -108,7 +111,8 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 			var tSlug sql.NullString
 			if err := rows.Scan(&role, &tID, &tSlug); err == nil {
 				roles = append(roles, role)
-				if role == "superadmin" || role == "super-admin" || role == "platform-admin" || role == "agent" || role == "support" {
+				roleLower := strings.ToLower(strings.TrimSpace(role))
+				if roleLower == "superadmin" || roleLower == "super-admin" || roleLower == "platform-admin" || roleLower == "admin" || roleLower == "agent" || roleLower == "support" || roleLower == "support-staff" {
 					isSuperAdmin = true
 				}
 				if tSlug.Valid && tID.Valid {
@@ -123,10 +127,11 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 	
 	var isGlobalAdmin bool
 	var globalRole sql.NullString
-	db.DB.QueryRow("SELECT COALESCE(is_admin, false), role FROM users WHERE id = ?", user.ID).Scan(&isGlobalAdmin, &globalRole)
+	db.DB.QueryRow("SELECT COALESCE(is_admin, false), role FROM public.users WHERE id = ?", user.ID).Scan(&isGlobalAdmin, &globalRole)
 	if globalRole.Valid && globalRole.String != "" {
+		gRole := strings.ToLower(strings.TrimSpace(globalRole.String))
 		roles = append(roles, globalRole.String)
-		if globalRole.String == "superadmin" || globalRole.String == "platform-admin" {
+		if gRole == "superadmin" || gRole == "super-admin" || gRole == "platform-admin" || gRole == "admin" || gRole == "support" || gRole == "support-staff" {
 			isSuperAdmin = true
 		}
 	}
@@ -171,7 +176,10 @@ func HandleAdminLogin(w http.ResponseWriter, r *http.Request) {
 
 	// Save refresh token
 	if refreshToken != "" {
-		_, err = db.DB.Exec("INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 7 DAY))", user.ID, refreshToken)
+		refreshTokenID := uuid.New().String()
+		expiresAt := time.Now().Add(7 * 24 * time.Hour)
+		_, err = db.DB.Exec("INSERT INTO refresh_tokens (id, user_id, token_hash, device_info, expires_at) VALUES (?, ?, ?, ?, ?)",
+			refreshTokenID, user.ID, refreshToken, clientIP, expiresAt)
 		if err != nil {
 			log.Printf("Failed to save refresh token: %v", err)
 		}

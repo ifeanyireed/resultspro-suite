@@ -492,7 +492,7 @@ func (g *GameEngineHandler) EventHandler(w http.ResponseWriter, r *http.Request)
 	if err == nil {
 		if g.DB.DriverName == "postgres" {
 			_, _ = g.DB.ExecContext(ctx, `
-				INSERT INTO users (id, username, avatar, group_id, total_xp, total_stars)
+				INSERT INTO puzzle_users (id, username, avatar, group_id, total_xp, total_stars)
 				VALUES (?, COALESCE(NULLIF(?, ''), 'Player'), COALESCE(NULLIF(?, ''), 'default.png'), ?, ?, ?)
 				ON CONFLICT (id) DO UPDATE SET
 					total_xp = EXCLUDED.total_xp,
@@ -500,7 +500,7 @@ func (g *GameEngineHandler) EventHandler(w http.ResponseWriter, r *http.Request)
 			`, req.UserID, req.Username, req.Avatar, req.GroupID, newXP, newStars)
 		} else {
 			_, _ = g.DB.ExecContext(ctx, `
-				INSERT INTO users (id, username, avatar, group_id, total_xp, total_stars)
+				INSERT INTO puzzle_users (id, username, avatar, group_id, total_xp, total_stars)
 				VALUES (?, COALESCE(NULLIF(?, ''), 'Player'), COALESCE(NULLIF(?, ''), 'default.png'), ?, ?, ?)
 				ON DUPLICATE KEY UPDATE
 					total_xp = VALUES(total_xp),
@@ -589,7 +589,7 @@ func (g *GameEngineHandler) GetProgressHandler(w http.ResponseWriter, r *http.Re
 	}
 
 	var totalXP int
-	_ = g.DB.QueryRowContext(ctx, "SELECT total_xp FROM users WHERE id = ?", userID).Scan(&totalXP)
+	_ = g.DB.QueryRowContext(ctx, "SELECT total_xp FROM puzzle_users WHERE id = ?", userID).Scan(&totalXP)
 	if totalXP == 0 {
 		_ = g.DB.QueryRowContext(ctx, "SELECT COALESCE(SUM(score), 0) FROM user_progress WHERE user_id = ? AND completed = TRUE", userID).Scan(&totalXP)
 	}
@@ -639,10 +639,10 @@ func (g *GameEngineHandler) GetLeaderboardHandler(w http.ResponseWriter, r *http
 	var args []interface{}
 
 	if groupID > 0 {
-		query = "SELECT id, username, avatar, total_xp, total_stars FROM users WHERE group_id = ? ORDER BY total_xp DESC LIMIT 20"
+		query = "SELECT id, username, avatar, total_xp, total_stars FROM puzzle_users WHERE group_id = ? ORDER BY total_xp DESC LIMIT 20"
 		args = append(args, groupID)
 	} else {
-		query = "SELECT id, username, avatar, total_xp, total_stars FROM users ORDER BY total_xp DESC LIMIT 20"
+		query = "SELECT id, username, avatar, total_xp, total_stars FROM puzzle_users ORDER BY total_xp DESC LIMIT 20"
 	}
 
 	rows, err := g.DB.QueryContext(ctx, query, args...)

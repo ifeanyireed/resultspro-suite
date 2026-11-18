@@ -107,7 +107,7 @@ func (db *DB) InitGameEngineSchema() error {
 				created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 				UNIQUE (level_id, waypoint_index)
 			);`,
-			`CREATE TABLE IF NOT EXISTS users (
+			`CREATE TABLE IF NOT EXISTS puzzle_users (
 				id SERIAL PRIMARY KEY,
 				username VARCHAR(100) DEFAULT '',
 				avatar VARCHAR(255) DEFAULT 'default.png',
@@ -199,7 +199,7 @@ func (db *DB) InitGameEngineSchema() error {
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`
 
 	createUsersTable := `
-	CREATE TABLE IF NOT EXISTS users (
+	CREATE TABLE IF NOT EXISTS puzzle_users (
 		id INT AUTO_INCREMENT PRIMARY KEY,
 		username VARCHAR(100) DEFAULT '',
 		avatar VARCHAR(255) DEFAULT 'default.png',
