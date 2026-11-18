@@ -349,27 +349,108 @@ func HandleDeletePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := strings.TrimSpace(r.URL.Query().Get("id"))
-	if id == "" {
-		var input struct {
-			ID string `json:"id"`
-		}
+	var input struct {
+		ID  string   `json:"id"`
+		IDs []string `json:"ids"`
+	}
+	if r.Body != nil {
 		_ = json.NewDecoder(r.Body).Decode(&input)
-		id = strings.TrimSpace(input.ID)
 	}
-	if id == "" {
-		utils.JSONError(w, http.StatusBadRequest, "Post ID is required")
+
+	var targetIDs []string
+	if len(input.IDs) > 0 {
+		for _, tid := range input.IDs {
+			tid = strings.TrimSpace(tid)
+			if tid != "" {
+				targetIDs = append(targetIDs, tid)
+			}
+		}
+	} else {
+		targetID := id
+		if targetID == "" {
+			targetID = strings.TrimSpace(input.ID)
+		}
+		if targetID != "" {
+			if strings.Contains(targetID, ",") {
+				for _, tid := range strings.Split(targetID, ",") {
+					tid = strings.TrimSpace(tid)
+					if tid != "" {
+						targetIDs = append(targetIDs, tid)
+					}
+				}
+			} else {
+				targetIDs = append(targetIDs, targetID)
+			}
+		}
+	}
+
+	if len(targetIDs) == 0 {
+		utils.JSONError(w, http.StatusBadRequest, "Post ID or IDs are required")
 		return
 	}
 
-	_ = db.GormDB.Exec("DELETE FROM blog_post_tags WHERE post_id = ?", id).Error
-	_ = db.GormDB.Exec("DELETE FROM blog_comments WHERE post_id = ?", id).Error
+	_ = db.GormDB.Exec("DELETE FROM blog_post_tags WHERE post_id IN (?)", targetIDs).Error
+	_ = db.GormDB.Exec("DELETE FROM blog_comments WHERE post_id IN (?)", targetIDs).Error
 
-	if err := db.GormDB.Where("id = ?", id).Delete(&models.BlogPost{}).Error; err != nil {
-		utils.JSONError(w, http.StatusInternalServerError, "Failed to delete post: "+err.Error())
+	if err := db.GormDB.Where("id IN (?)", targetIDs).Delete(&models.BlogPost{}).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to delete post(s): "+err.Error())
 		return
 	}
 
-	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Post deleted successfully"})
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"message": fmt.Sprintf("%d post(s) deleted successfully", len(targetIDs)),
+		"count":   len(targetIDs),
+	})
+}
+
+func HandleBulkDeletePosts(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodDelete && r.Method != http.MethodPost {
+		utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var input struct {
+		IDs []string `json:"ids"`
+	}
+	if r.Body != nil {
+		_ = json.NewDecoder(r.Body).Decode(&input)
+	}
+
+	qIDs := r.URL.Query().Get("ids")
+	if qIDs != "" {
+		for _, qid := range strings.Split(qIDs, ",") {
+			qid = strings.TrimSpace(qid)
+			if qid != "" {
+				input.IDs = append(input.IDs, qid)
+			}
+		}
+	}
+
+	var cleanIDs []string
+	for _, id := range input.IDs {
+		id = strings.TrimSpace(id)
+		if id != "" {
+			cleanIDs = append(cleanIDs, id)
+		}
+	}
+
+	if len(cleanIDs) == 0 {
+		utils.JSONError(w, http.StatusBadRequest, "No post IDs provided")
+		return
+	}
+
+	_ = db.GormDB.Exec("DELETE FROM blog_post_tags WHERE post_id IN (?)", cleanIDs).Error
+	_ = db.GormDB.Exec("DELETE FROM blog_comments WHERE post_id IN (?)", cleanIDs).Error
+
+	if err := db.GormDB.Where("id IN (?)", cleanIDs).Delete(&models.BlogPost{}).Error; err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to bulk delete posts: "+err.Error())
+		return
+	}
+
+	utils.JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"message": fmt.Sprintf("%d posts deleted successfully", len(cleanIDs)),
+		"count":   len(cleanIDs),
+	})
 }
 
 // ----------------------------------------------------------------------------

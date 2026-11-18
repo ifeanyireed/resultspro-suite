@@ -478,6 +478,7 @@ func main() {
 			utils.JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		}
 	})
+	mux.HandleFunc("/api/v1/cms/blog/posts/bulk-delete", handlers.HandleBulkDeletePosts)
 	mux.HandleFunc("/api/v1/cms/blog/posts/view", handlers.HandleIncrementPostView)
 	
 	mux.HandleFunc("/api/v1/cms/blog/categories", func(w http.ResponseWriter, r *http.Request) {

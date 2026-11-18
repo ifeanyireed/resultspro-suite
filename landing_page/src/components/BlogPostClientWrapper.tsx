@@ -6,6 +6,7 @@ import { IconArrowLeft } from '@tabler/icons-react';
 import BlogPostContent from '@/components/BlogPostContent';
 
 function normalizeSlug(s: string): string {
+  if (!s) return '';
   try {
     s = decodeURIComponent(s);
   } catch (_) {}
@@ -29,6 +30,13 @@ function findPost(posts: any[], requestedSlug: string) {
   // 3. Normalized match
   const targetNorm = normalizeSlug(requestedSlug);
   found = posts.find((p: any) => normalizeSlug(p.slug) === targetNorm);
+  if (found) return found;
+
+  // 4. Substring / prefix match (handles hash suffixes or prefixes)
+  found = posts.find((p: any) => {
+    const pNorm = normalizeSlug(p.slug || '');
+    return pNorm && (targetNorm.includes(pNorm) || pNorm.includes(targetNorm));
+  });
   if (found) return found;
 
   return null;
@@ -69,7 +77,7 @@ export function BlogPostClientWrapper({
         if (postsRes.ok) {
           const posts = await postsRes.json();
           if (Array.isArray(posts)) {
-            const published = posts.filter((p: any) => p.status === 'PUBLISHED');
+            const published = posts.filter((p: any) => p.status?.toUpperCase() === 'PUBLISHED');
 
             if (catRes.ok) {
               const categories = await catRes.json();
@@ -80,7 +88,7 @@ export function BlogPostClientWrapper({
             }
 
             const found = findPost(published, slug);
-            if (found && found.status === 'PUBLISHED') {
+            if (found && found.status?.toUpperCase() === 'PUBLISHED') {
               setPost({
                 ...found,
                 category: found.category || 'Blog',

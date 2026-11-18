@@ -6,7 +6,7 @@ import { Header } from '@/components/Header';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 import { Badge } from '@/components/Badge';
 import { StatCard } from '@/components/StatCard';
-import { FileText, CheckCircle2, File, Plus, Tag, MessageSquare, Folder, Users, Eye } from 'lucide-react';
+import { FileText, CheckCircle2, File, Plus, Tag, MessageSquare, Folder, Users, Eye, Trash2 } from 'lucide-react';
 import { fetchBlogPosts } from '@/lib/api';
 import { BlogPost } from '@/lib/types';
 import toast from 'react-hot-toast';
@@ -24,6 +24,9 @@ const USERS_API = process.env.NEXT_PUBLIC_USERS_API || '';
 export default function BlogCMSPage() {
   const [activeTab, setActiveTab] = useState('posts');
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [selectedPostIds, setSelectedPostIds] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
   const [tagsList, setTagsList] = useState<any[]>([]);
   const [subscribers, setSubscribers] = useState<any[]>([]);

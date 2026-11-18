@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { BlogPostClientWrapper } from '@/components/BlogPostClientWrapper';
-import { MotionRise } from '@/components/ScrollRiseProvider';
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
@@ -24,6 +23,7 @@ async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 
 }
 
 function normalizeSlug(s: string): string {
+  if (!s) return '';
   try {
     s = decodeURIComponent(s);
   } catch (_) {}
@@ -47,6 +47,13 @@ function findPost(posts: any[], requestedSlug: string) {
   // 3. Normalized match (handles punctuation, colons, quotes differences)
   const targetNorm = normalizeSlug(requestedSlug);
   found = posts.find((p: any) => normalizeSlug(p.slug) === targetNorm);
+  if (found) return found;
+
+  // 4. Substring / prefix match (handles hash suffixes or prefixes)
+  found = posts.find((p: any) => {
+    const pNorm = normalizeSlug(p.slug || '');
+    return pNorm && (targetNorm.includes(pNorm) || pNorm.includes(targetNorm));
+  });
   if (found) return found;
 
   return null;
@@ -113,7 +120,7 @@ async function getBlogPosts() {
     if (postsRes.ok) posts = await postsRes.json();
     if (!posts || !Array.isArray(posts)) return [];
     
-    const published = posts.filter((p: any) => p.status === 'PUBLISHED');
+    const published = posts.filter((p: any) => p.status?.toUpperCase() === 'PUBLISHED');
 
     if (catRes.ok) {
       const categories = await catRes.json();
@@ -157,12 +164,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   } : null;
 
   return (
-    <MotionRise>
-      <BlogPostClientWrapper 
-        initialPost={formattedPost} 
-        initialRelatedPosts={relatedPosts} 
-        slug={post?.slug || resolvedParams.slug} 
-      />
-    </MotionRise>
+    <BlogPostClientWrapper 
+      initialPost={formattedPost} 
+      initialRelatedPosts={relatedPosts} 
+      slug={post?.slug || resolvedParams.slug} 
+    />
   );
 }

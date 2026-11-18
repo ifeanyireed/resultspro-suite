@@ -46,7 +46,7 @@ function shouldSkipElement(el: HTMLElement): boolean {
   if (SKIP_TAGS.has(el.tagName)) return true;
   if (el.dataset.fmRisen === "true" || el.dataset.fmObserved === "true") return true;
   if (el.hasAttribute("data-no-rise") || el.closest("[data-no-rise]")) return true;
-  if (el.closest("nav")) return true;
+  if (el.closest("nav") || el.closest("article") || el.closest(".prose")) return true;
 
   const computed = window.getComputedStyle(el);
   if (computed.position === "fixed" || computed.position === "sticky") return true;
@@ -69,7 +69,7 @@ export interface MotionRiseProps extends HTMLMotionProps<"div"> {
   yOffset?: number;
   duration?: number;
   once?: boolean;
-  amount?: number;
+  amount?: "some" | "all" | number;
 }
 
 /**
@@ -81,7 +81,7 @@ export function MotionRise({
   yOffset = 28,
   duration = 0.65,
   once = true,
-  amount = 0.15,
+  amount = "some",
   ...rest
 }: MotionRiseProps) {
   const prefersReducedMotion = useReducedMotion();
