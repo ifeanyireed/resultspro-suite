@@ -9,7 +9,7 @@
 }
 
 @theme {
-  --color-navy: #0D1B2A;
+  --color-navy: #0D1060;
   --color-green: #FBBC04;
   --color-blue: #1565C0;
   --color-amber: #1e3a8a;
@@ -76,7 +76,7 @@
 }
 
 :root {
-  --background: #0D1B2A;
+  --background: #0D1060;
   --foreground: #ffffff;
   
   --primary: #FBBC04;

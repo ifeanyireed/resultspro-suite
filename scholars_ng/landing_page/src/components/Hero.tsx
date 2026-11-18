@@ -26,6 +26,7 @@ const Hero = () => {
   return (
     <section
       id="hero"
+      data-no-rise="true"
       aria-label="Hero — My School Academy"
       style={{
         position: 'relative',
