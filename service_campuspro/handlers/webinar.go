@@ -100,7 +100,7 @@ func HandlePublicWebinarRegister(w http.ResponseWriter, r *http.Request) {
 				"school_name":    req.SchoolName,
 				"series_name":    req.SeriesName,
 				"edition_title":  req.EditionTitle,
-				"date_time":      "Thursday, November 26, 2026 · 11:00 AM WAT (Lagos)",
+				"date_time":      "Sunday, November 29, 2026 · 05:00 PM – 06:00 PM WAT (Lagos)",
 				"zoom_access":    "https://us02web.zoom.us/j/84920260412",
 			},
 		})
@@ -136,8 +136,8 @@ func HandlePublicWebinarRegister(w http.ResponseWriter, r *http.Request) {
 			"role":           req.Role,
 			"series_name":    req.SeriesName,
 			"edition_title":  req.EditionTitle,
-			"date_time":      "Thursday, November 26, 2026 · 11:00 AM WAT (Lagos)",
-			"calendar_date":  "2026-11-26T11:00:00+01:00",
+			"date_time":      "Sunday, November 29, 2026 · 05:00 PM – 06:00 PM WAT (Lagos)",
+			"calendar_date":  "2026-11-29T17:00:00+01:00",
 			"zoom_access":    "https://us02web.zoom.us/j/84920260412",
 			"whatsapp_group": "https://chat.whatsapp.com/smart-school-webinar-vip",
 		},
@@ -163,7 +163,7 @@ func HandleCampusWebinarRegistrations(w http.ResponseWriter, r *http.Request) {
 	`, edition).Scan(&totalRegistrations)
 
 	rows, err := db.DB.Query(`
-		SELECT id, series_name, edition_title, full_name, email, phone, school_name, role, state_location, estimated_students, pain_points, created_at
+		SELECT id, series_name, edition_title, full_name, email, phone, school_name, role, state_location, estimated_students, pain_points, status, notes, created_at
 		FROM campus_webinar_registrations
 		WHERE edition_title = ?
 		ORDER BY created_at DESC
@@ -174,9 +174,12 @@ func HandleCampusWebinarRegistrations(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		defer rows.Close()
 		for rows.Next() {
-			var id, series, ed, name, email, phone, school, role, state, students, pains string
+			var id, series, ed, name, email, phone, school, role, state, students, pains, status, notes string
 			var cAt time.Time
-			_ = rows.Scan(&id, &series, &ed, &name, &email, &phone, &school, &role, &state, &students, &pains, &cAt)
+			_ = rows.Scan(&id, &series, &ed, &name, &email, &phone, &school, &role, &state, &students, &pains, &status, &notes, &cAt)
+			if status == "" {
+				status = "REGISTERED"
+			}
 			registrations = append(registrations, map[string]interface{}{
 				"id":                 id,
 				"series_name":        series,
@@ -189,6 +192,8 @@ func HandleCampusWebinarRegistrations(w http.ResponseWriter, r *http.Request) {
 				"state_location":     state,
 				"estimated_students": students,
 				"pain_points":        pains,
+				"status":             status,
+				"notes":              notes,
 				"registered_at":      cAt.Format("2006-01-02 15:04"),
 			})
 		}
@@ -199,5 +204,82 @@ func HandleCampusWebinarRegistrations(w http.ResponseWriter, r *http.Request) {
 		"total_count":   totalRegistrations,
 		"edition_title": edition,
 		"registrations": registrations,
+	})
+}
+
+// CertificateDispatchRequest defines payload to dispatch certificates
+type CertificateDispatchRequest struct {
+	ID                string   `json:"id"`
+	IDs               []string `json:"ids"`
+	Status            string   `json:"status"` // "CERTIFICATE_DISPATCHED", "ATTENDED", "REGISTERED"
+	CertificateNumber string   `json:"certificate_number"`
+	Notes             string   `json:"notes"`
+}
+
+// HandleCampusWebinarDispatchCertificate dispatches or updates webinar certificate status
+func HandleCampusWebinarDispatchCertificate(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, PUT, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Tenant-Id")
+
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	if r.Method != http.MethodPost && r.Method != http.MethodPut {
+		JSONError(w, http.StatusMethodNotAllowed, "Method not allowed. Use POST or PUT.")
+		return
+	}
+
+	var req CertificateDispatchRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		JSONError(w, http.StatusBadRequest, "Invalid JSON payload")
+		return
+	}
+
+	targetIDs := []string{}
+	if req.ID != "" {
+		targetIDs = append(targetIDs, req.ID)
+	}
+	if len(req.IDs) > 0 {
+		targetIDs = append(targetIDs, req.IDs...)
+	}
+
+	if len(targetIDs) == 0 {
+		JSONError(w, http.StatusBadRequest, "Participant ID or IDs are required")
+		return
+	}
+
+	if req.Status == "" {
+		req.Status = "CERTIFICATE_DISPATCHED"
+	}
+
+	updatedCount := 0
+	for _, id := range targetIDs {
+		certNo := req.CertificateNumber
+		if certNo == "" {
+			certNo = "CERT-SSW-2026-" + strings.ToUpper(uuid.New().String()[:8])
+		}
+		noteStr := "Certificate: " + certNo + " | Dispatched: " + time.Now().Format("2006-01-02 15:04")
+		if req.Notes != "" {
+			noteStr += " | " + req.Notes
+		}
+
+		_, err := db.DB.Exec(`
+			UPDATE campus_webinar_registrations
+			SET status = ?, notes = ?
+			WHERE id = ?
+		`, req.Status, noteStr, id)
+		if err == nil {
+			updatedCount++
+		}
+	}
+
+	JSONResponse(w, http.StatusOK, map[string]interface{}{
+		"success":       true,
+		"message":       "Certificate status updated successfully.",
+		"updated_count": updatedCount,
+		"status":        req.Status,
 	})
 }

@@ -5,20 +5,8 @@ import { animate, motion, useReducedMotion, type HTMLMotionProps } from "framer-
 import { usePathname } from "next/navigation";
 
 const TARGET_SELECTOR = [
-  "section",
-  "article",
-  "footer",
-  '[class*="card"]',
-  '[class*="grid"] > div',
-  "h1",
-  "h2",
-  "h3",
-  "p",
-  "blockquote",
-  "table",
-  "tbody > tr",
-  "ul > li",
   ".rise-on-scroll",
+  "[data-rise]",
 ].join(", ");
 
 const SKIP_ANCESTOR_SELECTOR = 'nav, aside, form, [data-no-rise], [data-fm-risen], [role="dialog"], header.sticky, header.fixed, .no-rise';

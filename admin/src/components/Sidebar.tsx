@@ -60,6 +60,7 @@ export function Sidebar() {
       title: 'COMMAND CENTER',
       links: [
         { label: 'Suite Overview', href: '/overview', icon: Squares2X2Icon, activeIcon: Squares2X2Solid },
+        { label: 'Webinar & Certificates', href: '/webinars', icon: AcademicCapIcon, activeIcon: AcademicCapSolid, badge: 'Nov 29' },
         { label: 'Demo Bookings', href: '/demos', icon: SparklesIcon, activeIcon: SparklesSolid },
         { label: 'Universal Users', href: '/users', icon: UserGroupIcon, activeIcon: UserGroupSolid },
       ],

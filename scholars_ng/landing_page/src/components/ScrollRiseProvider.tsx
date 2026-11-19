@@ -5,21 +5,8 @@ import { animate, motion, useReducedMotion, type HTMLMotionProps } from "framer-
 import { usePathname } from "next/navigation";
 
 const TARGET_SELECTOR = [
-  "section",
-  "article",
-  "footer",
-  '[class*="card"]',
-  '[class*="grid"] > div',
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "p",
-  "blockquote",
-  "form",
-  "table",
-  "ul > li",
   ".rise-on-scroll",
+  "[data-rise]",
 ].join(", ");
 
 const SKIP_SELECTOR = [
@@ -238,7 +225,9 @@ export default function ScrollRiseProvider({
       });
     };
 
-    registerElements(document);
+    const initTimer = setTimeout(() => {
+      registerElements(document);
+    }, 150);
 
     const mutationObserver = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
@@ -246,7 +235,7 @@ export default function ScrollRiseProvider({
           if (node instanceof HTMLElement) {
             if (node.matches(TARGET_SELECTOR) && !shouldSkipElement(node)) {
               registerElements(node.parentElement ?? document);
-            } else {
+            } else if (node.querySelectorAll(TARGET_SELECTOR).length > 0) {
               registerElements(node);
             }
           }
@@ -260,6 +249,7 @@ export default function ScrollRiseProvider({
     });
 
     return () => {
+      clearTimeout(initTimer);
       if (batchTimer !== null) {
         window.cancelAnimationFrame(batchTimer);
       }

@@ -60,9 +60,9 @@ export default function SmartSchoolEventsPage() {
   // FAQ Toggle State
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  // Target Webinar Date: Thursday, Nov 26, 2026 at 11:00 AM WAT
+  // Target Webinar Date: Sunday, Nov 29, 2026 at 05:00 PM WAT
   useEffect(() => {
-    const targetDate = new Date('2026-11-26T11:00:00+01:00').getTime();
+    const targetDate = new Date('2026-11-29T17:00:00+01:00').getTime();
 
     const interval = setInterval(() => {
       const now = new Date().getTime();
@@ -124,7 +124,7 @@ export default function SmartSchoolEventsPage() {
         ticket_code: `SS-${Math.floor(100000 + Math.random() * 900000)}`,
         series_name: 'Smart School Webinar Series',
         edition_title: 'Edition 01: Free & Easy EOT Results Processing',
-        date_time: 'Thursday, Nov 26, 2026 · 11:00 AM WAT',
+        date_time: 'Sunday, Nov 29, 2026 · 05:00 PM – 06:00 PM WAT',
         zoom_access: 'https://zoom.us/j/resultspro-webinar-edition01',
         whatsapp_group: 'https://chat.whatsapp.com/resultspro-vip-lounge',
       });
@@ -156,7 +156,7 @@ export default function SmartSchoolEventsPage() {
     },
     {
       q: 'How do I access the webinar session on the event day?',
-      a: 'Upon registering, you will receive an instant confirmation ticket code, an email calendar invitation, and access to our private WhatsApp VIP attendee lounge where the direct Zoom link will be broadcast prior to 11:00 AM WAT.',
+      a: 'Upon registering, you will receive an instant confirmation ticket code, an email calendar invitation, and access to our private WhatsApp VIP attendee lounge where the direct Zoom link will be broadcast prior to 05:00 PM WAT.',
     },
   ];
 
@@ -286,11 +286,11 @@ export default function SmartSchoolEventsPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.45rem 0.85rem', borderRadius: '4px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', fontSize: '0.8125rem', color: '#fff' }}>
                   <IconCalendarEvent size={18} color="var(--color-nets-red, #FBBC04)" />
-                  <span>Thursday, Nov 26, 2026</span>
+                  <span>Sunday, Nov 29, 2026</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.45rem 0.85rem', borderRadius: '4px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', fontSize: '0.8125rem', color: '#fff' }}>
                   <IconClock size={18} color="var(--color-nets-red, #FBBC04)" />
-                  <span>11:00 AM – 12:00 PM WAT</span>
+                  <span>05:00 PM – 06:00 PM WAT</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.45rem 0.85rem', borderRadius: '4px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', fontSize: '0.8125rem', color: '#fff' }}>
                   <IconBrandZoom size={18} color="#60a5fa" />
@@ -435,7 +435,7 @@ export default function SmartSchoolEventsPage() {
                       </a>
 
                       <a
-                        href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Smart+School+Webinar:+Free+%26+Easy+EOT+Results+Processing&dates=20261126T100000Z/20261126T110000Z&details=Live+virtual+masterclass+on+automating+End-of-Term+results+for+Nigerian+schools.+Zoom+Link:+${encodeURIComponent(registeredData.zoom_access)}&location=Online+Zoom+Webcast`}
+                        href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Smart+School+Webinar:+Free+%26+Easy+EOT+Results+Processing&dates=20261129T160000Z/20261129T170000Z&details=Live+virtual+masterclass+on+automating+End-of-Term+results+for+Nigerian+schools.+Zoom+Link:+${encodeURIComponent(registeredData.zoom_access)}&location=Online+Zoom+Webcast`}
                         target="_blank"
                         rel="noreferrer"
                         className="w-full py-2 px-3 rounded bg-white/10 hover:bg-white/15 border border-white/15 text-white text-[11px] font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-decoration-none"
@@ -782,9 +782,9 @@ export default function SmartSchoolEventsPage() {
               <div className="w-12 h-12 rounded bg-amber-50 text-[#0D1060] border border-amber-200 flex items-center justify-center font-bold text-lg">
                 01
               </div>
-              <h3 className="text-lg font-bold text-[#0D1060]">1-Click Broadsheet Synthesis</h3>
+              <h3 className="text-lg font-bold text-[#0D1060]">AI Assisted Data Entry</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Learn how subject teachers submit scores online, and how the exam officer generates master class broadsheets in under 60 seconds with automated grade boundary calculations.
+                Learn how AI streamlines score transcription, detects missing Continuous Assessment marks, eliminates typo errors, and accelerates teacher mark submission across all curriculum arms.
               </p>
             </div>
 
@@ -793,9 +793,9 @@ export default function SmartSchoolEventsPage() {
               <div className="w-12 h-12 rounded bg-amber-50 text-[#0D1060] border border-amber-200 flex items-center justify-center font-bold text-lg">
                 02
               </div>
-              <h3 className="text-lg font-bold text-[#0D1060]">Error-Free WAEC/NECO Grading</h3>
+              <h3 className="text-lg font-bold text-[#0D1060]">Affective &amp; Psychomotor Domains</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Eliminate manual arithmetic forever. Automatically compute class rankings (1st, 2nd, 3rd), subject averages, class minimum/maximum, and weighted Continuous Assessment ratios.
+                Standardize teacher evaluation chits. Configure 5-point ratings for punctuality, neatness, and honesty, plus AI-assisted personalized form teacher and principal remarks.
               </p>
             </div>
 
@@ -804,9 +804,9 @@ export default function SmartSchoolEventsPage() {
               <div className="w-12 h-12 rounded bg-amber-50 text-[#0D1060] border border-amber-200 flex items-center justify-center font-bold text-lg">
                 03
               </div>
-              <h3 className="text-lg font-bold text-[#0D1060]">Affective &amp; Psychomotor Domains</h3>
+              <h3 className="text-lg font-bold text-[#0D1060]">1-Click Broadsheet Synthesis</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Standardize teacher evaluation chits. Configure 5-point ratings for punctuality, neatness, and honesty, plus AI-assisted personalized form teacher and principal remarks.
+                Consolidate scores across CA1 (20%), CA2 (20%), and Exam (60%) into master class broadsheets in under 60 seconds with automated WAEC/NECO grade boundaries and ranking.
               </p>
             </div>
 
@@ -917,7 +917,7 @@ export default function SmartSchoolEventsPage() {
               Ready to Transform Your School&apos;s Results This Term?
             </h3>
             <p className="text-sm text-slate-200 max-w-xl mx-auto">
-              Join over 250 forward-thinking Nigerian school leaders on Thursday, Nov 26. Seats are strictly limited on Zoom.
+              Join over 250 forward-thinking Nigerian school leaders on Sunday, Nov 29 (05:00 PM – 06:00 PM WAT). Seats are strictly limited on Zoom.
             </p>
             <div className="pt-2">
               <a
