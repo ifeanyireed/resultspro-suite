@@ -1,42 +1,33 @@
 "use client";
 
-import React, { createContext, useContext, useEffect } from "react";
-import { animate, motion, useReducedMotion, type HTMLMotionProps } from "framer-motion";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  animate,
+  motion,
+  useInView,
+  useReducedMotion,
+  type HTMLMotionProps,
+} from "framer-motion";
 import { usePathname } from "next/navigation";
 
 const ScrollRiseContext = createContext<boolean>(false);
+const RISE_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-const TARGET_SELECTOR = [
-  "section",
-  "article",
-  "footer",
-  '[class*="card"]',
-  '[class*="rounded-"]',
-  '[class*="grid"] > div',
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "p",
-  "blockquote",
-  "form",
-  "table",
-  "tbody > tr",
-  "ul > li",
-  "ol > li",
-  ".rise-on-scroll",
-  "[data-rise]",
-].join(", ");
+const TARGET_SELECTOR = [".rise-on-scroll", "[data-rise]"].join(", ");
 
 const SKIP_ANCESTOR_SELECTOR = [
   "nav",
   "aside",
   "header",
+  "form",
   "[data-no-rise]",
+  "[data-fm-risen]",
   '[role="dialog"]',
+  '[aria-modal="true"]',
   '[role="menu"]',
   '[role="listbox"]',
   '[role="tooltip"]',
+  ".no-rise",
 ].join(", ");
 
 const SKIP_TAG_NAMES = new Set([
@@ -52,15 +43,24 @@ const SKIP_TAG_NAMES = new Set([
   "TEXTAREA",
   "SELECT",
   "OPTION",
-  " HEAD",
+  "BUTTON",
+  "FORM",
+  "HEAD",
   "META",
   "LINK",
+  "NOSCRIPT",
 ]);
 
 function shouldSkipElement(el: HTMLElement): boolean {
   if (!el || !(el instanceof HTMLElement)) return true;
   if (el.dataset.fmRisen === "true" || el.dataset.fmObserved === "true") return true;
-  if (el.hasAttribute("data-no-rise") || el.getAttribute("aria-hidden") === "true") return true;
+  if (
+    el.hasAttribute("data-no-rise") ||
+    el.hasAttribute("data-fm-risen") ||
+    el.getAttribute("aria-hidden") === "true"
+  ) {
+    return true;
+  }
   if (SKIP_TAG_NAMES.has(el.tagName)) return true;
   if (el.closest(SKIP_ANCESTOR_SELECTOR)) return true;
 
@@ -74,11 +74,8 @@ function shouldSkipElement(el: HTMLElement): boolean {
     return true;
   }
 
-  // Skip tiny decorative elements (e.g. 1px lines, small badges/icons)
   const rect = el.getBoundingClientRect();
-  if (rect.width < 16 && rect.height < 16 && rect.width > 0 && rect.height > 0) {
-    return true;
-  }
+  if (rect.width === 0 && rect.height === 0) return true;
 
   return false;
 }
@@ -93,81 +90,123 @@ export function ScrollRiseProvider({ children }: { children: React.ReactNode }) 
       return;
     }
 
-    let batchCounter = 0;
-    let batchResetTimer: ReturnType<typeof setTimeout> | null = null;
+    let batchQueue: HTMLElement[] = [];
+    let batchTimer: number | null = null;
+    const pendingElements = new Set<HTMLElement>();
+
+    const restoreInlineStyles = (el: HTMLElement) => {
+      if (!el.isConnected) return;
+      el.style.opacity = "";
+      el.style.transform = "";
+      el.style.willChange = "";
+    };
+
+    const flushBatch = () => {
+      const currentBatch = batchQueue;
+      batchQueue = [];
+      batchTimer = null;
+
+      currentBatch.forEach((el, idx) => {
+        pendingElements.delete(el);
+        if (!el.isConnected || el.dataset.fmRisen === "true") {
+          restoreInlineStyles(el);
+          return;
+        }
+        el.dataset.fmRisen = "true";
+
+        const customDelay = el.dataset.riseDelay ? parseFloat(el.dataset.riseDelay) : 0;
+        const staggerDelay = customDelay + Math.min(idx * 0.055, 0.35);
+
+        animate(
+          el,
+          { opacity: [0, 1], y: [28, 0] },
+          {
+            duration: 0.65,
+            delay: staggerDelay,
+            ease: RISE_EASE,
+          }
+        )
+          .then(() => {
+            restoreInlineStyles(el);
+          })
+          .catch(() => {
+            restoreInlineStyles(el);
+          });
+      });
+    };
+
+    const enqueueRise = (el: HTMLElement) => {
+      batchQueue.push(el);
+      if (batchTimer === null) {
+        batchTimer = window.requestAnimationFrame(flushBatch);
+      }
+    };
 
     const intersectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-
           const el = entry.target as HTMLElement;
           intersectionObserver.unobserve(el);
-
-          if (el.dataset.fmRisen === "true") return;
-          el.dataset.fmRisen = "true";
-
-          const staggerIndex = batchCounter % 8;
-          batchCounter += 1;
-
-          if (batchResetTimer) clearTimeout(batchResetTimer);
-          batchResetTimer = setTimeout(() => {
-            batchCounter = 0;
-          }, 120);
-
-          const customDelay = el.dataset.riseDelay ? parseFloat(el.dataset.riseDelay) : 0;
-          const staggerDelay = customDelay + staggerIndex * 0.055;
-
-          animate(
-            el,
-            { opacity: [0, 1], y: [28, 0] },
-            {
-              duration: 0.65,
-              delay: staggerDelay,
-              ease: [0.22, 1, 0.36, 1],
-            }
-          ).then(() => {
-            el.style.removeProperty("will-change");
-          });
+          enqueueRise(el);
         });
       },
       {
         root: null,
-        rootMargin: "0px 0px -40px 0px",
-        threshold: 0.08,
+        rootMargin: "0px 0px 0px 0px",
+        threshold: 0,
       }
     );
 
     const registerCandidates = (root: ParentNode = document) => {
       const elements = root.querySelectorAll<HTMLElement>(TARGET_SELECTOR);
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+
       elements.forEach((el) => {
         if (shouldSkipElement(el)) return;
+
         el.dataset.fmObserved = "true";
+        const rect = el.getBoundingClientRect();
+        if (rect.bottom < 0) {
+          el.dataset.fmRisen = "true";
+          return;
+        }
+
+        pendingElements.add(el);
         el.style.opacity = "0";
+        el.style.transform = "translateY(28px)";
         el.style.willChange = "opacity, transform";
-        intersectionObserver.observe(el);
+
+        if (rect.top < viewportHeight) {
+          enqueueRise(el);
+        } else {
+          intersectionObserver.observe(el);
+        }
       });
     };
 
-    // Initial scan on route mount
-    const initialTimer = setTimeout(() => {
+    const initialFrame = window.requestAnimationFrame(() => {
       registerCandidates(document);
-    }, 16);
+    });
 
-    // Watch for dynamically rendered DOM nodes on this page
+    let mutationFrame: number | null = null;
     const mutationObserver = new MutationObserver((mutations) => {
+      let hasAddedNodes = false;
       for (const mutation of mutations) {
-        mutation.addedNodes.forEach((node) => {
-          if (!(node instanceof HTMLElement)) return;
-          if (node.matches && node.matches(TARGET_SELECTOR) && !shouldSkipElement(node)) {
-            node.dataset.fmObserved = "true";
-            node.style.opacity = "0";
-            node.style.willChange = "opacity, transform";
-            intersectionObserver.observe(node);
-          }
-          registerCandidates(node);
-        });
+        if (mutation.addedNodes.length > 0) {
+          hasAddedNodes = true;
+          break;
+        }
       }
+      if (!hasAddedNodes) return;
+
+      if (mutationFrame !== null) {
+        window.cancelAnimationFrame(mutationFrame);
+      }
+      mutationFrame = window.requestAnimationFrame(() => {
+        registerCandidates(document);
+      });
     });
 
     mutationObserver.observe(document.body, {
@@ -176,10 +215,17 @@ export function ScrollRiseProvider({ children }: { children: React.ReactNode }) 
     });
 
     return () => {
-      clearTimeout(initialTimer);
-      if (batchResetTimer) clearTimeout(batchResetTimer);
+      window.cancelAnimationFrame(initialFrame);
+      if (batchTimer !== null) window.cancelAnimationFrame(batchTimer);
+      if (mutationFrame !== null) window.cancelAnimationFrame(mutationFrame);
       intersectionObserver.disconnect();
       mutationObserver.disconnect();
+
+      pendingElements.forEach((el) => {
+        delete el.dataset.fmObserved;
+        restoreInlineStyles(el);
+      });
+      pendingElements.clear();
     };
   }, [pathname, prefersReducedMotion, isNested]);
 
@@ -200,6 +246,7 @@ export interface MotionRiseProps extends HTMLMotionProps<"div"> {
   duration?: number;
   yOffset?: number;
   once?: boolean;
+  amount?: "some" | "all" | number;
 }
 
 export function MotionRise({
@@ -208,24 +255,61 @@ export function MotionRise({
   duration = 0.65,
   yOffset = 28,
   once = true,
+  amount = "some",
   ...rest
 }: MotionRiseProps) {
   const prefersReducedMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once, amount });
+  const [hasRevealed, setHasRevealed] = useState(false);
+
+  useEffect(() => {
+    if (isInView) {
+      setHasRevealed(true);
+      return;
+    }
+
+    const checkVisibility = () => {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+      if ((rect.width > 0 || rect.height > 0) && rect.top < viewportHeight) {
+        setHasRevealed(true);
+      }
+    };
+
+    const rafId = window.requestAnimationFrame(checkVisibility);
+    return () => window.cancelAnimationFrame(rafId);
+  }, [isInView]);
 
   if (prefersReducedMotion) {
-    return <div {...(rest as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>;
+    return (
+      <motion.div
+        data-fm-risen="true"
+        data-no-rise="true"
+        initial={false}
+        {...rest}
+      >
+        {children}
+      </motion.div>
+    );
   }
+
+  const shouldShow = once ? hasRevealed || isInView : isInView;
 
   return (
     <motion.div
+      ref={ref}
       data-fm-risen="true"
+      data-no-rise="true"
       initial={{ opacity: 0, y: yOffset }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once, amount: 0.12, margin: "0px 0px -40px 0px" }}
+      animate={shouldShow ? { opacity: 1, y: 0 } : { opacity: 0, y: yOffset }}
       transition={{
         duration,
         delay,
-        ease: [0.22, 1, 0.36, 1],
+        ease: RISE_EASE,
       }}
       {...rest}
     >
@@ -239,6 +323,7 @@ export interface MotionStaggerProps extends HTMLMotionProps<"div"> {
   staggerChildren?: number;
   delayChildren?: number;
   once?: boolean;
+  amount?: "some" | "all" | number;
 }
 
 export function MotionStagger({
@@ -246,20 +331,57 @@ export function MotionStagger({
   staggerChildren = 0.08,
   delayChildren = 0.05,
   once = true,
+  amount = "some",
   ...rest
 }: MotionStaggerProps) {
   const prefersReducedMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once, amount });
+  const [hasRevealed, setHasRevealed] = useState(false);
+
+  useEffect(() => {
+    if (isInView) {
+      setHasRevealed(true);
+      return;
+    }
+
+    const checkVisibility = () => {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+      if ((rect.width > 0 || rect.height > 0) && rect.top < viewportHeight) {
+        setHasRevealed(true);
+      }
+    };
+
+    const rafId = window.requestAnimationFrame(checkVisibility);
+    return () => window.cancelAnimationFrame(rafId);
+  }, [isInView]);
 
   if (prefersReducedMotion) {
-    return <div {...(rest as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>;
+    return (
+      <motion.div
+        data-fm-risen="true"
+        data-no-rise="true"
+        initial={false}
+        {...rest}
+      >
+        {children}
+      </motion.div>
+    );
   }
+
+  const shouldShow = once ? hasRevealed || isInView : isInView;
 
   return (
     <motion.div
+      ref={ref}
       data-fm-risen="true"
+      data-no-rise="true"
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once, amount: 0.1 }}
+      animate={shouldShow ? "visible" : "hidden"}
       variants={{
         hidden: { opacity: 0 },
         visible: {

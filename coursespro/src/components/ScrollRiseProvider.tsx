@@ -1,34 +1,24 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { animate, motion, useReducedMotion, type Variants } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  animate,
+  motion,
+  useInView,
+  useReducedMotion,
+  type Variants,
+} from "framer-motion";
 import { usePathname } from "next/navigation";
 
-const RISE_SELECTOR = [
-  "section",
-  "article",
-  "footer",
-  "header:not([data-no-rise])",
-  '[class*="card"]',
-  '[class*="Card"]',
-  '[class*="rounded-"]',
-  '[class*="grid"] > div',
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "p",
-  "blockquote",
-  "form",
-  "table",
-  "tbody > tr",
-  "ul > li",
-  "ol > li",
-  "dl > div",
-  "figure",
-  ".rise-on-scroll",
-  "[data-rise]",
-].join(", ");
+const RISE_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+// Opt-in only: pages use declarative <MotionRise> / <MotionStagger>.
+// Blanket selectors (section, [class*="rounded-"], h1-h4, p, etc.) caused
+// race conditions on client navigation and collided with Framer Motion / UI elements.
+const RISE_SELECTOR = [".rise-on-scroll", "[data-rise]"].join(", ");
+
+const SKIP_ANCESTOR_SELECTOR =
+  'nav, aside, form, [data-no-rise], [data-fm-risen], [role="dialog"], [aria-modal="true"], header.sticky, header.fixed, .no-rise';
 
 const SKIP_TAGS = new Set([
   "NAV",
@@ -42,6 +32,8 @@ const SKIP_TAGS = new Set([
   "TEXTAREA",
   "SELECT",
   "OPTION",
+  "BUTTON",
+  "FORM",
   "HEAD",
   "META",
   "LINK",
@@ -51,10 +43,9 @@ const SKIP_TAGS = new Set([
 function shouldSkipElement(el: HTMLElement): boolean {
   if (!el || !(el instanceof HTMLElement)) return true;
   if (el.dataset.fmRisen === "true" || el.dataset.fmObserved === "true") return true;
+  if (el.hasAttribute("data-no-rise") || el.hasAttribute("data-fm-risen")) return true;
   if (SKIP_TAGS.has(el.tagName)) return true;
-  if (el.closest("nav, aside, [data-no-rise], [role='dialog'], [aria-modal='true']")) {
-    return true;
-  }
+  if (el.closest(SKIP_ANCESTOR_SELECTOR)) return true;
 
   const computed = window.getComputedStyle(el);
   if (
@@ -69,15 +60,6 @@ function shouldSkipElement(el: HTMLElement): boolean {
   const rect = el.getBoundingClientRect();
   if (rect.width === 0 && rect.height === 0) return true;
 
-  // Avoid double-animating huge layout wrappers that encompass the whole viewport height
-  if (
-    (el.tagName === "DIV" || el.tagName === "SECTION") &&
-    rect.height > window.innerHeight * 2.2 &&
-    el.children.length > 3
-  ) {
-    return true;
-  }
-
   return false;
 }
 
@@ -91,6 +73,16 @@ export function ScrollRiseProvider({ children }: { children: React.ReactNode }) 
 
     let batchQueue: HTMLElement[] = [];
     let batchTimer: number | null = null;
+    // Track elements hidden by this effect so cleanup can restore them if navigation
+    // interrupts before flushBatch or IntersectionObserver fires.
+    const pendingElements = new Set<HTMLElement>();
+
+    const restoreInlineStyles = (el: HTMLElement) => {
+      if (!el.isConnected) return;
+      el.style.opacity = "";
+      el.style.transform = "";
+      el.style.willChange = "";
+    };
 
     const flushBatch = () => {
       const currentBatch = batchQueue;
@@ -98,7 +90,11 @@ export function ScrollRiseProvider({ children }: { children: React.ReactNode }) 
       batchTimer = null;
 
       currentBatch.forEach((el, idx) => {
-        if (el.dataset.fmRisen === "true") return;
+        pendingElements.delete(el);
+        if (!el.isConnected || el.dataset.fmRisen === "true") {
+          restoreInlineStyles(el);
+          return;
+        }
         el.dataset.fmRisen = "true";
 
         const staggerDelay = Math.min(idx * 0.055, 0.35);
@@ -109,11 +105,15 @@ export function ScrollRiseProvider({ children }: { children: React.ReactNode }) 
           {
             duration: 0.65,
             delay: staggerDelay,
-            ease: [0.22, 1, 0.36, 1],
+            ease: RISE_EASE,
           }
-        ).then(() => {
-          el.style.willChange = "";
-        });
+        )
+          .then(() => {
+            restoreInlineStyles(el);
+          })
+          .catch(() => {
+            restoreInlineStyles(el);
+          });
       });
     };
 
@@ -136,14 +136,15 @@ export function ScrollRiseProvider({ children }: { children: React.ReactNode }) 
       },
       {
         root: null,
-        rootMargin: "0px 0px -6% 0px",
-        threshold: 0.08,
+        rootMargin: "0px 0px 0px 0px",
+        threshold: 0,
       }
     );
 
     const registerElements = (scope: ParentNode = document) => {
       const candidates = scope.querySelectorAll<HTMLElement>(RISE_SELECTOR);
-      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
 
       candidates.forEach((el) => {
         if (shouldSkipElement(el)) return;
@@ -151,19 +152,19 @@ export function ScrollRiseProvider({ children }: { children: React.ReactNode }) 
         el.dataset.fmObserved = "true";
         const rect = el.getBoundingClientRect();
 
-        // If already scrolled well above the viewport, leave it visible without re-animating
+        // If already scrolled above the viewport, leave it visible without re-animating
         if (rect.bottom < 0) {
           el.dataset.fmRisen = "true";
           return;
         }
 
-        // Set initial pre-rise state
+        // Set initial pre-rise state and track for safe cleanup
+        pendingElements.add(el);
         el.style.opacity = "0";
         el.style.transform = "translateY(28px)";
         el.style.willChange = "opacity, transform";
 
-        // If currently in viewport on load/route transition, trigger entrance rise right away
-        if (rect.top < viewportHeight * 0.96) {
+        if (rect.top < viewportHeight) {
           enqueueRise(el);
         } else {
           intersectionObserver.observe(el);
@@ -171,12 +172,10 @@ export function ScrollRiseProvider({ children }: { children: React.ReactNode }) 
       });
     };
 
-    // Initial scan on mount / pathname change
     const initialFrame = window.requestAnimationFrame(() => {
       registerElements(rootRef.current || document);
     });
 
-    // Observe dynamic DOM mutations (async query data, tabs, modals, client transitions)
     let mutationFrame: number | null = null;
     const mutationObserver = new MutationObserver((mutations) => {
       let hasAddedNodes = false;
@@ -207,6 +206,13 @@ export function ScrollRiseProvider({ children }: { children: React.ReactNode }) 
       if (mutationFrame !== null) window.cancelAnimationFrame(mutationFrame);
       intersectionObserver.disconnect();
       mutationObserver.disconnect();
+
+      // Restore any elements that were hidden but never animated before cleanup
+      pendingElements.forEach((el) => {
+        delete el.dataset.fmObserved;
+        restoreInlineStyles(el);
+      });
+      pendingElements.clear();
     };
   }, [pathname, prefersReducedMotion]);
 
@@ -224,7 +230,7 @@ export interface MotionRiseProps {
   duration?: number;
   yOffset?: number;
   once?: boolean;
-  amount?: number;
+  amount?: "some" | "all" | number;
 }
 
 export function MotionRise({
@@ -234,25 +240,56 @@ export function MotionRise({
   duration = 0.65,
   yOffset = 28,
   once = true,
-  amount = 0.15,
+  amount = "some",
 }: MotionRiseProps) {
   const prefersReducedMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once, amount });
+  const [hasRevealed, setHasRevealed] = useState(false);
+
+  useEffect(() => {
+    if (isInView) {
+      setHasRevealed(true);
+      return;
+    }
+
+    const checkVisibility = () => {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+      if ((rect.width > 0 || rect.height > 0) && rect.top < viewportHeight) {
+        setHasRevealed(true);
+      }
+    };
+
+    const rafId = window.requestAnimationFrame(checkVisibility);
+    return () => window.cancelAnimationFrame(rafId);
+  }, [isInView]);
 
   if (prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
+    return (
+      <div data-fm-risen="true" data-no-rise="true" className={className}>
+        {children}
+      </div>
+    );
   }
+
+  const shouldShow = once ? hasRevealed || isInView : isInView;
 
   return (
     <motion.div
+      ref={ref}
       data-fm-risen="true"
+      data-no-rise="true"
       className={className}
       initial={{ opacity: 0, y: yOffset }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once, amount }}
+      animate={shouldShow ? { opacity: 1, y: 0 } : { opacity: 0, y: yOffset }}
       transition={{
         duration,
         delay,
-        ease: [0.22, 1, 0.36, 1],
+        ease: RISE_EASE,
       }}
     >
       {children}
@@ -278,7 +315,7 @@ const staggerItemVariants: Variants = {
     y: 0,
     transition: {
       duration: 0.65,
-      ease: [0.22, 1, 0.36, 1],
+      ease: RISE_EASE,
     },
   },
 };
@@ -288,7 +325,7 @@ export interface MotionStaggerProps {
   className?: string;
   staggerDelay?: number;
   once?: boolean;
-  amount?: number;
+  amount?: "some" | "all" | number;
 }
 
 export function MotionStagger({
@@ -296,28 +333,63 @@ export function MotionStagger({
   className,
   staggerDelay = 0.08,
   once = true,
-  amount = 0.12,
+  amount = "some",
 }: MotionStaggerProps) {
   const prefersReducedMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once, amount });
+  const [hasRevealed, setHasRevealed] = useState(false);
+
+  useEffect(() => {
+    if (isInView) {
+      setHasRevealed(true);
+      return;
+    }
+
+    const checkVisibility = () => {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+      if ((rect.width > 0 || rect.height > 0) && rect.top < viewportHeight) {
+        setHasRevealed(true);
+      }
+    };
+
+    const rafId = window.requestAnimationFrame(checkVisibility);
+    return () => window.cancelAnimationFrame(rafId);
+  }, [isInView]);
 
   if (prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
+    return (
+      <div data-fm-risen="true" data-no-rise="true" className={className}>
+        {children}
+      </div>
+    );
   }
+
+  const shouldShow = once ? hasRevealed || isInView : isInView;
 
   return (
     <motion.div
+      ref={ref}
       data-fm-risen="true"
+      data-no-rise="true"
       className={className}
       variants={staggerContainerVariants}
       custom={staggerDelay}
       initial="hidden"
-      whileInView="show"
-      viewport={{ once, amount }}
+      animate={shouldShow ? "show" : "hidden"}
     >
       {React.Children.map(children, (child) => {
         if (!React.isValidElement(child)) return child;
         return (
-          <motion.div data-fm-risen="true" variants={staggerItemVariants}>
+          <motion.div
+            data-fm-risen="true"
+            data-no-rise="true"
+            variants={staggerItemVariants}
+          >
             {child}
           </motion.div>
         );

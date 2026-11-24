@@ -1,19 +1,26 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { animate, motion, useReducedMotion, type HTMLMotionProps } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  animate,
+  motion,
+  useInView,
+  useReducedMotion,
+  type HTMLMotionProps,
+} from "framer-motion";
 import { usePathname } from "next/navigation";
 
-const TARGET_SELECTOR = [
-  ".rise-on-scroll",
-  "[data-rise]",
-].join(", ");
+const TARGET_SELECTOR = [".rise-on-scroll", "[data-rise]"].join(", ");
 
 const SKIP_SELECTOR = [
   "nav",
+  "aside",
+  "form",
   'header[role="banner"]',
   "[data-no-rise]",
-  "[data-no-rise] *",
+  "[data-fm-risen]",
+  "[role='dialog']",
+  "[aria-modal='true']",
   "script",
   "style",
   "svg",
@@ -21,15 +28,17 @@ const SKIP_SELECTOR = [
   "input",
   "textarea",
   "select",
+  "button",
 ].join(", ");
 
 const EASE_OUT_EXPO: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 function shouldSkipElement(el: HTMLElement): boolean {
+  if (!el || !(el instanceof HTMLElement)) return true;
   if (el.dataset.fmRisen === "true" || el.dataset.fmObserved === "true") {
     return true;
   }
-  if (el.matches(SKIP_SELECTOR) || el.closest("nav, [data-no-rise], header[role='banner']")) {
+  if (el.matches(SKIP_SELECTOR) || el.closest(SKIP_SELECTOR)) {
     return true;
   }
   const computed = window.getComputedStyle(el);
@@ -53,7 +62,8 @@ export interface MotionRiseProps extends HTMLMotionProps<"div"> {
   delay?: number;
   yOffset?: number;
   duration?: number;
-  amount?: number;
+  once?: boolean;
+  amount?: "some" | "all" | number;
 }
 
 export function MotionRise({
@@ -61,19 +71,60 @@ export function MotionRise({
   delay = 0,
   yOffset = 28,
   duration = 0.65,
-  amount = 0.15,
+  once = true,
+  amount = "some",
   ...rest
 }: MotionRiseProps) {
   const prefersReducedMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once, amount });
+  const [hasRevealed, setHasRevealed] = useState(false);
+
+  useEffect(() => {
+    if (isInView) {
+      setHasRevealed(true);
+      return;
+    }
+
+    const checkVisibility = () => {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+      if ((rect.width > 0 || rect.height > 0) && rect.top < viewportHeight) {
+        setHasRevealed(true);
+      }
+    };
+
+    const rafId = window.requestAnimationFrame(checkVisibility);
+    return () => window.cancelAnimationFrame(rafId);
+  }, [isInView]);
+
+  if (prefersReducedMotion) {
+    return (
+      <motion.div
+        data-fm-risen="true"
+        data-no-rise="true"
+        initial={false}
+        {...rest}
+      >
+        {children}
+      </motion.div>
+    );
+  }
+
+  const shouldShow = once ? hasRevealed || isInView : isInView;
 
   return (
     <motion.div
+      ref={ref}
       data-fm-risen="true"
-      initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: yOffset }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount }}
+      data-no-rise="true"
+      initial={{ opacity: 0, y: yOffset }}
+      animate={shouldShow ? { opacity: 1, y: 0 } : { opacity: 0, y: yOffset }}
       transition={{
-        duration: prefersReducedMotion ? 0 : duration,
+        duration,
         delay,
         ease: EASE_OUT_EXPO,
       }}
@@ -88,31 +139,73 @@ export interface MotionStaggerProps extends HTMLMotionProps<"div"> {
   children: React.ReactNode;
   staggerChildren?: number;
   delayChildren?: number;
-  amount?: number;
+  once?: boolean;
+  amount?: "some" | "all" | number;
 }
 
 export function MotionStagger({
   children,
   staggerChildren = 0.08,
   delayChildren = 0.05,
-  amount = 0.12,
+  once = true,
+  amount = "some",
   ...rest
 }: MotionStaggerProps) {
   const prefersReducedMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once, amount });
+  const [hasRevealed, setHasRevealed] = useState(false);
+
+  useEffect(() => {
+    if (isInView) {
+      setHasRevealed(true);
+      return;
+    }
+
+    const checkVisibility = () => {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+      if ((rect.width > 0 || rect.height > 0) && rect.top < viewportHeight) {
+        setHasRevealed(true);
+      }
+    };
+
+    const rafId = window.requestAnimationFrame(checkVisibility);
+    return () => window.cancelAnimationFrame(rafId);
+  }, [isInView]);
+
+  if (prefersReducedMotion) {
+    return (
+      <motion.div
+        data-fm-risen="true"
+        data-no-rise="true"
+        initial={false}
+        {...rest}
+      >
+        {children}
+      </motion.div>
+    );
+  }
+
+  const shouldShow = once ? hasRevealed || isInView : isInView;
 
   return (
     <motion.div
+      ref={ref}
       data-fm-risen="true"
+      data-no-rise="true"
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount }}
+      animate={shouldShow ? "visible" : "hidden"}
       variants={{
-        hidden: { opacity: prefersReducedMotion ? 1 : 0 },
+        hidden: { opacity: 0 },
         visible: {
           opacity: 1,
           transition: {
-            staggerChildren: prefersReducedMotion ? 0 : staggerChildren,
-            delayChildren: prefersReducedMotion ? 0 : delayChildren,
+            staggerChildren,
+            delayChildren,
           },
         },
       }}
@@ -135,7 +228,7 @@ export const motionRiseItemVariants = {
   },
 };
 
-export default function ScrollRiseProvider({
+export function ScrollRiseProvider({
   children,
 }: {
   children: React.ReactNode;
@@ -148,19 +241,31 @@ export default function ScrollRiseProvider({
 
     let batchQueue: HTMLElement[] = [];
     let batchTimer: number | null = null;
+    const pendingElements = new Set<HTMLElement>();
+
+    const restoreInlineStyles = (el: HTMLElement) => {
+      if (!el.isConnected) return;
+      el.style.opacity = "";
+      el.style.transform = "";
+      el.style.willChange = "";
+    };
 
     const flushBatch = () => {
-      const currentBatch = batchQueue.slice();
+      const currentBatch = batchQueue;
       batchQueue = [];
       batchTimer = null;
 
       currentBatch.forEach((el, index) => {
-        if (el.dataset.fmRisen === "true") return;
+        pendingElements.delete(el);
+        if (!el.isConnected || el.dataset.fmRisen === "true") {
+          restoreInlineStyles(el);
+          return;
+        }
         el.dataset.fmRisen = "true";
 
         const staggerDelay = Math.min(index * 0.055, 0.35);
 
-        const controls = animate(
+        animate(
           el,
           { opacity: [0, 1], y: [28, 0] },
           {
@@ -168,13 +273,13 @@ export default function ScrollRiseProvider({
             delay: staggerDelay,
             ease: EASE_OUT_EXPO,
           }
-        );
-
-        controls.then(() => {
-          el.style.opacity = "";
-          el.style.transform = "";
-          el.style.willChange = "";
-        });
+        )
+          .then(() => {
+            restoreInlineStyles(el);
+          })
+          .catch(() => {
+            restoreInlineStyles(el);
+          });
       });
     };
 
@@ -198,26 +303,32 @@ export default function ScrollRiseProvider({
       },
       {
         root: null,
-        rootMargin: "0px 0px -48px 0px",
-        threshold: 0.08,
+        rootMargin: "0px 0px 0px 0px",
+        threshold: 0,
       }
     );
 
     const registerElements = (root: ParentNode = document) => {
       const candidates = root.querySelectorAll<HTMLElement>(TARGET_SELECTOR);
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+
       candidates.forEach((el) => {
         if (shouldSkipElement(el)) return;
 
         el.dataset.fmObserved = "true";
+        const rect = el.getBoundingClientRect();
+        if (rect.bottom < 0) {
+          el.dataset.fmRisen = "true";
+          return;
+        }
+
+        pendingElements.add(el);
         el.style.opacity = "0";
         el.style.transform = "translateY(28px)";
         el.style.willChange = "opacity, transform";
 
-        const rect = el.getBoundingClientRect();
-        const inInitialViewport =
-          rect.top < window.innerHeight * 0.94 && rect.bottom > 0;
-
-        if (inInitialViewport) {
+        if (rect.top < viewportHeight) {
           enqueueRise(el);
         } else {
           intersectionObserver.observe(el);
@@ -225,22 +336,27 @@ export default function ScrollRiseProvider({
       });
     };
 
-    const initTimer = setTimeout(() => {
+    const initialFrame = window.requestAnimationFrame(() => {
       registerElements(document);
-    }, 150);
+    });
 
+    let mutationFrame: number | null = null;
     const mutationObserver = new MutationObserver((mutations) => {
+      let hasAddedNodes = false;
       for (const mutation of mutations) {
-        mutation.addedNodes.forEach((node) => {
-          if (node instanceof HTMLElement) {
-            if (node.matches(TARGET_SELECTOR) && !shouldSkipElement(node)) {
-              registerElements(node.parentElement ?? document);
-            } else if (node.querySelectorAll(TARGET_SELECTOR).length > 0) {
-              registerElements(node);
-            }
-          }
-        });
+        if (mutation.addedNodes.length > 0) {
+          hasAddedNodes = true;
+          break;
+        }
       }
+      if (!hasAddedNodes) return;
+
+      if (mutationFrame !== null) {
+        window.cancelAnimationFrame(mutationFrame);
+      }
+      mutationFrame = window.requestAnimationFrame(() => {
+        registerElements(document);
+      });
     });
 
     mutationObserver.observe(document.body, {
@@ -249,14 +365,21 @@ export default function ScrollRiseProvider({
     });
 
     return () => {
-      clearTimeout(initTimer);
-      if (batchTimer !== null) {
-        window.cancelAnimationFrame(batchTimer);
-      }
+      window.cancelAnimationFrame(initialFrame);
+      if (batchTimer !== null) window.cancelAnimationFrame(batchTimer);
+      if (mutationFrame !== null) window.cancelAnimationFrame(mutationFrame);
       intersectionObserver.disconnect();
       mutationObserver.disconnect();
+
+      pendingElements.forEach((el) => {
+        delete el.dataset.fmObserved;
+        restoreInlineStyles(el);
+      });
+      pendingElements.clear();
     };
   }, [pathname, prefersReducedMotion]);
 
   return <>{children}</>;
 }
+
+export default ScrollRiseProvider;

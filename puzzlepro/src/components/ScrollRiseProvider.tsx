@@ -1,29 +1,18 @@
 "use client";
 
-import React, { useEffect, ReactNode } from "react";
-import { animate, motion, useReducedMotion, Variants } from "framer-motion";
+import React, { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  animate,
+  motion,
+  useInView,
+  useReducedMotion,
+  type Variants,
+} from "framer-motion";
 import { usePathname } from "next/navigation";
 
-const TARGET_SELECTOR = [
-  "section",
-  "article",
-  "footer",
-  "[class*='card']",
-  "[class*='rounded-']",
-  "[class*='grid'] > div",
-  ".frosted-panel",
-  ".liquid-glass",
-  "h1",
-  "h2",
-  "h3",
-  "p",
-  "blockquote",
-  "form",
-  "table",
-  "tbody > tr",
-  "ul > li",
-  ".rise-on-scroll",
-].join(", ");
+const RISE_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const TARGET_SELECTOR = [".rise-on-scroll", "[data-rise]"].join(", ");
 
 const SKIP_TAGS = new Set([
   "NAV",
@@ -36,22 +25,28 @@ const SKIP_TAGS = new Set([
   "INPUT",
   "TEXTAREA",
   "SELECT",
+  "OPTION",
+  "BUTTON",
+  "FORM",
   "HEAD",
   "META",
   "LINK",
+  "NOSCRIPT",
 ]);
 
 function shouldSkipElement(el: HTMLElement): boolean {
   if (!el || !(el instanceof HTMLElement)) return true;
   if (el.dataset.fmRisen === "true" || el.dataset.fmObserved === "true") return true;
+  if (el.hasAttribute("data-no-rise") || el.hasAttribute("data-fm-risen")) return true;
   if (SKIP_TAGS.has(el.tagName)) return true;
   if (
     el.closest(
-      "nav, aside, [data-no-rise], .blocklyWorkspace, [class*='blockly'], svg, canvas"
+      'nav, aside, form, [data-no-rise], [data-fm-risen], [role="dialog"], [aria-modal="true"], .blocklyWorkspace, [class*="blockly"], svg, canvas'
     )
   ) {
     return true;
   }
+
   const className = typeof el.className === "string" ? el.className : "";
   if (
     className.includes("blockly") ||
@@ -62,21 +57,17 @@ function shouldSkipElement(el: HTMLElement): boolean {
   }
 
   const computed = window.getComputedStyle(el);
-  if (computed.position === "fixed" || computed.position === "sticky") {
-    return true;
-  }
-  if (computed.display === "none" || computed.visibility === "hidden") {
-    return true;
-  }
-
-  // Skip full-viewport background wrappers so they don't flash white/blank
-  const rect = el.getBoundingClientRect();
   if (
-    rect.width >= window.innerWidth * 0.98 &&
-    rect.height >= window.innerHeight * 0.92
+    computed.position === "fixed" ||
+    computed.position === "sticky" ||
+    computed.display === "none" ||
+    computed.visibility === "hidden"
   ) {
     return true;
   }
+
+  const rect = el.getBoundingClientRect();
+  if (rect.width === 0 && rect.height === 0) return true;
 
   return false;
 }
@@ -88,35 +79,55 @@ export function ScrollRiseProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (prefersReducedMotion || typeof window === "undefined") return;
 
-    let batchCount = 0;
-    let batchResetTimer: ReturnType<typeof setTimeout> | null = null;
+    let batchQueue: HTMLElement[] = [];
+    let batchTimer: number | null = null;
+    const pendingElements = new Set<HTMLElement>();
 
-    const triggerRise = (el: HTMLElement) => {
-      if (el.dataset.fmRisen === "true") return;
-      el.dataset.fmRisen = "true";
+    const restoreInlineStyles = (el: HTMLElement) => {
+      if (!el.isConnected) return;
+      el.style.opacity = "";
+      el.style.transform = "";
+      el.style.willChange = "";
+    };
 
-      const staggerDelay = Math.min(batchCount * 0.055, 0.38);
-      batchCount += 1;
+    const flushBatch = () => {
+      const currentBatch = batchQueue;
+      batchQueue = [];
+      batchTimer = null;
 
-      if (batchResetTimer) clearTimeout(batchResetTimer);
-      batchResetTimer = setTimeout(() => {
-        batchCount = 0;
-      }, 120);
-
-      const controls = animate(
-        el,
-        { opacity: [0, 1], y: [28, 0] },
-        {
-          duration: 0.65,
-          delay: staggerDelay,
-          ease: [0.22, 1, 0.36, 1],
+      currentBatch.forEach((el, idx) => {
+        pendingElements.delete(el);
+        if (!el.isConnected || el.dataset.fmRisen === "true") {
+          restoreInlineStyles(el);
+          return;
         }
-      );
+        el.dataset.fmRisen = "true";
 
-      controls.then(() => {
-        // Clear inline transform after completion so CSS hover transforms remain responsive
-        el.style.transform = "";
+        const staggerDelay = Math.min(idx * 0.055, 0.35);
+
+        animate(
+          el,
+          { opacity: [0, 1], y: [28, 0] },
+          {
+            duration: 0.65,
+            delay: staggerDelay,
+            ease: RISE_EASE,
+          }
+        )
+          .then(() => {
+            restoreInlineStyles(el);
+          })
+          .catch(() => {
+            restoreInlineStyles(el);
+          });
       });
+    };
+
+    const enqueueRise = (el: HTMLElement) => {
+      batchQueue.push(el);
+      if (batchTimer === null) {
+        batchTimer = window.requestAnimationFrame(flushBatch);
+      }
     };
 
     const intersectionObserver = new IntersectionObserver(
@@ -125,38 +136,50 @@ export function ScrollRiseProvider({ children }: { children: ReactNode }) {
           if (entry.isIntersecting) {
             const target = entry.target as HTMLElement;
             intersectionObserver.unobserve(target);
-            triggerRise(target);
+            enqueueRise(target);
           }
         });
       },
       {
         root: null,
-        rootMargin: "0px 0px -6% 0px",
-        threshold: 0.08,
+        rootMargin: "0px 0px 0px 0px",
+        threshold: 0,
       }
     );
 
     const registerElements = (root: ParentNode = document) => {
       const candidates = root.querySelectorAll<HTMLElement>(TARGET_SELECTOR);
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+
       candidates.forEach((el) => {
         if (shouldSkipElement(el)) return;
+
         el.dataset.fmObserved = "true";
-
         const rect = el.getBoundingClientRect();
-        const inViewport =
-          rect.top < window.innerHeight * 0.96 && rect.bottom > 0;
+        if (rect.bottom < 0) {
+          el.dataset.fmRisen = "true";
+          return;
+        }
 
-        if (inViewport) {
-          triggerRise(el);
+        pendingElements.add(el);
+        el.style.opacity = "0";
+        el.style.transform = "translateY(28px)";
+        el.style.willChange = "opacity, transform";
+
+        if (rect.top < viewportHeight) {
+          enqueueRise(el);
         } else {
-          el.style.opacity = "0";
           intersectionObserver.observe(el);
         }
       });
     };
 
-    registerElements(document);
+    const initialFrame = window.requestAnimationFrame(() => {
+      registerElements(document);
+    });
 
+    let mutationFrame: number | null = null;
     const mutationObserver = new MutationObserver((mutations) => {
       let hasNewNodes = false;
       for (const mutation of mutations) {
@@ -165,9 +188,14 @@ export function ScrollRiseProvider({ children }: { children: ReactNode }) {
           break;
         }
       }
-      if (hasNewNodes) {
-        registerElements(document);
+      if (!hasNewNodes) return;
+
+      if (mutationFrame !== null) {
+        window.cancelAnimationFrame(mutationFrame);
       }
+      mutationFrame = window.requestAnimationFrame(() => {
+        registerElements(document);
+      });
     });
 
     mutationObserver.observe(document.body, {
@@ -175,32 +203,18 @@ export function ScrollRiseProvider({ children }: { children: ReactNode }) {
       subtree: true,
     });
 
-    // Also listen for scroll events inside nested scrollable containers in PuzzlePro
-    const handleScrollCapture = () => {
-      const unobserved = document.querySelectorAll<HTMLElement>(
-        "[data-fm-observed='true']:not([data-fm-risen='true'])"
-      );
-      unobserved.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.95 && rect.bottom > 0) {
-          intersectionObserver.unobserve(el);
-          triggerRise(el);
-        }
-      });
-    };
-
-    window.addEventListener("scroll", handleScrollCapture, {
-      capture: true,
-      passive: true,
-    });
-
     return () => {
-      if (batchResetTimer) clearTimeout(batchResetTimer);
+      window.cancelAnimationFrame(initialFrame);
+      if (batchTimer !== null) window.cancelAnimationFrame(batchTimer);
+      if (mutationFrame !== null) window.cancelAnimationFrame(mutationFrame);
       intersectionObserver.disconnect();
       mutationObserver.disconnect();
-      window.removeEventListener("scroll", handleScrollCapture, {
-        capture: true,
+
+      pendingElements.forEach((el) => {
+        delete el.dataset.fmObserved;
+        restoreInlineStyles(el);
       });
+      pendingElements.clear();
     };
   }, [pathname, prefersReducedMotion]);
 
@@ -214,6 +228,7 @@ export interface MotionRiseProps {
   duration?: number;
   yOffset?: number;
   once?: boolean;
+  amount?: "some" | "all" | number;
 }
 
 export function MotionRise({
@@ -223,24 +238,56 @@ export function MotionRise({
   duration = 0.65,
   yOffset = 28,
   once = true,
+  amount = "some",
 }: MotionRiseProps) {
   const prefersReducedMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once, amount });
+  const [hasRevealed, setHasRevealed] = useState(false);
+
+  useEffect(() => {
+    if (isInView) {
+      setHasRevealed(true);
+      return;
+    }
+
+    const checkVisibility = () => {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+      if ((rect.width > 0 || rect.height > 0) && rect.top < viewportHeight) {
+        setHasRevealed(true);
+      }
+    };
+
+    const rafId = window.requestAnimationFrame(checkVisibility);
+    return () => window.cancelAnimationFrame(rafId);
+  }, [isInView]);
 
   if (prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
+    return (
+      <div data-fm-risen="true" data-no-rise="true" className={className}>
+        {children}
+      </div>
+    );
   }
+
+  const shouldShow = once ? hasRevealed || isInView : isInView;
 
   return (
     <motion.div
+      ref={ref}
       data-fm-risen="true"
+      data-no-rise="true"
       className={className}
       initial={{ opacity: 0, y: yOffset }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once, amount: 0.12 }}
+      animate={shouldShow ? { opacity: 1, y: 0 } : { opacity: 0, y: yOffset }}
       transition={{
         duration,
         delay,
-        ease: [0.22, 1, 0.36, 1],
+        ease: RISE_EASE,
       }}
     >
       {children}
@@ -254,6 +301,7 @@ export interface MotionStaggerProps {
   staggerChildren?: number;
   delayChildren?: number;
   once?: boolean;
+  amount?: "some" | "all" | number;
 }
 
 const staggerContainerVariants: Variants = {
@@ -274,7 +322,7 @@ export const motionRiseItemVariants: Variants = {
     y: 0,
     transition: {
       duration: 0.65,
-      ease: [0.22, 1, 0.36, 1],
+      ease: RISE_EASE,
     },
   },
 };
@@ -285,24 +333,58 @@ export function MotionStagger({
   staggerChildren = 0.08,
   delayChildren = 0.04,
   once = true,
+  amount = "some",
 }: MotionStaggerProps) {
   const prefersReducedMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once, amount });
+  const [hasRevealed, setHasRevealed] = useState(false);
+
+  useEffect(() => {
+    if (isInView) {
+      setHasRevealed(true);
+      return;
+    }
+
+    const checkVisibility = () => {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+      if ((rect.width > 0 || rect.height > 0) && rect.top < viewportHeight) {
+        setHasRevealed(true);
+      }
+    };
+
+    const rafId = window.requestAnimationFrame(checkVisibility);
+    return () => window.cancelAnimationFrame(rafId);
+  }, [isInView]);
 
   if (prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
+    return (
+      <div data-fm-risen="true" data-no-rise="true" className={className}>
+        {children}
+      </div>
+    );
   }
+
+  const shouldShow = once ? hasRevealed || isInView : isInView;
 
   return (
     <motion.div
+      ref={ref}
       data-fm-risen="true"
+      data-no-rise="true"
       className={className}
       variants={staggerContainerVariants}
       custom={{ staggerChildren, delayChildren }}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once, amount: 0.1 }}
+      animate={shouldShow ? "visible" : "hidden"}
     >
       {children}
     </motion.div>
   );
 }
+
+export default ScrollRiseProvider;
