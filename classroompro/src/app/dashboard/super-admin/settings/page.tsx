@@ -95,11 +95,11 @@ export default function PlatformSettings() {
                        <div className="grid md:grid-cols-2 gap-6">
                           <div className="space-y-2">
                              <Label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Platform Name</Label>
-                             <Input defaultValue="ClassroomPRO LMS" className="bg-[#146ef5] border-gray-100 text-white h-11" />
+                             <Input defaultValue="ClassroomPRO LMS" className="bg-gray-50 border-gray-200 text-gray-900 h-11" />
                           </div>
                           <div className="space-y-2">
                              <Label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Support Email</Label>
-                             <Input defaultValue="support@classroompro.com" className="bg-[#146ef5] border-gray-100 text-white h-11" />
+                             <Input defaultValue="support@classroompro.com" className="bg-gray-50 border-gray-200 text-gray-900 h-11" />
                           </div>
                        </div>
                     </div>
@@ -207,12 +207,12 @@ export default function PlatformSettings() {
                     <div className="space-y-6">
                        <div className="space-y-2">
                           <Label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Default Meta Title</Label>
-                          <Input defaultValue="ClassroomPRO | Digital Class Notes & Learning Platform" className="bg-[#146ef5] border-gray-100 text-white h-11" />
+                          <Input defaultValue="ClassroomPRO | Digital Class Notes & Learning Platform" className="bg-gray-50 border-gray-200 text-gray-900 h-11" />
                        </div>
                        <div className="space-y-2">
                           <Label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Default Meta Description</Label>
                           <textarea 
-                             className="w-full bg-[#146ef5] border border-gray-100 rounded-xl p-4 text-sm text-white focus:outline-none focus:border-green h-32 resize-none"
+                             className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm text-gray-900 focus:outline-none focus:border-emerald-500 h-32 resize-none"
                              defaultValue="Access high-quality class notes, interactive quizzes, and study flashcards for all secondary school levels in Nigeria."
                           />
                        </div>

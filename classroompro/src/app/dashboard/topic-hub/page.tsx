@@ -181,11 +181,11 @@ export default function TopicHubPage() {
                <h3 className="text-lg font-bold text-gray-900 font-display mb-4">Exam Connections</h3>
                <p className="text-xs text-gray-500 mb-4">This topic frequently appears in these past exams:</p>
                <div className="space-y-3">
-                  <div className="p-3 rounded-xl bg-[#146ef5]/40 border border-white/5 hover:border-green/30 transition-colors cursor-pointer group">
+                  <div className="p-3 rounded-xl bg-gray-50 border border-gray-100 hover:border-emerald-500/30 transition-colors cursor-pointer group">
                      <div className="text-[8px] text-emerald-600 font-bold uppercase tracking-widest mb-1">BECE 2023</div>
                      <div className="text-sm text-gray-900 font-bold group-hover:text-emerald-600 transition-colors">Section B: Biology Q4</div>
                   </div>
-                  <div className="p-3 rounded-xl bg-[#146ef5]/40 border border-white/5 hover:border-green/30 transition-colors cursor-pointer group">
+                  <div className="p-3 rounded-xl bg-gray-50 border border-gray-100 hover:border-emerald-500/30 transition-colors cursor-pointer group">
                      <div className="text-[8px] text-emerald-600 font-bold uppercase tracking-widest mb-1">Lekki British School</div>
                      <div className="text-sm text-gray-900 font-bold group-hover:text-emerald-600 transition-colors">2023 1st Term Mock</div>
                   </div>

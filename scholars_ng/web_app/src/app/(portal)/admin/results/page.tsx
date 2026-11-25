@@ -1,12 +1,27 @@
 'use client';
 
 import React from 'react';
-import { ChartBarIcon, DocumentTextIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
-import ResultsPRODashboard from '@/components/Dashboard/ResultsPRODashboard';
+import {
+  ChartBarIcon,
+  DocumentTextIcon,
+  CheckBadgeIcon,
+  CameraIcon,
+  ShieldExclamationIcon,
+  SparklesIcon,
+  PlayCircleIcon,
+} from '@heroicons/react/24/outline';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
-import { CompactGradebook, ResultCheckerView } from '@resultspro/modules';
+import {
+  CompactGradebook,
+  ResultCheckerView,
+  MarksheetScannerView,
+  ResultAuditView,
+  TeacherCommentStudio,
+  PerformanceIntelligenceView,
+  WebinarWorkflowDemo,
+} from '@resultspro/modules';
 import { useAppHost } from '@/components/AppHostContext';
-import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
+import { MotionRise } from '@/components/ScrollRiseProvider';
 
 function AdminBroadsheetPreview() {
   const { tenant } = useAppHost();
@@ -77,10 +92,34 @@ function AdminBroadsheetPreview() {
 export default function AdminResultsHub() {
   const tabs: AppSubtab[] = [
     {
-      id: 'analytics',
-      label: 'Performance Analytics',
+      id: 'webinar-demo',
+      label: '★ 9-Step Webinar Live Demo',
+      icon: PlayCircleIcon,
+      component: WebinarWorkflowDemo,
+    },
+    {
+      id: 'intelligence',
+      label: 'AI Performance & Results Officer',
       icon: ChartBarIcon,
-      component: ResultsPRODashboard,
+      component: PerformanceIntelligenceView,
+    },
+    {
+      id: 'marksheet-ocr',
+      label: 'AI Marksheet OCR',
+      icon: CameraIcon,
+      component: MarksheetScannerView,
+    },
+    {
+      id: 'audit',
+      label: 'AI Result Auditor',
+      icon: ShieldExclamationIcon,
+      component: ResultAuditView,
+    },
+    {
+      id: 'comments',
+      label: 'AI Teacher Comments',
+      icon: SparklesIcon,
+      component: TeacherCommentStudio,
     },
     {
       id: 'broadsheet',
@@ -98,12 +137,12 @@ export default function AdminResultsHub() {
 
   return (
     <SpecialistAppContainer
-      appTitle="Results & Examination Broadsheets"
-      appSubtitle="School-wide GPA tracking, Nigerian curriculum broadsheet management, and scratch-card verification."
+      appTitle="AI Assessment & Result Intelligence Engine"
+      appSubtitle="Multi-campus official score processing from CampusPRO, handwritten marksheet OCR, pre-publication AI auditing, report card narratives, and the AI Results-Processing Officer."
       appBadge="ResultsPRO"
-      accentColor="#8b5cf6"
+      accentColor="#0D1060"
       tabs={tabs}
-      defaultTabId="analytics"
+      defaultTabId="intelligence"
     />
   );
 }

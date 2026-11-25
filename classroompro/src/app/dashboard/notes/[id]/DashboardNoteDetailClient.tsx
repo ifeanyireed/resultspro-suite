@@ -151,7 +151,7 @@ export default function DashboardNoteDetailClient() {
             <p className="text-xs text-gray-500 mb-4 relative z-10">Test your understanding of this topic with a quick quiz.</p>
             {note.quizzes?.[0] ? (
               <Link href={`/dashboard/quizzes/${note.quizzes[0].id}`}>
-                 <Button className="w-full bg-blue hover:bg-blue/90 text-gray-900 font-bold h-11 relative z-10 shadow-lg shadow-blue/20">
+                 <Button className="w-full bg-blue hover:bg-blue/90 text-white font-bold h-11 relative z-10 shadow-lg shadow-blue/20">
                     Start Topic Quiz
                  </Button>
               </Link>
@@ -170,7 +170,7 @@ export default function DashboardNoteDetailClient() {
             <p className="text-xs text-gray-500 mb-4 relative z-10">Use flashcards to memorize key terms and definitions.</p>
             {note.flashcards?.[0] ? (
               <Link href={`/dashboard/flashcards/${note.flashcards[0].id}`}>
-                 <Button className="w-full bg-amber hover:bg-amber/90 text-gray-900 font-bold h-11 relative z-10 shadow-lg shadow-amber/20">
+                 <Button className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold h-11 relative z-10 shadow-lg shadow-amber-500/20">
                     Study Flashcards
                  </Button>
               </Link>
@@ -183,7 +183,7 @@ export default function DashboardNoteDetailClient() {
 
           <div className="p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
             <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-widest text-[10px]">Topic Progress</h4>
-            <div className="w-full h-2 bg-[#146ef5] rounded-full overflow-hidden mb-2">
+            <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-2">
                <div className="w-1/3 h-full bg-emerald-600" />
             </div>
             <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">33% Mastered</p>

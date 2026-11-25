@@ -61,24 +61,24 @@ export default function ParentProgress() {
   const selectedChild = children.find(c => c.id === selectedChildId);
 
   return (
-    <main className="min-h-screen bg-navy pb-24">
+    <main className="min-h-screen bg-gray-50 pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
-            <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
+            <h1 className="text-3xl md:text-5xl font-display font-black text-gray-900 mb-2">
               Progress <span className="text-blue">Analytics</span>
             </h1>
-            <p className="text-gray-400">Deep-dive into subject mastery and learning trends.</p>
+            <p className="text-gray-600">Deep-dive into subject mastery and learning trends.</p>
           </div>
           
-          <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10">
+          <div className="flex bg-white p-1 rounded-2xl border border-gray-200 shadow-sm">
             {children.map((child) => (
               <button
                 key={child.id}
                 onClick={() => setSelectedChildId(child.id)}
                 className={`px-6 py-2 rounded-xl text-sm font-bold transition-all ${
-                  selectedChildId === child.id ? 'bg-blue text-white shadow-lg' : 'text-gray-500 hover:text-white'
+                  selectedChildId === child.id ? 'bg-navy text-white shadow-sm' : 'text-gray-500 hover:text-gray-900'
                 }`}
               >
                 {child.name.split(' ')[0]}
@@ -90,14 +90,14 @@ export default function ParentProgress() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 opacity-50">
             <Loader2 className="w-12 h-12 text-blue animate-spin mb-4" />
-            <p className="text-white font-bold">Loading dashboard...</p>
+            <p className="text-gray-900 font-bold">Loading dashboard...</p>
           </div>
         ) : children.length === 0 ? (
-          <div className="mt-12 py-20 text-center rounded-[40px] border-2 border-dashed border-white/5">
-             <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center mx-auto mb-6">
-                <User className="w-8 h-8 text-gray-500" />
+          <div className="mt-12 py-20 text-center rounded-[40px] bg-white border-2 border-dashed border-gray-200">
+             <div className="w-16 h-16 rounded-3xl bg-gray-100 flex items-center justify-center mx-auto mb-6">
+                <User className="w-8 h-8 text-gray-400" />
              </div>
-             <h3 className="text-xl font-bold text-white mb-2">No children linked</h3>
+             <h3 className="text-xl font-bold text-gray-900 mb-2">No children linked</h3>
              <p className="text-sm text-gray-500">Link a child account to see their progress analytics.</p>
           </div>
         ) : (
@@ -107,20 +107,20 @@ export default function ParentProgress() {
               {/* Subject Performance Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  {progressData?.subject_mastery.map((data: any, i: number) => (
-                   <div key={i} className="p-8 rounded-[40px] bg-white/5 border border-white/10 hover:bg-white/[0.08] transition-all relative overflow-hidden group">
+                   <div key={i} className="p-8 rounded-[40px] bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all relative overflow-hidden group">
                       <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-500">
-                         <Brain className="w-24 h-24" />
+                         <Brain className="w-24 h-24 text-navy" />
                       </div>
                       <div className="flex justify-between items-start mb-6">
                          <div>
-                            <h3 className="text-xl font-bold text-white mb-1">{data.name}</h3>
-                            <div className={`text-xs font-bold flex items-center gap-1 ${data.trend.startsWith('+') ? 'text-green' : 'text-red-400'}`}>
+                            <h3 className="text-xl font-bold text-gray-900 mb-1">{data.name}</h3>
+                            <div className={`text-xs font-bold flex items-center gap-1 ${data.trend.startsWith('+') ? 'text-blue' : 'text-red-500'}`}>
                                <ArrowUpRight className="w-3 h-3" /> {data.trend} this month
                             </div>
                          </div>
-                         <div className="text-3xl font-display font-black text-white">{data.score}%</div>
+                         <div className="text-3xl font-display font-black text-gray-900">{data.score}%</div>
                       </div>
-                      <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+                      <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                          <div 
                            className={`h-full ${data.color || 'bg-blue'} rounded-full transition-all duration-1000`} 
                            style={{ width: `${data.score}%` }} 
@@ -131,27 +131,27 @@ export default function ParentProgress() {
               </div>
 
               {/* Learning Velocity Chart Placeholder */}
-              <section className="p-10 rounded-[40px] bg-white/[0.02] border border-white/5">
+              <section className="p-10 rounded-[40px] bg-white border border-gray-100 shadow-sm">
                  <div className="flex items-center justify-between mb-10">
-                    <h2 className="text-2xl font-display font-bold text-white flex items-center gap-3">
-                       <TrendingUp className="w-6 h-6 text-green" /> Learning Velocity
+                    <h2 className="text-2xl font-display font-bold text-gray-900 flex items-center gap-3">
+                       <TrendingUp className="w-6 h-6 text-blue" /> Learning Velocity
                     </h2>
                     <div className="flex gap-2">
                        {['1W', '1M', '3M', '1Y'].map(t => (
-                          <button key={t} className={`px-3 py-1 rounded-lg text-[10px] font-black ${t === '1M' ? 'bg-white/10 text-white' : 'text-gray-600'}`}>{t}</button>
+                          <button key={t} className={`px-3 py-1 rounded-lg text-[10px] font-black ${t === '1M' ? 'bg-navy text-white' : 'text-gray-500 hover:bg-gray-100'}`}>{t}</button>
                        ))}
                     </div>
                  </div>
                  <div className="h-64 flex items-end justify-between gap-2 px-4">
                     {[30, 45, 35, 60, 55, 80, 75, 90, 85, 95, 88, 100].map((h, i) => (
-                       <div key={i} className="flex-1 bg-gradient-to-t from-blue/20 to-blue/60 rounded-t-xl hover:to-blue transition-all cursor-help relative group" style={{ height: `${h}%` }}>
-                          <div className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-white text-navy text-[10px] font-black rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                       <div key={i} className="flex-1 bg-gradient-to-t from-blue/30 to-blue rounded-t-xl hover:to-navy transition-all cursor-help relative group" style={{ height: `${h}%` }}>
+                          <div className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-navy text-white text-[10px] font-black rounded opacity-0 group-hover:opacity-100 transition-opacity">
                              {h}%
                           </div>
                        </div>
                     ))}
                  </div>
-                 <div className="flex justify-between mt-4 px-4 text-[10px] font-bold text-gray-600 uppercase tracking-widest">
+                 <div className="flex justify-between mt-4 px-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
                     <span>Jan</span>
                     <span>Dec</span>
                  </div>
@@ -161,20 +161,20 @@ export default function ParentProgress() {
             {/* Sidebar (Right) */}
             <MotionRise delay={0.1} className="space-y-8">
                {/* Target Goals */}
-               <section className="p-8 rounded-[40px] bg-white/5 border border-white/10">
-                  <div className="w-12 h-12 rounded-2xl bg-amber/10 text-amber flex items-center justify-center mb-6">
+               <section className="p-8 rounded-[40px] bg-white border border-gray-100 shadow-sm">
+                  <div className="w-12 h-12 rounded-2xl bg-green/20 text-navy flex items-center justify-center mb-6">
                      <Target className="w-6 h-6" />
                   </div>
-                  <h3 className="text-xl font-display font-bold text-white mb-4">Current Goals</h3>
+                  <h3 className="text-xl font-display font-bold text-gray-900 mb-4">Current Goals</h3>
                   <div className="space-y-6">
                      {progressData?.goals.map((goal: any, i: number) => (
                        <div key={i} className="space-y-2">
                           <div className="flex justify-between text-xs font-bold">
-                             <span className="text-white">{goal.title}</span>
+                             <span className="text-gray-900">{goal.title}</span>
                              <span className="text-gray-500">{goal.progress}%</span>
                           </div>
-                          <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                             <div className="h-full bg-amber rounded-full" style={{ width: `${goal.progress}%` }} />
+                          <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                             <div className="h-full bg-green rounded-full" style={{ width: `${goal.progress}%` }} />
                           </div>
                        </div>
                      ))}
@@ -182,22 +182,22 @@ export default function ParentProgress() {
                </section>
 
                {/* Activity Snapshot */}
-               <section className="p-8 rounded-[40px] bg-white/5 border border-white/10">
-                  <h3 className="text-xl font-display font-bold text-white mb-6">Recent Activity</h3>
+               <section className="p-8 rounded-[40px] bg-white border border-gray-100 shadow-sm">
+                  <h3 className="text-xl font-display font-bold text-gray-900 mb-6">Recent Activity</h3>
                   <div className="space-y-6">
                      {progressData?.recent_activity.map((act: any, i: number) => (
                        <div key={i} className="flex gap-4">
-                          <div className={`w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 ${act.color}`}>
+                          <div className={`w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0 text-blue`}>
                              {act.type === 'quiz' ? <Brain className="w-5 h-5" /> : act.type === 'class' ? <Clock className="w-5 h-5" /> : <Target className="w-5 h-5" />}
                           </div>
                           <div>
-                             <div className="text-sm text-white font-bold">{act.msg}</div>
+                             <div className="text-sm text-gray-900 font-bold">{act.msg}</div>
                              <div className="text-[10px] text-gray-500 uppercase font-black">{act.time}</div>
                           </div>
                        </div>
                      ))}
                   </div>
-                  <button className="w-full mt-8 py-4 rounded-2xl bg-white/5 border border-white/10 text-gray-400 font-bold text-xs uppercase tracking-widest hover:text-white transition-all">
+                  <button className="w-full mt-8 py-4 rounded-2xl bg-gray-50 border border-gray-200 text-gray-700 font-bold text-xs uppercase tracking-widest hover:bg-gray-100 transition-all">
                      Full Activity Log
                   </button>
                </section>

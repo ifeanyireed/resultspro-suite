@@ -81,7 +81,7 @@ function VerifyEmailContent() {
           </div>
           <Button
             onClick={() => router.push("/login")}
-            className="w-full bg-green-600 text-white font-bold"
+            className="w-full bg-green hover:bg-[#E5A800] text-navy font-bold"
           >
             Go to Login
           </Button>
@@ -121,7 +121,7 @@ function VerifyEmailContent() {
 
         <Button
           type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-12 text-lg"
+          className="w-full bg-green hover:bg-[#E5A800] text-navy font-bold h-12 text-lg"
           disabled={isLoading || otp.length !== 6}
         >
           {isLoading ? "Verifying..." : "Verify email"}

@@ -35,14 +35,22 @@ export default function HelpPage() {
       
       <main className="p-8 max-w-5xl mx-auto space-y-12">
         {/* Hero Search */}
-        <MotionRise className="text-center space-y-6 py-8">
-           <h2 className="text-4xl font-bold text-gray-900 font-display">How can we help you?</h2>
-           <div className="relative max-w-2xl mx-auto">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-              <Input 
-                 placeholder="Search for articles, guides or tutorials..." 
-                 className="pl-12 h-14 bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900 rounded-2xl shadow-2xl focus-visible:ring-green/50"
-              />
+        <MotionRise className="rounded-[40px] p-8 md:p-12 bg-[#0D1060] text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+           <div aria-hidden className="absolute inset-0 z-0 opacity-20">
+              <img src="/photo11.jpeg" alt="" className="w-full h-full object-cover" />
+           </div>
+           <div className="relative z-10 flex-1 space-y-6 text-left">
+              <h2 className="text-4xl font-bold text-white font-display">How can we help you?</h2>
+              <div className="relative max-w-xl">
+                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                 <Input 
+                    placeholder="Search for articles, guides or tutorials..." 
+                    className="pl-12 h-14 bg-white shadow-sm border border-gray-100 text-gray-900 rounded-2xl focus-visible:ring-green/50"
+                 />
+              </div>
+           </div>
+           <div className="relative z-10 w-40 h-40 shrink-0 hidden md:flex items-center justify-center">
+              <img src="/monster_meditating.png" alt="Support Mascot" className="w-full h-full object-contain" />
            </div>
         </MotionRise>
 
@@ -100,7 +108,7 @@ export default function HelpPage() {
         </MotionRise>
 
         {/* Contact Support Footer */}
-        <MotionRise className="p-10 rounded-[40px] bg-[#146ef5] border border-gray-100 text-center space-y-6 relative overflow-hidden">
+        <MotionRise className="p-10 rounded-[40px] bg-white shadow-sm border border-gray-100 text-center space-y-6 relative overflow-hidden">
            <div className="relative z-10">
               <h3 className="text-2xl font-bold text-gray-900">Still have questions?</h3>
               <p className="text-gray-500 text-sm max-w-xl mx-auto">

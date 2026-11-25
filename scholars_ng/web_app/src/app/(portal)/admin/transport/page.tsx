@@ -1,8 +1,4 @@
-'use client';
-
-import React from 'react';
-import TransportManager from '../campus-os/TransportManager';
-
-export default function TransportDashboard() {
-  return <TransportManager />;
+import { redirect } from 'next/navigation';
+export default function RedirectToCampusOS() {
+  redirect('/admin/campus-os/transport');
 }

@@ -136,7 +136,7 @@ export default function ChildProgressReport() {
                               className={`w-full ${item.color} rounded-t-xl transition-all duration-1000 opacity-80 hover:opacity-100 relative group`}
                               style={{ height: `${item.score}%` }}
                           >
-                             <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-white text-[10px] font-black px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                             <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-navy text-white text-[10px] font-black px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                                 {item.score}%
                              </div>
                              <div className="w-full h-full bg-gradient-to-t from-black/20 to-transparent" />

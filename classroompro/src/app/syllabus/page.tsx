@@ -112,41 +112,59 @@ export default function PublicSyllabusPage() {
   };
 
   return (
-    <div className="min-h-screen bg-navy flex flex-col">
+    <main className="min-h-screen bg-light flex flex-col" style={{ background: "var(--color-nets-light)" }}>
       <Navbar />
 
-      <main className="flex-1 pt-32 pb-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <MotionRise className="text-center mb-12">
+      {/* Navy Hero Banner */}
+      <section
+        className="bg-navy text-white relative overflow-hidden"
+        style={{ background: "var(--color-nets-navy-dark)", paddingTop: "10rem", paddingBottom: "5rem", marginTop: "-72px" }}
+      >
+        <div aria-hidden className="absolute inset-0 z-0 opacity-20">
+          <img src="/photo11.jpeg" alt="" className="w-full h-full object-cover" />
+        </div>
+        <div
+          aria-hidden
+          className="absolute inset-0 z-0"
+          style={{
+            background: "linear-gradient(105deg, rgba(13,16,96,0.96) 0%, rgba(13,16,96,0.82) 55%, rgba(13,16,96,0.65) 100%)",
+          }}
+        />
+        <div className="container-nets relative z-10 text-center">
+          <MotionRise className="max-w-3xl mx-auto">
+            <div className="overline-dark justify-center" style={{ marginBottom: "1rem" }}>Term-by-Term Curriculum</div>
             <h1 className="text-4xl md:text-6xl font-bold font-display text-white mb-4 tracking-tight">
               Study <span className="text-green">Syllabus</span>
             </h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+            <p className="text-white/75 max-w-2xl mx-auto text-lg">
               A structured 12-week learning path designed for academic mastery.
             </p>
           </MotionRise>
+        </div>
+      </section>
 
+      <section className="flex-1 py-16 px-4 bg-light">
+        <div className="max-w-6xl mx-auto">
           {/* Filters */}
-          <MotionRise delay={0.08} className="space-y-4 mb-16 bg-white/5 p-6 rounded-[40px] border border-white/10 backdrop-blur-2xl shadow-2xl">
+          <MotionRise delay={0.08} className="space-y-4 mb-16 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
               <Input 
                 placeholder="Search subjects or topics..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-12 h-14 bg-navy/50 border-white/10 text-white focus:border-green/50 focus:ring-green/50 text-lg rounded-2xl"
+                className="pl-12 h-14 bg-gray-50 border-gray-200 text-gray-900 focus:border-blue/50 focus:ring-blue/30 text-lg rounded-xl"
               />
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] ml-2">Grade Level</label>
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] ml-2">Grade Level</label>
                   <Select value={selectedClass} onValueChange={setSelectedClass}>
-                    <SelectTrigger className="bg-navy/50 border-white/10 text-white h-12 rounded-xl">
+                    <SelectTrigger className="bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                       <SelectValue placeholder="All Classes" />
                     </SelectTrigger>
-                    <SelectContent className="bg-navy border-white/10 text-white">
+                    <SelectContent className="bg-white border-gray-200 text-gray-900">
                       <SelectItem value="all">All Grades</SelectItem>
                       {classes.map((c) => (
                         <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
@@ -156,12 +174,12 @@ export default function PublicSyllabusPage() {
                </div>
 
                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] ml-2">Subject</label>
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] ml-2">Subject</label>
                   <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-                    <SelectTrigger className="bg-navy/50 border-white/10 text-white h-12 rounded-xl">
+                    <SelectTrigger className="bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                       <SelectValue placeholder="All Subjects" />
                     </SelectTrigger>
-                    <SelectContent className="bg-navy border-white/10 text-white">
+                    <SelectContent className="bg-white border-gray-200 text-gray-900">
                       <SelectItem value="all">All Subjects</SelectItem>
                       {subjects.map((s) => (
                         <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
@@ -171,12 +189,12 @@ export default function PublicSyllabusPage() {
                </div>
 
                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] ml-2">Term</label>
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] ml-2">Term</label>
                   <Select value={selectedTerm} onValueChange={setSelectedTerm}>
-                    <SelectTrigger className="bg-navy/50 border-white/10 text-white h-12 rounded-xl">
+                    <SelectTrigger className="bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                       <SelectValue placeholder="All Terms" />
                     </SelectTrigger>
-                    <SelectContent className="bg-navy border-white/10 text-white">
+                    <SelectContent className="bg-white border-gray-200 text-gray-900">
                       <SelectItem value="all">Full Session</SelectItem>
                       <SelectItem value="1">1st Term</SelectItem>
                       <SelectItem value="2">2nd Term</SelectItem>
@@ -186,12 +204,12 @@ export default function PublicSyllabusPage() {
                </div>
 
                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] ml-2">Curriculum</label>
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] ml-2">Curriculum</label>
                   <Select value={selectedCurriculum} onValueChange={setSelectedCurriculum}>
-                    <SelectTrigger className="bg-navy/50 border-white/10 text-white h-12 rounded-xl">
+                    <SelectTrigger className="bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                       <SelectValue placeholder="All Curriculums" />
                     </SelectTrigger>
-                    <SelectContent className="bg-navy border-white/10 text-white">
+                    <SelectContent className="bg-white border-gray-200 text-gray-900">
                       <SelectItem value="all">All Systems</SelectItem>
                       {curriculums.map((curr: any) => (
                         <SelectItem key={curr} value={curr}>{curr}</SelectItem>
@@ -205,7 +223,7 @@ export default function PublicSyllabusPage() {
           {/* Syllabus Timeline */}
           {loading ? (
             <div className="flex justify-center py-20">
-               <Loader2 className="w-12 h-12 text-green animate-spin" />
+               <Loader2 className="w-12 h-12 text-blue animate-spin" />
             </div>
           ) : currentSyllabusList.length > 0 ? (
             <MotionStagger className="space-y-12">
@@ -217,27 +235,27 @@ export default function PublicSyllabusPage() {
                     {/* Syllabus Header Item - Clickable to Toggle */}
                     <button 
                       onClick={() => toggleGroup(syllabus.key)}
-                      className="flex items-center justify-between w-full bg-white/5 border border-white/10 p-5 rounded-3xl hover:bg-white/10 transition-all text-left"
+                      className="flex items-center justify-between w-full bg-white border border-gray-200 shadow-sm p-5 rounded-2xl hover:border-blue/40 hover:shadow-md transition-all text-left"
                     >
                       <div className="flex items-center gap-4">
-                         <div className="w-10 h-10 rounded-2xl bg-green/10 flex items-center justify-center">
-                            <BookOpen className="w-5 h-5 text-green" />
+                         <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center">
+                            <BookOpen className="w-5 h-5 text-blue" />
                          </div>
                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                            <span className="text-xs font-black text-green uppercase tracking-widest">{syllabus.curriculum}</span>
-                            <div className="w-1 h-1 rounded-full bg-white/20 hidden sm:block" />
+                            <span className="text-xs font-black text-amber-700 uppercase tracking-widest">{syllabus.curriculum}</span>
+                            <div className="w-1 h-1 rounded-full bg-gray-300 hidden sm:block" />
                             <span className="text-xs font-black text-blue uppercase tracking-widest">{syllabus.className}</span>
-                            <div className="w-1 h-1 rounded-full bg-white/20 hidden sm:block" />
-                            <span className="text-xs font-black text-amber uppercase tracking-widest">{syllabus.subject}</span>
-                            <div className="w-1 h-1 rounded-full bg-white/20 hidden sm:block" />
-                            <span className="text-xs font-black text-white uppercase tracking-widest">Term {syllabus.term}</span>
+                            <div className="w-1 h-1 rounded-full bg-gray-300 hidden sm:block" />
+                            <span className="text-xs font-black text-emerald-700 uppercase tracking-widest">{syllabus.subject}</span>
+                            <div className="w-1 h-1 rounded-full bg-gray-300 hidden sm:block" />
+                            <span className="text-xs font-black text-gray-800 uppercase tracking-widest">Term {syllabus.term}</span>
                          </div>
                       </div>
                       <div className="flex items-center gap-3">
-                         <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest hidden sm:block">
+                         <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest hidden sm:block">
                            {isExpanded ? "Collapse" : "View Timeline"}
                          </span>
-                         {isExpanded ? <ChevronUp className="w-5 h-5 text-white" /> : <ChevronDown className="w-5 h-5 text-white" />}
+                         {isExpanded ? <ChevronUp className="w-5 h-5 text-gray-700" /> : <ChevronDown className="w-5 h-5 text-gray-700" />}
                       </div>
                     </button>
 
@@ -245,15 +263,13 @@ export default function PublicSyllabusPage() {
                     {isExpanded && (
                       <div className="relative pl-8 md:pl-0 mt-12 animate-in fade-in slide-in-from-top-4 duration-500">
                         {/* Vertical Timeline Line */}
-                        <div className="absolute left-[19px] md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-green/50 via-blue/50 to-transparent md:-translate-x-1/2" />
+                        <div className="absolute left-[19px] md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-blue/40 via-gray-300 to-transparent md:-translate-x-1/2" />
 
                         <div className="space-y-16">
                           {[...Array(12)].map((_, i) => {
                             const week = i + 1;
                             const weekTopics = syllabus.topics.filter((t: any) => t.week === week);
                             const isEven = week % 2 === 0;
-                            
-                            // Public view: no progress shown by default
                             const isWeekCompleted = false;
 
                             return (
@@ -261,12 +277,12 @@ export default function PublicSyllabusPage() {
                                 {/* Week Bubble */}
                                 <div className="absolute left-0 md:left-1/2 top-0 -translate-x-1/2 flex flex-col items-center z-10">
                                    <div className={cn(
-                                     "w-10 h-10 rounded-full flex items-center justify-center border-4 border-navy shadow-lg transition-all duration-500",
-                                     weekTopics.length > 0 ? "bg-green-600 text-white" : "bg-white/5 text-white/20"
+                                     "w-10 h-10 rounded-full flex items-center justify-center border-4 border-white shadow-md transition-all duration-500",
+                                     weekTopics.length > 0 ? "bg-green text-navy" : "bg-gray-200 text-gray-500"
                                    )}>
                                       <span className="text-xs font-black">{week}</span>
                                    </div>
-                                   <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-2 bg-navy px-2">Week</div>
+                                   <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-2 bg-light px-2">Week</div>
                                 </div>
 
                                 {/* Content Card */}
@@ -280,14 +296,14 @@ export default function PublicSyllabusPage() {
                                           <div 
                                             key={topic.id}
                                             className={cn(
-                                              "w-full group bg-white/5 border border-white/10 rounded-[32px] p-6 hover:border-green/30 transition-all relative overflow-hidden",
-                                              isWeekCompleted && "bg-green/[0.02] border-green/20"
+                                              "w-full group bg-white border border-gray-200 shadow-sm rounded-2xl p-6 hover:border-blue/40 transition-all relative overflow-hidden",
+                                              isWeekCompleted && "bg-emerald-50/30 border-emerald-200"
                                             )}
                                           >
-                                            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-green transition-colors">{topic.title}</h3>
+                                            <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue transition-colors">{topic.title}</h3>
                                             
                                             <p className={cn(
-                                              "text-xs text-muted-foreground mb-6 line-clamp-3 leading-relaxed",
+                                              "text-xs text-gray-600 mb-6 line-clamp-3 leading-relaxed",
                                               !isEven && "md:text-right"
                                             )}>
                                               {topic.notes?.[0]?.content || "In this week, we explore the fundamental principles and key structures of this topic through detailed explanations and visual aids."}
@@ -301,7 +317,7 @@ export default function PublicSyllabusPage() {
                                                   <React.Fragment key={note.id}>
                                                      <Link 
                                                        href={`/notes/${note.id}`}
-                                                       className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-[10px] font-bold text-white hover:bg-green/10 hover:text-green transition-all"
+                                                       className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 border border-gray-200 text-[10px] font-bold text-gray-800 hover:bg-blue-50 hover:text-blue transition-all"
                                                      >
                                                         <BookOpen className="w-3 h-3" /> Note
                                                      </Link>
@@ -309,7 +325,7 @@ export default function PublicSyllabusPage() {
                                                         <Link 
                                                           key={quiz.id}
                                                           href={`/dashboard/quizzes/${quiz.id}`}
-                                                          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-[10px] font-bold text-white hover:bg-amber/10 hover:text-amber transition-all"
+                                                          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 border border-gray-200 text-[10px] font-bold text-gray-800 hover:bg-amber-50 hover:text-amber-700 transition-all"
                                                         >
                                                            <BrainCircuit className="w-3 h-3" /> Quiz
                                                         </Link>
@@ -318,7 +334,7 @@ export default function PublicSyllabusPage() {
                                                         <Link 
                                                           key={flashcard.id}
                                                           href={`/dashboard/flashcards/${flashcard.id}`}
-                                                          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-[10px] font-bold text-white hover:bg-blue/10 hover:text-blue transition-all"
+                                                          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 border border-gray-200 text-[10px] font-bold text-gray-800 hover:bg-blue-50 hover:text-blue transition-all"
                                                         >
                                                            <Layers className="w-3 h-3" /> Cards
                                                         </Link>
@@ -328,14 +344,14 @@ export default function PublicSyllabusPage() {
                                             </div>
 
                                             <div className={cn(
-                                              "flex items-center gap-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest",
+                                              "flex items-center gap-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest",
                                               !isEven && "md:justify-end"
                                             )}>
                                                <div className="flex items-center gap-1.5">
                                                   <Clock className="w-3 h-3" /> 45 Mins
                                                </div>
-                                               <div className="w-1 h-1 rounded-full bg-white/10" />
-                                               <div className="flex items-center gap-1.5 text-green">
+                                               <div className="w-1 h-1 rounded-full bg-gray-300" />
+                                               <div className="flex items-center gap-1.5 text-emerald-600">
                                                   <Sparkles className="w-3 h-3" /> Mastery
                                                </div>
                                             </div>
@@ -343,9 +359,9 @@ export default function PublicSyllabusPage() {
                                         );
                                       })
                                    ) : (
-                                      <div className="py-8 opacity-20">
-                                         <div className="h-2 w-24 bg-white/20 rounded-full mb-2" />
-                                         <div className="h-2 w-48 bg-white/10 rounded-full" />
+                                      <div className="py-8 opacity-40">
+                                         <div className="h-2 w-24 bg-gray-300 rounded-full mb-2" />
+                                         <div className="h-2 w-48 bg-gray-200 rounded-full" />
                                       </div>
                                     )}
                                 </div>
@@ -361,14 +377,14 @@ export default function PublicSyllabusPage() {
 
               {/* Pagination Controller */}
               {!loading && syllabusList.length > 0 && (
-                <div className="mt-16 flex flex-col md:flex-row items-center justify-between gap-8 bg-white/5 p-6 rounded-[32px] border border-white/10 backdrop-blur-xl">
+                <div className="mt-16 flex flex-col md:flex-row items-center justify-between gap-8 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                    <div className="flex items-center gap-4">
-                      <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Items per page</span>
+                      <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Items per page</span>
                       <Select value={itemsPerPage} onValueChange={setItemsPerPage}>
-                        <SelectTrigger className="w-20 bg-navy/50 border-white/10 text-white h-10 rounded-xl">
+                        <SelectTrigger className="w-20 bg-gray-50 border-gray-200 text-gray-900 h-10 rounded-xl">
                           <SelectValue placeholder="6" />
                         </SelectTrigger>
-                        <SelectContent className="bg-navy border-white/10 text-white">
+                        <SelectContent className="bg-white border-gray-200 text-gray-900">
                           <SelectItem value="4">4</SelectItem>
                           <SelectItem value="6">6</SelectItem>
                           <SelectItem value="10">10</SelectItem>
@@ -381,7 +397,7 @@ export default function PublicSyllabusPage() {
                       <Button 
                         variant="outline" 
                         size="icon" 
-                        className="w-10 h-10 rounded-xl border-white/10 text-white hover:bg-white/5 disabled:opacity-30"
+                        className="w-10 h-10 rounded-xl border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-30"
                         disabled={currentPage === 1}
                         onClick={() => {
                           setCurrentPage(prev => Math.max(1, prev - 1));
@@ -392,7 +408,6 @@ export default function PublicSyllabusPage() {
                       </Button>
 
                       <div className="flex items-center gap-2">
-                         {/* Smart Pagination: Show limited pages */}
                          {Array.from({ length: totalPages }, (_, i) => i + 1)
                            .filter(pageNum => 
                              pageNum === 1 || 
@@ -402,13 +417,13 @@ export default function PublicSyllabusPage() {
                            .map((pageNum, idx, array) => (
                              <React.Fragment key={pageNum}>
                                {idx > 0 && array[idx-1] !== pageNum - 1 && (
-                                 <span className="text-muted-foreground px-1">...</span>
+                                 <span className="text-gray-400 px-1">...</span>
                                )}
                                <Button
                                  variant={currentPage === pageNum ? "default" : "outline"}
                                  className={cn(
                                    "w-10 h-10 rounded-xl font-bold",
-                                   currentPage === pageNum ? "bg-green-600 text-white hover:bg-green/90" : "border-white/10 text-white hover:bg-white/5"
+                                   currentPage === pageNum ? "bg-green text-navy hover:bg-[#E5A800]" : "border-gray-200 text-gray-700 hover:bg-gray-50"
                                  )}
                                  onClick={() => {
                                    setCurrentPage(pageNum);
@@ -424,7 +439,7 @@ export default function PublicSyllabusPage() {
                       <Button 
                         variant="outline" 
                         size="icon" 
-                        className="w-10 h-10 rounded-xl border-white/10 text-white hover:bg-white/5 disabled:opacity-30"
+                        className="w-10 h-10 rounded-xl border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-30"
                         disabled={currentPage === totalPages}
                         onClick={() => {
                           setCurrentPage(prev => Math.min(totalPages, prev + 1));
@@ -435,20 +450,20 @@ export default function PublicSyllabusPage() {
                       </Button>
                    </div>
 
-                   <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                   <div className="text-xs font-bold text-gray-500 uppercase tracking-widest">
                       Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, totalItems)} of {totalItems}
                    </div>
                 </div>
               )}
             </MotionStagger>
           ) : (
-            <div className="text-center py-32 bg-white/5 rounded-[40px] border border-white/10 border-dashed">
-               <Layers className="w-16 h-16 text-muted-foreground mx-auto mb-6 opacity-20" />
-               <p className="text-white text-2xl font-display mb-2">No Syllabus Found</p>
-               <p className="text-muted-foreground">Adjust your filters to see the 12-week learning path.</p>
+            <div className="text-center py-32 bg-white rounded-3xl border border-gray-200 border-dashed shadow-sm">
+               <Layers className="w-16 h-16 text-gray-300 mx-auto mb-6" />
+               <p className="text-gray-900 text-2xl font-display mb-2">No Syllabus Found</p>
+               <p className="text-gray-500">Adjust your filters to see the 12-week learning path.</p>
                <Button 
                 variant="link" 
-                className="text-green mt-6 font-black uppercase tracking-widest text-xs"
+                className="text-blue mt-6 font-black uppercase tracking-widest text-xs"
                 onClick={() => {
                   setSearch("");
                   setSelectedClass("all");
@@ -462,9 +477,9 @@ export default function PublicSyllabusPage() {
             </div>
           )}
         </div>
-      </main>
+      </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }

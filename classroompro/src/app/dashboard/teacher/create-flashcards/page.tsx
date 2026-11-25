@@ -46,7 +46,7 @@ export default function CreateFlashcardsPage() {
           <Link href="/dashboard/teacher" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 transition-colors">
             <ChevronLeft className="w-4 h-4 mr-1" /> Back
           </Link>
-          <Button className="bg-blue hover:bg-blue/90 text-gray-900 font-bold">
+          <Button className="bg-blue hover:bg-blue/90 text-white font-bold">
             <Save className="w-4 h-4 mr-2" /> Save Deck
           </Button>
         </MotionRise>
@@ -69,14 +69,14 @@ export default function CreateFlashcardsPage() {
             <div className="grid md:grid-cols-2 gap-6 pt-6 border-t border-white/5">
                <div className="space-y-2">
                   <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Subject</Label>
-                  <select className="w-full bg-[#146ef5] border border-gray-100 rounded-xl h-12 px-4 text-sm text-white">
+                  <select className="w-full bg-gray-50 border border-gray-200 rounded-xl h-12 px-4 text-sm text-gray-900">
                     <option>Chemistry</option>
                     <option>Physics</option>
                   </select>
                </div>
                <div className="space-y-2">
                   <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Topic</Label>
-                  <select className="w-full bg-[#146ef5] border border-gray-100 rounded-xl h-12 px-4 text-sm text-white">
+                  <select className="w-full bg-gray-50 border border-gray-200 rounded-xl h-12 px-4 text-sm text-gray-900">
                     <option>Organic Compounds</option>
                     <option>Chemical Bonding</option>
                   </select>

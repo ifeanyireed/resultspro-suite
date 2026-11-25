@@ -11,3 +11,9 @@ export { ResultCheckerView, default as DefaultResultCheckerView } from './compon
 export type { ResultCheckerViewProps } from './components/ResultCheckerView';
 export { getTemplate, gradebookTemplates } from './lib/gradebookTemplates';
 export type { School, SchoolResult, GradebookTemplate } from './lib/schoolData';
+export * from './components/ai/MarksheetScannerView';
+export * from './components/ai/ResultAuditView';
+export * from './components/ai/TeacherCommentStudio';
+export * from './components/ai/PerformanceIntelligenceView';
+export * from './components/ai/ParentResultInterpreter';
+export * from './components/ai/WebinarWorkflowDemo';

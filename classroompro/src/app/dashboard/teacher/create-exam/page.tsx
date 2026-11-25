@@ -96,18 +96,18 @@ export default function CreateExamPage() {
                   <Label className="text-xs text-gray-500 uppercase font-bold">Scheduled Date</Label>
                   <div className="relative">
                     <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
-                    <Input type="date" className="pl-10 bg-[#146ef5] border-gray-100 text-white" />
+                    <Input type="date" className="pl-10 bg-gray-50 border-gray-200 text-gray-900" />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-xs text-gray-500 uppercase font-bold">Duration (Minutes)</Label>
-                  <Input type="number" defaultValue={60} className="bg-[#146ef5] border-gray-100 text-white" />
+                  <Input type="number" defaultValue={60} className="bg-gray-50 border-gray-200 text-gray-900" />
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-xs text-gray-500 uppercase font-bold block mb-2">Assign to Class</Label>
-                  <select className="w-full bg-[#146ef5] border border-gray-100 rounded-lg h-10 px-3 text-sm text-white">
+                  <select className="w-full bg-gray-50 border border-gray-200 rounded-lg h-10 px-3 text-sm text-gray-900">
                     <option>SSS 1 Biology</option>
                     <option>SSS 2 Biology</option>
                   </select>

@@ -204,7 +204,7 @@ export default function StudentDashboard() {
           <div className="space-y-5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                    <img src="/character9.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <img src="/photo01.jpeg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
                 <div>
                   <h4 className="text-base font-normal text-gray-900">Greenwood High</h4>
                   <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Onboarding Form</span></p>
@@ -214,7 +214,7 @@ export default function StudentDashboard() {
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                    <img src="/character10.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <img src="/photo02.jpeg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
                 <div>
                   <h4 className="text-base font-normal text-gray-900">Lighthouse Academy</h4>
                   <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Pricing Approval</span></p>
@@ -224,7 +224,7 @@ export default function StudentDashboard() {
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                    <img src="/character11.jpg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                    <img src="/photo04.jpeg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
                 <div>
                   <h4 className="text-base font-normal text-gray-900">Harvard Int'l</h4>
                   <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Initial Pitch</span></p>
@@ -310,11 +310,11 @@ export default function StudentDashboard() {
             {/* Background Image */}
             <div 
               className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: "url('/abstract-blue-4.jpg')" }}
+              style={{ backgroundImage: "url('/photo05.jpeg')" }}
             ></div>
             {/* Gradient Dark Overlay */}
-            <div className="absolute inset-0 bg-black/10"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+            <div className="absolute inset-0 bg-[#0D1060]/40"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0D1060]/90 via-[#0D1060]/40 to-transparent"></div>
             
             <h3 className="text-xl font-normal text-white relative z-10 text-left w-full">Time Tracker</h3>
             <div className="relative z-10 flex flex-col items-center justify-center flex-1">

@@ -160,17 +160,17 @@ export default function ExamsPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
             <Input 
               placeholder="Search exams..." 
-              className="pl-10 h-12 bg-[#146ef5] border-gray-100 text-white focus:ring-0 ring-0"
+              className="pl-10 h-12 bg-gray-50 border-gray-200 text-gray-900 focus:ring-0 ring-0"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <div className="flex flex-wrap gap-2">
              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                <SelectTrigger className="w-[160px] bg-[#146ef5] border-gray-100 text-white h-12 rounded-xl">
+                <SelectTrigger className="w-[160px] bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                <SelectContent className="bg-white border-gray-200 text-gray-900">
                   <SelectItem value="all">All Exams</SelectItem>
                   <SelectItem value="upcoming">Upcoming</SelectItem>
                   <SelectItem value="completed">Completed</SelectItem>

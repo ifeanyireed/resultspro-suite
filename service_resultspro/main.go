@@ -65,6 +65,13 @@ func main() {
 
 		// Scratch Card Batch Management (School Admins)
 		api.POST("/cards/generate", handlers.GenerateScratchCards)
+
+		// Connected Trio AI Intelligence Endpoints
+		api.POST("/results/ocr/extract", handlers.ExtractMarksheetOCR)
+		api.POST("/results/instances/:instanceId/audit", handlers.RunAIResultAudit)
+		api.POST("/results/comments/generate", handlers.GenerateAITeacherComments)
+		api.POST("/results/intelligence/query", handlers.QueryPerformanceIntelligence)
+		api.GET("/results/officer/readiness", handlers.GetResultsOfficerReadiness)
 	}
 
 	log.Printf("ResultsPRO Service starting on port %s...", config.AppConfig.Port)

@@ -94,7 +94,7 @@ export default function RevenueAnalytics() {
              <Button variant="outline" className="border-gray-100 text-gray-900 hover:bg-gray-50 h-12">
                 <Calendar className="w-4 h-4 mr-2" /> Jan 2025 - Dec 2025
              </Button>
-             <Button className="bg-white text-white font-bold h-12 px-6 hover:bg-white/90 shadow-lg shadow-white/10">
+             <Button className="bg-[#146ef5] text-white font-bold h-12 px-6 hover:bg-[#105bd1] shadow-lg shadow-[#146ef5]/10">
                 <Download className="w-4 h-4 mr-2" /> Export Report
              </Button>
           </div>
@@ -256,10 +256,10 @@ export default function RevenueAnalytics() {
                     <div className="flex items-center gap-4">
                        <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Show</span>
                        <Select value={itemsPerPage} onValueChange={(val) => { setItemsPerPage(val); setCurrentPage(1); }}>
-                          <SelectTrigger className="w-20 bg-[#146ef5] border-gray-100 text-white h-9 rounded-xl">
+                          <SelectTrigger className="w-20 bg-gray-50 border-gray-200 text-gray-900 h-9 rounded-xl">
                              <SelectValue placeholder="10" />
                           </SelectTrigger>
-                          <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                          <SelectContent className="bg-white border-gray-200 text-gray-900">
                              <SelectItem value="10">10</SelectItem>
                              <SelectItem value="25">25</SelectItem>
                              <SelectItem value="50">50</SelectItem>

@@ -183,17 +183,17 @@ export default function QuizzesPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
             <Input 
               placeholder="Search quizzes..." 
-              className="pl-10 h-12 bg-[#146ef5] border-gray-100 text-white focus:ring-0 ring-0"
+              className="pl-10 h-12 bg-gray-50 border-gray-200 text-gray-900 focus:ring-0 ring-0"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <div className="flex flex-wrap gap-2">
              <Select value={selectedTerm} onValueChange={setSelectedTerm}>
-                <SelectTrigger className="w-[130px] bg-[#146ef5] border-gray-100 text-white h-12 rounded-xl focus:ring-0 ring-0">
+                <SelectTrigger className="w-[130px] bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl focus:ring-0 ring-0">
                   <SelectValue placeholder="Term" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                <SelectContent className="bg-white border-gray-200 text-gray-900">
                   <SelectItem value="all">All Terms</SelectItem>
                   <SelectItem value="1">1st Term</SelectItem>
                   <SelectItem value="2">2nd Term</SelectItem>
@@ -202,10 +202,10 @@ export default function QuizzesPage() {
              </Select>
 
              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                <SelectTrigger className="w-[140px] bg-[#146ef5] border-gray-100 text-white h-12 rounded-xl focus:ring-0 ring-0">
+                <SelectTrigger className="w-[140px] bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl focus:ring-0 ring-0">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                <SelectContent className="bg-white border-gray-200 text-gray-900">
                   <SelectItem value="all">All Statuses</SelectItem>
                   <SelectItem value="new">New</SelectItem>
                   <SelectItem value="in_progress">In Progress</SelectItem>
@@ -214,10 +214,10 @@ export default function QuizzesPage() {
              </Select>
 
              <Select value={selectedSubjectId || "all"} onValueChange={(val) => setSelectedSubjectId(val === "all" ? null : val)}>
-                <SelectTrigger className="w-[150px] bg-[#146ef5] border-gray-100 text-white h-12 rounded-xl focus:ring-0 ring-0">
+                <SelectTrigger className="w-[150px] bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl focus:ring-0 ring-0">
                   <SelectValue placeholder="Subject" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                <SelectContent className="bg-white border-gray-200 text-gray-900">
                   <SelectItem value="all">All Subjects</SelectItem>
                   {subjects.map(s => (
                     <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>

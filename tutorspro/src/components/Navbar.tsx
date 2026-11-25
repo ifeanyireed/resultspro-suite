@@ -210,7 +210,7 @@ export default function Navbar() {
                         fontWeight: active ? 600 : 500, 
                         color: active ? 'var(--color-nets-red)' : '#fff', 
                         borderLeft: active ? '3px solid var(--color-nets-red)' : '3px solid transparent',
-                        background: active ? 'rgba(192, 39, 45, 0.05)' : 'transparent',
+                        background: active ? 'rgba(251, 188, 4, 0.08)' : 'transparent',
                         transition: 'all 0.2s ease'
                       }}
                     >

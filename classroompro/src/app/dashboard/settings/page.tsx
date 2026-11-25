@@ -143,12 +143,12 @@ export default function SettingsPage() {
                           <Input 
                             value={profileData?.full_name || user?.full_name} 
                             onChange={(e) => setProfileData({...profileData, full_name: e.target.value})}
-                            className="bg-[#146ef5] border-gray-100 text-white" 
+                            className="bg-gray-50 border-gray-200 text-gray-900" 
                           />
                       </div>
                       <div className="space-y-2">
                           <Label className="text-xs text-gray-500 uppercase font-bold">Email Address</Label>
-                          <Input defaultValue={user?.email} disabled className="bg-[#146ef5] border-gray-100 text-white/50" />
+                          <Input defaultValue={user?.email} disabled className="bg-gray-50 border-gray-200 text-gray-500" />
                       </div>
                       <div className="space-y-2">
                           <Label className="text-xs text-gray-500 uppercase font-bold">Phone Number</Label>
@@ -156,7 +156,7 @@ export default function SettingsPage() {
                             value={profileData?.phone || ""} 
                             onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
                             placeholder="+234 ..."
-                            className="bg-[#146ef5] border-gray-100 text-white" 
+                            className="bg-gray-50 border-gray-200 text-gray-900" 
                           />
                       </div>
                       <div className="space-y-2">
@@ -164,7 +164,7 @@ export default function SettingsPage() {
                           <select 
                             value={profileData?.sex || ""}
                             onChange={(e) => setProfileData({...profileData, sex: e.target.value})}
-                            className="w-full bg-[#146ef5] border border-gray-100 text-white h-10 rounded-md px-3 text-sm focus:outline-none"
+                            className="w-full bg-gray-50 border border-gray-200 text-gray-900 h-10 rounded-md px-3 text-sm focus:outline-none"
                           >
                             <option value="" disabled>Select Sex</option>
                             <option value="Male">Male</option>
@@ -178,7 +178,7 @@ export default function SettingsPage() {
                             type="date"
                             value={profileData?.date_of_birth ? new Date(profileData.date_of_birth).toISOString().split('T')[0] : ""} 
                             onChange={(e) => setProfileData({...profileData, date_of_birth: e.target.value})}
-                            className="bg-[#146ef5] border-gray-100 text-white" 
+                            className="bg-gray-50 border-gray-200 text-gray-900" 
                           />
                       </div>
                       <div className="space-y-2">
@@ -187,16 +187,16 @@ export default function SettingsPage() {
                             value={profileData?.address || ""} 
                             onChange={(e) => setProfileData({...profileData, address: e.target.value})}
                             placeholder="Residential Address"
-                            className="bg-[#146ef5] border-gray-100 text-white" 
+                            className="bg-gray-50 border-gray-200 text-gray-900" 
                           />
                       </div>
                       <div className="space-y-2">
                           <Label className="text-xs text-gray-500 uppercase font-bold">Your Class</Label>
-                          <Input value={profileData?.class?.name || "No Class Assigned"} disabled className="bg-[#146ef5] border-gray-100 text-emerald-600 font-bold" />
+                          <Input value={profileData?.class?.name || "No Class Assigned"} disabled className="bg-gray-50 border-gray-200 text-emerald-600 font-bold" />
                       </div>
                       <div className="space-y-2">
                           <Label className="text-xs text-gray-500 uppercase font-bold">School</Label>
-                          <Input value={profileData?.school?.name || "Lekki British School"} disabled className="bg-[#146ef5] border-gray-100 text-white/50" />
+                          <Input value={profileData?.school?.name || "Lekki British School"} disabled className="bg-gray-50 border-gray-200 text-gray-500" />
                       </div>
                     </div>
                   )}
@@ -246,7 +246,7 @@ export default function SettingsPage() {
                              placeholder="••••••••" 
                              value={passwordData.currentPassword}
                              onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
-                             className="bg-[#146ef5] border-gray-100 text-white" 
+                             className="bg-gray-50 border-gray-200 text-gray-900" 
                            />
                         </div>
                         <div className="space-y-2">
@@ -256,7 +256,7 @@ export default function SettingsPage() {
                              placeholder="••••••••" 
                              value={passwordData.newPassword}
                              onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
-                             className="bg-[#146ef5] border-gray-100 text-white" 
+                             className="bg-gray-50 border-gray-200 text-gray-900" 
                            />
                         </div>
                         <div className="space-y-2">
@@ -266,7 +266,7 @@ export default function SettingsPage() {
                              placeholder="••••••••" 
                              value={passwordData.confirmPassword}
                              onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
-                             className="bg-[#146ef5] border-gray-100 text-white" 
+                             className="bg-gray-50 border-gray-200 text-gray-900" 
                            />
                         </div>
                      </div>
@@ -318,7 +318,7 @@ export default function SettingsPage() {
                               <div className="text-xs text-gray-500">{item.desc}</div>
                            </div>
                            <div className="w-10 h-5 bg-emerald-600 rounded-full relative cursor-pointer">
-                              <div className="absolute right-0.5 top-0.5 w-4 h-4 bg-[#146ef5] rounded-full" />
+                              <div className="absolute right-0.5 top-0.5 w-4 h-4 bg-white rounded-full" />
                            </div>
                         </div>
                      ))}

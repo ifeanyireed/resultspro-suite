@@ -119,10 +119,10 @@ export default function TutorLayout({
           <div className="px-6 mt-8">
             <div 
               className="rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
-              style={{ backgroundImage: "url('/abstract-blue-2.jpg')" }}
+              style={{ backgroundImage: "url('/photo09.jpeg')" }}
             >
-              <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
+              <div className="absolute inset-0 bg-[#0D1060]/70 mix-blend-multiply"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0D1060]/90 to-transparent"></div>
               
               <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
                 {mounted && <Image src={user?.avatarUrl || `/avatars/character${ (String(user?.id || user?.name || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}

@@ -61,31 +61,41 @@ export default function DashboardLayout({
 
   const teacherItems = [
     { icon: <LayoutDashboard className="w-6 h-6" />, label: "Teacher Home", href: "/dashboard/teacher" },
-    { icon: <MessageSquare className="w-6 h-6" />, label: "Messages", href: "/dashboard/teacher/messages" },
-    { icon: <Users className="w-6 h-6" />, label: "My Classes", href: "/dashboard/teacher/classes" },
-    { icon: <BarChart3 className="w-6 h-6" />, label: "Analytics", href: "/dashboard/teacher/analytics" },
+    { icon: <Users className="w-6 h-6" />, label: "Assigned Classes", href: "/dashboard/teacher/classes" },
+    { icon: <FilePlus className="w-6 h-6" />, label: "Create Lesson Note", href: "/dashboard/teacher/create-note" },
+    { icon: <BrainCircuit className="w-6 h-6" />, label: "AI Quiz Generator", href: "/dashboard/teacher/create-quiz" },
+    { icon: <BarChart3 className="w-6 h-6" />, label: "Topic Mastery & Sync", href: "/dashboard/teacher/analytics" },
     { icon: <Settings className="w-6 h-6" />, label: "Settings", href: "/dashboard/settings" },
   ];
 
-  const adminItems = [
-    { icon: <LayoutDashboard className="w-6 h-6" />, label: "Admin Panel", href: "/dashboard/admin" },
-    { icon: <School className="w-6 h-6" />, label: "Manage School", href: "/dashboard/admin/school" },
-    { icon: <Users className="w-6 h-6" />, label: "Manage Teachers", href: "/dashboard/admin/teachers" },
-    { icon: <GraduationCap className="w-6 h-6" />, label: "Manage Students", href: "/dashboard/admin/students" },
-    { icon: <BarChart3 className="w-6 h-6" />, label: "Reports", href: "/dashboard/admin/reports" },
+  const parentItems = [
+    { icon: <LayoutDashboard className="w-6 h-6" />, label: "Parent Learning Hub", href: "/dashboard/parent" },
+    { icon: <TrendingUp className="w-6 h-6" />, label: "Topic Mastery & Remedial", href: "/dashboard/parent/progress" },
+    { icon: <BookOpen className="w-6 h-6" />, label: "NERDC Class Notes", href: "/dashboard/notes" },
+    { icon: <BrainCircuit className="w-6 h-6" />, label: "Practice Quizzes", href: "/dashboard/quizzes" },
   ];
 
+  const adminItems = [
+    { icon: <LayoutDashboard className="w-6 h-6" />, label: "Curriculum Oversight", href: "/dashboard/admin" },
+    { icon: <Library className="w-6 h-6" />, label: "NERDC Content Moderation", href: "/dashboard/admin/subjects" },
+    { icon: <BarChart3 className="w-6 h-6" />, label: "Learning Gap & Sync Audit", href: "/dashboard/admin/reports" },
+  ];
+
+  const pathname = usePathname();
+
   const getMenuItems = () => {
-    switch (role) {
+    if (pathname.startsWith("/dashboard/admin")) return adminItems;
+    if (pathname.startsWith("/dashboard/teacher")) return teacherItems;
+    if (pathname.startsWith("/dashboard/parent")) return parentItems;
+    switch (String(role).toUpperCase()) {
       case Role.SCHOOL_ADMIN: return adminItems;
       case Role.TEACHER: return teacherItems;
+      case Role.PARENT: return parentItems;
       default: return studentItems;
     }
   };
 
   const menuItems = getMenuItems();
-
-  const pathname = usePathname();
 
   const isActive = (path: string) => pathname === path;
 
@@ -145,10 +155,10 @@ export default function DashboardLayout({
           <div className="px-6 mt-8">
             <div 
               className="rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
-              style={{ backgroundImage: "url('/abstract-blue-2.jpg')" }}
+              style={{ backgroundImage: "url('/photo07.jpeg')" }}
             >
-              <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
+              <div className="absolute inset-0 bg-[#0D1060]/70 mix-blend-multiply"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0D1060]/90 to-transparent"></div>
               
               <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
                 {mounted && <Image src={(user as any)?.avatarUrl || user?.avatar_url || `/avatars/character${ (String(user?.id || (user as any)?.name || user?.full_name || 'A').charCodeAt(0) % 20) || 1 }.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
@@ -190,12 +200,12 @@ export default function DashboardLayout({
                 <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
               </button>
               <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
-                <div className="w-10 h-10 bg-gradient-to-tr from-orange-200 to-orange-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
-                  <img src="/avatars/character7.jpg" alt="Agent Avatar" className="w-full h-full object-cover" />
+                <div className="w-10 h-10 bg-gradient-to-tr from-blue-200 to-blue-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
+                  <img src={mounted ? ((user as any)?.avatarUrl || user?.avatar_url || "/photo04.jpeg") : "/photo04.jpeg"} alt="User Avatar" className="w-full h-full object-cover" />
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-sm font-bold text-gray-900 leading-tight">Totok Michael</p>
-                  <p className="text-xs text-gray-500">tmichael20@gmail.com</p>
+                  <p className="text-sm font-bold text-gray-900 leading-tight">{mounted ? ((user as any)?.name || user?.full_name || "Chidinma Adeleke") : "Chidinma Adeleke"}</p>
+                  <p className="text-xs text-gray-500">{mounted ? (user?.email || "student@classroompro.ng") : "student@classroompro.ng"}</p>
                 </div>
               </div>
             </div>

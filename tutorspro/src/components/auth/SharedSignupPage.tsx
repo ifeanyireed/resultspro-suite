@@ -161,10 +161,21 @@ export default function SharedSignupPage({
   return (
     <div className="min-h-screen w-full flex">
       {/* Left Panel - Branding & Aesthetic */}
-      <div className="hidden lg:flex w-[55%] relative overflow-hidden bg-[#0B1021]">
-        {/* Abstract Background Elements */}
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-600/20 blur-[150px]" />
+      <div className="hidden lg:flex w-[55%] relative overflow-hidden bg-[#0D1060]">
+        {/* 3D Pixar Background Image & Cinematic Overlay */}
+        <div aria-hidden className="absolute inset-0 z-0">
+          <img
+            src="/photo09.jpeg"
+            alt="TutorsPRO Digital Campus"
+            className="w-full h-full object-cover object-center opacity-35"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(155deg, rgba(13,16,96,0.94) 0%, rgba(13,16,96,0.75) 55%, rgba(21,101,192,0.55) 100%)',
+            }}
+          />
+        </div>
         
         <div className="relative z-10 w-full h-full flex flex-col justify-between p-16">
           {/* Brand Logo */}

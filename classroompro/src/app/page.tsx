@@ -72,7 +72,7 @@ export default function Home() {
             </MotionRise>
             
             <MotionRise delay={0.15} className="relative">
-              <img src="/images/Students2.jpeg" alt="School administration" className="rounded-sm shadow-card-lg" />
+              <img src="/photo04.jpeg" alt="School administration" className="rounded-sm shadow-card-lg" />
             </MotionRise>
           </div>
         </div>

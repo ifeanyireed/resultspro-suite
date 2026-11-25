@@ -130,7 +130,7 @@ export default function Navbar() {
                 <Link href="/notifications" style={{ position: 'relative', color: 'rgba(255,255,255,0.6)', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = 'white'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}>
                   <Bell style={{ width: '20px', height: '20px' }} />
                   {unreadCount > 0 && (
-                    <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', background: 'var(--color-nets-red)', color: 'white', fontSize: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>
+                    <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', background: 'var(--color-nets-red)', color: '#0D1060', fontSize: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
@@ -139,7 +139,7 @@ export default function Navbar() {
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', lineHeight: 1.2 }}>
                   </div>
                   <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold', color: 'white' }}>
-                    {user?.name?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                    {(user as any)?.name?.charAt(0) || (user as any)?.email?.charAt(0) || 'U'}
                   </div>
                 </Link>
               </div>
@@ -200,7 +200,7 @@ export default function Navbar() {
                         fontWeight: active ? 600 : 500, 
                         color: active ? 'var(--color-nets-red)' : '#fff', 
                         borderLeft: active ? '3px solid var(--color-nets-red)' : '3px solid transparent',
-                        background: active ? 'rgba(192, 39, 45, 0.05)' : 'transparent',
+                        background: active ? 'rgba(251, 188, 4, 0.08)' : 'transparent',
                         transition: 'all 0.2s ease'
                       }}
                     >

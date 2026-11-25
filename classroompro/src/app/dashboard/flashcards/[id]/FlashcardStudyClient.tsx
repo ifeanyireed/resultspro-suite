@@ -76,7 +76,7 @@ export default function FlashcardStudyClient() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#146ef5] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f9fafc] flex items-center justify-center">
          <Loader2 className="w-12 h-12 text-emerald-600 animate-spin" />
       </div>
     );
@@ -84,7 +84,7 @@ export default function FlashcardStudyClient() {
 
   if (!cards || cards.length === 0) {
     return (
-      <div className="min-h-screen bg-[#146ef5] flex flex-col items-center justify-center p-8 text-center">
+      <div className="min-h-screen bg-[#f9fafc] flex flex-col items-center justify-center p-8 text-center">
          <div className="w-24 h-24 rounded-[32px] bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 mb-6">
             <CheckCircle className="w-12 h-12 opacity-20" />
          </div>
@@ -114,9 +114,9 @@ export default function FlashcardStudyClient() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#146ef5] flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-[#f9fafc] flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="h-20 border-b border-gray-100 bg-[#146ef5]/80 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-50">
+      <header className="h-20 border-b border-gray-100 bg-white/80 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-4">
           <Link href="/dashboard/flashcards" className="w-10 h-10 rounded-full hover:bg-gray-50 flex items-center justify-center transition-colors">
             <ArrowLeft className="w-5 h-5 text-gray-900" />
@@ -155,8 +155,8 @@ export default function FlashcardStudyClient() {
                transition={{ type: "spring", damping: 20, stiffness: 100 }}
                onClick={() => !isFlipped && setIsFlipped(true)}
                className={cn(
-                 "w-full h-full rounded-[40px] border-2 cursor-pointer shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center p-12 text-center relative transition-all duration-500",
-                 isFlipped ? "bg-[#146ef5] border-blue/40" : "bg-white shadow-sm border border-gray-100 border-gray-100 hover:border-gray-200"
+                 "w-full h-full rounded-[40px] border-2 cursor-pointer shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] flex flex-col items-center justify-center p-12 text-center relative transition-all duration-500",
+                 isFlipped ? "bg-blue-50/50 border-blue/40" : "bg-white shadow-sm border border-gray-100 hover:border-gray-200"
                )}
              >
                 <div className="absolute top-8 left-10 text-gray-500 flex items-center gap-2">

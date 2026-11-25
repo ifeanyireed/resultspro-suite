@@ -1,158 +1,231 @@
 "use client";
 
-import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { 
-  MagnifyingGlassIcon,
-  EnvelopeIcon,
-  BellIcon,
-  Squares2X2Icon,
-  ClipboardDocumentCheckIcon,
-  BuildingStorefrontIcon,
-  WalletIcon,
-  Cog6ToothIcon,
-  QuestionMarkCircleIcon,
-  ArrowRightOnRectangleIcon
-} from '@heroicons/react/24/outline';
-import { 
-  Squares2X2Icon as Squares2X2Solid,
-} from '@heroicons/react/24/solid';
+import React, { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  PlayCircleIcon,
+  ChartBarIcon,
+  CameraIcon,
+  ShieldExclamationIcon,
+  SparklesIcon,
+  AcademicCapIcon,
+  CheckBadgeIcon,
+  ArrowsRightLeftIcon,
+  CheckIcon,
+} from "@heroicons/react/24/outline";
+import { ModernDashboardLayout } from "@/components/layout/ModernDashboardLayout";
 
-import { ModernDashboardLayout } from '@/components/layout/ModernDashboardLayout';
+interface RoleProfile {
+  id: string;
+  roleName: string;
+  fullName: string;
+  subtitle: string;
+  avatar: string;
+}
 
-export default function AgentLayout({
+const RESULTSPRO_ROLES: RoleProfile[] = [
+  {
+    id: "results-officer",
+    roleName: "Principal / Results Officer",
+    fullName: "Dr. (Mrs.) Folake Adeyemi",
+    subtitle: "Laurel Academy (Ikeja, Lekki & Abuja Campuses)",
+    avatar: "/photo01.jpeg",
+  },
+  {
+    id: "subject-teacher",
+    roleName: "Subject Teacher",
+    fullName: "Mr. Tunde Ogunleye",
+    subtitle: "Mathematics & STEM Lead · Ikeja Campus",
+    avatar: "/photo02.jpeg",
+  },
+  {
+    id: "parent-guardian",
+    roleName: "Parent / Guardian",
+    fullName: "Chief & Mrs. O. Adeleke",
+    subtitle: "Parent of Chidinma Adeleke (JSS 2 Gold)",
+    avatar: "/photo03.jpeg",
+  },
+];
+
+export default function ResultsProDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
+  const [activeProfile, setActiveProfile] = useState<RoleProfile>(RESULTSPRO_ROLES[0]);
+  const [switcherOpen, setSwitcherOpen] = useState(false);
 
-  const isActive = (path: string) => pathname === path;
-
+  const navItems = [
+    { label: "★ 9-Step Webinar Live Demo", icon: PlayCircleIcon, href: "/dashboard" },
+    { label: "Multi-Campus AI Officer", icon: ChartBarIcon, href: "/dashboard" },
+    { label: "AI Marksheet OCR & Voice", icon: CameraIcon, href: "/dashboard" },
+    { label: "Pre-Publication AI Auditor", icon: ShieldExclamationIcon, href: "/dashboard" },
+    { label: "AI Report Card Comments", icon: SparklesIcon, href: "/dashboard" },
+    { label: "Parent AI Result & Remedial", icon: AcademicCapIcon, href: "/dashboard" },
+  ];
 
   return (
     <ModernDashboardLayout
       sidebarContent={
         <>
-          
           <div>
             {/* Logo */}
             <div className="px-8 mb-6">
-              <Image 
-                src="/logo.png" 
-                alt="ResultsPRO" 
-                width={300} 
-                height={80} 
-                className="w-auto h-20 object-contain" 
-              />
+              <Link href="/">
+                <Image
+                  src="/logo.png"
+                  alt="ResultsPRO"
+                  width={300}
+                  height={80}
+                  className="w-auto h-20 object-contain"
+                />
+              </Link>
             </div>
 
-            {/* Menu Sections */}
+            {/* AI Intelligence Pillars */}
             <div className="px-6 space-y-1">
-              <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">MENU</p>
-              
-              <Link href="/dashboard" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                {isActive('/dashboard') ? <Squares2X2Solid className="w-6 h-6" /> : <Squares2X2Icon className="w-6 h-6" />}
-                Overview
-              </Link>
-              
-              <Link href="/dashboard/leads" className={`flex items-center justify-between text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/leads') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <div className="flex items-center gap-3">
-                  <ClipboardDocumentCheckIcon className="w-6 h-6" />
-                  Registrations
+              <p className="px-2 text-xs font-extrabold text-gray-400 tracking-wider uppercase mb-3">
+                ResultsPRO AI Engine
+              </p>
+              {navItems.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={idx}
+                    href={item.href}
+                    className={`flex items-center gap-3 text-sm px-4 py-2.5 rounded-xl font-bold transition-colors ${
+                      idx === 0
+                        ? "bg-[#0D1060] text-[#FBBC04]"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                    }`}
+                  >
+                    <Icon className="w-5 h-5 shrink-0" />
+                    <span className="truncate">{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* System-of-Record Boundaries */}
+            <div className="px-6 mt-8 space-y-2">
+              <p className="px-2 text-[11px] font-extrabold text-gray-400 tracking-wider uppercase">
+                Connected Suite Boundaries
+              </p>
+              <div className="p-3.5 rounded-2xl bg-gray-50 border border-gray-200/70 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-extrabold text-gray-900">CampusPRO</span>
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded bg-[#0D1060] text-[#FBBC04]">
+                    ERP Record
+                  </span>
                 </div>
-                <span className="bg-[#146ef5] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">12+</span>
-              </Link>
-
-              <Link href="/dashboard/store" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/store') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <BuildingStorefrontIcon className="w-6 h-6" />
-                Wholesale Store
-              </Link>
-
-              <Link href="/dashboard/ledger" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/ledger') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <WalletIcon className="w-6 h-6" />
-                Ledger & Payouts
-              </Link>
-            </div>
-
-            <div className="px-6 mt-10 space-y-1">
-              <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">GENERAL</p>
-              
-              <Link href="/dashboard/settings" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/settings') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <Cog6ToothIcon className="w-6 h-6" />
-                Settings
-              </Link>
-              <Link href="/dashboard/help" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/help') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <QuestionMarkCircleIcon className="w-6 h-6" />
-                Help
-              </Link>
-              <Link href="#" className="flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
-                <ArrowRightOnRectangleIcon className="w-6 h-6" />
-                Logout
-              </Link>
-            </div>
-          </div>
-
-          {/* User Info */}
-          <div className="px-6 mt-8">
-            <div 
-              className="rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
-              style={{ backgroundImage: "url('/abstract-blue-2.jpg')" }}
-            >
-              <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
-              
-              <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-sm border-2 border-white/50 overflow-hidden bg-white/20 backdrop-blur-sm">
-                <Image src="/avatars/character1.jpg" alt="Agent Avatar" width={40} height={40} className="w-full h-full object-cover" />
+                <p className="text-[11px] text-gray-500 leading-snug">
+                  Owns Manage Teachers, Students, Classes, Attendance, Fees &amp; All Messaging.
+                </p>
               </div>
-              <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">Agent Profile</h4>
-              <p className="text-[10px] text-gray-300 mb-6 relative z-10">agent@resultspro.ng</p>
-              
-              <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] transition-colors text-white text-xs font-semibold py-3 rounded-full relative z-10 shadow-md">
-                View Profile
-              </button>
+              <div className="p-3.5 rounded-2xl bg-gray-50 border border-gray-200/70 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-extrabold text-gray-900">ClassroomPRO</span>
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded bg-[#1565C0] text-white">
+                    Learning Hub
+                  </span>
+                </div>
+                <p className="text-[11px] text-gray-500 leading-snug">
+                  Owns NERDC Notes, AI Stories, Flashcards, CBT Quizzes &amp; Remedial Packs.
+                </p>
+              </div>
             </div>
           </div>
-        
+
+          {/* Active Persona Card */}
+          <div className="px-6 mt-6">
+            <div
+              className="rounded-3xl p-5 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
+              style={{ backgroundImage: "url('/photo07.jpeg')" }}
+            >
+              <div className="absolute inset-0 bg-[#0D1060]/80 mix-blend-multiply" />
+              <div className="relative z-10 space-y-2">
+                <span className="inline-block text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FBBC04] text-[#0D1060]">
+                  {activeProfile.roleName}
+                </span>
+                <h4 className="font-extrabold text-sm leading-tight">{activeProfile.fullName}</h4>
+                <p className="text-[11px] text-gray-200">{activeProfile.subtitle}</p>
+              </div>
+            </div>
+          </div>
         </>
       }
       headerContent={
         <>
-          
-            <div className="relative w-96">
-              <MagnifyingGlassIcon className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
-              <input 
-                type="text" 
-                placeholder="Search leads..." 
-                className="w-full bg-white border border-white focus:border-gray-200 outline-none rounded-xl py-3 pl-12 pr-12 text-sm text-gray-700 shadow-sm transition-colors placeholder:text-gray-400"
-              />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-gray-100 rounded px-1.5 py-0.5 border border-gray-200">
-                <span className="text-[10px] font-medium text-gray-500">⌘</span>
-                <span className="text-[10px] font-medium text-gray-500">F</span>
-              </div>
-            </div>
+          <div className="flex items-center gap-3">
+            <span className="px-3 py-1.5 rounded-xl bg-[#0D1060] text-[#FBBC04] text-xs font-extrabold">
+              Laurel Academy Multi-Campus Suite
+            </span>
+            <span className="hidden md:inline text-xs font-bold text-gray-500">
+              Ikeja · Lekki · Abuja Campuses (Zero Cross-Campus Leakage)
+            </span>
+          </div>
 
-            <div className="flex items-center gap-4">
-              <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-500 shadow-sm hover:text-gray-900 transition-colors">
-                <EnvelopeIcon className="w-5 h-5" />
-              </button>
-              <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-500 shadow-sm hover:text-gray-900 transition-colors relative">
-                <BellIcon className="w-5 h-5" />
-                <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-              </button>
-              <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
-                <div className="w-10 h-10 bg-gradient-to-tr from-orange-200 to-orange-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
-                  <img src="/avatars/character7.jpg" alt="Agent Avatar" className="w-full h-full object-cover" />
+          {/* Role Switcher in Header / Floating */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setSwitcherOpen((prev) => !prev)}
+              className="flex items-center gap-3 px-4 py-2 rounded-full bg-white border border-gray-200 shadow-sm hover:border-[#0D1060] transition-all cursor-pointer"
+            >
+              <img
+                src={activeProfile.avatar}
+                alt={activeProfile.fullName}
+                className="w-8 h-8 rounded-full object-cover"
+              />
+              <div className="text-left hidden sm:block">
+                <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#1565C0]">
+                  Switch Role · {activeProfile.roleName}
+                </p>
+                <p className="text-xs font-extrabold text-gray-900">{activeProfile.fullName}</p>
+              </div>
+              <ArrowsRightLeftIcon className="w-4 h-4 text-[#0D1060]" />
+            </button>
+
+            {switcherOpen && (
+              <div className="absolute right-0 mt-2 w-80 bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden z-50">
+                <div className="px-4 py-3 bg-[#0D1060] text-white flex items-center justify-between">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-[#FBBC04]">
+                    Switch ResultsPRO Role
+                  </span>
                 </div>
-                <div className="hidden md:block">
-                  <p className="text-sm font-bold text-gray-900 leading-tight">Totok Michael</p>
-                  <p className="text-xs text-gray-500">tmichael20@gmail.com</p>
+                <div className="p-2 space-y-1">
+                  {RESULTSPRO_ROLES.map((prof) => {
+                    const isCurrent = prof.id === activeProfile.id;
+                    return (
+                      <button
+                        key={prof.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveProfile(prof);
+                          setSwitcherOpen(false);
+                        }}
+                        className={`w-full text-left p-2.5 rounded-2xl flex items-center gap-3 transition-colors cursor-pointer ${
+                          isCurrent ? "bg-blue-50 border border-blue-200" : "hover:bg-gray-50"
+                        }`}
+                      >
+                        <img
+                          src={prof.avatar}
+                          alt={prof.fullName}
+                          className="w-9 h-9 rounded-full object-cover"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-extrabold text-gray-900 truncate">{prof.roleName}</p>
+                          <p className="text-[11px] text-gray-500 truncate">{prof.fullName}</p>
+                        </div>
+                        {isCurrent && <CheckIcon className="w-4 h-4 text-[#1565C0]" />}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-            </div>
-          
+            )}
+          </div>
         </>
       }
     >

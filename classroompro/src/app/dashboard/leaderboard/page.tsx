@@ -108,7 +108,7 @@ export default function LeaderboardPage() {
               {podium[0] && (
                 <div className="flex flex-col items-center gap-4 flex-1 max-w-[140px]">
                   <div className="relative">
-                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-blue overflow-hidden p-1 bg-[#146ef5] flex items-center justify-center">
+                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-blue overflow-hidden p-1 bg-white flex items-center justify-center">
                        <div className="w-full h-full rounded-full bg-blue/20 flex items-center justify-center font-black text-2xl text-gray-900 overflow-hidden">
                          {podium[0].user?.avatar_url ? (
                            <img src={podium[0].user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
@@ -117,7 +117,7 @@ export default function LeaderboardPage() {
                          )}
                        </div>
                     </div>
-                    <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-blue flex items-center justify-center font-black text-gray-900 text-xs border-4 border-navy">
+                    <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-blue flex items-center justify-center font-black text-white text-xs border-4 border-white">
                       2
                     </div>
                   </div>
@@ -134,8 +134,8 @@ export default function LeaderboardPage() {
                 <div className="flex flex-col items-center gap-4 flex-1 max-w-[160px] -translate-y-8">
                   <div className="relative">
                     <Crown className="w-8 h-8 text-amber-600 absolute -top-8 left-1/2 -translate-x-1/2 drop-shadow-[0_0_10px_rgba(255,179,0,0.5)]" />
-                    <div className="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-amber overflow-hidden p-1 bg-[#146ef5] shadow-[0_0_30px_rgba(255,111,0,0.2)] flex items-center justify-center">
-                       <div className="w-full h-full rounded-full bg-amber/20 flex items-center justify-center font-black text-4xl text-gray-900 overflow-hidden">
+                    <div className="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-amber-500 overflow-hidden p-1 bg-white shadow-[0_0_30px_rgba(255,111,0,0.2)] flex items-center justify-center">
+                       <div className="w-full h-full rounded-full bg-amber-100 flex items-center justify-center font-black text-4xl text-gray-900 overflow-hidden">
                          {podium[1].user?.avatar_url ? (
                            <img src={podium[1].user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
                          ) : (
@@ -143,7 +143,7 @@ export default function LeaderboardPage() {
                          )}
                        </div>
                     </div>
-                    <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-amber flex items-center justify-center font-black text-white text-sm border-4 border-navy">
+                    <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center font-black text-white text-sm border-4 border-white">
                       1
                     </div>
                   </div>
@@ -151,7 +151,7 @@ export default function LeaderboardPage() {
                     <div className="text-base font-black text-gray-900 mb-1 truncate w-32">{podium[1].user?.full_name || 'Anonymous'}</div>
                     <div className="text-sm font-black text-amber-600">{podium[1].xp?.toLocaleString()}</div>
                   </div>
-                  <div className="w-full h-40 bg-gradient-to-t from-amber/20 to-amber/5 rounded-t-2xl border-t border-x border-amber/20" />
+                  <div className="w-full h-40 bg-gradient-to-t from-amber-500/20 to-amber-500/5 rounded-t-2xl border-t border-x border-amber-500/20" />
                 </div>
               )}
 
@@ -159,7 +159,7 @@ export default function LeaderboardPage() {
               {podium[2] && (
                 <div className="flex flex-col items-center gap-4 flex-1 max-w-[140px]">
                   <div className="relative">
-                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-green overflow-hidden p-1 bg-[#146ef5] flex items-center justify-center">
+                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-emerald-500 overflow-hidden p-1 bg-white flex items-center justify-center">
                        <div className="w-full h-full rounded-full bg-emerald-100 flex items-center justify-center font-black text-2xl text-gray-900 overflow-hidden">
                          {podium[2].user?.avatar_url ? (
                            <img src={podium[2].user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
@@ -168,7 +168,7 @@ export default function LeaderboardPage() {
                          )}
                        </div>
                     </div>
-                    <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center font-black text-white text-xs border-4 border-navy">
+                    <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center font-black text-white text-xs border-4 border-white">
                       3
                     </div>
                   </div>
@@ -176,7 +176,7 @@ export default function LeaderboardPage() {
                     <div className="text-sm font-bold text-gray-900 mb-1 truncate w-24">{podium[2].user?.full_name || 'Anonymous'}</div>
                     <div className="text-xs font-black text-emerald-600">{podium[2].xp?.toLocaleString()}</div>
                   </div>
-                  <div className="w-full h-20 bg-gradient-to-t from-green/20 to-green/5 rounded-t-2xl border-t border-x border-green/20" />
+                  <div className="w-full h-20 bg-gradient-to-t from-emerald-500/20 to-emerald-500/5 rounded-t-2xl border-t border-x border-emerald-500/20" />
                 </div>
               )}
             </MotionRise>
@@ -210,7 +210,7 @@ export default function LeaderboardPage() {
                       <div>
                         <div className="flex items-center gap-2">
                            <div className="text-sm font-bold text-gray-900">{profile.user?.full_name || 'Anonymous'}</div>
-                           {isMe && <span className="px-2 py-0.5 rounded bg-blue text-gray-900 text-[8px] font-black uppercase tracking-tighter">You</span>}
+                           {isMe && <span className="px-2 py-0.5 rounded bg-blue text-white text-[8px] font-black uppercase tracking-tighter">You</span>}
                            {profile.user?.role === 'TEACHER' && <span className="px-2 py-0.5 rounded bg-amber-50 text-amber-600 border border-amber/20 text-[8px] font-black uppercase tracking-tighter">Staff</span>}
                         </div>
                         <div className="flex items-center gap-1.5 mt-0.5">

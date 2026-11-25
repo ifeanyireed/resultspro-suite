@@ -13,7 +13,7 @@ import {
 } from 'hugeicons-react';
 import api from '@/lib/api';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
-import { CompactGradebook, ResultCheckerView } from '@resultspro/modules';
+import { CompactGradebook, ResultCheckerView, ParentResultInterpreter } from '@resultspro/modules';
 import { useAppHost } from '@/components/AppHostContext';
 
 function StudentResultsSummary() {
@@ -200,6 +200,12 @@ export default function StudentResultsHub() {
       component: StudentResultsSummary,
     },
     {
+      id: 'ai-coach',
+      label: 'AI Progress & ClassroomPRO Revision',
+      icon: Award01Icon,
+      component: ParentResultInterpreter,
+    },
+    {
       id: 'report-card',
       label: 'Official Report Card',
       icon: File01Icon,
@@ -215,10 +221,10 @@ export default function StudentResultsHub() {
 
   return (
     <SpecialistAppContainer
-      appTitle="Results & Academic Standing"
-      appSubtitle="Terminal broadsheets, scratch-card validation, and historical performance analysis."
+      appTitle="Results, AI Performance Insights & Remedial Revision"
+      appSubtitle="Terminal broadsheets, ClassroomPRO topic-gap revision packs, scratch-card validation, and historical performance analysis."
       appBadge="ResultsPRO"
-      accentColor="#8b5cf6"
+      accentColor="#0D1060"
       tabs={tabs}
       defaultTabId="summary"
     />

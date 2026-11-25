@@ -84,42 +84,60 @@ export default function PublicFlashcardsIndex() {
   const curriculums = Array.from(new Set(classes.map(c => c.school?.curriculum).filter(Boolean)));
 
   return (
-    <div className="min-h-screen bg-navy flex flex-col">
+    <main className="min-h-screen bg-light flex flex-col" style={{ background: "var(--color-nets-light)" }}>
       <Navbar />
 
-      <main className="flex-1 pt-32 pb-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <MotionRise className="text-center mb-12">
+      {/* Navy Hero Banner */}
+      <section
+        className="bg-navy text-white relative overflow-hidden"
+        style={{ background: "var(--color-nets-navy-dark)", paddingTop: "10rem", paddingBottom: "5rem", marginTop: "-72px" }}
+      >
+        <div aria-hidden className="absolute inset-0 z-0 opacity-20">
+          <img src="/photo13.jpeg" alt="" className="w-full h-full object-cover" />
+        </div>
+        <div
+          aria-hidden
+          className="absolute inset-0 z-0"
+          style={{
+            background: "linear-gradient(105deg, rgba(13,16,96,0.96) 0%, rgba(13,16,96,0.82) 55%, rgba(13,16,96,0.65) 100%)",
+          }}
+        />
+        <div className="container-nets relative z-10 text-center">
+          <MotionRise className="max-w-3xl mx-auto">
+            <div className="overline-dark justify-center" style={{ marginBottom: "1rem" }}>Active Recall &amp; Spaced Repetition</div>
             <h1 className="text-4xl md:text-5xl font-bold font-display text-white mb-4">
-              Smart <span className="text-blue">Flashcards</span>
+              Smart <span className="text-green">Flashcards</span>
             </h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-white/75 max-w-2xl mx-auto text-lg">
               Master complex concepts with active recall. Browse community-curated 
               study sets and accelerate your learning.
             </p>
           </MotionRise>
+        </div>
+      </section>
 
+      <section className="flex-1 py-16 px-4 bg-light">
+        <div className="max-w-7xl mx-auto">
           {/* Search and Filters */}
-          <MotionRise delay={0.08} className="space-y-4 mb-12 bg-white/5 p-6 rounded-[32px] border border-white/10 backdrop-blur-xl">
+          <MotionRise delay={0.08} className="space-y-4 mb-12 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
               <Input 
                 placeholder="Search flashcards by topic or subject..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-12 h-14 bg-navy/50 border-white/10 text-white focus:border-blue/50 focus:ring-blue/50 text-lg rounded-2xl"
+                className="pl-12 h-14 bg-gray-50 border-gray-200 text-gray-900 focus:border-blue/50 focus:ring-blue/30 text-lg rounded-xl"
               />
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-2">Class Level</label>
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Class Level</label>
                   <Select value={selectedClass} onValueChange={setSelectedClass}>
-                    <SelectTrigger className="bg-navy/50 border-white/10 text-white h-12 rounded-xl">
+                    <SelectTrigger className="bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                       <SelectValue placeholder="All Classes" />
                     </SelectTrigger>
-                    <SelectContent className="bg-navy border-white/10 text-white">
+                    <SelectContent className="bg-white border-gray-200 text-gray-900">
                       <SelectItem value="all">All Classes</SelectItem>
                       {classes.map((c) => (
                         <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
@@ -129,12 +147,12 @@ export default function PublicFlashcardsIndex() {
                </div>
 
                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-2">Subject</label>
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Subject</label>
                   <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-                    <SelectTrigger className="bg-navy/50 border-white/10 text-white h-12 rounded-xl">
+                    <SelectTrigger className="bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                       <SelectValue placeholder="All Subjects" />
                     </SelectTrigger>
-                    <SelectContent className="bg-navy border-white/10 text-white">
+                    <SelectContent className="bg-white border-gray-200 text-gray-900">
                       <SelectItem value="all">All Subjects</SelectItem>
                       {subjects.map((s) => (
                         <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
@@ -144,12 +162,12 @@ export default function PublicFlashcardsIndex() {
                </div>
 
                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-2">Term</label>
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Term</label>
                   <Select value={selectedTerm} onValueChange={setSelectedTerm}>
-                    <SelectTrigger className="bg-navy/50 border-white/10 text-white h-12 rounded-xl">
+                    <SelectTrigger className="bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                       <SelectValue placeholder="All Terms" />
                     </SelectTrigger>
-                    <SelectContent className="bg-navy border-white/10 text-white">
+                    <SelectContent className="bg-white border-gray-200 text-gray-900">
                       <SelectItem value="all">All Terms</SelectItem>
                       <SelectItem value="1">1st Term</SelectItem>
                       <SelectItem value="2">2nd Term</SelectItem>
@@ -159,12 +177,12 @@ export default function PublicFlashcardsIndex() {
                </div>
 
                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-2">Curriculum</label>
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-2">Curriculum</label>
                   <Select value={selectedCurriculum} onValueChange={setSelectedCurriculum}>
-                    <SelectTrigger className="bg-navy/50 border-white/10 text-white h-12 rounded-xl">
+                    <SelectTrigger className="bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                       <SelectValue placeholder="All Curriculums" />
                     </SelectTrigger>
-                    <SelectContent className="bg-navy border-white/10 text-white">
+                    <SelectContent className="bg-white border-gray-200 text-gray-900">
                       <SelectItem value="all">All Curriculums</SelectItem>
                       {curriculums.map((curr: any) => (
                         <SelectItem key={curr} value={curr}>{curr} Curriculum</SelectItem>
@@ -186,39 +204,37 @@ export default function PublicFlashcardsIndex() {
                 <MotionRise 
                   key={set.id} 
                   delay={idx * 0.05}
-                  className="group bg-white/5 border border-white/10 rounded-[32px] p-6 hover:border-blue/50 transition-all duration-300 flex flex-col relative overflow-hidden"
+                  className="group bg-white border border-gray-200 shadow-sm hover:shadow-md rounded-2xl p-6 hover:border-blue/40 transition-all duration-300 flex flex-col relative overflow-hidden"
                 >
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-blue/5 blur-[30px] rounded-full -z-10" />
-                  
-                  <div className="w-12 h-12 rounded-xl bg-blue/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <Layers className="w-6 h-6 text-blue" />
                   </div>
                   
                   <div className="flex flex-col gap-2 mb-4">
                     <div className="flex flex-wrap gap-1.5">
-                       <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-green/10 text-green uppercase tracking-tighter border border-green/10">
+                       <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 uppercase tracking-tighter border border-amber-200">
                          {set.note?.topic?.class?.school?.curriculum}
                        </span>
-                       <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-blue/10 text-blue uppercase tracking-tighter border border-blue/10">
+                       <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-blue-50 text-blue uppercase tracking-tighter border border-blue-200">
                          {set.note?.topic?.class?.name}
                        </span>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
-                       <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-amber/10 text-amber uppercase tracking-tighter border border-amber/10">
+                       <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 uppercase tracking-tighter border border-emerald-200">
                          {set.note?.topic?.subject?.name}
                        </span>
-                       <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-white/10 text-white uppercase tracking-tighter border border-white/10">
+                       <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 uppercase tracking-tighter border border-gray-200">
                          Term {set.note?.topic?.term}
                        </span>
                     </div>
                   </div>
                   
-                  <h3 className="text-lg font-bold text-white mb-4 line-clamp-2 min-h-[56px] group-hover:text-blue transition-colors">
+                  <h3 className="text-lg font-bold text-gray-900 mb-4 line-clamp-2 min-h-[56px] group-hover:text-blue transition-colors">
                     {set.title}
                   </h3>
                   
                   <div className="mt-auto space-y-4">
-                    <div className="flex items-center justify-between text-[10px] text-muted-foreground font-bold uppercase tracking-widest pt-4 border-t border-white/5">
+                    <div className="flex items-center justify-between text-[10px] text-gray-500 font-bold uppercase tracking-widest pt-4 border-t border-gray-100">
                       <div className="flex items-center gap-1.5">
                         <Brain className="w-3 h-3" /> Medium
                       </div>
@@ -228,7 +244,7 @@ export default function PublicFlashcardsIndex() {
                     </div>
                     
                     <Link href={`/dashboard/flashcards/${set.id}`}>
-                      <Button className="w-full bg-blue hover:bg-blue/60 text-white font-bold h-10 rounded-xl">
+                      <Button className="w-full bg-blue hover:bg-blue/90 text-white font-bold h-10 rounded-xl">
                         Study Now
                       </Button>
                     </Link>
@@ -239,9 +255,9 @@ export default function PublicFlashcardsIndex() {
           )}
 
           {!loading && filteredFlashcards.length === 0 && (
-            <div className="text-center py-20 bg-white/5 rounded-[32px] border border-white/10">
-               <p className="text-white text-xl font-display mb-2">No flashcards found</p>
-               <p className="text-muted-foreground">Try adjusting your filters or search query.</p>
+            <div className="text-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm">
+               <p className="text-gray-900 text-xl font-display mb-2">No flashcards found</p>
+               <p className="text-gray-500">Try adjusting your filters or search query.</p>
                <Button 
                 variant="link" 
                 className="text-blue mt-4 font-bold"
@@ -260,14 +276,14 @@ export default function PublicFlashcardsIndex() {
 
           {/* Pagination Controller */}
           {!loading && filteredFlashcards.length > 0 && (
-            <div className="mt-16 flex flex-col md:flex-row items-center justify-between gap-8 bg-white/5 p-6 rounded-[32px] border border-white/10 backdrop-blur-xl">
+            <div className="mt-16 flex flex-col md:flex-row items-center justify-between gap-8 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                <div className="flex items-center gap-4">
-                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Items per page</span>
+                  <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Items per page</span>
                   <Select value={itemsPerPage} onValueChange={setItemsPerPage}>
-                    <SelectTrigger className="w-20 bg-navy/50 border-white/10 text-white h-10 rounded-xl">
+                    <SelectTrigger className="w-20 bg-gray-50 border-gray-200 text-gray-900 h-10 rounded-xl">
                       <SelectValue placeholder="8" />
                     </SelectTrigger>
-                    <SelectContent className="bg-navy border-white/10 text-white">
+                    <SelectContent className="bg-white border-gray-200 text-gray-900">
                       <SelectItem value="4">4</SelectItem>
                       <SelectItem value="8">8</SelectItem>
                       <SelectItem value="12">12</SelectItem>
@@ -280,7 +296,7 @@ export default function PublicFlashcardsIndex() {
                   <Button 
                     variant="outline" 
                     size="icon" 
-                    className="w-10 h-10 rounded-xl border-white/10 text-white hover:bg-white/5 disabled:opacity-30"
+                    className="w-10 h-10 rounded-xl border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-30"
                     disabled={currentPage === 1}
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                   >
@@ -288,7 +304,6 @@ export default function PublicFlashcardsIndex() {
                   </Button>
 
                   <div className="flex items-center gap-2">
-                     {/* Smart Pagination: Show limited pages */}
                      {Array.from({ length: totalPages }, (_, i) => i + 1)
                        .filter(pageNum => 
                          pageNum === 1 || 
@@ -298,13 +313,13 @@ export default function PublicFlashcardsIndex() {
                        .map((pageNum, idx, array) => (
                          <React.Fragment key={pageNum}>
                            {idx > 0 && array[idx-1] !== pageNum - 1 && (
-                             <span className="text-muted-foreground px-1">...</span>
+                             <span className="text-gray-400 px-1">...</span>
                            )}
                            <Button
                              variant={currentPage === pageNum ? "default" : "outline"}
                              className={cn(
                                "w-10 h-10 rounded-xl font-bold",
-                               currentPage === pageNum ? "bg-green-600 text-white hover:bg-green/90" : "border-white/10 text-white hover:bg-white/5"
+                               currentPage === pageNum ? "bg-green text-navy hover:bg-[#E5A800]" : "border-gray-200 text-gray-700 hover:bg-gray-50"
                              )}
                              onClick={() => setCurrentPage(pageNum)}
                            >
@@ -317,7 +332,7 @@ export default function PublicFlashcardsIndex() {
                   <Button 
                     variant="outline" 
                     size="icon" 
-                    className="w-10 h-10 rounded-xl border-white/10 text-white hover:bg-white/5 disabled:opacity-30"
+                    className="w-10 h-10 rounded-xl border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-30"
                     disabled={currentPage === totalPages}
                     onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                   >
@@ -325,15 +340,15 @@ export default function PublicFlashcardsIndex() {
                   </Button>
                </div>
 
-               <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+               <div className="text-xs font-bold text-gray-500 uppercase tracking-widest">
                   Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, totalItems)} of {totalItems}
                </div>
             </div>
           )}
         </div>
-      </main>
+      </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }

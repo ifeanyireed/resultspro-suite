@@ -90,7 +90,7 @@ export const PopupProvider = ({ children }: { children: ReactNode }) => {
       
       {currentPopup && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-navy/60 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-[#1a2b3c] border border-white/10 p-8 rounded-[40px] w-full max-w-md shadow-2xl relative animate-in zoom-in-95 duration-300">
+          <div className="bg-[#0D1060] border border-white/10 p-8 rounded-[40px] w-full max-w-md shadow-2xl relative animate-in zoom-in-95 duration-300">
             <button 
               onClick={() => closePopup(currentPopup.id)}
               className="absolute top-6 right-6 p-2 rounded-full bg-white/5 text-gray-400 hover:text-white transition-colors"
@@ -112,7 +112,7 @@ export const PopupProvider = ({ children }: { children: ReactNode }) => {
 
             <Button 
               onClick={() => closePopup(currentPopup.id)}
-              className="w-full bg-green-600 text-white hover:bg-green/90 font-black uppercase tracking-widest h-14 rounded-2xl shadow-[0_8px_20px_rgba(0,200,83,0.3)]"
+              className="w-full bg-green text-navy hover:bg-[#E5A800] font-black uppercase tracking-widest h-14 rounded-2xl shadow-[0_8px_20px_rgba(251,188,4,0.3)]"
             >
               Got it!
             </Button>

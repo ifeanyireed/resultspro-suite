@@ -116,7 +116,7 @@ export default function TutorsPage() {
              <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                {filteredTutors.map((tutor, idx) => {
                  const tName = tutor.name || "Anonymous Tutor";
-                 const tAvatar = tutor.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(tName)}&background=0D1B2A&color=fff`;
+                 const tAvatar = tutor.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(tName)}&background=0D1060&color=fff`;
                  const tRate = tutor.hourlyRate || tutor.hourly_rate || 0;
                  const tLocation = tutor.location || "Online";
                  const tReviews = tutor.reviewCount || tutor.total_reviews || 0;

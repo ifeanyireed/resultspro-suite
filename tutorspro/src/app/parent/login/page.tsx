@@ -39,35 +39,29 @@ export default function ParentLogin() {
   };
 
   return (
-    <main className="min-h-screen bg-navy flex items-center justify-center p-4 relative overflow-hidden">
-      {/* ... background ... */}
-      <div className="absolute top-0 left-0 w-full h-full z-0">
-        <div className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-blue/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-purple/10 rounded-full blur-[120px]" />
-      </div>
-
+    <main className="min-h-screen bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
       <MotionRise className="w-full max-w-md relative z-10">
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue/10 border border-blue/20 text-[10px] font-bold text-blue uppercase tracking-widest mb-6">
              <Shield className="w-3 h-3" /> Parent Security Portal
           </div>
-          <h1 className="text-4xl font-display font-black text-white mb-2">Welcome Back</h1>
-          <p className="text-gray-400">Manage your child&apos;s learning journey.</p>
+          <h1 className="text-4xl font-display font-black text-gray-900 mb-2">Welcome Back</h1>
+          <p className="text-gray-600">Manage your child&apos;s learning journey.</p>
         </div>
 
-        <div className="p-8 md:p-10 rounded-[40px] bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl">
+        <div className="p-8 md:p-10 rounded-[40px] bg-white border border-gray-100 shadow-lg">
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
               <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="parent@example.com"
                   required
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-blue/50 transition-all"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-4 pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-blue transition-all"
                 />
               </div>
             </div>
@@ -78,28 +72,28 @@ export default function ParentLogin() {
                 <Link href="#" className="text-[10px] font-bold text-blue hover:underline uppercase tracking-tighter">Forgot Password?</Link>
               </div>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input 
                   type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-blue/50 transition-all"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-4 pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-blue transition-all"
                 />
               </div>
             </div>
 
             <button 
               disabled={isLoading}
-              className="w-full py-4 rounded-2xl bg-blue text-white font-bold text-lg flex items-center justify-center gap-2 hover:bg-blue/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-blue/20 disabled:opacity-50"
+              className="w-full py-4 rounded-2xl bg-green text-navy font-bold text-lg flex items-center justify-center gap-2 hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-sm disabled:opacity-50"
             >
               {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : "LOG IN TO PORTAL"}
               {!isLoading && <ChevronRight className="w-5 h-5" />}
             </button>
           </form>
 
-          <div className="mt-8 pt-8 border-t border-white/5 text-center">
+          <div className="mt-8 pt-8 border-t border-gray-100 text-center">
             <p className="text-sm text-gray-500">
               Don&apos;t have a parent account? <Link href="/signup" className="text-blue font-bold hover:underline">Create One</Link>
             </p>
@@ -107,11 +101,11 @@ export default function ParentLogin() {
         </div>
 
         <div className="mt-8 flex justify-center gap-6">
-          <Link href="/login" className="flex items-center gap-2 text-xs font-bold text-gray-600 hover:text-white transition-colors">
+          <Link href="/login" className="flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors">
             <UserCircle2 className="w-4 h-4" /> STUDENT LOGIN
           </Link>
-          <div className="w-1 h-1 rounded-full bg-white/10 self-center" />
-          <Link href="/contact" className="text-xs font-bold text-gray-600 hover:text-white transition-colors">HELP CENTER</Link>
+          <div className="w-1 h-1 rounded-full bg-gray-300 self-center" />
+          <Link href="/contact" className="text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors">HELP CENTER</Link>
         </div>
       </MotionRise>
     </main>

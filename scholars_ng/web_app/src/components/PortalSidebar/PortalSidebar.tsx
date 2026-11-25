@@ -56,7 +56,7 @@ const teacherMenu: MenuItem[] = [
   { section: 'Modular Suite', name: 'ClassroomPRO', icon: AcademicCapIcon, activeIcon: AcademicCapIcon, slug: '/teacher/classroom' },
   { name: 'TutorsPRO', icon: UserGroupIcon, activeIcon: UserGroupIcon, slug: '/teacher/tutors' },
   { name: 'PuzzlePRO', icon: PuzzlePieceIcon, activeIcon: PuzzlePieceIcon, slug: '/admin/puzzlepro' },
-  { name: 'ResultsPRO', icon: ChartPieIcon, activeIcon: ChartPieIcon, slug: '/admin/results' },
+  { name: 'ResultsPRO', icon: ChartPieIcon, activeIcon: ChartPieIcon, slug: '/teacher/results' },
   { section: 'Operations', name: 'CampusPRO', icon: HomeModernIcon, activeIcon: HomeModernIcon, slug: '/teacher/campus-os' },
 ];
 

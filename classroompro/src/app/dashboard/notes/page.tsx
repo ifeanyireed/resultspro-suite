@@ -271,7 +271,7 @@ export default function NotesListPage() {
                        <SelectTrigger className="h-12 bg-white shadow-sm border border-gray-100 border-gray-100 rounded-2xl text-gray-900 px-6 w-full md:w-40">
                           <SelectValue placeholder="Status" />
                        </SelectTrigger>
-                       <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                       <SelectContent className="bg-white border-gray-200 text-gray-900">
                           <SelectItem value="all">All Notes</SelectItem>
                           <SelectItem value="new">New</SelectItem>
                           <SelectItem value="in_progress">In Progress</SelectItem>

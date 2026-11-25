@@ -38,18 +38,35 @@ export default function HowItWorksPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-slate-50 flex flex-col">
+    <main className="min-h-screen bg-light flex flex-col" style={{ background: 'var(--color-nets-light)' }}>
       <Navbar />
       
+      {/* Navy Hero Section */}
+      <section className="bg-navy text-white text-center relative overflow-hidden" style={{ background: 'var(--color-nets-navy-dark)', paddingTop: '10rem', paddingBottom: '6rem', marginTop: '-72px' }}>
+        <div aria-hidden className="absolute inset-0 z-0 opacity-20">
+          <img src="/photo06.jpeg" alt="" className="w-full h-full object-cover" />
+        </div>
+        <div
+          aria-hidden
+          className="absolute inset-0 z-0"
+          style={{
+            background: "linear-gradient(105deg, rgba(13,16,96,0.96) 0%, rgba(13,16,96,0.82) 55%, rgba(13,16,96,0.65) 100%)",
+          }}
+        />
+        <div className="container-nets relative z-10">
+          <MotionRise className="max-w-3xl mx-auto">
+            <div className="overline-dark justify-center" style={{ marginBottom: '1.25rem' }}>Step-by-Step Guide</div>
+            <h1 className="fw-300 text-white" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', lineHeight: 1.1, marginBottom: '1.5rem' }}>
+              How <span style={{ fontWeight: 700, color: 'var(--color-nets-red)' }}>TutorsPRO</span> Works
+            </h1>
+            <p className="text-body-lg text-white/75">
+              Your journey to academic excellence starts here. We&apos;ve made it incredibly simple to connect with world-class educators and start learning immediately.
+            </p>
+          </MotionRise>
+        </div>
+      </section>
+
       <div className="flex-1 max-w-5xl mx-auto w-full px-6 py-20">
-        <MotionRise className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
-            How <span className="text-[var(--color-nets-red)]">TutorsPRO</span> Works
-          </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Your journey to academic excellence starts here. We've made it incredibly simple to connect with world-class educators and start learning immediately.
-          </p>
-        </MotionRise>
 
         <MotionStagger className="space-y-12 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
           {steps.map((step, idx) => {

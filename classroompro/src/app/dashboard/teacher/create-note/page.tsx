@@ -67,21 +67,21 @@ export default function CreateNotePage() {
             <div className="grid md:grid-cols-3 gap-6 pt-6 border-t border-white/5">
                <div className="space-y-2">
                   <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Subject</Label>
-                  <select className="w-full bg-[#146ef5] border border-gray-100 rounded-xl h-12 px-4 text-sm text-white">
+                  <select className="w-full bg-gray-50 border border-gray-200 rounded-xl h-12 px-4 text-sm text-gray-900">
                     <option>Biology</option>
                     <option>Chemistry</option>
                   </select>
                </div>
                <div className="space-y-2">
                   <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Class</Label>
-                  <select className="w-full bg-[#146ef5] border border-gray-100 rounded-xl h-12 px-4 text-sm text-white">
+                  <select className="w-full bg-gray-50 border border-gray-200 rounded-xl h-12 px-4 text-sm text-gray-900">
                     <option>SSS 1</option>
                     <option>SSS 2</option>
                   </select>
                </div>
                <div className="space-y-2">
                   <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Week</Label>
-                  <select className="w-full bg-[#146ef5] border border-gray-100 rounded-xl h-12 px-4 text-sm text-white">
+                  <select className="w-full bg-gray-50 border border-gray-200 rounded-xl h-12 px-4 text-sm text-gray-900">
                     <option>Week 1</option>
                     <option>Week 2</option>
                   </select>

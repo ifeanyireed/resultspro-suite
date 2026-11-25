@@ -65,7 +65,12 @@ func main() {
 
 			protected.POST("/bookmarks/toggle", h.ToggleBookmark)
 			protected.GET("/bookmarks", h.GetBookmarks)
+
+			// Connected Trio: Teacher Score Approval Sync to CampusPRO & Topic Learning-Gap Telemetry
+			protected.POST("/teacher/assessments/:id/approve-and-sync", h.ApproveAndSyncAssessment)
+			protected.GET("/learning-gaps/student/:studentId", h.GetStudentLearningGaps)
 		}
+		content.GET("/learning-gaps/student/:studentId", h.GetStudentLearningGaps)
 	}
 
 	port := os.Getenv("PORT")

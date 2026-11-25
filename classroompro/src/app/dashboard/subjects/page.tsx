@@ -157,7 +157,7 @@ export default function SubjectsPage() {
                 </div>
              </div>
              <Link href={`/dashboard/topic-hub?topicId=${data.lastTopic.id}`}>
-                <button className="px-10 py-4 bg-white text-white font-black rounded-2xl hover:scale-105 transition-transform shadow-xl shadow-blue/20">
+                <button className="px-10 py-4 bg-blue text-white font-black rounded-2xl hover:scale-105 transition-transform shadow-xl shadow-blue/20">
                    Resume Topic
                 </button>
              </Link>

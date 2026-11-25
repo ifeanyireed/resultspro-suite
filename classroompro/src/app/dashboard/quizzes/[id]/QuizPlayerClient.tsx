@@ -148,7 +148,7 @@ export default function QuizPlayerClient() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#146ef5] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f9fafc] flex items-center justify-center">
          <Loader2 className="w-12 h-12 text-emerald-600 animate-spin" />
       </div>
     );
@@ -156,7 +156,7 @@ export default function QuizPlayerClient() {
 
   if (!quiz) {
     return (
-      <div className="min-h-screen bg-[#146ef5] flex flex-col items-center justify-center text-white">
+      <div className="min-h-screen bg-[#f9fafc] flex flex-col items-center justify-center text-gray-900">
         <h1 className="text-2xl font-bold mb-4">Quiz Not Found</h1>
         <Link href="/dashboard/quizzes">
           <Button>Back to Quizzes</Button>
@@ -169,9 +169,9 @@ export default function QuizPlayerClient() {
   const isAnswered = (idx: number) => !!selectedAnswers[quiz.questions[idx].id];
 
   return (
-    <div className="min-h-screen bg-[#146ef5] flex flex-col">
+    <div className="min-h-screen bg-[#f9fafc] flex flex-col">
       {/* Quiz Header */}
-      <header className="h-20 border-b border-gray-100 bg-[#146ef5]/80 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-50">
+      <header className="h-20 border-b border-gray-100 bg-white/80 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-4">
           <Link href="/dashboard/quizzes" className="w-10 h-10 rounded-full hover:bg-gray-50 flex items-center justify-center transition-colors">
             <ArrowLeft className="w-5 h-5 text-gray-900" />
@@ -230,12 +230,12 @@ export default function QuizPlayerClient() {
                       value={selectedAnswers[currentQuestion.id] || ""}
                       onChange={(e) => handleOptionSelect(e.target.value)}
                       placeholder="Type your answer here in detail..."
-                      className="w-full min-h-[200px] p-6 rounded-2xl border border-gray-100 bg-[#146ef5]/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-green/50 transition-colors"
+                      className="w-full min-h-[200px] p-6 rounded-2xl border border-gray-200 bg-gray-50 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-emerald-500/50 transition-colors"
                     />
                     <div className="flex justify-end">
                       <Button 
                         size="sm" 
-                        className="bg-blue hover:bg-blue/90 text-gray-900 font-bold h-10 rounded-xl"
+                        className="bg-blue hover:bg-blue/90 text-white font-bold h-10 rounded-xl"
                         onClick={evaluateTheory}
                         disabled={evaluating || !selectedAnswers[currentQuestion.id]}
                       >
@@ -317,7 +317,7 @@ export default function QuizPlayerClient() {
             </Button>
 
             <Button 
-              className="bg-blue hover:bg-blue/90 text-gray-900 h-12 px-8 rounded-xl font-bold" 
+              className="bg-blue hover:bg-blue/90 text-white h-12 px-8 rounded-xl font-bold" 
               onClick={() => {
                 if (currentQuestionIdx < quiz.questions.length - 1) {
                   setCurrentQuestionIdx(prev => prev + 1);

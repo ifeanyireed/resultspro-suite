@@ -4,4 +4,3 @@ export { default as TeacherAtRiskStudents } from './AtRiskStudents';
 export { default as TeacherCohortAnalysis } from './CohortAnalysis';
 export { default as TeacherStudentDetail } from './StudentDetail';
 export { default as TeacherProfile } from './Profile';
-export { default as TeacherMessages } from './Messages';

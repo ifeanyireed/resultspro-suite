@@ -41,8 +41,8 @@ const Hero = () => {
       {/* ── Full-bleed background photo ── */}
       <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <img
-          src="/images/Students1.jpeg"
-          alt=""
+          src="/photo07.jpeg"
+          alt="ResultsPRO 3D Campus"
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
           loading="eager"
         />
@@ -85,7 +85,7 @@ const Hero = () => {
           {/* Overline */}
           <motion.div variants={staggerItem} style={{ marginBottom: '1.5rem' }}>
             <span className="overline-dark">
-              Africa's Smart Result Management
+              AI-Powered School Assessment &amp; Performance Intelligence Engine
             </span>
           </motion.div>
 
@@ -93,52 +93,51 @@ const Hero = () => {
           <motion.h1 variants={staggerItem} className="fw-300" style={{ 
             color: '#fff', 
             marginBottom: '1rem', 
-            fontSize: 'clamp(2.75rem, 4vw, 3.75rem)', 
+            fontSize: 'clamp(2.5rem, 3.8vw, 3.65rem)', 
             lineHeight: '1.1',
             letterSpacing: '-0.02em',
-            whiteSpace: 'nowrap'
           }}>
-            Digitize Your
+            From Manual Score Entry
             <br />
-            <em style={{ fontStyle: 'normal', fontWeight: 700, color: '#fff' }}>Results</em>
+            <em style={{ fontStyle: 'normal', fontWeight: 700, color: '#FBBC04' }}>To Intelligent</em>
             <br />
-            <span style={{ color: 'rgba(255,255,255,0.6)' }}>Seamlessly.</span>
+            <span style={{ color: 'rgba(255,255,255,0.85)' }}>Academic Reporting.</span>
           </motion.h1>
 
           {/* Body */}
           <motion.p variants={staggerItem} style={{ 
-            maxWidth: '460px', 
+            maxWidth: '540px', 
             marginBottom: '2rem', 
             fontSize: '1.125rem', 
-            color: 'rgba(255,255,255,0.7)',
-            lineHeight: '1.5'
+            color: 'rgba(255,255,255,0.78)',
+            lineHeight: '1.55'
           }}>
-            The ultimate result computation and checking platform for schools, parents, and examination bodies.
+            Snap handwritten marksheets for AI OCR extraction, reconcile against CampusPRO multi-campus rosters, run pre-publication AI result audits, generate personalized report-card remarks, and close the learning loop with ClassroomPRO.
           </motion.p>
 
           {/* CTAs */}
           <motion.div variants={staggerItem} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem', alignItems: 'center' }}>
-            <Link href="/check" className="btn btn-red btn-lg">
-              Check Result
+            <Link href="/dashboard" className="btn btn-red btn-lg">
+              Launch 9-Step Webinar Demo
             </Link>
-            <Link href="/schools" className="btn btn-outline-white btn-lg">
-              For Schools
+            <Link href="/login" className="btn btn-outline-white btn-lg">
+              School Portal Login
             </Link>
           </motion.div>
 
           {/* Trust badges & checkmark features */}
           <motion.div variants={staggerItem} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
-              <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>Instant Processing</span>
+              <IconCheck size={15} strokeWidth={1.25} color="#FBBC04" />
+              <span>Multi-Sheet Handwritten OCR</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
-              <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>Anti-Fraud Checks</span>
+              <IconCheck size={15} strokeWidth={1.25} color="#FBBC04" />
+              <span>AI Result Auditor &amp; Officer</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.85)' }}>
-              <IconCheck size={15} strokeWidth={1.25} color="#4ade80" />
-              <span>Secure Backups</span>
+              <IconCheck size={15} strokeWidth={1.25} color="#FBBC04" />
+              <span>100% Deterministic Broadsheets</span>
             </div>
           </motion.div>
         </motion.div>

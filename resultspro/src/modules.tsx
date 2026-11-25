@@ -5,6 +5,12 @@ import { CompactGradebook } from './components/gradebook/CompactGradebook';
 import axiosInstance from './lib/axiosConfig';
 
 export * from './components/gradebook';
+export * from './components/ai/MarksheetScannerView';
+export * from './components/ai/ResultAuditView';
+export * from './components/ai/TeacherCommentStudio';
+export * from './components/ai/PerformanceIntelligenceView';
+export * from './components/ai/ParentResultInterpreter';
+export * from './components/ai/WebinarWorkflowDemo';
 
 export interface ResultCheckerViewProps {
   schoolSlug?: string;

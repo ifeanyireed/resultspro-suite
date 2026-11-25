@@ -87,27 +87,41 @@ export default function PricingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-navy flex flex-col">
+    <main className="min-h-screen bg-light flex flex-col" style={{ background: "var(--color-nets-light)" }}>
       <Navbar />
 
-      <main className="flex-1 pt-32 pb-20 px-4">
-        <div className="">
-          {/* Header */}
-          <MotionRise className="text-center mb-12">
+      {/* Navy Hero Section */}
+      <section
+        className="bg-navy text-white relative overflow-hidden"
+        style={{ background: "var(--color-nets-navy-dark)", paddingTop: "10rem", paddingBottom: "6rem", marginTop: "-72px" }}
+      >
+        <div aria-hidden className="absolute inset-0 z-0 opacity-20">
+          <img src="/photo07.jpeg" alt="" className="w-full h-full object-cover" />
+        </div>
+        <div
+          aria-hidden
+          className="absolute inset-0 z-0"
+          style={{
+            background: "linear-gradient(105deg, rgba(13,16,96,0.96) 0%, rgba(13,16,96,0.82) 55%, rgba(13,16,96,0.65) 100%)",
+          }}
+        />
+        <div className="container-nets relative z-10 text-center">
+          <MotionRise className="max-w-3xl mx-auto">
+            <div className="overline-dark justify-center" style={{ marginBottom: "1.25rem" }}>Transparent Pricing</div>
             <h1 className="text-4xl md:text-6xl font-bold font-display text-white mb-6">
               Invest in <span className="text-green">Academic Success</span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10">
+            <p className="text-lg text-white/75 max-w-2xl mx-auto mb-10">
               Choose the plan that fits your learning needs. From independent students 
               and parents to full school ecosystems.
             </p>
 
             {/* Billing Toggle */}
             <div className="flex items-center justify-center gap-4">
-              <span className={cn("text-sm font-bold transition-colors", !isAnnual ? "text-white" : "text-muted-foreground")}>Termly</span>
+              <span className={cn("text-sm font-bold transition-colors", !isAnnual ? "text-white" : "text-white/60")}>Termly</span>
               <button 
                 onClick={() => setIsAnnual(!isAnnual)}
-                className="w-16 h-8 rounded-full bg-white/5 border border-white/10 p-1 relative transition-all"
+                className="w-16 h-8 rounded-full bg-white/10 border border-white/20 p-1 relative transition-all"
               >
                 <div className={cn(
                   "w-6 h-6 rounded-full bg-green shadow-lg transition-all duration-300",
@@ -115,27 +129,31 @@ export default function PricingPage() {
                 )} />
               </button>
               <div className="flex items-center gap-2">
-                <span className={cn("text-sm font-bold transition-colors", isAnnual ? "text-white" : "text-muted-foreground")}>Annual</span>
-                <span className="px-2 py-0.5 rounded-full bg-green/20 text-green text-[10px] font-black uppercase tracking-widest">Save 20%</span>
+                <span className={cn("text-sm font-bold transition-colors", isAnnual ? "text-white" : "text-white/60")}>Annual</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-green text-navy text-[10px] font-black uppercase tracking-widest">Save 20%</span>
               </div>
             </div>
           </MotionRise>
+        </div>
+      </section>
 
-          {/* Tiers Grid */}
+      {/* White Section: Tiers Grid */}
+      <section className="section-py bg-white border-b border-gray-200 flex-1">
+        <div className="container-nets">
           <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {tiers.map((tier, i) => (
               <MotionRise 
                 key={i} 
                 delay={i * 0.08}
                 className={cn(
-                  "relative p-6 rounded-[32px] border flex flex-col transition-all duration-500",
+                  "relative p-8 rounded-2xl border flex flex-col transition-all duration-300 bg-white",
                   tier.highlight 
-                    ? "bg-white/5 border-green/30 shadow-[0_0_80px_rgba(0,200,83,0.1)] lg:scale-105 z-10" 
-                    : "bg-white/[0.02] border-white/10 hover:border-white/20"
+                    ? "border-2 border-[#0D1060] shadow-xl lg:scale-105 z-10" 
+                    : "border-gray-200 shadow-sm hover:shadow-md"
                 )}
               >
                 {tier.highlight && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest">
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-green text-navy text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest shadow-sm">
                     Most Popular
                   </div>
                 )}
@@ -144,23 +162,23 @@ export default function PricingPage() {
                   {tier.icon}
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-2 font-display">{tier.name}</h3>
-                <p className="text-xs text-muted-foreground mb-8 min-h-[40px] leading-relaxed">{tier.description}</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2 font-display">{tier.name}</h3>
+                <p className="text-xs text-gray-500 mb-8 min-h-[40px] leading-relaxed">{tier.description}</p>
 
                 <div className="mb-8">
                   <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-white">{tier.price}</span>
-                    <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest">{tier.period}</span>
+                    <span className="text-3xl font-bold text-gray-900">{tier.price}</span>
+                    <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest">{tier.period}</span>
                   </div>
                 </div>
 
-                <div className="space-y-4 mb-10 flex-1">
+                <div className="space-y-4 mb-10 flex-1 border-t border-gray-100 pt-6">
                   {tier.features.map((feature, fIndex) => (
-                    <div key={fIndex} className="flex items-start gap-3 text-xs text-muted-foreground">
-                      <div className="w-5 h-5 rounded-full bg-green/10 flex items-center justify-center shrink-0 mt-0.5">
-                        <Check className="w-3 h-3 text-green" />
+                    <div key={fIndex} className="flex items-start gap-3 text-xs text-gray-600">
+                      <div className="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 mt-0.5">
+                        <Check className="w-3 h-3 text-emerald-600" />
                       </div>
-                      <span className="leading-relaxed">{feature}</span>
+                      <span className="leading-relaxed font-medium">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -169,8 +187,8 @@ export default function PricingPage() {
                   className={cn(
                     "w-full h-12 rounded-xl font-bold text-sm transition-all",
                     tier.highlight 
-                      ? "bg-green-600 hover:bg-green-700 text-white shadow-[0_0_20px_rgba(0,200,83,0.2)]" 
-                      : "bg-white/5 hover:bg-white/10 text-white border border-white/10"
+                      ? "bg-green hover:bg-[#E5A800] text-navy shadow-md" 
+                      : "bg-[#0D1060] hover:bg-[#1A1FA8] text-white"
                   )}
                 >
                   {tier.buttonText}
@@ -179,27 +197,28 @@ export default function PricingPage() {
             ))}
           </MotionStagger>
 
-          {/* Guarantee Section */}
-          <MotionRise className="mt-24 bg-white/5 border border-white/10 rounded-[40px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+          {/* Guarantee Section on Light Surface */}
+          <MotionRise className="mt-20 bg-light border border-gray-200 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center gap-6">
-              <div className="w-16 h-16 rounded-2xl bg-green/10 flex items-center justify-center text-green shrink-0">
-                <ShieldCheck className="w-10 h-10" />
+              <div className="w-16 h-16 rounded-2xl bg-white border border-gray-200 shadow-sm flex items-center justify-center text-blue shrink-0">
+                <ShieldCheck className="w-9 h-9" />
               </div>
               <div>
-                <h4 className="text-2xl font-bold text-white font-display mb-1">Safe and Secure Payments</h4>
-                <p className="text-muted-foreground">All transactions are encrypted and processed securely.</p>
+                <h4 className="text-2xl font-bold text-gray-900 font-display mb-1">Safe and Secure Payments</h4>
+                <p className="text-gray-600 text-sm">All school and family transactions are encrypted and processed securely via Paystack.</p>
               </div>
             </div>
-            <div className="flex gap-4">
-               {/* Logos placeholder */}
-               <div className="h-8 w-24 bg-white/10 rounded" />
-               <div className="h-8 w-24 bg-white/10 rounded" />
+            <div className="flex items-center gap-4">
+              <img src="/photo02.jpeg" alt="ClassroomPRO Schools" className="w-28 h-16 object-cover rounded-lg border border-gray-200 shadow-sm" />
+              <div className="text-xs text-gray-500 font-semibold">
+                Trusted by 100+<br />Partner Schools
+              </div>
             </div>
           </MotionRise>
         </div>
-      </main>
+      </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }

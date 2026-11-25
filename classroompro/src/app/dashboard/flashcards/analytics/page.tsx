@@ -135,7 +135,7 @@ export default function FlashcardAnalyticsPage() {
            
            <div className="flex items-center gap-3 bg-white shadow-sm border border-gray-100 p-2 rounded-2xl backdrop-blur-md">
               <div className="px-4 py-2 flex flex-col items-center">
-                 <div className="flex items-center gap-1.5 text-amber-600-500">
+                 <div className="flex items-center gap-1.5 text-amber-600">
                     <Flame className="w-4 h-4 fill-current" />
                     <span className="text-lg font-black">{profile?.profile?.currentStreak || 1}</span>
                  </div>
@@ -174,7 +174,7 @@ export default function FlashcardAnalyticsPage() {
                     <p className="text-[10px] text-gray-500 uppercase tracking-widest">Next Level: {((profile?.profile?.level || 1) + 1)}</p>
                  </div>
               </div>
-              <div className="h-4 w-full bg-[#146ef5] rounded-full overflow-hidden p-1 border border-white/5">
+              <div className="h-4 w-full bg-gray-100 rounded-full overflow-hidden p-1 border border-gray-200">
                  <div 
                    className="h-full bg-gradient-to-r from-blue to-purple-500 rounded-full transition-all duration-1000 shadow-[0_0_20px_rgba(59,130,246,0.5)]" 
                    style={{ width: `${((profile?.profile?.xp % 500) / 500) * 100}%` }}
@@ -257,7 +257,7 @@ export default function FlashcardAnalyticsPage() {
            {/* Time Spent Heatmap-like chart */}
            <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
-                 <Clock className="w-5 h-5 text-amber-600-500" /> Study Time (Minutes)
+                 <Clock className="w-5 h-5 text-amber-600" /> Study Time (Minutes)
               </h3>
               <div className="h-[250px]">
                  <ResponsiveContainer width="100%" height="100%">

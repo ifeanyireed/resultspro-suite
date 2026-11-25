@@ -56,7 +56,7 @@ function ResetPasswordForm() {
           <span>Success! Your account is secure again.</span>
         </div>
         <Link href="/login">
-          <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-11">
+          <Button className="w-full bg-green hover:bg-[#E5A800] text-navy font-bold h-11">
             Log in to your account
           </Button>
         </Link>
@@ -110,7 +110,7 @@ function ResetPasswordForm() {
 
       <Button 
         type="submit" 
-        className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-11"
+        className="w-full bg-green hover:bg-[#E5A800] text-navy font-bold h-11"
         disabled={isLoading || !token}
       >
         {isLoading ? "Resetting..." : "Reset password"}

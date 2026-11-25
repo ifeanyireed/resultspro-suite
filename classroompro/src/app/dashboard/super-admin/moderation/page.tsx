@@ -122,7 +122,7 @@ export default function ContentModeration() {
         <MotionStagger className="grid gap-4">
            {currentItems.map((item, i) => (
               <MotionRise key={item.id} delay={i * 0.04} className="p-6 rounded-3xl bg-white shadow-sm border border-gray-100 hover:border-gray-200 transition-all flex flex-col md:flex-row md:items-center gap-6 group">
-                 <div className="w-14 h-14 rounded-2xl bg-[#146ef5] border border-gray-100 flex items-center justify-center text-gray-500 group-hover:text-emerald-600 transition-colors shrink-0">
+                 <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-gray-100 flex items-center justify-center text-[#146ef5] group-hover:text-emerald-600 transition-colors shrink-0">
                     {item.type === 'note' && <BookOpen className="w-7 h-7" />}
                     {item.type === 'quiz' && <BrainCircuit className="w-7 h-7" />}
                     {item.type === 'flashcard' && <Layers className="w-7 h-7" />}
@@ -176,10 +176,10 @@ export default function ContentModeration() {
               <div className="flex items-center gap-4">
                  <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Show</span>
                  <Select value={itemsPerPage} onValueChange={setItemsPerPage}>
-                    <SelectTrigger className="w-20 bg-[#146ef5] border-gray-100 text-white h-9 rounded-xl">
+                    <SelectTrigger className="w-20 bg-gray-50 border-gray-200 text-gray-900 h-9 rounded-xl">
                        <SelectValue placeholder="10" />
                     </SelectTrigger>
-                    <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                    <SelectContent className="bg-white border-gray-200 text-gray-900">
                        <SelectItem value="10">10</SelectItem>
                        <SelectItem value="25">25</SelectItem>
                        <SelectItem value="50">50</SelectItem>

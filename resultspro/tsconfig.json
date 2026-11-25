@@ -21,6 +21,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "gsap": [
+        "../scholars_ng/web_app/node_modules/gsap"
       ]
     },
     "plugins": [
@@ -38,6 +41,9 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/legacy-pages",
+    "src/App.tsx",
+    "src/main.tsx"
   ]
 }

@@ -8,9 +8,9 @@ import { MotionRise } from "@/components/ScrollRiseProvider";
 
 export default function OfflinePage() {
   return (
-    <MotionRise className="min-h-screen bg-[#146ef5] flex flex-col items-center justify-center p-4 text-center">
+    <MotionRise className="min-h-screen bg-[#f9fafc] flex flex-col items-center justify-center p-4 text-center">
       <div className="mb-12">
-        <Logo />
+        <Logo dark />
       </div>
 
       <div className="w-24 h-24 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-500 mb-8">
@@ -25,7 +25,7 @@ export default function OfflinePage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg">
         <Link href="/dashboard/downloads">
-           <Button className="w-full bg-white text-white font-black h-14 rounded-2xl shadow-xl hover:bg-white/90">
+           <Button className="w-full bg-[#146ef5] text-white font-black h-14 rounded-2xl shadow-xl hover:bg-[#105bd1]">
               <BookOpen className="w-5 h-5 mr-2" /> Access Offline Notes
            </Button>
         </Link>

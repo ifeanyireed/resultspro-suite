@@ -52,19 +52,19 @@ export default function ParentChildren() {
   if (!mounted) return null;
 
   return (
-    <main className="min-h-screen bg-navy pb-24">
+    <main className="min-h-screen bg-gray-50 pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
-            <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
+            <h1 className="text-3xl md:text-5xl font-display font-black text-gray-900 mb-2">
               My <span className="text-blue">Children</span>
             </h1>
-            <p className="text-gray-400">Manage linked student accounts and supervision settings.</p>
+            <p className="text-gray-600">Manage linked student accounts and supervision settings.</p>
           </div>
           <button 
             onClick={() => document.getElementById('invite-input')?.focus()}
-            className="px-6 py-3 rounded-2xl bg-blue text-white font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-blue/20"
+            className="px-6 py-3 rounded-2xl bg-green text-navy font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-sm"
           >
             <Plus className="w-5 h-5" />
             ADD ANOTHER CHILD
@@ -77,39 +77,39 @@ export default function ParentChildren() {
             {loading ? (
               <div className="flex flex-col items-center justify-center py-24 opacity-50">
                 <Loader2 className="w-12 h-12 text-blue animate-spin mb-4" />
-                <p className="text-white font-bold">Loading children...</p>
+                <p className="text-gray-900 font-bold">Loading children...</p>
               </div>
             ) : children.length > 0 ? (
               children.map((child) => (
-                <div key={child.id} className="p-6 md:p-8 rounded-[40px] bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-all group">
+                <div key={child.id} className="p-6 md:p-8 rounded-[40px] bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all group">
                   <div className="flex flex-col md:flex-row justify-between gap-6">
                     <div className="flex gap-6">
-                      <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue to-purple flex items-center justify-center text-white text-3xl font-black shadow-xl">
+                      <div className="w-20 h-20 rounded-3xl bg-navy flex items-center justify-center text-white text-3xl font-black shadow-md">
                         {child.avatar}
                       </div>
                       <div>
-                        <h3 className="text-2xl font-display font-bold text-white mb-1 group-hover:text-blue transition-colors">{child.name}</h3>
+                        <h3 className="text-2xl font-display font-bold text-gray-900 mb-1 group-hover:text-blue transition-colors">{child.name}</h3>
                         <div className="flex flex-wrap gap-3 mb-4">
-                          <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold text-gray-400 uppercase tracking-widest">{child.grade}</span>
+                          <span className="px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-[10px] font-bold text-gray-600 uppercase tracking-widest">{child.grade}</span>
                           <span className="px-3 py-1 rounded-full bg-blue/10 border border-blue/20 text-[10px] font-bold text-blue uppercase tracking-widest">{child.subjects} Active Subjects</span>
                         </div>
                         <div className="text-sm text-gray-500 flex items-center gap-2">
-                          <div className={`w-2 h-2 rounded-full ${child.last_active === 'Active' ? 'bg-green animate-pulse' : 'bg-gray-500'}`} />
+                          <div className={`w-2 h-2 rounded-full ${child.last_active === 'Active' ? 'bg-green animate-pulse' : 'bg-gray-400'}`} />
                           Last active: {child.last_active}
                         </div>
                       </div>
                     </div>
                     
                     <div className="flex flex-col justify-center gap-2">
-                      <button className="w-full md:w-auto px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-bold flex items-center justify-center gap-2 hover:bg-white/10 transition-all">
+                      <button className="w-full md:w-auto px-6 py-3 rounded-xl bg-gray-100 border border-gray-200 text-gray-900 font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition-all">
                         <ExternalLink className="w-4 h-4" />
                         VIEW DASHBOARD
                       </button>
                       <div className="flex gap-2">
-                        <button className="flex-1 md:flex-none p-3 rounded-xl bg-white/5 border border-white/10 text-gray-500 hover:text-white hover:bg-white/10 transition-all">
+                        <button className="flex-1 md:flex-none p-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all">
                           <Settings className="w-5 h-5" />
                         </button>
-                        <button className="flex-1 md:flex-none p-3 rounded-xl bg-white/5 border border-white/10 text-gray-500 hover:text-red-400 hover:bg-red-400/10 transition-all">
+                        <button className="flex-1 md:flex-none p-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-500 hover:text-red-500 hover:bg-red-50 transition-all">
                           <Trash2 className="w-5 h-5" />
                         </button>
                       </div>
@@ -118,24 +118,24 @@ export default function ParentChildren() {
                 </div>
               ))
             ) : (
-              <div className="p-12 rounded-[40px] border-2 border-dashed border-white/10 flex flex-col items-center justify-center text-center opacity-60">
-                <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center mb-6">
-                  <UserPlus className="w-8 h-8 text-gray-500" />
+              <div className="p-12 rounded-[40px] bg-white border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-center">
+                <div className="w-16 h-16 rounded-3xl bg-gray-100 flex items-center justify-center mb-6">
+                  <UserPlus className="w-8 h-8 text-gray-400" />
                 </div>
-                <h4 className="text-xl font-bold text-white mb-2">No children linked yet</h4>
-                <p className="text-sm text-gray-500 max-w-xs mx-auto">Enter an invite code on the right to start monitoring your child's progress.</p>
+                <h4 className="text-xl font-bold text-gray-900 mb-2">No children linked yet</h4>
+                <p className="text-sm text-gray-500 max-w-xs mx-auto">Enter an invite code on the right to start monitoring your child&apos;s progress.</p>
               </div>
             )}
           </MotionRise>
 
           {/* Sidebar / Invite Form */}
           <MotionRise delay={0.1} className="space-y-8">
-            <section className="p-8 rounded-[40px] bg-white/5 border border-white/10">
+            <section className="p-8 rounded-[40px] bg-white border border-gray-100 shadow-sm">
               <div className="w-12 h-12 rounded-2xl bg-blue/10 text-blue flex items-center justify-center mb-6">
                 <ShieldCheck className="w-6 h-6" />
               </div>
-              <h3 className="text-2xl font-display font-bold text-white mb-2">Invite Code</h3>
-              <p className="text-sm text-gray-400 mb-8">Your child can find this code in their Profile settings.</p>
+              <h3 className="text-2xl font-display font-bold text-gray-900 mb-2">Invite Code</h3>
+              <p className="text-sm text-gray-600 mb-8">Your child can find this code in their Profile settings.</p>
               
               <div className="space-y-4">
                 <input 
@@ -144,12 +144,12 @@ export default function ParentChildren() {
                   value={inviteCode}
                   onChange={(e) => setInviteCode(e.target.value)}
                   placeholder="EX: Student ID"
-                  className="w-full bg-navy border border-white/10 rounded-2xl py-4 px-6 text-white font-mono text-center tracking-widest placeholder:text-gray-700 focus:outline-none focus:border-blue transition-all"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-4 px-6 text-gray-900 font-mono text-center tracking-widest placeholder:text-gray-400 focus:outline-none focus:border-blue transition-all"
                 />
                 <button 
                   onClick={handleLinkAccount}
                   disabled={linking}
-                  className="w-full py-4 rounded-2xl bg-blue text-white font-bold flex items-center justify-center gap-2 hover:bg-blue/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-4 rounded-2xl bg-green text-navy font-bold flex items-center justify-center gap-2 hover:opacity-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {linking ? <Loader2 className="w-5 h-5 animate-spin" /> : 'LINK ACCOUNT'}
                   <ChevronRight className="w-5 h-5" />
@@ -158,8 +158,8 @@ export default function ParentChildren() {
             </section>
 
             {/* Quick Tips */}
-            <section className="p-8 rounded-[40px] bg-gradient-to-br from-purple/20 to-transparent border border-white/10">
-               <h4 className="font-bold text-white mb-4">Why link accounts?</h4>
+            <section className="p-8 rounded-[40px] bg-white border border-gray-100 shadow-sm">
+               <h4 className="font-bold text-gray-900 mb-4">Why link accounts?</h4>
                <ul className="space-y-4">
                  {[
                    'Real-time attendance alerts',
@@ -167,8 +167,8 @@ export default function ParentChildren() {
                    'Direct messaging with tutors',
                    'Simplified billing management'
                  ].map((tip, i) => (
-                   <li key={i} className="flex gap-3 text-sm text-gray-400">
-                     <div className="w-1.5 h-1.5 rounded-full bg-purple mt-1.5 shrink-0" />
+                   <li key={i} className="flex gap-3 text-sm text-gray-600">
+                     <div className="w-1.5 h-1.5 rounded-full bg-blue mt-1.5 shrink-0" />
                      {tip}
                    </li>
                  ))}

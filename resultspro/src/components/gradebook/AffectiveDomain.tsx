@@ -5,7 +5,7 @@ interface AffectiveDomainProps {
   result: SchoolResult;
 }
 
-const getRatingColor = (rating: string) => {
+const getRatingColor = (rating: string | number) => {
   switch(rating) {
     case 'Excellent': return 'bg-green-100 text-green-800 border-green-300';
     case 'Very Good': return 'bg-blue-100 text-blue-800 border-blue-300';

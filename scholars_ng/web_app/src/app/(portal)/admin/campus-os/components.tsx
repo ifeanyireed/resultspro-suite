@@ -32,13 +32,6 @@ import {
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
-import TimetableDashboard from '../timetable/page';
-import PerformanceDashboard from '../performance/page';
-import EnrollmentDashboard from '../enrollment/page';
-import FeesDashboard from '../fees/page';
-import LibraryDashboard from '../library/page';
-import ProcurementDashboard from '../procurement/page';
-import TransportDashboard from '../transport/page';
 import AdmissionsDashboard, { type AdmissionSubtab } from '@/components/Dashboard/AdmissionsDashboard';
 import api from '@/lib/api';
 import AcademicSessionManager from './AcademicSessionManager';
@@ -190,7 +183,7 @@ export function AcademicOperationsHub() {
       </div>
 
       {/* 0. OVERVIEW (Moved to Front) */}
-      {subtab === 'overview' && <TimetableDashboard />}
+      {subtab === 'overview' && <TimetableManager />}
 
       {/* 1. ACADEMIC SESSION (Tenant-Isolated & Persistent Database Hub) */}
       {subtab === 'session' && <AcademicSessionManager />}

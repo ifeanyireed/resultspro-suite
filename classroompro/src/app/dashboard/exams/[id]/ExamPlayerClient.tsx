@@ -109,7 +109,7 @@ export default function ExamPlayerClient() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#146ef5] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f9fafc] flex items-center justify-center">
          <Loader2 className="w-12 h-12 text-[#146ef5] animate-spin" />
       </div>
     );
@@ -117,12 +117,12 @@ export default function ExamPlayerClient() {
 
   if (!exam) {
     return (
-      <div className="min-h-screen bg-[#146ef5] flex flex-col items-center justify-center text-white p-8 text-center">
+      <div className="min-h-screen bg-[#f9fafc] flex flex-col items-center justify-center text-gray-900 p-8 text-center">
         <GraduationCap className="w-16 h-16 text-gray-500 mb-6 opacity-20" />
         <h1 className="text-2xl font-bold mb-2">Exam Not Found</h1>
         <p className="text-gray-500 mb-8">This assessment may have been moved or deleted.</p>
         <Link href="/dashboard/exams">
-          <Button className="bg-blue text-gray-900 px-8 h-12 rounded-xl">Back to Exams</Button>
+          <Button className="bg-blue text-white px-8 h-12 rounded-xl">Back to Exams</Button>
         </Link>
       </div>
     );
@@ -132,9 +132,9 @@ export default function ExamPlayerClient() {
   const isAnswered = (idx: number) => !!selectedAnswers[exam.questions[idx].id];
 
   return (
-    <div className="min-h-screen bg-[#146ef5] flex flex-col">
+    <div className="min-h-screen bg-[#f9fafc] flex flex-col">
       {/* Exam Header */}
-      <header className="h-20 border-b border-gray-100 bg-[#146ef5]/80 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-50">
+      <header className="h-20 border-b border-gray-100 bg-white/80 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-4">
           <button 
             onClick={() => {
@@ -161,7 +161,7 @@ export default function ExamPlayerClient() {
             <span className="text-lg font-mono font-bold">{formatTime(timeLeft)}</span>
           </div>
           <Button 
-            className="bg-blue hover:bg-blue/80 text-gray-900 font-bold px-6 h-10 rounded-xl shadow-lg shadow-blue/20" 
+            className="bg-blue hover:bg-blue/80 text-white font-bold px-6 h-10 rounded-xl shadow-lg shadow-blue/20" 
             onClick={() => {
               if (confirm("Are you sure you want to submit your exam now?")) {
                 handleSubmit();
@@ -251,7 +251,7 @@ export default function ExamPlayerClient() {
             </Button>
 
             <Button 
-              className="bg-blue hover:bg-blue/90 text-gray-900 h-12 px-8 rounded-xl font-bold shadow-lg shadow-blue/20" 
+              className="bg-blue hover:bg-blue/90 text-white h-12 px-8 rounded-xl font-bold shadow-lg shadow-blue/20" 
               onClick={() => {
                 if (currentQuestionIdx < exam.questions.length - 1) {
                   setCurrentQuestionIdx(prev => prev + 1);

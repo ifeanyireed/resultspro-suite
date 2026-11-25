@@ -222,17 +222,17 @@ export default function FlashcardsPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
             <Input 
               placeholder="Search study sets..." 
-              className="pl-10 h-12 bg-[#146ef5] border-gray-100 text-white focus:ring-0 ring-0"
+              className="pl-10 h-12 bg-gray-50 border-gray-200 text-gray-900 focus:ring-0 ring-0"
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
             />
           </div>
           <div className="flex flex-wrap gap-2">
              <Select value={selectedTerm} onValueChange={(val) => { setSelectedTerm(val); setCurrentPage(1); }}>
-                <SelectTrigger className="w-[130px] bg-[#146ef5] border-gray-100 text-white h-12 rounded-xl">
+                <SelectTrigger className="w-[130px] bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                   <SelectValue placeholder="Term" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                <SelectContent className="bg-white border-gray-200 text-gray-900">
                   <SelectItem value="all">All Terms</SelectItem>
                   <SelectItem value="1">1st Term</SelectItem>
                   <SelectItem value="2">2nd Term</SelectItem>
@@ -241,10 +241,10 @@ export default function FlashcardsPage() {
              </Select>
 
              <Select value={selectedCreator} onValueChange={(val) => { setSelectedCreator(val); setCurrentPage(1); }}>
-                <SelectTrigger className="w-[130px] bg-[#146ef5] border-gray-100 text-white h-12 rounded-xl">
+                <SelectTrigger className="w-[130px] bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                   <SelectValue placeholder="Creator" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                <SelectContent className="bg-white border-gray-200 text-gray-900">
                   <SelectItem value="all">All Creators</SelectItem>
                   <SelectItem value="teachers">Teachers</SelectItem>
                   <SelectItem value="mine">My Sets</SelectItem>
@@ -252,10 +252,10 @@ export default function FlashcardsPage() {
              </Select>
 
              <Select value={selectedSubjectId || "all"} onValueChange={(val) => { setSelectedSubjectId(val === "all" ? null : val); setCurrentPage(1); }}>
-                <SelectTrigger className="w-[150px] bg-[#146ef5] border-gray-100 text-white h-12 rounded-xl">
+                <SelectTrigger className="w-[150px] bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                   <SelectValue placeholder="Subject" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                <SelectContent className="bg-white border-gray-200 text-gray-900">
                   <SelectItem value="all">All Subjects</SelectItem>
                   {subjects.map(s => (
                     <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
@@ -264,10 +264,10 @@ export default function FlashcardsPage() {
              </Select>
 
              <Select value={selectedStatus} onValueChange={(val) => { setSelectedStatus(val); setCurrentPage(1); }}>
-                <SelectTrigger className="w-[140px] bg-[#146ef5] border-gray-100 text-white h-12 rounded-xl">
+                <SelectTrigger className="w-[140px] bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                <SelectContent className="bg-white border-gray-200 text-gray-900">
                   <SelectItem value="all">All Statuses</SelectItem>
                   <SelectItem value="new">Unopened</SelectItem>
                   <SelectItem value="in_progress">In Progress</SelectItem>
@@ -335,7 +335,7 @@ export default function FlashcardsPage() {
                   <div className="flex gap-2 pt-2">
                       {(set.dueCount > 0 || !set.lastStudied) ? (
                         <Link href={`/dashboard/flashcards/${set.id}`} className="flex-1">
-                          <Button className="w-full bg-blue hover:bg-blue/80 text-gray-900 font-bold text-xs h-10 rounded-xl shadow-lg shadow-blue/20">
+                          <Button className="w-full bg-blue hover:bg-blue/80 text-white font-bold text-xs h-10 rounded-xl shadow-lg shadow-blue/20">
                             Study Now
                           </Button>
                         </Link>
@@ -366,7 +366,7 @@ export default function FlashcardsPage() {
                     <SelectTrigger className="w-20 bg-gray-50 border-gray-100 text-gray-900 h-10 rounded-xl focus:ring-0 ring-0">
                       <SelectValue placeholder="6" />
                     </SelectTrigger>
-                    <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                    <SelectContent className="bg-white border-gray-200 text-gray-900">
                       <SelectItem value="6">6</SelectItem>
                       <SelectItem value="12">12</SelectItem>
                       <SelectItem value="24">24</SelectItem>

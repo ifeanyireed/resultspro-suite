@@ -60,7 +60,7 @@ export default function SchoolLeaderboardPage() {
   const others = rankingData.slice(3);
 
   return (
-    <div className="flex-1 bg-[#146ef5] min-h-screen">
+    <div className="flex-1 bg-[#f9fafc] min-h-screen">
       
       
       <main className="p-8 max-w-5xl mx-auto">
@@ -82,7 +82,7 @@ export default function SchoolLeaderboardPage() {
                 onClick={() => setActiveTab(tab)}
                 className={`
                   px-6 py-2 rounded-xl text-sm font-bold transition-all
-                  ${activeTab === tab ? 'bg-blue text-gray-900 shadow-lg shadow-blue/20' : 'text-gray-500 hover:text-gray-900'}
+                  ${activeTab === tab ? 'bg-blue text-white shadow-lg shadow-blue/20' : 'text-gray-500 hover:text-gray-900'}
                 `}
               >
                 {tab}
@@ -97,12 +97,12 @@ export default function SchoolLeaderboardPage() {
           {podium[0] && (
             <div className="flex flex-col items-center gap-4 flex-1 max-w-[140px]">
               <div className="relative">
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-blue overflow-hidden p-1 bg-[#146ef5] flex items-center justify-center">
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-blue overflow-hidden p-1 bg-white flex items-center justify-center">
                   <div className="w-full h-full rounded-full bg-blue/20 flex items-center justify-center text-[#146ef5] font-bold text-xl">
                     {podium[0].avatar}
                   </div>
                 </div>
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-blue flex items-center justify-center font-black text-gray-900 text-xs border-4 border-navy">
+                <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-blue flex items-center justify-center font-black text-white text-xs border-4 border-white">
                   2
                 </div>
               </div>
@@ -120,12 +120,12 @@ export default function SchoolLeaderboardPage() {
             <div className="flex flex-col items-center gap-4 flex-1 max-w-[160px] -translate-y-8">
               <div className="relative">
                 <Crown className="w-8 h-8 text-amber-600 absolute -top-8 left-1/2 -translate-x-1/2 drop-shadow-[0_0_10px_rgba(255,179,0,0.5)]" />
-                <div className="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-amber overflow-hidden p-1 bg-[#146ef5] flex items-center justify-center shadow-[0_0_30px_rgba(255,111,0,0.2)]">
-                  <div className="w-full h-full rounded-full bg-amber/20 flex items-center justify-center text-amber-600 font-bold text-2xl">
+                <div className="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-amber-500 overflow-hidden p-1 bg-white flex items-center justify-center shadow-[0_0_30px_rgba(255,111,0,0.2)]">
+                  <div className="w-full h-full rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-bold text-2xl">
                     {podium[1].avatar}
                   </div>
                 </div>
-                <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-amber flex items-center justify-center font-black text-white text-sm border-4 border-navy">
+                <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center font-black text-white text-sm border-4 border-white">
                   1
                 </div>
               </div>
@@ -134,7 +134,7 @@ export default function SchoolLeaderboardPage() {
                 <div className="text-sm font-black text-amber-600">{podium[1].points.toLocaleString()} pts</div>
                 <div className="text-[10px] text-amber-600/60 font-bold uppercase tracking-wider">{podium[1].class}</div>
               </div>
-              <div className="w-full h-40 bg-gradient-to-t from-amber/20 to-amber/5 rounded-t-2xl border-t border-x border-amber/20" />
+              <div className="w-full h-40 bg-gradient-to-t from-amber-500/20 to-amber-500/5 rounded-t-2xl border-t border-x border-amber-500/20" />
             </div>
           )}
 
@@ -142,12 +142,12 @@ export default function SchoolLeaderboardPage() {
           {podium[2] && (
             <div className="flex flex-col items-center gap-4 flex-1 max-w-[140px]">
               <div className="relative">
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-green overflow-hidden p-1 bg-[#146ef5] flex items-center justify-center">
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-emerald-500 overflow-hidden p-1 bg-white flex items-center justify-center">
                   <div className="w-full h-full rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-xl">
                     {podium[2].avatar}
                   </div>
                 </div>
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center font-black text-white text-xs border-4 border-navy">
+                <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center font-black text-white text-xs border-4 border-white">
                   3
                 </div>
               </div>
@@ -156,7 +156,7 @@ export default function SchoolLeaderboardPage() {
                 <div className="text-xs font-black text-emerald-600">{podium[2].points.toLocaleString()} pts</div>
                 <div className="text-[10px] text-gray-500 font-bold uppercase">{podium[2].class}</div>
               </div>
-              <div className="w-full h-20 bg-gradient-to-t from-green/20 to-green/5 rounded-t-2xl border-t border-x border-green/20" />
+              <div className="w-full h-20 bg-gradient-to-t from-emerald-500/20 to-emerald-500/5 rounded-t-2xl border-t border-x border-emerald-500/20" />
             </div>
           )}
         </MotionRise>

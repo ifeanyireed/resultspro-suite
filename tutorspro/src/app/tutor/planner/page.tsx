@@ -66,21 +66,21 @@ export default function TutorPlanner() {
   if (!mounted) return null;
 
   return (
-    <main className="min-h-screen bg-navy pb-24">
+    <main className="min-h-screen bg-gray-50 pb-24">
             
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
         <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
-            <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
-              Lesson <span className="text-green">Planner</span>
+            <h1 className="text-3xl md:text-5xl font-display font-black text-gray-900 mb-2">
+              Lesson <span className="text-blue">Planner</span>
             </h1>
-            <p className="text-gray-400">Outline objectives, attach resources, and prepare for your sessions.</p>
+            <p className="text-gray-600">Outline objectives, attach resources, and prepare for your sessions.</p>
           </div>
           <button 
             onClick={() => {
                setTitle('New Lesson Plan');
             }}
-            className="px-8 py-4 rounded-2xl bg-green-600 text-white font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-green/20"
+            className="px-8 py-4 rounded-2xl bg-green text-navy font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-sm"
           >
              <Plus className="w-5 h-5" /> CREATE NEW PLAN
           </button>
@@ -89,10 +89,10 @@ export default function TutorPlanner() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Planner Form (Left) */}
           <MotionRise delay={0.1} className="lg:col-span-2 space-y-8">
-            <section className="p-10 rounded-[40px] bg-white/[0.02] border border-white/5 space-y-8">
-               <div className="flex justify-between items-center border-b border-white/5 pb-8 mb-8">
+            <section className="p-10 rounded-[40px] bg-white border border-gray-100 shadow-sm space-y-8">
+               <div className="flex justify-between items-center border-b border-gray-100 pb-8 mb-8">
                   <div className="flex items-center gap-4 w-full">
-                     <div className="w-12 h-12 rounded-xl bg-green/10 text-green flex items-center justify-center shrink-0">
+                     <div className="w-12 h-12 rounded-xl bg-green/20 text-navy flex items-center justify-center shrink-0">
                         <FileText className="w-6 h-6" />
                      </div>
                      <div className="flex-1">
@@ -101,21 +101,21 @@ export default function TutorPlanner() {
                           value={title}
                           onChange={(e) => setTitle(e.target.value)}
                           placeholder="Lesson Title (e.g. Intro to Calculus)" 
-                          className="w-full bg-transparent text-xl font-bold text-white focus:outline-none placeholder:text-gray-600"
+                          className="w-full bg-transparent text-xl font-bold text-gray-900 focus:outline-none placeholder:text-gray-400"
                         />
                      </div>
                   </div>
                   <div className="flex gap-3 shrink-0 ml-4">
                      <button 
                        onClick={() => { setTitle(''); setObjective(''); setOutline(''); }}
-                       className="p-3 rounded-xl bg-white/5 text-gray-400 hover:text-white transition-all"
+                       className="p-3 rounded-xl bg-gray-100 text-gray-500 hover:text-gray-900 transition-all"
                      >
                        <Trash2 size={18} />
                      </button>
                      <button 
                        onClick={handleSavePlan}
                        disabled={saving}
-                       className="px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-sm hover:bg-white/10 transition-all flex items-center gap-2 disabled:opacity-50"
+                       className="px-6 py-3 rounded-xl bg-navy text-white font-bold text-sm hover:opacity-95 transition-all flex items-center gap-2 disabled:opacity-50"
                      >
                         {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save size={18} />} 
                         SAVE PLAN
@@ -127,25 +127,25 @@ export default function TutorPlanner() {
                   <div className="space-y-2">
                      <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Learning Objective</label>
                      <div className="relative">
-                        <Target className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                        <Target className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                         <input 
                           type="text" 
                           value={objective}
                           onChange={(e) => setObjective(e.target.value)}
                           placeholder="Understand derivatives..." 
-                          className="w-full bg-navy border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-white focus:outline-none focus:border-green/50 transition-all" 
+                          className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-4 pl-12 pr-6 text-gray-900 focus:outline-none focus:border-blue transition-all" 
                         />
                      </div>
                   </div>
                   <div className="space-y-2">
                      <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Duration (min)</label>
                      <div className="relative">
-                        <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                        <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                         <input 
                           type="number" 
                           value={duration}
                           onChange={(e) => setDuration(e.target.value)}
-                          className="w-full bg-navy border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-white focus:outline-none focus:border-green/50 transition-all" 
+                          className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-4 pl-12 pr-6 text-gray-900 focus:outline-none focus:border-blue transition-all" 
                         />
                      </div>
                   </div>
@@ -157,7 +157,7 @@ export default function TutorPlanner() {
                     rows={8} 
                     value={outline}
                     onChange={(e) => setOutline(e.target.value)}
-                    className="w-full bg-navy border border-white/10 rounded-3xl p-6 text-white focus:outline-none focus:border-green/50 transition-all resize-none leading-relaxed"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-3xl p-6 text-gray-900 focus:outline-none focus:border-blue transition-all resize-none leading-relaxed"
                     placeholder="1. Introduction to rates of change&#10;2. Graphical representation of tangents&#10;3. The power rule derivation&#10;4. Practice problems..."
                   ></textarea>
                </div>
@@ -165,7 +165,7 @@ export default function TutorPlanner() {
                <div className="space-y-4">
                   <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Attached Resources</label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     <button className="p-4 rounded-2xl border-2 border-dashed border-white/5 text-gray-600 hover:text-white hover:border-white/20 transition-all flex items-center justify-center gap-2 text-xs font-bold">
+                     <button className="p-4 rounded-2xl border-2 border-dashed border-gray-200 text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-all flex items-center justify-center gap-2 text-xs font-bold">
                         <Plus size={14} /> ATTACH FILE
                      </button>
                   </div>
@@ -176,25 +176,25 @@ export default function TutorPlanner() {
           {/* Sidebar - Recent Plans (Right) */}
           <MotionRise delay={0.2} className="space-y-8">
             <section>
-               <h2 className="text-2xl font-display font-bold text-white mb-6">Recent Plans</h2>
+               <h2 className="text-2xl font-display font-bold text-gray-900 mb-6">Recent Plans</h2>
                
                {loading ? (
                   <div className="flex justify-center py-10 opacity-50">
-                     <Loader2 className="w-8 h-8 text-green animate-spin" />
+                     <Loader2 className="w-8 h-8 text-blue animate-spin" />
                   </div>
                ) : (
                   <MotionStagger className="space-y-4">
                      {plans.map((plan: any) => (
-                       <div key={plan.id} className="p-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/[0.08] transition-all cursor-pointer group">
+                       <div key={plan.id} className="p-6 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all cursor-pointer group">
                           <div className="flex justify-between items-start mb-4">
-                             <h3 className="font-bold text-white group-hover:text-green transition-colors line-clamp-1">{plan.title}</h3>
+                             <h3 className="font-bold text-gray-900 group-hover:text-blue transition-colors line-clamp-1">{plan.title}</h3>
                              <span className={`shrink-0 ml-2 px-3 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest ${
-                                plan.status === 'Ready' ? 'bg-green/10 text-green' : 'bg-white/5 text-gray-500'
+                                plan.status === 'Ready' ? 'bg-green/20 text-navy' : 'bg-gray-100 text-gray-600'
                              }`}>
                                 {plan.priority || 'Draft'}
                              </span>
                           </div>
-                          <div className="flex items-center justify-between text-[10px] text-gray-600 font-black uppercase tracking-tighter mt-4">
+                          <div className="flex items-center justify-between text-[10px] text-gray-500 font-black uppercase tracking-tighter mt-4">
                              <div className="flex items-center gap-1">
                                 <Calendar className="w-3 h-3" /> {new Date(plan.createdAt).toLocaleDateString()}
                              </div>
@@ -203,22 +203,22 @@ export default function TutorPlanner() {
                        </div>
                      ))}
                      {plans.length === 0 && (
-                        <div className="text-center py-10 opacity-50 border-2 border-dashed border-white/5 rounded-3xl">
-                           <FileText className="w-8 h-8 text-gray-500 mx-auto mb-2" />
-                           <p className="text-gray-400 text-sm">No plans created yet.</p>
+                        <div className="text-center py-10 bg-white border-2 border-dashed border-gray-200 rounded-3xl">
+                           <FileText className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                           <p className="text-gray-500 text-sm">No plans created yet.</p>
                         </div>
                      )}
                   </MotionStagger>
                )}
             </section>
 
-            <section className="p-8 rounded-[40px] bg-gradient-to-br from-green/20 to-transparent border border-white/10">
-               <div className="w-12 h-12 rounded-2xl bg-green/10 text-green flex items-center justify-center mb-6">
+            <section className="p-8 rounded-[40px] bg-white border border-gray-100 shadow-sm">
+               <div className="w-12 h-12 rounded-2xl bg-green/20 text-navy flex items-center justify-center mb-6">
                   <BookOpen className="w-6 h-6" />
                </div>
-               <h3 className="text-xl font-display font-bold text-white mb-2">Lesson Templates</h3>
-               <p className="text-sm text-gray-400 mb-6 leading-relaxed">Save time by using our subject-specific templates for math, science, and languages.</p>
-               <button className="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-white text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-all">
+               <h3 className="text-xl font-display font-bold text-gray-900 mb-2">Lesson Templates</h3>
+               <p className="text-sm text-gray-600 mb-6 leading-relaxed">Save time by using our subject-specific templates for math, science, and languages.</p>
+               <button className="w-full py-4 rounded-2xl bg-gray-100 border border-gray-200 text-gray-900 text-xs font-bold uppercase tracking-widest hover:bg-gray-200 transition-all">
                   Browse Templates
                </button>
             </section>

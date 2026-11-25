@@ -104,7 +104,7 @@ export default function SyllabusPage() {
                     <Link href={`/dashboard/topic-hub?topicId=${topic.id}`}>
                       <div className="p-6 rounded-[32px] bg-white/[0.02] border border-white/[0.05] border-t-white/[0.1] hover:bg-white/[0.05] hover:border-gray-200 transition-all flex items-center justify-between">
                          <div className="flex items-center gap-6">
-                            <div className="w-12 h-12 rounded-2xl bg-[#146ef5] border border-gray-100 flex items-center justify-center text-gray-500 group-hover:text-emerald-600 group-hover:border-green/30 transition-all">
+                            <div className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-500 group-hover:text-emerald-600 group-hover:border-emerald-500/30 transition-all">
                                {topic.isCompleted ? <CheckCircle2 className="w-6 h-6 text-emerald-600" /> : <Circle className="w-5 h-5 opacity-20" />}
                             </div>
                             <div>

@@ -207,6 +207,12 @@ func main() {
 		"/api/campus/parents":          handlers.HandleCampusParents,
 		"/api/v1/campus/parents/wards": handlers.HandleCampusParentWards,
 		"/api/campus/parents/wards":    handlers.HandleCampusParentWards,
+
+		// Official Examination Score Ledger (Traceable Sync from ClassroomPRO & ResultsPRO OCR)
+		"/api/v1/campus/exam-scores/sync":     handlers.HandleCampusOfficialExamScoresSync,
+		"/api/campus/exam-scores/sync":        handlers.HandleCampusOfficialExamScoresSync,
+		"/api/v1/campus/exam-scores/official": handlers.HandleCampusOfficialExamScoresList,
+		"/api/campus/exam-scores/official":    handlers.HandleCampusOfficialExamScoresList,
 	}
 
 	for path, handler := range routes {

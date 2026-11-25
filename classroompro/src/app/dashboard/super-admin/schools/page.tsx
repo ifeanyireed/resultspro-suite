@@ -169,7 +169,7 @@ export default function SchoolsOverview() {
                          <td className="p-6">
                             <span className={cn("px-2 py-1 rounded text-[10px] font-black uppercase tracking-tighter", 
                                school.plan === 'Premium' ? 'bg-purple-50 text-purple-600' : 
-                               school.plan === 'Enterprise' ? 'bg-amber-400/10 text-amber-600-400' : 'bg-blue-50 text-[#146ef5]'
+                               school.plan === 'Enterprise' ? 'bg-amber-50 text-amber-600' : 'bg-blue-50 text-[#146ef5]'
                             )}>{school.plan}</span>
                             <p className="text-[10px] text-gray-500 mt-1.5 flex items-center gap-1">
                                <Calendar className="w-3 h-3" /> Joined {school.joined}
@@ -205,10 +205,10 @@ export default function SchoolsOverview() {
                 <div className="flex items-center gap-4">
                    <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Show</span>
                    <Select value={itemsPerPage} onValueChange={setItemsPerPage}>
-                      <SelectTrigger className="w-20 bg-[#146ef5] border-gray-100 text-white h-9 rounded-xl">
+                      <SelectTrigger className="w-20 bg-gray-50 border-gray-200 text-gray-900 h-9 rounded-xl">
                          <SelectValue placeholder="10" />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                      <SelectContent className="bg-white border-gray-200 text-gray-900">
                          <SelectItem value="10">10</SelectItem>
                          <SelectItem value="25">25</SelectItem>
                          <SelectItem value="50">50</SelectItem>

@@ -42,9 +42,9 @@ function ParentClassesDirectory() {
             </div>
             <h3 className="text-xl font-medium text-gray-900 mb-1">{c.name}</h3>
             <p className="text-sm text-gray-500 mb-4">{c.teacher} • {c.time}</p>
-            <button className="mt-auto w-full bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm font-semibold py-2.5 rounded-full transition-colors flex items-center justify-center gap-2">
-              <VideoCameraIcon className="w-4 h-4" /> Message Teacher
-            </button>
+            <a href="/parent/campus-os?subtab=notices" className="mt-auto w-full bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm font-semibold py-2.5 rounded-full transition-colors flex items-center justify-center gap-2">
+              <VideoCameraIcon className="w-4 h-4" /> Message Teacher (CampusPRO)
+            </a>
           </MotionRise>
         ))}
       </MotionStagger>

@@ -141,7 +141,7 @@ export function TeacherClassDetailClient() {
                           <tr key={student.id} className="hover:bg-white/[0.02] transition-colors">
                              <td className="px-6 py-4">
                                 <div className="flex items-center gap-3">
-                                   <div className="w-8 h-8 rounded-full bg-[#146ef5] border border-gray-100 flex items-center justify-center text-xs font-bold text-emerald-600 uppercase">
+                                   <div className="w-8 h-8 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center text-xs font-bold text-emerald-600 uppercase">
                                       {student.name.charAt(0)}
                                    </div>
                                    <div>
@@ -152,7 +152,7 @@ export function TeacherClassDetailClient() {
                              </td>
                              <td className="px-6 py-4">
                                 <div className="flex items-center gap-2">
-                                   <div className="w-16 h-1.5 bg-[#146ef5] rounded-full overflow-hidden">
+                                   <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                                       <div className="h-full bg-emerald-600" style={{ width: student.score }} />
                                    </div>
                                    <span className="text-xs font-bold text-gray-900">{student.score}</span>

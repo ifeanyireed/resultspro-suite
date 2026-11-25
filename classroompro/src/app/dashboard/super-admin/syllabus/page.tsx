@@ -230,10 +230,10 @@ export default function SuperAdminSyllabusPage() {
                 <div className="flex items-center gap-4">
                    <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Show</span>
                    <Select value={itemsPerPage} onValueChange={setItemsPerPage}>
-                      <SelectTrigger className="w-20 bg-[#146ef5] border-gray-100 text-white h-9 rounded-xl">
+                      <SelectTrigger className="w-20 bg-gray-50 border-gray-200 text-gray-900 h-9 rounded-xl">
                          <SelectValue placeholder="10" />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                      <SelectContent className="bg-white border-gray-200 text-gray-900">
                          <SelectItem value="10">10</SelectItem>
                          <SelectItem value="25">25</SelectItem>
                          <SelectItem value="50">50</SelectItem>
@@ -294,8 +294,8 @@ export default function SuperAdminSyllabusPage() {
 
       {/* Add Topic Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#146ef5]/80 backdrop-blur-sm">
-           <div className="bg-[#146ef5] border border-gray-100 rounded-[32px] w-full max-w-md p-8 shadow-2xl">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+           <div className="bg-white border border-gray-100 rounded-[32px] w-full max-w-md p-8 shadow-2xl">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Add New Topic</h2>
               <form onSubmit={handleAddTopic} className="space-y-4">
                  <div className="space-y-2">
@@ -305,7 +305,7 @@ export default function SuperAdminSyllabusPage() {
                       value={newTopic.title}
                       onChange={(e) => setNewTopic({...newTopic, title: e.target.value})}
                       placeholder="e.g. Quantum Physics" 
-                      className="bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900 h-12 rounded-xl" 
+                      className="bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl" 
                     />
                  </div>
                  
@@ -313,10 +313,10 @@ export default function SuperAdminSyllabusPage() {
                     <div className="space-y-2">
                        <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Subject</label>
                        <Select value={newTopic.subjectId} onValueChange={(val) => setNewTopic({...newTopic, subjectId: val})}>
-                          <SelectTrigger className="bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900 h-12 rounded-xl">
+                          <SelectTrigger className="bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                              <SelectValue placeholder="Select" />
                           </SelectTrigger>
-                          <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                          <SelectContent className="bg-white border-gray-200 text-gray-900">
                              {subjects.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                           </SelectContent>
                        </Select>
@@ -324,10 +324,10 @@ export default function SuperAdminSyllabusPage() {
                     <div className="space-y-2">
                        <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Class</label>
                        <Select value={newTopic.classId} onValueChange={(val) => setNewTopic({...newTopic, classId: val})}>
-                          <SelectTrigger className="bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900 h-12 rounded-xl">
+                          <SelectTrigger className="bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                              <SelectValue placeholder="Select" />
                           </SelectTrigger>
-                          <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                          <SelectContent className="bg-white border-gray-200 text-gray-900">
                              {classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                           </SelectContent>
                        </Select>
@@ -337,10 +337,10 @@ export default function SuperAdminSyllabusPage() {
                  <div className="space-y-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Term</label>
                     <Select value={newTopic.term} onValueChange={(val) => setNewTopic({...newTopic, term: val})}>
-                       <SelectTrigger className="bg-white shadow-sm border border-gray-100 border-gray-100 text-gray-900 h-12 rounded-xl">
+                       <SelectTrigger className="bg-gray-50 border-gray-200 text-gray-900 h-12 rounded-xl">
                           <SelectValue placeholder="Select Term" />
                        </SelectTrigger>
-                       <SelectContent className="bg-[#146ef5] border-gray-100 text-white">
+                       <SelectContent className="bg-white border-gray-200 text-gray-900">
                           <SelectItem value="1">1st Term</SelectItem>
                           <SelectItem value="2">2nd Term</SelectItem>
                           <SelectItem value="3">3rd Term</SelectItem>

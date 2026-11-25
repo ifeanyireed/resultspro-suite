@@ -38,28 +38,28 @@ export default function FindTutor() {
 
   return (
     <RoleGate allowedRoles={['STUDENT', 'PARENT', 'SUPERADMIN']}>
-      <main className="min-h-screen bg-navy pb-24">
+      <main className="min-h-screen bg-gray-50 pb-24">
                 
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12">
           <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
             <div>
-              <h1 className="text-3xl md:text-5xl font-display font-black text-white mb-2">
-                Discover <span className="text-green">Experts</span>
+              <h1 className="text-3xl md:text-5xl font-display font-black text-gray-900 mb-2">
+                Discover <span className="text-blue">Experts</span>
               </h1>
-              <p className="text-gray-400">Find the right mentor for your learning goals.</p>
+              <p className="text-gray-600">Find the right mentor for your learning goals.</p>
             </div>
             <div className="flex gap-2 w-full md:w-auto">
                <div className="relative flex-1 md:w-80">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input 
                     type="text" 
                     placeholder="Subject or tutor name..." 
-                    className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white/5 border border-white/10 text-white focus:border-green outline-none transition-all" 
+                    className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white border border-gray-200 text-gray-900 focus:border-blue outline-none transition-all shadow-sm" 
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                </div>
-               <button className="p-4 rounded-2xl bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all">
+               <button className="p-4 rounded-2xl bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-all shadow-sm">
                   <SlidersHorizontal className="w-6 h-6" />
                </button>
             </div>
@@ -72,7 +72,7 @@ export default function FindTutor() {
                  key={cat}
                  onClick={() => setActiveCategory(cat)}
                  className={`px-6 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all border ${
-                   activeCategory === cat ? 'bg-green-600 text-white border-green' : 'bg-white/5 text-gray-400 border-white/10 hover:border-white/20'
+                   activeCategory === cat ? 'bg-navy text-white border-navy' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
                  }`}
                >
                  {cat}
@@ -83,53 +83,53 @@ export default function FindTutor() {
           {/* Tutor Grid */}
           {loading ? (
             <div className="flex items-center justify-center h-64">
-               <Loader2 className="w-12 h-12 text-green animate-spin" />
+               <Loader2 className="w-12 h-12 text-blue animate-spin" />
             </div>
           ) : (
             <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredTutors.length > 0 ? filteredTutors.map((tutor, i) => (
-                <div key={tutor.id} className="p-6 rounded-[32px] bg-white/[0.02] border border-white/10 hover:bg-white/[0.05] transition-all relative group">
-                  <button className="absolute top-6 right-6 p-2 rounded-full bg-white/5 text-gray-500 hover:text-red-500 transition-colors">
+                <div key={tutor.id} className="p-6 rounded-[32px] bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all relative group">
+                  <button className="absolute top-6 right-6 p-2 rounded-full bg-gray-50 text-gray-400 hover:text-red-500 transition-colors">
                      <Heart className="w-4 h-4" />
                   </button>
                   
                   <div className="flex items-center gap-4 mb-6">
-                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green/20 to-blue/20 flex items-center justify-center text-white text-2xl font-black">
+                     <div className="w-16 h-16 rounded-2xl bg-navy text-white flex items-center justify-center text-2xl font-black">
                        {tutor.name[0]}
                      </div>
                      <div>
-                        <h3 className="text-lg font-bold text-white group-hover:text-green transition-colors">{tutor.name}</h3>
+                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue transition-colors">{tutor.name}</h3>
                         <div className="text-xs text-gray-500">{tutor.subjects?.[0] || "General Tutor"}</div>
                      </div>
                   </div>
 
                   <div className="flex items-center gap-4 mb-6">
-                     <div className="flex items-center gap-1 text-amber font-bold text-sm">
+                     <div className="flex items-center gap-1 text-amber-600 font-bold text-sm">
                         <Star className="w-3 h-3 fill-current" /> {tutor.rating}
                         <span className="text-gray-500 font-normal ml-1">({tutor.reviewCount})</span>
                      </div>
-                     <div className="text-white font-black">₦{tutor.hourlyRate?.toLocaleString()}</div>
+                     <div className="text-gray-900 font-black">₦{tutor.hourlyRate?.toLocaleString()}</div>
                   </div>
 
-                  <p className="text-sm text-gray-400 mb-6 line-clamp-2">{tutor.bio}</p>
+                  <p className="text-sm text-gray-600 mb-6 line-clamp-2">{tutor.bio}</p>
 
                   <div className="flex flex-wrap gap-2 mb-8">
-                     {tutor.isVerified && <span className="px-3 py-1 rounded-lg bg-green/10 text-[10px] uppercase font-bold tracking-widest text-green">Verified</span>}
+                     {tutor.isVerified && <span className="px-3 py-1 rounded-lg bg-green/20 text-[10px] uppercase font-bold tracking-widest text-navy">Verified</span>}
                      {tutor.subjects?.slice(0, 2).map((s: string) => (
-                       <span key={s} className="px-3 py-1 rounded-lg bg-white/5 text-[10px] uppercase font-bold tracking-widest text-gray-500">{s}</span>
+                       <span key={s} className="px-3 py-1 rounded-lg bg-gray-100 text-[10px] uppercase font-bold tracking-widest text-gray-600">{s}</span>
                      ))}
                   </div>
 
                   <div className="flex items-center gap-2 text-xs text-gray-500 mb-6">
-                     <Clock className="w-3 h-3 text-amber" /> {tutor.location}
+                     <Clock className="w-3 h-3 text-blue" /> {tutor.location}
                   </div>
 
-                  <button className="w-full py-4 rounded-2xl bg-green-600 text-white font-bold hover:shadow-[0_0_20px_rgba(0,200,83,0.3)] transition-all">
+                  <button className="w-full py-4 rounded-2xl bg-green text-navy font-bold hover:opacity-95 transition-all">
                      View Full Profile
                   </button>
                 </div>
               )) : (
-                <div className="col-span-full py-20 text-center bg-white/5 rounded-[40px] border border-dashed border-white/10">
+                <div className="col-span-full py-20 text-center bg-white rounded-[40px] border border-dashed border-gray-200">
                    <p className="text-gray-500 font-bold">No tutors found matching your search.</p>
                 </div>
               )}

@@ -296,11 +296,11 @@ export default function TutorDashboard() {
             {/* Background Image */}
             <div 
               className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: "url('/abstract-blue-4.jpg')" }}
+              style={{ backgroundImage: "url('/photo05.jpeg')" }}
             ></div>
             {/* Gradient Dark Overlay */}
-            <div className="absolute inset-0 bg-black/10"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+            <div className="absolute inset-0 bg-[#0D1060]/40"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0D1060]/90 via-[#0D1060]/40 to-transparent"></div>
             
             <h3 className="text-xl font-normal text-white relative z-10 text-left w-full">Time Tracker</h3>
             <div className="relative z-10 flex flex-col items-center justify-center flex-1">

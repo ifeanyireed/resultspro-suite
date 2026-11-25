@@ -7,7 +7,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { AnalyticsUpIcon, File01Icon, DocumentValidationIcon } from 'hugeicons-react';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
-import { CompactGradebook, ResultCheckerView } from '@resultspro/modules';
+import { CompactGradebook, ResultCheckerView, ParentResultInterpreter } from '@resultspro/modules';
 import { useAppHost } from '@/components/AppHostContext';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
@@ -136,6 +136,12 @@ function ParentOfficialReportCard() {
 export default function ParentResultsHub() {
   const tabs: AppSubtab[] = [
     {
+      id: 'ai-interpreter',
+      label: 'AI Result Interpretation & ClassroomPRO Plan',
+      icon: AnalyticsUpIcon,
+      component: ParentResultInterpreter,
+    },
+    {
       id: 'assessments',
       label: 'Assessments & Standing',
       icon: AnalyticsUpIcon,
@@ -158,12 +164,12 @@ export default function ParentResultsHub() {
   return (
     <MotionRise>
       <SpecialistAppContainer
-        appTitle="Parent Academic Records"
-        appSubtitle="Continuous assessments, official terminal broadsheets, and scratch card grade verification."
+        appTitle="Parent Academic Records & AI Result Interpretation"
+        appSubtitle="Plain-language AI progress explanation, ClassroomPRO targeted revision packs, official terminal broadsheets, and scratch card verification."
         appBadge="ResultsPRO"
-        accentColor="#8b5cf6"
+        accentColor="#0D1060"
         tabs={tabs}
-        defaultTabId="assessments"
+        defaultTabId="ai-interpreter"
       />
     </MotionRise>
   );

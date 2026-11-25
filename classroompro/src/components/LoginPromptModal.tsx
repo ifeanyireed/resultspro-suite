@@ -114,7 +114,7 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
           animate-in zoom-in-95 fade-in slide-in-from-bottom-4 duration-300">
 
           {/* Gradient background */}
-          <div className="absolute inset-0 bg-[#0d1b2a]" />
+          <div className="absolute inset-0 bg-[#0D1060]" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-green/15 rounded-full blur-[80px] pointer-events-none" />
           <div className="absolute bottom-0 right-0 w-[300px] h-[200px] bg-blue/10 rounded-full blur-[80px] pointer-events-none" />
 
@@ -134,7 +134,7 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
                 <div className="w-16 h-16 rounded-2xl bg-green/10 border border-green/20 flex items-center justify-center">
                   <Zap className="w-8 h-8 text-green fill-current" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-amber border-2 border-[#0d1b2a] flex items-center justify-center">
+                <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-green border-2 border-[#0D1060] flex items-center justify-center">
                   <span className="text-[8px] font-black text-navy">✦</span>
                 </div>
               </div>
@@ -202,7 +202,7 @@ export default function LoginPromptModal({ delayMs = 30000, show, onClose }: Log
                 <div className="w-full border-t border-white/5" />
               </div>
               <div className="relative flex justify-center">
-                <span className="px-3 bg-[#0d1b2a] text-[10px] font-bold uppercase tracking-widest text-gray-600">
+                <span className="px-3 bg-[#0D1060] text-[10px] font-bold uppercase tracking-widest text-gray-400">
                   or
                 </span>
               </div>
