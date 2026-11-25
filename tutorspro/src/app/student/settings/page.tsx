@@ -109,7 +109,7 @@ export default function StudentSettings() {
                          <div className="relative group shrink-0">
                             <div className="w-24 h-24 rounded-full overflow-hidden shadow-sm border border-gray-200 bg-gray-50">
                                <img 
-                                  src={user?.avatar_url || user?.avatarUrl || `/avatars/character${(user?.full_name?.length % 20) || 1}.jpg`} 
+                                  src={user?.avatar_url || user?.avatarUrl || `/avatars/character${((user?.full_name?.length || 1) % 20) || 1}.jpg`} 
                                   alt={user?.full_name || 'User'} 
                                   className="w-full h-full object-cover" 
                                />

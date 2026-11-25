@@ -79,13 +79,12 @@ export default function ParentLayout({
             <div className="px-6 space-y-1">
               <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">TUTORSPRO (GUARDIAN)</p>
               
-                            {([
+              {([
                 { name: 'Dashboard', href: '/parent/dashboard', icon: Squares2X2Icon, activeIcon: Squares2X2Solid },
-                { name: 'History & Attendance', href: '/parent/history', icon: ClockIcon },
-                { name: 'Progress Analytics', href: '/parent/progress', icon: ChartBarIcon },
+                { name: 'Session History', href: '/parent/history', icon: ClockIcon },
+                { name: 'Mentorship Progress', href: '/parent/progress', icon: ChartBarIcon },
                 { name: 'Tutor Feedback', href: '/parent/feedback', icon: ChatBubbleLeftRightIcon },
-                { name: 'Notifications', href: '/parent/notifications', icon: BellIcon },
-                { name: 'Billing', href: '/parent/billing', icon: CreditCardIcon },
+                { name: 'Session Alerts', href: '/parent/notifications', icon: BellIcon },
               ]).map((item) => {
                 const active = isActive(item.href);
                 const Icon = active && item.activeIcon ? item.activeIcon : item.icon;

@@ -132,7 +132,7 @@ export default function PricingPage() {
                  </div>
 
                  <div className="flex-1 space-y-4 mb-10 border-t border-gray-200 pt-8">
-                    {plan.features.map((feature, j) => (
+                    {plan.features.map((feature: string, j: number) => (
                       <div key={j} className="flex items-center gap-3 text-sm text-navy fw-500">
                          <Check size={16} style={{ color: plan.color }} />
                          {feature}

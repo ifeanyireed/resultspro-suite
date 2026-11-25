@@ -70,7 +70,7 @@ export default function TutorLayout({
             <div className="px-6 space-y-1">
               <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">TUTORSPRO (INSTRUCTOR)</p>
               
-                            {([
+              {([
                 { name: 'Dashboard', href: '/tutor/dashboard', icon: Squares2X2Icon, activeIcon: Squares2X2Solid },
                 { name: 'Calendar & Availability', href: '/tutor/calendar', icon: CalendarIcon },
                 { name: 'Class Requests', href: '/tutor/requests', icon: InboxIcon },
@@ -82,7 +82,6 @@ export default function TutorLayout({
                 { name: 'Earnings', href: '/tutor/earnings', icon: CurrencyDollarIcon },
                 { name: 'Payouts', href: '/tutor/payouts', icon: BanknotesIcon },
                 { name: 'Reviews', href: '/tutor/reviews', icon: StarIcon },
-                { name: 'Messages', href: '/tutor/messages', icon: EnvelopeIcon },
               ]).map((item) => {
                 const active = isActive(item.href);
                 const Icon = active && item.activeIcon ? item.activeIcon : item.icon;

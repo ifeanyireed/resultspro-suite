@@ -75,20 +75,16 @@ export default function StudentLayout({
             <div className="px-6 space-y-1">
               <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">TUTORSPRO (LEARNER)</p>
               
-                            {([
+              {([
                 { name: 'Dashboard', href: '/student/dashboard', icon: Squares2X2Icon, activeIcon: Squares2X2Solid },
                 { name: 'Find a Tutor', href: '/student/find-tutor', icon: MagnifyingGlassCircleIcon },
                 { name: 'Book a Session', href: '/student/bookings', icon: CalendarIcon },
                 { name: 'Upcoming Classes', href: '/student/classes', icon: VideoCameraIcon },
                 { name: 'Live Classroom', href: '/student/classroom', icon: PlayIcon },
-                { name: 'Assignments', href: '/student/assignments', icon: ClipboardDocumentCheckIcon },
-                { name: 'Quizzes', href: '/student/quizzes', icon: DocumentTextIcon },
-                { name: 'Flashcards', href: '/student/flashcards', icon: Square3Stack3DIcon },
-                { name: 'Games Hub', href: '/student/games', icon: PuzzlePieceIcon },
+                { name: 'Session Tasks', href: '/student/assignments', icon: ClipboardDocumentCheckIcon },
                 { name: 'Progress Reports', href: '/student/progress', icon: TrophyIcon },
                 { name: 'Certificates', href: '/student/certificates', icon: AcademicCapIcon },
-                { name: 'Messages', href: '/student/messages', icon: EnvelopeIcon },
-                { name: 'Wallet / Payments', href: '/student/wallet', icon: WalletIcon },
+                { name: 'Session Wallet', href: '/student/wallet', icon: WalletIcon },
               ]).map((item) => {
                 const active = isActive(item.href);
                 const Icon = active && item.activeIcon ? item.activeIcon : item.icon;

@@ -107,24 +107,25 @@ function StudentTutorDashboard() {
           </div>
         </div>
 
-        {/* Messaging Side Panel */}
+        {/* CampusPRO Messaging Handoff Side Panel */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           <div style={{ background: '#f8fafc', borderRadius: '1.5rem', border: '1px solid #f1f5f9', padding: '1.75rem' }}>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#1e293b', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Message01Icon size={20} color="#10b981" />
-              Tutor Messages
+            <span style={{ display: 'inline-block', fontSize: '0.65rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.06em', padding: '0.25rem 0.6rem', borderRadius: '999px', background: '#0D1060', color: '#FBBC04', marginBottom: '0.75rem' }}>
+              Zero-Duplication Suite
+            </span>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <Message01Icon size={20} color="#0D1060" />
+              All Messaging Lives in CampusPRO
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {messages.map((msg: any) => (
-                <div key={msg.id} style={{ padding: '1rem', background: 'white', borderRadius: '1rem', border: '1px solid #f1f5f9' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-                    <span style={{ fontWeight: '700', fontSize: '0.85rem', color: '#1e293b' }}>{msg.from}</span>
-                    <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{msg.time}</span>
-                  </div>
-                  <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', lineHeight: 1.4 }}>{msg.snippet}</p>
-                </div>
-              ))}
-            </div>
+            <p style={{ fontSize: '0.8rem', color: '#64748b', lineHeight: 1.5, marginBottom: '1rem' }}>
+              Direct messages with your assigned tutors and subject educators are unified inside your CampusPRO Communications Hub.
+            </p>
+            <a
+              href="/student/campus-os"
+              style={{ display: 'block', textAlign: 'center', textDecoration: 'none', background: '#0D1060', color: '#FBBC04', padding: '0.75rem 1rem', borderRadius: '0.85rem', fontWeight: 800, fontSize: '0.8rem' }}
+            >
+              Open CampusPRO Hub →
+            </a>
           </div>
         </div>
       </div>
