@@ -58,6 +58,14 @@ func main() {
 			content.GET("/progress/overview", h.GetDashboardProgress)
 			content.GET("/gamification/leaderboard", h.GetLeaderboard)
 			content.GET("/exams", h.GetExams)
+
+			// Portable NERDC Markdown Content Repository, Versioning & Offline Sync Endpoints
+			content.GET("/content/manifests", h.GetContentManifests)
+			content.GET("/content/packages/:packageId", h.GetContentPackage)
+			content.GET("/content/versions/:contentId", h.GetLessonVersions)
+			content.POST("/content/publish", h.PublishLessonContent)
+			content.POST("/sync/push", h.PushOfflineSync)
+			content.GET("/sync/status", h.GetOfflineSyncStatus)
 		}
 
 		// Protected Student & Teacher Actions

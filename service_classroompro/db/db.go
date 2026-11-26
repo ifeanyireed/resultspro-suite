@@ -41,9 +41,10 @@ func InitDB() {
 		sqlDB.SetConnMaxLifetime(time.Hour)
 	}
 
-	// Auto-migrate ClassroomPRO tables
+	// Auto-migrate ClassroomPRO tables including NERDC curriculum, content versioning & offline sync tables
 	_ = DB.AutoMigrate(
 		&models.Note{},
+		&models.VideoLesson{},
 		&models.Quiz{},
 		&models.QuizAttempt{},
 		&models.Flashcard{},
@@ -51,14 +52,21 @@ func InitDB() {
 		&models.Bookmark{},
 		&models.GamificationProfile{},
 		&models.StudySession{},
+		&models.CurriculumTopic{},
+		&models.LessonVersion{},
+		&models.PackageManifest{},
+		&models.OfflineSyncOperation{},
+		&models.StudentLessonProgress{},
 	)
 
-	log.Println("ClassroomPRO connected to MySQL with GORM successfully")
+	log.Println("ClassroomPRO connected to PostgreSQL with GORM successfully")
 }
-
 
 // WithTenant safely scopes the GORM DB instance to the current request's Tenant ID
 func WithTenant(c *gin.Context) *gorm.DB {
+	if DB == nil {
+		return nil
+	}
 	tenantID, exists := c.Get("tenant_id")
 	if exists && tenantID != "" {
 		return DB.Where("tenant_id = ?", tenantID)

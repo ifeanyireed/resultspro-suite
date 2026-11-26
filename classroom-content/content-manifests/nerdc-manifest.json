@@ -1,0 +1,207 @@
+{
+  "manifest_version": "2026.11.26-v2",
+  "curriculum": "NERDC",
+  "generated_at": "2026-11-26T05:30:00Z",
+  "cloudinary_delivery": {
+    "cloud_name": "qsdwzejd",
+    "default_transform": "f_auto,q_auto,w_800",
+    "thumbnail_transform": "f_auto,q_auto,w_320"
+  },
+  "asset_registry": {
+    "asset://cld-pri4-math-place-value-chart": {
+      "public_id": "resultspro/classroom/pri4_math_place_value",
+      "delivery_url": "https://res.cloudinary.com/qsdwzejd/image/upload/f_auto,q_auto,w_800/v1789250545/landing_page/photo04.jpg",
+      "thumbnail_url": "https://res.cloudinary.com/qsdwzejd/image/upload/f_auto,q_auto,w_320/v1789250545/landing_page/photo04.jpg",
+      "format": "webp",
+      "alt": "Place Value Chart from Units to Millions",
+      "size_bytes": 28400
+    },
+    "asset://cld-math-pri4-place-value-abacus": {
+      "public_id": "resultspro/classroom/pri4_math_place_value",
+      "delivery_url": "https://res.cloudinary.com/qsdwzejd/image/upload/f_auto,q_auto,w_800/v1789250545/landing_page/photo04.jpg",
+      "thumbnail_url": "https://res.cloudinary.com/qsdwzejd/image/upload/f_auto,q_auto,w_320/v1789250545/landing_page/photo04.jpg",
+      "format": "webp",
+      "alt": "Seven-Column Nigerian Place Value Abacus",
+      "size_bytes": 28400
+    },
+    "asset://cld-pri4-math-fractions-diagram": {
+      "public_id": "resultspro/classroom/pri4_math_fractions",
+      "delivery_url": "https://res.cloudinary.com/qsdwzejd/image/upload/f_auto,q_auto,w_800/v1789250551/landing_page/photo07.jpg",
+      "thumbnail_url": "https://res.cloudinary.com/qsdwzejd/image/upload/f_auto,q_auto,w_320/v1789250551/landing_page/photo07.jpg",
+      "format": "webp",
+      "alt": "Roman Numerals and Equivalent Fractions Chart",
+      "size_bytes": 26100
+    },
+    "asset://cld-jss2-math-algebraic-lcm": {
+      "public_id": "resultspro/classroom/jss2_math_algebra_lcm",
+      "delivery_url": "https://res.cloudinary.com/qsdwzejd/image/upload/f_auto,q_auto,w_800/v1789250557/landing_page/photo09.jpg",
+      "thumbnail_url": "https://res.cloudinary.com/qsdwzejd/image/upload/f_auto,q_auto,w_320/v1789250557/landing_page/photo09.jpg",
+      "format": "webp",
+      "alt": "Algebraic Fractions and Linear Inequalities Diagram",
+      "size_bytes": 31200
+    },
+    "asset://cld-sss2-phy-projectile-parabola": {
+      "public_id": "resultspro/classroom/sss2_phy_projectile",
+      "delivery_url": "https://res.cloudinary.com/qsdwzejd/image/upload/f_auto,q_auto,w_800/v1789250561/landing_page/photo12.jpg",
+      "thumbnail_url": "https://res.cloudinary.com/qsdwzejd/image/upload/f_auto,q_auto,w_320/v1789250561/landing_page/photo12.jpg",
+      "format": "webp",
+      "alt": "Projectile Motion and Wave Optics Diagram",
+      "size_bytes": 34500
+    }
+  },
+  "packages": [
+    {
+      "package_id": "pkg-nerdc-pri4-math-t1",
+      "curriculum": "NERDC",
+      "education_level": "primary",
+      "class_code": "primary-4",
+      "class_label": "Primary 4",
+      "subject_id": "mathematics",
+      "subject_name": "Mathematics",
+      "term": "first-term",
+      "term_label": "First Term",
+      "package_version": 2,
+      "size_bytes": 148200,
+      "checksum_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "updated_at": "2026-11-26T05:10:00Z",
+      "lessons": [
+        {
+          "content_id": "nerdc-pri4-math-t1-w01",
+          "week": 1,
+          "topic": "Whole Numbers",
+          "subtopic": "Whole Numbers up to 1,000,000 and Place Value",
+          "version": 1,
+          "status": "published",
+          "path": "curriculum/nerdc/primary/primary-4/mathematics/first-term/week-01.md",
+          "checksum_sha256": "sha256:4a8b12c90e1f2d3a",
+          "assets": [
+            "asset://cld-pri4-math-place-value-chart",
+            "asset://cld-math-pri4-place-value-abacus"
+          ],
+          "youtube_id": "NybHckSEQBI",
+          "youtube_url": "https://www.youtube.com/watch?v=NybHckSEQBI",
+          "estimated_minutes": 35
+        },
+        {
+          "content_id": "nerdc-pri4-math-t1-w02",
+          "week": 2,
+          "topic": "Roman Numerals & Fractions",
+          "subtopic": "Roman Numerals I to C and Equivalent Fractions",
+          "version": 2,
+          "status": "published",
+          "path": "curriculum/nerdc/primary/primary-4/mathematics/first-term/week-02.md",
+          "checksum_sha256": "sha256:7c3d91e45b8a01f9",
+          "assets": [
+            "asset://cld-pri4-math-fractions-diagram"
+          ],
+          "youtube_id": "NybHckSEQBI",
+          "youtube_url": "https://www.youtube.com/watch?v=NybHckSEQBI",
+          "estimated_minutes": 30
+        }
+      ],
+      "quizzes": [
+        {
+          "id": "quiz-nerdc-pri4-math-t1-w01",
+          "topic_id": "nerdc-pri4-math-t1-w01",
+          "title": "Primary 4 Mathematics: Place Value & Whole Numbers Quiz",
+          "duration_min": 10,
+          "questions": [
+            {
+              "id": "q1",
+              "question": "What is the place value of 4 in 648,392?",
+              "options": ["Four Thousand", "Forty Thousand", "Four Hundred Thousand", "Four Hundred"],
+              "correct_index": 1,
+              "explanation": "4 is in the Ten Thousands column, so its value is 40,000."
+            },
+            {
+              "id": "q2",
+              "question": "Write Seven hundred and sixteen thousand, two hundred and five in figures.",
+              "options": ["760,205", "716,205", "716,250", "7,160,205"],
+              "correct_index": 1,
+              "explanation": "700,000 + 16,000 + 200 + 5 = 716,205."
+            }
+          ]
+        }
+      ],
+      "flashcards": [
+        {
+          "id": "fc-pri4-math-1",
+          "topic_id": "nerdc-pri4-math-t1-w01",
+          "front": "What is the value of the digit 6 in 648,392?",
+          "back": "600,000 (Six Hundred Thousand)",
+          "hint": "Count six digits from the right."
+        }
+      ]
+    },
+    {
+      "package_id": "pkg-nerdc-jss2-math-t2",
+      "curriculum": "NERDC",
+      "education_level": "junior-secondary",
+      "class_code": "jss-2",
+      "class_label": "JSS 2",
+      "subject_id": "mathematics",
+      "subject_name": "Mathematics",
+      "term": "second-term",
+      "term_label": "Second Term",
+      "package_version": 1,
+      "size_bytes": 164500,
+      "checksum_sha256": "sha256:8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4",
+      "updated_at": "2026-11-26T05:15:00Z",
+      "lessons": [
+        {
+          "content_id": "nerdc-jss2-math-t2-w03",
+          "week": 3,
+          "topic": "Algebraic Processes",
+          "subtopic": "Algebraic Fractions, LCM & Commercial Word Problems",
+          "version": 1,
+          "status": "published",
+          "path": "curriculum/nerdc/junior-secondary/jss-2/mathematics/second-term/week-03.md",
+          "checksum_sha256": "sha256:5f9a82b11c4e77d2",
+          "assets": [
+            "asset://cld-jss2-math-algebraic-lcm"
+          ],
+          "youtube_id": "NybHckSEQBI",
+          "youtube_url": "https://www.youtube.com/watch?v=NybHckSEQBI",
+          "estimated_minutes": 40
+        }
+      ],
+      "quizzes": [],
+      "flashcards": []
+    },
+    {
+      "package_id": "pkg-nerdc-sss2-phy-t2",
+      "curriculum": "NERDC",
+      "education_level": "senior-secondary",
+      "class_code": "sss-2",
+      "class_label": "SSS 2",
+      "subject_id": "physics",
+      "subject_name": "Physics",
+      "term": "second-term",
+      "term_label": "Second Term",
+      "package_version": 1,
+      "size_bytes": 132400,
+      "checksum_sha256": "sha256:2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+      "updated_at": "2026-11-26T05:20:00Z",
+      "lessons": [
+        {
+          "content_id": "nerdc-sss2-phy-t2-w04",
+          "week": 4,
+          "topic": "Mechanics & Optics",
+          "subtopic": "Projectile Motion, Vector Resolution & Range",
+          "version": 1,
+          "status": "published",
+          "path": "curriculum/nerdc/senior-secondary/sss-2/physics/second-term/week-04.md",
+          "checksum_sha256": "sha256:8e1d44a90b2c63e1",
+          "assets": [
+            "asset://cld-sss2-phy-projectile-parabola"
+          ],
+          "youtube_id": "aY8z2qO44WA",
+          "youtube_url": "https://www.youtube.com/watch?v=aY8z2qO44WA",
+          "estimated_minutes": 45
+        }
+      ],
+      "quizzes": [],
+      "flashcards": []
+    }
+  ]
+}

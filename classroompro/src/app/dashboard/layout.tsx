@@ -26,6 +26,7 @@ import {
 } from '@heroicons/react/24/solid';
 
 import { ModernDashboardLayout } from '@/components/layout/ModernDashboardLayout';
+import { OfflineSyncBanner } from '@/components/OfflineSyncBanner';
 
 export default function DashboardLayout({
   children,
@@ -55,6 +56,7 @@ export default function DashboardLayout({
     { icon: <VideoIcon className="w-6 h-6" />, label: "Video Lessons", href: "/dashboard/videos" },
     { icon: <BrainCircuit className="w-6 h-6" />, label: "My Quizzes", href: "/dashboard/quizzes" },
     { icon: <Layers className="w-6 h-6" />, label: "Flashcards", href: "/dashboard/flashcards" },
+    { icon: <Download className="w-6 h-6" />, label: "Offline Packs", href: "/dashboard/downloads" },
     { icon: <GraduationCap className="w-6 h-6" />, label: "My Exams", href: "/dashboard/exams" },
     { icon: <TrendingUp className="w-6 h-6" />, label: "My Progress", href: "/dashboard/progress" },
     { icon: <Trophy className="w-6 h-6" />, label: "Leaderboard", href: "/dashboard/leaderboard" },
@@ -216,6 +218,7 @@ export default function DashboardLayout({
         </>
       }
     >
+      <OfflineSyncBanner />
       {children}
     </ModernDashboardLayout>
   );

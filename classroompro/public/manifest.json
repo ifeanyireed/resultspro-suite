@@ -1,0 +1,26 @@
+{
+  "name": "ClassroomPRO — Offline-First NERDC Learning Platform",
+  "short_name": "ClassroomPRO",
+  "description": "Portable NERDC Curriculum Notes, Linked YouTube Video Lessons, Practice Quizzes, and Spaced-Repetition Flashcards with Offline-First IndexedDB Synchronization.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0D1060",
+  "theme_color": "#146ef5",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"]
+}

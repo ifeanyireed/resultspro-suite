@@ -13,6 +13,7 @@ export { default as QuizzesListView } from './app/dashboard/quizzes/page';
 export { default as QuizPlayerView } from './app/dashboard/quizzes/[id]/QuizPlayerClient';
 export { default as FlashcardsListView } from './app/dashboard/flashcards/page';
 export { default as FlashcardStudyView } from './app/dashboard/flashcards/[id]/FlashcardStudyClient';
+export { default as OfflineDownloadsView } from './app/dashboard/downloads/page';
 export { default as TeacherClassesView } from './app/dashboard/teacher/classes/page';
 export { default as TeacherCreateNoteView } from './app/dashboard/teacher/create-note/page';
 export { default as TeacherCreateVideoView } from './app/dashboard/teacher/create-video/page';

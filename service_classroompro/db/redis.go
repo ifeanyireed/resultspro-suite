@@ -81,6 +81,27 @@ func (c *RedisClient) BuildKey(tenantScope, resource, identifier string) string 
 	return fmt.Sprintf("resultspro:%s:classroom:%s:%s:%s", c.env, cleanScope, cleanResource, cleanId)
 }
 
+// AllowedClassroomNamespaces defines the strict Redis key isolation namespaces for ClassroomPRO:
+// classroom:curriculum:*, classroom:lessons:*, classroom:sync:*, classroom:assessments:*, classroom:notifications:*
+var AllowedClassroomNamespaces = map[string]bool{
+	"curriculum":    true,
+	"lessons":       true,
+	"sync":          true,
+	"assessments":   true,
+	"notifications": true,
+}
+
+// BuildNamespaceKey enforces ClassroomPRO Redis namespace isolation:
+// classroom:{namespace}:{identifier}
+func (c *RedisClient) BuildNamespaceKey(namespace, identifier string) string {
+	cleanNS := strings.ToLower(strings.TrimSpace(namespace))
+	if !AllowedClassroomNamespaces[cleanNS] {
+		cleanNS = "lessons"
+	}
+	cleanID := strings.ToLower(strings.TrimSpace(identifier))
+	return fmt.Sprintf("classroom:%s:%s", cleanNS, cleanID)
+}
+
 // Get retrieves a cached string by key (Upstash -> Memory Fallback)
 func (c *RedisClient) Get(ctx context.Context, key string) (string, bool) {
 	if c == nil {

@@ -106,3 +106,105 @@ CREATE TABLE IF NOT EXISTS cls_study_sessions (
     created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
     INDEX idx_study_sessions_user (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- 9. Linked YouTube Video Lessons (Strictly Linked YouTube IDs/URLs Only - Zero Raw Video Uploads)
+CREATE TABLE IF NOT EXISTS cls_video_lessons (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(64),
+    school_id VARCHAR(191),
+    subject_id VARCHAR(191) NOT NULL,
+    topic_id VARCHAR(191),
+    teacher_id VARCHAR(191) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    youtube_id VARCHAR(64) NOT NULL,
+    youtube_url VARCHAR(512) NOT NULL,
+    duration VARCHAR(32),
+    summary TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 10. NERDC Curriculum Hierarchy Topics
+CREATE TABLE IF NOT EXISTS cls_curriculum_topics (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(64),
+    curriculum VARCHAR(64) NOT NULL DEFAULT 'NERDC',
+    education_level VARCHAR(64) NOT NULL,
+    class_code VARCHAR(64) NOT NULL,
+    subject_id VARCHAR(64) NOT NULL,
+    subject_name VARCHAR(191) NOT NULL,
+    term VARCHAR(64) NOT NULL,
+    week INT NOT NULL,
+    topic VARCHAR(255) NOT NULL,
+    subtopic VARCHAR(255),
+    content_id VARCHAR(128) NOT NULL,
+    active_version INT DEFAULT 1,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 11. Portable Markdown Lesson Versions & Asset References
+CREATE TABLE IF NOT EXISTS cls_lesson_versions (
+    id VARCHAR(191) PRIMARY KEY,
+    content_id VARCHAR(128) NOT NULL,
+    curriculum VARCHAR(64) NOT NULL DEFAULT 'NERDC',
+    class_code VARCHAR(64) NOT NULL,
+    subject_id VARCHAR(64) NOT NULL,
+    term VARCHAR(64) NOT NULL,
+    week INT NOT NULL,
+    topic VARCHAR(255) NOT NULL,
+    subtopic VARCHAR(255),
+    version INT NOT NULL DEFAULT 1,
+    status VARCHAR(32) NOT NULL DEFAULT 'published',
+    markdown_path VARCHAR(512),
+    markdown_body TEXT,
+    checksum_sha256 VARCHAR(128),
+    assets_json TEXT,
+    youtube_id VARCHAR(64),
+    published_by VARCHAR(191),
+    published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 12. Offline Package Manifests
+CREATE TABLE IF NOT EXISTS cls_package_manifests (
+    package_id VARCHAR(191) PRIMARY KEY,
+    curriculum VARCHAR(64) NOT NULL DEFAULT 'NERDC',
+    education_level VARCHAR(64) NOT NULL,
+    class_code VARCHAR(64) NOT NULL,
+    class_label VARCHAR(128) NOT NULL,
+    subject_id VARCHAR(64) NOT NULL,
+    subject_name VARCHAR(191) NOT NULL,
+    term VARCHAR(64) NOT NULL,
+    term_label VARCHAR(128) NOT NULL,
+    package_version INT NOT NULL DEFAULT 1,
+    size_bytes BIGINT DEFAULT 0,
+    checksum_sha256 VARCHAR(128),
+    manifest_json TEXT NOT NULL,
+    published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 13. Idempotent Offline Sync Operations Log
+CREATE TABLE IF NOT EXISTS cls_offline_sync_ops (
+    operation_id VARCHAR(128) PRIMARY KEY,
+    tenant_id VARCHAR(64),
+    student_id VARCHAR(128) NOT NULL,
+    operation_type VARCHAR(64) NOT NULL, -- QUIZ_ATTEMPT, LESSON_PROGRESS, BOOKMARK
+    entity_id VARCHAR(128) NOT NULL,
+    payload_json TEXT NOT NULL,
+    client_timestamp BIGINT NOT NULL,
+    status VARCHAR(32) NOT NULL DEFAULT 'SYNCHRONIZED',
+    synced_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 14. Student Lesson Progress (Conflict-Resolved Mastery State)
+CREATE TABLE IF NOT EXISTS cls_student_lesson_progress (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(64),
+    student_id VARCHAR(128) NOT NULL,
+    content_id VARCHAR(128) NOT NULL,
+    completion_pct INT DEFAULT 0,
+    completed BOOLEAN DEFAULT FALSE,
+    last_scroll_pos INT DEFAULT 0,
+    client_timestamp BIGINT NOT NULL DEFAULT 0,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (student_id, content_id)
+);
