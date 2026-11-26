@@ -207,7 +207,7 @@ export default function ExamPlayerClient() {
                       <div className={cn(
                         "w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-all",
                         isSelected 
-                          ? "bg-blue border-blue text-gray-900" 
+                          ? "bg-blue border-blue text-white" 
                           : "border-gray-200 text-gray-500 group-hover:border-white group-hover:text-gray-900"
                       )}>
                         {String.fromCharCode(65 + idx)}

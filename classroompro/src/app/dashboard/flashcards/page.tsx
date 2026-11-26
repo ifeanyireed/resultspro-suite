@@ -406,7 +406,7 @@ export default function FlashcardsPage() {
                              variant={currentPage === pageNum ? "default" : "outline"}
                              className={cn(
                                "w-10 h-10 rounded-xl font-bold",
-                               currentPage === pageNum ? "bg-emerald-600 text-white hover:bg-emerald-600/90" : "border-gray-100 text-white hover:bg-gray-50"
+                               currentPage === pageNum ? "bg-emerald-600 text-white hover:bg-emerald-600/90" : "border-gray-200 text-gray-900 hover:bg-gray-50"
                              )}
                              onClick={() => {
                                setCurrentPage(pageNum);
