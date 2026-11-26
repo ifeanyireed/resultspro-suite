@@ -49,6 +49,13 @@ func main() {
 			content.GET("/quizzes", h.GetQuizzes)
 			content.GET("/quizzes/:id", h.GetQuizByID)
 			content.GET("/flashcards", h.GetFlashcards)
+			content.GET("/subjects", h.GetSubjects)
+			content.GET("/dashboard/subjects", h.GetDashboardSubjects)
+			content.GET("/dashboard/syllabus", h.GetDashboardSyllabus)
+			content.GET("/dashboard/progress", h.GetDashboardProgress)
+			content.GET("/progress/overview", h.GetDashboardProgress)
+			content.GET("/gamification/leaderboard", h.GetLeaderboard)
+			content.GET("/exams", h.GetExams)
 		}
 
 		// Protected Student & Teacher Actions
