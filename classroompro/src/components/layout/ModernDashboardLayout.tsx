@@ -226,7 +226,7 @@ export function ModernDashboardLayout({
             <div className="mb-3 w-[340px] bg-white rounded-3xl shadow-2xl border border-gray-200/90 overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-200">
               <div className="px-5 py-4 bg-gradient-to-r from-[#0D1060] to-[#1A1FA8] text-white flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <ArrowsRightLeftIcon className="w-4 h-4 text-[#FBBC04]" />
+                  <ArrowsRightLeftIcon className="w-4 h-4 text-white" />
                   <span className="text-xs font-bold uppercase tracking-widest">
                     Switch Role Profile
                   </span>

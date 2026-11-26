@@ -63,7 +63,7 @@ function TeacherClassroomStream() {
           </Link>
           <Link
             href="/teacher/campus-os?subtab=messaging"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0D1060] text-[#FBBC04] text-xs font-extrabold transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0D1060] text-white text-xs font-extrabold transition-colors"
           >
             CampusPRO Messaging Hub
             <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5" />
@@ -146,7 +146,7 @@ function TeacherClassroomStream() {
          {/* System Boundary Handoff Card (Replaces duplicate inline messaging) */}
          <div className="space-y-4">
             <div className="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm space-y-4">
-               <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider">
+               <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider">
                  Zero-Duplication Architecture
                </span>
                <h3 className="text-base font-extrabold text-gray-900">
@@ -172,7 +172,7 @@ function TeacherClassroomStream() {
                  </Link>
                  <Link
                    href="/teacher/results"
-                   className="w-full py-2.5 px-4 rounded-xl bg-[#0D1060] text-[#FBBC04] text-xs font-extrabold flex items-center justify-between transition-colors"
+                   className="w-full py-2.5 px-4 rounded-xl bg-[#0D1060] text-white text-xs font-extrabold flex items-center justify-between transition-colors"
                  >
                    <span>Open ResultsPRO AI Console</span>
                    <ArrowTopRightOnSquareIcon className="w-4 h-4" />

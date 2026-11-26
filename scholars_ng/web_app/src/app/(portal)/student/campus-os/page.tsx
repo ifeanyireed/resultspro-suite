@@ -1081,7 +1081,7 @@ export default function StudentCampusOSPage() {
                     <h4 className="text-xl font-bold leading-tight">{student.name}</h4>
                     <p className="text-xs text-blue-200 font-mono">ID: {student.admission_number}</p>
                     <p className="text-xs text-blue-100">{student.class_name} ({student.arm_name})</p>
-                    <p className="text-xs text-amber-300 font-semibold">{student.house_name}</p>
+                    <p className="text-xs text-white font-semibold">{student.house_name}</p>
                   </div>
                 </div>
 

@@ -107,7 +107,7 @@ export default function PuzzleProSchoolsConsole() {
         {/* Zero-Duplication Architecture Header */}
         <MotionRise className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-2 max-w-3xl">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider">
               <IconSparkles className="w-3.5 h-3.5" />
               PuzzlePRO Coding &amp; Robotics · Rosters Synced Read-Only from CampusPRO
             </span>
@@ -122,7 +122,7 @@ export default function PuzzleProSchoolsConsole() {
           <div className="flex flex-wrap gap-3 shrink-0">
             <Link
               href="/"
-              className="px-5 py-3 rounded-2xl bg-[#0D1060] text-[#FBBC04] text-xs font-extrabold flex items-center gap-2 hover:bg-[#151980] transition-colors"
+              className="px-5 py-3 rounded-2xl bg-[#0D1060] text-white text-xs font-extrabold flex items-center gap-2 hover:bg-[#151980] transition-colors"
             >
               <IconPlayerPlay className="w-4 h-4" />
               Launch 636 Coding Adventures
@@ -192,7 +192,7 @@ export default function PuzzleProSchoolsConsole() {
                   onClick={() => setSelectedCampus(camp)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition-colors cursor-pointer ${
                     selectedCampus === camp
-                      ? "bg-[#0D1060] text-[#FBBC04]"
+                      ? "bg-[#0D1060] text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >

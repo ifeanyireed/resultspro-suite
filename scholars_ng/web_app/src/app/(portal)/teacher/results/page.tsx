@@ -71,7 +71,7 @@ function TeacherBroadsheetPreview() {
         </div>
         <button
           onClick={() => window.print()}
-          className="px-4 py-2.5 rounded-xl bg-[#0D1060] text-[#FBBC04] text-xs font-extrabold hover:bg-[#151980] transition-colors cursor-pointer"
+          className="px-4 py-2.5 rounded-xl bg-[#0D1060] text-white text-xs font-extrabold hover:bg-[#151980] transition-colors cursor-pointer"
         >
           Print Class Broadsheet
         </button>

@@ -19,7 +19,7 @@ export default function PuzzleProOnboardingHandoff() {
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 md:px-8 py-16 flex items-center">
         <MotionRise className="w-full bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-sm space-y-6">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider">
             <IconSparkles className="w-3.5 h-3.5" />
             Zero-Duplication Suite Onboarding
           </span>
@@ -73,7 +73,7 @@ export default function PuzzleProOnboardingHandoff() {
           <div className="pt-4 border-t border-gray-100 flex flex-wrap gap-3">
             <Link
               href="/"
-              className="px-6 py-3 rounded-2xl bg-[#0D1060] text-[#FBBC04] text-xs font-extrabold flex items-center gap-2 hover:bg-[#151980] transition-colors"
+              className="px-6 py-3 rounded-2xl bg-[#0D1060] text-white text-xs font-extrabold flex items-center gap-2 hover:bg-[#151980] transition-colors"
             >
               <IconPlayerPlay className="w-4 h-4" />
               Launch PuzzlePRO Coding Studio

@@ -167,7 +167,7 @@ export const ResultAuditView: React.FC = () => {
 
           <button
             onClick={handleRunAudit}
-            className="px-6 py-3.5 rounded-2xl bg-[#0D1060] text-[#FBBC04] font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:opacity-95 transition-all shadow-md"
+            className="px-6 py-3.5 rounded-2xl bg-[#0D1060] text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:opacity-95 transition-all shadow-md"
           >
             <ArrowPathIcon className={`w-4 h-4 ${isAuditing ? "animate-spin" : ""}`} />
             {isAuditing ? "Running AI Audit..." : "Run AI Result Audit"}

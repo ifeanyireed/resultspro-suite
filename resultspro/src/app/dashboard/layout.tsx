@@ -96,7 +96,7 @@ export default function ResultsProDashboardLayout({
                     href={item.href}
                     className={`flex items-center gap-3 text-sm px-4 py-2.5 rounded-xl font-bold transition-colors ${
                       idx === 0
-                        ? "bg-[#0D1060] text-[#FBBC04]"
+                        ? "bg-[#0D1060] text-white"
                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                     }`}
                   >
@@ -115,7 +115,7 @@ export default function ResultsProDashboardLayout({
               <div className="p-3.5 rounded-2xl bg-gray-50 border border-gray-200/70 space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-extrabold text-gray-900">CampusPRO</span>
-                  <span className="text-[10px] font-black px-2 py-0.5 rounded bg-[#0D1060] text-[#FBBC04]">
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded bg-[#0D1060] text-white">
                     ERP Record
                   </span>
                 </div>
@@ -158,7 +158,7 @@ export default function ResultsProDashboardLayout({
       headerContent={
         <>
           <div className="flex items-center gap-3">
-            <span className="px-3 py-1.5 rounded-xl bg-[#0D1060] text-[#FBBC04] text-xs font-extrabold">
+            <span className="px-3 py-1.5 rounded-xl bg-[#0D1060] text-white text-xs font-extrabold">
               Laurel Academy Multi-Campus Suite
             </span>
             <span className="hidden md:inline text-xs font-bold text-gray-500">
@@ -190,7 +190,7 @@ export default function ResultsProDashboardLayout({
             {switcherOpen && (
               <div className="absolute right-0 mt-2 w-80 bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden z-50">
                 <div className="px-4 py-3 bg-[#0D1060] text-white flex items-center justify-between">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-[#FBBC04]">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-white">
                     Switch ResultsPRO Role
                   </span>
                 </div>

@@ -60,7 +60,7 @@ export default function TeacherDashboard() {
       {/* Header */}
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider mb-2">
             ClassroomPRO — Teacher Digital Learning &amp; Formative Assessment Hub
           </div>
           <h2 className="text-2xl font-extrabold text-gray-900">Hello, {teacherName}</h2>
@@ -70,7 +70,7 @@ export default function TeacherDashboard() {
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href="/dashboard/teacher/create-note">
-            <Button className="bg-[#0D1060] hover:bg-[#151980] text-[#FBBC04] font-extrabold rounded-2xl">
+            <Button className="bg-[#0D1060] hover:bg-[#151980] text-white font-extrabold rounded-2xl">
               <FilePlus className="w-4 h-4 mr-2" /> Author Lesson Note / Story
             </Button>
           </Link>
@@ -145,7 +145,7 @@ export default function TeacherDashboard() {
 
         {/* System-of-Record Boundary Card (Replaces duplicate Messages widget) */}
         <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4">
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider">
             Unified Trio Workflow
           </span>
           <h3 className="text-base font-extrabold text-gray-900">
@@ -165,7 +165,7 @@ export default function TeacherDashboard() {
             </li>
           </ul>
           <Link href="/dashboard/teacher/analytics" className="block pt-2">
-            <Button className="w-full bg-[#0D1060] hover:bg-[#151980] text-[#FBBC04] text-xs font-extrabold rounded-xl h-10">
+            <Button className="w-full bg-[#0D1060] hover:bg-[#151980] text-white text-xs font-extrabold rounded-xl h-10">
               Open Topic Mastery &amp; CampusPRO Sync
             </Button>
           </Link>

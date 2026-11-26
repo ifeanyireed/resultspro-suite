@@ -95,7 +95,7 @@ export default function PrincipalCurriculumOversightConsole() {
       {/* Architecture Boundary Banner */}
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider mb-2">
             ClassroomPRO — Principal Curriculum &amp; Learning Oversight
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
@@ -114,7 +114,7 @@ export default function PrincipalCurriculumOversightConsole() {
           </Link>
           <Link
             href="/dashboard/admin/reports"
-            className="px-4 py-2.5 rounded-2xl bg-[#0D1060] text-[#FBBC04] text-xs font-extrabold transition-colors"
+            className="px-4 py-2.5 rounded-2xl bg-[#0D1060] text-white text-xs font-extrabold transition-colors"
           >
             Topic-Gap &amp; Sync Reports
           </Link>
@@ -190,13 +190,13 @@ export default function PrincipalCurriculumOversightConsole() {
           <div className="space-y-2 pt-1 text-xs font-bold text-gray-700">
             <div className="p-3 rounded-2xl bg-gray-50 border border-gray-200/70 flex items-center justify-between">
               <span>Manage Teachers, Students &amp; Classes</span>
-              <span className="text-[10px] font-black px-2 py-0.5 rounded bg-[#0D1060] text-[#FBBC04]">
+              <span className="text-[10px] font-black px-2 py-0.5 rounded bg-[#0D1060] text-white">
                 CampusPRO
               </span>
             </div>
             <div className="p-3 rounded-2xl bg-gray-50 border border-gray-200/70 flex items-center justify-between">
               <span>School Messaging, Notices &amp; Circulars</span>
-              <span className="text-[10px] font-black px-2 py-0.5 rounded bg-[#0D1060] text-[#FBBC04]">
+              <span className="text-[10px] font-black px-2 py-0.5 rounded bg-[#0D1060] text-white">
                 CampusPRO
               </span>
             </div>

@@ -567,7 +567,7 @@ export default function InventoryManager() {
             onClick={() => setShowPOModal(true)}
             className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 text-xs font-semibold px-4 py-2.5 rounded-full shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
           >
-            <ShoppingCartIcon className="w-4 h-4 text-[#FBBC04]" />
+            <ShoppingCartIcon className="w-4 h-4 text-white" />
             New Purchase Order
           </button>
           <button

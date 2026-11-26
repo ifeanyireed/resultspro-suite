@@ -127,7 +127,7 @@ export const TeacherCommentStudio: React.FC = () => {
       {/* Top Studio Header */}
       <div className="bg-white rounded-3xl p-6 md:p-8 border border-gray-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="space-y-2 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-xs font-black uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-white text-xs font-black uppercase tracking-wider">
             <SparklesIcon className="w-4 h-4" /> AI Report-Card Narrative Studio
           </div>
           <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">
@@ -141,7 +141,7 @@ export const TeacherCommentStudio: React.FC = () => {
         <div className="flex flex-wrap gap-3">
           <button
             onClick={() => handleRegenerateAll(tone, role)}
-            className="px-5 py-3 rounded-2xl bg-[#0D1060] text-[#FBBC04] font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:opacity-95 transition-all shadow-sm"
+            className="px-5 py-3 rounded-2xl bg-[#0D1060] text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:opacity-95 transition-all shadow-sm"
           >
             <ArrowPathIcon className="w-4 h-4" />
             Batch Generate Class Remarks
@@ -221,7 +221,7 @@ export const TeacherCommentStudio: React.FC = () => {
           >
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-gray-100">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#0D1060] text-[#FBBC04] flex items-center justify-center font-black text-lg">
+                <div className="w-12 h-12 rounded-2xl bg-[#0D1060] text-white flex items-center justify-center font-black text-lg">
                   {student.studentName[0]}
                 </div>
                 <div>

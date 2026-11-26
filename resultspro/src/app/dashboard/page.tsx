@@ -37,7 +37,7 @@ export default function ResultsProAIConsole() {
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider mb-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider mb-2">
               CampusPRO (Academic Record) → ClassroomPRO (Learning Hub) → ResultsPRO (Intelligence Engine)
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
@@ -60,7 +60,7 @@ export default function ResultsProAIConsole() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-2.5 rounded-2xl text-xs font-extrabold flex items-center gap-2 transition-all ${
                   isSelected
-                    ? "bg-[#0D1060] text-[#FBBC04] shadow-sm"
+                    ? "bg-[#0D1060] text-white shadow-sm"
                     : "bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200/60"
                 }`}
               >

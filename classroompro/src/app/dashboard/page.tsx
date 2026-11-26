@@ -93,7 +93,7 @@ export default function StudentDashboard() {
       {/* Welcome Banner */}
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider mb-2">
             <Sparkles className="w-3.5 h-3.5" />
             ClassroomPRO — NERDC Digital Learning &amp; Offline-First Hub
           </div>
@@ -107,7 +107,7 @@ export default function StudentDashboard() {
 
         <div className="flex flex-wrap items-center gap-2.5 shrink-0">
           <Link href="/dashboard/videos">
-            <Button className="bg-[#0D1060] hover:bg-[#151980] text-[#FBBC04] font-extrabold rounded-2xl text-xs h-10 px-4">
+            <Button className="bg-[#0D1060] hover:bg-[#151980] text-white font-extrabold rounded-2xl text-xs h-10 px-4">
               <VideoIcon className="w-4 h-4 mr-1.5" /> Watch Video Lessons
             </Button>
           </Link>
@@ -133,7 +133,7 @@ export default function StudentDashboard() {
               className="bg-gradient-to-br from-[#0D1060] to-[#1565C0] rounded-3xl p-6 text-white shadow-sm flex flex-col justify-between"
             >
               <div className="flex items-center justify-between mb-4">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-[#FBBC04]">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-white">
                   {m.label}
                 </span>
                 <div className="w-9 h-9 rounded-2xl bg-white/15 flex items-center justify-center">
@@ -204,7 +204,7 @@ export default function StudentDashboard() {
                   </h3>
                   <p className="text-xs text-gray-500">{item.subject}</p>
                 </div>
-                <div className="w-9 h-9 rounded-xl bg-gray-100 group-hover:bg-[#0D1060] group-hover:text-[#FBBC04] text-gray-700 flex items-center justify-center shrink-0 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-gray-100 group-hover:bg-[#0D1060] group-hover:text-white text-gray-700 flex items-center justify-center shrink-0 transition-colors">
                   <Play className="w-4 h-4" />
                 </div>
               </Link>

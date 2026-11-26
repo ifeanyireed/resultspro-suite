@@ -693,7 +693,7 @@ export default function AcademicSessionManager() {
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/10 text-center">
               <div className="text-[10px] uppercase font-bold text-white/70">Teaching Days</div>
               <div className="text-xl font-extrabold mt-0.5">{currentTerm.teaching_days} Days</div>
-              <div className="text-[10px] text-[#FBBC04] font-medium">Planned Schedule</div>
+              <div className="text-[10px] text-white font-medium">Planned Schedule</div>
             </div>
 
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/10 text-center">
@@ -706,7 +706,7 @@ export default function AcademicSessionManager() {
 
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/10 text-center col-span-2 sm:col-span-1">
               <div className="text-[10px] uppercase font-bold text-white/70">Results Release</div>
-              <div className="text-xs font-bold mt-1 text-[#FBBC04] truncate">
+              <div className="text-xs font-bold mt-1 text-white truncate">
                 {formatDateDisplay(currentTerm.results_release_date)}
               </div>
               <div className="text-[10px] text-white/75 font-medium">Portal Publication</div>

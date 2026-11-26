@@ -77,7 +77,7 @@ export default function TeacherCreateVideoPage() {
     <div className="space-y-6 py-4 max-w-4xl mx-auto">
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider mb-2">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider mb-2">
             <Sparkles className="w-3.5 h-3.5" />
             ClassroomPRO YouTube Video Curation · Zero Video File Uploads
           </span>
@@ -225,7 +225,7 @@ export default function TeacherCreateVideoPage() {
             <Button
               type="submit"
               disabled={publishing}
-              className="bg-[#0D1060] hover:bg-[#151980] text-[#FBBC04] font-extrabold rounded-2xl px-6 h-11"
+              className="bg-[#0D1060] hover:bg-[#151980] text-white font-extrabold rounded-2xl px-6 h-11"
             >
               <LinkIcon className="w-4 h-4 mr-2" />
               {publishing ? "Linking YouTube Video..." : "Link YouTube Video"}

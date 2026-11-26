@@ -48,7 +48,7 @@ export default function ParentLearningHub() {
       {/* Header */}
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider mb-2">
             ClassroomPRO — Parent Learning &amp; Remedial Revision Hub
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900">
@@ -60,7 +60,7 @@ export default function ParentLearningHub() {
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href="/dashboard/parent/progress">
-            <Button className="bg-[#0D1060] hover:bg-[#151980] text-[#FBBC04] font-extrabold rounded-2xl">
+            <Button className="bg-[#0D1060] hover:bg-[#151980] text-white font-extrabold rounded-2xl">
               <TrendingUp className="w-4 h-4 mr-2" /> Full Topic Mastery Report
             </Button>
           </Link>
@@ -120,7 +120,7 @@ export default function ParentLearningHub() {
                       </Button>
                     </Link>
                     <Link href="/dashboard/quizzes" className="flex-1">
-                      <Button className="w-full text-xs font-extrabold h-9 rounded-xl bg-[#0D1060] text-[#FBBC04]">
+                      <Button className="w-full text-xs font-extrabold h-9 rounded-xl bg-[#0D1060] text-white">
                         <BrainCircuit className="w-3.5 h-3.5 mr-1.5" /> Practice Quiz
                       </Button>
                     </Link>
@@ -135,7 +135,7 @@ export default function ParentLearningHub() {
       {/* System Boundary Notice (Replaces duplicate My Children, Billing & Messages tabs) */}
       <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <MotionRise className="p-5 rounded-3xl bg-white border border-gray-100 shadow-sm space-y-2">
-          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded bg-[#0D1060] text-[#FBBC04]">
+          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded bg-[#0D1060] text-white">
             CampusPRO
           </span>
           <h3 className="text-sm font-extrabold text-gray-900">Teacher Messaging &amp; School Circulars</h3>
@@ -144,7 +144,7 @@ export default function ParentLearningHub() {
           </p>
         </MotionRise>
         <MotionRise className="p-5 rounded-3xl bg-white border border-gray-100 shadow-sm space-y-2">
-          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded bg-[#0D1060] text-[#FBBC04]">
+          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded bg-[#0D1060] text-white">
             CampusPRO
           </span>
           <h3 className="text-sm font-extrabold text-gray-900">Bursary, Fees &amp; Ward Enrolment</h3>

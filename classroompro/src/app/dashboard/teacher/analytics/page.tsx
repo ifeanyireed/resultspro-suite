@@ -116,7 +116,7 @@ export default function TeacherAnalyticsPage() {
       <main className="p-4 md:p-8 space-y-8">
         <MotionRise className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider mb-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider mb-2">
               ClassroomPRO Learning Hub → CampusPRO Official Exam Ledger
             </div>
             <h2 className="text-2xl font-extrabold text-gray-900 font-display">
@@ -147,7 +147,7 @@ export default function TeacherAnalyticsPage() {
             </select>
             <Button
               onClick={handleApproveAndSyncAll}
-              className="bg-[#0D1060] hover:bg-[#0D1060]/95 text-[#FBBC04] font-black text-xs rounded-xl"
+              className="bg-[#0D1060] hover:bg-[#0D1060]/95 text-white font-black text-xs rounded-xl"
             >
               <Refresh className="w-4 h-4 mr-2" />
               {batchSynced

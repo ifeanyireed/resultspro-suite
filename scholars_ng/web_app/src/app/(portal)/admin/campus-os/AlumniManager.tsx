@@ -282,7 +282,7 @@ export default function AlumniManager({
       <div className="bg-gradient-to-r from-[#0D1060] via-[#146ef5] to-[#0D1060] rounded-2xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold text-amber-300 border border-white/20">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold text-white border border-white/20">
               <IdentificationIcon className="w-4 h-4" />
               <span>Institutional Legacy & Registry</span>
             </div>

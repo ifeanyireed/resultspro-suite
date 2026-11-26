@@ -52,7 +52,7 @@ export default function AssignedClassesLearningView() {
     <div className="space-y-6 py-4">
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider mb-2">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider mb-2">
             Synced Read-Only from CampusPRO Academic ERP
           </span>
           <h2 className="text-2xl font-extrabold text-gray-900">
@@ -64,7 +64,7 @@ export default function AssignedClassesLearningView() {
         </div>
         <div className="flex gap-2.5 shrink-0">
           <Link href="/dashboard/teacher/create-note">
-            <Button className="bg-[#0D1060] text-[#FBBC04] font-extrabold rounded-2xl text-xs">
+            <Button className="bg-[#0D1060] text-white font-extrabold rounded-2xl text-xs">
               + Author Note / AI Story
             </Button>
           </Link>
@@ -118,7 +118,7 @@ export default function AssignedClassesLearningView() {
 
             <div className="flex gap-2">
               <Link href="/dashboard/teacher/analytics" className="flex-1">
-                <Button className="w-full bg-[#0D1060] hover:bg-[#151980] text-[#FBBC04] text-xs font-extrabold h-10 rounded-xl">
+                <Button className="w-full bg-[#0D1060] hover:bg-[#151980] text-white text-xs font-extrabold h-10 rounded-xl">
                   <BarChart3 className="w-4 h-4 mr-1.5" />
                   Topic Gaps &amp; Sync Scores
                 </Button>

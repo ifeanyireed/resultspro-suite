@@ -82,7 +82,7 @@ export const PerformanceIntelligenceView: React.FC = () => {
             Laurel Academy — School &amp; Cohort Intelligence Engine
           </h2>
           <p className="text-sm text-white/80 leading-relaxed">
-            Combines official examination records from <span className="text-[#FBBC04] font-bold">CampusPRO</span> across Ikeja, Lekki, and Abuja campuses with <span className="text-[#FBBC04] font-bold">ClassroomPRO&apos;s</span> multi-year topic mastery history.
+            Combines official examination records from <span className="text-white font-bold">CampusPRO</span> across Ikeja, Lekki, and Abuja campuses with <span className="text-white font-bold">ClassroomPRO&apos;s</span> multi-year topic mastery history.
           </p>
         </div>
 
@@ -202,7 +202,7 @@ export const PerformanceIntelligenceView: React.FC = () => {
               }}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all text-left ${
                 activeQuery.id === q.id
-                  ? "bg-[#0D1060] text-[#FBBC04] shadow-sm"
+                  ? "bg-[#0D1060] text-white shadow-sm"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
@@ -229,7 +229,7 @@ export const PerformanceIntelligenceView: React.FC = () => {
         {/* AI Narrative + Verifiable Figures Table */}
         <div className="p-6 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-4">
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-xl bg-[#0D1060] text-[#FBBC04] flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-8 h-8 rounded-xl bg-[#0D1060] text-white flex items-center justify-center shrink-0 mt-0.5">
               <AcademicCapIcon className="w-4 h-4" />
             </div>
             <div>
@@ -278,7 +278,7 @@ export const PerformanceIntelligenceView: React.FC = () => {
       <div className="bg-white rounded-3xl p-6 md:p-8 border-2 border-[#0D1060]/15 shadow-sm space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-gray-100">
           <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-xs font-black uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-white text-xs font-black uppercase tracking-wider">
               <ClipboardDocumentCheckIcon className="w-4 h-4" /> AI Results-Processing Officer (Admin Copilot)
             </div>
             <h3 className="text-2xl font-extrabold text-gray-900">

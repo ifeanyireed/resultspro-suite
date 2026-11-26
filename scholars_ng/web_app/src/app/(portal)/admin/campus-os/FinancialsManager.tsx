@@ -562,7 +562,7 @@ export default function FinancialsManager() {
             onClick={() => setShowNewStructureModal(true)}
             className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 text-xs font-semibold px-4 py-2.5 rounded-full shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
           >
-            <CreditCardIcon className="w-4 h-4 text-[#FBBC04]" />
+            <CreditCardIcon className="w-4 h-4 text-white" />
             New Fee Tariff
           </button>
           <button
@@ -651,7 +651,7 @@ export default function FinancialsManager() {
             <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
               <div className="flex items-center justify-between text-gray-400 mb-2">
                 <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Cleared Accounts</span>
-                <ReceiptPercentIcon className="w-4 h-4 text-[#FBBC04]" />
+                <ReceiptPercentIcon className="w-4 h-4 text-white" />
               </div>
               <div className="text-2xl font-bold text-gray-900">{summary.cleared_count || 0} Pupils</div>
               <div className="text-[11px] text-gray-400 mt-0.5">

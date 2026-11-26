@@ -45,7 +45,7 @@ export default function PuzzleProFamiliesConsole() {
         {/* Header */}
         <MotionRise className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-2 max-w-3xl">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider">
               <IconSparkles className="w-3.5 h-3.5" />
               PuzzlePRO Family Coding Progress · Ward Profiles Synced from CampusPRO
             </span>
@@ -58,7 +58,7 @@ export default function PuzzleProFamiliesConsole() {
           </div>
           <Link
             href="/"
-            className="px-5 py-3 rounded-2xl bg-[#0D1060] text-[#FBBC04] text-xs font-extrabold flex items-center gap-2 hover:bg-[#151980] transition-colors shrink-0"
+            className="px-5 py-3 rounded-2xl bg-[#0D1060] text-white text-xs font-extrabold flex items-center gap-2 hover:bg-[#151980] transition-colors shrink-0"
           >
             <IconPlayerPlay className="w-4 h-4" />
             Open Coding Studio

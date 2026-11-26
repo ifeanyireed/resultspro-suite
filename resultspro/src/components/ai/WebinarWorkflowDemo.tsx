@@ -289,7 +289,7 @@ export const WebinarWorkflowDemo: React.FC = () => {
               &ldquo;How AI Can Transform End-of-Term Results Processing in Nigerian Schools&rdquo;
             </h2>
             <p className="text-sm text-white/80">
-              Promise: <strong className="text-[#FBBC04]">From manual score entry to intelligent academic reporting</strong> — demonstrating Laurel Academy (Ikeja, Lekki &amp; Abuja Campuses) across ClassroomPRO, CampusPRO, and ResultsPRO.
+              Promise: <strong className="text-white">From manual score entry to intelligent academic reporting</strong> — demonstrating Laurel Academy (Ikeja, Lekki &amp; Abuja Campuses) across ClassroomPRO, CampusPRO, and ResultsPRO.
             </p>
           </div>
 
@@ -392,7 +392,7 @@ export const WebinarWorkflowDemo: React.FC = () => {
               {/* Left 7 Columns: Narrative & Highlights */}
               <div className="lg:col-span-7 space-y-5">
                 <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-xs font-black uppercase tracking-wider">
+                  <span className="px-3 py-1 rounded-full bg-[#0D1060] text-white text-xs font-black uppercase tracking-wider">
                     Step {activeStep.stepNumber} · {activeStep.productBadge}
                   </span>
                   <span className="px-3 py-1 rounded-full bg-blue-50 text-[#146ef5] text-xs font-bold">
@@ -454,12 +454,12 @@ export const WebinarWorkflowDemo: React.FC = () => {
 
                   {/* GSAP Tweened Number Counter Card */}
                   <div className="p-6 rounded-3xl bg-[#0D1060] text-white shadow-lg">
-                    <div className="text-[10px] font-black uppercase tracking-widest text-[#FBBC04] mb-2">
+                    <div className="text-[10px] font-black uppercase tracking-widest text-white mb-2">
                       Live Webinar Telemetry
                     </div>
                     <div className="text-4xl md:text-5xl font-black tracking-tight text-white">
                       <span ref={metricNumRef}>{activeStep.metricValue}</span>
-                      <span className="text-[#FBBC04]">{activeStep.metricSuffix}</span>
+                      <span className="text-white">{activeStep.metricSuffix}</span>
                     </div>
                     <div className="text-xs text-white/80 font-semibold mt-2">
                       {activeStep.metricLabel}

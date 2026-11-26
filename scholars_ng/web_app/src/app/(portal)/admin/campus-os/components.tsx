@@ -723,7 +723,7 @@ export function MobileAppDashboard({ selectedCampus }: { selectedCampus: string 
             <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4">
               <div className="text-xs text-white/70">Driver App IDs</div>
               <div className="text-2xl font-bold mt-1">28</div>
-              <div className="text-[11px] text-amber-200 mt-0.5">MOB-DRV-*</div>
+              <div className="text-[11px] text-white/90 mt-0.5">MOB-DRV-*</div>
             </div>
             <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4">
               <div className="text-xs text-white/70">Admin App IDs</div>

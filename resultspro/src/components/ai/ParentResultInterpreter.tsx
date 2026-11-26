@@ -187,7 +187,7 @@ export const ParentResultInterpreter: React.FC = () => {
               onClick={() => setSelectedQA(qa)}
               className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                 selectedQA.id === qa.id
-                  ? "bg-[#0D1060] text-[#FBBC04] shadow-sm"
+                  ? "bg-[#0D1060] text-white shadow-sm"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
@@ -212,7 +212,7 @@ export const ParentResultInterpreter: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-black text-[#0D1060] uppercase tracking-wider mb-1">
-              <BoltIcon className="w-4 h-4 text-[#FBBC04]" /> Continuous Academic Improvement Loop
+              <BoltIcon className="w-4 h-4 text-white" /> Continuous Academic Improvement Loop
             </div>
             <h3 className="text-xl font-extrabold text-gray-900">
               Recommended ClassroomPRO Revision Packs (Based on Exact Performance Gaps)
@@ -231,7 +231,7 @@ export const ParentResultInterpreter: React.FC = () => {
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider">
+                  <span className="px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider">
                     {pack.subject}
                   </span>
                   <span className="text-[11px] font-bold text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full">

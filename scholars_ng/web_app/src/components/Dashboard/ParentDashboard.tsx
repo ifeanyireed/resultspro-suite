@@ -751,7 +751,7 @@ export default function ParentDashboard() {
                   <div className="text-[10px] uppercase font-bold tracking-wider text-blue-200">
                     Single-Use Dismissal PIN
                   </div>
-                  <div className="text-3xl font-black tracking-widest text-amber-300 my-1">
+                  <div className="text-3xl font-black tracking-widest text-white my-1">
                     {activeWard.pickup_pin}
                   </div>
                   <div className="text-[10px] text-white/70">Show this PIN to gate marshals at pickup</div>
@@ -1154,7 +1154,7 @@ export default function ParentDashboard() {
 
                 <div className="p-6 rounded-2xl bg-gradient-to-r from-blue-900 to-indigo-900 text-white mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                   <div>
-                    <div className="text-xs font-bold text-amber-300 uppercase">Assigned Transit Route</div>
+                    <div className="text-xs font-bold text-white uppercase">Assigned Transit Route</div>
                     <div className="text-2xl font-black mt-1">{campusOps.transportation?.route_name}</div>
                     <div className="text-xs text-blue-200 mt-1">Vehicle: {campusOps.transportation?.bus_number} ({campusOps.transportation?.plate_number})</div>
                   </div>
