@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import {
-  IconVideo as VideoIcon,
+  IconBrandYoutube as YoutubeIcon,
   IconSparkles as Sparkles,
   IconCheck as Check,
-  IconCloudUpload as CloudUpload,
+  IconLink as LinkIcon,
 } from "@tabler/icons-react";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
@@ -20,13 +20,21 @@ import api from "../../../../lib/api";
 import { toast } from "../../../../lib/toast";
 import { MotionRise } from "../../../../components/ScrollRiseProvider";
 
+function extractYouTubeId(url: string): string | null {
+  const regExp = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+  const match = url.match(regExp);
+  if (match && match[1]) return match[1];
+  if (url.trim().length === 11) return url.trim();
+  return null;
+}
+
 export default function TeacherCreateVideoPage() {
   const [title, setTitle] = useState("Simplifying Algebraic Fractions & Word Problems");
   const [subject, setSubject] = useState("Mathematics");
   const [classLevel, setClassLevel] = useState("JSS 2 Gold");
   const [term, setTerm] = useState("2");
   const [week, setWeek] = useState("3");
-  const [videoUrl, setVideoUrl] = useState("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4");
+  const [youtubeUrl, setYoutubeUrl] = useState("https://www.youtube.com/watch?v=NybHckSEQBI");
   const [duration, setDuration] = useState("14:20");
   const [summary, setSummary] = useState(
     "Step-by-step worked examples showing how to find the LCM of algebraic denominators, simplify fractions, and solve NERDC commercial arithmetic word problems."
@@ -34,8 +42,14 @@ export default function TeacherCreateVideoPage() {
   const [publishing, setPublishing] = useState(false);
   const [published, setPublished] = useState(false);
 
+  const previewYoutubeId = extractYouTubeId(youtubeUrl);
+
   const handlePublish = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!previewYoutubeId) {
+      toast.error("Please enter a valid YouTube video URL (e.g. https://www.youtube.com/watch?v=...)");
+      return;
+    }
     setPublishing(true);
     try {
       await api.post("/teacher/videos", {
@@ -44,15 +58,16 @@ export default function TeacherCreateVideoPage() {
         classLevel,
         term: Number(term),
         week: Number(week),
-        videoUrl,
+        youtubeUrl,
+        youtubeId: previewYoutubeId,
         duration,
         summary,
       });
       setPublished(true);
-      toast.success("NERDC Video Lesson published and linked to Topic Hub & Offline Manifest!");
+      toast.success("YouTube Video Lesson linked to NERDC Topic Hub!");
     } catch {
       setPublished(true);
-      toast.success("NERDC Video Lesson published and linked to Topic Hub & Offline Manifest!");
+      toast.success("YouTube Video Lesson linked to NERDC Topic Hub!");
     } finally {
       setPublishing(false);
     }
@@ -64,13 +79,13 @@ export default function TeacherCreateVideoPage() {
         <div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            ClassroomPRO Video Authoring Studio
+            ClassroomPRO YouTube Video Curation · Zero Video File Uploads
           </span>
           <h1 className="text-2xl font-extrabold text-gray-900">
-            Publish NERDC Curriculum Video Lesson
+            Link YouTube Video Lesson to NERDC Topic
           </h1>
           <p className="text-xs text-gray-500 mt-1">
-            Attach a recorded video lecture or Cloudinary/CDN stream to a CampusPRO-synced class topic, complete with offline download packaging.
+            Paste a YouTube video link (`youtube.com/watch?v=...` or `youtu.be/...`) to embed it directly alongside your class&apos;s weekly Markdown Lesson Note, Flashcards, and Quiz.
           </p>
         </div>
       </MotionRise>
@@ -139,7 +154,7 @@ export default function TeacherCreateVideoPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-extrabold text-gray-700">Video Duration</label>
+              <label className="text-xs font-extrabold text-gray-700">Estimated Duration</label>
               <Input
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
@@ -160,20 +175,40 @@ export default function TeacherCreateVideoPage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-extrabold text-gray-700">
-              Cloudinary / CDN Video Stream URL (MP4 / HLS)
+            <label className="text-xs font-extrabold text-gray-700 flex items-center gap-1.5">
+              <YoutubeIcon className="w-4 h-4 text-red-600" />
+              YouTube Video URL (Linked YouTube Only — No File Uploads)
             </label>
             <Input
-              value={videoUrl}
-              onChange={(e) => setVideoUrl(e.target.value)}
+              value={youtubeUrl}
+              onChange={(e) => setYoutubeUrl(e.target.value)}
+              placeholder="https://www.youtube.com/watch?v=..."
               required
               className="h-11 rounded-xl"
             />
           </div>
 
+          {/* Live YouTube Embed Preview */}
+          {previewYoutubeId && (
+            <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200/80 space-y-2">
+              <p className="text-[11px] font-extrabold text-gray-500 uppercase tracking-wider">
+                Live YouTube Embed Preview (ID: {previewYoutubeId})
+              </p>
+              <div className="aspect-video max-w-md rounded-xl overflow-hidden bg-black border border-gray-200">
+                <iframe
+                  className="w-full h-full"
+                  src={`https://www.youtube-nocookie.com/embed/${previewYoutubeId}?rel=0`}
+                  title="YouTube Preview"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          )}
+
           <div className="space-y-1.5">
             <label className="text-xs font-extrabold text-gray-700">
-              Lesson Summary &amp; Key Objectives (Indexed for Offline Search)
+              Teacher Study Guide &amp; Key Learning Objectives
             </label>
             <textarea
               rows={4}
@@ -183,7 +218,7 @@ export default function TeacherCreateVideoPage() {
             />
           </div>
 
-          <div className="pt-2 flex items-center justify-between gap-4">
+          <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
             <span className="text-xs text-gray-500 font-medium">
               Automatically links with Week {week} Markdown Lesson Note, SRS Flashcards &amp; Quiz.
             </span>
@@ -192,8 +227,8 @@ export default function TeacherCreateVideoPage() {
               disabled={publishing}
               className="bg-[#0D1060] hover:bg-[#151980] text-[#FBBC04] font-extrabold rounded-2xl px-6 h-11"
             >
-              <CloudUpload className="w-4 h-4 mr-2" />
-              {publishing ? "Publishing Video..." : "Publish Video Lesson"}
+              <LinkIcon className="w-4 h-4 mr-2" />
+              {publishing ? "Linking YouTube Video..." : "Link YouTube Video"}
             </Button>
           </div>
 
@@ -201,7 +236,7 @@ export default function TeacherCreateVideoPage() {
             <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800 flex items-center gap-2">
               <Check className="w-4 h-4 shrink-0" />
               <span>
-                Video lesson published to <strong>{classLevel} ({subject})</strong> and added to the Term {term} offline download manifest.
+                YouTube video (<code>{previewYoutubeId}</code>) linked to <strong>{classLevel} ({subject} · Term {term}, Week {week})</strong>.
               </span>
             </div>
           )}

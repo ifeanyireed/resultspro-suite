@@ -201,7 +201,7 @@ export default function TeacherClassroomHub() {
     },
     {
       id: 'create-video',
-      label: 'Publish Video Lesson',
+      label: 'Link YouTube Video',
       icon: Video01Icon,
       component: TeacherCreateVideoView,
     },

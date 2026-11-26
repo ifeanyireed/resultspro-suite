@@ -3,14 +3,12 @@
 import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import {
-  IconVideo as VideoIcon,
+  IconBrandYoutube as YoutubeIcon,
   IconSearch as Search,
   IconPlayerPlay as Play,
   IconClock as Clock,
   IconEye as Eye,
-  IconCloudDownload as CloudDownload,
   IconSparkles as Sparkles,
-  IconCheck as Check,
 } from "@tabler/icons-react";
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
@@ -88,13 +86,13 @@ export default function VideosListPage() {
         <div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            ClassroomPRO Video Library · NERDC Curriculum &amp; Offline Caching
+            ClassroomPRO Video Library · Curated YouTube NERDC Lectures
           </span>
           <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
             NERDC Educational Video Lessons
           </h1>
           <p className="text-xs text-gray-500 mt-1">
-            Watch step-by-step video explanations mapped directly to your weekly lesson notes, flashcards, and practice quizzes.
+            Watch teacher-linked YouTube video explanations mapped directly to your weekly lesson notes, flashcards, and practice quizzes.
           </p>
         </div>
 
@@ -104,7 +102,7 @@ export default function VideosListPage() {
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search video lessons..."
+              placeholder="Search YouTube lessons..."
               className="pl-10 h-11 rounded-2xl"
             />
           </div>
@@ -143,77 +141,91 @@ export default function VideosListPage() {
 
       {/* Video Cards Grid */}
       <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredVideos.map((video, idx) => (
-          <MotionRise
-            key={video.id}
-            delay={idx * 0.05}
-            className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col group hover:border-gray-200 transition-all"
-          >
-            {/* Thumbnail Preview */}
-            <Link href={`/dashboard/videos/${video.id}`} className="relative aspect-video bg-[#0D1060] overflow-hidden block">
-              <img
-                src={video.thumbnailUrl || "/photo04.jpeg"}
-                alt={video.title}
-                className="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0D1060]/80 via-[#0D1060]/20 to-transparent" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-14 h-14 rounded-full bg-[#FBBC04] text-[#0D1060] flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
-                  <Play className="w-6 h-6 fill-current ml-0.5" />
+        {filteredVideos.map((video, idx) => {
+          const ytThumb =
+            video.thumbnailUrl ||
+            (video.youtubeId
+              ? `https://i.ytimg.com/vi/${video.youtubeId}/hqdefault.jpg`
+              : "/photo04.jpeg");
+          return (
+            <MotionRise
+              key={video.id}
+              delay={idx * 0.05}
+              className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col group hover:border-gray-200 transition-all"
+            >
+              {/* YouTube Thumbnail Preview */}
+              <Link
+                href={`/dashboard/videos/${video.id}`}
+                className="relative aspect-video bg-[#0D1060] overflow-hidden block"
+              >
+                <img
+                  src={ytThumb}
+                  alt={video.title}
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0D1060]/80 via-[#0D1060]/20 to-transparent" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-14 h-14 rounded-full bg-red-600 text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                    <Play className="w-6 h-6 fill-current ml-0.5" />
+                  </div>
                 </div>
-              </div>
-              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#0D1060]/90 text-[#FBBC04] text-[10px] font-extrabold uppercase tracking-wider">
-                {video.topic?.subject?.name || "NERDC"} · Term {video.topic?.term || 2}
-              </div>
-              <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-black/75 text-white text-xs font-bold flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5" />
-                {video.duration || "14:20"}
-              </div>
-            </Link>
+                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#0D1060]/90 text-[#FBBC04] text-[10px] font-extrabold uppercase tracking-wider">
+                  {video.topic?.subject?.name || "NERDC"} · Term {video.topic?.term || 2}
+                </div>
+                <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-red-600 text-white text-[10px] font-extrabold flex items-center gap-1">
+                  <YoutubeIcon className="w-3.5 h-3.5" /> YouTube
+                </div>
+                <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-black/75 text-white text-xs font-bold flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5" />
+                  {video.duration || "14:20"}
+                </div>
+              </Link>
 
-            {/* Video Metadata */}
-            <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-[11px] font-bold text-gray-500">
-                  <span>Week {video.topic?.week || 3} · {video.topic?.title}</span>
-                  {video.offlineReady && (
-                    <span className="inline-flex items-center gap-1 text-emerald-700">
-                      <Check className="w-3.5 h-3.5" /> Offline Ready
+              {/* Video Metadata */}
+              <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-[11px] font-bold text-gray-500">
+                    <span>
+                      Week {video.topic?.week || 3} · {video.topic?.title}
                     </span>
-                  )}
+                  </div>
+                  <Link href={`/dashboard/videos/${video.id}`}>
+                    <h3 className="text-base font-extrabold text-gray-900 group-hover:text-[#146ef5] transition-colors line-clamp-2">
+                      {video.title}
+                    </h3>
+                  </Link>
+                  <p className="text-xs text-gray-500 line-clamp-2">{video.summary}</p>
                 </div>
-                <Link href={`/dashboard/videos/${video.id}`}>
-                  <h3 className="text-base font-extrabold text-gray-900 group-hover:text-[#146ef5] transition-colors line-clamp-2">
-                    {video.title}
-                  </h3>
-                </Link>
-                <p className="text-xs text-gray-500 line-clamp-2">
-                  {video.summary}
-                </p>
-              </div>
 
-              <div className="pt-4 border-t border-gray-100 flex items-center justify-between gap-2">
-                <div className="text-[11px] font-bold text-gray-500 flex items-center gap-3">
-                  <span className="flex items-center gap-1">
-                    <Eye className="w-3.5 h-3.5" /> {video.viewsCount || 184} views
-                  </span>
-                  <span>{video.instructor || "Mr. Tunde Ogunleye"}</span>
+                <div className="pt-4 border-t border-gray-100 flex items-center justify-between gap-2">
+                  <div className="text-[11px] font-bold text-gray-500 flex items-center gap-3">
+                    <span className="flex items-center gap-1">
+                      <Eye className="w-3.5 h-3.5" /> {video.viewsCount || 184} views
+                    </span>
+                    <span>{video.instructor || "Mr. Tunde Ogunleye"}</span>
+                  </div>
+                  <Link href={`/dashboard/videos/${video.id}`}>
+                    <Button
+                      size="sm"
+                      className="rounded-xl text-xs font-extrabold bg-[#0D1060] hover:bg-[#151980] text-[#FBBC04]"
+                    >
+                      Watch
+                    </Button>
+                  </Link>
                 </div>
-                <Link href={`/dashboard/videos/${video.id}`}>
-                  <Button size="sm" className="rounded-xl text-xs font-extrabold bg-[#0D1060] hover:bg-[#151980] text-[#FBBC04]">
-                    Watch
-                  </Button>
-                </Link>
               </div>
-            </div>
-          </MotionRise>
-        ))}
+            </MotionRise>
+          );
+        })}
       </MotionStagger>
 
       {filteredVideos.length === 0 && (
         <div className="bg-white rounded-3xl p-16 text-center border border-dashed border-gray-200 space-y-3">
-          <VideoIcon className="w-10 h-10 text-gray-400 mx-auto" />
-          <h3 className="text-lg font-extrabold text-gray-900">No video lessons match your filter</h3>
+          <YoutubeIcon className="w-10 h-10 text-red-500 mx-auto" />
+          <h3 className="text-lg font-extrabold text-gray-900">
+            No linked YouTube lessons match your filter
+          </h3>
           <p className="text-xs text-gray-500">Try clearing the subject or term filter.</p>
           <Button
             variant="outline"

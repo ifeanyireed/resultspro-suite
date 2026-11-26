@@ -64,7 +64,7 @@ export default function DashboardLayout({
     { icon: <LayoutDashboard className="w-6 h-6" />, label: "Teacher Home", href: "/dashboard/teacher" },
     { icon: <Users className="w-6 h-6" />, label: "Assigned Classes", href: "/dashboard/teacher/classes" },
     { icon: <FilePlus className="w-6 h-6" />, label: "Create Lesson Note", href: "/dashboard/teacher/create-note" },
-    { icon: <VideoIcon className="w-6 h-6" />, label: "Publish Video Lesson", href: "/dashboard/teacher/create-video" },
+    { icon: <VideoIcon className="w-6 h-6" />, label: "Link YouTube Video", href: "/dashboard/teacher/create-video" },
     { icon: <BrainCircuit className="w-6 h-6" />, label: "AI Quiz Generator", href: "/dashboard/teacher/create-quiz" },
     { icon: <BarChart3 className="w-6 h-6" />, label: "Topic Mastery & Sync", href: "/dashboard/teacher/analytics" },
     { icon: <Settings className="w-6 h-6" />, label: "Settings", href: "/dashboard/settings" },

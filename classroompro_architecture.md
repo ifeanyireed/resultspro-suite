@@ -14,7 +14,7 @@ The platform will support:
 * Multiple subjects per class.
 * Terms, schemes of work and weekly lesson plans.
 * Rich educational notes containing text, images, diagrams, AI storybooks and illustrations.
-* Curriculum-aligned educational video lessons (with adaptive streaming and selective offline download).
+* Curriculum-aligned educational video lessons (curated & linked YouTube educational videos mapped to weekly topics — zero raw video file uploads).
 * Spaced-repetition flashcards (SRS).
 * Exercises, quizzes and CBT assessments (with traceable teacher score-approval sync to CampusPRO).
 * Student, teacher, parent and principal curriculum-oversight experiences.
@@ -92,7 +92,7 @@ Classroom Pro must have appropriately isolated data structures for:
 * Schemes of work & weekly topics.
 * Learning objectives.
 * Markdown Lessons & AI Storybooks.
-* **Video Lessons** (video metadata, streaming URLs, duration, transcript/summary, topic association, and offline package references).
+* **Video Lessons** (linked YouTube video IDs/URLs, duration, transcript/summary, and topic association — no direct video file uploads).
 * Spaced-Repetition Flashcard Decks & review queues.
 * Lesson metadata & lesson assets.
 * Content versions & content publication records.
@@ -234,7 +234,7 @@ Authorised academic content administrators and teachers should be able to:
 1. Manage the shared NERDC curriculum structure (while school-specific classes, subjects, terms, teachers, and students are managed in **CampusPRO** and synced read-only).
 2. Define schemes of work and organise weekly topics mapped to CampusPRO subjects.
 3. Create or import Markdown lessons and AI storybooks.
-4. Upload or link **NERDC Video Lessons** (with duration, transcript/key takeaways, and topic mapping).
+4. Link curated **YouTube Video Lessons** (with YouTube URL/ID, duration, transcript/key takeaways, and topic mapping — no raw video uploads).
 5. Create Spaced-Repetition (SRS) Flashcard decks and AI-moderated CBT Quizzes.
 6. Attach images, videos, and other learning assets.
 7. Preview rendered lessons and video lectures.

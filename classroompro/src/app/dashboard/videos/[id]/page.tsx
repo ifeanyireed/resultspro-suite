@@ -8,28 +8,35 @@ import {
   IconBook as BookOpen,
   IconBrain as BrainCircuit,
   IconStack2 as Layers,
-  IconCloudDownload as CloudDownload,
+  IconBrandYoutube as YoutubeIcon,
+  IconExternalLink as ExternalLink,
   IconCheck as Check,
   IconClock as Clock,
   IconSparkles as Sparkles,
 } from "@tabler/icons-react";
 import { Button } from "../../../../components/ui/button";
 import api from "../../../../lib/api";
-import { toast } from "../../../../lib/toast";
 import { MotionRise } from "../../../../components/ScrollRiseProvider";
+
+function extractYouTubeId(urlOrId: string): string {
+  if (!urlOrId) return "NybHckSEQBI";
+  const regExp = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+  const match = urlOrId.match(regExp);
+  if (match && match[1]) return match[1];
+  if (urlOrId.length === 11) return urlOrId;
+  return "NybHckSEQBI";
+}
 
 export default function VideoPlayerPage() {
   const { id } = useParams();
   const [video, setVideo] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [savedOffline, setSavedOffline] = useState(false);
 
   useEffect(() => {
     const fetchVideo = async () => {
       try {
         const res = await api.get(`/videos/${id}`);
         setVideo(res.data);
-        setSavedOffline(Boolean(res.data?.offlineReady));
       } catch (err) {
         console.error("Failed to load video lesson:", err);
       } finally {
@@ -39,14 +46,12 @@ export default function VideoPlayerPage() {
     if (id) fetchVideo();
   }, [id]);
 
-  const handleSaveOffline = () => {
-    setSavedOffline(true);
-    toast.success("Video lesson & transcript cached in IndexedDB for offline playback.");
-  };
-
   if (loading || !video) {
-    return <div className="p-8 text-sm text-gray-500">Loading NERDC Video Lesson...</div>;
+    return <div className="p-8 text-sm text-gray-500">Loading Linked YouTube Video Lesson...</div>;
   }
+
+  const youtubeId = extractYouTubeId(video.youtubeId || video.youtubeUrl || "NybHckSEQBI");
+  const youtubeWatchUrl = video.youtubeUrl || `https://www.youtube.com/watch?v=${youtubeId}`;
 
   return (
     <div className="space-y-6 py-4 max-w-6xl mx-auto">
@@ -68,37 +73,35 @@ export default function VideoPlayerPage() {
         </div>
 
         <div className="flex items-center gap-2.5">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleSaveOffline}
-            className="rounded-xl text-xs font-extrabold"
+          <a
+            href={youtubeWatchUrl}
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            {savedOffline ? (
-              <>
-                <Check className="w-4 h-4 mr-1.5 text-emerald-600" /> Cached Offline
-              </>
-            ) : (
-              <>
-                <CloudDownload className="w-4 h-4 mr-1.5" /> Download Offline ({video.fileSize || "28 MB"})
-              </>
-            )}
-          </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-xl text-xs font-extrabold"
+            >
+              <YoutubeIcon className="w-4 h-4 mr-1.5 text-red-600" />
+              Watch on YouTube
+              <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
+            </Button>
+          </a>
         </div>
       </MotionRise>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Video Player & Transcript */}
+        {/* YouTube Embed Player & Summary */}
         <MotionRise className="lg:col-span-2 space-y-6">
-          <div className="bg-[#0D1060] rounded-3xl overflow-hidden shadow-lg border border-gray-200">
-            <video
-              controls
-              poster={video.thumbnailUrl || "/photo04.jpeg"}
-              className="w-full aspect-video bg-black"
-              src={video.videoUrl || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"}
-            >
-              Your browser does not support HTML5 video playback.
-            </video>
+          <div className="bg-[#0D1060] rounded-3xl overflow-hidden shadow-lg border border-gray-200 aspect-video">
+            <iframe
+              className="w-full h-full"
+              src={`https://www.youtube-nocookie.com/embed/${youtubeId}?rel=0`}
+              title={video.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
 
           <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4">
@@ -111,10 +114,10 @@ export default function VideoPlayerPage() {
                 />
                 <div>
                   <h3 className="text-sm font-extrabold text-gray-900">
-                    {video.instructor || "Mr. Tunde Ogunleye"}
+                    Curated by {video.instructor || "Mr. Tunde Ogunleye"}
                   </h3>
                   <p className="text-xs text-gray-500">
-                    Laurel Academy · NERDC Curriculum Educator
+                    Laurel Academy · Linked YouTube NERDC Video Lesson
                   </p>
                 </div>
               </div>
@@ -155,7 +158,7 @@ export default function VideoPlayerPage() {
               Complete the Topic Mastery Loop
             </h3>
             <p className="text-xs text-gray-500 leading-relaxed">
-              Every NERDC video lesson is paired with a Markdown Lesson Note, Spaced-Repetition Flashcards, and a Practice CBT Quiz.
+              Every linked YouTube lesson is paired with a Markdown Lesson Note, Spaced-Repetition Flashcards, and a Practice CBT Quiz.
             </p>
 
             <div className="space-y-2.5 pt-1">
