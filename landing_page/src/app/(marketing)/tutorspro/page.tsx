@@ -11,30 +11,30 @@ import {
 } from '@tabler/icons-react';
 
 export const metadata = {
-  title: 'TutorsPRO | ResultsPro Edu Suite',
-  description: 'Vetted, curriculum-aligned private tuition. Connect with elite educators for personalized learning.',
+  title: 'TutorsPRO | 1-on-1 Vetted Mentorship & Live Virtual Classroom',
+  description: 'Vetted 1-on-1 tutor discovery, calendar availability & session booking, live video classroom with interactive whiteboard, and automated tutor payouts—seamlessly connected to CampusPRO.',
 };
 
 const FEATURES = [
   {
     icon: IconUserCheck,
     title: 'Elite Vetted Tutors',
-    desc: 'Only the top 5% of applicants make it onto our platform. Every tutor undergoes rigorous background checks and subject mastery tests.'
+    desc: 'Only the top 5% of applicants make it onto our platform. Every tutor undergoes rigorous background checks and NERDC/WAEC/IGCSE subject mastery verification.'
   },
   {
     icon: IconChalkboard,
-    title: 'Curriculum Aligned',
-    desc: 'Our tutors don\'t just teach; they sync directly with the student\'s school curriculum via the ResultsPro ecosystem.'
+    title: 'Targeted Remedial Intervention',
+    desc: 'Tutors align directly with your ward\'s school subject gaps identified in ResultsPRO and ClassroomPRO, turning weak topics into distinctions.'
   },
   {
     icon: IconCalendarTime,
-    title: 'Flexible Scheduling',
-    desc: 'Book one-off sessions for exam prep or set up recurring weekly classes. Manage all bookings seamlessly through the app.'
+    title: 'Availability Calendar & Session Booking',
+    desc: 'Book one-off exam-prep intensives or recurring weekly mentorship sessions while school communications and billing stay unified in CampusPRO.'
   },
   {
     icon: IconVideo,
-    title: 'In-Person or Virtual',
-    desc: 'Choose between physical home tutoring or interactive virtual classrooms equipped with digital whiteboards.'
+    title: 'Live Video Classroom & Interactive Whiteboard',
+    desc: 'Conduct high-definition virtual 1-on-1 sessions equipped with a collaborative digital whiteboard, session task tracking, and transparent tutor payouts.'
   }
 ];
 

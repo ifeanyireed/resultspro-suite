@@ -11,30 +11,30 @@ import {
 } from '@tabler/icons-react';
 
 export const metadata = {
-  title: 'PuzzlePRO | ResultsPro Edu Suite',
-  description: 'Learn to code with 636 coding games for kids in HTML, CSS, JavaScript, and Python. Master tech skills through fun gamified adventures!',
+  title: 'PuzzlePRO | 636 Gamified Coding & Robotics Adventures',
+  description: 'Master visual logic, HTML, CSS, JavaScript, and Python through 636 gamified coding quests across 6 progressive worlds—with zero-duplication roster sync from CampusPRO.',
 };
 
 const FEATURES = [
   {
     icon: IconCode,
-    title: '636 Coding Games',
-    desc: 'Take students from basic logic with Scratch Blocks all the way to advanced HTML, CSS, JavaScript, and Python through immersive coding worlds.'
+    title: '636 Coding & Robotics Quests (Worlds 1–6)',
+    desc: 'Take learners from Blockly visual sequences and autonomous loops to HTML, CSS, JavaScript, and Python AI agents across 6 progressive adventure worlds.'
   },
   {
     icon: IconBuildingCommunity,
-    title: 'Educator Portal',
-    desc: 'Manage school campuses, organize classes, and assign specific coding labs tailored to Grade 5, Robotics, or STEM curriculums.'
+    title: 'CampusPRO-Synced Cohort World Assignment',
+    desc: 'Zero duplicate student or class data entry. School campuses, class cohorts, and ward profiles sync read-only from CampusPRO so educators assign Coding Worlds in one click.'
   },
   {
     icon: IconPuzzle,
-    title: 'Passwordless Access',
-    desc: 'No complicated logins for young learners. Generate and copy instant 8-digit access codes for frictionless student onboarding.'
+    title: 'Interactive Blockly & Code Customizer Studio',
+    desc: 'Browser-based visual coding and game physics studio where students program sprites, solve algorithmic mazes, and build shareable STEM portfolios.'
   },
   {
     icon: IconTrophy,
-    title: 'XP Progress Tracking',
-    desc: 'Gamified learning at its best. Monitor student coding milestones and total XP automatically directly from the teacher dashboard.'
+    title: 'School & Multi-Campus XP Leaderboards',
+    desc: 'Track algorithmic badges, level completion percentages, and live school XP leaderboards across all synced class cohorts and family portals.'
   }
 ];
 

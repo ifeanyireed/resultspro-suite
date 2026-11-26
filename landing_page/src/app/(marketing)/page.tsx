@@ -21,14 +21,14 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { id: 'scholars_ng', title: 'ScholarsNG', desc: 'Mobile-First Digital Campus experience.', icon: IconSchool, href: '/scholars_ng' },
-              { id: 'campuspro', title: 'CampusPRO', desc: 'Campus ERP, bursary billing, fleet GPS & mobile app.', icon: IconBuildingCommunity, href: '/campuspro' },
-              { id: 'examspro', title: 'ExamsPRO', desc: 'Gamified CBT preparation for external exams.', icon: IconTrophy, href: '/examspro' },
-              { id: 'classroompro', title: 'ClassroomPRO', desc: 'Offline-first digital classroom resources.', icon: IconDeviceLaptop, href: '/classroompro' },
-              { id: 'resultspro', title: 'ResultsPRO', desc: 'AI-powered results processing and insights.', icon: IconChartBar, href: '/resultspro' },
-              { id: 'tutorspro', title: 'TutorsPRO', desc: 'Vetted, curriculum-aligned private tuition.', icon: IconChalkboard, href: '/tutorspro' },
-              { id: 'coursespro', title: 'CoursesPRO', desc: 'Curated digital courses and certification pathways.', icon: IconCertificate, href: '/coursespro' },
-              { id: 'puzzlepro', title: 'PuzzlePRO', desc: '636 coding games for kids in HTML, CSS, JavaScript, and Python.', icon: IconPuzzle, href: '/puzzlepro' },
+              { id: 'scholars_ng', title: 'ScholarsNG', desc: 'Unified white-label Digital Campus OS orchestrating CampusPRO, ClassroomPRO, ResultsPRO, TutorsPRO & PuzzlePRO.', icon: IconSchool, href: '/scholars_ng' },
+              { id: 'campuspro', title: 'CampusPRO', desc: '20-module School Operations & ERP System of Record: classes, teachers, students, attendance, bursary & all messaging.', icon: IconBuildingCommunity, href: '/campuspro' },
+              { id: 'classroompro', title: 'ClassroomPRO', desc: 'Offline-first NERDC Markdown notes, AI storybooks, linked YouTube video lessons, SRS flashcards, CBT quizzes & CampusPRO score sync.', icon: IconDeviceLaptop, href: '/classroompro' },
+              { id: 'resultspro', title: 'ResultsPRO', desc: 'AI handwritten marksheet OCR, pre-publication result auditor, AI report card remarks, multi-campus intelligence & AI Results Officer.', icon: IconChartBar, href: '/resultspro' },
+              { id: 'tutorspro', title: 'TutorsPRO', desc: '1-on-1 vetted tutor discovery, session scheduling, live video classroom with interactive whiteboard & tutor payouts.', icon: IconChalkboard, href: '/tutorspro' },
+              { id: 'puzzlepro', title: 'PuzzlePRO', desc: '636 Blockly & coding adventure quests across 6 progressive worlds, synced with CampusPRO class cohorts & XP leaderboards.', icon: IconPuzzle, href: '/puzzlepro' },
+              { id: 'examspro', title: 'ExamsPRO', desc: 'Gamified CBT preparation for WAEC, NECO, JAMB, and national external examinations.', icon: IconTrophy, href: '/examspro' },
+              { id: 'coursespro', title: 'CoursesPRO', desc: 'Curated digital courses and professional certification pathways.', icon: IconCertificate, href: '/coursespro' },
             ].map((cat, i) => (
               <MotionRise key={i} id={cat.id} delay={i * 0.06} className="card p-8 hover:shadow-card-lg transition-shadow">
                 <cat.icon className="w-8 h-8 text-red mb-6" style={{ color: 'var(--color-nets-red)' }} />

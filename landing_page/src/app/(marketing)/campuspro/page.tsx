@@ -13,9 +13,9 @@ import {
 } from '@tabler/icons-react';
 
 export const metadata = {
-  title: 'CampusPRO | 20 Integrated Modules School Operations ERP',
+  title: 'CampusPRO | 20 Integrated Modules School Operations & ERP System of Record',
   description:
-    'The complete institutional ERP for modern schools: 20 integrated operational modules spanning Academics, Biometric Attendance, Bursary Invoicing, Clinic Sick Bay, Hostel Exeat, Security Gate, Cashless Cafeteria, and Fleet GPS.',
+    'The canonical System of Record for modern schools: 20 integrated operational modules owning Multi-Campus Setup, Academic Sessions & Terms, Classes, Manage Teachers, Manage Students, Manage Parents, Biometric Attendance, Bursary Invoicing, and All School Messaging.',
 };
 
 export default function CampusProPage() {
@@ -43,7 +43,7 @@ export default function CampusProPage() {
                 Run your entire campus on <span style={{ fontWeight: 800, color: 'white' }}>autopilot.</span>
               </h1>
               <p className="text-body-lg text-white/80 mt-6 max-w-2xl text-base sm:text-lg leading-relaxed">
-                From biometric gate turnstiles and automated bursary tuition collections to digital sick bay triage, QR hostel exeat vouchers, cashless cafeteria wallets, and live school bus GPS tracking—CampusPRO unifies all 20 operational departments of your institution.
+                CampusPRO is the canonical System of Record across the ResultsPRO Suite—owning Multi-Campus Setup, Academic Sessions &amp; Terms, Classes &amp; Arms, Manage Teachers, Manage Students, Manage Parents &amp; Wards, Biometric Attendance, Bursary Invoicing, Official Exam Score Ledgers, and All School Messaging across all 20 operational departments.
               </p>
 
               {/* Stats Bar */}

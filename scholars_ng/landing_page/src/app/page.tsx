@@ -21,49 +21,49 @@ import Link from 'next/link';
 export default function Home() {
   const specialistApps = [
     {
-      id: 'resultspro',
-      title: 'ResultsPRO',
-      badge: 'Academic Records',
-      icon: IconChartBar,
-      desc: 'Automated continuous assessment computation, official terminal broadsheets, and tamper-proof scratch cards.',
-      features: ['Automated CA1/CA2 math & ranking', 'Encrypted scratch card PIN batches', 'Certified PDF report card export'],
-      href: '/results'
+      id: 'campuspro',
+      title: 'CampusPRO',
+      badge: 'System of Record ERP',
+      icon: IconBuildingCommunity,
+      desc: '20-module institutional ERP owning Multi-Campus Setup, Sessions/Terms, Classes, Manage Teachers, Manage Students, Manage Parents, Attendance, Bursary & All Messaging.',
+      features: ['Single System of Record for rosters & classes', 'Bursary invoicing, HR payroll & biometric gates', 'Unified school messaging, notices & circulars'],
+      href: '/admin/campus-os'
     },
     {
       id: 'classroompro',
       title: 'ClassroomPRO',
-      badge: 'Curriculum & LMS',
+      badge: 'NERDC Learning Hub',
       icon: IconBook2,
-      desc: 'NERDC curriculum-aligned offline lesson handouts, interactive formative quizzes, and spaced-repetition flashcards.',
-      features: ['Full Nigerian secondary syllabus', 'Spaced-repetition (SRS) flashcards', 'Offline-first student mobile access'],
+      desc: 'Offline-first NERDC Markdown lesson notes, AI storybooks, linked YouTube video lessons, SRS flashcards, CBT quizzes, and traceable CA score sync to CampusPRO.',
+      features: ['Markdown notes, AI stories & YouTube lessons', 'Spaced-repetition (SRS) flashcards & CBT quizzes', 'Teacher-approved CA score sync to CampusPRO'],
       href: '/classroom'
+    },
+    {
+      id: 'resultspro',
+      title: 'ResultsPRO',
+      badge: 'AI Result Intelligence',
+      icon: IconChartBar,
+      desc: 'AI handwritten marksheet OCR & voice score entry, pre-publication AI result auditing, deterministic broadsheets, AI report card comments, and the AI Results Officer.',
+      features: ['Handwritten marksheet OCR & roster matching', 'Pre-publication AI Result Auditor & AI Officer', 'Parent AI Interpreter → ClassroomPRO remedial loop'],
+      href: '/results'
     },
     {
       id: 'tutorspro',
       title: 'TutorsPRO',
       badge: '1-on-1 Mentorship',
       icon: IconUsers,
-      desc: 'Direct-to-school tutoring network connecting vetted subject-matter educators with learners for targeted remedial classes.',
-      features: ['Vetted secondary & WAEC mentors', 'Interactive digital whiteboard room', 'Parent post-session progress reports'],
+      desc: 'Vetted 1-on-1 educator discovery, calendar availability & session booking, live video classroom with interactive digital whiteboard, and automated tutor payouts.',
+      features: ['Vetted NERDC, WAEC & IGCSE subject mentors', 'Live video classroom & collaborative whiteboard', 'Session progress tracking & tutor payouts'],
       href: '/tutors'
     },
     {
       id: 'puzzlepro',
       title: 'PuzzlePRO',
-      badge: 'Gamified Coding',
+      badge: '636 Coding Quests',
       icon: IconPuzzle,
-      desc: '636 progressive coding quests teaching HTML, CSS, JavaScript, and Python logic through algorithmic game puzzles.',
-      features: ['636 progressive coding quests', 'Blockly visual code customizer', 'School rosters & live leaderboards'],
+      desc: '636 progressive coding & robotics adventures across 6 worlds in Blockly, HTML, CSS, JavaScript & Python—consuming CampusPRO class cohorts read-only.',
+      features: ['636 progressive coding quests (Worlds 1–6)', 'One-click World assignment to CampusPRO classes', 'Algorithmic badges & school XP leaderboards'],
       href: '/future-skills'
-    },
-    {
-      id: 'campuspro',
-      title: 'CampusPRO',
-      badge: 'Campus ERP & OS',
-      icon: IconBuildingCommunity,
-      desc: 'End-to-end school operations unifying admissions, bursary & fee invoicing, master timetables, HR payroll, and transport fleets.',
-      features: ['Bursary, fee invoicing & HR payroll', 'Master timetable, library & inventory', 'Admissions CRM & parent messaging'],
-      href: '/admin/campus-os'
     }
   ];
 
@@ -93,46 +93,46 @@ export default function Home() {
   const roleWorkspaces = [
     {
       role: 'School Owners & Principals',
-      badge: 'Institutional Command',
-      desc: 'Real-time telemetry on student enrollment, bursary revenue, scratch card batches, and teacher allocations.',
+      badge: 'Multi-Campus Command',
+      desc: 'Centralized ERP governance in CampusPRO paired with ResultsPRO multi-campus performance intelligence and the AI Results-Processing Officer.',
       bullets: [
-        'Multi-campus central governance',
-        'Scratch card PIN batch encryption',
-        'Custom domain setup & branding',
-        'Granular staff RBAC permissions'
+        'Multi-campus isolation (e.g. Ikeja, Lekki, Abuja)',
+        'AI Results-Processing Officer & conversational queries',
+        'NERDC curriculum coverage & content moderation',
+        'Bursary invoicing, HR payroll & unified messaging'
       ]
     },
     {
       role: 'Classroom Teachers',
-      badge: 'Frictionless Grading',
-      desc: 'Cut administrative mark entry time by 80% with automated CA weighting, broadsheets, and lesson handouts.',
+      badge: 'AI-Assisted Teaching',
+      desc: 'Author NERDC lessons, link YouTube video lectures, approve CA score pushes to CampusPRO, and digitize handwritten marksheets with AI OCR.',
       bullets: [
-        'Rapid digital mark-sheet entry',
-        'Automated class position ranking',
-        'Curriculum-aligned lesson handouts',
-        'Form master remark generator'
+        'Handwritten marksheet OCR & voice score entry',
+        'Pre-submission AI Result Auditor & 4-tone AI remarks',
+        'NERDC Markdown notes, AI stories & YouTube links',
+        'Traceable CA score approval sync to CampusPRO'
       ]
     },
     {
       role: 'Parents & Guardians',
-      badge: 'Academic Transparency',
-      desc: 'Stay intimately connected with terminal broadsheets, subject mastery trajectories, and direct teacher messaging.',
+      badge: 'Home-School Loop',
+      desc: 'Receive plain-language AI result interpretations, trigger 1-click ClassroomPRO remedial packs, and manage all fees and teacher chats in CampusPRO.',
       bullets: [
-        'Instant PIN scratch card verification',
-        'Term-over-term mastery analytics',
-        'Direct chat with class teachers',
-        'Secure school fees via Paystack'
+        'AI Result Interpreter with plain-language guidance',
+        '1-click ClassroomPRO remedial revision packs',
+        'Unified teacher messaging & bursary in CampusPRO',
+        '1-on-1 TutorsPRO bookings & PuzzlePRO coding tracker'
       ]
     },
     {
       role: 'Learners & Students',
-      badge: 'Personalized Study',
-      desc: 'An inspiring digital campus equipped with offline lesson notes, SRS memory flashcards, and coding challenges.',
+      badge: 'Multi-Modal Mastery',
+      desc: 'An inspiring digital campus equipped with offline Markdown notes, linked YouTube video lessons, SRS flashcards, practice quizzes, and 636 coding quests.',
       bullets: [
-        '24/7 offline lesson note library',
-        'Spaced repetition flashcards (SRS)',
-        '636 coding adventure quests',
-        'Safe scratch card grade lookup'
+        'NERDC Markdown notes, AI stories & YouTube lessons',
+        'Spaced-repetition (SRS) flashcards & practice CBT',
+        'Targeted remedial revision loops from ResultsPRO',
+        '636 PuzzlePRO coding quests across 6 worlds'
       ]
     }
   ];

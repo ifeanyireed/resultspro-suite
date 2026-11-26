@@ -12,8 +12,8 @@ import {
 } from '@tabler/icons-react';
 
 export const metadata = {
-  title: 'ScholarsNG | ResultsPro Edu Suite',
-  description: 'The complete operating system for modern African schools. Manage finance, HR, admissions, and more in one unified platform.',
+  title: 'ScholarsNG | Unified White-Label Digital Campus Workspace',
+  description: 'The unified multi-campus school portal orchestrating CampusPRO, ClassroomPRO, ResultsPRO, TutorsPRO, and PuzzlePRO under your institution\'s custom domain with zero screen duplication.',
 };
 
 const FEATURES = [
@@ -63,7 +63,7 @@ export default function ScholarsNgPage() {
               The operating system for <span style={{ fontWeight: 700, color: 'white' }}>modern schools.</span>
             </h1>
             <p className="text-body-lg text-white/70 mt-6 max-w-2xl">
-              Eliminate paper trails and disjointed software. ScholarsNG unifies your admissions, finance, human resources, and daily operations into one powerful, mobile-first command center.
+              Eliminate paper trails and duplicate software. ScholarsNG unifies CampusPRO (20-module School ERP &amp; Messaging), ClassroomPRO (NERDC Notes, Linked YouTube Videos, Flashcards &amp; Quizzes), ResultsPRO (AI Marksheet OCR, Result Auditor &amp; AI Results Officer), TutorsPRO (1-on-1 Mentorship), and PuzzlePRO (636 Coding Quests) into one white-labeled command center.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-10">

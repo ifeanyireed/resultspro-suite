@@ -12,30 +12,30 @@ import {
 } from '@tabler/icons-react';
 
 export const metadata = {
-  title: 'ClassroomPRO | ResultsPro Edu Suite',
-  description: 'Offline-first digital classroom resources. Keep students engaged with curriculum-aligned content regardless of internet availability.',
+  title: 'ClassroomPRO | NERDC Digital Learning & Formative Assessment Hub',
+  description: 'Offline-first NERDC Markdown lesson notes, AI storybooks, linked YouTube video lessons, spaced-repetition flashcards, AI-moderated CBT quizzes, and traceable score synchronization to CampusPRO.',
 };
 
 const FEATURES = [
   {
-    icon: IconWifiOff,
-    title: 'Edge-Sync Technology',
-    desc: 'Students download modules on the school network, work entirely offline at home, and sync progress automatically upon return.'
+    icon: IconBooks,
+    title: 'NERDC Markdown Notes, AI Stories & YouTube Videos',
+    desc: 'Deliver structured NERDC weekly Markdown lesson notes, illustrated AI storybooks, and teacher-linked YouTube video lessons mapped to every topic—with zero raw video upload overhead.'
   },
   {
-    icon: IconBooks,
-    title: 'Digital Curriculum',
-    desc: 'Distribute notes, interactive textbooks, and multimedia lessons without printing a single sheet of paper.'
+    icon: IconWifiOff,
+    title: 'Offline-First PWA & Spaced-Repetition Flashcards',
+    desc: 'Students cache lesson packages in IndexedDB/SQLite for zero-data home study and master key definitions using intelligent spaced-repetition (SRS) flashcard decks.'
   },
   {
     icon: IconListCheck,
-    title: 'Automated Grading',
-    desc: 'Create quizzes and assignments that grade themselves instantly, saving teachers hundreds of hours per term.'
+    title: 'AI Quiz Moderation & Traceable CampusPRO Score Sync',
+    desc: 'Generate NERDC-aligned CBT quizzes with AI exam moderation. Students can practice multiple times while teachers explicitly approve which official CA score syncs into CampusPRO.'
   },
   {
     icon: IconChartArcs,
-    title: 'Engagement Tracking',
-    desc: 'Monitor exactly how long students spend on specific modules and identify areas where the class is struggling.'
+    title: 'Multi-Year Topic-Gap Analytics & Remedial Loops',
+    desc: 'Retain multi-year attempt history and question-level mastery telemetry, automatically receiving 1-click remedial revision packs triggered from ResultsPRO report card diagnostics.'
   }
 ];
 
@@ -57,7 +57,7 @@ export default function ClassroomProPage() {
               The classroom that works <span style={{ fontWeight: 700, color: 'white' }}>offline.</span>
             </h1>
             <p className="text-body-lg text-white/70 mt-6 max-w-2xl">
-              Internet connectivity shouldn't be a barrier to modern education. ClassroomPRO is an offline-first learning management system built for the realities of African infrastructure.
+              Synced read-only with your CampusPRO class rosters, ClassroomPRO powers daily teaching and formative assessment with NERDC Markdown lesson notes, AI storybooks, linked YouTube video lessons, spaced-repetition flashcards, and traceable CA score synchronization.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-10">
@@ -86,10 +86,10 @@ export default function ClassroomProPage() {
               </p>
               <ul className="space-y-4">
                 {[
-                  'Zero data costs for home study',
-                  'Interactive assignments and tests',
-                  'Seamless integration with ScholarsNG',
-                  'Parental oversight tools'
+                  'NERDC Markdown notes, AI storybooks & linked YouTube video lessons',
+                  'Spaced-repetition (SRS) flashcards & offline-first PWA caching',
+                  'Traceable teacher score-approval sync to CampusPRO Exam Ledger',
+                  '1-click remedial revision loop connected directly to ResultsPRO'
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <div className="mt-1 bg-green-100 text-green-700 p-1 rounded-full">

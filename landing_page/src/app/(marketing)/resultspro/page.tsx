@@ -11,30 +11,30 @@ import {
 } from '@tabler/icons-react';
 
 export const metadata = {
-  title: 'ResultsPRO | ResultsPro Edu Suite',
-  description: 'AI-powered results processing and insights. Turn raw grading data into actionable cognitive mapping.',
+  title: 'ResultsPRO | AI Assessment & Result Intelligence Engine',
+  description: 'AI handwritten marksheet OCR, voice score entry, pre-publication AI result auditing, AI teacher & principal report card remarks, multi-campus performance intelligence, and the AI Results-Processing Officer.',
 };
 
 const FEATURES = [
   {
     icon: IconBrain,
-    title: 'Cognitive Analytics',
-    desc: 'Go beyond simple letter grades. Our AI analyzes assessment data to map out a student\'s cognitive strengths and weaknesses.'
+    title: 'AI Handwritten Marksheet OCR & Voice Entry',
+    desc: 'Snap photos of multi-page handwritten marksheets or dictate scores by voice. ResultsPRO fuzzy-matches names against CampusPRO rosters with mandatory teacher approval.'
   },
   {
     icon: IconReportAnalytics,
-    title: 'Automated Report Cards',
-    desc: 'Generate beautifully designed, comprehensive termly report cards for the entire school in a single click.'
-  },
-  {
-    icon: IconDeviceMobile,
-    title: 'Parent Mobile App',
-    desc: 'Parents receive real-time push notifications about test scores, attendance, and behavioral remarks instantly.'
+    title: 'Pre-Publication AI Result Auditor & Broadsheets',
+    desc: 'Automatically detect missing CA scores, duplicate entries, attendance conflicts, and >25% term-over-term anomalies before deterministically compiling master broadsheets.'
   },
   {
     icon: IconChartBar,
-    title: 'School-Wide Trends',
-    desc: 'Administrators get macro-level insights to see which subjects need more resource allocation and which teachers are outperforming.'
+    title: 'AI Results-Processing Officer & Multi-Campus Intelligence',
+    desc: 'Compare Ikeja, Lekki, and Abuja campuses with strict campus isolation, query school data in plain English, and let the AI Results Officer guide end-of-term readiness.'
+  },
+  {
+    icon: IconDeviceMobile,
+    title: 'AI Teacher Remarks & Parent Remedial Loop',
+    desc: 'Batch-generate personalized teacher and principal remarks in 4 tones, and give parents plain-language AI result interpretation that launches 1-click ClassroomPRO revision packs.'
   }
 ];
 
@@ -56,7 +56,7 @@ export default function ResultsProPage() {
               Turning raw scores into <span style={{ fontWeight: 700, color: 'white' }}>actionable intelligence.</span>
             </h1>
             <p className="text-body-lg text-white/70 mt-6 max-w-2xl">
-              Stop burying data in filing cabinets. ResultsPRO uses artificial intelligence to process exam scores, identify learning patterns, and deliver instant, rich report cards to parents.
+              From manual score entry to intelligent multi-campus academic reporting. ResultsPRO combines handwritten marksheet OCR, pre-publication AI error auditing, deterministic broadsheet computation, AI report-card narratives, and the AI Results-Processing Officer copilot.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-10">
@@ -85,10 +85,10 @@ export default function ResultsProPage() {
               </p>
               <ul className="space-y-4">
                 {[
-                  'One-click result compilation',
-                  'Custom grading systems (WAEC, IGCSE, etc.)',
-                  'Behavioral & psychomotor evaluations',
-                  'Automated class rankings'
+                  'Handwritten marksheet OCR & voice score entry matched to CampusPRO rosters',
+                  'Pre-publication AI Result Auditor catching missing scores & attendance conflicts',
+                  'AI Teacher & Principal report-card comment generator across 4 tone presets',
+                  'Parent AI Result Interpreter with 1-click ClassroomPRO remedial revision packs'
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <div className="mt-1 bg-green-100 text-green-700 p-1 rounded-full">
