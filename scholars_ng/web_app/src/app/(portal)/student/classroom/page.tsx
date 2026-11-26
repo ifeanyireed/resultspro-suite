@@ -8,12 +8,13 @@ import {
   Message01Icon, 
   Activity04Icon,
   Book02Icon,
+  Video01Icon,
   HelpCircleIcon,
   Folder01Icon
 } from 'hugeicons-react';
 import api from '@/lib/api';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
-import { NotesListView, QuizzesListView, FlashcardsListView } from '@classroompro/modules';
+import { NotesListView, VideosListView, QuizzesListView, FlashcardsListView } from '@classroompro/modules';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 function StudentClassroomSnapshot() {
@@ -146,6 +147,12 @@ export default function StudentClassroomHub() {
       label: 'Curriculum Notes',
       icon: Book02Icon,
       component: NotesListView,
+    },
+    {
+      id: 'videos',
+      label: 'Video Lessons',
+      icon: Video01Icon,
+      component: VideosListView,
     },
     {
       id: 'quizzes',

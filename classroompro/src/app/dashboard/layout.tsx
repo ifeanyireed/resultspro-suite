@@ -1,5 +1,5 @@
 "use client";
-import { IconLayoutDashboard as LayoutDashboard, IconBook as BookOpen, IconBrain as BrainCircuit, IconStack2 as Layers, IconCertificate as GraduationCap, IconTrendingUp as TrendingUp, IconDownload as Download, IconSettings as Settings, IconLogout as LogOut, IconBell as Bell, IconUsers as Users, IconSchool as School, IconFilePlus as FilePlus, IconChartBar as BarChart3, IconCalendar as Calendar, IconTrophy as Trophy, IconBookmark as Bookmark, IconLibrary as Library, IconHeart as Heart, IconMessage as MessageSquare, IconCreditCard as CreditCard } from '@tabler/icons-react';
+import { IconLayoutDashboard as LayoutDashboard, IconBook as BookOpen, IconVideo as VideoIcon, IconBrain as BrainCircuit, IconStack2 as Layers, IconCertificate as GraduationCap, IconTrendingUp as TrendingUp, IconDownload as Download, IconSettings as Settings, IconLogout as LogOut, IconBell as Bell, IconUsers as Users, IconSchool as School, IconFilePlus as FilePlus, IconChartBar as BarChart3, IconCalendar as Calendar, IconTrophy as Trophy, IconBookmark as Bookmark, IconLibrary as Library, IconHeart as Heart, IconMessage as MessageSquare, IconCreditCard as CreditCard } from '@tabler/icons-react';
 import { useAuthStore } from "@/store/useAuthStore";
 import { Role } from "@/lib/roles";
 import { useRouter, usePathname } from "next/navigation";
@@ -52,6 +52,7 @@ export default function DashboardLayout({
     { icon: <LayoutDashboard className="w-6 h-6" />, label: "Dashboard", href: "/dashboard" },
     { icon: <Library className="w-6 h-6" />, label: "Library", href: "/dashboard/subjects" },
     { icon: <BookOpen className="w-6 h-6" />, label: "Class Notes", href: "/dashboard/notes" },
+    { icon: <VideoIcon className="w-6 h-6" />, label: "Video Lessons", href: "/dashboard/videos" },
     { icon: <BrainCircuit className="w-6 h-6" />, label: "My Quizzes", href: "/dashboard/quizzes" },
     { icon: <Layers className="w-6 h-6" />, label: "Flashcards", href: "/dashboard/flashcards" },
     { icon: <GraduationCap className="w-6 h-6" />, label: "My Exams", href: "/dashboard/exams" },
@@ -63,6 +64,7 @@ export default function DashboardLayout({
     { icon: <LayoutDashboard className="w-6 h-6" />, label: "Teacher Home", href: "/dashboard/teacher" },
     { icon: <Users className="w-6 h-6" />, label: "Assigned Classes", href: "/dashboard/teacher/classes" },
     { icon: <FilePlus className="w-6 h-6" />, label: "Create Lesson Note", href: "/dashboard/teacher/create-note" },
+    { icon: <VideoIcon className="w-6 h-6" />, label: "Publish Video Lesson", href: "/dashboard/teacher/create-video" },
     { icon: <BrainCircuit className="w-6 h-6" />, label: "AI Quiz Generator", href: "/dashboard/teacher/create-quiz" },
     { icon: <BarChart3 className="w-6 h-6" />, label: "Topic Mastery & Sync", href: "/dashboard/teacher/analytics" },
     { icon: <Settings className="w-6 h-6" />, label: "Settings", href: "/dashboard/settings" },
@@ -72,6 +74,7 @@ export default function DashboardLayout({
     { icon: <LayoutDashboard className="w-6 h-6" />, label: "Parent Learning Hub", href: "/dashboard/parent" },
     { icon: <TrendingUp className="w-6 h-6" />, label: "Topic Mastery & Remedial", href: "/dashboard/parent/progress" },
     { icon: <BookOpen className="w-6 h-6" />, label: "NERDC Class Notes", href: "/dashboard/notes" },
+    { icon: <VideoIcon className="w-6 h-6" />, label: "Video Lessons", href: "/dashboard/videos" },
     { icon: <BrainCircuit className="w-6 h-6" />, label: "Practice Quizzes", href: "/dashboard/quizzes" },
   ];
 

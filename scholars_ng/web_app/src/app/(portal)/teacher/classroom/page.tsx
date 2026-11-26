@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { 
   Book02Icon, 
+  Video01Icon,
   Task01Icon, 
   HelpCircleIcon,
   AnalyticsUpIcon
@@ -13,6 +14,7 @@ import api from '@/lib/api';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
 import { 
   TeacherCreateNoteView, 
+  TeacherCreateVideoView,
   TeacherCreateQuizView, 
   TeacherAnalyticsView 
 } from '@classroompro/modules';
@@ -196,6 +198,12 @@ export default function TeacherClassroomHub() {
       label: 'NERDC Lesson Note & AI Story Editor',
       icon: Task01Icon,
       component: TeacherCreateNoteView,
+    },
+    {
+      id: 'create-video',
+      label: 'Publish Video Lesson',
+      icon: Video01Icon,
+      component: TeacherCreateVideoView,
     },
     {
       id: 'create-quiz',

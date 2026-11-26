@@ -1,338 +1,265 @@
 "use client";
 
-import React from 'react';
-import { 
-  PlusIcon,
-  ArrowUpRightIcon,
-  PlayIcon,
-  PauseIcon,
-  StopIcon,
-  EllipsisHorizontalIcon,
-  CheckCircleIcon,
-  UserPlusIcon,
-  ShoppingCartIcon
-} from '@heroicons/react/24/outline';
-import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
-import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/useAuthStore';
-import { useEffect } from 'react';
-import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
+import React from "react";
+import Link from "next/link";
+import {
+  IconBook as BookOpen,
+  IconVideo as VideoIcon,
+  IconBrain as BrainCircuit,
+  IconStack2 as Layers,
+  IconTrendingUp as TrendingUp,
+  IconSparkles as Sparkles,
+  IconCloudDownload as CloudDownload,
+  IconCircleCheck as CheckCircle,
+  IconPlayerPlay as Play,
+  IconChevronRight as ChevronRight,
+} from "@tabler/icons-react";
+import { useAuthStore } from "@/store/useAuthStore";
+import { Button } from "@/components/ui/button";
+import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 
 export default function StudentDashboard() {
-  const router = useRouter();
   const { user } = useAuthStore();
+  const studentName = (user as any)?.name || user?.full_name || "Chidinma Adeleke";
 
-  useEffect(() => {
-    if (!user) {
-      router.push('/login');
-    }
-  }, [user, router]);
+  const metrics = [
+    {
+      label: "Overall Topic Mastery",
+      value: "82%",
+      sub: "Across 8 NERDC subjects",
+      icon: <TrendingUp className="w-5 h-5" />,
+      primary: true,
+    },
+    {
+      label: "Notes & AI Stories Read",
+      value: "34",
+      sub: "4 downloaded for offline study",
+      icon: <BookOpen className="w-5 h-5 text-[#146ef5]" />,
+      bg: "bg-blue-50",
+    },
+    {
+      label: "Video Lessons Watched",
+      value: "18",
+      sub: "3.5 hrs of NERDC video lectures",
+      icon: <VideoIcon className="w-5 h-5 text-purple-600" />,
+      bg: "bg-purple-50",
+    },
+    {
+      label: "Quizzes & SRS Flashcards",
+      value: "14,850 XP",
+      sub: "9-Day active study streak",
+      icon: <BrainCircuit className="w-5 h-5 text-emerald-600" />,
+      bg: "bg-emerald-50",
+    },
+  ];
 
-  if (!user) return null;
+  const continueLearning = [
+    {
+      type: "Video Lesson",
+      badgeColor: "bg-purple-50 text-purple-700",
+      title: "Simplifying Algebraic Fractions with LCM (Step-by-Step Video)",
+      subject: "Mathematics · JSS 2 Term 2 · Week 3",
+      duration: "14:20",
+      href: "/dashboard/videos/vid-math-1",
+    },
+    {
+      type: "Lesson Note & AI Story",
+      badgeColor: "bg-blue-50 text-[#146ef5]",
+      title: "Algebraic Fractions, Word Problems & Commercial Arithmetic",
+      subject: "Mathematics · JSS 2 Term 2 · Week 3",
+      duration: "8 min read",
+      href: "/dashboard/notes/note-math-1",
+    },
+    {
+      type: "SRS Flashcard Deck",
+      badgeColor: "bg-emerald-50 text-emerald-700",
+      title: "Cell Organelles & Plant vs. Animal Cells SRS Deck",
+      subject: "Biology · Term 1 · 4 cards due today",
+      duration: "5 min review",
+      href: "/dashboard/flashcards/fc-bio-1",
+    },
+    {
+      type: "Practice CBT Quiz",
+      badgeColor: "bg-amber-50 text-amber-800",
+      title: "Algebraic Fractions & Linear Equations Diagnostic Quiz",
+      subject: "Mathematics · Best Score: 80%",
+      duration: "15 min CBT",
+      href: "/dashboard/quizzes/quiz-math-1",
+    },
+  ];
 
   return (
-    <>
-      {/* Dashboard Title & Actions */}
-      <MotionRise className="flex items-end justify-between mb-8 mt-2">
+    <div className="space-y-8 py-2">
+      {/* Welcome Banner */}
+      <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Student Dashboard</h1>
-          <p className="text-sm text-gray-500 mt-1">Plan, prioritize, and accomplish your tasks with ease.</p>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-[#FBBC04] text-[10px] font-black uppercase tracking-wider mb-2">
+            <Sparkles className="w-3.5 h-3.5" />
+            ClassroomPRO — NERDC Digital Learning &amp; Offline-First Hub
+          </div>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+            Welcome back, {studentName}
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Laurel Academy (Ikeja Campus) · JSS 2 Gold · Synced with CampusPRO &amp; ResultsPRO
+          </p>
         </div>
-        <div className="flex items-center gap-3">
-          <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
-            <PlusIcon className="w-4 h-4" />
-            Join Class
-          </button>
-          <button className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-[#f6f9f8] text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
-            Take Quiz
-          </button>
+
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          <Link href="/dashboard/videos">
+            <Button className="bg-[#0D1060] hover:bg-[#151980] text-[#FBBC04] font-extrabold rounded-2xl text-xs h-10 px-4">
+              <VideoIcon className="w-4 h-4 mr-1.5" /> Watch Video Lessons
+            </Button>
+          </Link>
+          <Link href="/dashboard/notes">
+            <Button variant="outline" className="rounded-2xl text-xs font-extrabold h-10 px-4">
+              <BookOpen className="w-4 h-4 mr-1.5" /> Class Notes
+            </Button>
+          </Link>
+          <Link href="/dashboard/quizzes">
+            <Button variant="outline" className="rounded-2xl text-xs font-extrabold h-10 px-4">
+              <BrainCircuit className="w-4 h-4 mr-1.5" /> Take Quiz
+            </Button>
+          </Link>
         </div>
       </MotionRise>
 
       {/* Top Metric Cards */}
-      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        
-        {/* Card 1: Primary Dark */}
-        <div className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
-          {/* Subtle Depth Effects */}
-          <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
-          <div className="absolute -top-12 -left-12 w-40 h-40 bg-white/10 rounded-full filter blur-[3rem] opacity-20"></div>
-          
-          <div className="flex justify-between items-start z-10">
-            <h3 className="text-xl font-normal text-white">Bounties Earned</h3>
-            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm group-hover:bg-white group-hover:text-[#146ef5] transition-colors">
-              <ArrowUpRightIcon className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="z-10">
-            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">₦450k</h2>
-            <div className="flex items-center gap-1.5 text-xs text-white/80">
-              <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 5%</div>
-              <span>Increased from last month</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 2: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
-          <div className="flex justify-between items-start">
-            <h3 className="text-xl font-normal text-gray-900">Unpaid Earnings</h3>
-            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
-              <ArrowUpRightIcon className="w-4 h-4" />
-            </div>
-          </div>
-          <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">₦150k</h2>
-            <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 6%</div>
-              <span>Increased from last month</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 3: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
-          <div className="flex justify-between items-start">
-            <h3 className="text-xl font-normal text-gray-900">Active Schools</h3>
-            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
-              <ArrowUpRightIcon className="w-4 h-4" />
-            </div>
-          </div>
-          <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">12</h2>
-            <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <div className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600 flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> 2%</div>
-              <span>Increased from last month</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 4: White */}
-        <div className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
-          <div className="flex justify-between items-start">
-            <h3 className="text-xl font-normal text-gray-900">Total Cards Sold</h3>
-            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-900 group-hover:text-gray-900 transition-colors">
-              <ArrowUpRightIcon className="w-4 h-4" />
-            </div>
-          </div>
-          <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">1,250</h2>
-            <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <span className="text-gray-400">On Discuss</span>
-            </div>
-          </div>
-        </div>
-
-      </MotionStagger>
-
-      {/* Main Content Area */}
-      <MotionStagger className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-        
-        {/* Left Side (Analytics, Reminders, Leads, etc) */}
-        <div className="lg:col-span-9 flex flex-col gap-3">
-          
-          {/* Top Row of Left Side */}
-          <div className="grid grid-cols-1 lg:grid-cols-9 gap-3">
-            {/* Analytics Bar Chart (Mock) */}
-            <div className="lg:col-span-6 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
-              <h3 className="text-xl font-normal text-gray-900 mb-6">Sales Analytics</h3>
-          <div className="flex-1 flex items-end justify-between gap-2 px-4 pb-2">
-            {[
-              { h: '60%', type: 'stripe' },
-              { h: '80%', type: 'solid-dark' },
-              { h: '65%', type: 'solid-light', tooltip: '74%' },
-              { h: '90%', type: 'solid-dark' },
-              { h: '70%', type: 'stripe' },
-              { h: '45%', type: 'stripe' },
-              { h: '55%', type: 'stripe' },
-            ].map((bar, i) => (
-              <div key={i} className="w-[12%] flex flex-col items-center gap-3">
-                <div className="w-full relative flex items-end h-[140px]">
-                  {bar.tooltip && (
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-sm text-xs font-bold px-2 py-1 rounded">
-                      {bar.tooltip}
-                    </div>
-                  )}
-                  <div 
-                    className={`w-full rounded-full transition-all hover:opacity-80 ${
-                      bar.type === 'solid-dark' ? 'bg-[#146ef5]' : 
-                      bar.type === 'solid-light' ? 'bg-[#6ba0f5]' : 
-                      'bg-gray-100'
-                    }`}
-                    style={{ 
-                      height: bar.h,
-                      backgroundImage: bar.type === 'stripe' ? 'repeating-linear-gradient(45deg, transparent, transparent 5px, #d1d5db 5px, #d1d5db 7px)' : 'none'
-                    }}
-                  ></div>
+      <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {metrics.map((m, idx) =>
+          m.primary ? (
+            <MotionRise
+              key={idx}
+              className="bg-gradient-to-br from-[#0D1060] to-[#1565C0] rounded-3xl p-6 text-white shadow-sm flex flex-col justify-between"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-[#FBBC04]">
+                  {m.label}
+                </span>
+                <div className="w-9 h-9 rounded-2xl bg-white/15 flex items-center justify-center">
+                  {m.icon}
                 </div>
-                <span className="text-xs font-medium text-gray-400">
-                  {['S','M','T','W','T','F','S'][i]}
+              </div>
+              <div>
+                <div className="text-4xl font-extrabold">{m.value}</div>
+                <p className="text-xs text-white/80 mt-1">{m.sub}</p>
+              </div>
+            </MotionRise>
+          ) : (
+            <MotionRise
+              key={idx}
+              className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col justify-between"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className={`w-10 h-10 rounded-2xl ${m.bg} flex items-center justify-center`}>
+                  {m.icon}
+                </div>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700">
+                  Synced
                 </span>
               </div>
+              <div>
+                <div className="text-2xl font-extrabold text-gray-900">{m.value}</div>
+                <div className="text-xs font-bold text-gray-800 mt-0.5">{m.label}</div>
+                <p className="text-[11px] text-gray-500 mt-0.5">{m.sub}</p>
+              </div>
+            </MotionRise>
+          )
+        )}
+      </MotionStagger>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Multi-Modal Learning Stream (Videos, Notes, Flashcards, Quizzes) */}
+        <MotionRise className="lg:col-span-2 bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-extrabold text-gray-900">
+                Continue Your NERDC Learning Stream
+              </h2>
+              <p className="text-xs text-gray-500">
+                Pick up where you left off across Video Lessons, Markdown Notes, SRS Flashcards, and Quizzes.
+              </p>
+            </div>
+            <Link href="/dashboard/subjects" className="text-xs font-extrabold text-[#146ef5] hover:underline">
+              All Subjects →
+            </Link>
+          </div>
+
+          <div className="divide-y divide-gray-100">
+            {continueLearning.map((item, i) => (
+              <Link
+                key={i}
+                href={item.href}
+                className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 group hover:bg-gray-50/70 -mx-3 px-3 rounded-2xl transition-colors"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${item.badgeColor}`}>
+                      {item.type}
+                    </span>
+                    <span className="text-[11px] font-semibold text-gray-400">{item.duration}</span>
+                  </div>
+                  <h3 className="text-sm font-extrabold text-gray-900 group-hover:text-[#146ef5] transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-gray-500">{item.subject}</p>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-gray-100 group-hover:bg-[#0D1060] group-hover:text-[#FBBC04] text-gray-700 flex items-center justify-center shrink-0 transition-colors">
+                  <Play className="w-4 h-4" />
+                </div>
+              </Link>
             ))}
           </div>
-        </div>
+        </MotionRise>
 
-        {/* Reminders / Next Actions */}
-        <div className="lg:col-span-3 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square">
-          <div>
-            <h3 className="text-xl font-normal text-gray-900 mb-6">Reminders</h3>
-            <h4 className="text-xl font-normal text-gray-900 leading-tight mb-2">Meeting with<br/>Excel Academy</h4>
-            <p className="text-sm text-gray-500 mb-8 flex items-center gap-2">
-              Time : 02.00 pm - 04.00 pm
+        {/* ResultsPRO Remedial Loop + Offline Sync Status */}
+        <div className="space-y-6">
+          <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 text-[10px] font-black uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5" />
+              ResultsPRO → ClassroomPRO Remedial Pack
+            </span>
+            <h3 className="text-base font-extrabold text-gray-900">
+              Algebraic Fractions &amp; Word Problems
+            </h3>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              Recommended from your Second Term diagnostic to boost your Mathematics score from 74% to 85%+.
             </p>
-          </div>
-          <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] text-white font-semibold py-3.5 rounded-full transition-colors flex items-center justify-center gap-2 shadow-sm">
-            <PlayIcon className="w-5 h-5 fill-current" />
-            Start Meeting
-          </button>
-        </div>
+            <div className="grid grid-cols-2 gap-2 text-[11px] font-bold text-gray-700">
+              <Link href="/dashboard/videos/vid-math-1" className="p-2.5 rounded-xl bg-purple-50 text-purple-800 flex items-center gap-1.5">
+                <VideoIcon className="w-4 h-4 shrink-0" /> 1 Video Lesson
+              </Link>
+              <Link href="/dashboard/notes/note-math-1" className="p-2.5 rounded-xl bg-blue-50 text-[#146ef5] flex items-center gap-1.5">
+                <BookOpen className="w-4 h-4 shrink-0" /> 1 Note + Story
+              </Link>
+              <Link href="/dashboard/flashcards/fc-math-1" className="p-2.5 rounded-xl bg-emerald-50 text-emerald-800 flex items-center gap-1.5">
+                <Layers className="w-4 h-4 shrink-0" /> 15 Flashcards
+              </Link>
+              <Link href="/dashboard/quizzes/quiz-math-1" className="p-2.5 rounded-xl bg-amber-50 text-amber-800 flex items-center gap-1.5">
+                <BrainCircuit className="w-4 h-4 shrink-0" /> 10-Q Quiz
+              </Link>
+            </div>
+          </MotionRise>
 
-          </div>
-
-          {/* Bottom Row of Left Side */}
-          <div className="grid grid-cols-1 lg:grid-cols-9 gap-3">
-            
-            {/* Registrations List */}
-            <div className="lg:col-span-5 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-normal text-gray-900">Active Leads</h3>
-            <button className="text-[#146ef5] text-xs font-semibold px-3 py-1.5 border border-[#146ef5] rounded-full flex items-center gap-1 hover:bg-[#eef5ff] transition-colors">
-              <PlusIcon className="w-3 h-3" /> Add Lead
-            </button>
-          </div>
-          <div className="space-y-5">
+          <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                    <img src="/photo01.jpeg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
-                <div>
-                  <h4 className="text-base font-normal text-gray-900">Greenwood High</h4>
-                  <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Onboarding Form</span></p>
-                </div>
-              </div>
-              <span className="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-md">Completed</span>
+              <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-emerald-700">
+                <CheckCircle className="w-4 h-4" />
+                Offline-First PWA Ready
+              </span>
+              <span className="text-[11px] font-bold text-gray-400">IndexedDB Synced</span>
             </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                    <img src="/photo02.jpeg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
-                <div>
-                  <h4 className="text-base font-normal text-gray-900">Lighthouse Academy</h4>
-                  <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Pricing Approval</span></p>
-                </div>
-              </div>
-              <span className="px-2 py-1 bg-yellow-50 text-yellow-600 text-[10px] font-bold rounded-md">In Progress</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                    <img src="/photo04.jpeg" alt="Agent Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
-                <div>
-                  <h4 className="text-base font-normal text-gray-900">Harvard Int'l</h4>
-                  <p className="text-sm text-gray-500">Working on <span className="font-medium text-gray-700">Initial Pitch</span></p>
-                </div>
-              </div>
-              <span className="px-2 py-1 bg-red-50 text-red-500 text-[10px] font-bold rounded-md">Pending</span>
-            </div>
-          </div>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              4 Lesson Notes, 2 Video Lectures, and 2 Flashcard Decks are cached locally for offline study.
+            </p>
+            <Link href="/dashboard/downloads" className="block pt-1">
+              <Button variant="outline" className="w-full rounded-xl text-xs font-extrabold h-9">
+                <CloudDownload className="w-4 h-4 mr-1.5" /> Manage Offline Downloads
+              </Button>
+            </Link>
+          </MotionRise>
         </div>
-
-        {/* Project Progress Donut */}
-        <div className="lg:col-span-4 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col items-center">
-          <h3 className="text-xl font-normal text-gray-900 mb-6 self-start">Target Progress</h3>
-          
-          <div className="relative w-full aspect-[2/1] max-w-[260px] flex items-end justify-center mt-2 mb-4">
-            <svg viewBox="0 0 100 50" className="w-full h-full overflow-visible">
-              <defs>
-                <pattern id="stripes-arc" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                  <line x1="0" y1="0" x2="0" y2="4" stroke="#d1d5db" strokeWidth="2" />
-                </pattern>
-              </defs>
-              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="url(#stripes-arc)" strokeWidth="15" strokeLinecap="round" strokeDasharray="125.66 125.66" strokeDashoffset="0" />
-              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#111827" strokeWidth="15" strokeLinecap="round" strokeDasharray="82.93 125.66" strokeDashoffset="0" />
-              <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#146ef5" strokeWidth="15" strokeLinecap="round" strokeDasharray="51.52 125.66" strokeDashoffset="0" />
-            </svg>
-            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end translate-y-[15%]">
-              <span className="text-5xl font-normal tracking-tight text-gray-900">41%</span>
-              <span className="text-xs font-medium text-gray-500 mt-1">Target Reached</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4 mt-auto w-full justify-center pt-6">
-            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#146ef5]"></div><span className="text-xs text-gray-500 font-medium">Completed</span></div>
-            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#111827]"></div><span className="text-xs text-gray-500 font-medium">In Progress</span></div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-full bg-white border border-gray-200" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 1px, #d1d5db 1px, #d1d5db 3px)' }}></div>
-              <span className="text-xs text-gray-500 font-medium">Pending</span>
-            </div>
-          </div>
-        </div>
-          </div>
-        </div>
-
-        {/* Right Sidebar Stack */}
-        <div className="lg:col-span-3 flex flex-col gap-3">
-          
-          {/* Recent Activity */}
-          <div className="w-full bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
-            <h3 className="text-xl font-normal text-gray-900 mb-6">Recent Activity</h3>
-            <div className="flex-1 flex flex-col gap-8 pb-2">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                  <CheckCircleIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-base font-normal text-gray-900">Bounty Credited</p>
-                  <p className="text-sm text-gray-500 mt-0.5">₦50k from Excel Academy</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center shrink-0">
-                  <UserPlusIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-base font-normal text-gray-900">New Lead Added</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Springfield High School</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center shrink-0">
-                  <ShoppingCartIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-base font-normal text-gray-900">PINs Purchased</p>
-                  <p className="text-sm text-gray-500 mt-0.5">50 PINs standard pack</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          <div className="rounded-[1.5rem] p-6 text-white relative overflow-hidden aspect-square flex flex-col justify-between shadow-lg group">
-            {/* Background Image */}
-            <div 
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: "url('/photo05.jpeg')" }}
-            ></div>
-            {/* Gradient Dark Overlay */}
-            <div className="absolute inset-0 bg-[#0D1060]/40"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0D1060]/90 via-[#0D1060]/40 to-transparent"></div>
-            
-            <h3 className="text-xl font-normal text-white relative z-10 text-left w-full">Time Tracker</h3>
-            <div className="relative z-10 flex flex-col items-center justify-center flex-1">
-              <div className="text-5xl font-medium tracking-tight mb-8 font-sans">01:24:08</div>
-              <div className="flex gap-4">
-                <button className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:scale-105 transition-transform shadow-md">
-                  <PauseIcon className="w-5 h-5 text-gray-900" strokeWidth={2.5} />
-                </button>
-                <button className="w-12 h-12 rounded-full bg-red-500 flex items-center justify-center hover:scale-105 transition-transform shadow-md">
-                  <StopIcon className="w-5 h-5 text-white" strokeWidth={2.5} />
-                </button>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </MotionStagger>
-    </>
+      </div>
+    </div>
   );
 }

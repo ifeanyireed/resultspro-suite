@@ -46,6 +46,8 @@ func main() {
 		{
 			content.GET("/notes", h.GetNotes)
 			content.GET("/notes/:id", h.GetNoteByID)
+			content.GET("/videos", h.GetVideos)
+			content.GET("/videos/:id", h.GetVideoByID)
 			content.GET("/quizzes", h.GetQuizzes)
 			content.GET("/quizzes/:id", h.GetQuizByID)
 			content.GET("/flashcards", h.GetFlashcards)
@@ -63,6 +65,7 @@ func main() {
 		protected.Use(middleware.AuthMiddleware())
 		{
 			protected.POST("/teacher/notes", h.CreateNote)
+			protected.POST("/teacher/videos", h.CreateVideo)
 			protected.POST("/teacher/quizzes", h.CreateQuiz)
 			protected.POST("/teacher/flashcards", h.CreateFlashcard)
 

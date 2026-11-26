@@ -114,6 +114,73 @@ export const FALLBACK_NOTES = [
   },
 ];
 
+export const FALLBACK_VIDEOS = [
+  {
+    id: 'vid-math-1',
+    title: 'Simplifying Algebraic Fractions with LCM & Commercial Word Problems',
+    duration: '14:20',
+    fileSize: '28 MB',
+    viewsCount: 248,
+    offlineReady: true,
+    instructor: 'Mr. Tunde Ogunleye',
+    thumbnailUrl: '/photo02.jpeg',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    summary: 'Step-by-step worked examples showing how to find the Lowest Common Multiple (LCM) of algebraic denominators, combine fractions, and solve NERDC JSS 2 commercial arithmetic word problems.',
+    noteId: 'note-math-1',
+    flashcardSetId: 'fc-math-1',
+    quizId: 'quiz-math-1',
+    topic: FALLBACK_NOTES[0].topic,
+  },
+  {
+    id: 'vid-eng-1',
+    title: 'Mastering Comprehension Inference, Topic Sentences & Summary Writing',
+    duration: '16:45',
+    fileSize: '32 MB',
+    viewsCount: 192,
+    offlineReady: true,
+    instructor: 'Mrs. Funke Adebayo',
+    thumbnailUrl: '/photo01.jpeg',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+    summary: 'Learn how to identify topic sentences rapidly, infer implied meanings, and write concise summary answers without lifting verbatim clauses.',
+    noteId: 'note-eng-1',
+    flashcardSetId: 'fc-math-1',
+    quizId: 'quiz-eng-1',
+    topic: FALLBACK_NOTES[1].topic,
+  },
+  {
+    id: 'vid-bio-1',
+    title: 'Cell Organelles, Microscopy & Osmosis in Plant and Animal Tissues',
+    duration: '18:10',
+    fileSize: '36 MB',
+    viewsCount: 314,
+    offlineReady: false,
+    instructor: 'Mr. Ibrahim Musa',
+    thumbnailUrl: '/photo04.jpeg',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+    summary: 'Visual laboratory demonstration comparing plant and animal cells under a light microscope and observing osmosis across a semi-permeable membrane.',
+    noteId: 'note-bio-1',
+    flashcardSetId: 'fc-bio-1',
+    quizId: 'quiz-bio-1',
+    topic: FALLBACK_NOTES[2].topic,
+  },
+  {
+    id: 'vid-phy-1',
+    title: 'Projectile Motion: Resolving Horizontal & Vertical Velocity Vectors',
+    duration: '15:30',
+    fileSize: '30 MB',
+    viewsCount: 165,
+    offlineReady: false,
+    instructor: 'Mr. Tunde Ogunleye',
+    thumbnailUrl: '/photo03.jpeg',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoy.mp4',
+    summary: 'Deriving time of flight, maximum height, and horizontal range for projectiles launched at an angle in NERDC SS 2 Physics.',
+    noteId: 'note-phy-1',
+    flashcardSetId: 'fc-math-1',
+    quizId: 'quiz-math-1',
+    topic: FALLBACK_NOTES[3].topic,
+  },
+];
+
 export const FALLBACK_QUIZZES = [
   {
     id: 'quiz-math-1',
@@ -366,6 +433,14 @@ api.interceptors.response.use(
       }
       if (reqUrl.includes('/notes')) {
         return { data: FALLBACK_NOTES, status: 200, statusText: 'OK', headers: {}, config: originalRequest };
+      }
+      if (reqUrl.match(/\/videos\/[^/?]+/)) {
+        const idPart = reqUrl.split('/videos/')[1]?.split('?')[0];
+        const found = FALLBACK_VIDEOS.find((v) => v.id === idPart) || FALLBACK_VIDEOS[0];
+        return { data: found, status: 200, statusText: 'OK', headers: {}, config: originalRequest };
+      }
+      if (reqUrl.includes('/videos')) {
+        return { data: FALLBACK_VIDEOS, status: 200, statusText: 'OK', headers: {}, config: originalRequest };
       }
       if (reqUrl.match(/\/quizzes\/[^/?]+/)) {
         const idPart = reqUrl.split('/quizzes/')[1]?.split('?')[0];

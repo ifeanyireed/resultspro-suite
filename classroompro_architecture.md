@@ -13,9 +13,11 @@ The platform will support:
 * Senior Secondary School 1–3.
 * Multiple subjects per class.
 * Terms, schemes of work and weekly lesson plans.
-* Rich educational notes containing text, images, diagrams and illustrations.
-* Exercises, quizzes and assessments.
-* Student and teacher experiences.
+* Rich educational notes containing text, images, diagrams, AI storybooks and illustrations.
+* Curriculum-aligned educational video lessons (with adaptive streaming and selective offline download).
+* Spaced-repetition flashcards (SRS).
+* Exercises, quizzes and CBT assessments (with traceable teacher score-approval sync to CampusPRO).
+* Student, teacher, parent and principal curriculum-oversight experiences.
 * Web and mobile applications.
 * Offline-first learning.
 
@@ -31,13 +33,13 @@ Do not rebuild existing working infrastructure unnecessarily.
 
 Results Pro Suite is the central monorepo housing multiple education applications, frontend projects and backend microservices.
 
-Other applications include:
+Other applications in the 5-product school-focused suite include:
 
-* Results Pro.
-* Classroom Pro.
-* Tutors Pro.
-* Data Pro.
-* Other existing education products.
+* **CampusPRO** (`scholars_ng/web_app` & `service_campuspro`): The foundational School Operations & Academic ERP System of Record (Multi-Campus Setup, Academic Sessions & Terms, Classes & Arms, Subject Definitions & Teacher Allocations, Manage Teachers, Manage Students, Manage Parents & Wards, Attendance, Fees/Billing, and **All Messaging & Circulars**).
+* **ClassroomPRO** (`classroompro` & `service_classroompro`): The NERDC Digital Learning & Formative Assessment Hub (Markdown Lesson Notes, AI Storybooks, **Educational Video Lessons**, Spaced-Repetition Flashcards, Practice Quizzes/CBT, Multi-Year Attempt History, Topic-Level Learning-Gap Analytics, and Teacher Score Approval Sync to CampusPRO).
+* **ResultsPRO** (`resultspro` & `service_resultspro`): The AI Assessment & Result Intelligence Engine (Handwritten Marksheet OCR & Voice Score Entry reconciled against CampusPRO rosters, Pre-Publication AI Result Auditor, Deterministic Broadsheet & Report Card Engine, AI Teacher/Principal Remarks, Multi-Campus Performance Intelligence, AI Results-Processing Officer Copilot, and Parent AI Result Interpreter that triggers 1-click ClassroomPRO Remedial Packs).
+* **TutorsPRO** (`tutorspro` & `service_tutorspro`): 1-on-1 Vetted Tutor Discovery, Session Booking & Scheduling, Live Video Classroom & Interactive Whiteboard, and Tutor Payouts.
+* **PuzzlePRO** (`puzzlepro` & `service_puzzlepro`): Blockly Visual Coding Studio, 636 Gamified Coding & Robotics Adventures (Worlds 1–6), Cohort World Assignment (consuming CampusPRO classes read-only), and XP Leaderboards.
 
 The applications may have independent frontends and backend services while sharing foundational infrastructure.
 
@@ -86,24 +88,19 @@ Follow the existing database ownership and migration conventions.
 
 Classroom Pro must have appropriately isolated data structures for:
 
-* Curriculum.
-* Academic classes.
-* Subjects.
-* Academic terms.
-* Schemes of work.
-* Weekly topics.
+* Shared NERDC Master Curriculum Hierarchy (Level -> Grade `Primary 1–6 / JSS 1–3 / SSS 1–3` -> Subject -> Term -> Week -> Topic). *(Note: School-specific academic sessions/terms, classes/arms, subject allocations, teacher directories, and student enrolments are owned exclusively by **CampusPRO** and consumed read-only by ClassroomPRO).*
+* Schemes of work & weekly topics.
 * Learning objectives.
-* Lessons.
-* Lesson metadata.
-* Lesson assets.
-* Content versions.
-* Content publication records.
-* Student enrolments.
-* Assignments.
-* Student progress.
+* Markdown Lessons & AI Storybooks.
+* **Video Lessons** (video metadata, streaming URLs, duration, transcript/summary, topic association, and offline package references).
+* Spaced-Repetition Flashcard Decks & review queues.
+* Lesson metadata & lesson assets.
+* Content versions & content publication records.
+* Assignments & remedial revision packs (including packs triggered from **ResultsPRO** report card diagnostics).
+* Student topic mastery & multi-year attempt history.
 * Bookmarks.
-* Quiz attempts.
-* Assessment submissions.
+* Quiz attempts & formative assessment submissions.
+* **Traceable Score-Approval Sync Records** (`classroompro_assessment_id` linking teacher-approved official CA scores pushed into **CampusPRO's Official Exam Score Ledger**).
 * Offline synchronization records.
 
 Use relational PostgreSQL tables for structured application data.
@@ -232,23 +229,22 @@ Audit the existing administrative interfaces.
 
 Implement the necessary Classroom Pro content-management workflow if it does not already exist.
 
-Authorised academic administrators should be able to:
+Authorised academic content administrators and teachers should be able to:
 
-1. Create curriculum structures.
-2. Create and manage classes.
-3. Create subjects.
-4. Define schemes of work.
-5. Organise weekly topics.
-6. Create or import Markdown lessons.
-7. Attach images and other learning assets.
-8. Preview rendered lessons.
-9. Edit and revise content.
-10. Submit content for review.
-11. Approve or reject content.
-12. Publish approved content.
-13. Unpublish content when necessary.
-14. View content versions.
-15. Restore an earlier published version.
+1. Manage the shared NERDC curriculum structure (while school-specific classes, subjects, terms, teachers, and students are managed in **CampusPRO** and synced read-only).
+2. Define schemes of work and organise weekly topics mapped to CampusPRO subjects.
+3. Create or import Markdown lessons and AI storybooks.
+4. Upload or link **NERDC Video Lessons** (with duration, transcript/key takeaways, and topic mapping).
+5. Create Spaced-Repetition (SRS) Flashcard decks and AI-moderated CBT Quizzes.
+6. Attach images, videos, and other learning assets.
+7. Preview rendered lessons and video lectures.
+8. Edit and revise content.
+9. Submit content for review.
+10. Approve or reject content.
+11. Publish approved content.
+12. Unpublish content when necessary.
+13. View content versions and restore an earlier published version.
+14. **Approve & Push Official Assessment Scores to CampusPRO**: Review student quiz/CBT attempts and explicitly push approved Continuous Assessment (CA) scores to **CampusPRO's Official Exam Score Ledger** (for **ResultsPRO** broadsheet consolidation) while retaining multi-year attempt telemetry in ClassroomPRO.
 
 Support bulk content import from prepared Markdown files and organised content packages.
 
@@ -671,39 +667,33 @@ Avoid duplicate screens and duplicate functionality.
 
 Implement missing functionality using the established Classroom Pro design system.
 
-Academic administration
+Academic & curriculum administration (Zero-Duplication with CampusPRO)
 
 Provide appropriate interfaces for:
 
-* Curriculum management.
-* Class management.
-* Subject management.
-* Schemes of work.
+* NERDC curriculum & scheme of work oversight *(School-level Manage Teachers, Manage Students, Manage Classes, Manage Subjects, Manage Terms, Billing, and All Messaging live exclusively in **CampusPRO**)*.
 * Weekly lesson management.
-* Markdown lesson authoring or import.
-* Image and asset management.
-* Content preview.
-* Content review.
-* Content publishing.
-* Version history.
+* Markdown lesson & AI storybook authoring or import.
+* **Educational Video Lesson authoring & publishing**.
+* Spaced-repetition flashcard & AI-moderated quiz authoring.
+* Image, video and asset management.
+* Content preview, review, publishing & version history.
+* **Topic Mastery & Traceable Score Sync to CampusPRO**.
 
 Student experience
 
 Provide appropriate interfaces for:
 
-* My classes.
-* My subjects.
-* Schemes of work.
-* Weekly lessons.
-* Lesson reading.
+* Synced class & subject library (from CampusPRO enrolment).
+* Schemes of work & weekly topics.
+* Lesson note & AI storybook reading.
+* **Video Lessons library & interactive video player**.
 * Images and diagrams.
-* Exercises.
-* Quizzes.
+* Spaced-repetition flashcards.
+* Practice quizzes & mock CBT exams.
 * Bookmarks.
-* Learning progress.
-* Offline downloads.
-* Synchronization status.
-* Storage management.
+* Topic-level learning progress & **ResultsPRO-triggered Remedial Revision Packs**.
+* Unified offline download manager & synchronization status.
 
 Offline experience
 

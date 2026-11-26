@@ -4,6 +4,7 @@ import React from 'react';
 import { 
   ChartBarIcon, 
   BookOpenIcon, 
+  VideoCameraIcon,
   FolderIcon, 
   DocumentPlusIcon,
   AcademicCapIcon 
@@ -13,6 +14,7 @@ import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppCon
 import { MotionRise } from '@/components/ScrollRiseProvider';
 import { 
   NotesListView, 
+  VideosListView,
   QuizzesListView, 
   FlashcardsListView, 
   TeacherCreateNoteView 
@@ -31,6 +33,12 @@ export default function AdminClassroomHub() {
       label: 'Curriculum Lesson Notes',
       icon: BookOpenIcon,
       component: NotesListView,
+    },
+    {
+      id: 'videos',
+      label: 'NERDC Video Lessons',
+      icon: VideoCameraIcon,
+      component: VideosListView,
     },
     {
       id: 'quizzes',

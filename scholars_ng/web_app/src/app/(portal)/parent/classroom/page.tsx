@@ -5,9 +5,9 @@ import {
   AcademicCapIcon,
   VideoCameraIcon
 } from '@heroicons/react/24/outline';
-import { Book02Icon, HelpCircleIcon } from 'hugeicons-react';
+import { Book02Icon, Video01Icon, HelpCircleIcon } from 'hugeicons-react';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
-import { NotesListView, QuizzesListView } from '@classroompro/modules';
+import { NotesListView, VideosListView, QuizzesListView } from '@classroompro/modules';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 function ParentClassesDirectory() {
@@ -65,6 +65,12 @@ export default function ParentClassroomHub() {
       label: 'Subject Notes & Handouts',
       icon: Book02Icon,
       component: NotesListView,
+    },
+    {
+      id: 'videos',
+      label: 'Video Lessons',
+      icon: Video01Icon,
+      component: VideosListView,
     },
     {
       id: 'quizzes',

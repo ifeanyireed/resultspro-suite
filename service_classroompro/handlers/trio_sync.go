@@ -187,3 +187,91 @@ func (h *Handler) GetExams(c *gin.Context) {
 		},
 	})
 }
+
+func (h *Handler) GetVideos(c *gin.Context) {
+	c.JSON(http.StatusOK, []gin.H{
+		{
+			"id":             "vid-math-1",
+			"title":          "Simplifying Algebraic Fractions with LCM & Commercial Word Problems",
+			"duration":       "14:20",
+			"fileSize":       "28 MB",
+			"viewsCount":     248,
+			"offlineReady":   true,
+			"instructor":     "Mr. Tunde Ogunleye",
+			"thumbnailUrl":   "/photo02.jpeg",
+			"videoUrl":       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+			"summary":        "Step-by-step worked examples showing how to find the Lowest Common Multiple (LCM) of algebraic denominators, combine fractions, and solve NERDC JSS 2 commercial arithmetic word problems.",
+			"noteId":         "note-math-1",
+			"flashcardSetId": "fc-math-1",
+			"quizId":         "quiz-math-1",
+			"topic": gin.H{
+				"id":        "top-alg-frac",
+				"title":     "Algebraic Fractions & Word Problems",
+				"term":      2,
+				"week":      3,
+				"subjectId": "sub-math",
+				"subject":   gin.H{"id": "sub-math", "name": "Mathematics"},
+			},
+		},
+		{
+			"id":             "vid-eng-1",
+			"title":          "Mastering Comprehension Inference, Topic Sentences & Summary Writing",
+			"duration":       "16:45",
+			"fileSize":       "32 MB",
+			"viewsCount":     192,
+			"offlineReady":   true,
+			"instructor":     "Mrs. Funke Adebayo",
+			"thumbnailUrl":   "/photo01.jpeg",
+			"videoUrl":       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+			"summary":        "Learn how to identify topic sentences rapidly, infer implied meanings, and write concise summary answers without lifting verbatim clauses.",
+			"noteId":         "note-eng-1",
+			"flashcardSetId": "fc-math-1",
+			"quizId":         "quiz-eng-1",
+			"topic": gin.H{
+				"id":        "top-eng-comp",
+				"title":     "Comprehension & Summary Rules",
+				"term":      2,
+				"week":      2,
+				"subjectId": "sub-eng",
+				"subject":   gin.H{"id": "sub-eng", "name": "English Language"},
+			},
+		},
+	})
+}
+
+func (h *Handler) GetVideoByID(c *gin.Context) {
+	id := c.Param("id")
+	c.JSON(http.StatusOK, gin.H{
+		"id":             id,
+		"title":          "Simplifying Algebraic Fractions with LCM & Commercial Word Problems",
+		"duration":       "14:20",
+		"fileSize":       "28 MB",
+		"viewsCount":     248,
+		"offlineReady":   true,
+		"instructor":     "Mr. Tunde Ogunleye",
+		"thumbnailUrl":   "/photo02.jpeg",
+		"videoUrl":       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+		"summary":        "Step-by-step worked examples showing how to find the Lowest Common Multiple (LCM) of algebraic denominators, combine fractions, and solve NERDC JSS 2 commercial arithmetic word problems.",
+		"noteId":         "note-math-1",
+		"flashcardSetId": "fc-math-1",
+		"quizId":         "quiz-math-1",
+		"topic": gin.H{
+			"id":        "top-alg-frac",
+			"title":     "Algebraic Fractions & Word Problems",
+			"term":      2,
+			"week":      3,
+			"subjectId": "sub-math",
+			"subject":   gin.H{"id": "sub-math", "name": "Mathematics"},
+		},
+	})
+}
+
+func (h *Handler) CreateVideo(c *gin.Context) {
+	var body map[string]interface{}
+	_ = c.ShouldBindJSON(&body)
+	c.JSON(http.StatusCreated, gin.H{
+		"status":  "PUBLISHED",
+		"message": "NERDC Video Lesson published and added to topic manifest.",
+		"video":   body,
+	})
+}
