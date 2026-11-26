@@ -1,6 +1,19 @@
 "use client";
 
-import { IconBook as BookOpen, IconSearch as Search, IconChevronRight as ChevronRight, IconTrendingUp as TrendingUp, IconBrain as BrainCircuit, IconStack2 as Layers } from '@tabler/icons-react';
+import {
+  IconBook as BookOpen,
+  IconSearch as Search,
+  IconChevronRight as ChevronRight,
+  IconTrendingUp as TrendingUp,
+  IconBrain as BrainCircuit,
+  IconStack2 as Layers,
+  IconMathFunction as MathIcon,
+  IconDna as DnaIcon,
+  IconAtom as AtomIcon,
+  IconFlask as FlaskIcon,
+  IconWorld as GlobeIcon,
+  IconBuildingBank as CivicIcon,
+} from '@tabler/icons-react';
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -51,17 +64,17 @@ export default function SubjectsPage() {
   }
 
   const getSubjectStyle = (name: string) => {
-    const styles: Record<string, { icon: any, color: string, bg: string, shadow: string }> = {
-      "Mathematics": { icon: "📐", color: "text-[#146ef5]", bg: "bg-blue-50", shadow: "shadow-blue/10" },
-      "Biology": { icon: "🧬", color: "text-emerald-600", bg: "bg-emerald-50", shadow: "shadow-green/10" },
-      "Physics": { icon: "⚛️", color: "text-amber-600", bg: "bg-amber-50", shadow: "shadow-amber/10" },
-      "Chemistry": { icon: "🧪", color: "text-emerald", bg: "bg-emerald/10", shadow: "shadow-emerald/10" },
-      "English Language": { icon: "📚", color: "text-purple-600", bg: "bg-purple-50", shadow: "shadow-purple-400/10" },
-      "Geography": { icon: "🌍", color: "text-[#146ef5]", bg: "bg-blue-50", shadow: "shadow-blue/10" },
-      "Civic Education": { icon: "🏛️", color: "text-amber-600", bg: "bg-amber-50", shadow: "shadow-amber/10" },
-      "Economics": { icon: "📈", color: "text-emerald-600", bg: "bg-emerald-50", shadow: "shadow-green/10" },
+    const styles: Record<string, { icon: React.ReactNode; color: string; bg: string; barColor: string; shadow: string }> = {
+      "Mathematics": { icon: <MathIcon className="w-7 h-7" />, color: "text-[#146ef5]", bg: "bg-blue-50", barColor: "bg-[#146ef5]", shadow: "shadow-blue-500/10" },
+      "Biology": { icon: <DnaIcon className="w-7 h-7" />, color: "text-emerald-600", bg: "bg-emerald-50", barColor: "bg-emerald-600", shadow: "shadow-emerald-500/10" },
+      "Physics": { icon: <AtomIcon className="w-7 h-7" />, color: "text-amber-600", bg: "bg-amber-50", barColor: "bg-amber-500", shadow: "shadow-amber-500/10" },
+      "Chemistry": { icon: <FlaskIcon className="w-7 h-7" />, color: "text-teal-600", bg: "bg-teal-50", barColor: "bg-teal-600", shadow: "shadow-teal-500/10" },
+      "English Language": { icon: <BookOpen className="w-7 h-7" />, color: "text-purple-600", bg: "bg-purple-50", barColor: "bg-purple-600", shadow: "shadow-purple-500/10" },
+      "Geography": { icon: <GlobeIcon className="w-7 h-7" />, color: "text-[#146ef5]", bg: "bg-blue-50", barColor: "bg-[#146ef5]", shadow: "shadow-blue-500/10" },
+      "Civic Education": { icon: <CivicIcon className="w-7 h-7" />, color: "text-amber-600", bg: "bg-amber-50", barColor: "bg-amber-500", shadow: "shadow-amber-500/10" },
+      "Economics": { icon: <TrendingUp className="w-7 h-7" />, color: "text-emerald-600", bg: "bg-emerald-50", barColor: "bg-emerald-600", shadow: "shadow-emerald-500/10" },
     };
-    return styles[name] || { icon: "📖", color: "text-gray-400", bg: "bg-white shadow-sm border border-gray-100", shadow: "shadow-white/5" };
+    return styles[name] || { icon: <BookOpen className="w-7 h-7" />, color: "text-gray-600", bg: "bg-gray-50", barColor: "bg-[#146ef5]", shadow: "shadow-gray-500/5" };
   };
 
   const filteredSubjects = (data?.subjects || []).filter((s: any) => 
@@ -100,7 +113,7 @@ export default function SubjectsPage() {
                 <div className={`absolute top-0 right-0 w-32 h-32 ${style.bg} blur-[40px] rounded-full -z-10`} />
                 
                 <div className="flex justify-between items-start mb-8">
-                   <div className={`w-14 h-14 rounded-2xl ${style.bg} flex items-center justify-center text-3xl group-hover:scale-110 transition-transform shadow-xl ${style.shadow}`}>
+                   <div className={`w-14 h-14 rounded-2xl ${style.bg} ${style.color} flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm ${style.shadow}`}>
                       {style.icon}
                    </div>
                    <div className="bg-white shadow-sm border border-gray-100 px-3 py-1 rounded-full text-[10px] font-black text-gray-500 uppercase tracking-widest border border-white/5">
@@ -117,9 +130,9 @@ export default function SubjectsPage() {
                          <span className="text-gray-500">Mastery</span>
                          <span className="text-gray-900">{subject.mastery || 0}%</span>
                       </div>
-                      <div className="w-full h-1.5 bg-white shadow-sm border border-gray-100 rounded-full overflow-hidden">
+                      <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
                          <div 
-                           className={`h-full ${style.bg.replace('/10', '')} transition-all duration-1000`} 
+                           className={`h-full ${style.barColor} transition-all duration-1000`} 
                            style={{ width: `${subject.mastery || 0}%` }}
                          />
                       </div>
@@ -153,7 +166,7 @@ export default function SubjectsPage() {
                 <div>
                    <div className="text-[10px] font-black text-[#146ef5] uppercase tracking-[0.2em] mb-2">Continue Learning</div>
                    <h4 className="text-2xl font-bold text-gray-900 mb-1">{data.lastTopic.title}</h4>
-                   <p className="text-sm text-gray-500">{data.lastTopic.subject.name} • {data.lastTopic.week}</p>
+                   <p className="text-sm text-gray-500">{typeof data.lastTopic.subject === 'object' ? data.lastTopic.subject?.name : data.lastTopic.subject} • {data.lastTopic.week || 'Week 3'}</p>
                 </div>
              </div>
              <Link href={`/dashboard/topic-hub?topicId=${data.lastTopic.id}`}>

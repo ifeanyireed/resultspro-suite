@@ -1,6 +1,24 @@
 "use client";
 
-import { IconBook as BookOpen, IconSearch as Search, IconFilter as Filter, IconChevronRight as ChevronRight, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconClock as Clock, IconCircleCheck as CheckCircle, IconActivity as Activity, IconStack2 as Layers } from '@tabler/icons-react';
+import {
+  IconBook as BookOpen,
+  IconSearch as Search,
+  IconFilter as Filter,
+  IconChevronRight as ChevronRight,
+  IconLoader2 as Loader2,
+  IconChevronLeft as ChevronLeft,
+  IconClock as Clock,
+  IconCircleCheck as CheckCircle,
+  IconActivity as Activity,
+  IconStack2 as Layers,
+  IconMathFunction as MathIcon,
+  IconDna as DnaIcon,
+  IconAtom as AtomIcon,
+  IconFlask as FlaskIcon,
+  IconWorld as GlobeIcon,
+  IconBuildingBank as CivicIcon,
+  IconTrendingUp as TrendingUp,
+} from '@tabler/icons-react';
 import { Input } from "../../../components/ui/input";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -54,17 +72,17 @@ export default function NotesListPage() {
   }, [user?.class_id]);
 
   const getSubjectStyle = (name: string) => {
-    const styles: Record<string, string> = {
-      "Mathematics": "📐",
-      "Biology": "🧬",
-      "Physics": "⚛️",
-      "Chemistry": "🧪",
-      "English Language": "📚",
-      "Geography": "🌍",
-      "Civic Education": "🏛️",
-      "Economics": "📈",
+    const styles: Record<string, React.ReactNode> = {
+      "Mathematics": <MathIcon className="w-6 h-6 text-[#146ef5]" />,
+      "Biology": <DnaIcon className="w-6 h-6 text-emerald-600" />,
+      "Physics": <AtomIcon className="w-6 h-6 text-amber-600" />,
+      "Chemistry": <FlaskIcon className="w-6 h-6 text-teal-600" />,
+      "English Language": <BookOpen className="w-6 h-6 text-purple-600" />,
+      "Geography": <GlobeIcon className="w-6 h-6 text-[#146ef5]" />,
+      "Civic Education": <CivicIcon className="w-6 h-6 text-amber-600" />,
+      "Economics": <TrendingUp className="w-6 h-6 text-emerald-600" />,
     };
-    return styles[name] || "📖";
+    return styles[name] || <BookOpen className="w-6 h-6 text-gray-500" />;
   };
 
   // Group notes by subject for counts
