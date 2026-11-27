@@ -17,11 +17,11 @@ import {
   IconTrash as Trash2,
   IconCurrencyNaira as CurrencyNaira,
 } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
-import api from "@/lib/api";
-import { syncEngine } from "@/lib/syncEngine";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { MotionRise, MotionStagger } from "./ScrollRiseProvider";
+import api from "../lib/api";
+import { syncEngine } from "../lib/syncEngine";
 
 export interface StudyPackCreatorStudioProps {
   creatorRole: "TEACHER" | "SCHOOL_ADMIN" | "PLATFORM_ADMIN";

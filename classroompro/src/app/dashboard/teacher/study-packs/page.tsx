@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { useAuthStore } from "@/store/useAuthStore";
-import { StudyPackCreatorStudio } from "@/components/StudyPackCreatorStudio";
+import { useAuthStore } from "../../../../store/useAuthStore";
+import { StudyPackCreatorStudio } from "../../../../components/StudyPackCreatorStudio";
 
 export default function TeacherStudyPacksPage() {
   const user = useAuthStore((state) => state.user);
