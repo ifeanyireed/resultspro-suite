@@ -1,11 +1,10 @@
 import React from 'react';
-import { Icon as LucideIcon } from '@tabler/icons-react';
 
 interface Props {
   id: string;
   title: string;
   description: string;
-  icon: LucideIcon;
+  icon: any;
   isSelected: boolean;
   onSelect: (id: string) => void;
 }

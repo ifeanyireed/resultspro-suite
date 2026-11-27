@@ -20,6 +20,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
+      "@landing/*": ["../../landing_page/src/*"],
       "@classroompro/*": ["../../classroompro/src/*"],
       "@resultspro/*": ["../../resultspro/src/*"],
       "@tutorspro/*": ["../../tutorspro/src/*"],

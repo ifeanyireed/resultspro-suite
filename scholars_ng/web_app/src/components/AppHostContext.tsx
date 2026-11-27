@@ -50,6 +50,9 @@ export const AppHostProvider: React.FC<{
     }
     if (tenant && typeof window !== 'undefined') {
       localStorage.setItem('tenant_id', tenant.id);
+      localStorage.setItem('tenantId', tenant.id);
+      localStorage.setItem('x-tenant-id', tenant.id);
+      localStorage.setItem('schoolId', tenant.id);
       localStorage.setItem('tenant_slug', tenant.slug);
     }
   }, [token, user, tenant]);

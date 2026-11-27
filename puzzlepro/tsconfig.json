@@ -20,6 +20,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
+      "@landing/*": ["../landing_page/src/*"],
       "react": ["../scholars_ng/web_app/node_modules/@types/react"],
       "react/*": ["../scholars_ng/web_app/node_modules/@types/react/*"],
       "react-dom": ["../scholars_ng/web_app/node_modules/@types/react-dom"],

@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MotionRise } from '@/components/ScrollRiseProvider';
+import { MotionRise } from '../../../../components/ScrollRiseProvider';
 import { useRouter } from 'next/navigation';
-import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
-import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
+import { ResultsProRegistryForm } from '../../../../components/onboarding/ResultsProRegistryForm';
+import { ResultsProStepIndicator } from '../../../../components/onboarding/ResultsProStepIndicator';
 import { IconLayoutGrid as LayoutGrid, IconClipboardList as ClipboardList, IconShieldCheck as ShieldCheck, IconWallet as Wallet, IconShare2 as Share2, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCircleCheck as CheckCircle2, IconUpload as Upload, IconUser as User, IconPhone as Phone, IconMail as Mail, IconMapPin as MapPin, IconLoader2 as Loader2, IconCopy as Copy, IconCheck as Check, IconSparkles as Sparkles, IconFileText as FileText, IconX as X, IconBuilding as Building2, IconTrendingUp as TrendingUp, IconPercentage as Percent, IconPhoto as ImageIcon, IconCamera as Camera, IconPlus as Plus, IconLink as Link, IconCreditCard as CreditCard } from '@tabler/icons-react';
 const steps = [
   { id: 1, label: 'ROLE', icon: LayoutGrid },

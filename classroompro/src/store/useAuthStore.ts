@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import api, { extractTenantIdFromJwt } from '@/lib/api';
-import { Role } from '@/lib/roles';
+import api, { extractTenantIdFromJwt } from '../lib/api';
+import { Role } from '../lib/roles';
 
 interface User {
   id: string;

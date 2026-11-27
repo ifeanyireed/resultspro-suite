@@ -15,7 +15,7 @@ import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
 import api, {
   getCampusStudents,
   getCampusOfficialExamScores,
-} from "@/lib/api";
+} from "../../../../lib/api";
 
 export default function TeacherAnalyticsPage() {
   const [loading, setLoading] = useState(true);

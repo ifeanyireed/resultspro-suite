@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { MotionRise } from '@/components/ScrollRiseProvider';
-import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
+import { MotionRise } from '../../../components/ScrollRiseProvider';
+import { ResultsProStepIndicator } from '../../../components/onboarding/ResultsProStepIndicator';
 import { IconLayoutGrid as LayoutGrid, IconClipboardList as ClipboardList, IconPhone as Phone, IconShieldCheck as ShieldCheck, IconCamera as Camera, IconCreditCard as CreditCard, IconArrowRight as ArrowRight, IconUser as User, IconSchool as School, IconUsersGroup as Handshake, IconCertificate as GraduationCap, IconCalendar as Calendar, IconStack2 as Layers, IconUsers as Users, IconWallet as Wallet, IconShare2 as Share2, IconKey as Key, IconSearch as Search, IconBook as BookOpen } from '@tabler/icons-react';
 
 const defaultSteps = [
@@ -50,15 +50,15 @@ const roles = [
   {
     id: 'parent',
     title: "Parent / Student",
-    description: "TRACK PROGRESS & VIEW RESULTS",
+    description: "RESULTS, STUDY PACKS, TUTORS & CODING",
     icon: User,
     color: "text-rose-500",
     link: "/onboard/parent",
   },
   {
     id: 'teacher',
-    title: "Teacher / Staff",
-    description: "GRADE EXAMS & MANAGE CLASSES",
+    title: "Teacher / Tutor",
+    description: "CLASSES, EXAMS & 1-ON-1 TUTORING",
     icon: GraduationCap,
     color: "text-emerald-500",
     link: "/onboard/teacher",
@@ -66,7 +66,7 @@ const roles = [
   {
     id: 'school',
     title: "School Admin",
-    description: "DEPLOY YOUR DIGITAL CAMPUS",
+    description: "DEPLOY FULL SUITE DIGITAL CAMPUS",
     icon: School,
     color: "text-amber-500",
     link: "/onboard/school",

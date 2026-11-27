@@ -2,11 +2,15 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MotionRise } from '@/components/ScrollRiseProvider';
-import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
+import { MotionRise } from '../../../../components/ScrollRiseProvider';
+import { ResultsProRegistryForm } from '../../../../components/onboarding/ResultsProRegistryForm';
 import { IconCamera as Camera, IconPhoto as ImageIcon, IconGlobe as Globe, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCircleCheck as CheckCircle2, IconBuilding as Building2, IconPalette as Palette, IconBook as BookOpen, IconQuote as Quote, IconPlus as Plus, IconCalendar as Calendar, IconStack2 as Layers, IconUsers as Users, IconCertificate as GraduationCap, IconUpload as Upload, IconCheck as Check, IconCreditCard as CreditCard, IconLock as Lock, IconLink as Link } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
-import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
+import { ResultsProStepIndicator } from '../../../../components/onboarding/ResultsProStepIndicator';
+import {
+  provisionSchoolIntoTrio,
+  resolveExistingEntityOnSuite,
+} from '../../../../lib/trioOnboardingApi';
 
 const steps = [
   { id: 1, label: 'BASICS', icon: Building2 },
@@ -24,6 +28,7 @@ export default function SchoolOnboarding() {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
+    existingTenantSlug: '',
     schoolName: '',
     motto: '',
     email: '',
@@ -31,7 +36,8 @@ export default function SchoolOnboarding() {
     primaryColor: '#146ef5',
     accentColor: '#0f172a',
     country: 'Nigeria',
-    curriculum: 'WASSCE / National',
+    curriculum: 'NERDC / WAEC Standard',
+    codingPathway: 'World 1–6 Full Future Skills Track',
     logoUrl: '' as string | null,
     logoFile: null as File | null,
     logoZoom: 1,
@@ -45,6 +51,32 @@ export default function SchoolOnboarding() {
     paymentOption: 'PRO',
     referralCode: ''
   });
+
+  const [isLinkingExistingSchool, setIsLinkingExistingSchool] = useState(false);
+
+  const handleLinkExistingSchoolEntity = async () => {
+    if (!formData.existingTenantSlug.trim()) return;
+    setIsLinkingExistingSchool(true);
+    try {
+      const entity = await resolveExistingEntityOnSuite(formData.existingTenantSlug);
+      if (entity) {
+        setFormData((prev) => ({
+          ...prev,
+          existingTenantSlug: entity.slug,
+          schoolName: entity.schoolName || prev.schoolName,
+          motto: entity.motto || prev.motto,
+          primaryColor: entity.primaryColor || prev.primaryColor,
+          accentColor: entity.accentColor || prev.accentColor,
+          curriculum: entity.curriculum || prev.curriculum,
+        }));
+        triggerToast(`Linked to existing school entity: ${entity.schoolName} (${entity.tenantId})`);
+      } else {
+        triggerToast(`No existing school entity found for "${formData.existingTenantSlug}". You can proceed to register it as a new tenant.`);
+      }
+    } finally {
+      setIsLinkingExistingSchool(false);
+    }
+  };
 
   const [sessionData, setSessionData] = useState({
     sessionName: '2024/2025',
@@ -148,11 +180,39 @@ export default function SchoolOnboarding() {
   const nextStep = () => setStep(s => Math.min(s + 1, steps.length));
   const prevStep = () => setStep(s => Math.max(s - 1, 1));
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsSubmitting(true);
-    setTimeout(() => {
-      router.push('/admin');
-    }, 1500);
+    try {
+      const { slug } = await provisionSchoolIntoTrio({
+        existingTenantSlug: formData.existingTenantSlug,
+        schoolName: formData.schoolName,
+        motto: formData.motto,
+        email: formData.email,
+        phone: formData.phone,
+        primaryColor: formData.primaryColor,
+        accentColor: formData.accentColor,
+        curriculum: formData.curriculum,
+        codingPathway: formData.codingPathway,
+        logoUrl: formData.logoUrl,
+        paymentOption: formData.paymentOption,
+        referralCode: formData.referralCode,
+        sessionData,
+        classesList,
+        teachersList,
+        studentsList,
+      });
+      triggerToast(`School provisioned across CampusPRO, ClassroomPRO, ResultsPRO, TutorsPRO & PuzzlePRO (${slug})!`);
+      setTimeout(() => {
+        router.push(`/admin?tenant=${encodeURIComponent(slug)}`);
+      }, 900);
+    } catch (err: any) {
+      triggerToast(err?.message || 'Provisioning completed with warnings. Redirecting...');
+      setTimeout(() => {
+        router.push('/admin');
+      }, 1200);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputStyle = "w-full p-4 bg-slate-50 border border-slate-200/60 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm font-bold text-slate-800 placeholder:text-slate-400 placeholder:font-medium";
@@ -227,6 +287,41 @@ export default function SchoolOnboarding() {
                   showName={false}
                   customTopElement={
                     <div style={{ display: 'grid', gap: '1rem' }}>
+                      {/* Optional Link to Existing School Entity */}
+                      <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
+                        <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1">
+                          Link to Existing School Entity (Optional Subdomain / Tenant Code)
+                        </label>
+                        <div className="flex flex-col sm:flex-row gap-2.5">
+                          <input
+                            type="text"
+                            placeholder="e.g. greenwoodhigh (leave blank to provision a brand-new school)"
+                            value={formData.existingTenantSlug}
+                            onChange={(e) =>
+                              setFormData({ ...formData, existingTenantSlug: e.target.value })
+                            }
+                            className="focus:border-[#146ef5] focus:ring-1 focus:ring-[#146ef5] transition-all text-slate-800 placeholder:text-slate-400"
+                            style={{
+                              padding: '0.65rem 1rem',
+                              border: '1px solid #e2e8f0',
+                              borderRadius: '4px',
+                              outline: 'none',
+                              fontSize: '0.875rem',
+                              width: '100%',
+                              background: 'white',
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={handleLinkExistingSchoolEntity}
+                            disabled={isLinkingExistingSchool || !formData.existingTenantSlug.trim()}
+                            className="px-5 py-2.5 shrink-0 rounded-full bg-slate-900 hover:bg-black text-white text-xs font-extrabold uppercase tracking-wider disabled:opacity-40 transition-all"
+                          >
+                            {isLinkingExistingSchool ? 'Linking...' : 'Link Entity'}
+                          </button>
+                        </div>
+                      </div>
+
                       <div className="relative">
                         <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1" style={{ marginTop: '0.75rem' }}>Official School Name</label>
                         <div className="relative">
@@ -253,6 +348,40 @@ export default function SchoolOnboarding() {
                             className="focus:border-[#146ef5] focus:ring-1 focus:ring-[#146ef5] transition-all text-slate-800 placeholder:text-slate-400"
                             style={{ padding: '0.75rem 1rem 0.75rem 2.5rem', border: '1px solid #e2e8f0', borderRadius: '4px', outline: 'none', fontSize: '0.875rem', width: '100%', background: 'white' }}
                           />
+                        </div>
+                      </div>
+
+                      {/* Academic Background for All 5 Suite Apps */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                        <div>
+                          <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1">
+                            Academic Curriculum (ResultsPRO &amp; ClassroomPRO)
+                          </label>
+                          <select
+                            value={formData.curriculum}
+                            onChange={(e) => setFormData({ ...formData, curriculum: e.target.value })}
+                            style={{ padding: '0.75rem 1rem', border: '1px solid #e2e8f0', borderRadius: '4px', outline: 'none', fontSize: '0.875rem', width: '100%', background: 'white' }}
+                          >
+                            <option value="NERDC / WAEC Standard">NERDC / WAEC Standard</option>
+                            <option value="IGCSE / British Curriculum">IGCSE / British Curriculum</option>
+                            <option value="Hybrid Nigerian-British">Hybrid Nigerian-British</option>
+                            <option value="American / Common Core">American / Common Core</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1">
+                            PuzzlePRO Coding &amp; STEM Track
+                          </label>
+                          <select
+                            value={formData.codingPathway}
+                            onChange={(e) => setFormData({ ...formData, codingPathway: e.target.value })}
+                            style={{ padding: '0.75rem 1rem', border: '1px solid #e2e8f0', borderRadius: '4px', outline: 'none', fontSize: '0.875rem', width: '100%', background: 'white' }}
+                          >
+                            <option value="World 1–6 Full Future Skills Track">World 1–6 Full Future Skills Track</option>
+                            <option value="Primary Algorithmic & Block Coding (Worlds 1–2)">Primary Algorithmic &amp; Block Coding (Worlds 1–2)</option>
+                            <option value="Junior Secondary Python & Web (Worlds 3–4)">Junior Secondary Python &amp; Web (Worlds 3–4)</option>
+                            <option value="Senior Secondary AI & Software Studio (Worlds 5–6)">Senior Secondary AI &amp; Software Studio (Worlds 5–6)</option>
+                          </select>
                         </div>
                       </div>
                     </div>

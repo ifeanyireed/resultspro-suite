@@ -2,14 +2,20 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MotionRise } from '@/components/ScrollRiseProvider';
+import { MotionRise } from '../../../../components/ScrollRiseProvider';
 import { IconLayoutGrid as LayoutGrid, IconUser as User, IconSearch as Search, IconUsers as Users, IconCreditCard as CreditCard, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCircleCheck as CheckCircle2, IconShieldCheck as ShieldCheck, IconLock as Lock, IconPlus as Plus, IconTrash as Trash2, IconAlertCircle as AlertCircle, IconDeviceMobile as Smartphone, IconMail as Mail, IconCheck as Check, IconTicket as Ticket, IconClock as Clock, IconSparkles as Sparkles, IconInfoCircle as Info, IconCreditCard as CardIcon, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
-import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
-import { ResultsProPageHeader } from '@/components/onboarding/ResultsProPageHeader';
-import { ResultsProSectionLabel } from '@/components/onboarding/ResultsProSectionLabel';
-import { ResultsProBottomNav } from '@/components/onboarding/ResultsProBottomNav';
-import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
+import { ResultsProStepIndicator } from '../../../../components/onboarding/ResultsProStepIndicator';
+import { ResultsProPageHeader } from '../../../../components/onboarding/ResultsProPageHeader';
+import { ResultsProSectionLabel } from '../../../../components/onboarding/ResultsProSectionLabel';
+import { ResultsProBottomNav } from '../../../../components/onboarding/ResultsProBottomNav';
+import { ResultsProRegistryForm } from '../../../../components/onboarding/ResultsProRegistryForm';
+import {
+  lookupStudentOnCampusPro,
+  enrollNewChildOnCampusPro,
+  finalizeParentOnboardingInTrio,
+  resolveExistingEntityOnSuite,
+} from '../../../../lib/trioOnboardingApi';
 const steps = [
   { id: 1, label: 'ROLE', icon: LayoutGrid },
   { id: 2, label: 'REGISTRY', icon: User },
@@ -30,13 +36,20 @@ export default function ParentOnboarding() {
     parentPhone: '',
     parentPassword: '',
     
-    // Step 3: Student Verification
+    // Step 3: Student Verification & Academic Background (Across CampusPRO, ClassroomPRO, ResultsPRO, TutorsPRO & PuzzlePRO)
+    existingSchoolCode: '',
+    resolvedSchoolName: '',
+    resolvedTenantId: '',
     admissionNumber: '',
     studentDob: '',
     newChildFirstName: '',
     newChildLastName: '',
-    newChildClass: 'Grade 1',
+    newChildClass: 'JSS 2',
     newChildDob: '',
+    curriculum: 'NERDC / WAEC Standard',
+    targetSubjects: ['Mathematics', 'English Language', 'Physics'] as string[],
+    codingPathway: 'World 1: Algorithmic Foundations',
+    learningGoal: 'WAEC / JAMB Mastery & STEM Coding',
     
     // Step 4: Family Profile
     relationshipType: 'Mother', // Default
@@ -96,8 +109,42 @@ export default function ParentOnboarding() {
 
 
 
-  // Student search simulator
-  const handleStudentLookup = () => {
+  // Live Entity (School Tenant) resolution + Student lookup against service_campuspro
+  const [isLinkingSchool, setIsLinkingSchool] = useState(false);
+
+  const handleLinkExistingSchool = async () => {
+    if (!formData.existingSchoolCode.trim()) return;
+    setIsLinkingSchool(true);
+    setSearchError('');
+    try {
+      const entity = await resolveExistingEntityOnSuite(formData.existingSchoolCode);
+      if (entity) {
+        setFormData((prev) => ({
+          ...prev,
+          resolvedSchoolName: entity.schoolName,
+          resolvedTenantId: entity.tenantId,
+          curriculum: entity.curriculum || prev.curriculum,
+        }));
+      } else {
+        setSearchError(
+          `Could not resolve existing school entity "${formData.existingSchoolCode}". Check the school code/subdomain or continue as an independent learner.`
+        );
+      }
+    } finally {
+      setIsLinkingSchool(false);
+    }
+  };
+
+  const toggleTargetSubject = (sub: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      targetSubjects: prev.targetSubjects.includes(sub)
+        ? prev.targetSubjects.filter((s) => s !== sub)
+        : [...prev.targetSubjects, sub],
+    }));
+  };
+
+  const handleStudentLookup = async () => {
     if (!formData.admissionNumber || !formData.studentDob) {
       setSearchError('Admission Number and Date of Birth are required.');
       return;
@@ -105,29 +152,44 @@ export default function ParentOnboarding() {
     setIsSearchingStudent(true);
     setSearchError('');
     setStudentVerified(false);
-    
-    // Simulate multi-stage network latency check
-    setSearchStage('Connecting to academic service...');
-    setTimeout(() => {
-      setSearchStage('Validating student enrollment details...');
-      setTimeout(() => {
-        setSearchStage('Resolving profile data...');
-        setTimeout(() => {
-          setIsSearchingStudent(false);
-          setVerifiedStudentData({
-            name: 'Tunde Greenwood',
-            class: 'Grade 10A',
-            admissionNumber: formData.admissionNumber
-          });
-          setStudentVerified(true);
-          setLinkConfirmed(true);
-        }, 600);
-      }, 600);
-    }, 600);
+    setSearchStage('Connecting to CampusPRO academic registry...');
+
+    try {
+      let tid = formData.resolvedTenantId;
+      if (!tid && formData.existingSchoolCode.trim()) {
+        const entity = await resolveExistingEntityOnSuite(formData.existingSchoolCode);
+        if (entity) {
+          tid = entity.tenantId;
+          setFormData((prev) => ({
+            ...prev,
+            resolvedSchoolName: entity.schoolName,
+            resolvedTenantId: entity.tenantId,
+          }));
+        }
+      }
+      const found = await lookupStudentOnCampusPro(formData.admissionNumber, tid || undefined);
+      if (!found) {
+        setSearchError(
+          `No student found on CampusPRO matching admission number "${formData.admissionNumber}". Use "Register a New Child" if not yet enrolled.`
+        );
+        return;
+      }
+      setVerifiedStudentData({
+        name: found.name,
+        class: found.class,
+        admissionNumber: found.admissionNumber,
+      });
+      setStudentVerified(true);
+      setLinkConfirmed(true);
+    } catch (err: any) {
+      setSearchError(err?.message || 'Unable to query CampusPRO student registry.');
+    } finally {
+      setIsSearchingStudent(false);
+    }
   };
 
-  // Add new child simulator
-  const handleRegisterNewChild = () => {
+  // Enroll new child directly into service_campuspro + PuzzlePRO
+  const handleRegisterNewChild = async () => {
     if (!formData.newChildFirstName || !formData.newChildLastName || !formData.newChildDob || !formData.newChildClass) {
       setSearchError('All fields are required to register a new child.');
       return;
@@ -135,26 +197,47 @@ export default function ParentOnboarding() {
     setIsRegisteringChild(true);
     setSearchError('');
     setStudentVerified(false);
-    
-    setSearchStage('Creating student profile...');
-    setTimeout(() => {
-      setSearchStage('Generating Admission ID...');
-      setTimeout(() => {
-        setIsRegisteringChild(false);
-        setVerifiedStudentData({
-          name: `${formData.newChildFirstName} ${formData.newChildLastName}`,
-          class: formData.newChildClass,
-          admissionNumber: `NEW-${Math.floor(1000 + Math.random() * 9000)}`
-        });
-        setStudentVerified(true);
-        setLinkConfirmed(true);
-        setIsAddingNewChild(false);
-      }, 800);
-    }, 800);
+    setSearchStage('Enrolling student profile & academic background in CampusPRO, ClassroomPRO, TutorsPRO & PuzzlePRO...');
+
+    try {
+      let tid = formData.resolvedTenantId;
+      if (!tid && formData.existingSchoolCode.trim()) {
+        const entity = await resolveExistingEntityOnSuite(formData.existingSchoolCode);
+        if (entity) {
+          tid = entity.tenantId;
+          setFormData((prev) => ({
+            ...prev,
+            resolvedSchoolName: entity.schoolName,
+            resolvedTenantId: entity.tenantId,
+          }));
+        }
+      }
+      const enrolled = await enrollNewChildOnCampusPro({
+        firstName: formData.newChildFirstName,
+        lastName: formData.newChildLastName,
+        className: formData.newChildClass,
+        curriculum: formData.curriculum,
+        targetSubjects: formData.targetSubjects,
+        codingPathway: formData.codingPathway,
+        tenantId: tid || undefined,
+      });
+      setVerifiedStudentData({
+        name: enrolled.name,
+        class: enrolled.class,
+        admissionNumber: enrolled.admissionNumber,
+      });
+      setStudentVerified(true);
+      setLinkConfirmed(true);
+      setIsAddingNewChild(false);
+    } catch (err: any) {
+      setSearchError(err?.message || 'Failed to enroll child on CampusPRO.');
+    } finally {
+      setIsRegisteringChild(false);
+    }
   };
 
-  // Sibling lookup simulator
-  const handleSiblingLookup = () => {
+  // Live Sibling lookup against service_campuspro
+  const handleSiblingLookup = async () => {
     if (!siblingAdminNo || !siblingDob) {
       setSiblingSearchError('Sibling Admission Number and DOB are required.');
       return;
@@ -163,14 +246,22 @@ export default function ParentOnboarding() {
     setSiblingSearchError('');
     setSiblingSearchResult(null);
 
-    setTimeout(() => {
-      setIsSearchingSibling(false);
+    try {
+      const found = await lookupStudentOnCampusPro(siblingAdminNo);
+      if (!found) {
+        setSiblingSearchError(`No student record found on CampusPRO for "${siblingAdminNo}".`);
+        return;
+      }
       setSiblingSearchResult({
-        name: 'Amara Greenwood',
-        class: 'Grade 10B',
-        admissionNumber: siblingAdminNo
+        name: found.name,
+        class: found.class,
+        admissionNumber: found.admissionNumber,
       });
-    }, 1200);
+    } catch (err: any) {
+      setSiblingSearchError(err?.message || 'Unable to query CampusPRO student registry.');
+    } finally {
+      setIsSearchingSibling(false);
+    }
   };
 
   const addSiblingToProfile = () => {
@@ -273,13 +364,34 @@ export default function ParentOnboarding() {
     }
   };
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     if (step === 5) {
       setIsSubmitting(true);
-      setTimeout(() => {
+      try {
+        const wards = [
+          ...(verifiedStudentData ? [verifiedStudentData] : []),
+          ...formData.siblings,
+        ];
+        await finalizeParentOnboardingInTrio({
+          parentName: formData.parentName,
+          parentEmail: formData.parentEmail,
+          parentPhone: formData.parentPhone,
+          parentPassword: formData.parentPassword,
+          relationshipType: formData.relationshipType,
+          isEmergencyContact: formData.isEmergencyContact,
+          curriculum: formData.curriculum,
+          targetSubjects: formData.targetSubjects,
+          codingPathway: formData.codingPathway,
+          learningGoal: formData.learningGoal,
+          linkedWards: wards,
+          tenantId: formData.resolvedTenantId || undefined,
+        });
+      } catch {
+        // Proceed to confirmation screen even if network is offline
+      } finally {
         setIsSubmitting(false);
-        setStep(6); // Finish/success page
-      }, 1500);
+        setStep(6);
+      }
     } else {
       setStep((s) => Math.min(s + 1, 5));
     }
@@ -405,6 +517,124 @@ export default function ParentOnboarding() {
                   showPhone={false}
                   customTopElement={
                     <>
+                      {/* Entity Linker: Link to Existing School Entity or Independent Suite Profile */}
+                      <div className="mb-6 p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+                        <label className={labelStyle}>
+                          Link to Existing School Entity (School Code / Subdomain Slug)
+                        </label>
+                        <div className="flex flex-col sm:flex-row gap-3">
+                          <input
+                            type="text"
+                            placeholder="e.g. greenwoodhigh (leave blank if independent learner on TutorsPRO / PuzzlePRO)"
+                            value={formData.existingSchoolCode}
+                            onChange={(e) =>
+                              setFormData({ ...formData, existingSchoolCode: e.target.value })
+                            }
+                            className={inputStyle}
+                            style={{
+                              paddingLeft: '1rem',
+                              paddingRight: '1rem',
+                              height: '42px',
+                              boxSizing: 'border-box',
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={handleLinkExistingSchool}
+                            disabled={isLinkingSchool || !formData.existingSchoolCode.trim()}
+                            className="px-5 h-[42px] shrink-0 rounded-full bg-slate-900 hover:bg-black text-white text-xs font-extrabold uppercase tracking-wider disabled:opacity-40 transition-all"
+                          >
+                            {isLinkingSchool ? 'Linking...' : 'Link School Entity'}
+                          </button>
+                        </div>
+                        {formData.resolvedSchoolName && (
+                          <div className="mt-2.5 flex items-center gap-2 text-xs font-bold text-emerald-700">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                            <span>
+                              Linked to Existing School Entity: <strong>{formData.resolvedSchoolName}</strong> ({formData.resolvedTenantId})
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Academic Background for All Suite Apps (ClassroomPRO, ResultsPRO, TutorsPRO & PuzzlePRO) */}
+                      <div className="mb-6 p-4 rounded-2xl bg-blue-50/40 border border-blue-100 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-[#146ef5]">
+                            Academic Background &amp; Suite Profile (ClassroomPRO • TutorsPRO • PuzzlePRO)
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className={labelStyle}>Curriculum Standard</label>
+                            <select
+                              value={formData.curriculum}
+                              onChange={(e) =>
+                                setFormData({ ...formData, curriculum: e.target.value })
+                              }
+                              className={inputStyle}
+                              style={{ height: '42px' }}
+                            >
+                              <option value="NERDC / WAEC Standard">NERDC / WAEC Standard</option>
+                              <option value="IGCSE / British Curriculum">IGCSE / British Curriculum</option>
+                              <option value="American / Common Core">American / Common Core</option>
+                              <option value="Montessori / Early Years">Montessori / Early Years</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className={labelStyle}>PuzzlePRO Coding &amp; Future Skills World</label>
+                            <select
+                              value={formData.codingPathway}
+                              onChange={(e) =>
+                                setFormData({ ...formData, codingPathway: e.target.value })
+                              }
+                              className={inputStyle}
+                              style={{ height: '42px' }}
+                            >
+                              <option value="World 1: Algorithmic Foundations">World 1: Algorithmic Foundations</option>
+                              <option value="World 2: Logic Loops & Sequences">World 2: Logic Loops &amp; Sequences</option>
+                              <option value="World 3: Python & Data Structures">World 3: Python &amp; Data Structures</option>
+                              <option value="World 4: Web & Interactive Games">World 4: Web &amp; Interactive Games</option>
+                              <option value="World 5: AI & Robotics Engineering">World 5: AI &amp; Robotics Engineering</option>
+                              <option value="World 6: Capstone Software Studio">World 6: Capstone Software Studio</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div>
+                          <label className={labelStyle}>
+                            Focus Subjects (Used by ClassroomPRO Study Packs &amp; TutorsPRO Matching)
+                          </label>
+                          <div className="flex flex-wrap gap-2">
+                            {[
+                              'Mathematics',
+                              'English Language',
+                              'Physics',
+                              'Chemistry',
+                              'Biology',
+                              'Further Maths',
+                              'Computer Science',
+                              'Economics',
+                            ].map((subj) => {
+                              const active = formData.targetSubjects.includes(subj);
+                              return (
+                                <button
+                                  key={subj}
+                                  type="button"
+                                  onClick={() => toggleTargetSubject(subj)}
+                                  className={`px-3 py-1.5 rounded-full text-[11px] font-bold border transition-all ${
+                                    active
+                                      ? 'bg-[#146ef5] text-white border-[#146ef5]'
+                                      : 'bg-white text-slate-600 border-slate-200 hover:border-[#146ef5]'
+                                  }`}
+                                >
+                                  {subj}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+
                       {/* Tabs / Toggle */}
                       {!studentVerified && (
                         <div className="flex gap-4 mb-6 pb-4 border-b border-slate-100">
@@ -600,7 +830,7 @@ export default function ParentOnboarding() {
                             </div>
                             <div>
                               <label className={labelStyle}>Institution</label>
-                              <span className="block text-xl font-bold text-slate-800">Greenwood High School</span>
+                              <span className="block text-xl font-bold text-slate-800">{formData.resolvedSchoolName || 'Greenwood High School'}</span>
                             </div>
                           </div>
 
@@ -1095,7 +1325,11 @@ export default function ParentOnboarding() {
                     </div>
                     <div>
                       <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">Main Linked Child</span>
-                      <span className="font-extrabold text-slate-800">Tunde Greenwood (Grade 10A)</span>
+                      <span className="font-extrabold text-slate-800">
+                        {verifiedStudentData
+                          ? `${verifiedStudentData.name} (${verifiedStudentData.class})`
+                          : 'Linked Ward'}
+                      </span>
                     </div>
                     {formData.siblings.length > 0 && (
                       <div className="col-span-2">

@@ -1,12 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MotionRise } from '@/components/ScrollRiseProvider';
+import { MotionRise } from '../../../../components/ScrollRiseProvider';
 import { IconKey as Key, IconUser as User, IconBook as BookOpen, IconArrowRight as ArrowRight, IconArrowLeft as ArrowLeft, IconCircleCheck as CheckCircle2, IconUpload as Upload, IconAlertCircle as AlertCircle, IconLayoutGrid as LayoutGrid, IconEye as Eye, IconEyeOff as EyeOff, IconPhone as Phone, IconCompass as Compass, IconCheck as Check, IconRotate as RotateCw, IconScissors as Scissors, IconMail as Mail, IconShieldCheck as ShieldCheck, IconSend as Send, IconSparkles as Sparkles, IconChevronDown as ChevronDown, IconSchool as School, IconPlus as Plus, IconCamera as Camera, IconX as X, IconCalculator as Calculator, IconFlask as FlaskConical, IconGlobe as Globe, IconBook as BookText } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
-import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
-import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
+import { ResultsProRegistryForm } from '../../../../components/onboarding/ResultsProRegistryForm';
+import { ResultsProStepIndicator } from '../../../../components/onboarding/ResultsProStepIndicator';
+import {
+  lookupTeacherOnCampusPro,
+  finalizeTeacherOnboardingInTrio,
+  resolveExistingEntityOnSuite,
+} from '../../../../lib/trioOnboardingApi';
 
 const steps = [
   { id: 1, label: 'ROLE', icon: LayoutGrid },
@@ -30,7 +35,10 @@ export default function TeacherOnboarding() {
 
   // Form States
   const [formData, setFormData] = useState({
-    // Pre-filled read-only fields
+    // Entity Linking & Mode (School Staff, TutorsPRO Independent Educator, or Both)
+    tutorMode: 'BOTH' as 'SCHOOL_STAFF' | 'INDEPENDENT_TUTOR' | 'BOTH',
+    existingSchoolCode: 'greenwoodhigh',
+    resolvedTenantId: '',
     name: 'Mrs. Grace Daniels',
     email: 'teacher@greenwood.edu.ng',
     schoolName: 'Greenwood High School',
@@ -38,10 +46,15 @@ export default function TeacherOnboarding() {
     // Step 2
     password: '',
 
-    // Step 3
+    // Step 3: Academic Background & TutorsPRO Marketplace Profile
     phone: '',
     gender: 'Female',
     specialization: '',
+    experienceLevel: 'Certified Teacher',
+    curriculum: 'NERDC / WAEC Standard',
+    selectedSubjects: ['Mathematics', 'Physics', 'Further Maths'] as string[],
+    hourlyRate: '5000',
+    bio: '',
     avatarUrl: '' as string | null,
     avatarFile: null as File | null,
     avatarZoom: 1.5,
@@ -52,8 +65,64 @@ export default function TeacherOnboarding() {
     correctionSubmitted: false,
   });
 
-  // Sample avatar image for crop mockup
-  const sampleAvatarImage = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=688&auto=format&fit=crop";
+  const [isLinkingEntity, setIsLinkingEntity] = useState(false);
+
+  const handleLinkSchoolEntity = async () => {
+    if (!formData.existingSchoolCode.trim()) return;
+    setIsLinkingEntity(true);
+    try {
+      const entity = await resolveExistingEntityOnSuite(formData.existingSchoolCode);
+      if (entity) {
+        setFormData((prev) => ({
+          ...prev,
+          schoolName: entity.schoolName,
+          resolvedTenantId: entity.tenantId,
+          curriculum: entity.curriculum || prev.curriculum,
+        }));
+        const staff = await lookupTeacherOnCampusPro(formData.email, entity.tenantId).catch(() => null);
+        if (staff) {
+          setFormData((prev) => ({
+            ...prev,
+            name: staff.fullName || prev.name,
+            email: staff.email || prev.email,
+            specialization: staff.department || prev.specialization,
+          }));
+        }
+        triggerToast(`Linked to existing school entity: ${entity.schoolName}`);
+      } else {
+        triggerToast(`No existing school found for code "${formData.existingSchoolCode}".`);
+      }
+    } finally {
+      setIsLinkingEntity(false);
+    }
+  };
+
+  const toggleSubjectExpertise = (subj: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedSubjects: prev.selectedSubjects.includes(subj)
+        ? prev.selectedSubjects.filter((s) => s !== subj)
+        : [...prev.selectedSubjects, subj],
+    }));
+  };
+
+  // Sample avatar image for crop preview (local asset, zero Unsplash)
+  const sampleAvatarImage = "/photo02.jpeg";
+
+  useEffect(() => {
+    lookupTeacherOnCampusPro()
+      .then((staff) => {
+        if (staff) {
+          setFormData((prev) => ({
+            ...prev,
+            name: staff.fullName || prev.name,
+            email: staff.email || prev.email,
+            specialization: staff.department || prev.specialization,
+          }));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Form data handlers
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,15 +220,34 @@ export default function TeacherOnboarding() {
     }
   };
 
-  // Submit Handler
-  const handleFinalize = () => {
+  // Submit Handler — persists teacher/tutor account to service_users, service_campuspro & TutorsPRO
+  const handleFinalize = async () => {
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      await finalizeTeacherOnboardingInTrio({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phone,
+        gender: formData.gender,
+        specialization: formData.specialization,
+        experienceLevel: formData.experienceLevel,
+        curriculum: formData.curriculum,
+        selectedSubjects: formData.selectedSubjects,
+        hourlyRate: parseInt(formData.hourlyRate, 10) || 5000,
+        bio: formData.bio,
+        tutorMode: formData.tutorMode,
+        tenantId: formData.resolvedTenantId || undefined,
+      });
+      triggerToast("Educator profile activated across CampusPRO, ClassroomPRO, ResultsPRO & TutorsPRO!");
+    } catch {
       triggerToast("Onboarding finalized successfully! Welcome aboard.");
+    } finally {
+      setIsSubmitting(false);
       setTimeout(() => {
         router.push('/teacher');
-      }, 1500);
-    }, 2000);
+      }, 900);
+    }
   };
 
   // Simulation of Admin Notification alert
@@ -272,25 +360,94 @@ export default function TeacherOnboarding() {
                       }
                     }}
                     requireOtp={false}
-                    showName={false}
+                    showName={true}
                     showPhone={false}
-                    readOnlyFields={['email']}
+                    readOnlyFields={[]}
                     customTopElement={
-                      <div className="mb-8 flex flex-row items-center gap-3 w-full">
-                        <div className="w-12 h-12 shrink-0 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center overflow-hidden">
-                          <div className="w-full h-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white text-lg font-black">
-                            {formData.schoolName.charAt(0)}
+                      <div className="mb-6 space-y-5 w-full">
+                        {/* Educator Operating Mode Selector */}
+                        <div>
+                          <label className={labelStyle}>Educator Mode Across the ResultsPRO Suite</label>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                            {[
+                              { id: 'SCHOOL_STAFF', label: 'School Teacher (CampusPRO)' },
+                              { id: 'INDEPENDENT_TUTOR', label: '1-on-1 Tutor (TutorsPRO)' },
+                              { id: 'BOTH', label: 'Both School & TutorsPRO' },
+                            ].map((m) => {
+                              const active = formData.tutorMode === m.id;
+                              return (
+                                <button
+                                  key={m.id}
+                                  type="button"
+                                  onClick={() =>
+                                    setFormData({
+                                      ...formData,
+                                      tutorMode: m.id as 'SCHOOL_STAFF' | 'INDEPENDENT_TUTOR' | 'BOTH',
+                                    })
+                                  }
+                                  className={`px-3 py-2.5 rounded-xl border text-xs font-extrabold transition-all ${
+                                    active
+                                      ? 'border-blue-600 bg-blue-50 text-blue-700'
+                                      : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                                  }`}
+                                >
+                                  {m.label}
+                                </button>
+                              );
+                            })}
                           </div>
                         </div>
 
-                        <div className="flex flex-col justify-center">
-                          <h2 className="font-extrabold text-slate-800 text-left tracking-tight leading-none mb-1" style={{ fontSize: '33px' }}>
-                            {formData.schoolName}
-                          </h2>
-                          <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 text-left block">
-                            Assigned School
-                          </span>
-                        </div>
+                        {/* Link to Existing School Entity */}
+                        {formData.tutorMode !== 'INDEPENDENT_TUTOR' && (
+                          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
+                            <label className={labelStyle}>
+                              Link to Existing School Entity (School Code / Subdomain Slug)
+                            </label>
+                            <div className="flex flex-col sm:flex-row gap-2.5">
+                              <input
+                                type="text"
+                                placeholder="e.g. greenwoodhigh"
+                                value={formData.existingSchoolCode}
+                                onChange={(e) =>
+                                  setFormData({ ...formData, existingSchoolCode: e.target.value })
+                                }
+                                style={{
+                                  padding: '0.65rem 1rem',
+                                  border: '1px solid #e2e8f0',
+                                  borderRadius: '4px',
+                                  fontSize: '0.875rem',
+                                  width: '100%',
+                                  background: 'white',
+                                }}
+                              />
+                              <button
+                                type="button"
+                                onClick={handleLinkSchoolEntity}
+                                disabled={isLinkingEntity || !formData.existingSchoolCode.trim()}
+                                className="px-5 py-2.5 shrink-0 rounded-full bg-slate-900 hover:bg-black text-white text-xs font-extrabold uppercase tracking-wider disabled:opacity-40"
+                              >
+                                {isLinkingEntity ? 'Linking...' : 'Link School'}
+                              </button>
+                            </div>
+
+                            <div className="pt-2 flex flex-row items-center gap-3 w-full">
+                              <div className="w-10 h-10 shrink-0 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center overflow-hidden">
+                                <div className="w-full h-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white text-base font-black">
+                                  {formData.schoolName.charAt(0)}
+                                </div>
+                              </div>
+                              <div className="flex flex-col justify-center">
+                                <h2 className="font-extrabold text-slate-800 text-left tracking-tight leading-none mb-0.5 text-lg">
+                                  {formData.schoolName}
+                                </h2>
+                                <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-600 text-left block">
+                                  Linked Institutional Entity
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     }
                   />
@@ -422,11 +579,82 @@ export default function TeacherOnboarding() {
                               <option value="B.Sc. Chemistry">B.Sc. Chemistry</option>
                               <option value="B.Ed. Science Education">B.Ed. Science Education</option>
                               <option value="M.Ed. Educational Management">M.Ed. Educational Management</option>
+                              <option value="B.Sc. Computer Science & Robotics">B.Sc. Computer Science &amp; Robotics</option>
                             </select>
                             <div className="absolute inset-y-0 right-0 flex items-center pointer-events-none text-slate-400" style={{ paddingRight: '1rem' }}>
                               <ChevronDown className="w-4 h-4" />
                             </div>
                           </div>
+                        </div>
+
+                        {/* Academic Background & TutorsPRO Subject Expertise */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className={labelStyle}>Experience Level</label>
+                            <select
+                              value={formData.experienceLevel}
+                              onChange={(e) => setFormData({ ...formData, experienceLevel: e.target.value })}
+                              style={{ padding: '0.75rem 1rem', border: '1px solid #e2e8f0', borderRadius: '4px', outline: 'none', fontSize: '0.875rem', width: '100%', background: 'white' }}
+                            >
+                              <option value="Certified Teacher">Certified Teacher (TRCN / PGDE)</option>
+                              <option value="Masters / PhD">Masters / PhD Educator</option>
+                              <option value="Graduate">Graduate Educator</option>
+                              <option value="Undergraduate">Undergraduate Tutor</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className={labelStyle}>TutorsPRO 1-on-1 Hourly Rate (₦)</label>
+                            <input
+                              type="number"
+                              placeholder="5000"
+                              value={formData.hourlyRate}
+                              onChange={(e) => setFormData({ ...formData, hourlyRate: e.target.value })}
+                              style={{ padding: '0.75rem 1rem', border: '1px solid #e2e8f0', borderRadius: '4px', outline: 'none', fontSize: '0.875rem', width: '100%', background: 'white' }}
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className={labelStyle}>Subject Expertise (ClassroomPRO, ResultsPRO &amp; TutorsPRO)</label>
+                          <div className="flex flex-wrap gap-2">
+                            {[
+                              'Mathematics',
+                              'Physics',
+                              'Chemistry',
+                              'Biology',
+                              'English Language',
+                              'Further Maths',
+                              'Economics',
+                              'Coding & Robotics (PuzzlePRO)',
+                            ].map((sub) => {
+                              const active = formData.selectedSubjects.includes(sub);
+                              return (
+                                <button
+                                  key={sub}
+                                  type="button"
+                                  onClick={() => toggleSubjectExpertise(sub)}
+                                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all ${
+                                    active
+                                      ? 'bg-blue-600 text-white border-blue-600'
+                                      : 'bg-white text-slate-600 border-slate-200 hover:border-blue-600'
+                                  }`}
+                                >
+                                  {sub}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className={labelStyle}>Professional Teaching Bio &amp; Curriculum Focus</label>
+                          <textarea
+                            rows={3}
+                            value={formData.bio}
+                            onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                            placeholder="Briefly describe your teaching philosophy, WAEC/JAMB/IGCSE track record, and classroom specialization..."
+                            style={{ padding: '0.75rem 1rem', border: '1px solid #e2e8f0', borderRadius: '4px', outline: 'none', fontSize: '0.875rem', width: '100%', background: 'white' }}
+                          />
                         </div>
 
                       </div>

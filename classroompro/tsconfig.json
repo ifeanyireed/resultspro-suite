@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@landing/*": ["../landing_page/src/*"]
     }
   },
   "include": [

@@ -8,7 +8,7 @@ import { Label } from "../../../../components/ui/label";
 import Link from "next/link";
 import { Skeleton } from "../../../../components/ui/skeleton";
 import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
-import api, { getCampusClasses } from "@/lib/api";
+import api, { getCampusClasses } from "../../../../lib/api";
 
 export default function CreateNotePage() {
   const [loading, setLoading] = useState(true);

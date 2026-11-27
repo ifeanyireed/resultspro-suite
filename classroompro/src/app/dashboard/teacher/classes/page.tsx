@@ -9,7 +9,7 @@ import {
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
-import { getCampusClasses } from "@/lib/api";
+import { getCampusClasses } from "../../../../lib/api";
 
 export default function AssignedClassesLearningView() {
   const [cohorts, setCohorts] = useState<any[]>([]);

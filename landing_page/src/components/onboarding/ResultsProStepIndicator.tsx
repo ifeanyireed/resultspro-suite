@@ -1,9 +1,8 @@
 import React from 'react';
-import { Icon as LucideIcon } from '@tabler/icons-react';
 
 export interface Step {
   id: string | number;
-  icon: LucideIcon;
+  icon: any;
   label: string;
 }
 
