@@ -19,6 +19,7 @@ import {
   AcademicCapIcon,
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
+import { useCampusProContext } from "@/context/CampusProContext";
 
 export interface WebinarStep {
   stepNumber: number;
@@ -201,8 +202,14 @@ const WEBINAR_STEPS: WebinarStep[] = [
 ];
 
 export const WebinarWorkflowDemo: React.FC = () => {
+  const { schoolName, branches } = useCampusProContext();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [autoPlay, setAutoPlay] = useState(false);
+
+  const branchSummary =
+    branches.length > 0
+      ? branches.map((b) => b.name).join(" · ")
+      : "Main Campus · Annex Campus · Abuja Campus";
 
   const stageCardRef = useRef<HTMLDivElement | null>(null);
   const metricNumRef = useRef<HTMLSpanElement | null>(null);
@@ -289,7 +296,7 @@ export const WebinarWorkflowDemo: React.FC = () => {
               &ldquo;How AI Can Transform End-of-Term Results Processing in Nigerian Schools&rdquo;
             </h2>
             <p className="text-sm text-white/80">
-              Promise: <strong className="text-white">From manual score entry to intelligent academic reporting</strong> — demonstrating Laurel Academy (Ikeja, Lekki &amp; Abuja Campuses) across ClassroomPRO, CampusPRO, and ResultsPRO.
+              Promise: <strong className="text-white">From manual score entry to intelligent academic reporting</strong> — demonstrating {schoolName} ({branchSummary}) across ClassroomPRO, CampusPRO, and ResultsPRO.
             </p>
           </div>
 

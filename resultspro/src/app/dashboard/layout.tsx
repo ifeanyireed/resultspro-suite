@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -10,11 +10,11 @@ import {
   ShieldExclamationIcon,
   SparklesIcon,
   AcademicCapIcon,
-  CheckBadgeIcon,
   ArrowsRightLeftIcon,
   CheckIcon,
 } from "@heroicons/react/24/outline";
 import { ModernDashboardLayout } from "@/components/layout/ModernDashboardLayout";
+import { CampusProProvider, useCampusProContext } from "@/context/CampusProContext";
 
 interface RoleProfile {
   id: string;
@@ -24,37 +24,71 @@ interface RoleProfile {
   avatar: string;
 }
 
-const RESULTSPRO_ROLES: RoleProfile[] = [
-  {
-    id: "results-officer",
-    roleName: "Principal / Results Officer",
-    fullName: "Dr. (Mrs.) Folake Adeyemi",
-    subtitle: "Laurel Academy (Ikeja, Lekki & Abuja Campuses)",
-    avatar: "/photo01.jpeg",
-  },
-  {
-    id: "subject-teacher",
-    roleName: "Subject Teacher",
-    fullName: "Mr. Tunde Ogunleye",
-    subtitle: "Mathematics & STEM Lead · Ikeja Campus",
-    avatar: "/photo02.jpeg",
-  },
-  {
-    id: "parent-guardian",
-    roleName: "Parent / Guardian",
-    fullName: "Chief & Mrs. O. Adeleke",
-    subtitle: "Parent of Chidinma Adeleke (JSS 2 Gold)",
-    avatar: "/photo03.jpeg",
-  },
-];
+function ResultsProDashboardShell({ children }: { children: React.ReactNode }) {
+  const { schoolName, branches, staff, parentProfile } = useCampusProContext();
 
-export default function ResultsProDashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [activeProfile, setActiveProfile] = useState<RoleProfile>(RESULTSPRO_ROLES[0]);
+  const roles: RoleProfile[] = useMemo(() => {
+    const branchNames = branches.length > 0
+      ? branches.map((b) => b.name.split("·")[0].trim()).join(", ")
+      : "Multi-Campus Network";
+
+    const principalStaff =
+      staff.find((s) => s.designation?.toLowerCase().includes("principal") || s.designation?.toLowerCase().includes("hod")) ||
+      staff[0];
+    const teacherStaff =
+      staff.find((s) => s.cadre === "TEACHING" && s.id !== principalStaff?.id) ||
+      staff[1] ||
+      staff[0];
+
+    const mainPrincipalName =
+      branches.find((b) => b.is_main)?.principal_name ||
+      (principalStaff ? `${principalStaff.title} ${principalStaff.full_name}`.trim() : "Dr. Olufemi Adeleke");
+
+    const teacherFullName = teacherStaff
+      ? `${teacherStaff.title} ${teacherStaff.full_name}`.trim()
+      : "Engr. David Adeleke";
+    const teacherSubtitle = teacherStaff
+      ? `${teacherStaff.designation} · ${teacherStaff.assigned_arm_name || teacherStaff.department}`
+      : `STEM & Mathematics Lead · ${branches[0]?.name || "Main Campus"}`;
+
+    const activeWard = parentProfile.activeWard || parentProfile.wards[0];
+    const parentName = parentProfile.name || "Mrs. Sarah Adeleke-Okonkwo";
+    const parentSubtitle = activeWard
+      ? `Parent of ${activeWard.name} (${activeWard.class_name} ${activeWard.arm_name})`
+      : `Verified Guardian · ${schoolName}`;
+
+    return [
+      {
+        id: "results-officer",
+        roleName: "Principal / Results Officer",
+        fullName: mainPrincipalName,
+        subtitle: `${schoolName} (${branchNames})`,
+        avatar: "/photo01.jpeg",
+      },
+      {
+        id: "subject-teacher",
+        roleName: "Subject Teacher",
+        fullName: teacherFullName,
+        subtitle: teacherSubtitle,
+        avatar: "/photo02.jpeg",
+      },
+      {
+        id: "parent-guardian",
+        roleName: "Parent / Guardian",
+        fullName: parentName,
+        subtitle: parentSubtitle,
+        avatar: "/photo03.jpeg",
+      },
+    ];
+  }, [schoolName, branches, staff, parentProfile]);
+
+  const [selectedRoleId, setSelectedRoleId] = useState<string>("results-officer");
   const [switcherOpen, setSwitcherOpen] = useState(false);
+
+  const activeProfile = useMemo(
+    () => roles.find((r) => r.id === selectedRoleId) || roles[0],
+    [roles, selectedRoleId]
+  );
 
   const navItems = [
     { label: "★ 9-Step Webinar Live Demo", icon: PlayCircleIcon, href: "/dashboard" },
@@ -64,6 +98,11 @@ export default function ResultsProDashboardLayout({
     { label: "AI Report Card Comments", icon: SparklesIcon, href: "/dashboard" },
     { label: "Parent AI Result & Remedial", icon: AcademicCapIcon, href: "/dashboard" },
   ];
+
+  const branchSummaryText =
+    branches.length > 0
+      ? `${branches.map((b) => b.name).join(" · ")} (CampusPRO Live Sync)`
+      : "CampusPRO System-of-Record Connected";
 
   return (
     <ModernDashboardLayout
@@ -137,7 +176,7 @@ export default function ResultsProDashboardLayout({
             </div>
           </div>
 
-          {/* Active Persona Card */}
+          {/* Active Persona Card (100% read from CampusPRO) */}
           <div className="px-6 mt-6">
             <div
               className="rounded-3xl p-5 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
@@ -159,10 +198,10 @@ export default function ResultsProDashboardLayout({
         <>
           <div className="flex items-center gap-3">
             <span className="px-3 py-1.5 rounded-xl bg-[#0D1060] text-white text-xs font-extrabold">
-              Laurel Academy Multi-Campus Suite
+              {schoolName}
             </span>
             <span className="hidden md:inline text-xs font-bold text-gray-500">
-              Ikeja · Lekki · Abuja Campuses (Zero Cross-Campus Leakage)
+              {branchSummaryText}
             </span>
           </div>
 
@@ -191,18 +230,18 @@ export default function ResultsProDashboardLayout({
               <div className="absolute right-0 mt-2 w-80 bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden z-50">
                 <div className="px-4 py-3 bg-[#0D1060] text-white flex items-center justify-between">
                   <span className="text-xs font-extrabold uppercase tracking-wider text-white">
-                    Switch ResultsPRO Role
+                    Switch CampusPRO Persona
                   </span>
                 </div>
                 <div className="p-2 space-y-1">
-                  {RESULTSPRO_ROLES.map((prof) => {
+                  {roles.map((prof) => {
                     const isCurrent = prof.id === activeProfile.id;
                     return (
                       <button
                         key={prof.id}
                         type="button"
                         onClick={() => {
-                          setActiveProfile(prof);
+                          setSelectedRoleId(prof.id);
                           setSwitcherOpen(false);
                         }}
                         className={`w-full text-left p-2.5 rounded-2xl flex items-center gap-3 transition-colors cursor-pointer ${
@@ -231,5 +270,17 @@ export default function ResultsProDashboardLayout({
     >
       {children}
     </ModernDashboardLayout>
+  );
+}
+
+export default function ResultsProDashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <CampusProProvider>
+      <ResultsProDashboardShell>{children}</ResultsProDashboardShell>
+    </CampusProProvider>
   );
 }

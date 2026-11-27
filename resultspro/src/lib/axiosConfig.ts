@@ -26,18 +26,22 @@ axiosInstance.interceptors.request.use(
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-      const tenantId = localStorage.getItem('tenantId') || localStorage.getItem('x-tenant-id') || localStorage.getItem('active_tenant_id');
+      const tenantId = localStorage.getItem('tenantId') || localStorage.getItem('x-tenant-id') || localStorage.getItem('active_tenant_id') || 'tenant-greenwoodhigh';
       if (tenantId) {
         config.headers['x-tenant-id'] = tenantId;
         config.headers['X-Tenant-ID'] = tenantId;
       }
     }
 
-    // Dynamic microservice routing for CampusPRO
-    const campusApi = typeof process !== 'undefined' ? process.env?.NEXT_PUBLIC_CAMPUS_API : '';
-    if (campusApi && config.url && (config.url.includes('/campus/') || config.url.startsWith('/campus') || config.url.startsWith('campus/'))) {
+    // Dynamic microservice routing for CampusPRO & ResultsPRO
+    const campusApi = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_CAMPUS_API) || 'https://resultspro-service-campuspro.onrender.com';
+    const resultsApi = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_RESULTS_API) || 'https://resultspro-service-resultspro.onrender.com';
+    if (config.url && (config.url.includes('/campus/') || config.url.startsWith('/campus') || config.url.startsWith('campus/') || config.url.startsWith('/api/v1/campus'))) {
       const cleanCampus = campusApi.replace(/\/+$/, '');
       config.baseURL = `${cleanCampus}/`;
+    } else if (config.url && (config.url.includes('/results/') || config.url.includes('/cards/'))) {
+      const cleanResults = resultsApi.replace(/\/+$/, '');
+      config.baseURL = `${cleanResults}/`;
     }
 
     return config;

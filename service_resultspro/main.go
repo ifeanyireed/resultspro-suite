@@ -23,8 +23,8 @@ func main() {
 	r.Use(cors.New(cors.Config{
 		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "X-App-ID", "X-App-Secret"},
-		ExposeHeaders:    []string{"Content-Length"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "X-App-ID", "X-App-Secret", "X-Tenant-ID", "x-tenant-id", "X-Tenant-Slug", "x-tenant-slug", "X-Tenant-Domain", "x-tenant-domain"},
+		ExposeHeaders:    []string{"Content-Length", "X-Tenant-ID", "X-Tenant-Slug"},
 		AllowCredentials: true,
 	}))
 
@@ -65,6 +65,11 @@ func main() {
 
 		// Scratch Card Batch Management (School Admins)
 		api.POST("/cards/generate", handlers.GenerateScratchCards)
+		api.GET("/cards/batches", handlers.GetScratchCardBatches)
+		api.GET("/cards/history", handlers.GetScratchCardUsageHistory)
+
+		// Compile EOT Gradebooks from CampusPRO Official Exam Scores & Attendance
+		api.POST("/results/instances/:instanceId/compile", handlers.CompileInstanceFromCampusPRO)
 
 		// Connected Trio AI Intelligence Endpoints
 		api.POST("/results/ocr/extract", handlers.ExtractMarksheetOCR)

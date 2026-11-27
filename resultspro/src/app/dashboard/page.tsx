@@ -16,11 +16,18 @@ import { TeacherCommentStudio } from "@/components/ai/TeacherCommentStudio";
 import { PerformanceIntelligenceView } from "@/components/ai/PerformanceIntelligenceView";
 import { ParentResultInterpreter } from "@/components/ai/ParentResultInterpreter";
 import { WebinarWorkflowDemo } from "@/components/ai/WebinarWorkflowDemo";
+import { useCampusProContext } from "@/context/CampusProContext";
 
 type TabKey = "webinar" | "intelligence" | "ocr" | "audit" | "comments" | "parent";
 
 export default function ResultsProAIConsole() {
   const [activeTab, setActiveTab] = useState<TabKey>("webinar");
+  const { schoolName, branches, students, activeSession, activeTerm } = useCampusProContext();
+
+  const branchSummary =
+    branches.length > 0
+      ? branches.map((b) => b.name).join(" · ")
+      : "Main Campus · Annex Campus";
 
   const tabs: { id: TabKey; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
     { id: "webinar", label: "★ 9-Step Webinar Live Demo", icon: PlayCircleIcon },
@@ -44,7 +51,8 @@ export default function ResultsProAIConsole() {
               ResultsPRO — AI School Assessment &amp; Performance Intelligence Engine
             </h1>
             <p className="text-sm text-gray-500 mt-1">
-              From manual score entry to intelligent multi-campus academic reporting for Laurel Academy (Ikeja, Lekki &amp; Abuja).
+              Live institutional &amp; student records synchronized 100% from <strong>CampusPRO</strong> for{" "}
+              <strong>{schoolName}</strong> ({branchSummary}) · {activeTerm} ({activeSession}) · {students.length} Enrolled Students.
             </p>
           </div>
         </div>

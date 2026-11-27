@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { CompactGradebook } from './gradebook/CompactGradebook';
 import { getTemplate } from '../lib/gradebookTemplates';
 import type { School, SchoolResult } from '../lib/schoolData';
+import { campusApi, resultsApi, getActiveTenantId } from '../lib/api';
 
 export interface ResultCheckerViewProps {
   standalone?: boolean;
@@ -28,19 +29,30 @@ export const ResultCheckerView: React.FC<ResultCheckerViewProps> = ({
   const [resultData, setResultData] = useState<any>(null);
   const [school, setSchool] = useState<School | null>(null);
 
-  // If schoolSlug is provided, attempt to fetch school details
+  // Fetch school institutional details 100% from service_campuspro
   useEffect(() => {
-    if (schoolSlug) {
-      const base = apiBaseUrl || '';
-      fetch(`${base}/onboarding/school/slug/${schoolSlug}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data?.success && data?.data) {
-            setSchool(data.data);
-          }
-        })
-        .catch((err) => console.error('Failed to fetch school info:', err));
-    }
+    const tenantCandidate = schoolSlug || getActiveTenantId();
+    campusApi
+      .get('/api/public/campus/website-config', {
+        params: { tenant: tenantCandidate, tenant_id: tenantCandidate },
+      })
+      .then((res) => {
+        const d = res.data;
+        if (d && (d.name || d.tenant_id)) {
+          setSchool({
+            slug: d.slug || schoolSlug || 'greenwoodhigh',
+            name: d.name || 'Greenwood High Academy',
+            motto: d.motto || 'Knowledge, Integrity & Excellence',
+            logo: d.logo_url || undefined,
+            primaryColor: d.primary_color || '#0D1060',
+            secondaryColor: d.secondary_color || '#FBBC04',
+            accentColor: d.accent_color || '#FBBC04',
+            contactEmail: d.contact_email || 'admin@scholars.ng',
+            contactPhone: d.contact_phone || '+234 800 000 0000',
+          });
+        }
+      })
+      .catch((err) => console.error('Failed to fetch school info from CampusPRO:', err));
   }, [schoolSlug, apiBaseUrl]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,33 +67,42 @@ export const ResultCheckerView: React.FC<ResultCheckerViewProps> = ({
     setLoading(true);
 
     try {
-      const base = apiBaseUrl || (typeof window !== 'undefined' ? (process.env.NEXT_PUBLIC_API_URL || '') : '');
-      const response = await fetch(`${base}/scratch-cards/validate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          pin: pin.trim(),
-          studentAdmissionNumber: admissionNumber.trim(),
-        }),
+      const tenantCandidate = schoolSlug || getActiveTenantId();
+      const response = await resultsApi.post('/api/v1/cards/verify', {
+        tenant_id: tenantCandidate,
+        pin: pin.trim(),
+        serial_number: pin.trim().startsWith('RP') ? pin.trim() : '',
+        student_id: admissionNumber.trim(),
+        admission_number: admissionNumber.trim(),
+        studentAdmissionNumber: admissionNumber.trim(),
       });
 
-      const json = await response.json().catch(() => null);
+      const json = response.data;
 
-      if (response.ok && json?.success) {
-        setResultData(json.data);
-        if (json.data?.school) {
-          setSchool(json.data.school);
+      if (json?.valid || json?.success) {
+        const payload = json.data || json;
+        setResultData(payload);
+        if (payload?.school?.name) {
+          setSchool((prev) => ({
+            slug: prev?.slug || schoolSlug || 'greenwoodhigh',
+            name: payload.school.name || prev?.name || 'Greenwood High Academy',
+            motto: payload.school.motto || prev?.motto || 'Knowledge, Integrity & Excellence',
+            logo: payload.school.logo || prev?.logo,
+            primaryColor: prev?.primaryColor || '#0D1060',
+            secondaryColor: prev?.secondaryColor || '#FBBC04',
+            accentColor: prev?.accentColor || '#FBBC04',
+            contactEmail: payload.school.contactEmail || prev?.contactEmail || 'admin@scholars.ng',
+            contactPhone: payload.school.contactPhone || prev?.contactPhone || '+234 800 000 0000',
+          }));
         }
         setSubmitted(true);
-        if (onSuccess) onSuccess(json.data);
+        if (onSuccess) onSuccess(payload);
       } else {
-        setError(json?.error || 'Invalid credentials or scratch card PIN. Please verify and try again.');
+        setError(json?.message || json?.error || 'Invalid credentials or scratch card PIN. Please verify and try again.');
       }
     } catch (err: any) {
-      console.error('Scratch card validation error:', err);
-      setError('Unable to connect to validation service. Please check your network connection.');
+      const apiMsg = err?.response?.data?.message || err?.response?.data?.error;
+      setError(apiMsg || 'Invalid credentials or scratch card PIN. Please verify and try again.');
     } finally {
       setLoading(false);
     }
