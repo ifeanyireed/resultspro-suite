@@ -250,11 +250,11 @@ function formatDateDisplay(dateStr: string): string {
 }
 
 export default function AcademicSessionManager() {
-  const [sessions, setSessions] = useState<AcademicSession[]>([FALLBACK_SESSION]);
-  const [selectedSessionId, setSelectedSessionId] = useState<string>(FALLBACK_SESSION.id);
-  const [terms, setTerms] = useState<AcademicTerm[]>(FALLBACK_TERMS);
-  const [events, setEvents] = useState<CalendarEvent[]>(FALLBACK_EVENTS);
-  const [loading, setLoading] = useState(false);
+  const [sessions, setSessions] = useState<AcademicSession[]>([]);
+  const [selectedSessionId, setSelectedSessionId] = useState<string>('');
+  const [terms, setTerms] = useState<AcademicTerm[]>([]);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [bannerNotice, setBannerNotice] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 

@@ -40,6 +40,7 @@ import SubjectManager from './SubjectManager';
 import TimetableManager from './TimetableManager';
 import TutorAssignmentManager from './TutorAssignmentManager';
 import MessagingManager from './MessagingManager';
+import ParentManager from './ParentManager';
 
 export interface CampusBranch {
   id: string;
@@ -115,6 +116,8 @@ type AcademicSubtab = 'overview' | 'session' | 'classes' | 'subjects' | 'assigne
 
 export function AcademicOperationsHub() {
   const [subtab, setSubtab] = useState<AcademicSubtab>('overview');
+  const [activeSessionLabel, setActiveSessionLabel] = useState<string>('');
+  const [armsCount, setArmsCount] = useState<number | undefined>(undefined);
   const [subjectsCount, setSubjectsCount] = useState<number | undefined>(undefined);
   const [tutorsCount, setTutorsCount] = useState<number | undefined>(undefined);
 
@@ -126,6 +129,17 @@ export function AcademicOperationsHub() {
         setSubtab(s);
       }
     }
+    api
+      .get('/v1/campus/summary')
+      .then((res) => {
+        if (res?.data) {
+          if (res.data.active_session) setActiveSessionLabel(res.data.active_session);
+          if (res.data.class_arms !== undefined) setArmsCount(res.data.class_arms);
+          if (res.data.subjects !== undefined) setSubjectsCount(res.data.subjects);
+          if (res.data.assigned_tutors !== undefined) setTutorsCount(res.data.assigned_tutors);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const handleSubtabChange = (newSubtab: AcademicSubtab) => {
@@ -139,10 +153,10 @@ export function AcademicOperationsHub() {
 
   const academicSubtabs: { id: AcademicSubtab; label: string; icon: any; count?: string }[] = [
     { id: 'overview', label: 'Overview', icon: ChartBarIcon, count: 'Pulse' },
-    { id: 'session', label: 'Academic Session', icon: CalendarIcon, count: '2026/2027' },
-    { id: 'classes', label: 'Classes', icon: AcademicCapIcon, count: '18 Arms' },
-    { id: 'subjects', label: 'Subjects', icon: BookOpenIcon, count: subjectsCount !== undefined ? `${subjectsCount}` : '28' },
-    { id: 'assigned-tutors', label: 'Assigned Tutors', icon: UserGroupIcon, count: tutorsCount !== undefined ? `${tutorsCount}` : 'Faculty' },
+    { id: 'session', label: 'Academic Session', icon: CalendarIcon, count: activeSessionLabel || undefined },
+    { id: 'classes', label: 'Classes', icon: AcademicCapIcon, count: armsCount !== undefined ? `${armsCount} Arms` : undefined },
+    { id: 'subjects', label: 'Subjects', icon: BookOpenIcon, count: subjectsCount !== undefined ? `${subjectsCount}` : undefined },
+    { id: 'assigned-tutors', label: 'Assigned Tutors', icon: UserGroupIcon, count: tutorsCount !== undefined ? `${tutorsCount}` : undefined },
     { id: 'timetable', label: 'Timetable', icon: ClockIcon, count: 'Weekly Grid' },
   ];
 
@@ -208,170 +222,13 @@ export function AcademicOperationsHub() {
 }
 
 export function ParentsDashboard() {
-  return (
-    <>
-      <MotionRise className="flex items-end justify-between mb-8 mt-2">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Parents &amp; Guardians CRM</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Manage parent accounts, ward linkages, PTA communications, and portal engagement.
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button className="bg-[#146ef5] hover:bg-[#105bd1] text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm shadow-[#146ef5]/20 transition-all flex items-center gap-2">
-            <EnvelopeIcon className="w-4 h-4" />
-            Send PTA Broadcast
-          </button>
-          <button className="bg-white border border-[#146ef5] text-[#146ef5] hover:bg-[#f6f9f8] text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors flex items-center gap-2">
-            <DocumentTextIcon className="w-4 h-4" />
-            Export Directory
-          </button>
-        </div>
-      </MotionRise>
-
-      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <MotionRise className="bg-gradient-to-br from-[#146ef5] to-[#0a2e70] rounded-[1.5rem] p-6 shadow-sm shadow-[#146ef5]/10 flex flex-col justify-between aspect-square relative overflow-hidden group hover:-translate-y-1 transition-transform">
-          <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#041533] rounded-full filter blur-[3rem] opacity-60"></div>
-          <div className="flex justify-between items-start z-10">
-            <h3 className="text-xl font-normal text-white">Active Guardians</h3>
-            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm">
-              <ArrowUpRightIcon className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="z-10">
-            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">892</h2>
-            <div className="flex items-center gap-1.5 text-xs text-white/80">
-              <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1">
-                <ArrowTrendingUpIcon className="w-3 h-3" /> +9.4%
-              </div>
-              <span>Portal logins this week</span>
-            </div>
-          </div>
-        </MotionRise>
-
-        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
-          <div className="flex justify-between items-start">
-            <h3 className="text-xl font-normal text-gray-900">Ward Linkages</h3>
-            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
-              <UsersIcon className="w-4 h-4" />
-            </div>
-          </div>
-          <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">98.4%</h2>
-            <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <span className="text-gray-400">1,228 of 1,248 students linked</span>
-            </div>
-          </div>
-        </MotionRise>
-
-        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
-          <div className="flex justify-between items-start">
-            <h3 className="text-xl font-normal text-gray-900">Notice Read Rate</h3>
-            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
-              <BoltIcon className="w-4 h-4" />
-            </div>
-          </div>
-          <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">91%</h2>
-            <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <span className="text-gray-400">SMS, WhatsApp &amp; Email</span>
-            </div>
-          </div>
-        </MotionRise>
-
-        <MotionRise className="bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col justify-between aspect-square group hover:-translate-y-1 transition-transform">
-          <div className="flex justify-between items-start">
-            <h3 className="text-xl font-normal text-gray-900">PTA Attendance</h3>
-            <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
-              <CheckCircleIcon className="w-4 h-4" />
-            </div>
-          </div>
-          <div>
-            <h2 className="text-5xl font-medium tracking-tight text-gray-900 mb-2">86%</h2>
-            <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <span className="text-gray-400">Last Term General Forum</span>
-            </div>
-          </div>
-        </MotionRise>
-      </MotionStagger>
-
-      <MotionRise delay={0.08} className="bg-white rounded-[1.5rem] shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-          <h3 className="text-lg font-medium text-gray-900">Guardian Directory &amp; Ward Accounts</h3>
-          <span className="text-xs font-semibold text-[#146ef5] bg-blue-50 px-3 py-1 rounded-full">
-            Verified Household Profiles
-          </span>
-        </div>
-        <table className="w-full text-left">
-          <thead>
-            <tr className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              <th className="px-6 py-4">Parent / Guardian</th>
-              <th className="px-6 py-4">Linked Wards</th>
-              <th className="px-6 py-4">Contact</th>
-              <th className="px-6 py-4">Fee Status</th>
-              <th className="px-6 py-4">Portal Activity</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {[
-              {
-                name: 'Chief & Mrs. O. Adeleke',
-                wards: 'Tomiwa Adeleke (SS 2), Kemi Adeleke (JSS 3)',
-                contact: 'adeleke.family@gmail.com · +234 803 412 8890',
-                feeStatus: 'Cleared',
-                activity: 'Active Today',
-              },
-              {
-                name: 'Engr. & Dr. (Mrs.) Chidi Nwosu',
-                wards: 'Chisom Nwosu (SS 3)',
-                contact: 'c.nwosu@nwosueng.ng · +234 809 221 3401',
-                feeStatus: 'Cleared',
-                activity: 'Active Yesterday',
-              },
-              {
-                name: 'Alhaji & Hajiya Ibrahim Danjuma',
-                wards: 'Amina Danjuma (JSS 2), Musa Danjuma (Primary 6)',
-                contact: 'ibrahim.danjuma@yahoo.com · +234 802 310 5542',
-                feeStatus: 'Installment 2/3',
-                activity: 'Active 2d ago',
-              },
-              {
-                name: 'Barr. & Mrs. Efe Omoregie',
-                wards: 'Osaze Omoregie (SS 1)',
-                contact: 'efe.omoregie@chambers.ng · +234 805 774 1129',
-                feeStatus: 'Cleared',
-                activity: 'Active Today',
-              },
-            ].map((p, i) => (
-              <tr key={i} className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4 font-medium text-gray-900">{p.name}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{p.wards}</td>
-                <td className="px-6 py-4 text-xs text-gray-500">{p.contact}</td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
-                      p.feeStatus === 'Cleared'
-                        ? 'bg-emerald-50 text-emerald-700'
-                        : 'bg-amber-50 text-amber-700'
-                    }`}
-                  >
-                    {p.feeStatus}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-xs font-medium text-[#146ef5]">{p.activity}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </MotionRise>
-    </>
-  );
+  return <ParentManager />;
 }
 
 export { MessagingManager };
 export const MessagingDashboard = MessagingManager;
 
-type MobileRoleType = 'Parent' | 'Teacher' | 'Driver' | 'Admin';
+type MobileRoleType = 'Parent' | 'Teacher' | 'Student' | 'Driver' | 'Admin';
 
 interface MobileAppAccount {
   id: string;
@@ -387,59 +244,6 @@ interface MobileAppAccount {
   inviteLink: string;
 }
 
-const CAMPUS_APP_INSTANCES: Record<
-  string,
-  {
-    appId: string;
-    appName: string;
-    bundleId: string;
-    version: string;
-    deepLinkPrefix: string;
-    activeDevices: number;
-  }
-> = {
-  'All Campuses (Multi-Campus)': {
-    appId: 'CMP-APP-GLOBAL',
-    appName: 'ScholarsNG Unified Multi-Campus Mobile',
-    bundleId: 'ng.scholars.campus.unified',
-    version: 'v4.8.2 (iOS & Android)',
-    deepLinkPrefix: 'https://app.scholars.ng/invite/GLOBAL',
-    activeDevices: 1184,
-  },
-  'Main Campus · Lekki Phase 1': {
-    appId: 'CMP-APP-LK01',
-    appName: 'ScholarsNG Mobile · Lekki Main Campus',
-    bundleId: 'ng.scholars.campus.lekki',
-    version: 'v4.8.2 (iOS & Android)',
-    deepLinkPrefix: 'https://app.scholars.ng/invite/CMP-LK01',
-    activeDevices: 540,
-  },
-  'Annex Campus · Ikeja GRA': {
-    appId: 'CMP-APP-IK02',
-    appName: 'ScholarsNG Mobile · Ikeja GRA Annex',
-    bundleId: 'ng.scholars.campus.ikeja',
-    version: 'v4.8.2 (iOS & Android)',
-    deepLinkPrefix: 'https://app.scholars.ng/invite/CMP-IK02',
-    activeDevices: 312,
-  },
-  'Victoria Island Junior Campus': {
-    appId: 'CMP-APP-VI03',
-    appName: 'ScholarsNG Mobile · VI Junior Campus',
-    bundleId: 'ng.scholars.campus.vi',
-    version: 'v4.8.2 (iOS & Android)',
-    deepLinkPrefix: 'https://app.scholars.ng/invite/CMP-VI03',
-    activeDevices: 198,
-  },
-  'Abuja Maitama Campus': {
-    appId: 'CMP-APP-AB04',
-    appName: 'ScholarsNG Mobile · Abuja Maitama',
-    bundleId: 'ng.scholars.campus.abuja',
-    version: 'v4.8.2 (iOS & Android)',
-    deepLinkPrefix: 'https://app.scholars.ng/invite/CMP-AB04',
-    activeDevices: 134,
-  },
-};
-
 const ROLE_CONFIG: Record<
   MobileRoleType,
   {
@@ -452,7 +256,7 @@ const ROLE_CONFIG: Record<
   Parent: {
     prefix: 'MOB-PRN',
     badgeClass: 'bg-blue-50 text-[#146ef5] border-blue-200',
-    defaultScopePlaceholder: 'e.g., Ward: Tomiwa Adeleke (SS 2 Science)',
+    defaultScopePlaceholder: 'e.g., Ward: Kelechi Okonkwo (SS 3 Science Diamond)',
     permissionsSummary: 'Sees linked wards’ results, fee invoices, attendance, bus GPS & teacher chat',
   },
   Teacher: {
@@ -461,10 +265,16 @@ const ROLE_CONFIG: Record<
     defaultScopePlaceholder: 'e.g., Assigned: SS 1 – SS 3 Mathematics',
     permissionsSummary: 'Sees assigned class arms, CA mark-sheet entry, timetable & student attendance',
   },
+  Student: {
+    prefix: 'MOB-STD',
+    badgeClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    defaultScopePlaceholder: 'e.g., Class: SS 3 Science Diamond',
+    permissionsSummary: 'Sees personal timetable, CBT homework, library catalog, meal wallet & digital ID',
+  },
   Driver: {
     prefix: 'MOB-DRV',
     badgeClass: 'bg-amber-50 text-amber-700 border-amber-200',
-    defaultScopePlaceholder: 'e.g., Bus Route B-04 · Lekki Phase 1 – Chevron',
+    defaultScopePlaceholder: 'e.g., Bus Route A · Lekki Phase 1 – Admiralty',
     permissionsSummary: 'Sees assigned bus route manifest, student boarding QR scanner & live GPS telemetry',
   },
   Admin: {
@@ -476,110 +286,47 @@ const ROLE_CONFIG: Record<
 };
 
 export function MobileAppDashboard({ selectedCampus }: { selectedCampus: string }) {
+  const { campuses } = useCampusOS();
   const [roleFilter, setRoleFilter] = useState<'All' | MobileRoleType>('All');
   const [inviteRole, setInviteRole] = useState<MobileRoleType>('Parent');
-  const [inviteCampus, setInviteCampus] = useState<string>(
-    selectedCampus === 'All Campuses (Multi-Campus)'
-      ? 'Main Campus · Lekki Phase 1'
-      : selectedCampus
-  );
+  const defaultCampusName =
+    selectedCampus !== 'All Campuses (Multi-Campus)'
+      ? selectedCampus
+      : campuses[0]?.name || 'Main Campus · Lekki Phase 1';
+  const [inviteCampus, setInviteCampus] = useState<string>(defaultCampusName);
   const [recipientName, setRecipientName] = useState('');
   const [recipientContact, setRecipientContact] = useState('');
   const [recipientScope, setRecipientScope] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [inviteSentBanner, setInviteSentBanner] = useState<string | null>(null);
+  const [accounts, setAccounts] = useState<MobileAppAccount[]>([]);
 
-  const [accounts, setAccounts] = useState<MobileAppAccount[]>([
-    {
-      id: '1',
-      mobileUserId: 'MOB-PRN-88412',
-      name: 'Chief & Mrs. O. Adeleke',
-      contact: '+234 803 412 8890 · adeleke.family@gmail.com',
-      role: 'Parent',
-      campus: 'Main Campus · Lekki Phase 1',
-      scopeDetail: 'Wards: Tomiwa Adeleke (SS 2), Kemi Adeleke (JSS 3)',
-      permissionsSummary: ROLE_CONFIG.Parent.permissionsSummary,
-      deviceStatus: 'iOS 18 · iPhone 15 Pro',
-      status: 'Active',
-      inviteLink: 'https://app.scholars.ng/invite/CMP-LK01?role=parent&uid=MOB-PRN-88412',
-    },
-    {
-      id: '2',
-      mobileUserId: 'MOB-TCH-30914',
-      name: 'Mr. David Jenkins',
-      contact: '+234 809 118 4402 · d.jenkins@scholars.ng',
-      role: 'Teacher',
-      campus: 'Main Campus · Lekki Phase 1',
-      scopeDetail: 'HOD Mathematics · SS 1, SS 2 & SS 3 Science',
-      permissionsSummary: ROLE_CONFIG.Teacher.permissionsSummary,
-      deviceStatus: 'Android 14 · Samsung S24',
-      status: 'Active',
-      inviteLink: 'https://app.scholars.ng/invite/CMP-LK01?role=teacher&uid=MOB-TCH-30914',
-    },
-    {
-      id: '3',
-      mobileUserId: 'MOB-DRV-55108',
-      name: 'Mr. Sunday Olatunji',
-      contact: '+234 802 665 9012 · transport.b04@scholars.ng',
-      role: 'Driver',
-      campus: 'Main Campus · Lekki Phase 1',
-      scopeDetail: 'Coaster Bus #04 · Route B-04 (Lekki Phase 1 – Ikate – Ajah)',
-      permissionsSummary: ROLE_CONFIG.Driver.permissionsSummary,
-      deviceStatus: 'Android 13 · Transit Tablet',
-      status: 'Active',
-      inviteLink: 'https://app.scholars.ng/invite/CMP-LK01?role=driver&uid=MOB-DRV-55108',
-    },
-    {
-      id: '4',
-      mobileUserId: 'MOB-ADM-10204',
-      name: 'Mrs. Folake Adeyemi (FCA)',
-      contact: '+234 805 339 1100 · bursar.ikeja@scholars.ng',
-      role: 'Admin',
-      campus: 'Annex Campus · Ikeja GRA',
-      scopeDetail: 'Campus Bursar & Operations Controller',
-      permissionsSummary: ROLE_CONFIG.Admin.permissionsSummary,
-      deviceStatus: 'iOS 18 · iPad Air + iPhone',
-      status: 'Active',
-      inviteLink: 'https://app.scholars.ng/invite/CMP-IK02?role=admin&uid=MOB-ADM-10204',
-    },
-    {
-      id: '5',
-      mobileUserId: 'MOB-DRV-55192',
-      name: 'Mr. Musa Abdullahi',
-      contact: '+234 806 712 3389 · transport.abj01@scholars.ng',
-      role: 'Driver',
-      campus: 'Abuja Maitama Campus',
-      scopeDetail: 'Hiace Bus #02 · Route ABJ-01 (Maitama – Wuse II – Asokoro)',
-      permissionsSummary: ROLE_CONFIG.Driver.permissionsSummary,
-      deviceStatus: 'Awaiting First Login',
-      status: 'Invite Sent',
-      inviteLink: 'https://app.scholars.ng/invite/CMP-AB04?role=driver&uid=MOB-DRV-55192',
-    },
-    {
-      id: '6',
-      mobileUserId: 'MOB-PRN-88940',
-      name: 'Engr. & Dr. (Mrs.) Chidi Nwosu',
-      contact: '+234 809 221 3401 · c.nwosu@nwosueng.ng',
-      role: 'Parent',
-      campus: 'Victoria Island Junior Campus',
-      scopeDetail: 'Ward: Chisom Nwosu (Year 6 Emerald)',
-      permissionsSummary: ROLE_CONFIG.Parent.permissionsSummary,
-      deviceStatus: 'iOS 18 · iPhone 14',
-      status: 'Active',
-      inviteLink: 'https://app.scholars.ng/invite/CMP-VI03?role=parent&uid=MOB-PRN-88940',
-    },
-  ]);
+  useEffect(() => {
+    if (selectedCampus !== 'All Campuses (Multi-Campus)') {
+      setInviteCampus(selectedCampus);
+    } else if (campuses.length > 0 && !inviteCampus) {
+      setInviteCampus(campuses[0].name);
+    }
+  }, [selectedCampus, campuses, inviteCampus]);
 
-  const activeCampusMeta =
-    CAMPUS_APP_INSTANCES[selectedCampus] || CAMPUS_APP_INSTANCES['All Campuses (Multi-Campus)'];
+  const activeBranch = campuses.find((c) => c.name === selectedCampus);
+  const activeCampusMeta = {
+    appId: activeBranch?.code ? `CMP-APP-${activeBranch.code}` : 'CMP-APP-GLOBAL',
+    appName:
+      selectedCampus === 'All Campuses (Multi-Campus)'
+        ? 'Unified Multi-Campus Mobile App'
+        : `CampusPRO Mobile · ${selectedCampus}`,
+    bundleId: 'ng.scholars.campus.unified',
+    version: 'v4.8.2 (iOS & Android)',
+    deepLinkPrefix: `https://app.scholars.ng/invite/${activeBranch?.code || 'GLOBAL'}`,
+    activeDevices: accounts.length,
+  };
 
   // Preview next generated Mobile App User ID & role-scoped invite link
   const previewRoleMeta = ROLE_CONFIG[inviteRole];
-  const deterministicSuffix = String(10000 + accounts.length * 731).slice(0, 5);
+  const deterministicSuffix = String(10000 + (accounts.length + 1) * 731).slice(0, 5);
   const previewMobileUserId = `${previewRoleMeta.prefix}-${deterministicSuffix}`;
-  const inviteCampusMeta =
-    CAMPUS_APP_INSTANCES[inviteCampus] || CAMPUS_APP_INSTANCES['Main Campus · Lekki Phase 1'];
-  const previewInviteLink = `${inviteCampusMeta.deepLinkPrefix}?role=${inviteRole.toLowerCase()}&uid=${previewMobileUserId}`;
+  const previewInviteLink = `${activeCampusMeta.deepLinkPrefix}?role=${inviteRole.toLowerCase()}&uid=${previewMobileUserId}`;
 
   const handleCopy = (text: string, idKey: string) => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -593,37 +340,48 @@ export function MobileAppDashboard({ selectedCampus }: { selectedCampus: string 
     api
       .get('/v1/campus/mobile-accounts')
       .then((res) => {
-        if (Array.isArray(res.data) && res.data.length > 0) {
-          const mapped: MobileAppAccount[] = res.data.map((row: any) => {
-            const normRole = (row.role || 'parent').toLowerCase();
-            const roleCap: MobileRoleType =
-              normRole === 'teacher'
-                ? 'Teacher'
-                : normRole === 'driver'
-                ? 'Driver'
-                : normRole === 'admin'
-                ? 'Admin'
-                : 'Parent';
-            const uid = row.invite_code || `${ROLE_CONFIG[roleCap].prefix}-${String(row.id || '').slice(0, 5).toUpperCase()}`;
-            return {
-              id: String(row.id),
-              mobileUserId: uid,
-              name: row.full_name,
-              contact: [row.phone, row.email].filter(Boolean).join(' · '),
-              role: roleCap,
-              campus: selectedCampus === 'All Campuses (Multi-Campus)' ? 'Main Campus · Lekki Phase 1' : selectedCampus,
-              scopeDetail: row.linked_ward_or_class || `${roleCap} Account`,
-              permissionsSummary: ROLE_CONFIG[roleCap].permissionsSummary,
-              deviceStatus: row.device_platform || 'iOS / Android',
-              status: row.account_status === 'INVITE_SENT' ? 'Invite Sent' : 'Active',
-              inviteLink: `https://app.scholars.ng/invite/CMP-LK01?role=${roleCap.toLowerCase()}&uid=${uid}`,
-            };
-          });
-          setAccounts(mapped);
-        }
+        const list = Array.isArray(res.data) ? res.data : res.data?.accounts || [];
+        const mapped: MobileAppAccount[] = list.map((row: any) => {
+          const normRole = (row.role || 'parent').toLowerCase();
+          const roleCap: MobileRoleType =
+            normRole === 'teacher'
+              ? 'Teacher'
+              : normRole === 'student'
+              ? 'Student'
+              : normRole === 'driver'
+              ? 'Driver'
+              : normRole === 'admin'
+              ? 'Admin'
+              : 'Parent';
+          const uid =
+            row.invite_code ||
+            row.account_id ||
+            `${ROLE_CONFIG[roleCap].prefix}-${String(row.id || '').slice(0, 5).toUpperCase()}`;
+          return {
+            id: String(row.id),
+            mobileUserId: uid,
+            name: row.full_name || row.user_name,
+            contact: [row.phone, row.email].filter(Boolean).join(' · '),
+            role: roleCap,
+            campus:
+              row.campus_name ||
+              (selectedCampus === 'All Campuses (Multi-Campus)'
+                ? campuses[0]?.name || 'Main Campus · Lekki Phase 1'
+                : selectedCampus),
+            scopeDetail: row.linked_ward_or_class || row.ward_name || `${roleCap} Account`,
+            permissionsSummary: ROLE_CONFIG[roleCap].permissionsSummary,
+            deviceStatus: row.device_platform || row.device_model || row.app_version || 'iOS / Android',
+            status:
+              row.account_status === 'INVITE_SENT' || row.status === 'INVITED'
+                ? 'Invite Sent'
+                : 'Active',
+            inviteLink: `https://app.scholars.ng/invite/GLOBAL?role=${roleCap.toLowerCase()}&uid=${uid}`,
+          };
+        });
+        setAccounts(mapped);
       })
       .catch((err) => console.error('Failed to load mobile app accounts:', err));
-  }, [selectedCampus]);
+  }, [selectedCampus, campuses]);
 
   const handleSendInvite = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -660,7 +418,7 @@ export function MobileAppDashboard({ selectedCampus }: { selectedCampus: string 
       permissionsSummary: previewRoleMeta.permissionsSummary,
       deviceStatus: 'Invite Dispatched · Awaiting Login',
       status: 'Invite Sent',
-      inviteLink: `${inviteCampusMeta.deepLinkPrefix}?role=${inviteRole.toLowerCase()}&uid=${finalCode}`,
+      inviteLink: `${activeCampusMeta.deepLinkPrefix}?role=${inviteRole.toLowerCase()}&uid=${finalCode}`,
     };
 
     setAccounts([newEntry, ...accounts]);
@@ -679,6 +437,11 @@ export function MobileAppDashboard({ selectedCampus }: { selectedCampus: string 
     const matchesRole = roleFilter === 'All' || acc.role === roleFilter;
     return matchesCampus && matchesRole;
   });
+
+  const parentCount = accounts.filter((a) => a.role === 'Parent').length;
+  const teacherCount = accounts.filter((a) => a.role === 'Teacher').length;
+  const studentDriverCount = accounts.filter((a) => a.role === 'Student' || a.role === 'Driver').length;
+  const adminCount = accounts.filter((a) => a.role === 'Admin').length;
 
   return (
     <div className="space-y-6">
@@ -712,22 +475,22 @@ export function MobileAppDashboard({ selectedCampus }: { selectedCampus: string 
           <div className="lg:col-span-5 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3">
             <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4">
               <div className="text-xs text-white/70">Parent App IDs</div>
-              <div className="text-2xl font-bold mt-1">842</div>
+              <div className="text-2xl font-bold mt-1">{parentCount}</div>
               <div className="text-[11px] text-emerald-300 mt-0.5">MOB-PRN-*</div>
             </div>
             <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4">
               <div className="text-xs text-white/70">Teacher App IDs</div>
-              <div className="text-2xl font-bold mt-1">94</div>
+              <div className="text-2xl font-bold mt-1">{teacherCount}</div>
               <div className="text-[11px] text-purple-200 mt-0.5">MOB-TCH-*</div>
             </div>
             <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4">
-              <div className="text-xs text-white/70">Driver App IDs</div>
-              <div className="text-2xl font-bold mt-1">28</div>
-              <div className="text-[11px] text-white/90 mt-0.5">MOB-DRV-*</div>
+              <div className="text-xs text-white/70">Student / Driver IDs</div>
+              <div className="text-2xl font-bold mt-1">{studentDriverCount}</div>
+              <div className="text-[11px] text-white/90 mt-0.5">MOB-STD / DRV</div>
             </div>
             <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4">
               <div className="text-xs text-white/70">Admin App IDs</div>
-              <div className="text-2xl font-bold mt-1">14</div>
+              <div className="text-2xl font-bold mt-1">{adminCount}</div>
               <div className="text-[11px] text-blue-200 mt-0.5">MOB-ADM-*</div>
             </div>
           </div>
@@ -798,10 +561,15 @@ export function MobileAppDashboard({ selectedCampus }: { selectedCampus: string 
               onChange={(e) => setInviteCampus(e.target.value)}
               className="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-[#146ef5]"
             >
-              <option>Main Campus · Lekki Phase 1</option>
-              <option>Annex Campus · Ikeja GRA</option>
-              <option>Victoria Island Junior Campus</option>
-              <option>Abuja Maitama Campus</option>
+              {campuses.length > 0 ? (
+                campuses.map((c) => (
+                  <option key={c.id} value={c.name}>
+                    {c.name}
+                  </option>
+                ))
+              ) : (
+                <option value={inviteCampus}>{inviteCampus}</option>
+              )}
             </select>
           </div>
 

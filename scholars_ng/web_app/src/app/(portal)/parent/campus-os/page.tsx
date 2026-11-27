@@ -417,9 +417,9 @@ function ParentCampusOSContent() {
           <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
               <div>
-                <h3 className="text-base font-bold text-gray-900">Term Bursary & Tuition Invoices</h3>
+                <h3 className="text-base font-bold text-gray-900">Term Bursary &amp; Tuition Invoices</h3>
                 <p className="text-xs text-gray-500 mt-0.5">
-                  Automated breakdown of tuition, boarding levies, ICT infrastructure, and books.
+                  Automated breakdown of tuition, boarding levies, ICT infrastructure, and books for {activeWard?.name}.
                 </p>
               </div>
               <button
@@ -434,13 +434,17 @@ function ParentCampusOSContent() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
               <div className="p-4 rounded-xl border border-blue-100 bg-blue-50/50">
                 <span className="text-[11px] font-bold text-blue-700 uppercase">Total Term Billing</span>
-                <p className="text-2xl font-bold text-gray-900 mt-1">₦350,000</p>
-                <p className="text-xs text-gray-500 mt-1">2026/2027 Academic Session · First Term</p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">
+                  ₦{Number(dashboardData?.campus_operations?.bursary?.total_billed || 285000).toLocaleString()}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {dashboardData?.school?.session || '2026/2027 Session'} · {dashboardData?.campus_operations?.bursary?.term_name || 'First Term'}
+                </p>
               </div>
               <div className="p-4 rounded-xl border border-emerald-100 bg-emerald-50/50">
                 <span className="text-[11px] font-bold text-emerald-700 uppercase">Total Settled</span>
                 <p className="text-2xl font-bold text-emerald-700 mt-1">
-                  ₦{(350000 - Number(activeWard?.outstanding_fees || 0)).toLocaleString()}
+                  ₦{Number(dashboardData?.campus_operations?.bursary?.amount_paid ?? (285000 - Number(activeWard?.outstanding_fees || 0))).toLocaleString()}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">Verified via Central Paystack Switch</p>
               </div>
@@ -449,7 +453,9 @@ function ParentCampusOSContent() {
                 <p className="text-2xl font-bold text-amber-800 mt-1">
                   ₦{Number(activeWard?.outstanding_fees || 0).toLocaleString()}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">Due before midterm examination clearances</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Due: {dashboardData?.campus_operations?.bursary?.next_due_date || 'Before Terminal Exams'}
+                </p>
               </div>
             </div>
 
@@ -465,42 +471,26 @@ function ParentCampusOSContent() {
                       <th className="py-3 px-4">Category</th>
                       <th className="py-3 px-4">Amount</th>
                       <th className="py-3 px-4">Status</th>
-                      <th className="py-3 px-4 text-right">Receipt</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 text-gray-700">
-                    <tr className="hover:bg-gray-50/60">
-                      <td className="py-3.5 px-4 font-mono font-bold text-gray-900">FEE-TUI-01</td>
-                      <td className="py-3.5 px-4 font-medium">Senior Secondary Academic Tuition</td>
-                      <td className="py-3.5 px-4"><span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold">Academic</span></td>
-                      <td className="py-3.5 px-4 font-bold text-gray-900">₦220,000</td>
-                      <td className="py-3.5 px-4"><span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">PART-PAID</span></td>
-                      <td className="py-3.5 px-4 text-right font-bold text-[#146ef5] hover:underline cursor-pointer">Download ↓</td>
-                    </tr>
-                    <tr className="hover:bg-gray-50/60">
-                      <td className="py-3.5 px-4 font-mono font-bold text-gray-900">FEE-LAB-04</td>
-                      <td className="py-3.5 px-4 font-medium">Physics & STEM Laboratory Practical Consumables</td>
-                      <td className="py-3.5 px-4"><span className="px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 text-[10px] font-bold">Laboratory</span></td>
-                      <td className="py-3.5 px-4 font-bold text-gray-900">₦45,000</td>
-                      <td className="py-3.5 px-4"><span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">PAID</span></td>
-                      <td className="py-3.5 px-4 text-right font-bold text-[#146ef5] hover:underline cursor-pointer">Download ↓</td>
-                    </tr>
-                    <tr className="hover:bg-gray-50/60">
-                      <td className="py-3.5 px-4 font-mono font-bold text-gray-900">FEE-ICT-02</td>
-                      <td className="py-3.5 px-4 font-medium">ClassroomPRO & CBT Exam Infrastructure Levy</td>
-                      <td className="py-3.5 px-4"><span className="px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 text-[10px] font-bold">Technology</span></td>
-                      <td className="py-3.5 px-4 font-bold text-gray-900">₦35,000</td>
-                      <td className="py-3.5 px-4"><span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">PAID</span></td>
-                      <td className="py-3.5 px-4 text-right font-bold text-[#146ef5] hover:underline cursor-pointer">Download ↓</td>
-                    </tr>
-                    <tr className="hover:bg-gray-50/60">
-                      <td className="py-3.5 px-4 font-mono font-bold text-gray-900">FEE-CLB-09</td>
-                      <td className="py-3.5 px-4 font-medium">Sports & Co-Curricular House Dues</td>
-                      <td className="py-3.5 px-4"><span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 text-[10px] font-bold">House Sports</span></td>
-                      <td className="py-3.5 px-4 font-bold text-gray-900">₦15,000</td>
-                      <td className="py-3.5 px-4"><span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 text-[10px] font-bold">UNPAID</span></td>
-                      <td className="py-3.5 px-4 text-right text-gray-400">—</td>
-                    </tr>
+                    {(dashboardData?.campus_operations?.bursary?.fee_items || []).map((item: any, idx: number) => (
+                      <tr key={idx} className="hover:bg-gray-50/60">
+                        <td className="py-3.5 px-4 font-mono font-bold text-gray-900">{item.code}</td>
+                        <td className="py-3.5 px-4 font-medium">{item.description}</td>
+                        <td className="py-3.5 px-4">
+                          <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold">
+                            {item.category}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 font-bold text-gray-900">₦{Number(item.amount || 0).toLocaleString()}</td>
+                        <td className="py-3.5 px-4">
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                            {item.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -515,7 +505,7 @@ function ParentCampusOSContent() {
           <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
               <div>
-                <h3 className="text-base font-bold text-gray-900">Biometric Gate Logs & Daily Punctuality</h3>
+                <h3 className="text-base font-bold text-gray-900">Biometric Gate Logs &amp; Daily Punctuality</h3>
                 <p className="text-xs text-gray-500 mt-0.5">
                   Synchronized with CampusPRO Turnstile Face/Fingerprint Terminals.
                 </p>
@@ -529,14 +519,20 @@ function ParentCampusOSContent() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5">
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
-                <span className="text-xs text-gray-500 font-semibold">Today's Morning Gate In</span>
-                <p className="text-xl font-bold text-gray-900 mt-1">07:28 AM</p>
-                <p className="text-[11px] text-emerald-600 font-semibold">✓ Punctual (Gate closes 07:45 AM)</p>
+                <span className="text-xs text-gray-500 font-semibold">Today&apos;s Morning Gate In</span>
+                <p className="text-xl font-bold text-gray-900 mt-1">
+                  {dashboardData?.today_attendance?.time_in || '07:22 AM'}
+                </p>
+                <p className="text-[11px] text-emerald-600 font-semibold">
+                  ✓ {dashboardData?.today_attendance?.status || 'PRESENT'}
+                </p>
               </div>
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
                 <span className="text-xs text-gray-500 font-semibold">Terminal Location</span>
-                <p className="text-xl font-bold text-gray-900 mt-1">Main Pedestrian Gate B</p>
-                <p className="text-[11px] text-gray-500">Biometric Face Scanner #02</p>
+                <p className="text-xl font-bold text-gray-900 mt-1">
+                  {dashboardData?.today_attendance?.terminal || 'Main Gate Turnstile A'}
+                </p>
+                <p className="text-[11px] text-gray-500">Biometric Optical/RFID Scanner</p>
               </div>
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
                 <span className="text-xs text-gray-500 font-semibold">SMS Arrival Notification</span>
@@ -547,7 +543,7 @@ function ParentCampusOSContent() {
 
             {/* Attendance History Table */}
             <div className="mt-6">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Recent 5-Day Gate Ledger</h4>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Recent Gate Ledger</h4>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
@@ -561,30 +557,20 @@ function ParentCampusOSContent() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 text-gray-700">
-                    <tr className="hover:bg-gray-50/60">
-                      <td className="py-3 px-4 font-bold text-gray-900">Today</td>
-                      <td className="py-3 px-4 font-mono font-bold text-emerald-600">07:28 AM</td>
-                      <td className="py-3 px-4 font-mono text-gray-400">— In School</td>
-                      <td className="py-3 px-4"><span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">PRESENT</span></td>
-                      <td className="py-3 px-4">Main Gate Terminal B</td>
-                      <td className="py-3 px-4 font-semibold text-emerald-600">✓ Marked Present (Period 1)</td>
-                    </tr>
-                    <tr className="hover:bg-gray-50/60">
-                      <td className="py-3 px-4 font-bold text-gray-900">Yesterday</td>
-                      <td className="py-3 px-4 font-mono font-bold text-emerald-600">07:34 AM</td>
-                      <td className="py-3 px-4 font-mono text-gray-600">04:15 PM</td>
-                      <td className="py-3 px-4"><span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">PRESENT</span></td>
-                      <td className="py-3 px-4">Main Gate Terminal B</td>
-                      <td className="py-3 px-4 font-semibold text-emerald-600">✓ Marked Present</td>
-                    </tr>
-                    <tr className="hover:bg-gray-50/60">
-                      <td className="py-3 px-4 font-bold text-gray-900">Wednesday</td>
-                      <td className="py-3 px-4 font-mono font-bold text-amber-600">07:49 AM</td>
-                      <td className="py-3 px-4 font-mono text-gray-600">04:10 PM</td>
-                      <td className="py-3 px-4"><span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 text-[10px] font-bold">LATE (4 mins)</span></td>
-                      <td className="py-3 px-4">Main Gate Terminal A</td>
-                      <td className="py-3 px-4 font-semibold text-amber-600">Marked Late</td>
-                    </tr>
+                    {(dashboardData?.today_attendance?.history || []).map((log: any, idx: number) => (
+                      <tr key={idx} className="hover:bg-gray-50/60">
+                        <td className="py-3 px-4 font-bold text-gray-900">{log.date}</td>
+                        <td className="py-3 px-4 font-mono font-bold text-emerald-600">{log.time_in}</td>
+                        <td className="py-3 px-4 font-mono text-gray-600">{log.time_out || '— In School'}</td>
+                        <td className="py-3 px-4">
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                            {log.status}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4">{log.terminal}</td>
+                        <td className="py-3 px-4 font-semibold text-emerald-600">✓ {log.roll_call || 'Marked Present'}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -599,59 +585,61 @@ function ParentCampusOSContent() {
           <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
               <div>
-                <h3 className="text-base font-bold text-gray-900">School Bus Route & Live Fleet Tracking</h3>
+                <h3 className="text-base font-bold text-gray-900">School Bus Route &amp; Live Fleet Tracking</h3>
                 <p className="text-xs text-gray-500 mt-0.5">
                   Route assigned to {activeWard?.name} with live GPS beacon.
                 </p>
               </div>
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-50 text-[#146ef5] text-xs font-bold">
-                <TruckIcon className="w-4 h-4" /> Route 4 · Lekki-Ikoyi Expressway
+                <TruckIcon className="w-4 h-4" /> {dashboardData?.campus_operations?.transportation?.route_name || 'Campus Shuttle'}
               </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50 space-y-2">
                 <span className="text-[11px] font-bold text-gray-400 uppercase">Assigned Bus</span>
-                <p className="text-xl font-bold text-gray-900">Bus 08 (Toyota Coaster)</p>
-                <p className="text-xs font-mono text-gray-600">Plate: KJA-482-XA</p>
+                <p className="text-xl font-bold text-gray-900">
+                  {dashboardData?.campus_operations?.transportation?.bus_number || 'BUS-01 (Toyota Coaster)'}
+                </p>
                 <div className="pt-2 border-t border-gray-200 flex items-center justify-between text-xs">
-                  <span className="text-gray-500">Capacity: 32 Learners</span>
+                  <span className="text-gray-500">
+                    Capacity: {dashboardData?.campus_operations?.transportation?.capacity || 30} Learners
+                  </span>
                   <span className="text-emerald-600 font-bold">AC Verified</span>
                 </div>
               </div>
 
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50 space-y-2">
-                <span className="text-[11px] font-bold text-gray-400 uppercase">Driver & Route Warden</span>
-                <p className="text-xl font-bold text-gray-900">Mr. Tunde Lawal</p>
-                <p className="text-xs text-gray-600">Certified Driver · 8 Years Service</p>
+                <span className="text-[11px] font-bold text-gray-400 uppercase">Driver &amp; Route Warden</span>
+                <p className="text-xl font-bold text-gray-900">
+                  {dashboardData?.campus_operations?.transportation?.driver_name || 'Assigned Fleet Driver'}
+                </p>
+                <p className="text-xs text-gray-600">LASDRI Certified Driver</p>
                 <div className="pt-2 border-t border-gray-200 flex items-center gap-2 text-xs">
-                  <a
-                    href="tel:+2348031122334"
-                    className="text-[#146ef5] font-bold flex items-center gap-1 hover:underline"
-                  >
-                    <PhoneIcon className="w-3.5 h-3.5" /> Call Driver (+234 803 112 2334)
-                  </a>
+                  {dashboardData?.campus_operations?.transportation?.driver_phone && (
+                    <a
+                      href={`tel:${dashboardData.campus_operations.transportation.driver_phone}`}
+                      className="text-[#146ef5] font-bold flex items-center gap-1 hover:underline"
+                    >
+                      <PhoneIcon className="w-3.5 h-3.5" /> Call Driver ({dashboardData.campus_operations.transportation.driver_phone})
+                    </a>
+                  )}
                 </div>
               </div>
 
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50 space-y-2">
-                <span className="text-[11px] font-bold text-gray-400 uppercase">Your Pickup & Drop Stop</span>
-                <p className="text-xl font-bold text-gray-900">Admiralty Way Junction</p>
-                <p className="text-xs text-gray-600">Morning Pickup: 06:45 AM · Afternoon Drop: 04:35 PM</p>
+                <span className="text-[11px] font-bold text-gray-400 uppercase">Your Pickup &amp; Drop Stop</span>
+                <p className="text-xl font-bold text-gray-900">
+                  {dashboardData?.campus_operations?.transportation?.pickup_stop || 'Admiralty Way Junction'}
+                </p>
+                <p className="text-xs text-gray-600">
+                  Morning: {dashboardData?.campus_operations?.transportation?.pickup_time || '06:45 AM'} · Afternoon: {dashboardData?.campus_operations?.transportation?.dropoff_time || '03:50 PM'}
+                </p>
                 <div className="pt-2 border-t border-gray-200 flex items-center justify-between text-xs">
-                  <span className="text-emerald-600 font-bold">● Route Completed Morning Run</span>
+                  <span className="text-emerald-600 font-bold">
+                    ● {dashboardData?.campus_operations?.transportation?.status || 'Active'}
+                  </span>
                 </div>
-              </div>
-            </div>
-
-            {/* Simulated Live Route Stops */}
-            <div className="mt-6 p-4.5 rounded-xl border border-blue-100 bg-blue-50/40">
-              <h4 className="text-xs font-bold text-blue-900 mb-2">Corridor Progress Checkpoints</h4>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-gray-600">
-                <span className="font-semibold text-emerald-700">✓ Stop 1: Chevron Toll Gate (06:30 AM)</span>
-                <span className="font-semibold text-emerald-700">✓ Stop 2: Admiralty Way (06:45 AM)</span>
-                <span className="font-semibold text-emerald-700">✓ Stop 3: Falomo Bridge (07:05 AM)</span>
-                <span className="font-semibold text-emerald-700">✓ Arrived Campus Gate (07:25 AM)</span>
               </div>
             </div>
           </div>
@@ -664,7 +652,7 @@ function ParentCampusOSContent() {
           <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
               <div>
-                <h3 className="text-base font-bold text-gray-900">Child Safeguarding & Authorized Pickup</h3>
+                <h3 className="text-base font-bold text-gray-900">Child Safeguarding &amp; Authorized Pickup</h3>
                 <p className="text-xs text-gray-500 mt-0.5">
                   Only guardians presenting this dynamic PIN or verified QR pass may pick up {activeWard?.name}.
                 </p>
@@ -682,36 +670,24 @@ function ParentCampusOSContent() {
                   {activeWard?.pickup_pin || '849201'}
                 </p>
                 <p className="text-xs text-gray-500 max-w-xs">
-                  Present this code to the Security Marshall at Gate A or B during after-school dismissal.
+                  Present this code to the Security Marshal at Gate A or B during after-school dismissal.
                 </p>
               </div>
 
               <div className="space-y-4">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Authorized Pickup Delegates</h4>
                 <div className="space-y-2.5">
-                  <div className="p-3.5 rounded-xl border border-gray-200 bg-white flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-bold text-gray-900">{parent.name} (Primary Parent)</p>
-                      <p className="text-[11px] text-gray-500">Mother · {parent.phone}</p>
+                  {(dashboardData?.campus_operations?.security?.authorized_pickups || []).map((del: any, idx: number) => (
+                    <div key={idx} className="p-3.5 rounded-xl border border-gray-200 bg-white flex items-center justify-between">
+                      <div>
+                        <p className="text-xs font-bold text-gray-900">{del.name}</p>
+                        <p className="text-[11px] text-gray-500">{del.relationship} · {del.phone}</p>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                        {del.status || 'AUTHORIZED'}
+                      </span>
                     </div>
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">PRIMARY</span>
-                  </div>
-
-                  <div className="p-3.5 rounded-xl border border-gray-200 bg-white flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-bold text-gray-900">Dr. Emeka Okonkwo</p>
-                      <p className="text-[11px] text-gray-500">Father · +234 802 889 1234</p>
-                    </div>
-                    <span className="px-2 py-0.5 rounded-full bg-blue-50 text-[#146ef5] text-[10px] font-bold">AUTHORIZED</span>
-                  </div>
-
-                  <div className="p-3.5 rounded-xl border border-gray-200 bg-white flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-bold text-gray-900">Miss Grace Bassey</p>
-                      <p className="text-[11px] text-gray-500">Family Driver / Chauffeur · +234 814 300 9988</p>
-                    </div>
-                    <span className="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[10px] font-bold">DELEGATE</span>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -725,34 +701,42 @@ function ParentCampusOSContent() {
           <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
               <div>
-                <h3 className="text-base font-bold text-gray-900">Medical History & Clinic Visit Logs</h3>
+                <h3 className="text-base font-bold text-gray-900">Medical History &amp; Clinic Visit Logs</h3>
                 <p className="text-xs text-gray-500 mt-0.5">
                   Maintained by School Matron and Campus Clinic Physician.
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 text-xs font-bold">Blood Group: O+</span>
-                <span className="px-2.5 py-1 rounded-full bg-blue-50 text-[#146ef5] text-xs font-bold">Genotype: AA</span>
+                <span className="px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 text-xs font-bold">
+                  Blood Group: {dashboardData?.campus_operations?.clinic?.blood_group || 'O+'}
+                </span>
+                <span className="px-2.5 py-1 rounded-full bg-blue-50 text-[#146ef5] text-xs font-bold">
+                  Genotype: {dashboardData?.campus_operations?.clinic?.genotype || 'AA'}
+                </span>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
                 <span className="text-xs text-gray-500 font-semibold">Active Allergies / Warnings</span>
-                <p className="text-sm font-bold text-gray-900 mt-1">Peanuts & Penicillin</p>
-                <p className="text-[11px] text-gray-400 mt-0.5">Flagged in Dining Hall & Clinic</p>
+                <p className="text-sm font-bold text-gray-900 mt-1">
+                  {dashboardData?.campus_operations?.clinic?.known_allergies || 'None reported'}
+                </p>
+                <p className="text-[11px] text-gray-400 mt-0.5">Flagged in Dining Hall &amp; Clinic</p>
               </div>
 
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
                 <span className="text-xs text-gray-500 font-semibold">Duty Nurse on Call</span>
-                <p className="text-sm font-bold text-gray-900 mt-1">Nurse Folashade Adeleke (RN)</p>
+                <p className="text-sm font-bold text-gray-900 mt-1">
+                  {dashboardData?.campus_operations?.clinic?.duty_nurse || 'Nurse Comfort Adeyemi (RN)'}
+                </p>
                 <p className="text-[11px] text-[#146ef5] font-semibold mt-0.5">Infirmary Wing A · Ext: 104</p>
               </div>
 
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
                 <span className="text-xs text-gray-500 font-semibold">Recent Health Status</span>
-                <p className="text-sm font-bold text-emerald-700 mt-1">Fit & Active</p>
-                <p className="text-[11px] text-gray-400 mt-0.5">No active clinic admissions</p>
+                <p className="text-sm font-bold text-emerald-700 mt-1">Fit &amp; Active</p>
+                <p className="text-[11px] text-gray-400 mt-0.5">Cleared for Academics &amp; Sports</p>
               </div>
             </div>
 
@@ -766,20 +750,30 @@ function ParentCampusOSContent() {
                       <th className="py-3 px-4">Date</th>
                       <th className="py-3 px-4">Symptoms / Reason</th>
                       <th className="py-3 px-4">Triage Priority</th>
-                      <th className="py-3 px-4">Diagnosis & Care Given</th>
+                      <th className="py-3 px-4">Diagnosis &amp; Care Given</th>
                       <th className="py-3 px-4">Attending Nurse</th>
                       <th className="py-3 px-4">Outcome</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 text-gray-700">
-                    <tr className="hover:bg-gray-50/60">
-                      <td className="py-3 px-4 font-bold text-gray-900">08 Nov 2026</td>
-                      <td className="py-3 px-4">Mild Headache & Dehydration during Sports</td>
-                      <td className="py-3 px-4"><span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold">LOW</span></td>
-                      <td className="py-3 px-4 font-medium">Oral hydration therapy + 1 hr observation bed rest</td>
-                      <td className="py-3 px-4">Nurse Folashade</td>
-                      <td className="py-3 px-4"><span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">DISCHARGED TO CLASS</span></td>
-                    </tr>
+                    {(dashboardData?.campus_operations?.clinic?.recent_visits || []).map((v: any, idx: number) => (
+                      <tr key={idx} className="hover:bg-gray-50/60">
+                        <td className="py-3 px-4 font-bold text-gray-900">{v.date}</td>
+                        <td className="py-3 px-4">{v.symptoms}</td>
+                        <td className="py-3 px-4">
+                          <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold">
+                            {v.triage_priority}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 font-medium">{v.diagnosis}</td>
+                        <td className="py-3 px-4">{v.nurse}</td>
+                        <td className="py-3 px-4">
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                            {v.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -794,7 +788,7 @@ function ParentCampusOSContent() {
           <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
               <div>
-                <h3 className="text-base font-bold text-gray-900">Boarding Hostel & Digital Exeat Authorizations</h3>
+                <h3 className="text-base font-bold text-gray-900">Boarding Hostel &amp; Digital Exeat Authorizations</h3>
                 <p className="text-xs text-gray-500 mt-0.5">
                   Dormitory allocations and parent-approved exit clearances for boarders.
                 </p>
@@ -811,20 +805,26 @@ function ParentCampusOSContent() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
                 <span className="text-xs text-gray-500 font-semibold">Dormitory Hall</span>
-                <p className="text-xl font-bold text-gray-900 mt-1">Nelson Mandela Hall</p>
-                <p className="text-xs text-gray-500 mt-0.5">Room 14 · Bed 02 (Top Bunk)</p>
+                <p className="text-xl font-bold text-gray-900 mt-1">
+                  {dashboardData?.campus_operations?.hostel?.hall_name || 'Silverbird Hall'}
+                </p>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {dashboardData?.campus_operations?.hostel?.room_number || 'Room 204'} · {dashboardData?.campus_operations?.hostel?.wing || 'Wing A'}
+                </p>
               </div>
 
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
-                <span className="text-xs text-gray-500 font-semibold">Housemaster on Duty</span>
-                <p className="text-xl font-bold text-gray-900 mt-1">Mr. Babatunde Alabi</p>
-                <p className="text-xs text-gray-500 mt-0.5">Senior Housemaster · Block B</p>
+                <span className="text-xs text-gray-500 font-semibold">Housemaster / Matron</span>
+                <p className="text-xl font-bold text-gray-900 mt-1">
+                  {dashboardData?.campus_operations?.hostel?.housemaster || 'Mr. Emeka Nwosu'}
+                </p>
+                <p className="text-xs text-gray-500 mt-0.5">Boarding Directorate</p>
               </div>
 
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
                 <span className="text-xs text-gray-500 font-semibold">Current Exeat Status</span>
                 <p className="text-xl font-bold text-emerald-700 mt-1">In Residence</p>
-                <p className="text-xs text-gray-500 mt-0.5">No active overnight passes</p>
+                <p className="text-xs text-gray-500 mt-0.5">Verified on Nightly Roll Call</p>
               </div>
             </div>
 
@@ -844,14 +844,24 @@ function ParentCampusOSContent() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 text-gray-700">
-                    <tr className="hover:bg-gray-50/60">
-                      <td className="py-3 px-4 font-mono font-bold text-gray-900">EXT-2026-081</td>
-                      <td className="py-3 px-4"><span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold">WEEKEND</span></td>
-                      <td className="py-3 px-4 font-medium">Family Wedding Ceremony in Ikeja</td>
-                      <td className="py-3 px-4">24 Oct 2026 (04:00 PM)</td>
-                      <td className="py-3 px-4">26 Oct 2026 (06:00 PM)</td>
-                      <td className="py-3 px-4"><span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">COMPLETED & RETURNED</span></td>
-                    </tr>
+                    {(dashboardData?.campus_operations?.hostel?.active_exeats || []).map((ex: any, idx: number) => (
+                      <tr key={idx} className="hover:bg-gray-50/60">
+                        <td className="py-3 px-4 font-mono font-bold text-gray-900">{ex.pass_code}</td>
+                        <td className="py-3 px-4">
+                          <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold">
+                            {ex.exeat_type}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 font-medium">{ex.reason}</td>
+                        <td className="py-3 px-4">{ex.departure_date}</td>
+                        <td className="py-3 px-4">{ex.expected_return_date}</td>
+                        <td className="py-3 px-4">
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                            {ex.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -866,7 +876,7 @@ function ParentCampusOSContent() {
           <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
               <div>
-                <h3 className="text-base font-bold text-gray-900">Cashless Tuck Shop & Cafeteria Wallet</h3>
+                <h3 className="text-base font-bold text-gray-900">Cashless Tuck Shop &amp; Cafeteria Wallet</h3>
                 <p className="text-xs text-gray-500 mt-0.5">
                   Meal plan allowance, daily spending limits, and itemized POS purchases.
                 </p>
@@ -886,18 +896,24 @@ function ParentCampusOSContent() {
                 <p className="text-2xl font-bold text-purple-900 mt-1">
                   ₦{Number(activeWard?.wallet_balance || 0).toLocaleString()}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">Card ID: POS-TUCK-{activeWard?.admission_number || '001'}</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Card ID: {dashboardData?.campus_operations?.cafeteria?.rfid_card_number || 'RFID-GWH-0412'}
+                </p>
               </div>
 
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
                 <span className="text-[11px] font-bold text-gray-400 uppercase">Daily Spending Limit</span>
-                <p className="text-2xl font-bold text-gray-900 mt-1">₦2,500 / Day</p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">
+                  ₦{Number(dashboardData?.campus_operations?.cafeteria?.daily_spend_limit || 3500).toLocaleString()} / Day
+                </p>
                 <p className="text-xs text-gray-500 mt-1">Configured by Parent</p>
               </div>
 
               <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
                 <span className="text-[11px] font-bold text-gray-400 uppercase">Cafeteria Dietary Tag</span>
-                <p className="text-2xl font-bold text-emerald-700 mt-1">Standard + No Nut</p>
+                <p className="text-2xl font-bold text-emerald-700 mt-1">
+                  {dashboardData?.campus_operations?.cafeteria?.dietary_alert || 'Standard + Nut-Free'}
+                </p>
                 <p className="text-xs text-gray-500 mt-1">Kitchen POS Alert Active</p>
               </div>
             </div>
@@ -909,7 +925,7 @@ function ParentCampusOSContent() {
                 <table className="w-full text-left text-xs">
                   <thead>
                     <tr className="border-b border-gray-100 bg-gray-50/75 text-[11px] font-bold uppercase tracking-wider text-gray-500">
-                      <th className="py-3 px-4">Date & Time</th>
+                      <th className="py-3 px-4">Date &amp; Time</th>
                       <th className="py-3 px-4">Terminal</th>
                       <th className="py-3 px-4">Items Purchased</th>
                       <th className="py-3 px-4">Amount</th>
@@ -917,20 +933,17 @@ function ParentCampusOSContent() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 text-gray-700">
-                    <tr className="hover:bg-gray-50/60">
-                      <td className="py-3 px-4 font-medium text-gray-900">Today, 01:15 PM</td>
-                      <td className="py-3 px-4">Tuck Shop POS 1</td>
-                      <td className="py-3 px-4">Jollof Rice & Roasted Chicken + Fresh Orange Juice</td>
-                      <td className="py-3 px-4 font-bold text-gray-900">₦1,400</td>
-                      <td className="py-3 px-4 font-mono font-semibold text-gray-600">₦18,600</td>
-                    </tr>
-                    <tr className="hover:bg-gray-50/60">
-                      <td className="py-3 px-4 font-medium text-gray-900">Yesterday, 10:45 AM</td>
-                      <td className="py-3 px-4">Cafeteria Pastry Stand</td>
-                      <td className="py-3 px-4">Meat Pie & Maltina</td>
-                      <td className="py-3 px-4 font-bold text-gray-900">₦950</td>
-                      <td className="py-3 px-4 font-mono font-semibold text-gray-600">₦20,000</td>
-                    </tr>
+                    {(dashboardData?.campus_operations?.cafeteria?.recent_transactions || []).map((tx: any, idx: number) => (
+                      <tr key={idx} className="hover:bg-gray-50/60">
+                        <td className="py-3 px-4 font-medium text-gray-900">{tx.date}</td>
+                        <td className="py-3 px-4">{tx.terminal || 'Dining Hall POS'}</td>
+                        <td className="py-3 px-4">{tx.item}</td>
+                        <td className="py-3 px-4 font-bold text-gray-900">₦{Number(tx.amount || 0).toLocaleString()}</td>
+                        <td className="py-3 px-4 font-mono font-semibold text-gray-600">
+                          ₦{Number(tx.balance_after || activeWard?.wallet_balance || 0).toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -945,40 +958,36 @@ function ParentCampusOSContent() {
           <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
               <div>
-                <h3 className="text-base font-bold text-gray-900">Official School Circulars & Notices</h3>
+                <h3 className="text-base font-bold text-gray-900">Official School Circulars &amp; Notices</h3>
                 <p className="text-xs text-gray-500 mt-0.5">
                   Direct administrative communications from the Principal and Executive Board.
                 </p>
               </div>
-              <span className="text-xs font-bold text-[#146ef5]">2026/2027 Academic Year</span>
+              <span className="text-xs font-bold text-[#146ef5]">
+                {dashboardData?.school?.session || '2026/2027 Academic Year'}
+              </span>
             </div>
 
             <div className="space-y-3.5 mt-5">
-              <div className="p-4 rounded-xl border border-blue-100 bg-blue-50/30 flex items-start justify-between gap-4">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold">URGENT</span>
-                    <h4 className="text-xs font-bold text-gray-900">First Term Mid-Term Assessment Schedule & Portal Clearances</h4>
+              {(dashboardData?.notices || []).map((not: any, idx: number) => (
+                <div
+                  key={not.id || idx}
+                  className="p-4 rounded-xl border border-blue-100 bg-blue-50/30 flex items-start justify-between gap-4"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold">
+                        {not.category || not.priority || 'NOTICE'}
+                      </span>
+                      <h4 className="text-xs font-bold text-gray-900">{not.title}</h4>
+                    </div>
+                    <p className="text-xs text-gray-600">{not.summary}</p>
+                    <p className="text-[11px] text-gray-400">
+                      Published by {not.author} · {not.date}
+                    </p>
                   </div>
-                  <p className="text-xs text-gray-600">
-                    Parents and guardians are reminded that the Mid-Term CBT assessments for SSS 1 to SSS 3 commence on Monday, 24th November 2026. Please verify fee clearances on the Bursary tab.
-                  </p>
-                  <p className="text-[11px] text-gray-400">Published by Office of the Principal · Yesterday</p>
                 </div>
-              </div>
-
-              <div className="p-4 rounded-xl border border-gray-200 bg-white flex items-start justify-between gap-4">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 text-[10px] font-bold">PTA MEETING</span>
-                    <h4 className="text-xs font-bold text-gray-900">Annual General PTA Congress & Career Mentorship Day</h4>
-                  </div>
-                  <p className="text-xs text-gray-600">
-                    Join us this Saturday, 29th November at 10:00 AM in the Campus Main Auditorium. Virtual streaming will also be accessible.
-                  </p>
-                  <p className="text-[11px] text-gray-400">Published by PTA Secretariat · 3 days ago</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </MotionRise>

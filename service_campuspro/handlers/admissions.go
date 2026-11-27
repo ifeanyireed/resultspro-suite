@@ -269,11 +269,11 @@ func getCampusAdmissions(w http.ResponseWriter, r *http.Request, tenantID string
 	// 4. Fetch Available Class Arms for Enrollment Promotion
 	classArms := []AdmissionsClassArmMeta{}
 	aRows, err := db.DB.Query(`
-		SELECT a.id, COALESCE(c.name, 'Class'), a.arm_name
+		SELECT a.id, COALESCE(c.name, 'Class'), a.name
 		FROM campus_class_arms a
 		LEFT JOIN campus_classes c ON a.class_id = c.id
 		WHERE a.tenant_id = ?
-		ORDER BY c.level_order ASC, a.arm_name ASC
+		ORDER BY c.level_order ASC, a.name ASC
 	`, tenantID)
 	if err == nil && aRows != nil {
 		defer aRows.Close()

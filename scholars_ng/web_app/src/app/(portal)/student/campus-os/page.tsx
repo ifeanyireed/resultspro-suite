@@ -215,19 +215,19 @@ export default function StudentCampusOSPage() {
   const attendanceHistory = dashboardData?.attendance?.history || [];
 
   const subtabs: { id: CampusSubtab; label: string; icon: any; badge?: string }[] = [
-    { id: 'timetable', label: 'Bell Schedule', icon: CalendarDaysIcon, badge: '6 Periods' },
+    { id: 'timetable', label: 'Bell Schedule', icon: CalendarDaysIcon, badge: `${schedule.length || 6} Periods` },
     { id: 'attendance', label: 'Biometrics', icon: FingerPrintIcon, badge: campusOps?.attendance_today?.status || 'Present' },
-    { id: 'cafeteria', label: 'Meal Wallet', icon: CreditCardIcon, badge: `₦${campusOps?.cafeteria?.wallet?.balance?.toLocaleString() || '18,500'}` },
-    { id: 'cocurricular', label: 'Clubs & Sports', icon: TrophyIcon, badge: 'Sapphire House' },
-    { id: 'discipline', label: 'Merits & Conduct', icon: ShieldCheckIcon, badge: `${metrics?.merits_total || 60} Pts` },
-    { id: 'financials', label: 'Fees & Bursary', icon: BanknotesIcon, badge: '100% Cleared' },
-    { id: 'transport', label: 'Bus Fleet', icon: TruckIcon, badge: 'Route A' },
-    { id: 'library', label: 'Library & Catalog', icon: BookOpenIcon, badge: `${campusOps?.library?.borrowed_count || 2} Loans` },
+    { id: 'cafeteria', label: 'Meal Wallet', icon: CreditCardIcon, badge: `₦${(campusOps?.cafeteria?.wallet?.balance ?? 0).toLocaleString()}` },
+    { id: 'cocurricular', label: 'Clubs & Sports', icon: TrophyIcon, badge: student.house_name?.split(' (')[0] || 'House' },
+    { id: 'discipline', label: 'Merits & Conduct', icon: ShieldCheckIcon, badge: `${metrics?.merits_total ?? campusOps?.discipline?.merits_points ?? 0} Pts` },
+    { id: 'financials', label: 'Fees & Bursary', icon: BanknotesIcon, badge: campusOps?.financials?.status === 'PAID' ? '100% Cleared' : campusOps?.financials?.status || 'Bursary' },
+    { id: 'transport', label: 'Bus Fleet', icon: TruckIcon, badge: campusOps?.transport?.route_name?.split(' ·')[0] || 'Fleet' },
+    { id: 'library', label: 'Library & Catalog', icon: BookOpenIcon, badge: `${campusOps?.library?.borrowed_count ?? 0} Loans` },
     { id: 'hostel', label: 'Boarding & Exeats', icon: HomeModernIcon, badge: campusOps?.hostel?.exeat_status || 'On Campus' },
     { id: 'clinic', label: 'Health Bay', icon: HeartIcon, badge: campusOps?.clinic?.blood_group || 'O+' },
     { id: 'leadership', label: 'Prefects & Council', icon: UserGroupIcon },
     { id: 'idcard', label: 'Digital ID Card', icon: IdentificationIcon },
-    { id: 'notices', label: 'Circulars', icon: MegaphoneIcon, badge: `${campusOps?.notices?.length || 3} Memos` },
+    { id: 'notices', label: 'Circulars', icon: MegaphoneIcon, badge: `${campusOps?.notices?.length ?? 0} Memos` },
   ];
 
   const filteredCatalog = (campusOps?.library?.catalog || []).filter((b: any) =>
@@ -1064,7 +1064,9 @@ export default function StudentCampusOSPage() {
                 {/* Header */}
                 <div className="flex items-center justify-between pb-4 border-b border-white/20">
                   <div>
-                    <h3 className="font-extrabold text-lg tracking-tight">SCHOLARS ACADEMY</h3>
+                    <h3 className="font-extrabold text-lg tracking-tight uppercase">
+                      {student.school_name || dashboardData?.school?.name || 'GREENWOOD HIGH ACADEMY'}
+                    </h3>
                     <p className="text-[10px] text-blue-200">INSTITUTIONAL IDENTITY CARD</p>
                   </div>
                   <span className="px-2.5 py-1 rounded-full bg-white/20 text-[10px] font-bold uppercase tracking-wider">

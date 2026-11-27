@@ -23,6 +23,9 @@ func main() {
 	db.InitCampusSchema()
 	db.InitRedis()
 
+	// Seed Greenwood High Academy (greenwoodhigh) across all 20 CampusPRO modules
+	_ = handlers.SeedGreenwoodHighAllModules("tenant-greenwoodhigh")
+
 	mux := http.NewServeMux()
 
 	// --- Health Check ---

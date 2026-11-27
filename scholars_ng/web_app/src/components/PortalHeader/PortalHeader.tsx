@@ -1,13 +1,41 @@
 'use client';
 
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { 
   MagnifyingGlassIcon,
   EnvelopeIcon,
   BellIcon
 } from '@heroicons/react/24/outline';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useTenant } from '@/components/TenantProvider';
 
 export default function PortalHeader() {
+  const pathname = usePathname();
+  const { user } = useAuthStore();
+  const { tenant } = useTenant();
+
+  const roleFromPath = pathname?.startsWith('/admin')
+    ? 'Principal / Admin'
+    : pathname?.startsWith('/teacher')
+    ? 'Faculty Account'
+    : pathname?.startsWith('/parent')
+    ? 'Parent Account'
+    : 'Student Account';
+
+  const displayName =
+    user && user.name && user.name !== 'Bypass User'
+      ? user.name
+      : pathname?.startsWith('/admin')
+      ? 'Dr. (Mrs.) Folake Adeyemi'
+      : pathname?.startsWith('/teacher')
+      ? 'Engr. Funke Adebayo'
+      : pathname?.startsWith('/parent')
+      ? 'Mrs. Sarah Adeleke-Okonkwo'
+      : 'Kelechi Stephanie Okonkwo';
+
+  const displaySubtitle = `${roleFromPath}${tenant?.name ? ` · ${tenant.name}` : ''}`;
+
   return (
     <>
       <div className="relative w-96">
@@ -33,11 +61,11 @@ export default function PortalHeader() {
         </button>
         <div className="flex items-center gap-3 ml-2 border-l border-gray-200 pl-6">
           <div className="w-10 h-10 bg-gradient-to-tr from-blue-200 to-blue-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
-            <Image src="/photo01.jpeg" alt="James Dean" width={40} height={40} className="w-full h-full object-cover" />
+            <Image src="/photo01.jpeg" alt={displayName} width={40} height={40} className="w-full h-full object-cover" />
           </div>
           <div className="hidden md:block">
-            <p className="text-sm font-bold text-gray-900 leading-tight">James Dean</p>
-            <p className="text-xs text-gray-500">Parent Account</p>
+            <p className="text-sm font-bold text-gray-900 leading-tight">{displayName}</p>
+            <p className="text-xs text-gray-500">{displaySubtitle}</p>
           </div>
         </div>
       </div>

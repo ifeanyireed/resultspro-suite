@@ -41,6 +41,7 @@ export default function CampusOSLayout({
   const [isLoadingCampuses, setIsLoadingCampuses] = useState(false);
   const [selectedCampusId, setSelectedCampusId] = useState<string>('all');
   const [isBranchModalOpen, setIsBranchModalOpen] = useState(false);
+  const [summaryCounts, setSummaryCounts] = useState<Record<string, any>>({});
 
   // Initialize selectedCampusId from localStorage or query on mount
   useEffect(() => {
@@ -59,14 +60,18 @@ export default function CampusOSLayout({
   const fetchCampuses = useCallback(async () => {
     try {
       setIsLoadingCampuses(true);
-      const res = await api
-        .get('/v1/campus/branches')
-        .catch(async () => await api.get('/campus/branches'));
-      if (res?.data?.branches) {
-        setCampuses(res.data.branches);
+      const [branchRes, summaryRes] = await Promise.all([
+        api.get('/v1/campus/branches').catch(async () => await api.get('/campus/branches')),
+        api.get('/v1/campus/summary').catch(async () => await api.get('/campus/summary')),
+      ]);
+      if (branchRes?.data?.branches) {
+        setCampuses(branchRes.data.branches);
+      }
+      if (summaryRes?.data) {
+        setSummaryCounts(summaryRes.data);
       }
     } catch (err) {
-      console.error('Failed to load campus branches:', err);
+      console.error('Failed to load campus branches or summary:', err);
     } finally {
       setIsLoadingCampuses(false);
     }
@@ -108,26 +113,26 @@ export default function CampusOSLayout({
   const [isScrollActive, setIsScrollActive] = useState(false);
 
   const tabs: { id: CampusOSTab; label: string; icon: any; badge?: string; href: string }[] = [
-    { id: 'academic', label: 'Academic', icon: AcademicCapIcon, badge: 'Timetable', href: '/admin/campus-os/academic' },
+    { id: 'academic', label: 'Academic', icon: AcademicCapIcon, badge: summaryCounts.active_session || 'Timetable', href: '/admin/campus-os/academic' },
     { id: 'attendance', label: 'Attendance', icon: FingerPrintIcon, badge: 'Biometric', href: '/admin/campus-os/attendance' },
-    { id: 'staff', label: 'Staff', icon: UserGroupIcon, badge: 'HR & KPIs', href: '/admin/campus-os/staff' },
-    { id: 'students', label: 'Students', icon: UsersIcon, badge: '1,248', href: '/admin/campus-os/students' },
-    { id: 'parents', label: 'Parents', icon: HeartIcon, badge: '892', href: '/admin/campus-os/parents' },
+    { id: 'staff', label: 'Staff', icon: UserGroupIcon, badge: summaryCounts.teachers !== undefined ? `${summaryCounts.teachers}` : 'HR & KPIs', href: '/admin/campus-os/staff' },
+    { id: 'students', label: 'Students', icon: UsersIcon, badge: summaryCounts.students !== undefined ? Number(summaryCounts.students).toLocaleString() : 'Directory', href: '/admin/campus-os/students' },
+    { id: 'parents', label: 'Parents', icon: HeartIcon, badge: summaryCounts.parents !== undefined ? Number(summaryCounts.parents).toLocaleString() : 'Guardians', href: '/admin/campus-os/parents' },
     { id: 'financials', label: 'Financials', icon: BanknotesIcon, badge: 'Bursary', href: '/admin/campus-os/financials' },
-    { id: 'library', label: 'Library', icon: BookOpenIcon, badge: 'Catalog', href: '/admin/campus-os/library' },
-    { id: 'inventory', label: 'Inventory', icon: ArchiveBoxIcon, badge: 'Store', href: '/admin/campus-os/inventory' },
-    { id: 'transportation', label: 'Transportation', icon: TruckIcon, badge: 'Fleet', href: '/admin/campus-os/transportation' },
-    { id: 'admission', label: 'Admission', icon: ClipboardDocumentCheckIcon, badge: 'Pipeline', href: '/admin/campus-os/admission' },
-    { id: 'messaging', label: 'Messaging', icon: ChatBubbleLeftRightIcon, badge: 'Broadcast', href: '/admin/campus-os/messaging' },
+    { id: 'library', label: 'Library', icon: BookOpenIcon, badge: summaryCounts.library_books ? `${summaryCounts.library_books} Books` : 'Catalog', href: '/admin/campus-os/library' },
+    { id: 'inventory', label: 'Inventory', icon: ArchiveBoxIcon, badge: summaryCounts.inventory_items ? `${summaryCounts.inventory_items} SKUs` : 'Store', href: '/admin/campus-os/inventory' },
+    { id: 'transportation', label: 'Transportation', icon: TruckIcon, badge: summaryCounts.transport_routes ? `${summaryCounts.transport_routes} Routes` : 'Fleet', href: '/admin/campus-os/transportation' },
+    { id: 'admission', label: 'Admission', icon: ClipboardDocumentCheckIcon, badge: summaryCounts.inquiries ? `${summaryCounts.inquiries} Leads` : 'Pipeline', href: '/admin/campus-os/admission' },
+    { id: 'messaging', label: 'Messaging', icon: ChatBubbleLeftRightIcon, badge: summaryCounts.notices ? `${summaryCounts.notices} Notices` : 'Broadcast', href: '/admin/campus-os/messaging' },
     { id: 'clinic', label: 'Clinic', icon: HeartIcon, badge: 'Sick Bay', href: '/admin/campus-os/clinic' },
-    { id: 'hostel', label: 'Hostel & Exeat', icon: BuildingOffice2Icon, badge: 'Boarding', href: '/admin/campus-os/hostel' },
+    { id: 'hostel', label: 'Hostel & Exeat', icon: BuildingOffice2Icon, badge: summaryCounts.hostel_occupants ? `${summaryCounts.hostel_occupants} Beds` : 'Boarding', href: '/admin/campus-os/hostel' },
     { id: 'security', label: 'Security & Gate', icon: ShieldCheckIcon, badge: 'Visitor Pass', href: '/admin/campus-os/security' },
     { id: 'discipline', label: 'Discipline', icon: ScaleIcon, badge: 'Merits/Demerits', href: '/admin/campus-os/discipline' },
     { id: 'cafeteria', label: 'Cafeteria', icon: BuildingStorefrontIcon, badge: 'POS & Wallet', href: '/admin/campus-os/cafeteria' },
-    { id: 'co-curricular', label: 'Co-Curricular', icon: TrophyIcon, badge: 'Clubs & Houses', href: '/admin/campus-os/co-curricular' },
-    { id: 'facilities', label: 'Facilities', icon: BuildingOfficeIcon, badge: 'Venues', href: '/admin/campus-os/facilities' },
-    { id: 'alumni', label: 'Alumni', icon: IdentificationIcon, badge: 'Registry', href: '/admin/campus-os/alumni' },
-    { id: 'mobile-app', label: 'Mobile App', icon: DevicePhoneMobileIcon, badge: 'App IDs', href: '/admin/campus-os/mobile-app' },
+    { id: 'co-curricular', label: 'Co-Curricular', icon: TrophyIcon, badge: summaryCounts.clubs ? `${summaryCounts.clubs} Clubs` : 'Clubs & Houses', href: '/admin/campus-os/co-curricular' },
+    { id: 'facilities', label: 'Facilities', icon: BuildingOfficeIcon, badge: summaryCounts.facilities ? `${summaryCounts.facilities} Venues` : 'Venues', href: '/admin/campus-os/facilities' },
+    { id: 'alumni', label: 'Alumni', icon: IdentificationIcon, badge: summaryCounts.alumni ? `${summaryCounts.alumni} Alumni` : 'Registry', href: '/admin/campus-os/alumni' },
+    { id: 'mobile-app', label: 'Mobile App', icon: DevicePhoneMobileIcon, badge: summaryCounts.mobile_accounts ? `${summaryCounts.mobile_accounts} IDs` : 'App IDs', href: '/admin/campus-os/mobile-app' },
   ];
 
   // Active tab determination based on current route path

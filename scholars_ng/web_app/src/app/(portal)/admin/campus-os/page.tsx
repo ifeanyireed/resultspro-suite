@@ -33,6 +33,14 @@ function CampusOSRedirector() {
       'transportation',
       'admission',
       'messaging',
+      'clinic',
+      'hostel',
+      'security',
+      'discipline',
+      'cafeteria',
+      'co-curricular',
+      'facilities',
+      'alumni',
       'mobile-app',
     ];
 

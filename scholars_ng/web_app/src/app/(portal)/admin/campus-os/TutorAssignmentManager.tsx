@@ -286,16 +286,16 @@ const FALLBACK_TUTORS: TutorProfileRecord[] = [
 ];
 
 export default function TutorAssignmentManager({ onTutorsCountChange }: TutorAssignmentManagerProps) {
-  const [tutors, setTutors] = useState<TutorProfileRecord[]>(FALLBACK_TUTORS);
+  const [tutors, setTutors] = useState<TutorProfileRecord[]>([]);
   const [metrics, setMetrics] = useState<TutorSummaryMetrics>({
-    total_tutors: 12,
-    assigned_count: 6,
-    unassigned_count: 6,
-    form_teachers_count: 6,
-    avg_weekly_periods: 19.0,
+    total_tutors: 0,
+    assigned_count: 0,
+    unassigned_count: 0,
+    form_teachers_count: 0,
+    avg_weekly_periods: 0,
     overloaded_count: 0,
-    total_subjects_count: 28,
-    unassigned_subjects_count: 4,
+    total_subjects_count: 0,
+    unassigned_subjects_count: 0,
   });
 
   const [availableStaff, setAvailableStaff] = useState<AvailableStaff[]>([]);

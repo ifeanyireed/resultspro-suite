@@ -173,13 +173,12 @@ export default function AdmissionsDashboard({
     try {
       const res = await api.get('/v1/campus/admissions');
       const rawItems = Array.isArray(res.data) ? res.data : res.data?.inquiries || [];
-      const items = rawItems.length > 0 ? rawItems : FALLBACK_INQUIRIES;
-      setInquiries(items);
-      setPipelineData(computePipeline(items, rawItems.length > 0 ? res.data?.pipeline : undefined));
+      setInquiries(rawItems);
+      setPipelineData(computePipeline(rawItems, res.data?.pipeline));
     } catch (err) {
-      console.error('Failed to load tenant admissions data, using fallback:', err);
-      setInquiries(FALLBACK_INQUIRIES);
-      setPipelineData(computePipeline(FALLBACK_INQUIRIES));
+      console.error('Failed to load tenant admissions data:', err);
+      setInquiries([]);
+      setPipelineData(computePipeline([]));
     } finally {
       setLoading(false);
     }

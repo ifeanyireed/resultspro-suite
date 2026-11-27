@@ -1,4 +1,4 @@
 import { redirect } from 'next/navigation';
 export default function RedirectToCampusOS() {
-  redirect('/admin/campus-os/timetable');
+  redirect('/admin/campus-os/academic?subtab=timetable');
 }

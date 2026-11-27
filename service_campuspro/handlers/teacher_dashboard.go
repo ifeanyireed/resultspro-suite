@@ -38,7 +38,7 @@ func HandleTeacherDashboard(w http.ResponseWriter, r *http.Request) {
 	// Attempt resolving from staff directory
 	if teacherQuery != "" {
 		_ = db.DB.QueryRow(`
-			SELECT id, full_name, COALESCE(email, ''), COALESCE(phone, ''), COALESCE(role, 'Teacher'), COALESCE(department, 'Science & Mathematics')
+			SELECT id, full_name, COALESCE(email, ''), COALESCE(phone, ''), COALESCE(designation, 'Teacher'), COALESCE(department, 'Science & Mathematics')
 			FROM campus_staff
 			WHERE tenant_id = ? AND (id = ? OR full_name ILIKE ? OR email ILIKE ?)
 			LIMIT 1
@@ -50,9 +50,9 @@ func HandleTeacherDashboard(w http.ResponseWriter, r *http.Request) {
 	// If not found by query, pick first active teacher from staff or fallback to senior form teacher
 	if teacherID == "" {
 		_ = db.DB.QueryRow(`
-			SELECT id, full_name, COALESCE(email, ''), COALESCE(phone, ''), COALESCE(role, 'Senior Master'), COALESCE(department, 'Physics & Mathematics')
+			SELECT id, full_name, COALESCE(email, ''), COALESCE(phone, ''), COALESCE(designation, 'Senior Master'), COALESCE(department, 'Physics & Mathematics')
 			FROM campus_staff
-			WHERE tenant_id = ? AND (role ILIKE '%Teacher%' OR role ILIKE '%Master%' OR role ILIKE '%Instructor%' OR role ILIKE '%Faculty%')
+			WHERE tenant_id = ? AND (cadre = 'TEACHING' OR designation ILIKE '%Teacher%' OR designation ILIKE '%Master%' OR designation ILIKE '%Instructor%' OR designation ILIKE '%Faculty%' OR designation ILIKE '%HOD%')
 			ORDER BY full_name ASC
 			LIMIT 1
 		`, tenantID).Scan(&teacherID, &teacherName, &teacherEmail, &teacherPhone, &teacherRole, &teacherSubject)
@@ -140,9 +140,9 @@ func HandleTeacherDashboard(w http.ResponseWriter, r *http.Request) {
 
 	ttRows, err := db.DB.Query(`
 		SELECT id, COALESCE(period_index, 1), COALESCE(day_of_week, 'Monday'), COALESCE(start_time, '08:00 AM'),
-		       COALESCE(end_time, '08:50 AM'), COALESCE(subject_name, 'Physics'), COALESCE(class_name, 'SSS 3 Science B'),
-		       COALESCE(room_name, 'Physics Lab'), COALESCE(teacher_name, ''), COALESCE(status, 'ACTIVE')
-		FROM campus_timetables
+		       COALESCE(end_time, '08:45 AM'), COALESCE(subject_name, 'Physics'), COALESCE(class_name, 'SSS 3 Science'),
+		       COALESCE(room, 'Physics Lab'), COALESCE(teacher_name, ''), COALESCE(status, 'ACTIVE')
+		FROM campus_timetable_slots
 		WHERE tenant_id = ? AND (day_of_week ILIKE ? OR day_of_week ILIKE 'Monday')
 		ORDER BY period_index ASC
 		LIMIT 10
@@ -204,7 +204,7 @@ func HandleTeacherDashboard(w http.ResponseWriter, r *http.Request) {
 		SELECT id, COALESCE(title, ''), COALESCE(subject_name, ''), COALESCE(class_name, ''),
 		       COALESCE(due_date, ''), COALESCE(max_score, 100), COALESCE(submissions_count, 0),
 		       COALESCE(total_students, 35), COALESCE(status, 'PUBLISHED')
-		FROM campus_homework
+		FROM campus_homework_and_assessments
 		WHERE tenant_id = ?
 		ORDER BY created_at DESC
 		LIMIT 8

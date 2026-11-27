@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"service_campuspro.resultspro.ng/db"
 )
 
@@ -26,17 +25,21 @@ func HandleParentDashboard(w http.ResponseWriter, r *http.Request) {
 	todayDate := time.Now().Format("2006-01-02")
 
 	// 2. Resolve Campus / Institution Name
-	var campusName string
+	var schoolName, campusName string
+	_ = db.DB.QueryRow(`SELECT name FROM tenants WHERE id = ?`, tenantID).Scan(&schoolName)
+	if schoolName == "" {
+		schoolName = "Greenwood High Academy"
+	}
 	_ = db.DB.QueryRow(`
 		SELECT name FROM campus_branches WHERE tenant_id = ? AND is_main = true LIMIT 1
 	`, tenantID).Scan(&campusName)
 	if campusName == "" {
-		campusName = "ExamsPRO Academy · Main Campus"
+		campusName = schoolName + " · Main Campus"
 	}
 
 	// 3. Resolve Parent Info
 	parentName := "Mrs. Sarah Adeleke-Okonkwo"
-	parentEmail := "sarah.okonkwo@example.com"
+	parentEmail := "sarah.okonkwo@greenwoodhigh.edu.ng"
 	parentPhone := "+234 803 459 2810"
 
 	var dbParentName, dbParentEmail, dbParentPhone string
@@ -44,6 +47,7 @@ func HandleParentDashboard(w http.ResponseWriter, r *http.Request) {
 		SELECT full_name, COALESCE(email, ''), COALESCE(phone, '')
 		FROM campus_parents
 		WHERE tenant_id = ?
+		ORDER BY created_at ASC
 		LIMIT 1
 	`, tenantID).Scan(&dbParentName, &dbParentEmail, &dbParentPhone)
 
@@ -80,22 +84,24 @@ func HandleParentDashboard(w http.ResponseWriter, r *http.Request) {
 	wards := []WardItem{}
 	rows, err := db.DB.Query(`
 		SELECT s.student_id, s.student_name, s.admission_number, 
-		       COALESCE(c.class_name, 'SS3'), COALESCE(a.arm_name, 'A'), COALESCE(s.gender, 'M')
+		       COALESCE(c.name, 'SS 3'), COALESCE(a.name, 'Science Diamond'), COALESCE(s.gender, 'FEMALE')
 		FROM campus_class_students s
 		LEFT JOIN campus_class_arms a ON s.arm_id = a.id
 		LEFT JOIN campus_classes c ON a.class_id = c.id
 		WHERE s.tenant_id = ?
 		ORDER BY s.student_name ASC
-		LIMIT 5
+		LIMIT 4
 	`, tenantID)
 
 	if err == nil {
 		defer rows.Close()
 		avatarPool := []string{
-			"https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/character4.jpg",
-			"https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/character5.jpg",
-			"https://res.cloudinary.com/qsdwzejd/image/upload/v1789250607/landing_page/character6.jpg",
+			"/avatars/character4.jpg",
+			"/avatars/character5.jpg",
+			"/avatars/character6.jpg",
+			"/avatars/character7.jpg",
 		}
+		pins := []string{"849201", "731940", "620418", "519302"}
 		idx := 0
 		for rows.Next() {
 			var wItem WardItem
@@ -108,12 +114,35 @@ func HandleParentDashboard(w http.ResponseWriter, r *http.Request) {
 				wItem.FirstName = wItem.Name
 			}
 			wItem.Avatar = avatarPool[idx%len(avatarPool)]
-			wItem.AttendanceRate = 96.5 - float64(idx)*1.2
-			wItem.AverageScore = 91.5 - float64(idx)*2.0
-			wItem.AverageGPA = 3.82 - float64(idx)*0.15
-			wItem.OutstandingFees = 45000.0 * float64(idx+1)
-			wItem.WalletBalance = 8500.0 + float64(idx)*2000.0
-			wItem.PickupPIN = "7" + uuid.New().String()[:3]
+			wItem.AttendanceRate = 97.4 - float64(idx)*0.8
+			wItem.AverageScore = 92.5 - float64(idx)*1.5
+			wItem.AverageGPA = 3.88 - float64(idx)*0.08
+
+			// Look up invoice balance for this student if present
+			var invBal float64
+			invErr := db.DB.QueryRow(`
+				SELECT COALESCE(balance_due, 0) FROM campus_student_invoices
+				WHERE tenant_id = ? AND student_name ILIKE ? LIMIT 1
+			`, tenantID, "%"+wItem.Name+"%").Scan(&invBal)
+			if invErr == nil {
+				wItem.OutstandingFees = invBal
+			} else {
+				wItem.OutstandingFees = 0
+			}
+
+			// Look up wallet balance for this student if present
+			var walBal float64
+			walErr := db.DB.QueryRow(`
+				SELECT COALESCE(balance, 18500) FROM campus_cafeteria_wallets
+				WHERE tenant_id = ? AND (student_id = ? OR student_name ILIKE ?) LIMIT 1
+			`, tenantID, wItem.StudentID, "%"+wItem.Name+"%").Scan(&walBal)
+			if walErr == nil {
+				wItem.WalletBalance = walBal
+			} else {
+				wItem.WalletBalance = 18500.0
+			}
+
+			wItem.PickupPIN = pins[idx%len(pins)]
 			wItem.Status = "ACTIVE"
 			wards = append(wards, wItem)
 			idx++
@@ -258,61 +287,286 @@ func HandleParentDashboard(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// 9. Notices Feed
+	// 9. Notices Feed from DB
 	type NoticeItem struct {
-		ID        string `json:"id"`
-		Title     string `json:"title"`
-		Category  string `json:"category"`
-		Date      string `json:"date"`
-		Summary   string `json:"summary"`
-		Author    string `json:"author"`
-		Priority  string `json:"priority"`
+		ID       string `json:"id"`
+		Title    string `json:"title"`
+		Category string `json:"category"`
+		Date     string `json:"date"`
+		Summary  string `json:"summary"`
+		Author   string `json:"author"`
+		Priority string `json:"priority"`
 	}
 
-	notices := []NoticeItem{
-		{
-			ID:       "not_01",
-			Title:    "Inter-House Athletic Championships & Parent Invitation",
-			Category: "Sports & Co-Curricular",
-			Date:     "This Friday · 09:00 AM",
-			Summary:  "All parents and guardians are cordially invited to the Annual Inter-House Sports Fiesta holding at the main sports complex. Official house colors encouraged.",
-			Author:   "Vice Principal (Student Affairs)",
-			Priority: "HIGH",
-		},
-		{
-			ID:       "not_02",
-			Title:    "Mid-Term Cognitive Assessment Reports Ready on ResultsPRO",
-			Category: "Academics",
-			Date:     "Yesterday",
-			Summary:  "First term cognitive skill mappings and mid-term report cards are now published. Access the ResultsPRO tab to review psychomotor ratings.",
-			Author:   "Director of Academic Planning",
-			Priority: "NORMAL",
-		},
-		{
-			ID:       "not_03",
-			Title:    "School Bus Route Maintenance Notice (Lekki / Victoria Island)",
-			Category: "Transportation",
-			Date:     "3 days ago",
-			Summary:  "Bus Route 04 (Lekki Phase 1 / Ikoyi) will experience a 10-minute departure adjustment due to road resurfacing along Admiralty Way.",
-			Author:   "Fleet Operations Command",
-			Priority: "NORMAL",
-		},
+	notices := []NoticeItem{}
+	nRows, nErr := db.DB.Query(`
+		SELECT id, title, COALESCE(category, 'GENERAL'), COALESCE(event_date, ''), COALESCE(content, ''), COALESCE(author_name, 'Principal Office'), COALESCE(priority, 'NORMAL')
+		FROM campus_notices_and_events
+		WHERE tenant_id = ?
+		ORDER BY created_at DESC
+		LIMIT 6
+	`, tenantID)
+	if nErr == nil && nRows != nil {
+		defer nRows.Close()
+		for nRows.Next() {
+			var n NoticeItem
+			if err := nRows.Scan(&n.ID, &n.Title, &n.Category, &n.Date, &n.Summary, &n.Author, &n.Priority); err == nil {
+				if n.Date == "" {
+					n.Date = "This Week"
+				}
+				notices = append(notices, n)
+			}
+		}
+	}
+
+	// Attendance history from DB
+	attendanceHistory := []map[string]interface{}{}
+	attRows, attErr := db.DB.Query(`
+		SELECT log_date, COALESCE(time_in, '07:24 AM'), COALESCE(time_out, '03:45 PM'), COALESCE(status, 'PRESENT'), COALESCE(terminal_name, 'Main Gate Turnstile A')
+		FROM campus_attendance_logs
+		WHERE tenant_id = ? AND person_type = 'STUDENT'
+		ORDER BY log_date DESC
+		LIMIT 5
+	`, tenantID)
+	if attErr == nil && attRows != nil {
+		defer attRows.Close()
+		for attRows.Next() {
+			var lDate, tIn, tOut, stat, term string
+			if err := attRows.Scan(&lDate, &tIn, &tOut, &stat, &term); err == nil {
+				attendanceHistory = append(attendanceHistory, map[string]interface{}{
+					"date":      lDate,
+					"time_in":   tIn,
+					"time_out":  tOut,
+					"status":    stat,
+					"terminal":  term,
+					"roll_call": "Verified Present",
+				})
+			}
+		}
+	}
+
+	// Invoices & Fee Structures from DB
+	var invNo, invTerm, invStatus string
+	var invTotal, invPaid, invBal float64
+	_ = db.DB.QueryRow(`
+		SELECT invoice_no, COALESCE(term_name, 'First Term'), total_billed, amount_paid, balance_due, status
+		FROM campus_student_invoices
+		WHERE tenant_id = ? AND student_name ILIKE ?
+		LIMIT 1
+	`, tenantID, "%"+activeWard.Name+"%").Scan(&invNo, &invTerm, &invTotal, &invPaid, &invBal, &invStatus)
+	if invTotal == 0 {
+		invNo = "INV-GWH-2026-01"
+		invTerm = "First Term"
+		invTotal = 285000
+		invPaid = invTotal - activeWard.OutstandingFees
+		invBal = activeWard.OutstandingFees
+		invStatus = "PAID"
+		if invBal > 0 {
+			invStatus = "PARTIAL"
+		}
+	}
+
+	feeItems := []map[string]interface{}{}
+	fRows, fErr := db.DB.Query(`
+		SELECT id, title, category, total_due
+		FROM campus_fee_structures
+		WHERE tenant_id = ?
+		ORDER BY is_mandatory DESC, total_due DESC
+		LIMIT 6
+	`, tenantID)
+	if fErr == nil && fRows != nil {
+		defer fRows.Close()
+		idx := 1
+		for fRows.Next() {
+			var id, title, cat string
+			var amt float64
+			if err := fRows.Scan(&id, &title, &cat, &amt); err == nil {
+				st := "PAID"
+				if invBal > 0 && idx == 1 {
+					st = "PART-PAID"
+				}
+				feeItems = append(feeItems, map[string]interface{}{
+					"code":        "FEE-GWH-0" + string(rune('0'+idx)),
+					"description": title,
+					"category":    cat,
+					"amount":      amt,
+					"status":      st,
+				})
+				idx++
+			}
+		}
+	}
+
+	// Transport Route from DB
+	var routeName, busNum, driverName, driverPhone, pickupStop, mornTime, aftTime string
+	var busCap int
+	_ = db.DB.QueryRow(`
+		SELECT r.route_name, r.bus_number, r.driver_name, r.driver_phone, r.capacity,
+		       COALESCE(rd.pickup_stop, 'Admiralty Way Junction'),
+		       COALESCE(rd.morning_pickup_time, r.departure_time, '06:45 AM'),
+		       COALESCE(rd.afternoon_dropoff_time, r.return_time, '03:50 PM')
+		FROM campus_transport_routes r
+		LEFT JOIN campus_transport_riders rd ON rd.route_id = r.id AND rd.tenant_id = r.tenant_id
+		WHERE r.tenant_id = ?
+		ORDER BY r.route_name ASC
+		LIMIT 1
+	`, tenantID).Scan(&routeName, &busNum, &driverName, &driverPhone, &busCap, &pickupStop, &mornTime, &aftTime)
+
+	// Authorized Pickups from DB
+	authPickups := []map[string]interface{}{}
+	pRows, pErr := db.DB.Query(`
+		SELECT guardian_name, relationship, guardian_phone, COALESCE(pickup_code, ''), status
+		FROM campus_security_authorized_pickups
+		WHERE tenant_id = ?
+		ORDER BY created_at ASC
+		LIMIT 5
+	`, tenantID)
+	if pErr == nil && pRows != nil {
+		defer pRows.Close()
+		for pRows.Next() {
+			var gName, rel, gPhone, pCode, stat string
+			if err := pRows.Scan(&gName, &rel, &gPhone, &pCode, &stat); err == nil {
+				authPickups = append(authPickups, map[string]interface{}{
+					"name":         gName,
+					"relationship": rel,
+					"phone":        gPhone,
+					"pickup_code":  pCode,
+					"status":       stat,
+				})
+			}
+		}
+	}
+
+	// Clinic from DB
+	var bloodGroup, genotype, allergies string
+	_ = db.DB.QueryRow(`
+		SELECT COALESCE(blood_group, 'O+'), COALESCE(genotype, 'AA'), COALESCE(allergies, 'None reported')
+		FROM campus_clinic_health_records
+		WHERE tenant_id = ?
+		LIMIT 1
+	`, tenantID).Scan(&bloodGroup, &genotype, &allergies)
+	if bloodGroup == "" {
+		bloodGroup = "O+"
+		genotype = "AA"
+		allergies = "Peanuts (Mild)"
+	}
+
+	clinicVisits := []map[string]interface{}{}
+	cvRows, cvErr := db.DB.Query(`
+		SELECT symptoms, triage_priority, COALESCE(diagnosis, ''), COALESCE(treatment, ''), nurse_name, status, created_at
+		FROM campus_clinic_visits
+		WHERE tenant_id = ?
+		ORDER BY created_at DESC
+		LIMIT 5
+	`, tenantID)
+	if cvErr == nil && cvRows != nil {
+		defer cvRows.Close()
+		for cvRows.Next() {
+			var symp, prio, diag, treat, nurse, stat string
+			var cAt time.Time
+			if err := cvRows.Scan(&symp, &prio, &diag, &treat, &nurse, &stat, &cAt); err == nil {
+				clinicVisits = append(clinicVisits, map[string]interface{}{
+					"date":            cAt.Format("02 Jan 2006"),
+					"symptoms":        symp,
+					"triage_priority": prio,
+					"diagnosis":       diag + " — " + treat,
+					"nurse":           nurse,
+					"status":          stat,
+				})
+			}
+		}
+	}
+
+	// Hostel & Exeats from DB
+	var hostelName, roomNum, wingName, matronName string
+	_ = db.DB.QueryRow(`
+		SELECT hostel_name, room_number, COALESCE(wing, 'Block A'), COALESCE(matron_name, 'Mr. Emeka Nwosu')
+		FROM campus_hostel_allocations
+		WHERE tenant_id = ?
+		LIMIT 1
+	`, tenantID).Scan(&hostelName, &roomNum, &wingName, &matronName)
+
+	hostelExeats := []map[string]interface{}{}
+	heRows, heErr := db.DB.Query(`
+		SELECT COALESCE(pass_code, 'EXT-2026-01'), exeat_type, reason, departure_date, expected_return_date, status
+		FROM campus_hostel_exeats
+		WHERE tenant_id = ?
+		ORDER BY created_at DESC
+		LIMIT 5
+	`, tenantID)
+	if heErr == nil && heRows != nil {
+		defer heRows.Close()
+		for heRows.Next() {
+			var pCode, eType, reason, dep, ret, stat string
+			if err := heRows.Scan(&pCode, &eType, &reason, &dep, &ret, &stat); err == nil {
+				hostelExeats = append(hostelExeats, map[string]interface{}{
+					"pass_code":            pCode,
+					"exeat_type":           eType,
+					"reason":               reason,
+					"departure_date":       dep,
+					"expected_return_date": ret,
+					"status":               stat,
+				})
+			}
+		}
+	}
+
+	// Cafeteria Wallet & Transactions from DB
+	var cardRFID string
+	var dailyLimit float64
+	_ = db.DB.QueryRow(`
+		SELECT COALESCE(card_rfid, 'RFID-GWH-0412'), COALESCE(daily_limit, 3500)
+		FROM campus_cafeteria_wallets
+		WHERE tenant_id = ?
+		LIMIT 1
+	`, tenantID).Scan(&cardRFID, &dailyLimit)
+	if cardRFID == "" {
+		cardRFID = "RFID-GWH-0412"
+		dailyLimit = 3500
+	}
+
+	cafeteriaTxs := []map[string]interface{}{}
+	ctRows, ctErr := db.DB.Query(`
+		SELECT description, amount, balance_after, COALESCE(cashier_name, 'Cafeteria POS 1'), created_at
+		FROM campus_cafeteria_transactions
+		WHERE tenant_id = ?
+		ORDER BY created_at DESC
+		LIMIT 5
+	`, tenantID)
+	if ctErr == nil && ctRows != nil {
+		defer ctRows.Close()
+		for ctRows.Next() {
+			var desc, cashier string
+			var amt, balAfter float64
+			var cAt time.Time
+			if err := ctRows.Scan(&desc, &amt, &balAfter, &cashier, &cAt); err == nil {
+				cafeteriaTxs = append(cafeteriaTxs, map[string]interface{}{
+					"date":          cAt.Format("02 Jan, 03:04 PM"),
+					"terminal":      cashier,
+					"item":          desc,
+					"amount":        amt,
+					"balance_after": balAfter,
+				})
+			}
+		}
 	}
 
 	// 10. Construct Clean Tenant-Isolated Payload
 	response := map[string]interface{}{
 		"success": true,
 		"school": map[string]interface{}{
-			"name":        campusName,
-			"session":     "2026/2027 Academic Session",
-			"term":        "First Term (Term 1)",
-			"tenant_id":   tenantID,
+			"name":      schoolName,
+			"campus":    campusName,
+			"session":   "2026/2027 Academic Session",
+			"term":      "First Term (Term 1)",
+			"tenant_id": tenantID,
 		},
 		"parent": map[string]interface{}{
 			"name":         parentName,
 			"email":        parentEmail,
 			"phone":        parentPhone,
-			"relationship": "Mother / Primary Guardian",
+			"campus_name":  campusName,
+			"relationship": "Primary Guardian",
 		},
 		"metrics": map[string]interface{}{
 			"total_wards":            len(wards),
@@ -328,15 +582,18 @@ func HandleParentDashboard(w http.ResponseWriter, r *http.Request) {
 		"wards":       wards,
 		"active_ward": activeWard,
 		"today_attendance": map[string]interface{}{
-			"status":        clockStatus,
-			"time_in":       clockTimeIn,
-			"terminal":      terminalName,
-			"date":          todayDate,
-			"is_punctual":   true,
-			"monthly_rate":  activeWard.AttendanceRate,
+			"status":       clockStatus,
+			"time_in":      clockTimeIn,
+			"terminal":     terminalName,
+			"date":         todayDate,
+			"is_punctual":  true,
+			"monthly_rate": activeWard.AttendanceRate,
+			"history":      attendanceHistory,
 		},
 		"schedule": scheduleList,
 		"notices":  notices,
+		"messages": notices,
+		"clinic":   clinicVisits,
 		"modular_suite": map[string]interface{}{
 			"classroompro": map[string]interface{}{
 				"active_courses": 9,
@@ -352,18 +609,18 @@ func HandleParentDashboard(w http.ResponseWriter, r *http.Request) {
 					{"name": "Engr. D. Adeleke", "subject": "Further Mathematics", "rating": 4.9, "sessions_completed": 14, "next_session": "Today, 04:30 PM"},
 					{"name": "Dr. K. Balogun", "subject": "Physics Advanced", "rating": 4.8, "sessions_completed": 10, "next_session": "Thursday, 05:00 PM"},
 				},
-				"tutor_remarks": "Alex demonstrates outstanding conceptual grasp of differential calculus and mechanics.",
+				"tutor_remarks": activeWard.FirstName + " demonstrates outstanding conceptual grasp of differential calculus and mechanics.",
 			},
 			"puzzlepro": map[string]interface{}{
-				"cognitive_streak": 5,
-				"challenges_completed": 42,
+				"cognitive_streak":             5,
+				"challenges_completed":         42,
 				"computational_thinking_score": 890,
-				"global_rank": "Top 8% in Cohort",
+				"global_rank":                  "Top 8% in Cohort",
 			},
 			"resultspro": map[string]interface{}{
-				"latest_term": "First Term 2026/2027 Mid-Term Report",
+				"latest_term":   "First Term 2026/2027 Mid-Term Report",
 				"overall_grade": "A",
-				"percentile": "94th Percentile",
+				"percentile":    "94th Percentile",
 				"subjects": []map[string]interface{}{
 					{"subject": "Mathematics", "test": 28, "midterm": 67, "total": 95, "grade": "A+", "remark": "Exceptional insight"},
 					{"subject": "Physics", "test": 26, "midterm": 63, "total": 89, "grade": "A", "remark": "Strong problem solving"},
@@ -372,67 +629,62 @@ func HandleParentDashboard(w http.ResponseWriter, r *http.Request) {
 					{"subject": "Computer Science", "test": 30, "midterm": 68, "total": 98, "grade": "A+", "remark": "Mastery in Python algorithms"},
 				},
 				"psychomotor": map[string]string{
-					"Punctuality": "5/5 (Excellent)",
+					"Punctuality":   "5/5 (Excellent)",
 					"Attentiveness": "5/5 (Excellent)",
-					"Neatness": "5/5 (Excellent)",
-					"Leadership": "4/5 (Very Good)",
+					"Neatness":      "5/5 (Excellent)",
+					"Leadership":    "4/5 (Very Good)",
 					"Sportsmanship": "5/5 (Excellent)",
 				},
 			},
 		},
 		"campus_operations": map[string]interface{}{
 			"bursary": map[string]interface{}{
-				"outstanding_balance": activeWard.OutstandingFees,
-				"next_due_date":       "November 30, 2026",
-				"invoices": []map[string]interface{}{
-					{"invoice_no": "INV-2026-0812", "description": "Tuition & Laboratory Practical Fees (Term 1)", "total": 350000, "balance": activeWard.OutstandingFees, "status": "PARTIALLY_PAID"},
-					{"invoice_no": "INV-2026-0419", "description": "Annual School Uniform & Sports Kit Package", "total": 65000, "balance": 0, "status": "PAID"},
-				},
+				"invoice_no":          invNo,
+				"term_name":           invTerm,
+				"total_billed":        invTotal,
+				"amount_paid":         invPaid,
+				"outstanding_balance": invBal,
+				"status":              invStatus,
+				"next_due_date":       "December 01, 2026",
+				"fee_items":           feeItems,
 			},
 			"transportation": map[string]interface{}{
-				"route_name":      "Route 04 · Lekki Phase 1 / Admiralty Express",
-				"bus_number":      "BUS-04 (Toyota Coaster)",
-				"plate_number":    "LAG-849-XY",
-				"driver_name":     "Mr. Sunday Adelekan",
-				"driver_phone":    "+234 802 331 4991",
-				"pickup_stop":     "Block 12, Admiralty Way, Lekki",
-				"pickup_time":     "07:12 AM",
-				"dropoff_time":    "03:45 PM",
-				"status":          "In Transit · 6 mins away from stop",
-				"telemetry_lat":   6.4474,
-				"telemetry_lng":   3.4735,
+				"route_name":   routeName,
+				"bus_number":   busNum,
+				"capacity":     busCap,
+				"driver_name":  driverName,
+				"driver_phone": driverPhone,
+				"pickup_stop":  pickupStop,
+				"pickup_time":  mornTime,
+				"dropoff_time": aftTime,
+				"status":       "Route Active · GPS Verified",
 			},
 			"security": map[string]interface{}{
-				"dismissal_pin":       activeWard.PickupPIN,
-				"authorized_pickups": []map[string]interface{}{
-					{"name": parentName, "relationship": "Mother", "phone": parentPhone, "is_primary": true},
-					{"name": "Mr. Olumide Adeleke", "relationship": "Father", "phone": "+234 802 990 1204", "is_primary": false},
-					{"name": "Driver Sunday", "relationship": "Designated Family Driver", "phone": "+234 803 221 8899", "is_primary": false},
-				},
-				"gate_status": "Secure · Gate Marshals On Duty",
+				"dismissal_pin":      activeWard.PickupPIN,
+				"authorized_pickups": authPickups,
+				"gate_status":        "Secure · Gate Marshals On Duty",
 			},
 			"clinic": map[string]interface{}{
-				"blood_group":    "O+",
-				"genotype":       "AA",
-				"known_allergies": "Peanuts (Mild), Penicillin (Sensitive)",
-				"recent_visits": []map[string]interface{}{
-					{"date": "2026-11-04", "reason": "Sports Bruise & Disinfectant Dressing", "nurse": "Nurse Joy", "discharged": true},
-				},
+				"blood_group":     bloodGroup,
+				"genotype":        genotype,
+				"known_allergies": allergies,
+				"duty_nurse":      "Nurse Comfort Adeyemi (RN)",
+				"recent_visits":   clinicVisits,
 			},
 			"hostel": map[string]interface{}{
-				"is_boarder":     false,
-				"hall_name":      "Day Student (Not In Boarding)",
-				"active_exeats":  []map[string]interface{}{},
+				"is_boarder":    hostelName != "",
+				"hall_name":     hostelName,
+				"room_number":   roomNum,
+				"wing":          wingName,
+				"housemaster":   matronName,
+				"active_exeats": hostelExeats,
 			},
 			"cafeteria": map[string]interface{}{
-				"wallet_balance":     activeWard.WalletBalance,
-				"rfid_card_number":   "RFID-NG-77491",
-				"daily_spend_limit":  3000,
-				"dietary_alert":      "Nut-Free Menu Guard Active",
-				"recent_transactions": []map[string]interface{}{
-					{"date": "Today, 10:15 AM", "item": "Jollof Rice with Grilled Chicken & Fresh Apple Juice", "amount": 1800},
-					{"date": "Yesterday, 10:20 AM", "item": "Meat Pie & Greek Yogurt", "amount": 1200},
-				},
+				"wallet_balance":      activeWard.WalletBalance,
+				"rfid_card_number":    cardRFID,
+				"daily_spend_limit":   dailyLimit,
+				"dietary_alert":       "Nut-Free Menu Guard Active",
+				"recent_transactions": cafeteriaTxs,
 			},
 		},
 	}

@@ -17,11 +17,26 @@ import (
 func resolveHandlerTenantID(r *http.Request) string {
 	tID := middleware.GetTenantID(r)
 	if tID != "" {
-		return tID
+		res := middleware.ResolveCanonicalTenantID(tID)
+		if res == "tenant-greenwoodhigh" {
+			_ = SeedGreenwoodHighAllModules("tenant-greenwoodhigh")
+		}
+		return res
 	}
-	qID := strings.TrimSpace(r.URL.Query().Get("tenant_id"))
-	if qID != "" {
-		return qID
+	for _, c := range []string{
+		strings.TrimSpace(r.URL.Query().Get("tenant_id")),
+		strings.TrimSpace(r.URL.Query().Get("tenant")),
+		strings.TrimSpace(r.Header.Get("X-Tenant-ID")),
+		strings.TrimSpace(r.Header.Get("X-Tenant-Slug")),
+		strings.TrimSpace(r.Header.Get("X-Tenant-Domain")),
+	} {
+		if c != "" {
+			res := middleware.ResolveCanonicalTenantID(c)
+			if res == "tenant-greenwoodhigh" {
+				_ = SeedGreenwoodHighAllModules("tenant-greenwoodhigh")
+			}
+			return res
+		}
 	}
 	return ""
 }
@@ -412,14 +427,35 @@ func HandleCampusSummary(w http.ResponseWriter, r *http.Request) {
 
 	seedTenantOperationalDataIfEmpty(tenantID)
 
-	var studentsCount, teachersCount, parentsCount, classesCount, inquiriesCount int
+	var studentsCount, teachersCount, parentsCount, classesCount, armsCount, subjectsCount, tutorsCount, inquiriesCount int
 	var booksCount, activeLoansCount, inventoryCount, routesCount, hostelCount, noticesCount, mobileCount int
+	var clinicCount, securityVisitorsCount, disciplineIncidentsCount, cafeteriaWalletsCount, clubsCount, facilitiesCount, alumniCount, branchesCount int
+	var activeSessionName string
 	var feeCollected, feeOutstanding float64
 
-	_ = db.DB.QueryRow("SELECT COUNT(*) FROM user_tenant_roles WHERE tenant_id = ? AND role = 'student'", tenantID).Scan(&studentsCount)
-	_ = db.DB.QueryRow("SELECT COUNT(*) FROM user_tenant_roles WHERE tenant_id = ? AND role = 'teacher'", tenantID).Scan(&teachersCount)
-	_ = db.DB.QueryRow("SELECT COUNT(*) FROM user_tenant_roles WHERE tenant_id = ? AND role = 'parent'", tenantID).Scan(&parentsCount)
-	_ = db.DB.QueryRow("SELECT COUNT(*) FROM classes WHERE tenant_id = ?", tenantID).Scan(&classesCount)
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_class_students WHERE tenant_id = ?", tenantID).Scan(&studentsCount)
+	if studentsCount == 0 {
+		_ = db.DB.QueryRow("SELECT COUNT(*) FROM user_tenant_roles WHERE tenant_id = ? AND role = 'student'", tenantID).Scan(&studentsCount)
+	}
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_staff WHERE tenant_id = ?", tenantID).Scan(&teachersCount)
+	if teachersCount == 0 {
+		_ = db.DB.QueryRow("SELECT COUNT(*) FROM user_tenant_roles WHERE tenant_id = ? AND role = 'teacher'", tenantID).Scan(&teachersCount)
+	}
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_parents WHERE tenant_id = ?", tenantID).Scan(&parentsCount)
+	if parentsCount == 0 {
+		_ = db.DB.QueryRow("SELECT COUNT(*) FROM user_tenant_roles WHERE tenant_id = ? AND role = 'parent'", tenantID).Scan(&parentsCount)
+	}
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_classes WHERE tenant_id = ?", tenantID).Scan(&classesCount)
+	if classesCount == 0 {
+		_ = db.DB.QueryRow("SELECT COUNT(*) FROM classes WHERE tenant_id = ?", tenantID).Scan(&classesCount)
+	}
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_class_arms WHERE tenant_id = ?", tenantID).Scan(&armsCount)
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_subjects WHERE tenant_id = ?", tenantID).Scan(&subjectsCount)
+	_ = db.DB.QueryRow("SELECT COUNT(DISTINCT teacher_id) FROM campus_subject_teachers WHERE tenant_id = ?", tenantID).Scan(&tutorsCount)
+	_ = db.DB.QueryRow("SELECT COALESCE(session_name, '2026/2027') FROM campus_academic_sessions WHERE tenant_id = ? AND is_current = true LIMIT 1", tenantID).Scan(&activeSessionName)
+	if activeSessionName == "" {
+		activeSessionName = "2026/2027"
+	}
 	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_admissions_inquiries WHERE tenant_id = ?", tenantID).Scan(&inquiriesCount)
 	_ = db.DB.QueryRow("SELECT COALESCE(SUM(amount_paid), 0), COALESCE(SUM(balance_due), 0) FROM campus_student_invoices WHERE tenant_id = ?", tenantID).Scan(&feeCollected, &feeOutstanding)
 	_ = db.DB.QueryRow("SELECT COALESCE(SUM(total_copies), 0) FROM campus_library_books WHERE tenant_id = ?", tenantID).Scan(&booksCount)
@@ -429,23 +465,50 @@ func HandleCampusSummary(w http.ResponseWriter, r *http.Request) {
 	_ = db.DB.QueryRow("SELECT COALESCE(SUM(occupants_count), 0) FROM campus_hostel_allocations WHERE tenant_id = ?", tenantID).Scan(&hostelCount)
 	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_notices_and_events WHERE tenant_id = ?", tenantID).Scan(&noticesCount)
 	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_mobile_app_accounts WHERE tenant_id = ?", tenantID).Scan(&mobileCount)
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_clinic_health_records WHERE tenant_id = ?", tenantID).Scan(&clinicCount)
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_security_visitors WHERE tenant_id = ?", tenantID).Scan(&securityVisitorsCount)
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_discipline_incidents WHERE tenant_id = ?", tenantID).Scan(&disciplineIncidentsCount)
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_cafeteria_wallets WHERE tenant_id = ?", tenantID).Scan(&cafeteriaWalletsCount)
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_clubs WHERE tenant_id = ?", tenantID).Scan(&clubsCount)
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_facilities WHERE tenant_id = ?", tenantID).Scan(&facilitiesCount)
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_alumni_directory WHERE tenant_id = ?", tenantID).Scan(&alumniCount)
+	_ = db.DB.QueryRow("SELECT COUNT(*) FROM campus_branches WHERE tenant_id = ?", tenantID).Scan(&branchesCount)
+
+	var schoolName string
+	_ = db.DB.QueryRow("SELECT name FROM tenants WHERE id = ?", tenantID).Scan(&schoolName)
+	if schoolName == "" {
+		schoolName = "Greenwood High Academy"
+	}
 
 	respData := map[string]interface{}{
-		"tenant_id":        tenantID,
-		"students":         studentsCount,
-		"teachers":         teachersCount,
-		"parents":          parentsCount,
-		"classes":          classesCount,
-		"inquiries":        inquiriesCount,
-		"fee_collected":    feeCollected,
-		"fee_outstanding":  feeOutstanding,
-		"library_books":    booksCount,
-		"active_loans":     activeLoansCount,
-		"inventory_items":  inventoryCount,
-		"transport_routes": routesCount,
-		"hostel_occupants": hostelCount,
-		"notices":          noticesCount,
-		"mobile_accounts":  mobileCount,
+		"tenant_id":            tenantID,
+		"school_name":          schoolName,
+		"active_session":       activeSessionName,
+		"branches":             branchesCount,
+		"students":             studentsCount,
+		"teachers":             teachersCount,
+		"parents":              parentsCount,
+		"classes":              classesCount,
+		"class_arms":           armsCount,
+		"subjects":             subjectsCount,
+		"assigned_tutors":      tutorsCount,
+		"inquiries":            inquiriesCount,
+		"fee_collected":        feeCollected,
+		"fee_outstanding":      feeOutstanding,
+		"library_books":        booksCount,
+		"active_loans":         activeLoansCount,
+		"inventory_items":      inventoryCount,
+		"transport_routes":     routesCount,
+		"hostel_occupants":     hostelCount,
+		"notices":              noticesCount,
+		"mobile_accounts":      mobileCount,
+		"clinic_records":       clinicCount,
+		"security_visitors":    securityVisitorsCount,
+		"discipline_incidents": disciplineIncidentsCount,
+		"cafeteria_wallets":    cafeteriaWalletsCount,
+		"clubs":                clubsCount,
+		"facilities":           facilitiesCount,
+		"alumni":               alumniCount,
 	}
 
 	if db.GlobalRedis != nil && cacheKey != "" {

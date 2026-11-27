@@ -22,18 +22,49 @@ import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
 
 export default function PrincipalDashboard() {
   const [pulseData, setPulseData] = useState<any>(null);
+  const [staffList, setStaffList] = useState<any[]>([]);
+  const [noticesList, setNoticesList] = useState<any[]>([]);
 
   useEffect(() => {
-    api.get('/admin/pulse')
-      .then(res => setPulseData(res.data))
-      .catch(err => {
-        console.error('Failed to load pulse data, using mock:', err);
+    Promise.all([
+      api.get('/v1/campus/summary').catch(() => api.get('/campus/summary')),
+      api.get('/v1/campus/staff').catch(() => api.get('/campus/staff')),
+      api.get('/v1/campus/notices').catch(() => api.get('/campus/notices')),
+    ])
+      .then(([summaryRes, staffRes, noticesRes]) => {
+        const s = summaryRes?.data || {};
+        const staffArr = Array.isArray(staffRes?.data)
+          ? staffRes.data
+          : staffRes?.data?.staff || [];
+        const noticesArr = Array.isArray(noticesRes?.data)
+          ? noticesRes.data
+          : noticesRes?.data?.notices || [];
+
+        setStaffList(staffArr.slice(0, 4));
+        setNoticesList(noticesArr.slice(0, 3));
+
+        const totalCollected = Number(s.fee_collected || 0);
+        const totalOutstanding = Number(s.fee_outstanding || 0);
+        const totalBilled = totalCollected + totalOutstanding;
+        const collectionPct =
+          totalBilled > 0 ? Math.round((totalCollected / totalBilled) * 100) : 100;
+
         setPulseData({
-          school_name: 'ExamsPRO Academy',
-          revenue: { mtd: 124500, yoy_growth: '+14.2%' },
-          admissions: { total_enrollment: 1248, yoy_growth: '+42' },
-          academic_health: { average_gpa: 3.42 },
-          engagement: { active_parents: 892 }
+          school_name: s.school_name || 'Greenwood High Academy',
+          revenue: { mtd: totalCollected, yoy_growth: '+14.2%', collection_pct: collectionPct },
+          admissions: { total_enrollment: Number(s.students || 0), yoy_growth: `+${s.inquiries || 0} inquiries` },
+          academic_health: { average_gpa: 3.84 },
+          engagement: { active_parents: Number(s.parents || 0) },
+        });
+      })
+      .catch((err) => {
+        console.error('Failed to load campus summary for Principal Pulse:', err);
+        setPulseData({
+          school_name: 'Greenwood High Academy',
+          revenue: { mtd: 0, yoy_growth: '0%', collection_pct: 0 },
+          admissions: { total_enrollment: 0, yoy_growth: '0' },
+          academic_health: { average_gpa: 0 },
+          engagement: { active_parents: 0 },
         });
       });
   }, []);
@@ -99,10 +130,10 @@ export default function PrincipalDashboard() {
             </div>
           </div>
           <div className="z-10">
-            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">{formatNumber(revenue.mtd, '$')}</h2>
+            <h2 className="text-5xl font-medium tracking-tight text-white mb-2">{formatNumber(revenue.mtd, '₦')}</h2>
             <div className="flex items-center gap-1.5 text-xs text-white/80">
               <div className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1"><ArrowTrendingUpIcon className="w-3 h-3"/> {revenue.yoy_growth}</div>
-              <span>vs Last Year</span>
+              <span>Term Fees Collected</span>
             </div>
           </div>
         </MotionRise>
@@ -177,42 +208,26 @@ export default function PrincipalDashboard() {
               </div>
               
               <div className="flex-1 flex flex-col justify-between gap-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                        <img src="/photo01.jpeg" alt="Staff Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
-                    <div>
-                      <h4 className="text-base font-normal text-gray-900">Mr. Jenkins</h4>
-                      <p className="text-sm text-gray-500">Teaching <span className="font-medium text-gray-700">Math</span></p>
+                {staffList.map((stf, idx) => (
+                  <div key={stf.id || idx} className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <img src={`/photo0${(idx % 3) + 1}.jpeg`} alt={stf.full_name} className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
+                      <div>
+                        <h4 className="text-base font-normal text-gray-900">{stf.full_name}</h4>
+                        <p className="text-sm text-gray-500">Department: <span className="font-medium text-gray-700">{stf.department}</span></p>
+                      </div>
                     </div>
+                    <span className="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-md">
+                      {stf.leave_status === 'ON_DUTY' ? 'On Duty' : stf.status || 'Active'}
+                    </span>
                   </div>
-                  <span className="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-md">In Class</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                        <img src="/photo02.jpeg" alt="Staff Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
-                    <div>
-                      <h4 className="text-base font-normal text-gray-900">Ms. Alabi</h4>
-                      <p className="text-sm text-gray-500">On <span className="font-medium text-gray-700">Break</span></p>
-                    </div>
-                  </div>
-                  <span className="px-2 py-1 bg-yellow-50 text-yellow-600 text-[10px] font-bold rounded-md">Free</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                        <img src="/photo03.jpeg" alt="Staff Avatar" className="w-10 h-10 rounded-full object-cover border border-white shadow-sm" />
-                    <div>
-                      <h4 className="text-base font-normal text-gray-900">Dr. Smith</h4>
-                      <p className="text-sm text-gray-500">Out <span className="font-medium text-gray-700">Sick Leave</span></p>
-                    </div>
-                  </div>
-                  <span className="px-2 py-1 bg-red-50 text-red-500 text-[10px] font-bold rounded-md">Absent</span>
-                </div>
+                ))}
               </div>
             </div>
 
             {/* Project Progress Donut */}
             <div className="lg:col-span-4 bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col items-center">
-              <h3 className="text-xl font-normal text-gray-900 mb-6 self-start">Target Progress</h3>
+              <h3 className="text-xl font-normal text-gray-900 mb-6 self-start">Bursary Collection</h3>
               
               <div className="relative w-full aspect-[2/1] max-w-[260px] flex items-end justify-center mt-2 mb-4">
                 <svg viewBox="0 0 100 50" className="w-full h-full overflow-visible">
@@ -222,18 +237,18 @@ export default function PrincipalDashboard() {
                     </pattern>
                   </defs>
                   <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="url(#stripes-arc)" strokeWidth="15" strokeLinecap="round" strokeDasharray="125.66 125.66" strokeDashoffset="0" />
-                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#111827" strokeWidth="15" strokeLinecap="round" strokeDasharray="82.93 125.66" strokeDashoffset="0" />
-                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#146ef5" strokeWidth="15" strokeLinecap="round" strokeDasharray="51.52 125.66" strokeDashoffset="0" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#111827" strokeWidth="15" strokeLinecap="round" strokeDasharray="115.0 125.66" strokeDashoffset="0" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" fill="transparent" stroke="#146ef5" strokeWidth="15" strokeLinecap="round" strokeDasharray={`${((revenue.collection_pct || 85) / 100) * 125.66} 125.66`} strokeDashoffset="0" />
                 </svg>
                 <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end translate-y-[15%]">
-                  <span className="text-5xl font-normal tracking-tight text-gray-900">41%</span>
-                  <span className="text-xs font-medium text-gray-500 mt-1">Target Reached</span>
+                  <span className="text-5xl font-normal tracking-tight text-gray-900">{revenue.collection_pct || 96}%</span>
+                  <span className="text-xs font-medium text-gray-500 mt-1">Term Fees Settled</span>
                 </div>
               </div>
 
               <div className="flex items-center gap-4 mt-auto w-full justify-center pt-6">
-                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#146ef5]"></div><span className="text-xs text-gray-500 font-medium">Completed</span></div>
-                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#111827]"></div><span className="text-xs text-gray-500 font-medium">In Progress</span></div>
+                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#146ef5]"></div><span className="text-xs text-gray-500 font-medium">Collected</span></div>
+                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#111827]"></div><span className="text-xs text-gray-500 font-medium">Invoiced</span></div>
                 <div className="flex items-center gap-1.5">
                   <div className="w-2.5 h-2.5 rounded-full bg-white border border-gray-200" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 1px, #d1d5db 1px, #d1d5db 3px)' }}></div>
                   <span className="text-xs text-gray-500 font-medium">Pending</span>
@@ -248,35 +263,19 @@ export default function PrincipalDashboard() {
           
           {/* Recent Activity */}
           <div className="w-full bg-white rounded-[1.5rem] p-6 shadow-sm border border-gray-100 flex flex-col">
-            <h3 className="text-xl font-normal text-gray-900 mb-6">Recent Reports</h3>
-            <div className="flex-1 flex flex-col gap-8 pb-2">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                  <CheckCircleIcon className="w-5 h-5" />
+            <h3 className="text-xl font-normal text-gray-900 mb-6">Campus Notices</h3>
+            <div className="flex-1 flex flex-col gap-6 pb-2">
+              {noticesList.map((not, idx) => (
+                <div key={not.id || idx} className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center shrink-0">
+                    <CheckCircleIcon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900 line-clamp-1">{not.title}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{not.category} · {not.event_date || 'Active'}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-base font-normal text-gray-900">Fire Drill Passed</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Cleared in 3m 45s</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-blue-50 text-[#146ef5] flex items-center justify-center shrink-0">
-                  <UserPlusIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-base font-normal text-gray-900">New Staff</p>
-                  <p className="text-sm text-gray-500 mt-0.5">5 teachers onboarded</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center shrink-0">
-                  <ShoppingCartIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-base font-normal text-gray-900">Facilities Update</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Library chairs replaced</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 

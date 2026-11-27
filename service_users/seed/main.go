@@ -75,16 +75,30 @@ func main() {
 	seed(db, "INSERT INTO curriculums (id, name, country) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", "cur-1", "Nigerian National Curriculum (NERDC)", "Nigeria")
 	seed(db, "INSERT INTO curriculums (id, name, country) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", "cur-2", "British National Curriculum (Cambridge)", "United Kingdom")
 
-	// 4. Sample Tenant: Greenwood High
+	// 4. Sample Tenant: Greenwood High Academy (tenant-greenwoodhigh & tenant-1)
+	seed(db, `INSERT INTO tenants (id, name, slug, default_subdomain, tenant_code, short_name, motto, logo_url, primary_color, secondary_color, accent_color, contact_email, full_address, status, verification_status, referred_by_agent_id, subscription_tier, settings) 
+	          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 'ACTIVE', 'VERIFIED', $14, 'enterprise', $15) ON CONFLICT DO NOTHING`,
+		"tenant-greenwoodhigh", "Greenwood High Academy", "greenwoodhigh", "greenwoodhigh.scholars.ng", "GWH001", "GWH", "Nurturing Tomorrow's Leaders Through Excellence, Character & Innovation",
+		"/logo.svg", "#146ef5", "#0f172a", "#10b981",
+		"admissions@greenwoodhigh.edu.ng", "Plot 14, Admiralty Way, Lekki Phase 1, Lagos, Nigeria",
+		"999efa7d-e12d-4ed1-9902-d341c6826b99",
+		`{"theme": "modern", "hero_title": "Where Academic Rigor Meets Future-Ready Innovation.", "hero_subtitle": "Greenwood High Academy combines British-Nigerian curriculum excellence and world-class STEM facilities."}`)
+
 	seed(db, `INSERT INTO tenants (id, name, slug, default_subdomain, tenant_code, short_name, motto, logo_url, primary_color, secondary_color, accent_color, contact_email, full_address, status, verification_status, referred_by_agent_id, subscription_tier, settings) 
 	          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 'ACTIVE', 'VERIFIED', $14, 'PRO', $15) ON CONFLICT DO NOTHING`,
 		"tenant-1", "Greenwood High", "greenwood-high", "greenwood", "GHS001", "GHS", "Excellence and Integrity",
-		"https://auth.resultspro.ng/logos/greenwood.png", "#2563eb", "#1e293b", "#f59e0b",
+		"/logo.svg", "#2563eb", "#1e293b", "#f59e0b",
 		"info@greenwoodhigh.edu.ng", "123 Academic Way, Owerri, Imo State",
 		"999efa7d-e12d-4ed1-9902-d341c6826b99",
 		`{"theme": "modern", "hero_title": "Welcome to Greenwood High", "hero_subtitle": "Fostering academic excellence and character building."}`)
 
 	// 5. User Tenant Roles
+	seed(db, "INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "role-gwh-1", "bfb51c68-ccb0-401f-b58f-27fd41c6a856", "tenant-greenwoodhigh", "super-admin", "active")
+	seed(db, "INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "role-gwh-2", "8d3a7776-5d21-4f1e-9a6d-e4c1d63e9f02", "tenant-greenwoodhigh", "tenant-admin", "active")
+	seed(db, "INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "role-gwh-3", "2db093ed-bdc9-47c4-b71c-66869f0f1ea7", "tenant-greenwoodhigh", "teacher", "active")
+	seed(db, "INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "role-gwh-4", "111efa7d-e12d-4ed1-9902-d341c6826b50", "tenant-greenwoodhigh", "student", "active")
+	seed(db, "INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "role-gwh-5", "dac38ffd-866f-47ab-8ac4-ecf6ea520ba8", "tenant-greenwoodhigh", "parent", "active")
+
 	seed(db, "INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "role-1", "bfb51c68-ccb0-401f-b58f-27fd41c6a856", "tenant-1", "super-admin", "active")
 	seed(db, "INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "role-2", "8d3a7776-5d21-4f1e-9a6d-e4c1d63e9f02", "tenant-1", "tenant-admin", "active")
 	seed(db, "INSERT INTO user_tenant_roles (id, user_id, tenant_id, role, status) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING", "role-3", "2db093ed-bdc9-47c4-b71c-66869f0f1ea7", "tenant-1", "teacher", "active")

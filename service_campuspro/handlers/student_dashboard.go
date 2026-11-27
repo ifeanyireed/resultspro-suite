@@ -33,7 +33,7 @@ func HandleStudentDashboard(w http.ResponseWriter, r *http.Request) {
 
 	if studentID != "" {
 		_ = db.DB.QueryRow(`
-			SELECT s.student_id, s.student_name, s.admission_number, COALESCE(c.class_name, 'SS3'), COALESCE(a.arm_name, 'Science Diamond'), COALESCE(s.gender, 'F')
+			SELECT s.student_id, s.student_name, s.admission_number, COALESCE(c.name, 'SS 3'), COALESCE(a.name, 'Science Diamond'), COALESCE(s.gender, 'FEMALE')
 			FROM campus_class_students s
 			LEFT JOIN campus_class_arms a ON s.arm_id = a.id
 			LEFT JOIN campus_classes c ON a.class_id = c.id
@@ -45,7 +45,7 @@ func HandleStudentDashboard(w http.ResponseWriter, r *http.Request) {
 	// Fallback to first enrolled student in database if query param is not set or not found
 	if sID == "" {
 		_ = db.DB.QueryRow(`
-			SELECT s.student_id, s.student_name, s.admission_number, COALESCE(c.class_name, 'Senior Secondary 3'), COALESCE(a.arm_name, 'Science Diamond'), COALESCE(s.gender, 'F')
+			SELECT s.student_id, s.student_name, s.admission_number, COALESCE(c.name, 'Senior Secondary 3'), COALESCE(a.name, 'Science Diamond'), COALESCE(s.gender, 'FEMALE')
 			FROM campus_class_students s
 			LEFT JOIN campus_class_arms a ON s.arm_id = a.id
 			LEFT JOIN campus_classes c ON a.class_id = c.id
@@ -78,12 +78,16 @@ func HandleStudentDashboard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 3. Resolve School / Campus Name
-	var campusName string
+	var schoolName, campusName string
+	_ = db.DB.QueryRow(`SELECT name FROM tenants WHERE id = ?`, tenantID).Scan(&schoolName)
+	if schoolName == "" {
+		schoolName = "Greenwood High Academy"
+	}
 	_ = db.DB.QueryRow(`
 		SELECT name FROM campus_branches WHERE tenant_id = ? AND is_main = true LIMIT 1
 	`, tenantID).Scan(&campusName)
 	if campusName == "" {
-		campusName = "Main Campus · Lekki Phase 1"
+		campusName = schoolName + " · Main Campus"
 	}
 
 	// 4. Resolve Student Attendance & Today Clock-in
@@ -674,6 +678,11 @@ func HandleStudentDashboard(w http.ResponseWriter, r *http.Request) {
 	// Assemble final authoritative response
 	resp := map[string]interface{}{
 		"success": true,
+		"school": map[string]string{
+			"name":      schoolName,
+			"campus":    campusName,
+			"tenant_id": tenantID,
+		},
 		"student": map[string]string{
 			"id":               sID,
 			"name":             sName,
@@ -681,6 +690,7 @@ func HandleStudentDashboard(w http.ResponseWriter, r *http.Request) {
 			"admission_number": sAdmNo,
 			"class_name":       sClass,
 			"arm_name":         sArm,
+			"school_name":      schoolName,
 			"campus_name":      campusName,
 			"academic_session": "2026/2027",
 			"term":             "First Term",
