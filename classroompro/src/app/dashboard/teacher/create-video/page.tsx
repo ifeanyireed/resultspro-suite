@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   IconBrandYoutube as YoutubeIcon,
   IconSparkles as Sparkles,
@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../../components/ui/select";
-import api from "../../../../lib/api";
+import api, { getCampusClasses } from "../../../../lib/api";
 import { toast } from "../../../../lib/toast";
 import { MotionRise } from "../../../../components/ScrollRiseProvider";
 
@@ -31,9 +31,25 @@ function extractYouTubeId(url: string): string | null {
 export default function TeacherCreateVideoPage() {
   const [title, setTitle] = useState("Simplifying Algebraic Fractions & Word Problems");
   const [subject, setSubject] = useState("Mathematics");
-  const [classLevel, setClassLevel] = useState("JSS 2 Gold");
+  const [classLevel, setClassLevel] = useState("JSS 2");
+  const [classes, setClasses] = useState<any[]>([]);
+  const [subjects, setSubjects] = useState<any[]>([]);
   const [term, setTerm] = useState("2");
   const [week, setWeek] = useState("3");
+
+  useEffect(() => {
+    Promise.all([
+      getCampusClasses().catch(() => ({ classes: [] })),
+      api.get("/subjects").catch(() => ({ data: [] })),
+    ]).then(([clsRes, subjRes]) => {
+      const clsList = Array.isArray(clsRes?.classes) ? clsRes.classes : [];
+      const subjList = Array.isArray(subjRes?.data) ? subjRes.data : [];
+      setClasses(clsList);
+      setSubjects(subjList);
+      if (clsList[0]?.name) setClassLevel(clsList[0].name);
+      if (subjList[0]?.name) setSubject(subjList[0].name);
+    });
+  }, []);
   const [youtubeUrl, setYoutubeUrl] = useState("https://www.youtube.com/watch?v=NybHckSEQBI");
   const [duration, setDuration] = useState("14:20");
   const [summary, setSummary] = useState(
@@ -102,27 +118,37 @@ export default function TeacherCreateVideoPage() {
                   <SelectValue placeholder="Select Class" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="JSS 2 Gold">JSS 2 Gold (Ikeja Campus)</SelectItem>
-                  <SelectItem value="SS 2 Science">SS 2 Science (Ikeja Campus)</SelectItem>
-                  <SelectItem value="SS 3 Science">SS 3 Science (Ikeja Campus)</SelectItem>
+                  {classes.length > 0 ? (
+                    classes.map((c: any) => (
+                      <SelectItem key={c.id} value={c.name || c.code}>
+                        {c.name || c.code}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value={classLevel}>{classLevel}</SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-1.5">
               <label className="text-xs font-extrabold text-gray-700">
-                NERDC Subject
+                NERDC Subject (Synced from CampusPRO)
               </label>
               <Select value={subject} onValueChange={setSubject}>
                 <SelectTrigger className="h-11 rounded-xl">
                   <SelectValue placeholder="Select Subject" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Mathematics">Mathematics</SelectItem>
-                  <SelectItem value="English Language">English Language</SelectItem>
-                  <SelectItem value="Biology">Biology</SelectItem>
-                  <SelectItem value="Physics">Physics</SelectItem>
-                  <SelectItem value="Chemistry">Chemistry</SelectItem>
+                  {subjects.length > 0 ? (
+                    subjects.map((s: any) => (
+                      <SelectItem key={s.id} value={s.name}>
+                        {s.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value={subject}>{subject}</SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>

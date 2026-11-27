@@ -1,79 +1,88 @@
 "use client";
 
-import { IconTrendingUp as TrendingUp, IconCurrencyDollar as DollarSign, IconArrowUpRight as ArrowUpRight, IconArrowDownRight as ArrowDownRight, IconCalendar as Calendar, IconDownload as Download, IconCreditCard as CreditCard, IconSchool as School, IconWallet as Wallet, IconChevronLeft as ChevronLeft, IconChevronRight as ChevronRight } from '@tabler/icons-react';
-import { Button } from "@/components/ui/button";
+import {
+  IconTrendingUp as TrendingUp,
+  IconCurrencyDollar as DollarSign,
+  IconSchool as School,
+  IconWallet as Wallet,
+} from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-const revenueStats = [
-  { label: "Total Revenue", value: "₦142.8M", trend: "+12.5%", positive: true, icon: <DollarSign className="w-5 h-5" />, color: "text-emerald-600", bg: "bg-emerald-50" },
-  { label: "Monthly Recurring", value: "₦12.4M", trend: "+8.2%", positive: true, icon: <TrendingUp className="w-5 h-5" />, color: "text-[#146ef5]", bg: "bg-blue-50" },
-  { label: "Active Subscriptions", value: "112", trend: "+5", positive: true, icon: <School className="w-5 h-5" />, color: "text-purple-600", bg: "bg-purple-50" },
-  { label: "Pending Payouts", value: "₦1.2M", trend: "-2.1%", positive: false, icon: <Wallet className="w-5 h-5" />, color: "text-amber-600", bg: "bg-amber-50" },
-];
-
-const transactionsData = [
-  { id: "TX-9012", school: "Lekki British School", plan: "Premium (Annual)", amount: "₦4,500,000", date: "2 hours ago", status: "Successful" },
-  { id: "TX-9011", school: "Greenwood Hall", plan: "Standard (Monthly)", amount: "₦250,000", date: "5 hours ago", status: "Pending" },
-  { id: "TX-9010", school: "Corona Schools", plan: "Premium (Annual)", amount: "₦8,200,000", date: "Yesterday", status: "Successful" },
-  { id: "TX-9009", school: "Atlantic Hall", plan: "Premium (Annual)", amount: "₦7,500,000", date: "2 days ago", status: "Successful" },
-  { id: "TX-9008", school: "British International", plan: "Enterprise", amount: "₦12,000,000", date: "3 days ago", status: "Successful" },
-];
+import { syncEngine } from "@/lib/syncEngine";
 
 export default function RevenueAnalytics() {
   const [loading, setLoading] = useState(true);
-
-  // Pagination State
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState("10");
+  const [packs, setPacks] = useState<any[]>([]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500);
-    return () => clearTimeout(timer);
+    let cancelled = false;
+    const load = async () => {
+      setLoading(true);
+      try {
+        const manifests = await syncEngine.fetchAvailableManifests({
+          include_pending: true,
+        });
+        if (!cancelled) {
+          setPacks(Array.isArray(manifests) ? manifests : []);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  // Pagination Logic
-  const totalItems = transactionsData.length;
-  const limit = parseInt(itemsPerPage);
-  const totalPages = Math.ceil(totalItems / limit);
-  const indexOfLastItem = currentPage * limit;
-  const indexOfFirstItem = indexOfLastItem - limit;
-  const currentTransactions = transactionsData.slice(indexOfFirstItem, indexOfLastItem);
+  const paidPacks = packs.filter((p) => p.pricing_type === "PAID");
+  const freePacks = packs.filter((p) => p.pricing_type !== "PAID");
+  const catalogValue = paidPacks.reduce(
+    (acc, p) => acc + (Number(p.price_naira) || 0),
+    0
+  );
+
+  const revenueStats = [
+    {
+      label: "Paid Pack Catalog Value",
+      value: `₦${catalogValue.toLocaleString()}`,
+      icon: <DollarSign className="w-5 h-5" />,
+      color: "text-emerald-600",
+      bg: "bg-emerald-50",
+    },
+    {
+      label: "Paid Study Packs",
+      value: String(paidPacks.length),
+      icon: <TrendingUp className="w-5 h-5" />,
+      color: "text-[#146ef5]",
+      bg: "bg-blue-50",
+    },
+    {
+      label: "Free Study Packs",
+      value: String(freePacks.length),
+      icon: <School className="w-5 h-5" />,
+      color: "text-purple-600",
+      bg: "bg-purple-50",
+    },
+    {
+      label: "Total Persisted Packs",
+      value: String(packs.length),
+      icon: <Wallet className="w-5 h-5" />,
+      color: "text-amber-600",
+      bg: "bg-amber-50",
+    },
+  ];
 
   if (loading) {
     return (
       <div className="flex-1 pb-12 animate-in fade-in duration-500">
-        
         <main className="p-8 space-y-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-3">
-              <Skeleton className="h-10 w-64 rounded-xl" />
-              <Skeleton className="h-4 w-96 rounded-lg" />
-            </div>
-            <div className="flex gap-3">
-              <Skeleton className="h-12 w-48 rounded-xl" />
-              <Skeleton className="h-12 w-40 rounded-xl" />
-            </div>
-          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 rounded-[24px]" />)}
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <Skeleton className="lg:col-span-2 h-[450px] rounded-[32px]" />
-            <Skeleton className="h-[450px] rounded-[32px]" />
-          </div>
-          <div className="space-y-6">
-            <Skeleton className="h-8 w-48 rounded-lg" />
-            <Skeleton className="h-96 w-full rounded-[32px]" />
+            {[1, 2, 3, 4].map((i) => (
+              <Skeleton key={i} className="h-32 rounded-[24px]" />
+            ))}
           </div>
         </main>
       </div>
@@ -82,240 +91,95 @@ export default function RevenueAnalytics() {
 
   return (
     <div className="flex-1 pb-12 animate-in fade-in duration-500">
-      
-      
       <main className="p-8 space-y-8">
         <MotionRise className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Financial Performance</h2>
-            <p className="text-sm text-gray-500">Detailed breakdown of platform revenue and subscription health.</p>
-          </div>
-          <div className="flex gap-3">
-             <Button variant="outline" className="border-gray-100 text-gray-900 hover:bg-gray-50 h-12">
-                <Calendar className="w-4 h-4 mr-2" /> Jan 2025 - Dec 2025
-             </Button>
-             <Button className="bg-[#146ef5] text-white font-bold h-12 px-6 hover:bg-[#105bd1] shadow-lg shadow-[#146ef5]/10">
-                <Download className="w-4 h-4 mr-2" /> Export Report
-             </Button>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              Study Pack Catalog &amp; Monetization
+            </h2>
+            <p className="text-sm text-gray-500">
+              Live breakdown of FREE and PAID Study Packs persisted in ClassroomPRO.
+            </p>
           </div>
         </MotionRise>
 
         {/* Stats Grid */}
         <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {revenueStats.map((stat, i) => (
-            <MotionRise key={i} delay={i * 0.05} className="bg-white shadow-sm border border-gray-100 p-6 rounded-[24px] hover:border-gray-200 transition-all">
+            <MotionRise
+              key={i}
+              delay={i * 0.05}
+              className="bg-white shadow-sm border border-gray-100 p-6 rounded-[24px]"
+            >
               <div className="flex justify-between items-start mb-4">
                 <div className={cn("p-2.5 rounded-xl", stat.bg, stat.color)}>
                   {stat.icon}
                 </div>
-                <div className={cn("flex items-center gap-0.5 text-[10px] font-bold px-2 py-0.5 rounded-full", 
-                  stat.positive ? "bg-emerald-100 text-emerald-600" : "bg-red-400/20 text-red-400"
-                )}>
-                  {stat.positive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-                  {stat.trend}
-                </div>
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-              <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{stat.label}</div>
+              <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
+                {stat.label}
+              </div>
             </MotionRise>
           ))}
         </MotionStagger>
 
-        <MotionStagger className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-           {/* Revenue Chart Placeholder */}
-           <MotionRise className="lg:col-span-2 bg-white shadow-sm border border-gray-100 rounded-[32px] p-8">
-              <div className="flex justify-between items-center mb-10">
-                 <div>
-                    <h3 className="text-lg font-bold text-gray-900 font-display">Revenue Over Time</h3>
-                    <p className="text-xs text-gray-500 mt-1">Comparing 2024 vs 2025 performance</p>
-                 </div>
-                 <div className="flex gap-4">
-                    <div className="flex items-center gap-2">
-                       <div className="w-2 h-2 rounded-full bg-blue" />
-                       <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">2025</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                       <div className="w-2 h-2 rounded-full bg-gray-100" />
-                       <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">2024</span>
-                    </div>
-                 </div>
-              </div>
-              
-              <div className="h-72 flex items-end justify-between gap-3 px-4">
-                 {[40, 55, 45, 70, 85, 65, 95, 80, 75, 100, 110, 120].map((height, i) => (
-                    <div key={i} className="flex-1 space-y-3 group">
-                       <div className="relative w-full h-full flex items-end">
-                          <div 
-                            className="w-full bg-blue/20 group-hover:bg-blue/40 transition-all rounded-t-lg" 
-                            style={{ height: `${height}%` }} 
-                          />
-                          <div 
-                            className="absolute bottom-0 w-full bg-white shadow-sm border border-gray-100 rounded-t-lg" 
-                            style={{ height: `${height * 0.6}%` }} 
-                          />
-                       </div>
-                       <div className="text-[10px] text-center text-gray-500 font-bold uppercase">
-                          {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][i]}
-                       </div>
-                    </div>
-                 ))}
-              </div>
-           </MotionRise>
-
-           {/* Plan Distribution */}
-           <MotionRise delay={0.1} className="bg-white shadow-sm border border-gray-100 rounded-[32px] p-8">
-              <h3 className="text-lg font-bold text-gray-900 font-display mb-8">Plan Distribution</h3>
-              <div className="space-y-8">
-                 <div className="space-y-3">
-                    <div className="flex justify-between items-center text-xs">
-                       <span className="font-bold text-gray-900/80">Premium (Annual)</span>
-                       <span className="font-bold text-purple-600">45%</span>
-                    </div>
-                    <div className="w-full h-2 bg-white shadow-sm border border-gray-100 rounded-full overflow-hidden">
-                       <div className="h-full bg-purple-400 transition-all" style={{ width: '45%' }} />
-                    </div>
-                 </div>
-                 <div className="space-y-3">
-                    <div className="flex justify-between items-center text-xs">
-                       <span className="font-bold text-gray-900/80">Premium (Monthly)</span>
-                       <span className="font-bold text-[#146ef5]">30%</span>
-                    </div>
-                    <div className="w-full h-2 bg-white shadow-sm border border-gray-100 rounded-full overflow-hidden">
-                       <div className="h-full bg-blue transition-all" style={{ width: '30%' }} />
-                    </div>
-                 </div>
-                 <div className="space-y-3">
-                    <div className="flex justify-between items-center text-xs">
-                       <span className="font-bold text-gray-900/80">Standard</span>
-                       <span className="font-bold text-emerald-400">20%</span>
-                    </div>
-                    <div className="w-full h-2 bg-white shadow-sm border border-gray-100 rounded-full overflow-hidden">
-                       <div className="h-full bg-emerald-400 transition-all" style={{ width: '20%' }} />
-                    </div>
-                 </div>
-                 <div className="space-y-3">
-                    <div className="flex justify-between items-center text-xs">
-                       <span className="font-bold text-gray-900/80">Other</span>
-                       <span className="font-bold text-gray-500">5%</span>
-                    </div>
-                    <div className="w-full h-2 bg-white shadow-sm border border-gray-100 rounded-full overflow-hidden">
-                       <div className="h-full bg-white/20 transition-all" style={{ width: '5%' }} />
-                    </div>
-                 </div>
-              </div>
-
-              <div className="mt-12 p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-                 <div className="flex items-center gap-3 mb-2">
-                    <CreditCard className="w-4 h-4 text-emerald-600" />
-                    <span className="text-xs font-bold text-gray-900 uppercase tracking-widest">Next Payout</span>
-                 </div>
-                 <p className="text-2xl font-bold text-gray-900">₦1,240,500</p>
-                 <p className="text-[10px] text-gray-500 mt-1">Scheduled for Feb 1st, 2025</p>
-              </div>
-           </MotionRise>
-        </MotionStagger>
-
-        {/* Transactions Table */}
+        {/* Paid & Free Study Packs Table */}
         <MotionRise delay={0.1} className="space-y-6">
-           <h3 className="text-xl font-bold text-gray-900 font-display px-2">Recent Transactions</h3>
-           <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm border-collapse">
-                   <thead>
-                      <tr className="border-b border-gray-100 bg-white shadow-sm border border-gray-100">
-                         <th className="p-6 font-bold text-gray-500 uppercase tracking-widest text-[10px]">Transaction ID</th>
-                         <th className="p-6 font-bold text-gray-500 uppercase tracking-widest text-[10px]">School</th>
-                         <th className="p-6 font-bold text-gray-500 uppercase tracking-widest text-[10px]">Plan</th>
-                         <th className="p-6 font-bold text-gray-500 uppercase tracking-widest text-[10px]">Amount</th>
-                         <th className="p-6 font-bold text-gray-500 uppercase tracking-widest text-[10px]">Date</th>
-                         <th className="p-6 font-bold text-gray-500 uppercase tracking-widest text-[10px] text-right">Status</th>
-                      </tr>
-                   </thead>
-                   <tbody className="divide-y divide-white/5">
-                      {currentTransactions.map((tx) => (
-                         <tr key={tx.id} className="hover:bg-white/[0.02] transition-colors group">
-                            <td className="p-6 font-mono text-xs text-gray-500">{tx.id}</td>
-                            <td className="p-6 font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">{tx.school}</td>
-                            <td className="p-6 text-xs text-gray-500">{tx.plan}</td>
-                            <td className="p-6 font-bold text-gray-900">{tx.amount}</td>
-                            <td className="p-6 text-xs text-gray-500">{tx.date}</td>
-                            <td className="p-6 text-right">
-                               <span className={cn("px-2 py-1 rounded text-[10px] font-bold uppercase", 
-                                  tx.status === 'Successful' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
-                               )}>{tx.status}</span>
-                            </td>
-                         </tr>
-                      ))}
-                   </tbody>
-                </table>
-              </div>
-
-              {/* Pagination Footer */}
-              {totalItems > limit && (
-                 <div className="p-6 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 bg-white/[0.02]">
-                    <div className="flex items-center gap-4">
-                       <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Show</span>
-                       <Select value={itemsPerPage} onValueChange={(val) => { setItemsPerPage(val); setCurrentPage(1); }}>
-                          <SelectTrigger className="w-20 bg-gray-50 border-gray-200 text-gray-900 h-9 rounded-xl">
-                             <SelectValue placeholder="10" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-white border-gray-200 text-gray-900">
-                             <SelectItem value="10">10</SelectItem>
-                             <SelectItem value="25">25</SelectItem>
-                             <SelectItem value="50">50</SelectItem>
-                          </SelectContent>
-                       </Select>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                       <Button 
-                         variant="outline" 
-                         size="icon" 
-                         className="h-9 w-9 border-gray-100 text-gray-900 disabled:opacity-30"
-                         onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                         disabled={currentPage === 1}
-                       >
-                          <ChevronLeft className="w-4 h-4" />
-                       </Button>
-                       
-                       <div className="flex items-center gap-1">
-                          {Array.from({ length: totalPages }, (_, i) => i + 1)
-                            .filter(p => p === 1 || p === totalPages || (p >= currentPage - 1 && p <= currentPage + 1))
-                            .map((p, i, arr) => (
-                               <span key={p} className="flex items-center gap-1">
-                                  {i > 0 && arr[i-1] !== p - 1 && <span className="text-gray-500 px-1">...</span>}
-                                  <Button
-                                    variant={currentPage === p ? "default" : "outline"}
-                                    className={cn(
-                                       "h-9 w-9 rounded-xl font-bold text-xs",
-                                       currentPage === p ? "bg-emerald-600 text-white hover:bg-emerald-600/90" : "border-gray-100 text-white"
-                                    )}
-                                    onClick={() => setCurrentPage(p)}
-                                  >
-                                     {p}
-                                  </Button>
-                               </span>
-                            ))
-                          }
-                       </div>
-
-                       <Button 
-                         variant="outline" 
-                         size="icon" 
-                         className="h-9 w-9 border-gray-100 text-gray-900 disabled:opacity-30"
-                         onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                         disabled={currentPage === totalPages}
-                       >
-                          <ChevronRight className="w-4 h-4" />
-                       </Button>
-                    </div>
-
-                    <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">
-                       Page {currentPage} of {totalPages}
-                    </p>
-                 </div>
-              )}
-           </div>
+          <h3 className="text-xl font-bold text-gray-900 font-display px-2">
+            Study Pack Pricing Ledger
+          </h3>
+          <div className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-gray-100 bg-white">
+                    <th className="p-6 font-bold text-gray-500 uppercase tracking-widest text-[10px]">
+                      Pack ID
+                    </th>
+                    <th className="p-6 font-bold text-gray-500 uppercase tracking-widest text-[10px]">
+                      Study Pack Title
+                    </th>
+                    <th className="p-6 font-bold text-gray-500 uppercase tracking-widest text-[10px]">
+                      Class &amp; Subject
+                    </th>
+                    <th className="p-6 font-bold text-gray-500 uppercase tracking-widest text-[10px]">
+                      Price
+                    </th>
+                    <th className="p-6 font-bold text-gray-500 uppercase tracking-widest text-[10px] text-right">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {packs.map((pack) => (
+                    <tr
+                      key={pack.pack_id || pack.package_id}
+                      className="hover:bg-gray-50/50 transition-colors"
+                    >
+                      <td className="p-6 font-mono text-xs text-gray-500">
+                        {pack.pack_id || pack.package_id}
+                      </td>
+                      <td className="p-6 font-bold text-gray-900">{pack.title}</td>
+                      <td className="p-6 text-xs text-gray-500">
+                        {pack.class_label} · {pack.subject_name}
+                      </td>
+                      <td className="p-6 font-bold text-gray-900">
+                        {pack.pricing_type === "PAID"
+                          ? `₦${Number(pack.price_naira || 0).toLocaleString()}`
+                          : "FREE (₦0)"}
+                      </td>
+                      <td className="p-6 text-right">
+                        <span className="px-2 py-1 rounded text-[10px] font-bold uppercase bg-emerald-50 text-emerald-600">
+                          {pack.moderation_status || "PUBLISHED"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </MotionRise>
       </main>
     </div>

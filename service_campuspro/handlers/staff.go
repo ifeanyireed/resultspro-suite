@@ -48,6 +48,9 @@ type CampusStaffSummary struct {
 
 // seedTenantStaffIfEmpty seeds realistic persistent Nigerian faculty and administrative staff
 func seedTenantStaffIfEmpty(tenantID string) {
+	if !demoSeedEnabled() {
+		return
+	}
 	if tenantID == "" {
 		return
 	}

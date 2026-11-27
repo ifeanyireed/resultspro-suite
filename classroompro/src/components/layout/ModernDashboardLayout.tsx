@@ -41,45 +41,45 @@ export interface RoleProfile {
 
 export const ROLE_PROFILES: RoleProfile[] = [
   {
-    id: 'profile-student',
+    id: 'role-student',
     role: Role.STUDENT,
     portalName: 'Student Portal',
-    fullName: 'Chidinma Adeleke',
-    subtitle: 'SSS 2 Science · GHA/2026/0142',
-    email: 'chidinma.adeleke@greenwood.scholars.ng',
+    fullName: 'Student View',
+    subtitle: 'ClassroomPRO Student Learning Portal',
+    email: '',
     avatar: '/photo04.jpeg',
     slug: '/dashboard',
     accentColor: '#146ef5',
   },
   {
-    id: 'profile-teacher',
+    id: 'role-teacher',
     role: Role.TEACHER,
     portalName: 'Teacher Portal',
-    fullName: 'Mr. Tunde Ogunleye',
-    subtitle: 'Senior STEM & Coding Educator',
-    email: 'tunde.ogunleye@greenwood.scholars.ng',
+    fullName: 'Teacher View',
+    subtitle: 'ClassroomPRO Educator & Study Pack Studio',
+    email: '',
     avatar: '/photo02.jpeg',
     slug: '/dashboard/teacher',
     accentColor: '#10b981',
   },
   {
-    id: 'profile-parent',
+    id: 'role-parent',
     role: Role.PARENT,
     portalName: 'Parent Portal',
-    fullName: 'Chief & Mrs. O. Adeleke',
-    subtitle: 'Parent / Guardian · 2 Wards',
-    email: 'adeleke.family@gmail.com',
+    fullName: 'Parent View',
+    subtitle: 'ClassroomPRO Parent & Ward Study Pack Hub',
+    email: '',
     avatar: '/photo03.jpeg',
     slug: '/dashboard/parent',
     accentColor: '#8b5cf6',
   },
   {
-    id: 'profile-principal',
+    id: 'role-principal',
     role: Role.SCHOOL_ADMIN,
     portalName: 'Principal Portal',
-    fullName: 'Dr. (Mrs.) Folake Adeyemi',
-    subtitle: 'Principal & Head of School',
-    email: 'principal@greenwood.scholars.ng',
+    fullName: 'Principal / Admin View',
+    subtitle: 'ClassroomPRO Curriculum & Moderation Console',
+    email: '',
     avatar: '/photo01.jpeg',
     slug: '/dashboard/admin',
     accentColor: '#f59e0b',
@@ -138,23 +138,17 @@ export function ModernDashboardLayout({
   const activeProfile = getActiveProfile();
 
   const handleSelectProfile = (profile: RoleProfile) => {
-    setAuth(
-      {
-        id: profile.id,
-        full_name: profile.fullName,
-        email: profile.email,
-        role: profile.role,
-        avatar_url: profile.avatar,
-        account_status: 'active',
-        created_at: new Date().toISOString(),
-        mfa_enabled: false,
-        auth_provider: 'local',
-      },
-      `demo-jwt-${profile.role.toLowerCase()}`,
-      ''
-    );
+    if (user) {
+      setAuth(
+        {
+          ...user,
+          role: profile.role,
+        },
+        '',
+        ''
+      );
+    }
     document.cookie = `user_role=${profile.role}; path=/; max-age=86400; SameSite=Lax`;
-    document.cookie = `token=demo-jwt-${profile.role.toLowerCase()}; path=/; max-age=86400; SameSite=Lax`;
     setSwitcherOpen(false);
     router.push(profile.slug);
   };

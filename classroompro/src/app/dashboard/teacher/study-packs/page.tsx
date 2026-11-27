@@ -6,7 +6,7 @@ import { StudyPackCreatorStudio } from "../../../../components/StudyPackCreatorS
 
 export default function TeacherStudyPacksPage() {
   const user = useAuthStore((state) => state.user);
-  const teacherName = user?.full_name || "Mr. Tunde Ogunleye";
+  const teacherName = user?.full_name || "";
 
   return <StudyPackCreatorStudio creatorRole="TEACHER" creatorName={teacherName} />;
 }

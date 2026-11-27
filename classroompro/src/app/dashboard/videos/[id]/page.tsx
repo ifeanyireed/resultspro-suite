@@ -109,15 +109,15 @@ export default function VideoPlayerPage() {
               <div className="flex items-center gap-3">
                 <img
                   src="/photo02.jpeg"
-                  alt={video.instructor || "Mr. Tunde Ogunleye"}
+                  alt={video.instructor || "Course Instructor"}
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <div>
                   <h3 className="text-sm font-extrabold text-gray-900">
-                    Curated by {video.instructor || "Mr. Tunde Ogunleye"}
+                    Curated by {video.instructor || "Course Instructor"}
                   </h3>
                   <p className="text-xs text-gray-500">
-                    Laurel Academy · Linked YouTube NERDC Video Lesson
+                    NERDC Curriculum · Linked YouTube Video Lesson
                   </p>
                 </div>
               </div>

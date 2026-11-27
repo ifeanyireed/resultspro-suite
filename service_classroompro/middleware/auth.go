@@ -88,7 +88,8 @@ func OptionalAuthMiddleware() gin.HandlerFunc {
 			token := strings.TrimPrefix(authHeader, "Bearer ")
 			usersURL := strings.TrimRight(os.Getenv("USERS_SERVICE_URL"), "/")
 			if usersURL != "" {
-				payload, _ := json.Marshal(map[string]string{"token": token})
+				domain := c.GetHeader("X-Tenant-Domain")
+				payload, _ := json.Marshal(map[string]string{"token": token, "domain": domain})
 				req, err := http.NewRequest("POST", usersURL+"/auth/introspect", bytes.NewBuffer(payload))
 				if err == nil {
 					req.Header.Set("Content-Type", "application/json")
@@ -103,8 +104,19 @@ func OptionalAuthMiddleware() gin.HandlerFunc {
 							c.Set("user_id", result.User.ID)
 							c.Set("user_email", result.User.Email)
 							c.Set("user_name", result.User.FullName)
+							if result.TenantID != "" {
+								c.Set("tenant_id", result.TenantID)
+							}
 						}
 					}
+				}
+			}
+		}
+		if _, exists := c.Get("tenant_id"); !exists {
+			for _, h := range []string{"X-Tenant-ID", "x-tenant-id", "X-Tenant-Slug", "X-Tenant-Domain"} {
+				if v := strings.TrimSpace(c.GetHeader(h)); v != "" {
+					c.Set("tenant_id", v)
+					break
 				}
 			}
 		}

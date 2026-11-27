@@ -174,7 +174,7 @@ function ClassroomSidebarContent({
           <div
             title={
               mounted
-                ? (user as any)?.name || user?.full_name || "Chidinma Adeleke"
+                ? (user as any)?.name || user?.full_name || "Authenticated User"
                 : "Profile"
             }
             className="w-11 h-11 rounded-full overflow-hidden border-2 border-[#146ef5] shadow-md shrink-0"
@@ -206,11 +206,11 @@ function ClassroomSidebarContent({
             </div>
             <h4 className="font-normal text-lg leading-tight mb-1 relative z-10">
               {mounted
-                ? (user as any)?.name || user?.full_name || "Chidinma Adeleke"
+                ? (user as any)?.name || user?.full_name || "Authenticated User"
                 : "Loading..."}
             </h4>
             <p className="text-[10px] text-gray-300 mb-6 relative z-10">
-              {mounted ? user?.email || "student@classroompro.ng" : "Loading..."}
+              {mounted ? user?.email || "" : "Loading..."}
             </p>
 
             <button className="w-full bg-[#146ef5] hover:bg-[#105bd1] transition-colors text-white text-xs font-semibold py-3 rounded-full relative z-10 shadow-md">
@@ -355,11 +355,11 @@ export default function DashboardLayout({
               <div className="hidden md:block">
                 <p className="text-sm font-bold text-gray-900 leading-tight">
                   {mounted
-                    ? (user as any)?.name || user?.full_name || "Chidinma Adeleke"
-                    : "Chidinma Adeleke"}
+                    ? (user as any)?.name || user?.full_name || "Authenticated User"
+                    : ""}
                 </p>
                 <p className="text-xs text-gray-500">
-                  {mounted ? user?.email || "student@classroompro.ng" : "student@classroompro.ng"}
+                  {mounted ? user?.email || "" : ""}
                 </p>
               </div>
             </div>

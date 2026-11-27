@@ -39,7 +39,7 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
       'Complete curriculum-aligned study pack featuring portable Markdown notes with offline diagrams, AI storybooks, curated YouTube video lectures, 7 SRS flashcards, 3 weekly formative quizzes, 1 timed Mock CBT Exam, and 3 Mastery Badges (+600 XP).',
     creator_id: 'profile-teacher',
     creator_role: 'TEACHER',
-    creator_name: 'Mr. Tunde Ogunleye',
+    creator_name: 'NERDC Curriculum Team',
     pricing_type: 'FREE',
     price_kobo: 0,
     price_naira: 0,
@@ -151,7 +151,7 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
         week: 1,
         topic_id: 'nerdc-jss2-math-t2-w01',
         title: 'Simplifying Algebraic Fractions with LCM & Monomial Denominators',
-        instructor: 'Mr. Tunde Ogunleye',
+        instructor: 'NERDC Curriculum Team',
         youtube_id: 'NybHckSEQBI',
         youtube_url: 'https://www.youtube.com/watch?v=NybHckSEQBI',
         thumbnail_url: 'https://i.ytimg.com/vi/NybHckSEQBI/hqdefault.jpg',
@@ -167,7 +167,7 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
         week: 2,
         topic_id: 'nerdc-jss2-math-t2-w02',
         title: 'Translating Commercial Word Problems into Algebraic Equations',
-        instructor: 'Mr. Tunde Ogunleye',
+        instructor: 'NERDC Curriculum Team',
         youtube_id: 'fC9da6eqaqg',
         youtube_url: 'https://www.youtube.com/watch?v=fC9da6eqaqg',
         thumbnail_url: 'https://i.ytimg.com/vi/fC9da6eqaqg/hqdefault.jpg',
@@ -183,7 +183,7 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
         week: 3,
         topic_id: 'nerdc-jss2-math-t2-w03',
         title: 'Solving Linear Inequalities & Number Line Representation',
-        instructor: 'Mr. Tunde Ogunleye',
+        instructor: 'NERDC Curriculum Team',
         youtube_id: 'bAerID24QJ0',
         youtube_url: 'https://www.youtube.com/watch?v=bAerID24QJ0',
         thumbnail_url: 'https://i.ytimg.com/vi/bAerID24QJ0/hqdefault.jpg',
@@ -419,10 +419,7 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
     total_xp_reward: 350,
     checksum_sha256: 'sha256:4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce',
     neon_storage_key: 'packs/tenant_greenwood/pkg-nerdc-sss2-phy-t2/v1/bundle.json',
-    ward_entitlements: {
-      'profile-student': 'NOT_PURCHASED',
-      'student-ward-2': 'NOT_PURCHASED',
-    },
+    ward_entitlements: {},
     scheme_of_work: [
       {
         week: 1,
@@ -550,7 +547,7 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
     description: 'Complete Primary 4 Mathematics First Term pack covering Whole Numbers to 1,000,000, Place Value Abacus, and Roman Numerals.',
     creator_id: 'profile-principal',
     creator_role: 'SCHOOL_ADMIN',
-    creator_name: 'Dr. (Mrs.) Folake Adeyemi',
+    creator_name: 'NERDC Curriculum Team',
     pricing_type: 'FREE',
     price_kobo: 0,
     price_naira: 0,
@@ -626,7 +623,7 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
         week: 1,
         topic_id: 'nerdc-pri4-math-t1-w01',
         title: 'Place Value Abacus up to One Million for Primary 4',
-        instructor: 'Mr. Tunde Ogunleye',
+        instructor: 'NERDC Curriculum Team',
         youtube_id: 'NybHckSEQBI',
         youtube_url: 'https://www.youtube.com/watch?v=NybHckSEQBI',
         thumbnail_url: 'https://i.ytimg.com/vi/NybHckSEQBI/hqdefault.jpg',
@@ -695,28 +692,7 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
   },
 ];
 
-export const DEFAULT_LINKED_WARDS = [
-  {
-    student_id: 'profile-student',
-    full_name: 'Chidinma Adeleke',
-    admission_number: 'GHA/2026/0142',
-    class_code: 'sss-2',
-    class_label: 'SSS 2 Science',
-    campus: 'Greenwood / Laurel Academy (Ikeja Campus)',
-    overall_mastery: 84,
-    streak_days: 9,
-  },
-  {
-    student_id: 'student-ward-2',
-    full_name: 'Tobi Adeleke',
-    admission_number: 'GHA/2026/0219',
-    class_code: 'jss-2',
-    class_label: 'JSS 2 Gold',
-    campus: 'Greenwood / Laurel Academy (Ikeja Campus)',
-    overall_mastery: 78,
-    streak_days: 6,
-  },
-];
+export const DEFAULT_LINKED_WARDS: any[] = [];
 
 // Generates an offline SVG illustration data URI for any cached Cloudinary asset identifier
 function generateOfflineDiagramDataUrl(assetId: string, label: string): string {
@@ -867,7 +843,7 @@ class OfflineSyncEngine {
     return purged;
   }
 
-  async revokeAndRefundPack(packId: string, studentId = 'profile-student', reason = 'Order refunded'): Promise<void> {
+  async revokeAndRefundPack(packId: string, studentId = '', reason = 'Order refunded'): Promise<void> {
     if (typeof window !== 'undefined') {
       const current = new Set(this.getLocalRevokedPackIds());
       current.add(packId);
@@ -905,6 +881,7 @@ class OfflineSyncEngine {
     term?: string;
     pricing_type?: string;
     ward_id?: string;
+    include_pending?: boolean;
   }) {
     let serverPacks: any[] = [];
     let linkedWards = DEFAULT_LINKED_WARDS;
@@ -1000,9 +977,57 @@ class OfflineSyncEngine {
     return { packs, linkedWards };
   }
 
-  async fetchAvailableManifests(filters?: { class_code?: string; subject_id?: string; term?: string }) {
+  async fetchAvailableManifests(filters?: {
+    class_code?: string;
+    subject_id?: string;
+    term?: string;
+    include_pending?: boolean;
+  }) {
     const { packs } = await this.fetchStudyPacksCatalog(filters);
     return packs;
+  }
+
+  async fetchStudyPackDetail(packageId: string): Promise<any> {
+    if (!this.isOffline()) {
+      try {
+        const res = await api.get(`/packs/${encodeURIComponent(packageId)}`);
+        if (res.data) return res.data;
+      } catch {
+        // Fallback to local or embedded bundle
+      }
+    }
+    return (
+      this.getLocalCreatedPacks().find((p) => (p.pack_id || p.package_id) === packageId) ||
+      FALLBACK_NERDC_PACKAGES.find((p) => p.package_id === packageId) ||
+      null
+    );
+  }
+
+  async moderateTeacherStudyPack(
+    packId: string,
+    action: 'APPROVE_PUBLISH' | 'REJECT',
+    notes = ''
+  ): Promise<void> {
+    if (!this.isOffline()) {
+      try {
+        await api.post(`/admin/packs/${encodeURIComponent(packId)}/moderate`, {
+          action,
+          moderation_notes: notes,
+        });
+      } catch {
+        // Fallback to local moderation update
+      }
+    }
+    if (typeof window !== 'undefined') {
+      const nextStatus = action === 'APPROVE_PUBLISH' ? 'PUBLISHED' : 'REJECTED';
+      const updated = this.getLocalCreatedPacks().map((p) =>
+        (p.pack_id || p.package_id) === packId
+          ? { ...p, moderation_status: nextStatus }
+          : p
+      );
+      window.localStorage.setItem(LOCAL_CREATED_PACKS_KEY, JSON.stringify(updated));
+    }
+    this.notify();
   }
 
   async downloadPackage(packageId: string): Promise<OfflinePackageRecord> {
@@ -1101,7 +1126,7 @@ class OfflineSyncEngine {
         week: video.week || 1,
         topic_id: video.topic_id,
         title: video.title,
-        instructor: video.instructor || pkgData.creator_name || 'Mr. Tunde Ogunleye',
+        instructor: video.instructor || pkgData.creator_name || 'NERDC Curriculum Team',
         youtube_id: video.youtube_id,
         youtube_url: video.youtube_url || `https://www.youtube.com/watch?v=${video.youtube_id}`,
         thumbnail_url: video.thumbnail_url || `https://i.ytimg.com/vi/${video.youtube_id}/hqdefault.jpg`,
@@ -1234,7 +1259,7 @@ class OfflineSyncEngine {
     packageId?: string;
   }): Promise<{ operation: PendingSyncOperation; unlockedBadges: OfflineBadgeRecord[] }> {
     const timestamp = Date.now();
-    const studentId = params.studentId || 'profile-student';
+    const studentId = params.studentId || '';
     const opType = params.isExam ? 'EXAM_ATTEMPT' : 'QUIZ_ATTEMPT';
     const opId = `op-${params.isExam ? 'exam' : 'quiz'}-${params.quizId}-${timestamp}`;
 
@@ -1328,14 +1353,14 @@ class OfflineSyncEngine {
     return { operation: quizOp, unlockedBadges };
   }
 
-  async recordLessonProgress(contentId: string, completionPct = 100): Promise<void> {
+  async recordLessonProgress(contentId: string, completionPct = 100, studentId = ''): Promise<void> {
     const timestamp = Date.now();
     const existing = await offlineDb.getProgress(contentId);
     const highestPct = Math.max(existing?.completion_pct || 0, completionPct);
 
     await offlineDb.saveProgress({
       content_id: contentId,
-      student_id: 'profile-student',
+      student_id: studentId,
       completion_pct: highestPct,
       completed: highestPct >= 100,
       last_scroll_pos: highestPct,
@@ -1396,7 +1421,6 @@ class OfflineSyncEngine {
 
     try {
       await api.post('/sync/push', {
-        student_id: 'profile-student',
         device_id: 'web-pwa-indexeddb',
         operations: queue.map((op) => ({
           operation_id: op.operation_id,

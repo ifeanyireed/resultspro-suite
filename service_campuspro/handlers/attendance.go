@@ -81,6 +81,9 @@ type CampusAttendanceSummary struct {
 
 // seedTenantAttendanceIfEmpty initializes biometric tables, institutional policies, and sample logs
 func seedTenantAttendanceIfEmpty(tenantID string) {
+	if !demoSeedEnabled() {
+		return
+	}
 	if db.DB == nil || tenantID == "" {
 		return
 	}

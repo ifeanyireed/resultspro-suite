@@ -283,7 +283,7 @@ export function StudyPackCreatorStudio({
       week: w.week,
       topic_id: `${packId}-w0${w.week}`,
       title: `Week ${w.week} Video Lesson: ${w.topic}`,
-      instructor: creatorName || (creatorRole === "TEACHER" ? "Mr. Tunde Ogunleye" : "Dr. Folake Adeyemi"),
+      instructor: creatorName || (creatorRole === "TEACHER" ? "Subject Teacher" : "School Administrator"),
       youtube_id: w.youtubeId || "NybHckSEQBI",
       youtube_url: `https://www.youtube.com/watch?v=${w.youtubeId || "NybHckSEQBI"}`,
       thumbnail_url: `https://i.ytimg.com/vi/${w.youtubeId || "NybHckSEQBI"}/hqdefault.jpg`,
@@ -406,7 +406,7 @@ export function StudyPackCreatorStudio({
       creator_role: creatorRole,
       creator_name:
         creatorName ||
-        (creatorRole === "TEACHER" ? "Mr. Tunde Ogunleye" : "Dr. (Mrs.) Folake Adeyemi"),
+        (creatorRole === "TEACHER" ? "Subject Teacher" : "School Administrator"),
       publish_directly: creatorRole !== "TEACHER" || pricingType === "FREE",
       moderation_status:
         creatorRole === "TEACHER" && pricingType === "PAID" ? "PENDING_APPROVAL" : "PUBLISHED",
@@ -473,7 +473,7 @@ export function StudyPackCreatorStudio({
   const handleRevokeAndRefund = async (packId: string) => {
     await syncEngine.revokeAndRefundPack(
       packId,
-      "profile-student",
+      "",
       "Admin processed refund — revoked perpetual license and purged device IndexedDB"
     );
     setBannerMsg(
@@ -990,7 +990,7 @@ export function StudyPackCreatorStudio({
                   <h3 className="text-base font-extrabold text-gray-900">{pack.title}</h3>
                   <p className="text-xs text-gray-500">{pack.subtitle}</p>
                   <p className="text-[11px] text-gray-500 font-semibold">
-                    Creator: <strong>{pack.creator_name || "Mr. Tunde Ogunleye"}</strong> ({pack.creator_role || "TEACHER"}) · Neon Key:{" "}
+                    Creator: <strong>{pack.creator_name || "NERDC Curriculum Team"}</strong> ({pack.creator_role || "TEACHER"}) · Neon Key:{" "}
                     <code className="text-[10px] bg-white px-1.5 py-0.5 rounded border">
                       {pack.neon_storage_key || `packs/${pack.pack_id}/v1/bundle.json`}
                     </code>

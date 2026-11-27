@@ -62,6 +62,9 @@ type CampusArmStudent struct {
 
 // seedTenantClassesIfEmpty seeds persistent Nigerian school class levels & arms for a tenant
 func seedTenantClassesIfEmpty(tenantID string) {
+	if !demoSeedEnabled() {
+		return
+	}
 	if tenantID == "" {
 		return
 	}

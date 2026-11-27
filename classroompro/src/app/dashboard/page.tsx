@@ -32,7 +32,7 @@ import { syncEngine } from "@/lib/syncEngine";
 
 export default function StudentDashboard() {
   const { user } = useAuthStore();
-  const studentName = (user as any)?.name || user?.full_name || "Chidinma Adeleke";
+  const studentName = (user as any)?.name || user?.full_name || "Student";
 
   const [packages, setPackages] = useState<OfflinePackageRecord[]>([]);
   const [lessons, setLessons] = useState<OfflineLessonRecord[]>([]);

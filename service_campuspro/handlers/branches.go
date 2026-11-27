@@ -35,6 +35,9 @@ type CampusBranch struct {
 
 // seedTenantBranchesIfEmpty ensures every institution tenant has real, persistent Nigerian branch records
 func seedTenantBranchesIfEmpty(tenantID string) {
+	if !demoSeedEnabled() {
+		return
+	}
 	if db.DB == nil || tenantID == "" {
 		return
 	}

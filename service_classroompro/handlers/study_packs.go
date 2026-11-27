@@ -129,37 +129,13 @@ type LinkedWardProfile struct {
 }
 
 var (
-	packsMu              sync.RWMutex
-	packsInitOnce        sync.Once
-	studyPacksStore      = make(map[string]models.StudyPack)
-	studyPackBundles     = make(map[string]CompiledStudyPackBundle) // keyed by pack_id
-	packEntitlementsMem  = make(map[string]models.PackEntitlement)  // keyed by pack_id + ":" + student_id
-	packOrdersMem        = make(map[string]models.PackOrder)        // keyed by order_id
-	studentBadgesMem     = make(map[string][]models.StudentPackBadge)
-	linkedWardsByParent  = map[string][]LinkedWardProfile{
-		"profile-parent": {
-			{
-				StudentID:       "profile-student",
-				FullName:        "Chidinma Adeleke",
-				AdmissionNumber: "GHA/2026/0142",
-				ClassCode:       "sss-2",
-				ClassLabel:      "SSS 2 Science",
-				Campus:          "Greenwood / Laurel Academy (Ikeja Campus)",
-				OverallMastery:  84,
-				StreakDays:      9,
-			},
-			{
-				StudentID:       "student-ward-2",
-				FullName:        "Tobi Adeleke",
-				AdmissionNumber: "GHA/2026/0219",
-				ClassCode:       "jss-2",
-				ClassLabel:      "JSS 2 Gold",
-				Campus:          "Greenwood / Laurel Academy (Ikeja Campus)",
-				OverallMastery:  78,
-				StreakDays:      6,
-			},
-		},
-	}
+	packsMu             sync.RWMutex
+	packsInitOnce       sync.Once
+	studyPacksStore     = make(map[string]models.StudyPack)
+	studyPackBundles    = make(map[string]CompiledStudyPackBundle) // keyed by pack_id
+	packEntitlementsMem = make(map[string]models.PackEntitlement)  // keyed by pack_id + ":" + student_id
+	packOrdersMem       = make(map[string]models.PackOrder)        // keyed by order_id
+	studentBadgesMem    = make(map[string][]models.StudentPackBadge)
 )
 
 // EnsureSampleStudyPacksSeeded initializes the complete sample study packs for the test student/tenant
@@ -180,7 +156,7 @@ func EnsureSampleStudyPacksSeeded() {
 		// =========================================================================
 		// PACK 1 (TEST STUDENT PRIMARY COMPLETE PACK):
 		// NERDC SSS 2 Physics & Mathematics / JSS 2 Complete Scheme-of-Work Pack
-		// Entitled PERPETUALLY to test student "profile-student" (Chidinma Adeleke)
+		// Standalone DB-persisted Study Pack (entitled to students strictly on request)
 		// =========================================================================
 		pack1ID := "pkg-nerdc-jss2-math-t2"
 		pack1Slug := "nerdc-jss2-mathematics-second-term-complete-pack"
@@ -338,7 +314,7 @@ Solve **3x - 5 < 10** and represent the solution on a number line:
 				Week:         1,
 				TopicID:      "nerdc-jss2-math-t2-w01",
 				Title:        "Simplifying Algebraic Fractions with LCM & Monomial Denominators",
-				Instructor:   "Mr. Tunde Ogunleye",
+				Instructor:   "NERDC Curriculum Team",
 				YoutubeID:    "NybHckSEQBI",
 				YoutubeURL:   "https://www.youtube.com/watch?v=NybHckSEQBI",
 				ThumbnailURL: "https://i.ytimg.com/vi/NybHckSEQBI/hqdefault.jpg",
@@ -354,7 +330,7 @@ Solve **3x - 5 < 10** and represent the solution on a number line:
 				Week:         2,
 				TopicID:      "nerdc-jss2-math-t2-w02",
 				Title:        "Translating Commercial Word Problems into Algebraic Equations",
-				Instructor:   "Mr. Tunde Ogunleye",
+				Instructor:   "NERDC Curriculum Team",
 				YoutubeID:    "fC9da6eqaqg",
 				YoutubeURL:   "https://www.youtube.com/watch?v=fC9da6eqaqg",
 				ThumbnailURL: "https://i.ytimg.com/vi/fC9da6eqaqg/hqdefault.jpg",
@@ -370,7 +346,7 @@ Solve **3x - 5 < 10** and represent the solution on a number line:
 				Week:         3,
 				TopicID:      "nerdc-jss2-math-t2-w03",
 				Title:        "Solving Linear Inequalities & Number Line Representation",
-				Instructor:   "Mr. Tunde Ogunleye",
+				Instructor:   "NERDC Curriculum Team",
 				YoutubeID:    "bAerID24QJ0",
 				YoutubeURL:   "https://www.youtube.com/watch?v=bAerID24QJ0",
 				ThumbnailURL: "https://i.ytimg.com/vi/bAerID24QJ0/hqdefault.jpg",
@@ -541,7 +517,7 @@ Solve **3x - 5 < 10** and represent the solution on a number line:
 			TenantID:           "tenant_greenwood",
 			CreatorID:          "profile-teacher",
 			CreatorRole:        "TEACHER",
-			CreatorName:        "Mr. Tunde Ogunleye",
+			CreatorName:        "NERDC Curriculum Team",
 			Title:              "NERDC JSS 2 Mathematics — Second Term Complete Scheme Study Pack",
 			Subtitle:           "Weeks 1–3 Scheme of Work · Algebraic Fractions, Commercial Word Problems & Linear Inequalities",
 			Description:        "Complete curriculum-aligned study pack featuring portable Markdown notes with offline diagrams, AI storybooks, curated YouTube video lectures, 7 SRS flashcards, 3 weekly formative quizzes, 1 timed Mock CBT Exam, and 3 Mastery Badges (+600 XP).",
@@ -577,7 +553,7 @@ Solve **3x - 5 < 10** and represent the solution on a number line:
 			TenantID:       "tenant_greenwood",
 			CreatorID:      "profile-teacher",
 			CreatorRole:    "TEACHER",
-			CreatorName:    "Mr. Tunde Ogunleye",
+			CreatorName:    "NERDC Curriculum Team",
 			Title:          pack1Model.Title,
 			Subtitle:       pack1Model.Subtitle,
 			Description:    pack1Model.Description,
@@ -863,7 +839,7 @@ content_id: nerdc-sss2-phy-t2-w04
 			TenantID:           "tenant_greenwood",
 			CreatorID:          "profile-principal",
 			CreatorRole:        "SCHOOL_ADMIN",
-			CreatorName:        "Dr. (Mrs.) Folake Adeyemi",
+			CreatorName:        "NERDC Curriculum Team",
 			Title:              "NERDC Primary 4 Mathematics — First Term Place Value & Fractions Pack",
 			Subtitle:           "Official Primary 4 First Term Scheme Pack with Abacus Diagrams & Common Entrance Drills",
 			Description:        "Complete Primary 4 Mathematics First Term pack covering Whole Numbers to 1,000,000, Place Value Abacus, and Roman Numerals.",
@@ -899,7 +875,7 @@ content_id: nerdc-sss2-phy-t2-w04
 			TenantID:       "tenant_greenwood",
 			CreatorID:      "profile-principal",
 			CreatorRole:    "SCHOOL_ADMIN",
-			CreatorName:    "Dr. (Mrs.) Folake Adeyemi",
+			CreatorName:    "NERDC Curriculum Team",
 			Title:          pack3Model.Title,
 			Subtitle:       pack3Model.Subtitle,
 			Description:    pack3Model.Description,
@@ -985,7 +961,7 @@ content_id: nerdc-pri4-math-t1-w02
 					Week:                   1,
 					TopicID:                "nerdc-pri4-math-t1-w01",
 					Title:                  "Place Value Abacus up to One Million for Primary 4",
-					Instructor:             "Mr. Tunde Ogunleye",
+					Instructor:             "NERDC Curriculum Team",
 					YoutubeID:              "NybHckSEQBI",
 					YoutubeURL:             "https://www.youtube.com/watch?v=NybHckSEQBI",
 					ThumbnailURL:           "https://i.ytimg.com/vi/NybHckSEQBI/hqdefault.jpg",
@@ -1062,11 +1038,11 @@ func resolveCurrentStudentID(c *gin.Context) string {
 		return stuID
 	}
 	if uid, ok := c.Get("user_id"); ok {
-		if s, ok := uid.(string); ok && s != "" && s != "profile-parent" && s != "profile-teacher" && s != "profile-principal" {
-			return s
+		if s, ok := uid.(string); ok && strings.TrimSpace(s) != "" {
+			return strings.TrimSpace(s)
 		}
 	}
-	return "profile-student"
+	return strings.TrimSpace(c.GetHeader("X-Student-ID"))
 }
 
 // CanAccessPack implements the single entitlement resolution rule from classroompro_study_packs_architecture.md §7.1
@@ -1074,22 +1050,16 @@ func CanAccessPack(studentID string, pack models.StudyPack) (bool, string, *mode
 	packsMu.RLock()
 	defer packsMu.RUnlock()
 
-	key := pack.PackID + ":" + studentID
-	if ent, exists := packEntitlementsMem[key]; exists {
-		if ent.Status == "REVOKED" || ent.RevokedAt != nil {
-			return false, "ENTITLEMENT_REVOKED", &ent
+	if studentID != "" {
+		key := pack.PackID + ":" + studentID
+		if ent, exists := packEntitlementsMem[key]; exists {
+			if ent.Status == "REVOKED" || ent.RevokedAt != nil {
+				return false, "ENTITLEMENT_REVOKED", &ent
+			}
+			if ent.Status == "ACTIVE" {
+				return true, "ENTITLED_PERPETUAL", &ent
+			}
 		}
-		if ent.Status == "ACTIVE" {
-			return true, "ENTITLED_PERPETUAL", &ent
-		}
-	}
-
-	// Check fallback student-demo-1 alias
-	if ent, exists := packEntitlementsMem[pack.PackID+":profile-student"]; exists && studentID == "student-demo-1" {
-		if ent.Status == "REVOKED" {
-			return false, "ENTITLEMENT_REVOKED", &ent
-		}
-		return true, "ENTITLED_PERPETUAL", &ent
 	}
 
 	if strings.EqualFold(pack.PricingType, "FREE") && strings.EqualFold(pack.ModerationStatus, "PUBLISHED") {
@@ -1106,14 +1076,15 @@ func GetRevokedPackIDsForStudent(studentID string) []string {
 	defer packsMu.RUnlock()
 
 	revoked := make([]string, 0)
+	if studentID == "" {
+		return revoked
+	}
 	seen := make(map[string]bool)
-	for _, id := range []string{studentID, "profile-student", "student-demo-1"} {
-		for _, ent := range packEntitlementsMem {
-			if ent.BeneficiaryStudentID == id && (ent.Status == "REVOKED" || ent.RevokedAt != nil) {
-				if !seen[ent.PackID] {
-					seen[ent.PackID] = true
-					revoked = append(revoked, ent.PackID)
-				}
+	for _, ent := range packEntitlementsMem {
+		if ent.BeneficiaryStudentID == studentID && (ent.Status == "REVOKED" || ent.RevokedAt != nil) {
+			if !seen[ent.PackID] {
+				seen[ent.PackID] = true
+				revoked = append(revoked, ent.PackID)
 			}
 		}
 	}
@@ -1131,6 +1102,11 @@ func (h *Handler) GetStudyPacksCatalog(c *gin.Context) {
 	pricingFilter := strings.TrimSpace(c.Query("pricing_type"))
 	statusFilter := strings.TrimSpace(c.Query("moderation_status"))
 	studentID := resolveCurrentStudentID(c)
+
+	linkedWards, _ := fetchCampusLinkedWards(c)
+	if linkedWards == nil {
+		linkedWards = []LinkedWardProfile{}
+	}
 
 	packsMu.RLock()
 	defer packsMu.RUnlock()
@@ -1157,23 +1133,26 @@ func (h *Handler) GetStudyPacksCatalog(c *gin.Context) {
 		entitled := false
 		accessReason := "PACK_LOCKED_REQUIRES_PURCHASE"
 		var entObj *models.PackEntitlement
-		if ent, exists := packEntitlementsMem[pack.PackID+":"+studentID]; exists {
-			entObj = &ent
-			if ent.Status == "ACTIVE" && ent.RevokedAt == nil {
-				entitled = true
-				accessReason = "ENTITLED_PERPETUAL"
-			} else if ent.Status == "REVOKED" {
-				entitled = false
-				accessReason = "ENTITLEMENT_REVOKED"
+		if studentID != "" {
+			if ent, exists := packEntitlementsMem[pack.PackID+":"+studentID]; exists {
+				entObj = &ent
+				if ent.Status == "ACTIVE" && ent.RevokedAt == nil {
+					entitled = true
+					accessReason = "ENTITLED_PERPETUAL"
+				} else if ent.Status == "REVOKED" {
+					entitled = false
+					accessReason = "ENTITLEMENT_REVOKED"
+				}
 			}
-		} else if strings.EqualFold(pack.PricingType, "FREE") {
+		}
+		if entObj == nil && strings.EqualFold(pack.PricingType, "FREE") {
 			entitled = true
 			accessReason = "FREE_PUBLIC_PACK"
 		}
 
-		// Per-ward entitlement map for parents
+		// Per-ward entitlement map for parents (using linked wards fetched from service_campuspro)
 		wardEntitlements := make(map[string]string)
-		for _, ward := range linkedWardsByParent["profile-parent"] {
+		for _, ward := range linkedWards {
 			if wEnt, ok := packEntitlementsMem[pack.PackID+":"+ward.StudentID]; ok {
 				wardEntitlements[ward.StudentID] = wEnt.Status
 			} else if strings.EqualFold(pack.PricingType, "FREE") {
@@ -1184,58 +1163,58 @@ func (h *Handler) GetStudyPacksCatalog(c *gin.Context) {
 		}
 
 		items = append(items, gin.H{
-			"pack_id":            pack.PackID,
-			"package_id":         pack.PackID,
-			"slug":               pack.Slug,
-			"tenant_id":          pack.TenantID,
-			"creator_id":         pack.CreatorID,
-			"creator_role":       pack.CreatorRole,
-			"creator_name":       pack.CreatorName,
-			"title":              pack.Title,
-			"subtitle":           pack.Subtitle,
-			"description":        pack.Description,
-			"pack_scope":         pack.PackScope,
-			"curriculum":         pack.Curriculum,
-			"education_level":    pack.EducationLevel,
-			"class_code":         pack.ClassCode,
-			"class_label":        pack.ClassLabel,
-			"subject_id":         pack.SubjectID,
-			"subject_name":       pack.SubjectName,
-			"term":               pack.Term,
-			"term_label":         pack.TermLabel,
-			"scheme_start_week":  pack.SchemeStartWeek,
-			"scheme_end_week":    pack.SchemeEndWeek,
-			"scheme_of_work":     bundle.SchemeOfWork,
-			"pricing_type":       pack.PricingType,
-			"price_kobo":         pack.PriceKobo,
-			"price_naira":        pack.PriceKobo / 100,
-			"currency":           pack.Currency,
-			"visibility":         pack.Visibility,
-			"moderation_status":  pack.ModerationStatus,
-			"active_version":     pack.ActiveVersion,
-			"package_version":    pack.ActiveVersion,
-			"size_bytes":         bundle.SizeBytes,
-			"checksum_sha256":    bundle.ChecksumSHA256,
-			"neon_storage_key":   bundle.NeonStorageKey,
-			"total_xp_reward":    pack.TotalXPReward,
-			"notes_count":        len(bundle.Lessons),
-			"videos_count":       len(bundle.Videos),
-			"flashcards_count":   len(bundle.Flashcards),
-			"quizzes_count":      len(bundle.Quizzes),
-			"exams_count":        len(bundle.Exams),
-			"badges_count":       len(bundle.Badges),
-			"badges":             bundle.Badges,
-			"entitled":           entitled,
-			"access_reason":      accessReason,
-			"entitlement":        entObj,
-			"ward_entitlements":  wardEntitlements,
-			"updated_at":         pack.UpdatedAt.Format(time.RFC3339),
+			"pack_id":           pack.PackID,
+			"package_id":        pack.PackID,
+			"slug":              pack.Slug,
+			"tenant_id":         pack.TenantID,
+			"creator_id":        pack.CreatorID,
+			"creator_role":      pack.CreatorRole,
+			"creator_name":      pack.CreatorName,
+			"title":             pack.Title,
+			"subtitle":          pack.Subtitle,
+			"description":       pack.Description,
+			"pack_scope":        pack.PackScope,
+			"curriculum":        pack.Curriculum,
+			"education_level":   pack.EducationLevel,
+			"class_code":        pack.ClassCode,
+			"class_label":       pack.ClassLabel,
+			"subject_id":        pack.SubjectID,
+			"subject_name":      pack.SubjectName,
+			"term":              pack.Term,
+			"term_label":        pack.TermLabel,
+			"scheme_start_week": pack.SchemeStartWeek,
+			"scheme_end_week":   pack.SchemeEndWeek,
+			"scheme_of_work":    bundle.SchemeOfWork,
+			"pricing_type":      pack.PricingType,
+			"price_kobo":        pack.PriceKobo,
+			"price_naira":       pack.PriceKobo / 100,
+			"currency":          pack.Currency,
+			"visibility":        pack.Visibility,
+			"moderation_status": pack.ModerationStatus,
+			"active_version":    pack.ActiveVersion,
+			"package_version":   pack.ActiveVersion,
+			"size_bytes":        bundle.SizeBytes,
+			"checksum_sha256":   bundle.ChecksumSHA256,
+			"neon_storage_key":  bundle.NeonStorageKey,
+			"total_xp_reward":   pack.TotalXPReward,
+			"notes_count":       len(bundle.Lessons),
+			"videos_count":      len(bundle.Videos),
+			"flashcards_count":  len(bundle.Flashcards),
+			"quizzes_count":     len(bundle.Quizzes),
+			"exams_count":       len(bundle.Exams),
+			"badges_count":      len(bundle.Badges),
+			"badges":            bundle.Badges,
+			"entitled":          entitled,
+			"access_reason":     accessReason,
+			"entitlement":       entObj,
+			"ward_entitlements": wardEntitlements,
+			"updated_at":        pack.UpdatedAt.Format(time.RFC3339),
 		})
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"student_id":   studentID,
-		"linked_wards": linkedWardsByParent["profile-parent"],
+		"linked_wards": linkedWards,
 		"packs":        items,
 	})
 }
@@ -1265,6 +1244,10 @@ func (h *Handler) GetStudyPackBySlugOrID(c *gin.Context) {
 	packsMu.RUnlock()
 
 	entitled, reason, ent := CanAccessPack(studentID, *targetPack)
+	linkedWards, _ := fetchCampusLinkedWards(c)
+	if linkedWards == nil {
+		linkedWards = []LinkedWardProfile{}
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"pack":          targetPack,
@@ -1272,7 +1255,7 @@ func (h *Handler) GetStudyPackBySlugOrID(c *gin.Context) {
 		"entitled":      entitled,
 		"access_reason": reason,
 		"entitlement":   ent,
-		"linked_wards":  linkedWardsByParent["profile-parent"],
+		"linked_wards":  linkedWards,
 	})
 }
 
@@ -1282,20 +1265,26 @@ func (h *Handler) GetMyStudyPacks(c *gin.Context) {
 	EnsureSampleStudyPacksSeeded()
 	studentID := resolveCurrentStudentID(c)
 	revokedIDs := GetRevokedPackIDsForStudent(studentID)
+	linkedWards, _ := fetchCampusLinkedWards(c)
+	if linkedWards == nil {
+		linkedWards = []LinkedWardProfile{}
+	}
 
 	packsMu.RLock()
 	defer packsMu.RUnlock()
 
 	myPacks := make([]gin.H, 0)
-	for _, pack := range studyPacksStore {
-		key := pack.PackID + ":" + studentID
-		if ent, hasEnt := packEntitlementsMem[key]; hasEnt && ent.Status == "ACTIVE" {
-			bundle := studyPackBundles[pack.PackID]
-			myPacks = append(myPacks, gin.H{
-				"pack":        pack,
-				"bundle":      bundle,
-				"entitlement": ent,
-			})
+	if studentID != "" {
+		for _, pack := range studyPacksStore {
+			key := pack.PackID + ":" + studentID
+			if ent, hasEnt := packEntitlementsMem[key]; hasEnt && ent.Status == "ACTIVE" {
+				bundle := studyPackBundles[pack.PackID]
+				myPacks = append(myPacks, gin.H{
+					"pack":        pack,
+					"bundle":      bundle,
+					"entitlement": ent,
+				})
+			}
 		}
 	}
 
@@ -1309,7 +1298,7 @@ func (h *Handler) GetMyStudyPacks(c *gin.Context) {
 		"entitled_packs":   myPacks,
 		"earned_badges":    earnedBadges,
 		"revoked_pack_ids": revokedIDs,
-		"linked_wards":     linkedWardsByParent["profile-parent"],
+		"linked_wards":     linkedWards,
 	})
 }
 
@@ -1391,12 +1380,19 @@ func (h *Handler) CreateOrUpdateStudyPack(c *gin.Context) {
 	}
 	creatorName := strings.TrimSpace(input.CreatorName)
 	if creatorName == "" {
-		if creatorRole == "SCHOOL_ADMIN" || creatorRole == "PLATFORM_ADMIN" {
-			creatorName = "Dr. (Mrs.) Folake Adeyemi"
-		} else {
-			creatorName = "Mr. Tunde Ogunleye"
+		if uname, ok := c.Get("user_name"); ok {
+			if s, ok := uname.(string); ok {
+				creatorName = strings.TrimSpace(s)
+			}
 		}
 	}
+	creatorID := ""
+	if uid, ok := c.Get("user_id"); ok {
+		if s, ok := uid.(string); ok {
+			creatorID = strings.TrimSpace(s)
+		}
+	}
+	tenantID := resolveRequestTenantID(c)
 
 	moderationStatus := "PUBLISHED"
 	if creatorRole == "TEACHER" && pricingType == "PAID" && !input.PublishDirectly {
@@ -1564,8 +1560,8 @@ func (h *Handler) CreateOrUpdateStudyPack(c *gin.Context) {
 	packModel := models.StudyPack{
 		PackID:             packID,
 		Slug:               slug,
-		TenantID:           "tenant_greenwood",
-		CreatorID:          "profile-teacher",
+		TenantID:           tenantID,
+		CreatorID:          creatorID,
 		CreatorRole:        creatorRole,
 		CreatorName:        creatorName,
 		Title:              input.Title,
@@ -1600,12 +1596,17 @@ func (h *Handler) CreateOrUpdateStudyPack(c *gin.Context) {
 	hash := sha256.Sum256(rawBundleBytes)
 	checksum := "sha256:" + hex.EncodeToString(hash[:16])
 
+	storageScope := tenantID
+	if storageScope == "" {
+		storageScope = "global"
+	}
+
 	bundle := CompiledStudyPackBundle{
 		PackID:         packID,
 		PackageID:      packID,
 		Slug:           slug,
-		TenantID:       "tenant_greenwood",
-		CreatorID:      packModel.CreatorID,
+		TenantID:       tenantID,
+		CreatorID:      creatorID,
 		CreatorRole:    creatorRole,
 		CreatorName:    creatorName,
 		Title:          packModel.Title,
@@ -1625,7 +1626,7 @@ func (h *Handler) CreateOrUpdateStudyPack(c *gin.Context) {
 		Currency:       "NGN",
 		PackVersion:    1,
 		PackageVersion: 1,
-		NeonStorageKey: fmt.Sprintf("packs/tenant_greenwood/%s/v1/bundle.json", packID),
+		NeonStorageKey: fmt.Sprintf("packs/%s/%s/v1/bundle.json", storageScope, packID),
 		SizeBytes:      int64(len(rawBundleBytes) + 142000),
 		ChecksumSHA256: checksum,
 		TotalXPReward:  totalXP,
@@ -1719,7 +1720,23 @@ func (h *Handler) ClaimFreeStudyPack(c *gin.Context) {
 	_ = c.ShouldBindJSON(&input)
 
 	if len(input.BeneficiaryStudentIDs) == 0 {
-		input.BeneficiaryStudentIDs = []string{resolveCurrentStudentID(c)}
+		if sid := resolveCurrentStudentID(c); sid != "" {
+			input.BeneficiaryStudentIDs = []string{sid}
+		}
+	}
+	if len(input.BeneficiaryStudentIDs) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "beneficiary_student_ids or authenticated student context is required"})
+		return
+	}
+
+	purchasedBy := ""
+	if uid, ok := c.Get("user_id"); ok {
+		if s, ok := uid.(string); ok {
+			purchasedBy = strings.TrimSpace(s)
+		}
+	}
+	if purchasedBy == "" {
+		purchasedBy = input.BeneficiaryStudentIDs[0]
 	}
 
 	packsMu.Lock()
@@ -1738,7 +1755,7 @@ func (h *Handler) ClaimFreeStudyPack(c *gin.Context) {
 			EntitlementID:        fmt.Sprintf("ent-%s-%s", packID, stuID),
 			PackID:               packID,
 			BeneficiaryStudentID: stuID,
-			PurchasedByUserID:    "profile-parent",
+			PurchasedByUserID:    purchasedBy,
 			TenantID:             pack.TenantID,
 			GrantSource:          "FREE_CLAIM",
 			LicenseType:          "PERPETUAL",
@@ -1783,10 +1800,18 @@ func (h *Handler) CheckoutStudyPack(c *gin.Context) {
 	}
 
 	if input.BuyerUserID == "" {
-		input.BuyerUserID = "profile-parent"
+		if uid, ok := c.Get("user_id"); ok {
+			if s, ok := uid.(string); ok {
+				input.BuyerUserID = strings.TrimSpace(s)
+			}
+		}
 	}
 	if input.BuyerEmail == "" {
-		input.BuyerEmail = "adeleke.family@gmail.com"
+		if em, ok := c.Get("user_email"); ok {
+			if s, ok := em.(string); ok {
+				input.BuyerEmail = strings.TrimSpace(s)
+			}
+		}
 	}
 
 	// Check for duplicate active perpetual entitlements
@@ -1969,11 +1994,8 @@ func (h *Handler) RevokePackEntitlement(c *gin.Context) {
 		}
 	}
 
-	if revokedEnt == nil && input.PackID != "" {
-		stuID := input.StudentID
-		if stuID == "" {
-			stuID = "profile-student"
-		}
+	if revokedEnt == nil && input.PackID != "" && strings.TrimSpace(input.StudentID) != "" {
+		stuID := strings.TrimSpace(input.StudentID)
 		ent := models.PackEntitlement{
 			EntitlementID:        targetID,
 			PackID:               input.PackID,

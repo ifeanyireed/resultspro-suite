@@ -196,7 +196,7 @@ export default function SettingsPage() {
                       </div>
                       <div className="space-y-2">
                           <Label className="text-xs text-gray-500 uppercase font-bold">School</Label>
-                          <Input value={profileData?.school?.name || "Lekki British School"} disabled className="bg-gray-50 border-gray-200 text-gray-500" />
+                          <Input value={profileData?.school?.name || (user as any)?.tenant_id || "Assigned Campus"} disabled className="bg-gray-50 border-gray-200 text-gray-500" />
                       </div>
                     </div>
                   )}

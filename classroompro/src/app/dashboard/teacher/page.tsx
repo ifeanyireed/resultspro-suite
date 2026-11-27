@@ -18,13 +18,24 @@ import { syncEngine } from "@/lib/syncEngine";
 
 export default function TeacherDashboard() {
   const user = useAuthStore((state) => state.user);
-  const teacherName = user?.full_name || "Mr. Tunde Ogunleye";
+  const teacherName = user?.full_name || "Teacher";
   const [packs, setPacks] = useState<any[]>([]);
+  const [officialScoresCount, setOfficialScoresCount] = useState<number>(0);
 
   useEffect(() => {
     const load = async () => {
-      const { packs: list } = await syncEngine.fetchStudyPacksCatalog();
+      const [{ packs: list }, scoresData] = await Promise.all([
+        syncEngine.fetchStudyPacksCatalog(),
+        import("@/lib/api")
+          .then((m) => m.getCampusOfficialExamScores())
+          .catch(() => ({ official_scores: [] })),
+      ]);
       setPacks(list);
+      setOfficialScoresCount(
+        Array.isArray(scoresData?.official_scores)
+          ? scoresData.official_scores.length
+          : 0
+      );
     };
     load();
     return syncEngine.subscribe(load);
@@ -63,7 +74,7 @@ export default function TeacherDashboard() {
     },
     {
       label: "Scores Synced to CampusPRO",
-      value: "6 Batches",
+      value: `${officialScoresCount} Records`,
       sub: "Traceable official CA push",
       icon: <BarChart3 className="w-5 h-5 text-purple-600" />,
       bg: "bg-purple-50",

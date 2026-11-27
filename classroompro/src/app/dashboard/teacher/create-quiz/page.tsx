@@ -9,6 +9,7 @@ import Link from "next/link";
 import { cn } from "../../../../lib/utils";
 import { Skeleton } from "../../../../components/ui/skeleton";
 import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
+import api, { getCampusBranches, getCampusClasses } from "../../../../lib/api";
 
 interface Question {
   id: number;
@@ -44,8 +45,11 @@ const NERDC_AI_PRESETS: Question[] = [
 
 export default function CreateQuizPage() {
   const [loading, setLoading] = useState(true);
-  const [selectedCampus, setSelectedCampus] = useState("Ikeja Campus");
-  const [selectedClass, setSelectedClass] = useState("JSS 2 Gold");
+  const [branches, setBranches] = useState<any[]>([]);
+  const [classes, setClasses] = useState<any[]>([]);
+  const [subjects, setSubjects] = useState<any[]>([]);
+  const [selectedCampus, setSelectedCampus] = useState("Main Campus");
+  const [selectedClass, setSelectedClass] = useState("JSS 2");
   const [selectedSubject, setSelectedSubject] = useState("Mathematics");
   const [selectedComponent, setSelectedComponent] = useState("CA 1 (20 Marks)");
   const [selectedTopic, setSelectedTopic] = useState("Fractions & Percentages");
@@ -53,8 +57,22 @@ export default function CreateQuizPage() {
   const [moderationPassed, setModerationPassed] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 400);
-    return () => clearTimeout(timer);
+    Promise.all([
+      getCampusBranches().catch(() => ({ branches: [] })),
+      getCampusClasses().catch(() => ({ classes: [] })),
+      api.get("/subjects").catch(() => ({ data: [] })),
+    ]).then(([branchRes, clsRes, subjRes]) => {
+      const bList = Array.isArray(branchRes?.branches) ? branchRes.branches : [];
+      const cList = Array.isArray(clsRes?.classes) ? clsRes.classes : [];
+      const sList = Array.isArray(subjRes?.data) ? subjRes.data : [];
+      setBranches(bList);
+      setClasses(cList);
+      setSubjects(sList);
+      if (bList[0]?.name) setSelectedCampus(bList[0].name);
+      if (cList[0]?.name) setSelectedClass(cList[0].name);
+      if (sList[0]?.name) setSelectedSubject(sList[0].name);
+      setLoading(false);
+    });
   }, []);
 
   const [questions, setQuestions] = useState<Question[]>([
@@ -282,30 +300,38 @@ export default function CreateQuizPage() {
                     onChange={(e) => setSelectedCampus(e.target.value)}
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl h-10 px-3 text-xs font-bold text-gray-900"
                   >
-                    <option>Ikeja Campus</option>
-                    <option>Lekki Campus</option>
-                    <option>Abuja Campus</option>
+                    {branches.length > 0 ? (
+                      branches.map((b: any) => (
+                        <option key={b.id} value={b.name}>{b.name}</option>
+                      ))
+                    ) : (
+                      <option value={selectedCampus}>{selectedCampus}</option>
+                    )}
                   </select>
                 </div>
 
                 <div>
                   <Label className="text-[10px] text-gray-500 uppercase font-black block mb-1.5">
-                    Assigned Class &amp; Arm
+                    Assigned Class &amp; Arm (CampusPRO)
                   </Label>
                   <select
                     value={selectedClass}
                     onChange={(e) => setSelectedClass(e.target.value)}
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl h-10 px-3 text-xs font-bold text-gray-900"
                   >
-                    <option>JSS 2 Gold</option>
-                    <option>JSS 3 Emerald</option>
-                    <option>SS 2 Science</option>
+                    {classes.length > 0 ? (
+                      classes.map((c: any) => (
+                        <option key={c.id} value={c.name || c.code}>{c.name || c.code}</option>
+                      ))
+                    ) : (
+                      <option value={selectedClass}>{selectedClass}</option>
+                    )}
                   </select>
                 </div>
 
                 <div>
                   <Label className="text-[10px] text-gray-500 uppercase font-black block mb-1.5">
-                    Subject &amp; Official Exam Component
+                    Subject &amp; Official Exam Component (CampusPRO)
                   </Label>
                   <div className="grid grid-cols-2 gap-2">
                     <select
@@ -313,9 +339,13 @@ export default function CreateQuizPage() {
                       onChange={(e) => setSelectedSubject(e.target.value)}
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl h-10 px-2.5 text-xs font-bold text-gray-900"
                     >
-                      <option>Mathematics</option>
-                      <option>English Language</option>
-                      <option>Basic Science</option>
+                      {subjects.length > 0 ? (
+                        subjects.map((s: any) => (
+                          <option key={s.id} value={s.name}>{s.name}</option>
+                        ))
+                      ) : (
+                        <option value={selectedSubject}>{selectedSubject}</option>
+                      )}
                     </select>
                     <select
                       value={selectedComponent}

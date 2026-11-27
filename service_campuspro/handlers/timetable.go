@@ -63,6 +63,9 @@ var defaultBellPeriods = []BellPeriod{
 
 // seedTenantTimetableIfEmpty seeds realistic 5-day schedules across school arms
 func seedTenantTimetableIfEmpty(tenantID string) {
+	if !demoSeedEnabled() {
+		return
+	}
 	if tenantID == "" {
 		return
 	}

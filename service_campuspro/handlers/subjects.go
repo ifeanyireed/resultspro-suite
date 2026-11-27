@@ -65,6 +65,9 @@ type SubjectTeacherRecord struct {
 
 // seedTenantSubjectsIfEmpty seeds the 28 standard NERDC/WAEC/IGCSE curriculum subjects for a tenant
 func seedTenantSubjectsIfEmpty(tenantID string) {
+	if !demoSeedEnabled() {
+		return
+	}
 	if tenantID == "" {
 		return
 	}

@@ -8,13 +8,17 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
+import { getCampusClasses } from "@/lib/api";
 
 export default function CreateExamPage() {
   const [loading, setLoading] = useState(true);
+  const [classes, setClasses] = useState<any[]>([]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(timer);
+    getCampusClasses()
+      .then((res) => setClasses(Array.isArray(res?.classes) ? res.classes : []))
+      .catch(() => setClasses([]))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) {
@@ -106,10 +110,15 @@ export default function CreateExamPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-xs text-gray-500 uppercase font-bold block mb-2">Assign to Class</Label>
+                  <Label className="text-xs text-gray-500 uppercase font-bold block mb-2">Assign to Class (CampusPRO)</Label>
                   <select className="w-full bg-gray-50 border border-gray-200 rounded-lg h-10 px-3 text-sm text-gray-900">
-                    <option>SSS 1 Biology</option>
-                    <option>SSS 2 Biology</option>
+                    {classes.length === 0 ? (
+                      <option value="">No classes found on CampusPRO</option>
+                    ) : (
+                      classes.map((c: any) => (
+                        <option key={c.id} value={c.id}>{c.name || c.code}</option>
+                      ))
+                    )}
                   </select>
                 </div>
               </div>

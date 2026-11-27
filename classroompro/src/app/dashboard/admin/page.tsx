@@ -16,10 +16,21 @@ import { syncEngine } from "@/lib/syncEngine";
 
 export default function PrincipalCurriculumOversightConsole() {
   const [packs, setPacks] = useState<any[]>([]);
+  const [officialScoresCount, setOfficialScoresCount] = useState<number>(0);
 
   const loadPacks = async () => {
-    const { packs: list } = await syncEngine.fetchStudyPacksCatalog();
+    const [{ packs: list }, scoresData] = await Promise.all([
+      syncEngine.fetchStudyPacksCatalog(),
+      import("@/lib/api")
+        .then((m) => m.getCampusOfficialExamScores())
+        .catch(() => ({ official_scores: [] })),
+    ]);
     setPacks(list);
+    setOfficialScoresCount(
+      Array.isArray(scoresData?.official_scores)
+        ? scoresData.official_scores.length
+        : 0
+    );
   };
 
   useEffect(() => {
@@ -63,7 +74,7 @@ export default function PrincipalCurriculumOversightConsole() {
     },
     {
       label: "Official Scores Synced to CampusPRO",
-      value: "19 Batches",
+      value: `${officialScoresCount} Records`,
       sub: "100% teacher-verified audit trail",
       icon: <BarChart3 className="w-5 h-5" />,
       color: "text-purple-700",

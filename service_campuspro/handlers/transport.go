@@ -55,6 +55,9 @@ type CampusTransportRider struct {
 
 // seedTenantTransportIfEmpty initializes authentic Nigerian school bus routes & student manifests
 func seedTenantTransportIfEmpty(tenantID string) {
+	if !demoSeedEnabled() {
+		return
+	}
 	if db.DB == nil || tenantID == "" {
 		return
 	}

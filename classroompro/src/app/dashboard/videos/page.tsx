@@ -240,7 +240,7 @@ export default function VideosListPage() {
                     <span className="flex items-center gap-1">
                       <Eye className="w-3.5 h-3.5" /> {video.viewsCount || 184} views
                     </span>
-                    <span>{video.instructor || "Mr. Tunde Ogunleye"}</span>
+                    <span>{video.instructor || "Course Instructor"}</span>
                   </div>
                   <Link href={`/dashboard/videos/${video.id}`}>
                     <Button

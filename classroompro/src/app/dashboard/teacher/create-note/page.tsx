@@ -8,13 +8,22 @@ import { Label } from "../../../../components/ui/label";
 import Link from "next/link";
 import { Skeleton } from "../../../../components/ui/skeleton";
 import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
+import api, { getCampusClasses } from "@/lib/api";
 
 export default function CreateNotePage() {
   const [loading, setLoading] = useState(true);
+  const [subjects, setSubjects] = useState<any[]>([]);
+  const [classes, setClasses] = useState<any[]>([]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(timer);
+    Promise.all([
+      api.get("/subjects").catch(() => ({ data: [] })),
+      getCampusClasses().catch(() => ({ classes: [] })),
+    ]).then(([subjRes, clsRes]) => {
+      setSubjects(Array.isArray(subjRes?.data) ? subjRes.data : []);
+      setClasses(Array.isArray(clsRes?.classes) ? clsRes.classes : []);
+      setLoading(false);
+    });
   }, []);
 
   if (loading) {
@@ -66,17 +75,19 @@ export default function CreateNotePage() {
             
             <div className="grid md:grid-cols-3 gap-6 pt-6 border-t border-white/5">
                <div className="space-y-2">
-                  <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Subject</Label>
+                  <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Subject (CampusPRO)</Label>
                   <select className="w-full bg-gray-50 border border-gray-200 rounded-xl h-12 px-4 text-sm text-gray-900">
-                    <option>Biology</option>
-                    <option>Chemistry</option>
+                    {subjects.map((s: any) => (
+                      <option key={s.id} value={s.id}>{s.name}</option>
+                    ))}
                   </select>
                </div>
                <div className="space-y-2">
-                  <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Class</Label>
+                  <Label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Class (CampusPRO)</Label>
                   <select className="w-full bg-gray-50 border border-gray-200 rounded-xl h-12 px-4 text-sm text-gray-900">
-                    <option>SSS 1</option>
-                    <option>SSS 2</option>
+                    {classes.map((c: any) => (
+                      <option key={c.id} value={c.id}>{c.name || c.code}</option>
+                    ))}
                   </select>
                </div>
                <div className="space-y-2">

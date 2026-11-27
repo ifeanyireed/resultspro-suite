@@ -79,6 +79,20 @@ func main() {
 			content.POST("/packs/:packId/download-token", h.IssuePackDownloadToken)
 			content.POST("/packs/:packId/purge-ack", h.ConfirmOfflinePackPurge)
 			content.POST("/webhooks/paystack", h.HandlePaystackPackWebhook)
+
+			// CampusPRO System-of-Record Proxies (Classes, Arms, Students, Parent Wards, Official Exam Scores, Branches, Staff, Notices, Users)
+			content.GET("/campus/classes", h.ProxyCampusClasses)
+			content.GET("/classes", h.ProxyCampusClasses)
+			content.GET("/campus/students", h.ProxyCampusStudents)
+			content.GET("/campus/parent/wards", h.ProxyCampusParentWards)
+			content.GET("/campus/exam-scores/official", h.ProxyCampusOfficialScores)
+			content.GET("/campus/branches", h.ProxyCampusBranches)
+			content.GET("/campus/staff", h.ProxyCampusStaff)
+			content.GET("/campus/notices", h.ProxyCampusNotices)
+			content.GET("/notifications", h.ProxyCampusNotices)
+			content.GET("/campus/summary", h.ProxyCampusSummary)
+			content.GET("/campus/users", h.ProxyCampusUsersDirectory)
+			content.GET("/topics", h.GetTopics)
 		}
 
 		// Protected Student & Teacher Actions

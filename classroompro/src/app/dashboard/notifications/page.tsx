@@ -1,124 +1,112 @@
 "use client";
 
-import { IconBell as Bell, IconBook as BookOpen, IconBrain as BrainCircuit, IconTrophy as Trophy, IconMessage as MessageSquare, IconCheck as Check, IconDotsVertical as MoreVertical, IconClock as Clock } from '@tabler/icons-react';
+import {
+  IconBell as Bell,
+  IconMessage as MessageSquare,
+  IconCheck as Check,
+  IconClock as Clock,
+} from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
-
-const notifications = [
-  {
-    id: 1,
-    type: "note",
-    title: "New Study Material",
-    message: "Mr. Adeniyi uploaded new notes for 'Photosynthesis' in Biology.",
-    time: "2 hours ago",
-    read: false,
-    icon: <BookOpen className="w-4 h-4" />,
-    color: "text-emerald-600",
-    bg: "bg-emerald-50"
-  },
-  {
-    id: 2,
-    type: "quiz",
-    title: "Quiz Result Available",
-    message: "You scored 85% in the 'Cell Structure' quiz. Check your rank!",
-    time: "5 hours ago",
-    read: true,
-    icon: <Trophy className="w-4 h-4" />,
-    color: "text-amber-600",
-    bg: "bg-amber-50"
-  },
-  {
-    id: 3,
-    type: "message",
-    title: "School Announcement",
-    message: "The 1st term mid-term break starts on Monday, 25th Oct.",
-    time: "1 day ago",
-    read: true,
-    icon: <MessageSquare className="w-4 h-4" />,
-    color: "text-[#146ef5]",
-    bg: "bg-blue-50"
-  },
-  {
-    id: 4,
-    type: "reminder",
-    title: "Pending Practice",
-    message: "Don't forget to complete your 'Quadratic Equations' flashcard set.",
-    time: "2 days ago",
-    read: true,
-    icon: <Clock className="w-4 h-4" />,
-    color: "text-purple-600",
-    bg: "bg-purple-50"
-  }
-];
+import { useEffect, useState } from "react";
+import { MotionRise } from "@/components/ScrollRiseProvider";
+import { getCampusNotices } from "@/lib/api";
 
 export default function NotificationsPage() {
+  const [notices, setNotices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadNotices = async () => {
+      setLoading(true);
+      try {
+        const res = await getCampusNotices().catch(() => ({ notices: [] }));
+        if (!cancelled) {
+          setNotices(Array.isArray(res?.notices) ? res.notices : []);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    loadNotices();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="flex-1">
-      
-      
       <main className="p-8 max-w-4xl space-y-6">
         <MotionRise className="flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 font-display">Inbox</h2>
-            <p className="text-sm text-gray-500">Stay updated with your academic activities.</p>
+            <h2 className="text-2xl font-bold text-gray-900 font-display">
+              School Notices &amp; Inbox
+            </h2>
+            <p className="text-sm text-gray-500">
+              Official circulars and academic announcements synced from CampusPRO.
+            </p>
           </div>
-          <Button variant="outline" className="text-xs font-bold border-gray-100 hover:bg-gray-50 text-gray-900">
+          <Button
+            variant="outline"
+            onClick={() =>
+              setNotices((prev) => prev.map((n) => ({ ...n, read: true })))
+            }
+            className="text-xs font-bold border-gray-100 hover:bg-gray-50 text-gray-900"
+          >
             Mark all as read
           </Button>
         </MotionRise>
 
-        <MotionRise delay={0.08} className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden">
-          <div className="divide-y divide-gray-100">
-            {notifications.map((notif) => (
-              <div 
-                key={notif.id} 
-                className={cn(
-                  "p-6 flex items-start justify-between hover:bg-white/[0.02] transition-colors group relative",
-                  !notif.read && "bg-white/[0.01]"
-                )}
-              >
-                {!notif.read && (
-                   <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-600 shadow-[4px_0_15px_rgba(0,200,83,0.3)]" />
-                )}
-                
-                <div className="flex gap-4">
-                  <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", notif.bg, notif.color)}>
-                    {notif.icon}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                       <h3 className={cn("text-sm font-bold", notif.read ? "text-gray-900/70" : "text-gray-900")}>
-                          {notif.title}
-                       </h3>
-                       {!notif.read && <div className="w-1.5 h-1.5 rounded-full bg-emerald-600" />}
+        <MotionRise
+          delay={0.08}
+          className="bg-white shadow-sm border border-gray-100 rounded-[32px] overflow-hidden"
+        >
+          {loading ? (
+            <div className="p-12 text-center text-sm text-gray-500">
+              Loading circulars from <code>service_campuspro</code>...
+            </div>
+          ) : notices.length === 0 ? (
+            <div className="p-12 text-center text-sm text-gray-500">
+              No school circulars or announcements published on <code>service_campuspro</code> yet.
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-100">
+              {notices.map((notif, idx) => (
+                <div
+                  key={notif.id || idx}
+                  className={cn(
+                    "p-6 flex items-start justify-between hover:bg-gray-50/50 transition-colors group relative"
+                  )}
+                >
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-blue-50 text-[#146ef5]">
+                      <MessageSquare className="w-4 h-4" />
                     </div>
-                    <p className="text-xs text-gray-500 leading-relaxed mb-2">
-                       {notif.message}
-                    </p>
-                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
-                       <Clock className="w-3 h-3" /> {notif.time}
-                    </span>
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-sm font-bold text-gray-900">
+                          {notif.title || "Campus Circular"}
+                        </h3>
+                        {notif.category && (
+                          <span className="px-2 py-0.5 rounded bg-gray-100 text-[10px] font-bold text-gray-600 uppercase">
+                            {notif.category}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-500 leading-relaxed mb-2">
+                        {notif.body || notif.message || notif.summary}
+                      </p>
+                      <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
+                        <Clock className="w-3 h-3" />{" "}
+                        {notif.published_at || notif.created_at || notif.audience || "CampusPRO"}
+                      </span>
+                    </div>
                   </div>
                 </div>
-
-                <div className="flex items-center gap-2">
-                   <button className="p-2 rounded-lg hover:bg-gray-50 text-gray-500 hover:text-gray-900 transition-all opacity-0 group-hover:opacity-100">
-                      <Check className="w-4 h-4" />
-                   </button>
-                   <button className="p-2 rounded-lg hover:bg-gray-50 text-gray-500 hover:text-gray-900 transition-all">
-                      <MoreVertical className="w-4 h-4" />
-                   </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </MotionRise>
-
-        <MotionRise delay={0.14} className="text-center pt-8">
-           <Button variant="ghost" className="text-xs font-bold text-gray-500 hover:text-gray-900">
-              View Older Notifications
-           </Button>
+              ))}
+            </div>
+          )}
         </MotionRise>
       </main>
     </div>

@@ -59,6 +59,9 @@ type CampusParentSummary struct {
 
 // seedTenantParentsIfEmpty seeds realistic persistent Nigerian households and links them to students
 func seedTenantParentsIfEmpty(tenantID string) {
+	if !demoSeedEnabled() {
+		return
+	}
 	if tenantID == "" {
 		return
 	}

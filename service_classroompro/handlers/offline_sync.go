@@ -611,14 +611,10 @@ func (h *Handler) PushOfflineSync(c *gin.Context) {
 
 	studentID := strings.TrimSpace(req.StudentID)
 	if studentID == "" {
-		if uid, ok := c.Get("user_id"); ok {
-			if s, ok := uid.(string); ok && s != "" {
-				studentID = s
-			}
-		}
+		studentID = resolveCurrentStudentID(c)
 	}
 	if studentID == "" {
-		studentID = "student-demo-1"
+		studentID = "anonymous"
 	}
 
 	tenantID := "global"
@@ -827,17 +823,7 @@ func (h *Handler) PushOfflineSync(c *gin.Context) {
 // GetOfflineSyncStatus returns the student's synchronized quiz attempts, lesson progress, and sync operation history
 // Route: GET /api/sync/status
 func (h *Handler) GetOfflineSyncStatus(c *gin.Context) {
-	studentID := strings.TrimSpace(c.Query("student_id"))
-	if studentID == "" {
-		if uid, ok := c.Get("user_id"); ok {
-			if s, ok := uid.(string); ok && s != "" {
-				studentID = s
-			}
-		}
-	}
-	if studentID == "" {
-		studentID = "student-demo-1"
-	}
+	studentID := resolveCurrentStudentID(c)
 
 	offlineMu.RLock()
 	ops := make([]models.OfflineSyncOperation, 0)

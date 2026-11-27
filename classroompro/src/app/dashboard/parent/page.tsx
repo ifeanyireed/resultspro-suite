@@ -18,33 +18,44 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/useAuthStore";
 import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
-import api from "@/lib/api";
-import { syncEngine, DEFAULT_LINKED_WARDS } from "@/lib/syncEngine";
+import api, { getCampusParentWards } from "@/lib/api";
+import { syncEngine } from "@/lib/syncEngine";
 import { offlineDb, OfflineBadgeRecord } from "@/lib/offlineDb";
 
 export default function ParentLearningHub() {
   const user = useAuthStore((state) => state.user);
-  const parentName = user?.full_name || "Chief & Mrs. O. Adeleke";
+  const parentName = user?.full_name || "Parent / Guardian";
 
-  const [linkedWards, setLinkedWards] = useState<any[]>(DEFAULT_LINKED_WARDS);
-  const [selectedWardId, setSelectedWardId] = useState<string>("profile-student");
+  const [linkedWards, setLinkedWards] = useState<any[]>([]);
+  const [selectedWardId, setSelectedWardId] = useState<string>("");
   const [packs, setPacks] = useState<any[]>([]);
   const [earnedBadges, setEarnedBadges] = useState<OfflineBadgeRecord[]>([]);
   const [checkoutPack, setCheckoutPack] = useState<any | null>(null);
-  const [selectedBeneficiaries, setSelectedBeneficiaries] = useState<string[]>([
-    "profile-student",
-  ]);
+  const [selectedBeneficiaries, setSelectedBeneficiaries] = useState<string[]>(
+    []
+  );
   const [processingOrder, setProcessingOrder] = useState(false);
   const [purchaseNotice, setPurchaseNotice] = useState<string | null>(null);
 
   const loadParentData = async () => {
-    await syncEngine.ensureSampleStudyPackSeededForTestStudent();
-    const [{ packs: catalogPacks, linkedWards: wards }, badges] = await Promise.all([
-      syncEngine.fetchStudyPacksCatalog(),
-      offlineDb.getAllBadges(),
-    ]);
-    if (wards && wards.length > 0) {
-      setLinkedWards(wards);
+    const [{ packs: catalogPacks, linkedWards: catalogWards }, campusWardsRes, badges] =
+      await Promise.all([
+        syncEngine.fetchStudyPacksCatalog(),
+        getCampusParentWards().catch(() => ({ linked_wards: [] })),
+        offlineDb.getAllBadges(),
+      ]);
+
+    const wards =
+      Array.isArray(campusWardsRes?.linked_wards) &&
+      campusWardsRes.linked_wards.length > 0
+        ? campusWardsRes.linked_wards
+        : Array.isArray(catalogWards)
+        ? catalogWards
+        : [];
+
+    setLinkedWards(wards);
+    if (!selectedWardId && wards[0]?.student_id) {
+      setSelectedWardId(wards[0].student_id);
     }
     setPacks(catalogPacks);
     setEarnedBadges(badges.filter((b) => b.earned));
@@ -86,8 +97,8 @@ export default function ParentLearningHub() {
       } else {
         await api
           .post(`/packs/${checkoutPack.pack_id}/checkout`, {
-            buyer_user_id: "profile-parent",
-            buyer_email: user?.email || "adeleke.family@gmail.com",
+            buyer_user_id: user?.id || "",
+            buyer_email: user?.email || "",
             beneficiary_student_ids: selectedBeneficiaries,
             simulate_instant_pay: true,
           })
@@ -263,7 +274,7 @@ export default function ParentLearningHub() {
                   <h4 className="text-base font-extrabold text-gray-900">{pack.title}</h4>
                   <p className="text-xs text-gray-500">{pack.subtitle}</p>
                   <p className="text-[11px] text-gray-600 font-semibold">
-                    Author: <strong>{pack.creator_name || "Mr. Tunde Ogunleye"}</strong> ·{" "}
+                    Author: <strong>{pack.creator_name || "NERDC Curriculum Team"}</strong> ·{" "}
                     {pack.term_label}
                   </p>
 
