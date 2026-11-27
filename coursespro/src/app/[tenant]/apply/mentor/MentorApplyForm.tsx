@@ -2,14 +2,17 @@
 
 import React, { useState } from 'react';
 import TenantLogo from '@/components/TenantLogo';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { User, Mail, Briefcase, Sparkles, Users, ShieldCheck, ArrowRight, Loader2, Target, GraduationCap } from 'lucide-react';
+import { User, Mail, Briefcase, Sparkles, Users, ShieldCheck, ArrowRight, Loader2, Target, GraduationCap, CheckCircle2, AlertCircle } from 'lucide-react';
 import { coursesApi } from '@/lib/api';
 import toast from 'react-hot-toast';
 
 export default function MentorApplyForm({ tenant }: { tenant: any }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -18,24 +21,51 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
     linkedin_url: ''
   });
 
+  const normalizeLinkedInUrl = (raw: string) => {
+    const trimmed = raw.trim();
+    if (!trimmed) return '';
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+    return `https://${trimmed}`;
+  };
+
   const handleApply = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    const payload = {
+      first_name: formData.first_name.trim(),
+      last_name: formData.last_name.trim(),
+      email: formData.email.trim(),
+      expertise: formData.expertise.trim(),
+      linkedin_url: normalizeLinkedInUrl(formData.linkedin_url),
+    };
+
+    if (!payload.first_name || !payload.last_name || !payload.email || !payload.expertise || !payload.linkedin_url) {
+      const msg = 'Please complete all required fields.';
+      setError(msg);
+      toast.error(msg);
+      return;
+    }
+
     setIsLoading(true);
     
     try {
-      await coursesApi.post('/api/public/mentor/apply', formData, {
+      const tenantId = tenant?.id || tenant?.slug || '';
+      const tenantDomain = tenant?.slug || tenant?.id || '';
+      await coursesApi.post(`/api/public/mentor/apply${tenantId ? `?tenant_id=${encodeURIComponent(tenantId)}` : ''}`, payload, {
         headers: {
-          'x-tenant': tenant.id,
-          'X-Tenant-ID': tenant.id,
-          'X-Tenant-Domain': tenant.slug || tenant.id
+          'x-tenant': tenantId,
+          'X-Tenant-ID': tenantId,
+          'X-Tenant-Domain': tenantDomain
         }
       });
       toast.success('Application submitted successfully!');
-      setTimeout(() => {
-        router.push('/login'); 
-      }, 1500);
+      setIsSubmitted(true);
     } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Failed to submit application');
+      const errMsg = err.response?.data?.error || err.response?.data?.message || 'Failed to submit application. Please check your details and try again.';
+      setError(errMsg);
+      toast.error(errMsg);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -107,74 +137,111 @@ export default function MentorApplyForm({ tenant }: { tenant: any }) {
         </div>
 
         <div className="w-full max-w-md my-auto pt-12 lg:pt-0">
-          <div className="mb-8 text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Instructor Application</h2>
-            <p className="text-slate-500 font-medium">Tell us about your background and area of expertise.</p>
-          </div>
-
-          <form onSubmit={handleApply} className="space-y-5">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="block text-sm font-semibold text-slate-700">First Name</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <User className="h-4 w-4 text-slate-400" />
-                  </div>
-                  <input type="text" value={formData.first_name} onChange={e => setFormData({...formData, first_name: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="Jane" />
-                </div>
+          {isSubmitted ? (
+            <div className="text-center py-8 px-4 bg-emerald-50/50 border border-emerald-200 rounded-3xl space-y-5">
+              <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-8 h-8" />
               </div>
-              <div className="space-y-1.5">
-                <label className="block text-sm font-semibold text-slate-700">Last Name</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <User className="h-4 w-4 text-slate-400" />
-                  </div>
-                  <input type="text" value={formData.last_name} onChange={e => setFormData({...formData, last_name: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="Doe" />
-                </div>
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900 tracking-tight mb-2">Application Received!</h2>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  Thank you for applying to become an instructor at <span className="font-semibold text-slate-900">{tenant?.name || 'our academy'}</span>. Our academic team will review your profile and reach out to <span className="font-semibold text-slate-900">{formData.email}</span> shortly.
+                </p>
               </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-slate-700">Email Address</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <Mail className="h-4 w-4 text-slate-400" />
-                </div>
-                <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="jane@example.com" />
+              <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
+                <Link
+                  href="/"
+                  className="inline-flex justify-center items-center py-3 px-6 rounded-full text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-sm"
+                >
+                  Return to Campus Home
+                </Link>
+                <Link
+                  href="/login"
+                  className="inline-flex justify-center items-center py-3 px-6 rounded-full text-sm font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 transition-all"
+                >
+                  Go to Sign In
+                </Link>
               </div>
             </div>
-
-            <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-slate-700">Area of Expertise</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <Briefcase className="h-4 w-4 text-slate-400" />
-                </div>
-                <input type="text" value={formData.expertise} onChange={e => setFormData({...formData, expertise: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="e.g. Software Engineering" />
+          ) : (
+            <>
+              <div className="mb-8 text-center lg:text-left">
+                <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Instructor Application</h2>
+                <p className="text-slate-500 font-medium">Tell us about your background and area of expertise.</p>
               </div>
-            </div>
 
-            <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-slate-700">LinkedIn URL</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <Users className="h-4 w-4 text-slate-400" />
+              {error && (
+                <div className="mb-5 p-4 text-sm text-red-800 bg-red-50 border border-red-200 rounded-2xl flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                  <span>{error}</span>
                 </div>
-                <input type="url" value={formData.linkedin_url} onChange={e => setFormData({...formData, linkedin_url: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="https://linkedin.com/in/..." />
-              </div>
-            </div>
-
-            <button type="submit" disabled={isLoading} className="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed group mt-2">
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  Submit Application
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </>
               )}
-            </button>
-          </form>
+
+              <form onSubmit={handleApply} className="space-y-5">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="block text-sm font-semibold text-slate-700">First Name</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <User className="h-4 w-4 text-slate-400" />
+                      </div>
+                      <input type="text" value={formData.first_name} onChange={e => setFormData({...formData, first_name: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="Jane" />
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="block text-sm font-semibold text-slate-700">Last Name</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <User className="h-4 w-4 text-slate-400" />
+                      </div>
+                      <input type="text" value={formData.last_name} onChange={e => setFormData({...formData, last_name: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="Doe" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-sm font-semibold text-slate-700">Email Address</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Mail className="h-4 w-4 text-slate-400" />
+                    </div>
+                    <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="jane@example.com" />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-sm font-semibold text-slate-700">Area of Expertise</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Briefcase className="h-4 w-4 text-slate-400" />
+                    </div>
+                    <input type="text" value={formData.expertise} onChange={e => setFormData({...formData, expertise: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="e.g. Software Engineering" />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-sm font-semibold text-slate-700">LinkedIn URL</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Users className="h-4 w-4 text-slate-400" />
+                    </div>
+                    <input type="text" value={formData.linkedin_url} onChange={e => setFormData({...formData, linkedin_url: e.target.value})} required className="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" placeholder="https://linkedin.com/in/..." />
+                  </div>
+                </div>
+
+                <button type="submit" disabled={isLoading} className="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed group mt-2">
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      Submit Application
+                      <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </button>
+              </form>
+            </>
+          )}
 
           <div className="mt-6 text-center">
             <p className="text-xs text-slate-400 font-medium">

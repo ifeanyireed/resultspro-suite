@@ -42,6 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 import QueryProvider from '@/components/providers/QueryProvider';
 import { ScrollRiseProvider } from '@/components/ScrollRiseProvider';
+import { Toaster } from 'react-hot-toast';
 
 export default function RootLayout({
   children,
@@ -54,6 +55,7 @@ export default function RootLayout({
         <QueryProvider>
           <ScrollRiseProvider>
             {children}
+            <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
           </ScrollRiseProvider>
         </QueryProvider>
       </body>

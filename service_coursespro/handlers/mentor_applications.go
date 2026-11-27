@@ -3,6 +3,7 @@ package handlers
 import (
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -44,15 +45,26 @@ func (h *Handler) ApplyForMentor(c *gin.Context) {
 	}
 
 	var input struct {
-		FirstName   string `json:"first_name" binding:"required"`
-		LastName    string `json:"last_name" binding:"required"`
-		Email       string `json:"email" binding:"required,email"`
-		Expertise   string `json:"expertise" binding:"required"`
-		LinkedInURL string `json:"linkedin_url" binding:"required"`
+		FirstName   string `json:"first_name"`
+		LastName    string `json:"last_name"`
+		Email       string `json:"email"`
+		Expertise   string `json:"expertise"`
+		LinkedInURL string `json:"linkedin_url"`
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid application details provided."})
+		return
+	}
+
+	input.FirstName = strings.TrimSpace(input.FirstName)
+	input.LastName = strings.TrimSpace(input.LastName)
+	input.Email = strings.ToLower(strings.TrimSpace(input.Email))
+	input.Expertise = strings.TrimSpace(input.Expertise)
+	input.LinkedInURL = strings.TrimSpace(input.LinkedInURL)
+
+	if input.FirstName == "" || input.LastName == "" || input.Email == "" || !strings.Contains(input.Email, "@") || input.Expertise == "" || input.LinkedInURL == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please fill in your full name, valid email address, area of expertise, and LinkedIn URL."})
 		return
 	}
 
