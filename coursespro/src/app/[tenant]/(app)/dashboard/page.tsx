@@ -45,7 +45,8 @@ export default function LearnerDashboard() {
   // Payment Verification on Dashboard landing (Paystack or Free enrollment redirect)
   useEffect(() => {
     const reference = searchParams.get('reference') || searchParams.get('trxref');
-    if (reference && token) {
+    const activeToken = token || Cookies.get('token') || (typeof window !== 'undefined' ? localStorage.getItem('token') : null);
+    if (reference && activeToken) {
       setVerifying(true);
       const tenantSlug = (params?.tenant as string) || (typeof window !== 'undefined' ? window.location.hostname : '');
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "";
@@ -55,7 +56,7 @@ export default function LearnerDashboard() {
         headers: {
           'Content-Type': 'application/json',
           'X-Tenant-Domain': tenantSlug,
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${activeToken}`
         },
         body: JSON.stringify({ reference })
       })

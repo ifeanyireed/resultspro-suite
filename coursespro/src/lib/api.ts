@@ -78,11 +78,15 @@ api.interceptors.response.use(
       console.error("api interceptor caught 401 and wiped token. error.response.data:", error.response?.data);
       if (typeof window !== 'undefined') {
         const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+        const hostname = window.location.hostname;
         let rootDomain: string | undefined = undefined;
-        if (platformDomain !== 'localhost') {
+        if (platformDomain !== 'localhost' && (hostname === platformDomain || hostname.endsWith(`.${platformDomain}`))) {
            rootDomain = `.${platformDomain}`;
         }
-        Cookies.remove('token', { domain: rootDomain, path: '/' });
+        if (rootDomain) {
+          Cookies.remove('token', { domain: rootDomain, path: '/' });
+        }
+        Cookies.remove('token', { path: '/' });
         Cookies.remove('token');
         localStorage.removeItem('token');
       }
@@ -127,11 +131,15 @@ coursesApi.interceptors.response.use(
       console.error("api interceptor caught 401 and wiped token. error.response.data:", error.response?.data);
       if (typeof window !== 'undefined') {
         const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
+        const hostname = window.location.hostname;
         let rootDomain: string | undefined = undefined;
-        if (platformDomain !== 'localhost') {
+        if (platformDomain !== 'localhost' && (hostname === platformDomain || hostname.endsWith(`.${platformDomain}`))) {
            rootDomain = `.${platformDomain}`;
         }
-        Cookies.remove('token', { domain: rootDomain, path: '/' });
+        if (rootDomain) {
+          Cookies.remove('token', { domain: rootDomain, path: '/' });
+        }
+        Cookies.remove('token', { path: '/' });
         Cookies.remove('token');
         localStorage.removeItem('token');
       }

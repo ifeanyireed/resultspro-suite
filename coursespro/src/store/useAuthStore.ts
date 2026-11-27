@@ -48,7 +48,8 @@ export const useAuthStore = create<AuthState>()(
         let rootDomain: string | undefined = undefined;
         if (typeof window !== 'undefined') {
           const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
-          if (platformDomain !== 'localhost') {
+          const hostname = window.location.hostname;
+          if (platformDomain !== 'localhost' && (hostname === platformDomain || hostname.endsWith(`.${platformDomain}`))) {
              rootDomain = `.${platformDomain}`;
           }
         }
@@ -69,12 +70,16 @@ export const useAuthStore = create<AuthState>()(
         let rootDomain: string | undefined = undefined;
         if (typeof window !== 'undefined') {
           const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'localhost';
-          if (platformDomain !== 'localhost') {
+          const hostname = window.location.hostname;
+          if (platformDomain !== 'localhost' && (hostname === platformDomain || hostname.endsWith(`.${platformDomain}`))) {
              rootDomain = `.${platformDomain}`;
           }
         }
         
-        Cookies.remove('token', { domain: rootDomain, path: '/' });
+        if (rootDomain) {
+          Cookies.remove('token', { domain: rootDomain, path: '/' });
+        }
+        Cookies.remove('token', { path: '/' });
         Cookies.remove('token');
         if (typeof window !== 'undefined') localStorage.removeItem('token');
         

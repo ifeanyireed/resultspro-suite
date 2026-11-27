@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { COURSES_API } from '@/lib/api';
+import { useAuthStore } from '@/store/useAuthStore';
 import Link from 'next/link';
 import Image from 'next/image';
 import TenantLogo from '@/components/TenantLogo';
@@ -11,6 +12,7 @@ import { CreditCard, CheckCircle2, ShieldCheck, ArrowRight, Loader2 } from 'luci
 
 export default function PlanForm({ tenant }: { tenant: any }) {
   const router = useRouter();
+  const storeToken = useAuthStore((state) => state.token);
   const [isLoading, setIsLoading] = useState(false);
   const [plan, setPlan] = useState('upfront');
   const [cohort, setCohort] = useState<any>(null);
@@ -99,6 +101,7 @@ export default function PlanForm({ tenant }: { tenant: any }) {
   const officialPrice = basePrice + markup;
   const upfrontPrice = basePrice;
   const monthlyCost = isFree ? 0 : Math.round(officialPrice / divisor);
+  const chargeAmount = isFree ? 0 : (plan === 'upfront' ? upfrontPrice : monthlyCost);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-NG', { style: 'currency', currency: cohort.currency || 'NGN', minimumFractionDigits: 0 }).format(amount);
@@ -112,7 +115,11 @@ export default function PlanForm({ tenant }: { tenant: any }) {
         router.push('/dashboard');
         return;
       }
-      const token = Cookies.get('token');
+      const token = Cookies.get('token') || storeToken || (typeof window !== 'undefined' ? localStorage.getItem('token') : null);
+      if (!token) {
+        router.push('/login');
+        return;
+      }
       const USERS_API = process.env.NEXT_PUBLIC_USERS_API || "";
       const dashboardTarget = window.location.origin + (window.location.pathname.startsWith(`/${tenant.slug}`) ? `/${tenant.slug}` : '') + `/dashboard`;
       
@@ -124,7 +131,7 @@ export default function PlanForm({ tenant }: { tenant: any }) {
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ 
-          amount: isFree || plan === 'upfront' ? 0 : monthlyCost,
+          amount: chargeAmount,
           purpose: 'cohort_enrollment',
           plan_type: isFree ? 'upfront' : plan,
           force_card: (!isFree && plan === 'monthly') ? requireCardForInstallments : false,
