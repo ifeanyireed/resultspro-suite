@@ -150,7 +150,7 @@ export default function VideoPlayerPage() {
         {/* Companion Multi-Modal Learning Assets for This Topic */}
         <MotionRise className="space-y-4">
           <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#146ef5] text-white text-[10px] font-black uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
               Companion Topic Resources
             </span>

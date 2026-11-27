@@ -162,7 +162,7 @@ export default function CreateQuizPage() {
           <MotionRise className="lg:col-span-2 space-y-6">
             <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 space-y-4">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#146ef5] text-white text-[10px] font-black uppercase">
                   {selectedCampus}
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#146ef5] text-[10px] font-bold">

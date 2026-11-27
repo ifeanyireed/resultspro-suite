@@ -48,7 +48,7 @@ export default function ParentLearningHub() {
       {/* Header */}
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#146ef5] text-white text-[10px] font-black uppercase tracking-wider mb-2">
             ClassroomPRO — Parent Learning &amp; Remedial Revision Hub
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900">
@@ -135,7 +135,7 @@ export default function ParentLearningHub() {
       {/* System Boundary Notice (Replaces duplicate My Children, Billing & Messages tabs) */}
       <MotionStagger className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <MotionRise className="p-5 rounded-3xl bg-white border border-gray-100 shadow-sm space-y-2">
-          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded bg-[#0D1060] text-white">
+          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded bg-[#146ef5] text-white">
             CampusPRO
           </span>
           <h3 className="text-sm font-extrabold text-gray-900">Teacher Messaging &amp; School Circulars</h3>
@@ -144,7 +144,7 @@ export default function ParentLearningHub() {
           </p>
         </MotionRise>
         <MotionRise className="p-5 rounded-3xl bg-white border border-gray-100 shadow-sm space-y-2">
-          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded bg-[#0D1060] text-white">
+          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded bg-[#146ef5] text-white">
             CampusPRO
           </span>
           <h3 className="text-sm font-extrabold text-gray-900">Bursary, Fees &amp; Ward Enrolment</h3>

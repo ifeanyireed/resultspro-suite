@@ -329,6 +329,7 @@ export default function DashboardLayout({
           </div>
 
           <div className="flex items-center gap-4">
+            <OfflineSyncBanner />
             <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-500 shadow-sm hover:text-gray-900 transition-colors">
               <EnvelopeIcon className="w-5 h-5" />
             </button>
@@ -363,7 +364,6 @@ export default function DashboardLayout({
         </>
       }
     >
-      <OfflineSyncBanner />
       {children}
     </ModernDashboardLayout>
   );

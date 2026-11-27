@@ -60,7 +60,7 @@ export default function TeacherDashboard() {
       {/* Header */}
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#146ef5] text-white text-[10px] font-black uppercase tracking-wider mb-2">
             ClassroomPRO — Teacher Digital Learning &amp; Formative Assessment Hub
           </div>
           <h2 className="text-2xl font-extrabold text-gray-900">Hello, {teacherName}</h2>
@@ -145,7 +145,7 @@ export default function TeacherDashboard() {
 
         {/* System-of-Record Boundary Card (Replaces duplicate Messages widget) */}
         <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4">
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#146ef5] text-white text-[10px] font-black uppercase tracking-wider">
             Unified Trio Workflow
           </span>
           <h3 className="text-base font-extrabold text-gray-900">

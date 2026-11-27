@@ -84,7 +84,7 @@ export default function VideosListPage() {
       {/* Header */}
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1060] text-white text-[10px] font-black uppercase tracking-wider mb-2">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#146ef5] text-white text-[10px] font-black uppercase tracking-wider mb-2">
             <Sparkles className="w-3.5 h-3.5" />
             ClassroomPRO Video Library · Curated YouTube NERDC Lectures
           </span>
@@ -170,7 +170,7 @@ export default function VideosListPage() {
                     <Play className="w-6 h-6 fill-current ml-0.5" />
                   </div>
                 </div>
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#0D1060]/90 text-white text-[10px] font-extrabold uppercase tracking-wider">
+                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#146ef5]/90 text-white text-[10px] font-extrabold uppercase tracking-wider">
                   {video.topic?.subject?.name || "NERDC"} · Term {video.topic?.term || 2}
                 </div>
                 <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-red-600 text-white text-[10px] font-extrabold flex items-center gap-1">
