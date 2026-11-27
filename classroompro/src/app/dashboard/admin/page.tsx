@@ -1,39 +1,62 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   IconBook as BookOpen,
   IconBrain as BrainCircuit,
+  IconStack2 as Layers,
   IconChartBar as BarChart3,
   IconCheck as Check,
-  IconArrowUpRight as ArrowUpRight,
   IconAlertTriangle as AlertTriangle,
 } from "@tabler/icons-react";
+import { Button } from "@/components/ui/button";
 import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
+import { syncEngine } from "@/lib/syncEngine";
 
 export default function PrincipalCurriculumOversightConsole() {
+  const [packs, setPacks] = useState<any[]>([]);
+
+  const loadPacks = async () => {
+    const { packs: list } = await syncEngine.fetchStudyPacksCatalog();
+    setPacks(list);
+  };
+
+  useEffect(() => {
+    loadPacks();
+    return syncEngine.subscribe(loadPacks);
+  }, []);
+
+  const totalNotes = packs.reduce((acc, p) => acc + (p.notes_count || 0), 0);
+  const totalQuizzes = packs.reduce(
+    (acc, p) => acc + (p.quizzes_count || 0) + (p.exams_count || 0),
+    0
+  );
+  const totalBadges = packs.reduce((acc, p) => acc + (p.badges_count || 0), 0);
+
   const stats = [
     {
-      label: "NERDC Syllabus Coverage",
-      value: "84.2%",
-      sub: "Across 18 active subjects",
-      icon: <BookOpen className="w-5 h-5" />,
-      color: "text-[#0D1060]",
+      label: "Active Scheme Study Packs",
+      value: `${packs.length} Packs`,
+      sub: `${packs.filter((p) => p.pricing_type === "FREE").length} Free · ${
+        packs.filter((p) => p.pricing_type === "PAID").length
+      } Paid in Neon Storage`,
+      icon: <Layers className="w-5 h-5" />,
+      color: "text-[#146ef5]",
       bg: "bg-blue-50",
     },
     {
-      label: "Published Lesson Notes & AI Stories",
-      value: "342",
-      sub: "28 awaiting principal moderation",
+      label: "Published Notes & Video Lectures",
+      value: `${totalNotes} Notes`,
+      sub: "Bundled with cached diagrams & YouTube links",
       icon: <BookOpen className="w-5 h-5" />,
       color: "text-emerald-700",
       bg: "bg-emerald-50",
     },
     {
-      label: "Moderated AI CBT Quizzes",
-      value: "118",
-      sub: "4,920 student practice attempts",
+      label: "Quizzes, CBT Exams & Badges",
+      value: `${totalQuizzes} CBT Items`,
+      sub: `${totalBadges} Mastery Badges configured`,
       icon: <BrainCircuit className="w-5 h-5" />,
       color: "text-amber-700",
       bg: "bg-amber-50",
@@ -48,45 +71,24 @@ export default function PrincipalCurriculumOversightConsole() {
     },
   ];
 
-  const moderationQueue = [
-    {
-      title: "JSS 2 Mathematics — Algebraic Fractions & Word Problems (AI Storybook + Quiz)",
-      author: "Mr. Tunde Ogunleye (Ikeja Campus)",
-      alignment: "98% NERDC Aligned",
-      status: "Ready for Approval",
-    },
-    {
-      title: "SS 2 Physics — Projectile Motion & Vector Resolution (20 CBT Questions)",
-      author: "Mrs. Funke Adebayo (Lekki Campus)",
-      alignment: "96% NERDC Aligned",
-      status: "Ready for Approval",
-    },
-    {
-      title: "JSS 3 Basic Science — Chemical Symbols, Formulae & Equations",
-      author: "Mr. Ibrahim Musa (Abuja Campus)",
-      alignment: "94% NERDC Aligned",
-      status: "Approved & Published",
-    },
-  ];
-
   const topicGaps = [
     {
-      topic: "Quadratic Equations by Completing the Square",
-      classLevel: "SS 2 Science",
-      mastery: 44,
-      remedialAssigned: "38 students assigned AI Story + 15 Flashcards",
-    },
-    {
-      topic: "Balancing Redox Equations in Acidic Media",
-      classLevel: "SS 2 Science",
-      mastery: 49,
-      remedialAssigned: "31 students assigned Remedial Practice Quiz",
-    },
-    {
-      topic: "Linear Inequalities in One Variable",
+      topic: "Algebraic Fractions & Linear Inequalities",
       classLevel: "JSS 2 Gold",
       mastery: 52,
-      remedialAssigned: "24 students assigned Visual Lesson Note",
+      remedialAssigned: "Assigned NERDC JSS 2 Mathematics Second Term Study Pack",
+    },
+    {
+      topic: "Projectile Motion & Wave Optics",
+      classLevel: "SSS 2 Science",
+      mastery: 48,
+      remedialAssigned: "Assigned NERDC SSS 2 Physics WAEC Study Pack",
+    },
+    {
+      topic: "Whole Numbers to 1,000,000 & Place Value Abacus",
+      classLevel: "Primary 4",
+      mastery: 64,
+      remedialAssigned: "Assigned NERDC Primary 4 First Term Study Pack",
     },
   ];
 
@@ -96,27 +98,26 @@ export default function PrincipalCurriculumOversightConsole() {
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#146ef5] text-white text-[10px] font-black uppercase tracking-wider mb-2">
-            ClassroomPRO — Principal Curriculum &amp; Learning Oversight
+            ClassroomPRO — Principal Curriculum, Study Pack Creator &amp; Learning Oversight
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
-            School-Wide NERDC Learning &amp; Topic-Gap Console
+            School-Wide NERDC Study Packs &amp; Topic-Gap Console
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Monitor curriculum coverage, moderate AI lesson notes and quizzes, and audit official score pushes to CampusPRO.
+            Create or moderate Free and Paid Scheme-of-Work Study Packs, manage refunds/revocations, and audit score pushes to CampusPRO.
           </p>
         </div>
         <div className="flex flex-wrap gap-2.5 shrink-0">
+          <Link href="/dashboard/admin/study-packs">
+            <Button className="px-4 py-2.5 rounded-2xl bg-[#146ef5] hover:bg-[#105bd1] text-white text-xs font-extrabold">
+              <Layers className="w-4 h-4 mr-1.5" /> Study Pack Creator Studio (Free / Paid)
+            </Button>
+          </Link>
           <Link
             href="/dashboard/admin/subjects"
             className="px-4 py-2.5 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-extrabold transition-colors"
           >
             Moderate NERDC Content
-          </Link>
-          <Link
-            href="/dashboard/admin/reports"
-            className="px-4 py-2.5 rounded-2xl bg-[#0D1060] text-white text-xs font-extrabold transition-colors"
-          >
-            Topic-Gap &amp; Sync Reports
           </Link>
         </div>
       </MotionRise>
@@ -129,7 +130,9 @@ export default function PrincipalCurriculumOversightConsole() {
             delay={i * 0.05}
             className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm"
           >
-            <div className={`w-10 h-10 rounded-2xl flex items-center justify-center mb-4 ${stat.bg} ${stat.color}`}>
+            <div
+              className={`w-10 h-10 rounded-2xl flex items-center justify-center mb-4 ${stat.bg} ${stat.color}`}
+            >
               {stat.icon}
             </div>
             <div className="text-2xl font-extrabold text-gray-900">{stat.value}</div>
@@ -140,37 +143,61 @@ export default function PrincipalCurriculumOversightConsole() {
       </MotionStagger>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Content & Assessment Moderation Queue */}
+        {/* Live Study Packs Moderation & Pricing Queue */}
         <MotionRise className="lg:col-span-2 bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-extrabold text-gray-900">
-                NERDC Lesson Note &amp; CBT Quiz Moderation Queue
+                Active Study Packs &amp; Pricing Moderation Queue
               </h2>
               <p className="text-xs text-gray-500">
-                Review teacher-authored and AI-generated learning materials before school-wide release.
+                Review teacher-created and school-wide study packs stored in Neon Object Storage.
               </p>
             </div>
             <Link
-              href="/dashboard/admin/subjects"
-              className="text-xs font-extrabold text-[#1565C0] hover:underline"
+              href="/dashboard/admin/study-packs"
+              className="text-xs font-extrabold text-[#146ef5] hover:underline"
             >
-              View All →
+              Open Creator Studio →
             </Link>
           </div>
 
           <div className="divide-y divide-gray-100">
-            {moderationQueue.map((item, idx) => (
-              <div key={idx} className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div>
-                  <h3 className="text-sm font-extrabold text-gray-900">{item.title}</h3>
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    {item.author} · <span className="text-emerald-700 font-bold">{item.alignment}</span>
+            {packs.map((pack) => (
+              <div
+                key={pack.pack_id}
+                className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#146ef5] text-white">
+                      {pack.curriculum} · {pack.class_label} · {pack.subject_name}
+                    </span>
+                    <span
+                      className={`text-[10px] font-black uppercase px-2 py-0.5 rounded ${
+                        pack.pricing_type === "PAID"
+                          ? "bg-amber-100 text-amber-900"
+                          : "bg-emerald-100 text-emerald-800"
+                      }`}
+                    >
+                      {pack.pricing_type === "PAID"
+                        ? `PAID • ₦${(pack.price_naira || (pack.price_kobo || 0) / 100).toLocaleString()}`
+                        : "FREE • ₦0"}
+                    </span>
+                  </div>
+                  <h3 className="text-sm font-extrabold text-gray-900">{pack.title}</h3>
+                  <p className="text-xs text-gray-500">
+                    {pack.creator_name} ({pack.creator_role}) · {pack.notes_count} Notes ·{" "}
+                    {pack.videos_count} Videos · {pack.flashcards_count} SRS Cards ·{" "}
+                    {pack.quizzes_count} Quizzes · {pack.exams_count} CBT Exam · 🏅{" "}
+                    {pack.badges_count} Badges
                   </p>
                 </div>
-                <span className="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-extrabold shrink-0">
-                  {item.status}
-                </span>
+                <Link href="/dashboard/admin/study-packs" className="shrink-0">
+                  <span className="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-extrabold">
+                    {pack.moderation_status || "PUBLISHED"}
+                  </span>
+                </Link>
               </div>
             ))}
           </div>
@@ -215,18 +242,23 @@ export default function PrincipalCurriculumOversightConsole() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-extrabold text-gray-900">
-              Critical Topic Learning Gaps &amp; Active Remedial Loops
+              Critical Topic Learning Gaps &amp; Active Remedial Study Packs
             </h2>
             <p className="text-xs text-gray-500">
-              Topics where cohort mastery is below 55% across quiz and practice exam attempts.
+              Topics where cohort mastery is below 65% across quiz and practice exam attempts.
             </p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {topicGaps.map((gap, i) => (
-            <div key={i} className="p-4 rounded-2xl bg-gray-50 border border-gray-200/70 space-y-2">
+            <div
+              key={i}
+              className="p-4 rounded-2xl bg-gray-50 border border-gray-200/70 space-y-2"
+            >
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-extrabold text-[#1565C0]">{gap.classLevel}</span>
+                <span className="text-[11px] font-extrabold text-[#146ef5]">
+                  {gap.classLevel}
+                </span>
                 <span className="text-xs font-black text-rose-600 flex items-center gap-1">
                   <AlertTriangle className="w-3.5 h-3.5" />
                   {gap.mastery}% Mastery

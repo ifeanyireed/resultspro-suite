@@ -10,12 +10,14 @@ import OverviewTab from './tabs/OverviewTab';
 import NotesTab from './tabs/NotesTab';
 import QuizzesTab from './tabs/QuizzesTab';
 import FlashcardsTab from './tabs/FlashcardsTab';
+import StudyPacksTab from './tabs/StudyPacksTab';
 
 export default function ClassroomProAdminPage() {
   const [activeTab, setActiveTab] = useState('overview');
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+    { id: 'study-packs', label: 'Study Packs (Free/Paid)', icon: Layers },
     { id: 'notes', label: 'Study Notes', icon: BookOpen },
     { id: 'quizzes', label: 'Quizzes', icon: FileText },
     { id: 'flashcards', label: 'SRS Flashcards', icon: Layers },
@@ -56,6 +58,7 @@ export default function ClassroomProAdminPage() {
 
       <MotionRise delay={0.1} className="px-1 sm:px-4 md:p-8 py-4 sm:py-6 w-full">
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'study-packs' && <StudyPacksTab />}
         {activeTab === 'notes' && <NotesTab />}
         {activeTab === 'quizzes' && <QuizzesTab />}
         {activeTab === 'flashcards' && <FlashcardsTab />}

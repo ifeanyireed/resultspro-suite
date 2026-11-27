@@ -41,7 +41,7 @@ func InitDB() {
 		sqlDB.SetConnMaxLifetime(time.Hour)
 	}
 
-	// Auto-migrate ClassroomPRO tables including NERDC curriculum, content versioning & offline sync tables
+	// Auto-migrate ClassroomPRO tables including NERDC curriculum, content versioning, offline sync & study packs
 	_ = DB.AutoMigrate(
 		&models.Note{},
 		&models.VideoLesson{},
@@ -57,6 +57,15 @@ func InitDB() {
 		&models.PackageManifest{},
 		&models.OfflineSyncOperation{},
 		&models.StudentLessonProgress{},
+		&models.StudyPack{},
+		&models.PackExam{},
+		&models.PackBadge{},
+		&models.StudentPackBadge{},
+		&models.StudyPackItem{},
+		&models.StudyPackVersion{},
+		&models.PackOrder{},
+		&models.PackEntitlement{},
+		&models.PackDownload{},
 	)
 
 	log.Println("ClassroomPRO connected to PostgreSQL with GORM successfully")

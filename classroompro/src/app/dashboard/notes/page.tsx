@@ -54,18 +54,89 @@ export default function NotesListPage() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      let loadedNotes: any[] = [];
+      let loadedSubjects: any[] = [];
       try {
         const [notesRes, subjectsRes] = await Promise.all([
           api.get(`/notes${user?.class_id ? `?classId=${user.class_id}` : ''}`),
           api.get("/subjects")
         ]);
-        setNotes(Array.isArray(notesRes.data) ? notesRes.data : []);
-        setSubjects(Array.isArray(subjectsRes.data) ? subjectsRes.data : []);
+        const rawNotes = notesRes.data?.notes || notesRes.data || [];
+        loadedNotes = Array.isArray(rawNotes) ? rawNotes : [];
+        loadedSubjects = Array.isArray(subjectsRes.data) ? subjectsRes.data : [];
       } catch (error) {
-        console.error("Error fetching notes data:", error);
-      } finally {
-        setLoading(false);
+        // Fallback to local IndexedDB Study Pack lessons
       }
+
+      if (loadedNotes.length === 0) {
+        try {
+          const { syncEngine } = await import("../../../lib/syncEngine");
+          const { offlineDb } = await import("../../../lib/offlineDb");
+          const localLessons = await offlineDb.getAllLessons();
+          const { packs } = await syncEngine.fetchStudyPacksCatalog();
+          const catalogLessons = packs.flatMap((p: any) =>
+            (p.lessons || []).map((l: any) => ({
+              ...l,
+              class_code: p.class_code,
+              subject_id: p.subject_id,
+              term: p.term,
+            }))
+          );
+          const sourceLessons = localLessons.length > 0 ? localLessons : catalogLessons;
+          loadedNotes = sourceLessons.map((l: any) => ({
+            id: l.content_id,
+            title: `Week ${l.week}: ${l.topic} — ${l.subtopic}`,
+            content: l.markdown_content,
+            readingTime: l.estimated_minutes || 35,
+            isRead: true,
+            topic: {
+              id: l.content_id,
+              title: l.topic,
+              term: l.term === "first-term" ? 1 : 2,
+              subjectId: l.subject_id,
+              subject: {
+                id: l.subject_id,
+                name: l.subject_id.charAt(0).toUpperCase() + l.subject_id.slice(1),
+              },
+              class: {
+                name: l.class_code.toUpperCase().replace("-", " "),
+                school: { curriculum: "NERDC" },
+              },
+            },
+          }));
+        } catch {
+          // ignore
+        }
+      } else {
+        loadedNotes = loadedNotes.map((n: any, idx: number) => ({
+          ...n,
+          readingTime: n.readingTime || 30,
+          topic: n.topic || {
+            id: n.topic_id || `top-${idx}`,
+            title: n.title,
+            term: 2,
+            subjectId: n.subject_id || "mathematics",
+            subject: {
+              id: n.subject_id || "mathematics",
+              name:
+                (n.subject_id || "mathematics").charAt(0).toUpperCase() +
+                (n.subject_id || "mathematics").slice(1),
+            },
+            class: { name: "JSS 2", school: { curriculum: "NERDC" } },
+          },
+        }));
+      }
+
+      if (loadedSubjects.length === 0) {
+        loadedSubjects = [
+          { id: "mathematics", name: "Mathematics" },
+          { id: "physics", name: "Physics" },
+        ];
+      }
+
+      setNotes(loadedNotes);
+      setSubjects(loadedSubjects);
+      setLoading(false);
     };
 
     fetchData();

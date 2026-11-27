@@ -165,102 +165,108 @@ func (h *Handler) GetLeaderboard(c *gin.Context) {
 }
 
 func (h *Handler) GetExams(c *gin.Context) {
-	c.JSON(http.StatusOK, []gin.H{
-		{
-			"id":             "ex-1",
-			"title":          "NERDC Second Term Mathematics CBT Mock",
-			"status":         "UPCOMING",
-			"duration":       45,
-			"questionsCount": 30,
-			"class":          gin.H{"name": "JSS 2 Gold"},
-			"subject":        gin.H{"name": "Mathematics"},
-		},
-		{
-			"id":             "ex-2",
-			"title":          "NERDC English Comprehension & Lexis Practice Exam",
-			"status":         "COMPLETED",
-			"duration":       40,
-			"questionsCount": 25,
-			"score":          88,
-			"class":          gin.H{"name": "JSS 2 Gold"},
-			"subject":        gin.H{"name": "English Language"},
-		},
-	})
+	EnsureSampleStudyPacksSeeded()
+	packsMu.RLock()
+	exams := make([]gin.H, 0)
+	for _, bundle := range studyPackBundles {
+		for _, ex := range bundle.Exams {
+			exams = append(exams, gin.H{
+				"id":                       ex.ID,
+				"pack_id":                  bundle.PackID,
+				"pack_slug":                bundle.Slug,
+				"title":                    ex.Title,
+				"exam_type":                ex.ExamType,
+				"status":                   "AVAILABLE_IN_PACK",
+				"duration":                 ex.DurationMin,
+				"pass_score_pct":           ex.PassScorePct,
+				"questionsCount":           len(ex.Questions),
+				"questions":                ex.Questions,
+				"syncToCampusproComponent": ex.SyncToCampusproComponent,
+				"class":                    gin.H{"name": bundle.ClassLabel, "code": bundle.ClassCode},
+				"subject":                  gin.H{"name": bundle.SubjectName, "id": bundle.SubjectID},
+				"badges":                   bundle.Badges,
+			})
+		}
+	}
+	packsMu.RUnlock()
+	c.JSON(http.StatusOK, exams)
 }
 
 func (h *Handler) GetVideos(c *gin.Context) {
-	c.JSON(http.StatusOK, []gin.H{
-		{
-			"id":             "vid-math-1",
-			"title":          "Simplifying Algebraic Fractions with LCM & Commercial Word Problems",
-			"duration":       "14:20",
-			"viewsCount":     248,
-			"instructor":     "Mr. Tunde Ogunleye",
-			"youtubeId":      "NybHckSEQBI",
-			"youtubeUrl":     "https://www.youtube.com/watch?v=NybHckSEQBI",
-			"thumbnailUrl":   "https://i.ytimg.com/vi/NybHckSEQBI/hqdefault.jpg",
-			"summary":        "Step-by-step worked examples showing how to find the Lowest Common Multiple (LCM) of algebraic denominators, combine fractions, and solve NERDC JSS 2 commercial arithmetic word problems.",
-			"noteId":         "note-math-1",
-			"flashcardSetId": "fc-math-1",
-			"quizId":         "quiz-math-1",
-			"topic": gin.H{
-				"id":        "top-alg-frac",
-				"title":     "Algebraic Fractions & Word Problems",
-				"term":      2,
-				"week":      3,
-				"subjectId": "sub-math",
-				"subject":   gin.H{"id": "sub-math", "name": "Mathematics"},
-			},
-		},
-		{
-			"id":             "vid-eng-1",
-			"title":          "Mastering Comprehension Inference, Topic Sentences & Summary Writing",
-			"duration":       "16:45",
-			"viewsCount":     192,
-			"instructor":     "Mrs. Funke Adebayo",
-			"youtubeId":      "fC9da6eqaqg",
-			"youtubeUrl":     "https://www.youtube.com/watch?v=fC9da6eqaqg",
-			"thumbnailUrl":   "https://i.ytimg.com/vi/fC9da6eqaqg/hqdefault.jpg",
-			"summary":        "Learn how to identify topic sentences rapidly, infer implied meanings, and write concise summary answers without lifting verbatim clauses.",
-			"noteId":         "note-eng-1",
-			"flashcardSetId": "fc-math-1",
-			"quizId":         "quiz-eng-1",
-			"topic": gin.H{
-				"id":        "top-eng-comp",
-				"title":     "Comprehension & Summary Rules",
-				"term":      2,
-				"week":      2,
-				"subjectId": "sub-eng",
-				"subject":   gin.H{"id": "sub-eng", "name": "English Language"},
-			},
-		},
-	})
+	EnsureSampleStudyPacksSeeded()
+	packsMu.RLock()
+	videos := make([]gin.H, 0)
+	for _, bundle := range studyPackBundles {
+		for _, v := range bundle.Videos {
+			videos = append(videos, gin.H{
+				"id":                     v.ID,
+				"pack_id":                bundle.PackID,
+				"pack_slug":              bundle.Slug,
+				"title":                  v.Title,
+				"duration":               v.Duration,
+				"viewsCount":             248,
+				"instructor":             v.Instructor,
+				"youtubeId":              v.YoutubeID,
+				"youtubeUrl":             v.YoutubeURL,
+				"thumbnailUrl":           v.ThumbnailURL,
+				"summary":                v.Summary,
+				"offlineSummaryMarkdown": v.OfflineSummaryMarkdown,
+				"noteId":                 v.NoteID,
+				"flashcardSetId":         v.FlashcardSetID,
+				"quizId":                 v.QuizID,
+				"topic": gin.H{
+					"id":        v.TopicID,
+					"title":     v.Title,
+					"term":      bundle.TermLabel,
+					"week":      v.Week,
+					"subjectId": bundle.SubjectID,
+					"subject":   gin.H{"id": bundle.SubjectID, "name": bundle.SubjectName},
+				},
+			})
+		}
+	}
+	packsMu.RUnlock()
+	c.JSON(http.StatusOK, videos)
 }
 
 func (h *Handler) GetVideoByID(c *gin.Context) {
+	EnsureSampleStudyPacksSeeded()
 	id := c.Param("id")
-	c.JSON(http.StatusOK, gin.H{
-		"id":             id,
-		"title":          "Simplifying Algebraic Fractions with LCM & Commercial Word Problems",
-		"duration":       "14:20",
-		"viewsCount":     248,
-		"instructor":     "Mr. Tunde Ogunleye",
-		"youtubeId":      "NybHckSEQBI",
-		"youtubeUrl":     "https://www.youtube.com/watch?v=NybHckSEQBI",
-		"thumbnailUrl":   "https://i.ytimg.com/vi/NybHckSEQBI/hqdefault.jpg",
-		"summary":        "Step-by-step worked examples showing how to find the Lowest Common Multiple (LCM) of algebraic denominators, combine fractions, and solve NERDC JSS 2 commercial arithmetic word problems.",
-		"noteId":         "note-math-1",
-		"flashcardSetId": "fc-math-1",
-		"quizId":         "quiz-math-1",
-		"topic": gin.H{
-			"id":        "top-alg-frac",
-			"title":     "Algebraic Fractions & Word Problems",
-			"term":      2,
-			"week":      3,
-			"subjectId": "sub-math",
-			"subject":   gin.H{"id": "sub-math", "name": "Mathematics"},
-		},
-	})
+	packsMu.RLock()
+	defer packsMu.RUnlock()
+	for _, bundle := range studyPackBundles {
+		for _, v := range bundle.Videos {
+			if v.ID == id || (id == "vid-math-1" && v.ID == "vid-jss2-math-w01") {
+				c.JSON(http.StatusOK, gin.H{
+					"id":                     v.ID,
+					"pack_id":                bundle.PackID,
+					"pack_slug":              bundle.Slug,
+					"title":                  v.Title,
+					"duration":               v.Duration,
+					"viewsCount":             248,
+					"instructor":             v.Instructor,
+					"youtubeId":              v.YoutubeID,
+					"youtubeUrl":             v.YoutubeURL,
+					"thumbnailUrl":           v.ThumbnailURL,
+					"summary":                v.Summary,
+					"offlineSummaryMarkdown": v.OfflineSummaryMarkdown,
+					"noteId":                 v.NoteID,
+					"flashcardSetId":         v.FlashcardSetID,
+					"quizId":                 v.QuizID,
+					"topic": gin.H{
+						"id":        v.TopicID,
+						"title":     v.Title,
+						"term":      bundle.TermLabel,
+						"week":      v.Week,
+						"subjectId": bundle.SubjectID,
+						"subject":   gin.H{"id": bundle.SubjectID, "name": bundle.SubjectName},
+					},
+				})
+				return
+			}
+		}
+	}
+	c.JSON(http.StatusNotFound, gin.H{"error": "Video not found"})
 }
 
 func (h *Handler) CreateVideo(c *gin.Context) {

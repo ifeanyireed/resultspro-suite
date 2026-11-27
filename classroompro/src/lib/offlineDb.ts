@@ -1,15 +1,19 @@
 /**
- * ClassroomPRO IndexedDB Structured Offline Database Engine (Architecture §9.2)
+ * ClassroomPRO IndexedDB Structured Offline Database Engine v2
+ * (Aligned with classroompro_study_packs_architecture.md §4.2 & §7.3)
  *
- * Stores:
- * - packages: Downloaded NERDC curriculum package manifests & sync states
+ * Stores all 5 Study Pack Modalities + Gamification Badges:
+ * - packages: Downloaded Study Pack manifests, scheme-of-work spine, pricing, entitlement & sync states
  * - lessons: Portable Markdown lessons, resolved Markdown, version numbers, and linked YouTube metadata
  * - assets: Cached diagram images (Data URL / Blob metadata) mapped by asset://cld-* identifier
- * - quizzes: Offline practice quizzes & question banks
+ * - videos: Linked YouTube video lectures + offline_summary_markdown for 100% offline study
+ * - quizzes: Weekly formative practice quizzes & question banks
  * - flashcards: Offline spaced-repetition flashcard decks
+ * - exams: Timed Mid-Term, Terminal & WAEC/JAMB/BECE CBT mock exams bundled in Study Packs
+ * - badges: Study Pack Bronze/Silver/Gold achievement badges, unlock rules & earned status
  * - progress: Local student topic reading progress & completion timestamps
  * - bookmarks: Offline student bookmarks
- * - sync_queue: Pending upload operations (QUIZ_ATTEMPT, LESSON_PROGRESS, BOOKMARK) with idempotent operation_id
+ * - sync_queue: Pending upload operations (QUIZ_ATTEMPT, EXAM_ATTEMPT, BADGE_EARNED, LESSON_PROGRESS, BOOKMARK)
  */
 
 export type SyncState =
@@ -18,7 +22,22 @@ export type SyncState =
   | 'Synchronizing'
   | 'Synchronized'
   | 'Failed'
-  | 'Update available';
+  | 'Update available'
+  | 'Revoked';
+
+export interface SchemeWeekUnitRecord {
+  week: number;
+  topic_id: string;
+  topic: string;
+  subtopic: string;
+  note_id: string;
+  video_id: string;
+  flashcard_ids: string[];
+  quiz_id: string;
+  exam_id?: string;
+  badge_id?: string;
+  is_preview?: boolean;
+}
 
 export interface OfflineLessonRecord {
   content_id: string;
@@ -42,12 +61,30 @@ export interface OfflineLessonRecord {
 }
 
 export interface OfflineAssetRecord {
-  asset_id: string; // e.g. asset://cld-math-pri4-place-value-abacus
+  asset_id: string;
   delivery_url: string;
-  data_url: string; // Base64/SVG data URI for 100% offline rendering without network
+  data_url: string;
   alt: string;
   size_bytes: number;
   cached_at: string;
+}
+
+export interface OfflineVideoRecord {
+  id: string;
+  package_id: string;
+  week: number;
+  topic_id: string;
+  title: string;
+  instructor: string;
+  youtube_id: string;
+  youtube_url: string;
+  thumbnail_url: string;
+  duration: string;
+  summary: string;
+  offline_summary_markdown: string;
+  note_id?: string;
+  quiz_id?: string;
+  flashcard_set_id?: string;
 }
 
 export interface OfflineQuizRecord {
@@ -74,8 +111,49 @@ export interface OfflineFlashcardRecord {
   hint: string;
 }
 
+export interface OfflineExamRecord {
+  id: string;
+  package_id: string;
+  week: number;
+  exam_type: string; // MID_TERM_CBT | TERMINAL_MOCK | WAEC_MOCK | JAMB_CBT
+  title: string;
+  instructions: string;
+  duration_min: number;
+  pass_score_pct: number;
+  sync_to_campuspro_component?: string;
+  questions: Array<{
+    id: string;
+    question: string;
+    options: string[];
+    correct_index: number;
+    explanation: string;
+  }>;
+}
+
+export interface OfflineBadgeRecord {
+  badge_id: string;
+  package_id: string;
+  code: string;
+  name: string;
+  description: string;
+  icon_svg_or_asset: string;
+  tier: 'BRONZE' | 'SILVER' | 'GOLD' | string;
+  xp_bonus: number;
+  unlock_rule: Record<string, any>;
+  earned?: boolean;
+  earned_at?: string;
+}
+
 export interface OfflinePackageRecord {
   package_id: string;
+  slug?: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  creator_name?: string;
+  creator_role?: string;
+  pricing_type?: 'FREE' | 'PAID' | string;
+  price_kobo?: number;
   curriculum: string;
   education_level: string;
   class_code: string;
@@ -88,9 +166,16 @@ export interface OfflinePackageRecord {
   server_version?: number;
   size_bytes: number;
   checksum_sha256: string;
+  total_xp_reward?: number;
+  scheme_of_work?: SchemeWeekUnitRecord[];
   lesson_ids: string[];
+  video_ids?: string[];
   quiz_ids: string[];
   flashcard_ids: string[];
+  exam_ids?: string[];
+  badge_ids?: string[];
+  license_type?: 'PERPETUAL' | string;
+  entitlement_status?: 'ACTIVE' | 'REVOKED' | string;
   sync_state: SyncState;
   downloaded_at: string;
 }
@@ -107,7 +192,12 @@ export interface OfflineProgressRecord {
 
 export interface PendingSyncOperation {
   operation_id: string;
-  operation_type: 'QUIZ_ATTEMPT' | 'LESSON_PROGRESS' | 'BOOKMARK';
+  operation_type:
+    | 'QUIZ_ATTEMPT'
+    | 'EXAM_ATTEMPT'
+    | 'BADGE_EARNED'
+    | 'LESSON_PROGRESS'
+    | 'BOOKMARK';
   entity_id: string;
   client_timestamp: number;
   payload: Record<string, any>;
@@ -117,7 +207,7 @@ export interface PendingSyncOperation {
 }
 
 const DB_NAME = 'classroompro_offline_db';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 function openOfflineDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -140,12 +230,24 @@ function openOfflineDB(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains('assets')) {
         db.createObjectStore('assets', { keyPath: 'asset_id' });
       }
+      if (!db.objectStoreNames.contains('videos')) {
+        const store = db.createObjectStore('videos', { keyPath: 'id' });
+        store.createIndex('by_package', 'package_id', { unique: false });
+      }
       if (!db.objectStoreNames.contains('quizzes')) {
         const store = db.createObjectStore('quizzes', { keyPath: 'id' });
         store.createIndex('by_package', 'package_id', { unique: false });
       }
       if (!db.objectStoreNames.contains('flashcards')) {
         const store = db.createObjectStore('flashcards', { keyPath: 'id' });
+        store.createIndex('by_package', 'package_id', { unique: false });
+      }
+      if (!db.objectStoreNames.contains('exams')) {
+        const store = db.createObjectStore('exams', { keyPath: 'id' });
+        store.createIndex('by_package', 'package_id', { unique: false });
+      }
+      if (!db.objectStoreNames.contains('badges')) {
+        const store = db.createObjectStore('badges', { keyPath: 'badge_id' });
         store.createIndex('by_package', 'package_id', { unique: false });
       }
       if (!db.objectStoreNames.contains('progress')) {
@@ -232,17 +334,28 @@ export const offlineDb = {
   savePackage: (pkg: OfflinePackageRecord) => putRecord('packages', pkg),
   getPackage: (packageId: string) => getRecord<OfflinePackageRecord>('packages', packageId),
   getAllPackages: () => getAllRecords<OfflinePackageRecord>('packages'),
+
+  // Deletes a Study Pack and purges all 5 modalities (lessons, videos, quizzes, flashcards, exams) & unearned badges
   deletePackage: async (packageId: string) => {
     const pkg = await getRecord<OfflinePackageRecord>('packages', packageId);
     if (pkg) {
-      for (const lid of pkg.lesson_ids) {
+      for (const lid of pkg.lesson_ids || []) {
         await deleteRecord('lessons', lid);
       }
-      for (const qid of pkg.quiz_ids) {
+      for (const vid of pkg.video_ids || []) {
+        await deleteRecord('videos', vid);
+      }
+      for (const qid of pkg.quiz_ids || []) {
         await deleteRecord('quizzes', qid);
       }
-      for (const fid of pkg.flashcard_ids) {
+      for (const fid of pkg.flashcard_ids || []) {
         await deleteRecord('flashcards', fid);
+      }
+      for (const eid of pkg.exam_ids || []) {
+        await deleteRecord('exams', eid);
+      }
+      for (const bid of pkg.badge_ids || []) {
+        await deleteRecord('badges', bid);
       }
     }
     await deleteRecord('packages', packageId);
@@ -256,12 +369,24 @@ export const offlineDb = {
   getAsset: (assetId: string) => getRecord<OfflineAssetRecord>('assets', assetId),
   getAllAssets: () => getAllRecords<OfflineAssetRecord>('assets'),
 
+  saveVideo: (video: OfflineVideoRecord) => putRecord('videos', video),
+  getVideo: (videoId: string) => getRecord<OfflineVideoRecord>('videos', videoId),
+  getAllVideos: () => getAllRecords<OfflineVideoRecord>('videos'),
+
   saveQuiz: (quiz: OfflineQuizRecord) => putRecord('quizzes', quiz),
   getQuiz: (quizId: string) => getRecord<OfflineQuizRecord>('quizzes', quizId),
   getAllQuizzes: () => getAllRecords<OfflineQuizRecord>('quizzes'),
 
   saveFlashcard: (card: OfflineFlashcardRecord) => putRecord('flashcards', card),
   getAllFlashcards: () => getAllRecords<OfflineFlashcardRecord>('flashcards'),
+
+  saveExam: (exam: OfflineExamRecord) => putRecord('exams', exam),
+  getExam: (examId: string) => getRecord<OfflineExamRecord>('exams', examId),
+  getAllExams: () => getAllRecords<OfflineExamRecord>('exams'),
+
+  saveBadge: (badge: OfflineBadgeRecord) => putRecord('badges', badge),
+  getBadge: (badgeId: string) => getRecord<OfflineBadgeRecord>('badges', badgeId),
+  getAllBadges: () => getAllRecords<OfflineBadgeRecord>('badges'),
 
   saveProgress: (prog: OfflineProgressRecord) => putRecord('progress', prog),
   getProgress: (contentId: string) => getRecord<OfflineProgressRecord>('progress', contentId),

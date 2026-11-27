@@ -19,3 +19,6 @@ export { default as TeacherCreateNoteView } from './app/dashboard/teacher/create
 export { default as TeacherCreateVideoView } from './app/dashboard/teacher/create-video/page';
 export { default as TeacherCreateQuizView } from './app/dashboard/teacher/create-quiz/page';
 export { default as TeacherAnalyticsView } from './app/dashboard/teacher/analytics/page';
+export { default as TeacherStudyPacksView } from './app/dashboard/teacher/study-packs/page';
+export { default as AdminStudyPacksView } from './app/dashboard/admin/study-packs/page';
+export { StudyPackCreatorStudio } from './components/StudyPackCreatorStudio';

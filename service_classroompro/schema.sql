@@ -208,3 +208,176 @@ CREATE TABLE IF NOT EXISTS cls_student_lesson_progress (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (student_id, content_id)
 );
+
+-- 15. Study Packs Master Catalog (Curriculum, Class, Subject & Scheme-of-Work Scoped)
+CREATE TABLE IF NOT EXISTS cls_study_packs (
+    pack_id VARCHAR(191) PRIMARY KEY,
+    slug VARCHAR(191) UNIQUE NOT NULL,
+    tenant_id VARCHAR(64),
+    creator_id VARCHAR(191) NOT NULL,
+    creator_role VARCHAR(32) NOT NULL,
+    creator_name VARCHAR(191) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    subtitle VARCHAR(500),
+    description TEXT,
+    pack_scope VARCHAR(32) NOT NULL DEFAULT 'FULL_TERM_SCHEME',
+    curriculum VARCHAR(64) NOT NULL DEFAULT 'NERDC',
+    education_level VARCHAR(64) NOT NULL,
+    class_code VARCHAR(64) NOT NULL,
+    class_label VARCHAR(128) NOT NULL,
+    subject_id VARCHAR(64) NOT NULL,
+    subject_name VARCHAR(191) NOT NULL,
+    term VARCHAR(64) NOT NULL,
+    term_label VARCHAR(128) NOT NULL,
+    scheme_start_week INT NOT NULL DEFAULT 1,
+    scheme_end_week INT NOT NULL DEFAULT 12,
+    scheme_overview_json TEXT NOT NULL,
+    pricing_type VARCHAR(16) NOT NULL DEFAULT 'FREE',
+    price_kobo BIGINT NOT NULL DEFAULT 0,
+    currency VARCHAR(8) NOT NULL DEFAULT 'NGN',
+    visibility VARCHAR(32) NOT NULL DEFAULT 'PUBLIC',
+    moderation_status VARCHAR(32) NOT NULL DEFAULT 'DRAFT',
+    active_version INT NOT NULL DEFAULT 1,
+    cover_asset_id VARCHAR(255),
+    preview_week INT DEFAULT 1,
+    total_xp_reward INT NOT NULL DEFAULT 600,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 16. CBT Mock & Scheme-of-Work Terminal Exams (Bundled Inside Study Packs)
+CREATE TABLE IF NOT EXISTS cls_pack_exams (
+    id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(64),
+    pack_id VARCHAR(191) REFERENCES cls_study_packs(pack_id) ON DELETE CASCADE,
+    curriculum VARCHAR(64) NOT NULL DEFAULT 'NERDC',
+    class_code VARCHAR(64) NOT NULL,
+    subject_id VARCHAR(64) NOT NULL,
+    term VARCHAR(64) NOT NULL,
+    week_number INT NOT NULL DEFAULT 12,
+    exam_type VARCHAR(32) NOT NULL DEFAULT 'TERMINAL_MOCK',
+    title VARCHAR(255) NOT NULL,
+    instructions TEXT,
+    duration_min INT NOT NULL DEFAULT 45,
+    pass_score_pct INT NOT NULL DEFAULT 60,
+    questions_json TEXT NOT NULL,
+    sync_to_campuspro_component VARCHAR(32),
+    created_by VARCHAR(191) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 17. Study Pack Badges & Achievement Rules
+CREATE TABLE IF NOT EXISTS cls_pack_badges (
+    badge_id VARCHAR(191) PRIMARY KEY,
+    pack_id VARCHAR(191) NOT NULL REFERENCES cls_study_packs(pack_id) ON DELETE CASCADE,
+    code VARCHAR(128) UNIQUE NOT NULL,
+    name VARCHAR(191) NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    icon_svg_or_asset VARCHAR(255) NOT NULL,
+    tier VARCHAR(32) NOT NULL DEFAULT 'GOLD',
+    xp_bonus INT NOT NULL DEFAULT 250,
+    unlock_rule_json TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 18. Student Earned Pack Badges Ledger
+CREATE TABLE IF NOT EXISTS cls_student_pack_badges (
+    id VARCHAR(191) PRIMARY KEY,
+    student_id VARCHAR(191) NOT NULL,
+    pack_id VARCHAR(191) NOT NULL,
+    badge_id VARCHAR(191) NOT NULL REFERENCES cls_pack_badges(badge_id),
+    xp_awarded INT NOT NULL DEFAULT 250,
+    earned_offline BOOLEAN NOT NULL DEFAULT FALSE,
+    awarded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (student_id, badge_id)
+);
+
+-- 19. Study Pack Scheme-of-Work Items
+CREATE TABLE IF NOT EXISTS cls_study_pack_items (
+    id VARCHAR(191) PRIMARY KEY,
+    pack_id VARCHAR(191) NOT NULL REFERENCES cls_study_packs(pack_id) ON DELETE CASCADE,
+    version INT NOT NULL DEFAULT 1,
+    week_number INT NOT NULL,
+    topic_id VARCHAR(191),
+    topic_title VARCHAR(255) NOT NULL,
+    position INT NOT NULL DEFAULT 0,
+    item_type VARCHAR(32) NOT NULL,
+    content_id VARCHAR(191) NOT NULL,
+    content_version INT NOT NULL DEFAULT 1,
+    required_for_badge BOOLEAN NOT NULL DEFAULT TRUE,
+    is_free_preview BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+-- 20. Immutable Study Pack Versions (Neon Object Storage)
+CREATE TABLE IF NOT EXISTS cls_study_pack_versions (
+    id VARCHAR(191) PRIMARY KEY,
+    pack_id VARCHAR(191) NOT NULL REFERENCES cls_study_packs(pack_id) ON DELETE CASCADE,
+    version INT NOT NULL,
+    package_id VARCHAR(191) NOT NULL,
+    neon_storage_key VARCHAR(512) NOT NULL,
+    size_bytes BIGINT NOT NULL DEFAULT 0,
+    checksum_sha256 VARCHAR(128) NOT NULL,
+    weeks_count INT NOT NULL DEFAULT 0,
+    notes_count INT NOT NULL DEFAULT 0,
+    flashcards_count INT NOT NULL DEFAULT 0,
+    videos_count INT NOT NULL DEFAULT 0,
+    quizzes_count INT NOT NULL DEFAULT 0,
+    exams_count INT NOT NULL DEFAULT 0,
+    badges_count INT NOT NULL DEFAULT 0,
+    changelog TEXT,
+    published_by VARCHAR(191),
+    published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (pack_id, version)
+);
+
+-- 21. Parent & School Study Pack Orders (Paystack Integration)
+CREATE TABLE IF NOT EXISTS cls_pack_orders (
+    order_id VARCHAR(191) PRIMARY KEY,
+    tenant_id VARCHAR(64),
+    buyer_user_id VARCHAR(191) NOT NULL,
+    buyer_role VARCHAR(32) NOT NULL,
+    buyer_email VARCHAR(191) NOT NULL,
+    pack_id VARCHAR(191) NOT NULL REFERENCES cls_study_packs(pack_id),
+    beneficiary_student_ids_json TEXT NOT NULL,
+    unit_price_kobo BIGINT NOT NULL,
+    seats_count INT NOT NULL DEFAULT 1,
+    total_amount_kobo BIGINT NOT NULL,
+    currency VARCHAR(8) NOT NULL DEFAULT 'NGN',
+    paystack_reference VARCHAR(191) UNIQUE NOT NULL,
+    paystack_access_code VARCHAR(191),
+    status VARCHAR(32) NOT NULL DEFAULT 'PENDING',
+    paid_at TIMESTAMP,
+    refunded_at TIMESTAMP,
+    refund_reason TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 22. Perpetual Student Pack Entitlements (Supports Revocation on Refund)
+CREATE TABLE IF NOT EXISTS cls_pack_entitlements (
+    entitlement_id VARCHAR(191) PRIMARY KEY,
+    pack_id VARCHAR(191) NOT NULL REFERENCES cls_study_packs(pack_id),
+    beneficiary_student_id VARCHAR(191) NOT NULL,
+    purchased_by_user_id VARCHAR(191) NOT NULL,
+    tenant_id VARCHAR(64),
+    grant_source VARCHAR(32) NOT NULL,
+    order_id VARCHAR(191) REFERENCES cls_pack_orders(order_id),
+    license_type VARCHAR(32) NOT NULL DEFAULT 'PERPETUAL',
+    status VARCHAR(32) NOT NULL DEFAULT 'ACTIVE',
+    granted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    revoked_at TIMESTAMP,
+    revoke_reason VARCHAR(255),
+    UNIQUE (pack_id, beneficiary_student_id)
+);
+
+-- 23. Device Download & Offline Purge Registry
+CREATE TABLE IF NOT EXISTS cls_pack_downloads (
+    download_id VARCHAR(191) PRIMARY KEY,
+    entitlement_id VARCHAR(191) NOT NULL REFERENCES cls_pack_entitlements(entitlement_id),
+    pack_id VARCHAR(191) NOT NULL,
+    pack_version INT NOT NULL,
+    student_id VARCHAR(191) NOT NULL,
+    device_fingerprint VARCHAR(191) NOT NULL,
+    status VARCHAR(32) NOT NULL DEFAULT 'DOWNLOADED',
+    downloaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    purged_at TIMESTAMP
+);

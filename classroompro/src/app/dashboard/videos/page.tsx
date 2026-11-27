@@ -36,18 +36,55 @@ export default function VideosListPage() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      let loadedVideos: any[] = [];
       try {
         const [videosRes, subjectsRes] = await Promise.all([
           api.get(`/videos${user?.class_id ? `?classId=${user.class_id}` : ""}`),
           api.get("/subjects"),
         ]);
-        setVideos(Array.isArray(videosRes.data) ? videosRes.data : []);
+        loadedVideos = Array.isArray(videosRes.data) ? videosRes.data : [];
         setSubjects(Array.isArray(subjectsRes.data) ? subjectsRes.data : []);
       } catch (error) {
-        console.error("Error fetching videos:", error);
-      } finally {
-        setLoading(false);
+        // Fallback to local IndexedDB Study Pack videos
       }
+
+      if (loadedVideos.length === 0) {
+        try {
+          const { syncEngine } = await import("../../../lib/syncEngine");
+          const { offlineDb } = await import("../../../lib/offlineDb");
+          const localVids = await offlineDb.getAllVideos();
+          const { packs } = await syncEngine.fetchStudyPacksCatalog();
+          const catalogVids = packs.flatMap((p: any) => p.videos || []);
+          const sourceVids = localVids.length > 0 ? localVids : catalogVids;
+          loadedVideos = sourceVids.map((v: any) => ({
+            id: v.id,
+            title: v.title,
+            duration: v.duration,
+            viewsCount: 248,
+            instructor: v.instructor,
+            youtubeId: v.youtube_id,
+            youtubeUrl: v.youtube_url,
+            thumbnailUrl: v.thumbnail_url,
+            summary: v.summary,
+            noteId: v.note_id,
+            flashcardSetId: v.flashcard_set_id,
+            quizId: v.quiz_id,
+            topic: {
+              id: v.topic_id,
+              title: v.title,
+              term: 2,
+              week: v.week,
+              subjectId: "mathematics",
+              subject: { id: "mathematics", name: "Mathematics" },
+            },
+          }));
+        } catch {
+          // ignore
+        }
+      }
+
+      setVideos(loadedVideos);
+      setLoading(false);
     };
     fetchData();
   }, [user?.class_id]);

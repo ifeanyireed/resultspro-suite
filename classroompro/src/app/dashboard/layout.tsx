@@ -259,6 +259,7 @@ export default function DashboardLayout({
 
   const teacherItems: SidebarNavItem[] = [
     { icon: <LayoutDashboard className="w-6 h-6 shrink-0" />, label: "Teacher Home", href: "/dashboard/teacher" },
+    { icon: <Layers className="w-6 h-6 shrink-0" />, label: "Study Pack Studio", href: "/dashboard/teacher/study-packs" },
     { icon: <Users className="w-6 h-6 shrink-0" />, label: "Assigned Classes", href: "/dashboard/teacher/classes" },
     { icon: <FilePlus className="w-6 h-6 shrink-0" />, label: "Create Lesson Note", href: "/dashboard/teacher/create-note" },
     { icon: <VideoIcon className="w-6 h-6 shrink-0" />, label: "Link YouTube Video", href: "/dashboard/teacher/create-video" },
@@ -270,6 +271,7 @@ export default function DashboardLayout({
   const parentItems: SidebarNavItem[] = [
     { icon: <LayoutDashboard className="w-6 h-6 shrink-0" />, label: "Parent Learning Hub", href: "/dashboard/parent" },
     { icon: <TrendingUp className="w-6 h-6 shrink-0" />, label: "Topic Mastery & Remedial", href: "/dashboard/parent/progress" },
+    { icon: <Download className="w-6 h-6 shrink-0" />, label: "Ward Study Packs", href: "/dashboard/downloads" },
     { icon: <BookOpen className="w-6 h-6 shrink-0" />, label: "NERDC Class Notes", href: "/dashboard/notes" },
     { icon: <VideoIcon className="w-6 h-6 shrink-0" />, label: "Video Lessons", href: "/dashboard/videos" },
     { icon: <BrainCircuit className="w-6 h-6 shrink-0" />, label: "Practice Quizzes", href: "/dashboard/quizzes" },
@@ -277,6 +279,7 @@ export default function DashboardLayout({
 
   const adminItems: SidebarNavItem[] = [
     { icon: <LayoutDashboard className="w-6 h-6 shrink-0" />, label: "Curriculum Oversight", href: "/dashboard/admin" },
+    { icon: <Layers className="w-6 h-6 shrink-0" />, label: "Study Pack Studio", href: "/dashboard/admin/study-packs" },
     { icon: <Library className="w-6 h-6 shrink-0" />, label: "NERDC Content Moderation", href: "/dashboard/admin/subjects" },
     { icon: <BarChart3 className="w-6 h-6 shrink-0" />, label: "Learning Gap & Sync Audit", href: "/dashboard/admin/reports" },
   ];

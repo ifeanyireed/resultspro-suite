@@ -66,6 +66,19 @@ func main() {
 			content.POST("/content/publish", h.PublishLessonContent)
 			content.POST("/sync/push", h.PushOfflineSync)
 			content.GET("/sync/status", h.GetOfflineSyncStatus)
+
+			// Study Packs Catalog, Scheme-of-Work Player, Creator Studio, Ward Purchase & Refund Purge Endpoints
+			content.GET("/packs/catalog", h.GetStudyPacksCatalog)
+			content.GET("/packs/me", h.GetMyStudyPacks)
+			content.GET("/packs/:slug", h.GetStudyPackBySlugOrID)
+			content.POST("/teacher/packs", h.CreateOrUpdateStudyPack)
+			content.POST("/admin/packs/:packId/moderate", h.ModerateStudyPack)
+			content.POST("/admin/packs/entitlements/:id/revoke", h.RevokePackEntitlement)
+			content.POST("/packs/:packId/claim", h.ClaimFreeStudyPack)
+			content.POST("/packs/:packId/checkout", h.CheckoutStudyPack)
+			content.POST("/packs/:packId/download-token", h.IssuePackDownloadToken)
+			content.POST("/packs/:packId/purge-ack", h.ConfirmOfflinePackPurge)
+			content.POST("/webhooks/paystack", h.HandlePaystackPackWebhook)
 		}
 
 		// Protected Student & Teacher Actions
@@ -76,6 +89,9 @@ func main() {
 			protected.POST("/teacher/videos", h.CreateVideo)
 			protected.POST("/teacher/quizzes", h.CreateQuiz)
 			protected.POST("/teacher/flashcards", h.CreateFlashcard)
+			protected.POST("/teacher/packs", h.CreateOrUpdateStudyPack)
+			protected.POST("/admin/packs/:packId/moderate", h.ModerateStudyPack)
+			protected.POST("/admin/packs/entitlements/:id/revoke", h.RevokePackEntitlement)
 
 			protected.POST("/flashcards/review", h.ReviewFlashcard)
 			protected.POST("/gamification/session", h.LogStudySession)

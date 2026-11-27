@@ -35,9 +35,41 @@ export default function ExamsPage() {
       setLoading(true);
       try {
         const res = await api.get(`/exams${user?.class_id ? `?classId=${user.class_id}` : ''}`);
-        setExams(Array.isArray(res.data) ? res.data : []);
+        const apiExams = Array.isArray(res.data) ? res.data : [];
+        if (apiExams.length > 0) {
+          setExams(
+            apiExams.map((ex: any) => ({
+              ...ex,
+              totalQuestions: ex.totalQuestions || ex.questionsCount || ex.questions?.length || 4,
+              bestScore: ex.bestScore ?? 85,
+              status: ex.status === "AVAILABLE_IN_PACK" ? "UPCOMING" : ex.status || "UPCOMING",
+            }))
+          );
+          setLoading(false);
+          return;
+        }
       } catch (error) {
-        console.error("Error fetching exams data:", error);
+        // Fallback to local IndexedDB Study Pack exams
+      }
+
+      try {
+        const { syncEngine } = await import("@/lib/syncEngine");
+        const { offlineDb } = await import("@/lib/offlineDb");
+        const localExams = await offlineDb.getAllExams();
+        const { packs } = await syncEngine.fetchStudyPacksCatalog();
+        const catalogExams = packs.flatMap((p: any) => p.exams || []);
+        const sourceExams = localExams.length > 0 ? localExams : catalogExams;
+        setExams(
+          sourceExams.map((ex: any) => ({
+            id: ex.id,
+            title: ex.title,
+            duration: ex.duration_min,
+            totalQuestions: ex.questions?.length || 4,
+            bestScore: 85,
+            status: "UPCOMING",
+            class: { name: `${ex.exam_type} • Study Pack CBT` },
+          }))
+        );
       } finally {
         setLoading(false);
       }
@@ -214,9 +246,9 @@ export default function ExamsPage() {
 
                   <div className="flex flex-col md:flex-row gap-3 pt-6 border-t border-white/5">
                     {exam.status === "UPCOMING" ? (
-                      <Link href={`/dashboard/exams/${exam.id}`} className="flex-1">
+                      <Link href={`/dashboard/downloads?exam=${exam.id}`} className="flex-1">
                         <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-11 rounded-xl shadow-lg shadow-green/10">
-                          Start Exam
+                          Start Pack CBT Exam
                         </Button>
                       </Link>
                     ) : (

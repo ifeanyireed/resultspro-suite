@@ -178,6 +178,7 @@ func (h *Handler) GetContentManifests(c *gin.Context) {
 	}
 
 	filtered := make([]PackageEntry, 0, len(manifest.Packages))
+	seenPkg := make(map[string]bool)
 	for _, pkg := range manifest.Packages {
 		if classFilter != "" && !strings.EqualFold(pkg.ClassCode, classFilter) {
 			continue
@@ -188,8 +189,49 @@ func (h *Handler) GetContentManifests(c *gin.Context) {
 		if termFilter != "" && !strings.EqualFold(pkg.Term, termFilter) {
 			continue
 		}
+		seenPkg[pkg.PackageID] = true
 		filtered = append(filtered, pkg)
 	}
+
+	// Merge any creator-published Study Packs from studyPacksStore into /api/content/manifests
+	EnsureSampleStudyPacksSeeded()
+	packsMu.RLock()
+	for packID, bundle := range studyPackBundles {
+		if seenPkg[packID] {
+			continue
+		}
+		if classFilter != "" && !strings.EqualFold(bundle.ClassCode, classFilter) {
+			continue
+		}
+		if subjectFilter != "" && !strings.EqualFold(bundle.SubjectID, subjectFilter) {
+			continue
+		}
+		if termFilter != "" && !strings.EqualFold(bundle.Term, termFilter) {
+			continue
+		}
+		filtered = append(filtered, PackageEntry{
+			PackageID:      bundle.PackID,
+			Curriculum:     bundle.Curriculum,
+			EducationLevel: bundle.EducationLevel,
+			ClassCode:      bundle.ClassCode,
+			ClassLabel:     bundle.ClassLabel,
+			SubjectID:      bundle.SubjectID,
+			SubjectName:    bundle.SubjectName,
+			Term:           bundle.Term,
+			TermLabel:      bundle.TermLabel,
+			PackageVersion: bundle.PackVersion,
+			SizeBytes:      bundle.SizeBytes,
+			ChecksumSHA256: bundle.ChecksumSHA256,
+			UpdatedAt:      bundle.UpdatedAt,
+			Lessons:        bundle.Lessons,
+			Quizzes:        bundle.Quizzes,
+			Flashcards:     bundle.Flashcards,
+		})
+	}
+	packsMu.RUnlock()
+
+	studentID := resolveCurrentStudentID(c)
+	revokedPackIDs := GetRevokedPackIDsForStudent(studentID)
 
 	resp := gin.H{
 		"manifest_version":    manifest.ManifestVersion,
@@ -198,6 +240,7 @@ func (h *Handler) GetContentManifests(c *gin.Context) {
 		"cloudinary_delivery": manifest.CloudinaryDelivery,
 		"asset_registry":      manifest.AssetRegistry,
 		"packages":            filtered,
+		"revoked_pack_ids":    revokedPackIDs,
 	}
 
 	if db.GlobalRedis != nil && cacheKey != "" {
@@ -207,10 +250,76 @@ func (h *Handler) GetContentManifests(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-// GetContentPackage serves a full offline curriculum package (Markdown lessons, resolved Cloudinary URLs, quizzes, flashcards, and linked YouTube video IDs)
+// GetContentPackage serves a full offline curriculum package (Markdown lessons, resolved Cloudinary URLs, quizzes, flashcards, videos, exams, badges, and linked YouTube video IDs)
 // Route: GET /api/content/packages/:packageId
 func (h *Handler) GetContentPackage(c *gin.Context) {
 	packageID := strings.TrimSpace(c.Param("packageId"))
+	EnsureSampleStudyPacksSeeded()
+
+	// 1. Check if packageId is a Study Pack in studyPacksStore (with CanAccessPack entitlement gate)
+	studentID := resolveCurrentStudentID(c)
+	packsMu.RLock()
+	studyPack, isStudyPack := studyPacksStore[packageID]
+	studyBundle, hasBundle := studyPackBundles[packageID]
+	packsMu.RUnlock()
+
+	if isStudyPack && hasBundle {
+		allowed, reason, _ := CanAccessPack(studentID, studyPack)
+		if !allowed {
+			c.JSON(http.StatusForbidden, gin.H{
+				"error":         "Study pack access denied: " + reason,
+				"access_reason": reason,
+				"pack_id":       packageID,
+			})
+			return
+		}
+		// Resolve asset:// references inside studyBundle lessons and merge any runtime-published version overrides
+		manifest, _ := loadNERDCManifest()
+		offlineMu.RLock()
+		for i := range studyBundle.Lessons {
+			lesson := &studyBundle.Lessons[i]
+			if versions, ok := publishedVersions[lesson.ContentID]; ok && len(versions) > 0 {
+				latest := versions[len(versions)-1]
+				if latest.MarkdownBody != "" {
+					lesson.MarkdownContent = latest.MarkdownBody
+				}
+				if latest.Version > lesson.Version {
+					studyBundle.PackVersion += (latest.Version - lesson.Version)
+					studyBundle.PackageVersion = studyBundle.PackVersion
+					lesson.Version = latest.Version
+				}
+				lesson.ChecksumSHA256 = latest.ChecksumSHA256
+			}
+		}
+		offlineMu.RUnlock()
+
+		for i := range studyBundle.Lessons {
+			lesson := &studyBundle.Lessons[i]
+			resolvedMap := make(map[string]string)
+			resolvedMd := lesson.MarkdownContent
+			if manifest != nil {
+				for _, assetRef := range lesson.Assets {
+					if meta, ok := manifest.AssetRegistry[assetRef]; ok {
+						resolvedMap[assetRef] = meta.DeliveryURL
+						resolvedMd = strings.ReplaceAll(resolvedMd, assetRef, meta.DeliveryURL)
+					}
+				}
+			}
+			lesson.ResolvedAssets = resolvedMap
+			lesson.ResolvedMarkdown = resolvedMd
+		}
+		var reg map[string]AssetMetaEntry
+		if manifest != nil {
+			reg = manifest.AssetRegistry
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"package":        studyBundle,
+			"asset_registry": reg,
+			"downloaded_at":  time.Now().UTC().Format(time.RFC3339),
+		})
+		return
+	}
+
 	manifest, err := loadNERDCManifest()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to load manifest"})
@@ -562,7 +671,7 @@ func (h *Handler) PushOfflineSync(c *gin.Context) {
 		opMessage := "Operation synchronized and persisted"
 
 		switch strings.ToUpper(op.OperationType) {
-		case "QUIZ_ATTEMPT":
+		case "QUIZ_ATTEMPT", "EXAM_ATTEMPT":
 			score, _ := toFloat64(op.Payload["score"])
 			maxScore, _ := toFloat64(op.Payload["max_score"])
 			if maxScore <= 0 {
@@ -583,6 +692,35 @@ func (h *Handler) PushOfflineSync(c *gin.Context) {
 			if db.DB != nil {
 				_ = db.DB.Create(&attempt).Error
 			}
+
+		case "BADGE_EARNED":
+			packID, _ := op.Payload["pack_id"].(string)
+			xpAwarded := int(toFloat64Default(op.Payload["xp_awarded"], 250))
+			packsMu.Lock()
+			existingBadges := studentBadgesMem[studentID]
+			alreadyEarned := false
+			for _, eb := range existingBadges {
+				if eb.BadgeID == op.EntityID {
+					alreadyEarned = true
+					break
+				}
+			}
+			if !alreadyEarned {
+				newBadge := models.StudentPackBadge{
+					ID:            op.OperationID,
+					StudentID:     studentID,
+					PackID:        packID,
+					BadgeID:       op.EntityID,
+					XPAwarded:     xpAwarded,
+					EarnedOffline: true,
+					AwardedAt:     time.UnixMilli(op.ClientTimestamp).UTC(),
+				}
+				studentBadgesMem[studentID] = append(existingBadges, newBadge)
+				if db.DB != nil {
+					_ = db.DB.Save(&newBadge).Error
+				}
+			}
+			packsMu.Unlock()
 
 		case "LESSON_PROGRESS":
 			progressKey := studentID + ":" + op.EntityID
@@ -722,11 +860,14 @@ func (h *Handler) GetOfflineSyncStatus(c *gin.Context) {
 	}
 	offlineMu.RUnlock()
 
+	revokedPackIDs := GetRevokedPackIDsForStudent(studentID)
+
 	c.JSON(http.StatusOK, gin.H{
 		"student_id":        studentID,
 		"synced_operations": ops,
 		"lesson_progress":   progressList,
 		"quiz_attempts":     attempts,
+		"revoked_pack_ids":  revokedPackIDs,
 		"server_time":       time.Now().UTC().Format(time.RFC3339),
 	})
 }

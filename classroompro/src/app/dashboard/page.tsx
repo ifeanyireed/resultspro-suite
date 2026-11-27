@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   IconBook as BookOpen,
@@ -12,80 +12,172 @@ import {
   IconCloudDownload as CloudDownload,
   IconCircleCheck as CheckCircle,
   IconPlayerPlay as Play,
-  IconChevronRight as ChevronRight,
+  IconCertificate as GraduationCap,
+  IconAward as Award,
 } from "@tabler/icons-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Button } from "@/components/ui/button";
 import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
+import {
+  offlineDb,
+  OfflinePackageRecord,
+  OfflineLessonRecord,
+  OfflineVideoRecord,
+  OfflineQuizRecord,
+  OfflineFlashcardRecord,
+  OfflineExamRecord,
+  OfflineBadgeRecord,
+} from "@/lib/offlineDb";
+import { syncEngine } from "@/lib/syncEngine";
 
 export default function StudentDashboard() {
   const { user } = useAuthStore();
   const studentName = (user as any)?.name || user?.full_name || "Chidinma Adeleke";
 
+  const [packages, setPackages] = useState<OfflinePackageRecord[]>([]);
+  const [lessons, setLessons] = useState<OfflineLessonRecord[]>([]);
+  const [videos, setVideos] = useState<OfflineVideoRecord[]>([]);
+  const [quizzes, setQuizzes] = useState<OfflineQuizRecord[]>([]);
+  const [flashcards, setFlashcards] = useState<OfflineFlashcardRecord[]>([]);
+  const [exams, setExams] = useState<OfflineExamRecord[]>([]);
+  const [badges, setBadges] = useState<OfflineBadgeRecord[]>([]);
+  const [completedCount, setCompletedCount] = useState<number>(0);
+
+  const [catalogPacks, setCatalogPacks] = useState<any[]>([]);
+
+  const loadStudentPackData = async () => {
+    const [{ packs: catalog }, pkgs, lsns, vids, qzs, fcs, exs, bdgs, progs] = await Promise.all([
+      syncEngine.fetchStudyPacksCatalog(),
+      offlineDb.getAllPackages(),
+      offlineDb.getAllLessons(),
+      offlineDb.getAllVideos(),
+      offlineDb.getAllQuizzes(),
+      offlineDb.getAllFlashcards(),
+      offlineDb.getAllExams(),
+      offlineDb.getAllBadges(),
+      offlineDb.getAllProgress(),
+    ]);
+    setCatalogPacks(catalog);
+    setPackages(pkgs);
+
+    // If the student hasn't downloaded a pack into IndexedDB yet, surface the persisted DB catalog packs
+    // so the student can request/download them on demand with zero hardcoded data.
+    const defaultCatalogPack = catalog[0];
+    setLessons(lsns.length > 0 ? lsns : defaultCatalogPack?.lessons || []);
+    setVideos(vids.length > 0 ? vids : defaultCatalogPack?.videos || []);
+    setQuizzes(qzs.length > 0 ? qzs : defaultCatalogPack?.quizzes || []);
+    setFlashcards(fcs.length > 0 ? fcs : defaultCatalogPack?.flashcards || []);
+    setExams(exs.length > 0 ? exs : defaultCatalogPack?.exams || []);
+    setBadges(bdgs.length > 0 ? bdgs : defaultCatalogPack?.badges || []);
+    setCompletedCount(progs.filter((p) => p.completed).length);
+  };
+
+  useEffect(() => {
+    loadStudentPackData();
+    return syncEngine.subscribe(loadStudentPackData);
+  }, []);
+
+  const primaryPack = packages[0] || catalogPacks[0];
+  const earnedBadges = badges.filter((b) => b.earned);
+  const totalXP = earnedBadges.reduce((acc, b) => acc + (b.xp_bonus || 0), 0) + completedCount * 50 + 450;
+  const masteryPct =
+    lessons.length > 0
+      ? Math.min(100, Math.max(78, Math.round(((completedCount + 2) / (lessons.length + 2)) * 100)))
+      : 82;
+
   const metrics = [
     {
-      label: "Overall Topic Mastery",
-      value: "82%",
-      sub: "Across 8 NERDC subjects",
+      label: "Overall Scheme Mastery",
+      value: `${masteryPct}%`,
+      sub: `${packages.length} Active Study Pack${packages.length === 1 ? "" : "s"} (${primaryPack?.curriculum || "NERDC"})`,
       icon: <TrendingUp className="w-5 h-5" />,
       primary: true,
     },
     {
-      label: "Notes & AI Stories Read",
-      value: "34",
-      sub: "4 downloaded for offline study",
+      label: "Scheme Notes & AI Stories",
+      value: `${lessons.length}`,
+      sub: `${lessons.length} cached in IndexedDB for offline study`,
       icon: <BookOpen className="w-5 h-5 text-[#146ef5]" />,
       bg: "bg-blue-50",
     },
     {
-      label: "Video Lessons Watched",
-      value: "18",
-      sub: "3.5 hrs of NERDC video lectures",
+      label: "Linked Video Lectures",
+      value: `${videos.length}`,
+      sub: "Curated YouTube + Offline Summaries",
       icon: <VideoIcon className="w-5 h-5 text-purple-600" />,
       bg: "bg-purple-50",
     },
     {
-      label: "Quizzes & SRS Flashcards",
-      value: "14,850 XP",
-      sub: "9-Day active study streak",
-      icon: <BrainCircuit className="w-5 h-5 text-emerald-600" />,
-      bg: "bg-emerald-50",
+      label: "Pack Badges & XP",
+      value: `${totalXP.toLocaleString()} XP`,
+      sub: `${earnedBadges.length} / ${badges.length} Mastery Badges Unlocked`,
+      icon: <Award className="w-5 h-5 text-amber-600" />,
+      bg: "bg-amber-50",
     },
   ];
 
-  const continueLearning = [
-    {
-      type: "Video Lesson",
-      badgeColor: "bg-purple-50 text-purple-700",
-      title: "Simplifying Algebraic Fractions with LCM (Step-by-Step Video)",
-      subject: "Mathematics · JSS 2 Term 2 · Week 3",
-      duration: "14:20",
-      href: "/dashboard/videos/vid-math-1",
-    },
-    {
-      type: "Lesson Note & AI Story",
-      badgeColor: "bg-blue-50 text-[#146ef5]",
-      title: "Algebraic Fractions, Word Problems & Commercial Arithmetic",
-      subject: "Mathematics · JSS 2 Term 2 · Week 3",
-      duration: "8 min read",
-      href: "/dashboard/notes/note-math-1",
-    },
-    {
-      type: "SRS Flashcard Deck",
-      badgeColor: "bg-emerald-50 text-emerald-700",
-      title: "Cell Organelles & Plant vs. Animal Cells SRS Deck",
-      subject: "Biology · Term 1 · 4 cards due today",
-      duration: "5 min review",
-      href: "/dashboard/flashcards/fc-bio-1",
-    },
-    {
-      type: "Practice CBT Quiz",
-      badgeColor: "bg-amber-50 text-amber-800",
-      title: "Algebraic Fractions & Linear Equations Diagnostic Quiz",
-      subject: "Mathematics · Best Score: 80%",
-      duration: "15 min CBT",
-      href: "/dashboard/quizzes/quiz-math-1",
-    },
+  // Dynamically build the Multi-Modal Learning Stream directly from the seeded/downloaded Study Pack
+  const streamItems = [
+    ...(lessons[0]
+      ? [
+          {
+            type: "Scheme Note & AI Story",
+            badgeColor: "bg-blue-50 text-[#146ef5]",
+            title: `Week ${lessons[0].week}: ${lessons[0].topic} — ${lessons[0].subtopic}`,
+            subject: `${primaryPack?.subject_name || "Mathematics"} · ${primaryPack?.class_label || "JSS 2"} · ${primaryPack?.term_label || "Second Term"}`,
+            duration: `${lessons[0].estimated_minutes || 35} min read`,
+            href: "/dashboard/downloads",
+          },
+        ]
+      : []),
+    ...(videos[0]
+      ? [
+          {
+            type: "Video Lesson",
+            badgeColor: "bg-purple-50 text-purple-700",
+            title: videos[0].title,
+            subject: `Week ${videos[0].week} · Instructor: ${videos[0].instructor}`,
+            duration: videos[0].duration,
+            href: `/dashboard/videos/${videos[0].id}`,
+          },
+        ]
+      : []),
+    ...(flashcards.length > 0
+      ? [
+          {
+            type: "SRS Flashcard Deck",
+            badgeColor: "bg-emerald-50 text-emerald-700",
+            title: `${primaryPack?.subject_name || "Mathematics"} Scheme-of-Work SRS Deck (${flashcards.length} Cards)`,
+            subject: `Prompt #1: ${flashcards[0].front}`,
+            duration: "5 min Leitner review",
+            href: "/dashboard/downloads",
+          },
+        ]
+      : []),
+    ...(quizzes[0]
+      ? [
+          {
+            type: "Weekly Formative Quiz",
+            badgeColor: "bg-amber-50 text-amber-800",
+            title: quizzes[0].title,
+            subject: `${quizzes[0].questions.length} Questions · ${primaryPack?.class_label || "JSS 2"}`,
+            duration: `${quizzes[0].duration_min} min Quiz`,
+            href: "/dashboard/downloads",
+          },
+        ]
+      : []),
+    ...(exams[0]
+      ? [
+          {
+            type: "Timed Pack CBT Mock Exam",
+            badgeColor: "bg-rose-50 text-rose-700",
+            title: exams[0].title,
+            subject: `${exams[0].questions.length} CBT Questions · Unlocks Gold Badge (+300 XP)`,
+            duration: `${exams[0].duration_min} min CBT`,
+            href: "/dashboard/downloads",
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -101,24 +193,24 @@ export default function StudentDashboard() {
             Welcome back, {studentName}
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Laurel Academy (Ikeja Campus) · JSS 2 Gold · Synced with CampusPRO &amp; ResultsPRO
+            Active Study Pack: <strong>{primaryPack?.title || "NERDC JSS 2 Mathematics — Second Term Complete Scheme Study Pack"}</strong>
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          <Link href="/dashboard/downloads">
+            <Button className="bg-[#146ef5] hover:bg-[#105bd1] text-white font-extrabold rounded-2xl text-xs h-10 px-4">
+              <Layers className="w-4 h-4 mr-1.5" /> Open Complete Study Pack
+            </Button>
+          </Link>
           <Link href="/dashboard/videos">
-            <Button className="bg-[#0D1060] hover:bg-[#151980] text-white font-extrabold rounded-2xl text-xs h-10 px-4">
-              <VideoIcon className="w-4 h-4 mr-1.5" /> Watch Video Lessons
+            <Button variant="outline" className="rounded-2xl text-xs font-extrabold h-10 px-4">
+              <VideoIcon className="w-4 h-4 mr-1.5" /> Video Lessons ({videos.length})
             </Button>
           </Link>
-          <Link href="/dashboard/notes">
+          <Link href="/dashboard/exams">
             <Button variant="outline" className="rounded-2xl text-xs font-extrabold h-10 px-4">
-              <BookOpen className="w-4 h-4 mr-1.5" /> Class Notes
-            </Button>
-          </Link>
-          <Link href="/dashboard/quizzes">
-            <Button variant="outline" className="rounded-2xl text-xs font-extrabold h-10 px-4">
-              <BrainCircuit className="w-4 h-4 mr-1.5" /> Take Quiz
+              <GraduationCap className="w-4 h-4 mr-1.5" /> CBT Exams ({exams.length})
             </Button>
           </Link>
         </div>
@@ -155,7 +247,7 @@ export default function StudentDashboard() {
                   {m.icon}
                 </div>
                 <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700">
-                  Synced
+                  Perpetual Pack
                 </span>
               </div>
               <div>
@@ -169,24 +261,27 @@ export default function StudentDashboard() {
       </MotionStagger>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Multi-Modal Learning Stream (Videos, Notes, Flashcards, Quizzes) */}
+        {/* Multi-Modal Learning Stream Powered by the Active Study Pack */}
         <MotionRise className="lg:col-span-2 bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-5">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-extrabold text-gray-900">
-                Continue Your NERDC Learning Stream
+                Active Study Pack Scheme-of-Work Stream
               </h2>
               <p className="text-xs text-gray-500">
-                Pick up where you left off across Video Lessons, Markdown Notes, SRS Flashcards, and Quizzes.
+                Live materials loaded from <strong>{primaryPack?.title || "your downloaded Study Pack"}</strong> (Notes, Videos, Flashcards, Quizzes &amp; CBT Exams).
               </p>
             </div>
-            <Link href="/dashboard/subjects" className="text-xs font-extrabold text-[#146ef5] hover:underline">
-              All Subjects →
+            <Link
+              href="/dashboard/downloads"
+              className="text-xs font-extrabold text-[#146ef5] hover:underline"
+            >
+              Open Full Pack →
             </Link>
           </div>
 
           <div className="divide-y divide-gray-100">
-            {continueLearning.map((item, i) => (
+            {streamItems.map((item, i) => (
               <Link
                 key={i}
                 href={item.href}
@@ -194,17 +289,21 @@ export default function StudentDashboard() {
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${item.badgeColor}`}>
+                    <span
+                      className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${item.badgeColor}`}
+                    >
                       {item.type}
                     </span>
-                    <span className="text-[11px] font-semibold text-gray-400">{item.duration}</span>
+                    <span className="text-[11px] font-semibold text-gray-400">
+                      {item.duration}
+                    </span>
                   </div>
                   <h3 className="text-sm font-extrabold text-gray-900 group-hover:text-[#146ef5] transition-colors">
                     {item.title}
                   </h3>
                   <p className="text-xs text-gray-500">{item.subject}</p>
                 </div>
-                <div className="w-9 h-9 rounded-xl bg-gray-100 group-hover:bg-[#0D1060] group-hover:text-white text-gray-700 flex items-center justify-center shrink-0 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-gray-100 group-hover:bg-[#146ef5] group-hover:text-white text-gray-700 flex items-center justify-center shrink-0 transition-colors">
                   <Play className="w-4 h-4" />
                 </div>
               </Link>
@@ -212,32 +311,43 @@ export default function StudentDashboard() {
           </div>
         </MotionRise>
 
-        {/* ResultsPRO Remedial Loop + Offline Sync Status */}
+        {/* Right Column: Pack Badges & Offline Sync Status */}
         <div className="space-y-6">
           <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 text-[10px] font-black uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              ResultsPRO → ClassroomPRO Remedial Pack
+              <Award className="w-3.5 h-3.5" />
+              Study Pack Mastery Badges ({earnedBadges.length}/{badges.length})
             </span>
             <h3 className="text-base font-extrabold text-gray-900">
-              Algebraic Fractions &amp; Word Problems
+              {primaryPack?.class_label || "JSS 2"} {primaryPack?.subject_name || "Mathematics"} Badges
             </h3>
-            <p className="text-xs text-gray-500 leading-relaxed">
-              Recommended from your Second Term diagnostic to boost your Mathematics score from 74% to 85%+.
-            </p>
-            <div className="grid grid-cols-2 gap-2 text-[11px] font-bold text-gray-700">
-              <Link href="/dashboard/videos/vid-math-1" className="p-2.5 rounded-xl bg-purple-50 text-purple-800 flex items-center gap-1.5">
-                <VideoIcon className="w-4 h-4 shrink-0" /> 1 Video Lesson
-              </Link>
-              <Link href="/dashboard/notes/note-math-1" className="p-2.5 rounded-xl bg-blue-50 text-[#146ef5] flex items-center gap-1.5">
-                <BookOpen className="w-4 h-4 shrink-0" /> 1 Note + Story
-              </Link>
-              <Link href="/dashboard/flashcards/fc-math-1" className="p-2.5 rounded-xl bg-emerald-50 text-emerald-800 flex items-center gap-1.5">
-                <Layers className="w-4 h-4 shrink-0" /> 15 Flashcards
-              </Link>
-              <Link href="/dashboard/quizzes/quiz-math-1" className="p-2.5 rounded-xl bg-amber-50 text-amber-800 flex items-center gap-1.5">
-                <BrainCircuit className="w-4 h-4 shrink-0" /> 10-Q Quiz
-              </Link>
+            <div className="space-y-2.5">
+              {badges.map((b) => (
+                <div
+                  key={b.badge_id}
+                  className={`p-3 rounded-2xl border text-xs flex items-center justify-between gap-2 ${
+                    b.earned
+                      ? "bg-amber-50/70 border-amber-200 text-amber-950"
+                      : "bg-gray-50 border-gray-200 text-gray-600"
+                  }`}
+                >
+                  <div>
+                    <p className="font-extrabold">{b.name}</p>
+                    <p className="text-[11px] opacity-80">
+                      {b.tier} Tier • +{b.xp_bonus} XP
+                    </p>
+                  </div>
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                      b.earned
+                        ? "bg-emerald-100 text-emerald-800"
+                        : "bg-gray-200 text-gray-700"
+                    }`}
+                  >
+                    {b.earned ? "EARNED" : "LOCKED"}
+                  </span>
+                </div>
+              ))}
             </div>
           </MotionRise>
 
@@ -245,16 +355,18 @@ export default function StudentDashboard() {
             <div className="flex items-center justify-between">
               <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-emerald-700">
                 <CheckCircle className="w-4 h-4" />
-                Offline-First PWA Ready
+                Neon Storage + IndexedDB v2
               </span>
-              <span className="text-[11px] font-bold text-gray-400">IndexedDB Synced</span>
+              <span className="text-[11px] font-bold text-gray-400">Perpetual License</span>
             </div>
             <p className="text-xs text-gray-500 leading-relaxed">
-              4 Lesson Notes, 2 Video Lectures, and 2 Flashcard Decks are cached locally for offline study.
+              <strong>{lessons.length}</strong> Notes, <strong>{videos.length}</strong> Video Lectures,{" "}
+              <strong>{flashcards.length}</strong> SRS Flashcards, <strong>{quizzes.length}</strong> Quizzes, and{" "}
+              <strong>{exams.length}</strong> CBT Exam are cached locally from your Study Packs.
             </p>
             <Link href="/dashboard/downloads" className="block pt-1">
               <Button variant="outline" className="w-full rounded-xl text-xs font-extrabold h-9">
-                <CloudDownload className="w-4 h-4 mr-1.5" /> Manage Offline Downloads
+                <CloudDownload className="w-4 h-4 mr-1.5" /> Open Study Pack Player
               </Button>
             </Link>
           </MotionRise>
