@@ -141,6 +141,25 @@ export default function PlanForm({ tenant }: { tenant: any }) {
       });
       
       const data = await res.json();
+      // Ensure enrollment is also registered directly with service_coursespro
+      try {
+        await fetch(`${COURSES_API}/api/student/enroll/confirm`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Tenant-Domain': tenant.slug,
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            cohort_id: cohortId.replace(/['"]+/g, ''),
+            reference: data.reference || '',
+            plan_type: isFree ? 'upfront' : plan
+          })
+        });
+      } catch (confirmErr) {
+        console.warn("Direct enrollment confirm warning:", confirmErr);
+      }
+
       if (res.ok) {
         Cookies.remove('selected_cohort_id');
         if (isFree || data.access_code === 'free') {

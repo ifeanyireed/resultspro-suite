@@ -101,7 +101,8 @@ func HandleTenantPaymentInitialize(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// Dispatch synchronously so enrollment is created before client redirects
+		// Ensure enrollment is persisted directly in crs_enrollments and also dispatched via internal callback
+		syncCoursesProEnrollment(user.ID, req.ReferenceID, "SUCCESS", "", req.PlanType)
 		if err := dispatchToCoursesPro(user.ID, req.ReferenceID, "SUCCESS", "", req.PlanType); err != nil {
 			log.Printf("[Free Enrollment Warning] dispatchToCoursesPro error: %v", err)
 		}
@@ -261,6 +262,7 @@ func HandleTenantPaymentVerify(w http.ResponseWriter, r *http.Request) {
 
 	// Check if this is a free payment bypass
 	if payment.ID != "" && payment.PaymentMethod == "free" {
+		syncCoursesProEnrollment(payment.StudentID, payment.EnrollmentID, "SUCCESS", "", "")
 		if err := dispatchToCoursesPro(payment.StudentID, payment.EnrollmentID, "SUCCESS", "", ""); err != nil {
 			log.Printf("[Verify Warning] Failed to dispatch free payment to courses service: %v", err)
 		}
@@ -291,6 +293,7 @@ func HandleTenantPaymentVerify(w http.ResponseWriter, r *http.Request) {
 	if payment.ID != "" {
 		if status == "success" {
 			payment.Status = "paid"
+			syncCoursesProEnrollment(payment.StudentID, payment.EnrollmentID, "SUCCESS", "", "")
 			// Dispatch to courses service synchronously to finalize enrollment before responding
 			if err := dispatchToCoursesPro(payment.StudentID, payment.EnrollmentID, "SUCCESS", "", ""); err != nil {
 				log.Printf("[Verify Warning] Failed to dispatch payment to courses service: %v", err)

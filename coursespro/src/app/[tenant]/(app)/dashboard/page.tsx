@@ -61,7 +61,16 @@ export default function LearnerDashboard() {
         body: JSON.stringify({ reference })
       })
       .then(res => res.json())
-      .then(data => {
+      .then(async (data) => {
+        const savedCohortId = Cookies.get('selected_cohort_id');
+        try {
+          await coursesApi.post('/api/student/enroll/confirm', {
+            reference,
+            cohort_id: savedCohortId ? savedCohortId.replace(/['"]+/g, '') : ''
+          });
+        } catch (e) {
+          // ignore if endpoint falls back to dashboard summary self-heal
+        }
         Cookies.remove('selected_cohort_id');
         queryClient.invalidateQueries({ queryKey: ['student-dashboard-summary', user?.id] });
       })

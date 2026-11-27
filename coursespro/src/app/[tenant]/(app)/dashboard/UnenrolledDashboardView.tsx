@@ -14,7 +14,7 @@ import {
   CalendarDaysIcon,
   UserGroupIcon
 } from '@heroicons/react/24/outline';
-import { coursesApi } from '@/lib/api';
+import api, { coursesApi, getTenantSlug } from '@/lib/api';
 import Cookies from 'js-cookie';
 
 interface UnenrolledDashboardViewProps {
@@ -29,7 +29,17 @@ export default function UnenrolledDashboardView({ user, tenantSlug }: Unenrolled
   const { data: cohortsData, isLoading } = useQuery({
     queryKey: ['public-cohorts-for-dashboard', tenantSlug],
     queryFn: async () => {
-      const res = await coursesApi.get('/api/public/cohorts');
+      const slug = tenantSlug || getTenantSlug();
+      let resolvedTenantId = slug;
+      try {
+        const tenantRes = await api.get(`/api/public/tenant/resolve?domain=${slug}`);
+        if (tenantRes.data?.tenant?.id) {
+          resolvedTenantId = tenantRes.data.tenant.id;
+        }
+      } catch (e) {
+        // Fallback to slug if tenant resolve fails
+      }
+      const res = await coursesApi.get(`/api/public/cohorts?tenant_id=${encodeURIComponent(resolvedTenantId)}`);
       return res.data;
     }
   });

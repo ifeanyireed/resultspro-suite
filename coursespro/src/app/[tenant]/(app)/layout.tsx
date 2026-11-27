@@ -29,7 +29,9 @@ import {
   QuestionMarkCircleIcon,
   ShoppingBagIcon,
   ArrowRightOnRectangleIcon,
-  CreditCardIcon
+  CreditCardIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import { 
   Squares2X2Icon as Squares2X2Solid,
@@ -55,6 +57,7 @@ export default function AppLayout({
   const [profileName, setProfileName] = React.useState('Loading...');
   const [profileEmail, setProfileEmail] = React.useState('Loading...');
   const [isProfileModalOpen, setIsProfileModalOpen] = React.useState(false);
+  const [isCollapsed, setIsCollapsed] = React.useState(false);
 
   const { data: dashboardData } = useQuery({
     queryKey: ['student-dashboard-summary', user?.id],
@@ -108,36 +111,55 @@ export default function AppLayout({
 
   return (
     <ModernDashboardLayout
+      isCollapsed={isCollapsed}
       sidebarContent={
         <>
           
           <div>
             {/* Logo */}
-            <div className="px-8 mb-6">
-              <TenantLogo 
-                theme="light"
-                height={48}
-                logoUrl={logoUrl}
-                tenantName={tenantName}
-                className="w-auto h-12 object-contain"
-              />
+            <div className={`${isCollapsed ? 'px-4' : 'px-8'} mb-6 flex items-center justify-between`}>
+              {!isCollapsed ? (
+                <TenantLogo 
+                  theme="light"
+                  height={48}
+                  logoUrl={logoUrl}
+                  tenantName={tenantName}
+                  className="w-auto h-12 object-contain"
+                />
+              ) : (
+                <div className="flex items-center justify-center shrink-0 w-full pl-2">
+                  <TenantLogo 
+                    theme="light"
+                    height={32}
+                    logoUrl={logoUrl}
+                    tenantName={tenantName}
+                    className="w-auto h-8 object-contain"
+                  />
+                </div>
+              )}
+              <button 
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                className="absolute -right-4 top-6 w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-100 text-gray-500 z-[100]"
+              >
+                {isCollapsed ? <ChevronRightIcon className="w-4 h-4" /> : <ChevronLeftIcon className="w-5 h-5" />}
+              </button>
             </div>
 
             {/* Menu Sections */}
-            <div className="px-6 space-y-1">
-              <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">{tenantName}</p>
+            <div className={`${isCollapsed ? 'px-3' : 'px-6'} space-y-1`}>
+              {!isCollapsed && <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">{tenantName}</p>}
               
               <Link href="/dashboard" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                {isActive('/dashboard') ? <Squares2X2Solid className="w-6 h-6" /> : <Squares2X2Icon className="w-6 h-6" />}
-                Dashboard
+                {isActive('/dashboard') ? <Squares2X2Solid className="w-6 h-6 shrink-0" /> : <Squares2X2Icon className="w-6 h-6 shrink-0" />}
+                {!isCollapsed && <span className="truncate">Dashboard</span>}
               </Link>
               
               <Link href="/dashboard/journey" className={`flex items-center justify-between text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/journey') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
                 <div className="flex items-center gap-3">
-                  <MapIcon className="w-6 h-6" />
-                  Journey
+                  <MapIcon className="w-6 h-6 shrink-0" />
+                  {!isCollapsed && <span className="truncate">Journey</span>}
                 </div>
-                {dashboardData?.enrollment?.current_stage && (
+                {!isCollapsed && dashboardData?.enrollment?.current_stage && (
                   <span className="bg-[#146ef5] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                     Stage {dashboardData.enrollment.current_stage}
                   </span>
@@ -145,93 +167,96 @@ export default function AppLayout({
               </Link>
 
               <Link href="/dashboard/projects" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/projects') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <FolderOpenIcon className="w-6 h-6" />
-                Projects
+                <FolderOpenIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Projects</span>}
               </Link>
 
               <Link href="/dashboard/workspace" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/workspace') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <BriefcaseIcon className="w-6 h-6" />
-                Workspace
+                <BriefcaseIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Workspace</span>}
               </Link>
 
               <Link href="/dashboard/portfolio" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/portfolio') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <GlobeAltIcon className="w-6 h-6" />
-                Portfolio
+                <GlobeAltIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Portfolio</span>}
               </Link>
 
               <Link href="/dashboard/store" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/store') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <ShoppingBagIcon className="w-6 h-6" strokeWidth={2} />
-                Store
+                <ShoppingBagIcon className="w-6 h-6 shrink-0" strokeWidth={2} />
+                {!isCollapsed && <span className="truncate">Store</span>}
               </Link>
 
               <Link href="/dashboard/resources" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/resources') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <DocumentDuplicateIcon className="w-6 h-6" />
-                Resources
+                <DocumentDuplicateIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Resources</span>}
               </Link>
             </div>
 
-            <div className="px-6 mt-8 space-y-1">
-              <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">PRESENCE</p>
+            <div className={`${isCollapsed ? 'px-3' : 'px-6'} mt-8 space-y-1`}>
+              {!isCollapsed && <p className="px-2 text-xs font-semibold text-gray-400 tracking-wider mb-3">PRESENCE</p>}
               
               <Link href="/dashboard/classroom" className={`flex items-center justify-between text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/classroom') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
                 <div className="flex items-center gap-3">
-                  <VideoCameraIcon className="w-6 h-6" />
-                  Classroom
+                  <VideoCameraIcon className="w-6 h-6 shrink-0" />
+                  {!isCollapsed && <span className="truncate">Classroom</span>}
                 </div>
-                <span className="flex items-center space-x-1 px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-600 text-[10px] font-bold">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span>LIVE</span>
-                </span>
+                {!isCollapsed && (
+                  <span className="flex items-center space-x-1 px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-600 text-[10px] font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>LIVE</span>
+                  </span>
+                )}
               </Link>
               
               <Link href="/dashboard/peers" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/peers') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <UserGroupIcon className="w-6 h-6" />
-                Peers
+                <UserGroupIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Peers</span>}
               </Link>
 
               <Link href="/dashboard/messages" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/messages') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <ChatBubbleLeftEllipsisIcon className="w-6 h-6" />
-                Messages
+                <ChatBubbleLeftEllipsisIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Messages</span>}
               </Link>
               <Link href="/dashboard/calendar" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/calendar') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <CalendarIcon className="w-6 h-6" />
-                Calendar
+                <CalendarIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Calendar</span>}
               </Link>
               
               <Link href="/dashboard/mentor" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/mentor') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <AcademicCapIcon className="w-6 h-6" />
-                {dashboardData?.mentor_terminology || 'Mentor'}
+                <AcademicCapIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">{dashboardData?.mentor_terminology || 'Mentor'}</span>}
               </Link>
               
               <Link href="/dashboard/leaderboard" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/leaderboard') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <TrophyIcon className="w-6 h-6" />
-                Leaderboard
+                <TrophyIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Leaderboard</span>}
               </Link>
 
               <Link href="/dashboard/achievements" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/achievements') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <StarIcon className="w-6 h-6" />
-                Achievements
+                <StarIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Achievements</span>}
               </Link>
               
               <Link href="/dashboard/certificates" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/certificates') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                <CheckBadgeIcon className="w-6 h-6" />
-                Certificates
+                <CheckBadgeIcon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span className="truncate">Certificates</span>}
               </Link>
 
               <div className="pt-4 mt-4 border-t border-gray-100">
                 <Link href="/dashboard/billing" className={`flex items-center gap-3 text-lg px-4 py-2 rounded-xl font-normal relative transition-colors ${isActive('/dashboard/billing') ? 'text-[#146ef5] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:bg-[#146ef5] before:rounded-full' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                  <CreditCardIcon className="w-6 h-6" />
-                  Billing & Orders
+                  <CreditCardIcon className="w-6 h-6 shrink-0" />
+                  {!isCollapsed && <span className="truncate">Billing & Orders</span>}
                 </Link>
                 <button onClick={() => logout()} className="w-full text-left flex items-center gap-3 text-lg px-4 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-normal relative transition-colors border-transparent">
-                  <ArrowRightOnRectangleIcon className="w-6 h-6" />
-                  Logout
+                  <ArrowRightOnRectangleIcon className="w-6 h-6 shrink-0" />
+                  {!isCollapsed && <span className="truncate">Logout</span>}
                 </button>
               </div>
             </div>
           </div>
 
           {/* User Info */}
+          {!isCollapsed ? (
           <div className="px-6 mt-8">
             <div 
               className="rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-lg bg-cover bg-center"
@@ -252,6 +277,14 @@ export default function AppLayout({
               </button>
             </div>
           </div>
+          ) : (
+            <div className="px-2 mt-8 flex justify-center">
+              <div onClick={() => setIsProfileModalOpen(true)} className="w-10 h-10 rounded-full flex items-center justify-center relative z-10 shadow-sm border border-gray-200 overflow-hidden bg-white/20 backdrop-blur-sm cursor-pointer hover:ring-2 hover:ring-blue-500 transition-all">
+                {mounted && <Image src={user?.avatarUrl || `/avatars/character4.jpg`} alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+                {!mounted && <Image src="/avatars/character4.jpg" alt="User Avatar" width={40} height={40} className="w-full h-full object-cover" />}
+              </div>
+            </div>
+          )}
           <ProfileModal isOpen={isProfileModalOpen} onClose={() => setIsProfileModalOpen(false)} />
         
         </>

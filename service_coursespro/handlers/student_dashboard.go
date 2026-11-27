@@ -24,7 +24,46 @@ func (h *Handler) GetStudentDashboardSummary(c *gin.Context) {
 
 	// 1. Get Enrollment
 	var enrollment models.Enrollment
-	if err := db.DB.Where("tenant_id = ? AND user_id = ?", tenantID, userID).First(&enrollment).Error; err == nil {
+	if err := db.DB.Where("tenant_id = ? AND user_id = ?", tenantID, userID).First(&enrollment).Error; err != nil {
+		// Self-heal: Check if user has a completed platform_payment for a cohort in this tenant whose webhook did not reach service_coursespro
+		var paidPayment struct {
+			ID           string
+			TenantID     string
+			StudentID    string
+			EnrollmentID string
+		}
+		if pErr := db.DB.Table("platform_payments").
+			Select("id, tenant_id, student_id, enrollment_id").
+			Where("tenant_id = ? AND student_id = ? AND status = ? AND enrollment_id != ''", tenantID, userID, "paid").
+			Order("created_at DESC").
+			First(&paidPayment).Error; pErr == nil && paidPayment.EnrollmentID != "" {
+			var paidCohort models.Cohort
+			if cErr := db.DB.Where("id = ? AND tenant_id = ?", paidPayment.EnrollmentID, tenantID).First(&paidCohort).Error; cErr == nil && paidCohort.ID != "" {
+				now := time.Now().UTC()
+				enrollment = models.Enrollment{
+					ID:                 uuid.New().String(),
+					TenantID:           paidCohort.TenantID,
+					CohortID:           paidCohort.ID,
+					UserID:             userID.(string),
+					PaymentStatus:      "PAID",
+					PlanType:           "upfront",
+					BillingCycle:       "once",
+					CurrentStageNumber: 1,
+					CurrentXP:          0,
+					StreakDays:         1,
+					LastActiveDate:     &now,
+					Status:             "ACTIVE",
+					EnrolledAt:         now,
+					UpdatedAt:          now,
+				}
+				if createErr := db.DB.Create(&enrollment).Error; createErr == nil {
+					h.InvalidateCohortCache(c.Request.Context(), paidCohort.TenantID, paidCohort.ID, paidCohort.Slug)
+				}
+			}
+		}
+	}
+
+	if enrollment.ID != "" {
 		now := time.Now()
 		updated := false
 

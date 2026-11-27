@@ -113,6 +113,101 @@ func (h *Handler) InternalPaymentCallback(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "updated"})
 }
 
+// ConfirmStudentEnrollment allows an authenticated student to confirm enrollment after free or verified payment
+func (h *Handler) ConfirmStudentEnrollment(c *gin.Context) {
+	tenantID, _ := c.Get("tenant_id")
+	userID, _ := c.Get("user_id")
+	if tenantID == nil || userID == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	var req struct {
+		CohortID  string `json:"cohort_id"`
+		Reference string `json:"reference"`
+		PlanType  string `json:"plan_type"`
+	}
+	_ = c.ShouldBindJSON(&req)
+
+	cohortID := strings.TrimSpace(req.CohortID)
+	reference := strings.TrimSpace(req.Reference)
+
+	// If reference is provided, look up platform_payments
+	if reference != "" {
+		var pp struct {
+			EnrollmentID string
+			Status       string
+		}
+		if err := db.DB.Table("platform_payments").
+			Select("enrollment_id, status").
+			Where("reference = ? AND student_id = ?", reference, userID).
+			First(&pp).Error; err == nil {
+			if cohortID == "" {
+				cohortID = pp.EnrollmentID
+			}
+		}
+	}
+
+	if cohortID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "cohort_id or valid reference required"})
+		return
+	}
+
+	var cohort models.Cohort
+	if err := db.DB.Where("id = ?", cohortID).First(&cohort).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Cohort not found"})
+		return
+	}
+
+	// Verify either cohort is free or there is a paid platform_payment record for this user & cohort
+	if cohort.Price > 0 {
+		var paidCount int64
+		db.DB.Table("platform_payments").
+			Where("student_id = ? AND enrollment_id = ? AND status = ?", userID, cohort.ID, "paid").
+			Count(&paidCount)
+		if paidCount == 0 {
+			c.JSON(http.StatusPaymentRequired, gin.H{"error": "Payment not yet verified for this cohort"})
+			return
+		}
+	}
+
+	var enrollment models.Enrollment
+	if err := db.DB.Where("user_id = ? AND cohort_id = ?", userID, cohort.ID).First(&enrollment).Error; err != nil {
+		planType := req.PlanType
+		if planType == "" {
+			planType = "upfront"
+		}
+		billingCycle := "once"
+		if planType == "monthly" {
+			billingCycle = "monthly"
+		}
+		now := time.Now().UTC()
+		enrollment = models.Enrollment{
+			ID:                 uuid.New().String(),
+			TenantID:           cohort.TenantID,
+			CohortID:           cohort.ID,
+			UserID:             userID.(string),
+			PaymentStatus:      "PAID",
+			PlanType:           planType,
+			BillingCycle:       billingCycle,
+			CurrentStageNumber: 1,
+			CurrentXP:          0,
+			StreakDays:         1,
+			LastActiveDate:     &now,
+			Status:             "ACTIVE",
+			EnrolledAt:         now,
+			UpdatedAt:          now,
+		}
+		if err := db.DB.Create(&enrollment).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create enrollment"})
+			return
+		}
+		h.InvalidateCohortCache(c.Request.Context(), cohort.TenantID, cohort.ID, cohort.Slug)
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "enrolled", "enrollment": enrollment})
+}
+
 // CreatePaymentIntent handles generating a payment session
 func (h *Handler) CreatePaymentIntent(c *gin.Context) {
 	tenantID, exists := c.Get("tenant_id")

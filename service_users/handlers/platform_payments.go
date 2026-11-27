@@ -217,12 +217,14 @@ func HandlePlatformPaystackWebhook(w http.ResponseWriter, r *http.Request) {
 
 		// Dispatch to the specific module
 		if module == "coursespro" {
+			syncCoursesProEnrollment(payload.Data.Metadata.UserID, moduleRef, "SUCCESS", payload.Data.Authorization.AuthorizationCode, payload.Data.Metadata.PlanType)
 			go dispatchToCoursesPro(payload.Data.Metadata.UserID, moduleRef, "SUCCESS", payload.Data.Authorization.AuthorizationCode, payload.Data.Metadata.PlanType)
 		}
 
 	} else if payload.Event == "invoice.payment_failed" || payload.Event == "charge.failed" {
 		db.GormDB.Model(&models.UserTransaction{}).Where("reference = ?", payload.Data.Reference).Update("status", "FAILED")
 		if module == "coursespro" {
+			syncCoursesProEnrollment(payload.Data.Metadata.UserID, moduleRef, "FAILED", payload.Data.Authorization.AuthorizationCode, payload.Data.Metadata.PlanType)
 			go dispatchToCoursesPro(payload.Data.Metadata.UserID, moduleRef, "FAILED", payload.Data.Authorization.AuthorizationCode, payload.Data.Metadata.PlanType)
 		}
 	}
@@ -230,6 +232,55 @@ func HandlePlatformPaystackWebhook(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"status":"received"}`))
+}
+
+func syncCoursesProEnrollment(userID, cohortID, status, authCode, planType string) {
+	if userID == "" || cohortID == "" || db.DB == nil {
+		return
+	}
+	if status == "SUCCESS" {
+		var tenantID string
+		err := db.DB.QueryRow("SELECT tenant_id FROM crs_cohorts WHERE id = $1", cohortID).Scan(&tenantID)
+		if err != nil || tenantID == "" {
+			return
+		}
+
+		if planType == "" {
+			planType = "upfront"
+		}
+		billingCycle := "once"
+		var nextBilling interface{} = nil
+		if strings.ToLower(planType) == "monthly" {
+			billingCycle = "monthly"
+			nextBilling = time.Now().UTC().AddDate(0, 1, 0)
+		}
+		var subID interface{} = nil
+		if authCode != "" {
+			subID = authCode
+		}
+
+		var existingID string
+		err = db.DB.QueryRow("SELECT id FROM crs_enrollments WHERE user_id = $1 AND cohort_id = $2", userID, cohortID).Scan(&existingID)
+		now := time.Now().UTC()
+		if err != nil || existingID == "" {
+			newID := uuid.New().String()
+			_, insertErr := db.DB.Exec(`
+				INSERT INTO crs_enrollments (id, tenant_id, cohort_id, user_id, plan_type, payment_status, subscription_id, billing_cycle, next_billing_date, last_payment_failed, current_stage_number, current_xp, streak_days, status, enrolled_at, updated_at)
+				VALUES ($1, $2, $3, $4, $5, 'PAID', $6, $7, $8, false, 1, 0, 0, 'ACTIVE', $9, $9)
+			`, newID, tenantID, cohortID, userID, planType, subID, billingCycle, nextBilling, now)
+			if insertErr != nil {
+				log.Printf("[syncCoursesProEnrollment] Failed to insert enrollment for user=%s cohort=%s: %v", userID, cohortID, insertErr)
+			}
+		} else {
+			_, _ = db.DB.Exec(`
+				UPDATE crs_enrollments
+				SET payment_status = 'PAID', last_payment_failed = false, status = 'ACTIVE', updated_at = $1
+				WHERE id = $2
+			`, now, existingID)
+		}
+	} else if status == "FAILED" {
+		_, _ = db.DB.Exec("UPDATE crs_enrollments SET last_payment_failed = true, updated_at = $1 WHERE user_id = $2 AND cohort_id = $3", time.Now().UTC(), userID, cohortID)
+	}
 }
 
 func dispatchToCoursesPro(userID, cohortID, status, authCode, planType string) error {

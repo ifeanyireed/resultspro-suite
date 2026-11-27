@@ -172,6 +172,7 @@ func main() {
 
 		// Student Dashboard
 		protected.GET("/student/dashboard/summary", h.GetStudentDashboardSummary)
+		protected.POST("/student/enroll/confirm", h.ConfirmStudentEnrollment)
 		protected.GET("/student/billing/subscriptions", h.GetBillingSubscriptions)
 		protected.PUT("/student/billing/subscriptions/:id/cancel", h.CancelBillingSubscription)
 		protected.GET("/student/billing/history", h.GetBillingHistory)

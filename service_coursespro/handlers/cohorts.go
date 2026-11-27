@@ -2,11 +2,29 @@ package handlers
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"service_coursespro/db"
 	"service_coursespro/models"
 )
+
+func resolveCanonicalTenantID(raw string) string {
+	raw = strings.TrimSpace(raw)
+	if raw == "" {
+		return ""
+	}
+	var resolvedID string
+	err := db.DB.Table("tenants").
+		Select("id").
+		Where("id = ? OR LOWER(slug) = LOWER(?) OR LOWER(default_subdomain) = LOWER(?) OR LOWER(custom_domain) = LOWER(?)", raw, raw, raw, raw).
+		Limit(1).
+		Scan(&resolvedID).Error
+	if err == nil && resolvedID != "" {
+		return resolvedID
+	}
+	return raw
+}
 
 func (h *Handler) GetPublicCohorts(c *gin.Context) {
 	tenantID := c.Query("tenant_id")
@@ -17,6 +35,7 @@ func (h *Handler) GetPublicCohorts(c *gin.Context) {
 		tenantID = c.GetHeader("X-Tenant-Domain")
 	}
 
+	tenantID = resolveCanonicalTenantID(tenantID)
 	if tenantID == "" {
 		c.JSON(http.StatusOK, gin.H{"cohorts": []models.Cohort{}})
 		return
@@ -72,6 +91,7 @@ func (h *Handler) GetCohortDetail(c *gin.Context) {
 		tenantID = c.GetHeader("X-Tenant-Domain")
 	}
 
+	tenantID = resolveCanonicalTenantID(tenantID)
 	if tenantID == "" {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Cohort not found"})
 		return
