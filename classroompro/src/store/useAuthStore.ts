@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import api from '@/lib/api';
+import api, { extractTenantIdFromJwt } from '@/lib/api';
 import { Role } from '@/lib/roles';
 
 interface User {
@@ -7,6 +7,8 @@ interface User {
   email: string;
   full_name: string;
   role: Role;
+  tenant_id?: string;
+  tenant_slug?: string;
   school_id?: string;
   class_id?: string;
   account_status: string;
@@ -63,13 +65,27 @@ export const useAuthStore = create<AuthState>((set) => {
     setAuth: (user, accessToken, refreshToken) => {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('user', JSON.stringify(user));
-      set({ user, accessToken, refreshToken, isAuthenticated: true });
+      const resolvedTenantId =
+        (user as any)?.tenant_id ||
+        user?.school_id ||
+        (user as any)?.tenant_slug ||
+        extractTenantIdFromJwt(accessToken);
+      const enrichedUser = resolvedTenantId
+        ? { ...user, tenant_id: resolvedTenantId, school_id: user?.school_id || resolvedTenantId }
+        : user;
+      localStorage.setItem('user', JSON.stringify(enrichedUser));
+      if (resolvedTenantId) {
+        localStorage.setItem('tenantId', resolvedTenantId);
+        localStorage.setItem('x-tenant-id', resolvedTenantId);
+      }
+      set({ user: enrichedUser, accessToken, refreshToken, isAuthenticated: true });
     },
     logout: () => {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
+      localStorage.removeItem('tenantId');
+      localStorage.removeItem('x-tenant-id');
       set({ user: null, accessToken: null, refreshToken: null, isAuthenticated: false });
     },
     updateUser: (updatedUser) =>

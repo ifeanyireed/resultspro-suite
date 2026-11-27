@@ -13,7 +13,95 @@ const api = axios.create({
   },
 });
 
-// Attach auth token, tenant id, and tenant domain on every request so service_classroompro
+export function extractTenantIdFromJwt(token?: string | null): string {
+  if (!token) return '';
+  try {
+    const parts = token.split('.');
+    if (parts.length < 2) return '';
+    const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    const claims = JSON.parse(jsonPayload);
+    if (claims?.tenant_id && typeof claims.tenant_id === 'string') {
+      return claims.tenant_id;
+    }
+    if (claims?.tenants && typeof claims.tenants === 'object') {
+      for (const key of Object.keys(claims.tenants)) {
+        const entry = claims.tenants[key];
+        if (entry?.id) return String(entry.id);
+      }
+    }
+  } catch {
+    // Ignore malformed tokens
+  }
+  return '';
+}
+
+function isCentralAppHostname(host: string): boolean {
+  const lower = (host || '').toLowerCase().split(':')[0];
+  if (
+    !lower ||
+    lower === 'localhost' ||
+    lower === '127.0.0.1' ||
+    lower.endsWith('.onrender.com') ||
+    lower.endsWith('.vercel.app')
+  ) {
+    return true;
+  }
+  const centralHosts = new Set([
+    'resultspro.ng',
+    'www.resultspro.ng',
+    'app.resultspro.ng',
+    'classroompro.resultspro.ng',
+    'coursespro.resultspro.ng',
+    'courses.resultspro.ng',
+    'classroompro.ng',
+    'www.classroompro.ng',
+  ]);
+  return centralHosts.has(lower);
+}
+
+export function resolveActiveTenantId(): string {
+  if (typeof window === 'undefined') return '';
+  const stored =
+    localStorage.getItem('tenantId') ||
+    localStorage.getItem('x-tenant-id') ||
+    localStorage.getItem('active_tenant_id') ||
+    localStorage.getItem('schoolId') ||
+    localStorage.getItem('tenant_slug');
+  if (stored && !isCentralAppHostname(stored)) return stored;
+
+  const rawUser = localStorage.getItem('user');
+  if (rawUser && rawUser !== 'undefined') {
+    try {
+      const parsed = JSON.parse(rawUser);
+      const userTenant =
+        parsed?.tenant_id || parsed?.school_id || parsed?.tenant_slug || parsed?.school?.id;
+      if (userTenant) return String(userTenant);
+    } catch {
+      // Ignore parse errors
+    }
+  }
+
+  const token =
+    localStorage.getItem('accessToken') ||
+    localStorage.getItem('authToken') ||
+    localStorage.getItem('token');
+  const jwtTenant = extractTenantIdFromJwt(token);
+  if (jwtTenant) return jwtTenant;
+
+  const host = window.location?.hostname || '';
+  if (host && !isCentralAppHostname(host)) {
+    return host;
+  }
+  return '';
+}
+
+// Attach auth token and resolved user tenant_id on every request so service_classroompro
 // can proxy user and academic record lookups directly to service_campuspro.
 api.interceptors.request.use(
   (config) => {
@@ -25,15 +113,10 @@ api.interceptors.request.use(
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-      const tenantId =
-        localStorage.getItem('tenantId') ||
-        localStorage.getItem('x-tenant-id') ||
-        localStorage.getItem('tenant_slug');
+      const tenantId = resolveActiveTenantId();
       if (tenantId) {
         config.headers['x-tenant-id'] = tenantId;
-        config.headers['X-Tenant-Domain'] = tenantId;
-      } else if (window.location?.hostname) {
-        config.headers['X-Tenant-Domain'] = window.location.hostname;
+        config.headers['X-Tenant-ID'] = tenantId;
       }
     }
     return config;

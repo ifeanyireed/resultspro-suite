@@ -6,6 +6,7 @@ import { FaMicrosoft } from 'react-icons/fa';
 import { InlineLoadingSpinner } from '@/components/LoadingSpinner';
 import Navigation from '@/components/Navigation';
 import axiosInstance from '@/lib/axiosConfig';
+import { extractTenantIdFromJwt } from '@/lib/api';
 import { MotionRise } from '@/components/ScrollRiseProvider';
 
 const Login: React.FC = () => {
@@ -18,11 +19,34 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
 
   const handleAuthResponse = (data: any) => {
-    const { token, refreshToken, user, school } = data;
+    const token = data?.token || data?.access_token;
+    const refreshToken = data?.refreshToken || data?.refresh_token || '';
+    const user = data?.user || {};
+    const school = data?.school;
+    const resolvedTenantId =
+      data?.tenant_id ||
+      user?.tenant_id ||
+      user?.school_id ||
+      school?.id ||
+      extractTenantIdFromJwt(token);
+
     localStorage.setItem('accessToken', token);
     localStorage.setItem('authToken', token);
+    localStorage.setItem('token', token);
     localStorage.setItem('refreshToken', refreshToken);
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem(
+      'user',
+      JSON.stringify(
+        resolvedTenantId
+          ? { ...user, tenant_id: resolvedTenantId, school_id: user?.school_id || resolvedTenantId }
+          : user
+      )
+    );
+    if (resolvedTenantId) {
+      localStorage.setItem('tenantId', resolvedTenantId);
+      localStorage.setItem('x-tenant-id', resolvedTenantId);
+      localStorage.setItem('schoolId', resolvedTenantId);
+    }
     if (school) {
       localStorage.setItem('schoolId', school.id);
       localStorage.setItem('schoolName', school.name);

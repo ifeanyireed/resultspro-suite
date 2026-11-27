@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"net/http"
 	"strings"
@@ -74,6 +75,57 @@ func ResolveCanonicalTenantID(candidate string) string {
 	return raw
 }
 
+func isCentralAppHost(candidate string) bool {
+	lower := strings.ToLower(strings.TrimSpace(candidate))
+	if idx := strings.Index(lower, ":"); idx != -1 {
+		lower = lower[:idx]
+	}
+	if lower == "" || lower == "localhost" || lower == "127.0.0.1" ||
+		strings.HasSuffix(lower, ".onrender.com") ||
+		strings.HasSuffix(lower, ".vercel.app") {
+		return true
+	}
+	switch lower {
+	case "resultspro.ng", "www.resultspro.ng", "app.resultspro.ng",
+		"classroompro.resultspro.ng", "coursespro.resultspro.ng", "courses.resultspro.ng",
+		"classroompro.ng", "www.classroompro.ng":
+		return true
+	}
+	return false
+}
+
+func extractTenantFromBearer(authHeader string) string {
+	if !strings.HasPrefix(authHeader, "Bearer ") {
+		return ""
+	}
+	token := strings.TrimSpace(strings.TrimPrefix(authHeader, "Bearer "))
+	parts := strings.Split(token, ".")
+	if len(parts) < 2 {
+		return ""
+	}
+	rawPayload, err := base64.RawURLEncoding.DecodeString(parts[1])
+	if err != nil {
+		return ""
+	}
+	var claims map[string]interface{}
+	if err := json.Unmarshal(rawPayload, &claims); err != nil {
+		return ""
+	}
+	if tid, ok := claims["tenant_id"].(string); ok && strings.TrimSpace(tid) != "" {
+		return strings.TrimSpace(tid)
+	}
+	if tenantsMap, ok := claims["tenants"].(map[string]interface{}); ok {
+		for _, v := range tenantsMap {
+			if entry, ok := v.(map[string]interface{}); ok {
+				if idStr, ok := entry["id"].(string); ok && strings.TrimSpace(idStr) != "" {
+					return strings.TrimSpace(idStr)
+				}
+			}
+		}
+	}
+	return ""
+}
+
 func extractRequestTenantID(c *gin.Context) string {
 	candidates := []string{
 		strings.TrimSpace(c.GetHeader("X-Tenant-ID")),
@@ -82,17 +134,20 @@ func extractRequestTenantID(c *gin.Context) string {
 		strings.TrimSpace(c.Query("school_id")),
 		strings.TrimSpace(c.GetHeader("X-Tenant-Slug")),
 		strings.TrimSpace(c.Query("tenant")),
-		strings.TrimSpace(c.GetHeader("X-Tenant-Domain")),
+		extractTenantFromBearer(c.GetHeader("Authorization")),
+	}
+	if domain := strings.TrimSpace(c.GetHeader("X-Tenant-Domain")); domain != "" && !isCentralAppHost(domain) {
+		candidates = append(candidates, domain)
 	}
 	for _, cand := range candidates {
-		if cand != "" {
+		if cand != "" && !isCentralAppHost(cand) {
 			res := ResolveCanonicalTenantID(cand)
 			if res != "" {
 				return res
 			}
 		}
 	}
-	return "tenant-greenwoodhigh"
+	return ""
 }
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -121,7 +176,10 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		introspectURL := config.AppConfig.UsersServiceURL + "/auth/introspect"
-		domain := c.GetHeader("X-Tenant-Domain")
+		domain := strings.TrimSpace(c.GetHeader("X-Tenant-Domain"))
+		if isCentralAppHost(domain) {
+			domain = ""
+		}
 
 		payload, _ := json.Marshal(map[string]string{"token": token, "domain": domain})
 

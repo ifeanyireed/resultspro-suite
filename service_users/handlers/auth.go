@@ -314,6 +314,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	hasTenantAccess := false
 	var adminTenants []string
 	tenantRolesMap := make(map[string]map[string]string)
+	var primaryTenantID, primaryTenantSlug, primaryRole string
 
 	query := `
 		SELECT ur.role, ur.tenant_id, t.slug, t.custom_domain 
@@ -331,8 +332,22 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 			var tCustomDomain sql.NullString
 			if err := rows.Scan(&role, &tID, &tSlug, &tCustomDomain); err == nil {
 				roles = append(roles, role)
+				if primaryRole == "" {
+					primaryRole = role
+				}
+				if tID.Valid && primaryTenantID == "" {
+					primaryTenantID = tID.String
+					if tSlug.Valid {
+						primaryTenantSlug = tSlug.String
+					}
+				}
 				if tID.Valid && tID.String == input.TenantID {
 					hasTenantAccess = true
+					primaryTenantID = tID.String
+					if tSlug.Valid {
+						primaryTenantSlug = tSlug.String
+					}
+					primaryRole = role
 				}
 				if role == "platform-admin" || role == "superadmin" {
 					hasTenantAccess = true
@@ -384,11 +399,17 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	if primaryRole == "" && globalRole.Valid && globalRole.String != "" {
+		primaryRole = globalRole.String
+	}
+
 	// Issue JWT tokens
 	customClaims := map[string]interface{}{
 		"has_ican":     user.HasIcan,
 		"coin_balance": user.CoinBalance,
 		"tenants":      tenantRolesMap,
+		"tenant_id":    primaryTenantID,
+		"tenant_slug":  primaryTenantSlug,
 	}
 	if user.IcanPlan != nil {
 		customClaims["ican_plan"] = *user.IcanPlan
@@ -427,12 +448,20 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		"access_token":  accessToken,
 		"refresh_token": refreshToken,
 		"admin_tenants": adminTenants,
+		"tenant_id":     primaryTenantID,
+		"tenant_slug":   primaryTenantSlug,
+		"tenants":       tenantRolesMap,
 		"user": map[string]interface{}{
 			"id":             user.ID,
 			"email":          user.Email,
 			"name":           user.FullName,
+			"full_name":      user.FullName,
 			"avatar_url":     user.AvatarURL,
 			"account_status": user.AccountStatus,
+			"role":           primaryRole,
+			"tenant_id":      primaryTenantID,
+			"tenant_slug":    primaryTenantSlug,
+			"school_id":      primaryTenantID,
 		},
 	})
 }
@@ -729,39 +758,58 @@ func HandleIntrospect(w http.ResponseWriter, r *http.Request) {
 
 	var tenantID string
 	if input.Domain != "" {
-		// Resolve Tenant
+		// Try resolving Tenant if Domain is a tenant subdomain or custom domain.
+		// When users log in via central app URLs (e.g. resultspro.ng, classroompro.resultspro.ng, localhost),
+		// Domain is the app host rather than a tenant subdomain; in that case, fall back to the user's active tenant role.
 		slug := strings.Split(input.Domain, ".")[0]
-		err = db.DB.QueryRow("SELECT id FROM tenants WHERE slug = ? OR default_subdomain = ? OR custom_domain = ?", slug, input.Domain, input.Domain).Scan(&tenantID)
-		if err != nil {
-			utils.JSONResponse(w, http.StatusOK, models.IntrospectionResponse{
-				Active: false,
-				Reason: "tenant_not_found",
-				User:   &user,
-			})
-			return
+		err = db.DB.QueryRow("SELECT id FROM tenants WHERE id = ? OR slug = ? OR default_subdomain = ? OR custom_domain = ?", input.Domain, slug, input.Domain, input.Domain).Scan(&tenantID)
+		if err == nil && tenantID != "" {
+			// Check membership for this specific tenant domain
+			var role string
+			err = db.DB.QueryRow("SELECT role FROM user_tenant_roles WHERE user_id = ? AND tenant_id = ? AND status = 'active'", userID, tenantID).Scan(&role)
+
+			var isGlobalAdmin bool
+			var globalRole sql.NullString
+			db.DB.QueryRow("SELECT COALESCE(is_admin, false), role FROM users WHERE id = ?", userID).Scan(&isGlobalAdmin, &globalRole)
+
+			isSuperAdmin := isGlobalAdmin || (globalRole.Valid && (globalRole.String == "superadmin" || globalRole.String == "platform-admin"))
+
+			if err != nil && !isSuperAdmin {
+				var hasSuperRoleInTenant bool
+				db.DB.QueryRow("SELECT 1 FROM user_tenant_roles WHERE user_id = ? AND role = 'super-admin' AND status = 'active' LIMIT 1", userID).Scan(&hasSuperRoleInTenant)
+				if !hasSuperRoleInTenant {
+					utils.JSONResponse(w, http.StatusOK, models.IntrospectionResponse{
+						Active: false,
+						Reason: "user_not_in_tenant",
+						User:   &user,
+					})
+					return
+				}
+			}
 		}
+	}
 
-		// Check membership
-		var role string
-		err = db.DB.QueryRow("SELECT role FROM user_tenant_roles WHERE user_id = ? AND tenant_id = ? AND status = 'active'", userID, tenantID).Scan(&role)
-
-		// If Super Admin, they have universal access
-		var isGlobalAdmin bool
-		var globalRole sql.NullString
-		db.DB.QueryRow("SELECT COALESCE(is_admin, false), role FROM users WHERE id = ?", userID).Scan(&isGlobalAdmin, &globalRole)
-
-		isSuperAdmin := isGlobalAdmin || (globalRole.Valid && (globalRole.String == "superadmin" || globalRole.String == "platform-admin"))
-
-		if err != nil && !isSuperAdmin {
-			var hasSuperRoleInTenant bool
-			db.DB.QueryRow("SELECT 1 FROM user_tenant_roles WHERE user_id = ? AND role = 'super-admin' AND status = 'active' LIMIT 1", userID).Scan(&hasSuperRoleInTenant)
-			if !hasSuperRoleInTenant {
-				utils.JSONResponse(w, http.StatusOK, models.IntrospectionResponse{
-					Active: false,
-					Reason: "user_not_in_tenant",
-					User:   &user,
-				})
-				return
+	// If no tenant domain was matched (e.g. user logged in at central ClassroomPRO or ResultsPRO URL),
+	// resolve tenant_id directly from the user's active user_tenant_roles record or JWT claims.
+	if tenantID == "" {
+		_ = db.DB.QueryRow(`
+			SELECT tenant_id FROM user_tenant_roles
+			WHERE user_id = ? AND status = 'active' AND tenant_id IS NOT NULL AND tenant_id != ''
+			ORDER BY updated_at DESC, created_at DESC
+			LIMIT 1
+		`, userID).Scan(&tenantID)
+	}
+	if tenantID == "" {
+		if tid, ok := claims["tenant_id"].(string); ok && tid != "" {
+			tenantID = tid
+		} else if tenantsMap, ok := claims["tenants"].(map[string]interface{}); ok {
+			for _, entry := range tenantsMap {
+				if m, ok := entry.(map[string]interface{}); ok {
+					if idStr, ok := m["id"].(string); ok && idStr != "" {
+						tenantID = idStr
+						break
+					}
+				}
 			}
 		}
 	}

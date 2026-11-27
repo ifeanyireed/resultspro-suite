@@ -7,7 +7,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { Mail, Lock, ArrowRight, Loader2, Sparkles, Building2, Users, ShieldCheck } from 'lucide-react';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
-// import axiosInstance from '@/lib/axiosConfig'; // we can mock the login for now or use this
+import { extractTenantIdFromJwt, USERS_API_BASE } from '@/lib/api';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,12 +19,31 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const USERS_API = process.env.NEXT_PUBLIC_USERS_API;
+      const USERS_API = process.env.NEXT_PUBLIC_USERS_API || USERS_API_BASE;
       const res = await axios.post(`${USERS_API}/api/v1/auth/login`, { email, password });
       const token = res.data.access_token || res.data.token;
       if (token) {
         localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(res.data.user));
+        localStorage.setItem('accessToken', token);
+        localStorage.setItem('authToken', token);
+        if (res.data.refresh_token) {
+          localStorage.setItem('refreshToken', res.data.refresh_token);
+        }
+        const resolvedTenantId =
+          res.data.tenant_id ||
+          res.data.user?.tenant_id ||
+          res.data.user?.school_id ||
+          res.data.school?.id ||
+          extractTenantIdFromJwt(token);
+        const enrichedUser = resolvedTenantId
+          ? { ...(res.data.user || {}), tenant_id: resolvedTenantId, school_id: resolvedTenantId }
+          : res.data.user;
+        localStorage.setItem('user', JSON.stringify(enrichedUser));
+        if (resolvedTenantId) {
+          localStorage.setItem('tenantId', resolvedTenantId);
+          localStorage.setItem('x-tenant-id', resolvedTenantId);
+          localStorage.setItem('schoolId', resolvedTenantId);
+        }
         router.push('/dashboard');
       }
     } catch (err) {

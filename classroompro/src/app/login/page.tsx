@@ -48,15 +48,26 @@ function LoginForm() {
         return;
       }
 
-      const { access_token, refresh_token } = res.data;
+      const { access_token, refresh_token, tenant_id, tenant_slug } = res.data;
       
-      // Store tokens temporarily so the next API call is authenticated
+      // Store tokens and resolved tenant context from login response so subsequent API calls carry X-Tenant-ID
       localStorage.setItem('accessToken', access_token);
       localStorage.setItem('refreshToken', refresh_token);
+      if (tenant_id || tenant_slug) {
+        localStorage.setItem('tenantId', tenant_id || tenant_slug);
+        localStorage.setItem('x-tenant-id', tenant_id || tenant_slug);
+      }
       
-      // Fetch full profile from our local backend
-      const userRes = await api.get('/auth/me');
-      const user = userRes.data;
+      // Fetch full profile from our local backend or fall back to user payload returned by service_users
+      let user = res.data.user;
+      try {
+        const userRes = await api.get('/auth/me');
+        if (userRes.data) {
+          user = { ...user, ...userRes.data };
+        }
+      } catch {
+        // Use res.data.user from service_users login response
+      }
       
       setAuth(user, access_token, refresh_token);
       toast.success('Welcome back!');

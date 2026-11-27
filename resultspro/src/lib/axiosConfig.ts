@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getActiveTenantId } from './api';
 
 // Create axios instance with defaults
 const getApiUrl = () => {
@@ -26,7 +27,7 @@ axiosInstance.interceptors.request.use(
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-      const tenantId = localStorage.getItem('tenantId') || localStorage.getItem('x-tenant-id') || localStorage.getItem('active_tenant_id') || 'tenant-greenwoodhigh';
+      const tenantId = getActiveTenantId();
       if (tenantId) {
         config.headers['x-tenant-id'] = tenantId;
         config.headers['X-Tenant-ID'] = tenantId;
