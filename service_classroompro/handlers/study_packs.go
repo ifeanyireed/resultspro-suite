@@ -975,6 +975,9 @@ content_id: nerdc-pri4-math-t1-w02
 			},
 			Flashcards: []OfflineCardEntry{
 				{ID: "fc-pri4-math-1", TopicID: "nerdc-pri4-math-t1-w01", Front: "What is the value of the digit 6 in 648,392?", Back: "600,000 (Six Hundred Thousand)", Hint: "Count six digits from the right."},
+				{ID: "fc-pri4-math-2", TopicID: "nerdc-pri4-math-t1-w02", Front: "What does the Roman numeral XL represent?", Back: "40 (10 subtracted from 50)", Hint: "X before L means subtract 10 from 50."},
+				{ID: "fc-pri4-math-3", TopicID: "nerdc-pri4-math-t1-w02", Front: "What does the Roman numeral XC represent?", Back: "90 (10 subtracted from 100)", Hint: "X before C means subtract 10 from 100."},
+				{ID: "fc-pri4-math-4", TopicID: "nerdc-pri4-math-t1-w01", Front: "How many columns are on a Place Value Abacus up to One Million?", Back: "7 columns (U, T, H, Th, TTh, HTh, M)", Hint: "From Units up to Millions."},
 			},
 			Quizzes: []OfflineQuizEntry{
 				{
@@ -990,10 +993,59 @@ content_id: nerdc-pri4-math-t1-w02
 							"correct_index": 1,
 							"explanation":   "4 is in the Ten Thousands column, so its value is 40,000.",
 						},
+						{
+							"id":            "q2",
+							"question":      "Convert the Roman Numeral LXXIV to Hindu-Arabic numbers.",
+							"options":       []string{"64", "74", "84", "76"},
+							"correct_index": 1,
+							"explanation":   "L (50) + XX (20) + IV (4) = 74.",
+						},
+						{
+							"id":            "q3",
+							"question":      "Write Six Hundred and Five Thousand, Two Hundred and Nine in figures.",
+							"options":       []string{"650,209", "605,209", "605,290", "65,209"},
+							"correct_index": 1,
+							"explanation":   "600,000 + 5,000 + 200 + 9 = 605,209.",
+						},
 					},
 				},
 			},
-			Exams: []OfflineExamEntry{},
+			Exams: []OfflineExamEntry{
+				{
+					ID:                       "exam-pri4-math-t1-mock",
+					PackID:                   pack3ID,
+					Week:                     2,
+					ExamType:                 "COMMON_ENTRANCE_MOCK",
+					Title:                    "NERDC Primary 4 First Term Mathematics CBT Mock Exam",
+					Instructions:             "Answer all questions on Place Value up to 1,000,000 and Roman Numerals.",
+					DurationMin:              20,
+					PassScorePct:             60,
+					SyncToCampusproComponent: "CA1",
+					Questions: []map[string]interface{}{
+						{
+							"id":            "pri4-ex-1",
+							"question":      "What is the place value of 6 in 648,392?",
+							"options":       []string{"Sixty Thousand", "Six Hundred Thousand", "Six Million", "Six Thousand"},
+							"correct_index": 1,
+							"explanation":   "6 is in the Hundred Thousands column = 600,000.",
+						},
+						{
+							"id":            "pri4-ex-2",
+							"question":      "Write 94 in Roman Numerals.",
+							"options":       []string{"XCIV", "XCVI", "LXXXXIV", "ICV"},
+							"correct_index": 0,
+							"explanation":   "90 is XC and 4 is IV, so 94 is XCIV.",
+						},
+						{
+							"id":            "pri4-ex-3",
+							"question":      "Which fraction is equivalent to 2/3?",
+							"options":       []string{"4/9", "6/9", "3/6", "5/9"},
+							"correct_index": 1,
+							"explanation":   "Multiplying numerator and denominator of 2/3 by 3 gives 6/9.",
+						},
+					},
+				},
+			},
 			Badges: []OfflineBadgeEntry{
 				{
 					BadgeID:        "badge-pri4-math-gold",
@@ -1203,6 +1255,11 @@ func (h *Handler) GetStudyPacksCatalog(c *gin.Context) {
 			"quizzes_count":     len(bundle.Quizzes),
 			"exams_count":       len(bundle.Exams),
 			"badges_count":      len(bundle.Badges),
+			"lessons":           bundle.Lessons,
+			"videos":            bundle.Videos,
+			"flashcards":        bundle.Flashcards,
+			"quizzes":           bundle.Quizzes,
+			"exams":             bundle.Exams,
 			"badges":            bundle.Badges,
 			"entitled":          entitled,
 			"access_reason":     accessReason,

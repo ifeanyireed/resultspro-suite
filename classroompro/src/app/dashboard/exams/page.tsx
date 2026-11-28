@@ -1,23 +1,23 @@
 "use client";
 
 import { IconCertificate as GraduationCap, IconSearch as Search, IconFilter as Filter, IconChevronRight as ChevronRight, IconClock as Clock, IconCalendar as Calendar, IconAlertCircle as AlertCircle, IconLoader2 as Loader2, IconChevronLeft as ChevronLeft, IconCircleCheck as CheckCircle, IconTrophy as Trophy, IconActivity as Activity, IconHelpCircle as HelpCircle } from '@tabler/icons-react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn } from "../../../lib/utils";
 import React, { useEffect, useState, useMemo } from "react";
-import api from "@/lib/api";
-import { useAuthStore } from "@/store/useAuthStore";
+import api from "../../../lib/api";
+import { useAuthStore } from "../../../store/useAuthStore";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "../../../components/ui/select";
 
-import { Skeleton } from "@/components/ui/skeleton";
-import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
+import { Skeleton } from "../../../components/ui/skeleton";
+import { MotionRise, MotionStagger } from "../../../components/ScrollRiseProvider";
 
 export default function ExamsPage() {
   const user = useAuthStore((state) => state.user);
@@ -53,8 +53,8 @@ export default function ExamsPage() {
       }
 
       try {
-        const { syncEngine } = await import("@/lib/syncEngine");
-        const { offlineDb } = await import("@/lib/offlineDb");
+        const { syncEngine } = await import("../../../lib/syncEngine");
+        const { offlineDb } = await import("../../../lib/offlineDb");
         const localExams = await offlineDb.getAllExams();
         const { packs } = await syncEngine.fetchStudyPacksCatalog();
         const catalogExams = packs.flatMap((p: any) => p.exams || []);
@@ -128,7 +128,7 @@ export default function ExamsPage() {
     <div className="flex-1 pb-12">
       
       
-      <main className="p-8 max-w-7xl mx-auto space-y-8">
+      <main className="py-2 w-full flex flex-col gap-6" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2 font-display">Academic Assessments</h2>

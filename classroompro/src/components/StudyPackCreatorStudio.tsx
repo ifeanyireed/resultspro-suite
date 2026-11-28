@@ -310,6 +310,13 @@ export function StudyPackCreatorStudio({
         back: `Through structured problem-solving steps and CBT multiple-choice drills.`,
         hint: `Check Week ${w.week} worked example.`,
       },
+      {
+        id: `${packId}-fc-w0${w.week}-3`,
+        topic_id: `${packId}-w0${w.week}`,
+        front: `Key Formula / Rule for ${w.subtopic}:`,
+        back: `Apply the ${curriculum} standard method covered in Week ${w.week} of ${classLabel} ${subjectName}.`,
+        hint: `Refer to the Week ${w.week} offline diagram.`,
+      },
     ]);
 
     const quizzes = schemeWeeks.map((w) => ({
@@ -324,6 +331,25 @@ export function StudyPackCreatorStudio({
           options: [w.topic, "Unrelated topic", "Skipped syllabus", "None of the above"],
           correct_index: 0,
           explanation: `Week ${w.week} covers ${w.topic} (${w.subtopic}).`,
+        },
+        {
+          id: "q2",
+          question: `What is the primary learning objective of Week ${w.week} (${w.topic})?`,
+          options: ["Memorizing random facts", w.subtopic, "Ignoring units", "Skipping steps"],
+          correct_index: 1,
+          explanation: `The core objective of Week ${w.week} is ${w.subtopic}.`,
+        },
+        {
+          id: "q3",
+          question: `Which study modality is bundled with Week ${w.week} in this ${classLabel} ${subjectName} Study Pack?`,
+          options: [
+            "Only plain text",
+            "Markdown Notes, Offline Diagrams, Linked YouTube Video, SRS Flashcards & Quiz",
+            "Audio only",
+            "None",
+          ],
+          correct_index: 1,
+          explanation: `Every scheme week bundles Notes, Diagrams, Video, SRS Flashcards, and a Formative Quiz.`,
         },
       ],
     }));
@@ -483,7 +509,7 @@ export function StudyPackCreatorStudio({
   };
 
   return (
-    <div className="space-y-8 py-4">
+    <div className="flex flex-col gap-6 py-2" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {/* Header */}
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>

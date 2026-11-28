@@ -1,32 +1,40 @@
 'use client';
 
 import React from 'react';
-import { 
-  ChartBarIcon, 
-  BookOpenIcon, 
+import {
+  ChartBarIcon,
+  BookOpenIcon,
   VideoCameraIcon,
-  FolderIcon, 
+  FolderIcon,
   DocumentPlusIcon,
-  AcademicCapIcon 
+  AcademicCapIcon,
+  Squares2X2Icon,
 } from '@heroicons/react/24/outline';
-import ClassroomPRODashboard from '@/components/Dashboard/ClassroomPRODashboard';
 import { SpecialistAppContainer, AppSubtab } from '@/components/SpecialistAppContainer';
 import { MotionRise } from '@/components/ScrollRiseProvider';
-import { 
-  NotesListView, 
+import {
+  AdminCurriculumConsoleView,
+  AdminStudyPacksView,
+  NotesListView,
   VideosListView,
-  QuizzesListView, 
-  FlashcardsListView, 
-  TeacherCreateNoteView 
+  QuizzesListView,
+  FlashcardsListView,
+  TeacherCreateNoteView,
 } from '@classroompro/modules';
 
 export default function AdminClassroomHub() {
   const tabs: AppSubtab[] = [
     {
-      id: 'analytics',
-      label: 'Classroom Analytics',
+      id: 'oversight',
+      label: 'Curriculum & Study Pack Console',
       icon: ChartBarIcon,
-      component: ClassroomPRODashboard,
+      component: AdminCurriculumConsoleView,
+    },
+    {
+      id: 'study-packs',
+      label: 'Study Pack Creator Studio (Free / Paid)',
+      icon: Squares2X2Icon,
+      component: AdminStudyPacksView,
     },
     {
       id: 'notes',
@@ -63,12 +71,12 @@ export default function AdminClassroomHub() {
   return (
     <MotionRise>
       <SpecialistAppContainer
-        appTitle="Classroom Curriculum & Learning Management"
-        appSubtitle="NERDC curriculum lesson handouts, timed interactive quizzes, and spaced-repetition flashcards."
+        appTitle="ClassroomPRO — Principal Curriculum, Study Pack Creator & Learning Oversight"
+        appSubtitle="Single-codebase ClassroomPRO admin workspace: school-wide NERDC Study Packs, Free/Paid pricing moderation, topic-gap tracking, and official score sync audit."
         appBadge="ClassroomPRO"
         accentColor="#146ef5"
         tabs={tabs}
-        defaultTabId="analytics"
+        defaultTabId="oversight"
       />
     </MotionRise>
   );

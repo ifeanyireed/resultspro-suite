@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "../../../components/ui/select";
 import { Skeleton } from "../../../components/ui/skeleton";
-import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
+import { MotionRise, MotionStagger } from "../../../components/ScrollRiseProvider";
 
 export default function QuizzesPage() {
   const user = useAuthStore((state) => state.user);
@@ -50,56 +50,127 @@ export default function QuizzesPage() {
         // Fallback to local IndexedDB Study Pack quizzes
       }
 
-      if (loadedQuizzes.length === 0) {
-        try {
-          const { syncEngine } = await import("../../../lib/syncEngine");
-          const { offlineDb } = await import("../../../lib/offlineDb");
-          const localQuizzes = await offlineDb.getAllQuizzes();
-          const { packs } = await syncEngine.fetchStudyPacksCatalog();
-          const catalogQuizzes = packs.flatMap((p: any) => p.quizzes || []);
-          const sourceQuizzes = localQuizzes.length > 0 ? localQuizzes : catalogQuizzes;
-          loadedQuizzes = sourceQuizzes.map((q: any) => ({
-            id: q.id,
-            title: q.title,
-            duration: q.duration_min || 10,
-            questionsCount: q.questions?.length || 2,
-            bestScore: 85,
-            isNew: false,
-            isMastered: true,
-            note: {
-              topic: {
-                id: q.topic_id,
-                term: 2,
-                subjectId: "mathematics",
-                subject: { id: "mathematics", name: "Mathematics" },
-                class: { name: "JSS 2", school: { curriculum: "NERDC" } },
-              },
-            },
-          }));
-        } catch {
-          // ignore
+      const parseQuizQuestions = (rawQuestions: any): any[] => {
+        if (Array.isArray(rawQuestions)) return rawQuestions;
+        if (typeof rawQuestions === "string" && rawQuestions.trim()) {
+          try {
+            const parsed = JSON.parse(rawQuestions);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch {
+            return [];
+          }
         }
-      } else {
-        loadedQuizzes = loadedQuizzes.map((q: any) => ({
-          ...q,
-          duration: q.duration || q.duration_min || 10,
-          questionsCount: q.questionsCount || 2,
-          bestScore: q.bestScore ?? 85,
-          note: q.note || {
-            topic: {
-              id: q.topic_id || q.id,
-              term: 2,
-              subjectId: q.subject_id || "mathematics",
-              subject: {
-                id: q.subject_id || "mathematics",
-                name:
-                  (q.subject_id || "mathematics").charAt(0).toUpperCase() +
-                  (q.subject_id || "mathematics").slice(1),
+        return [];
+      };
+
+      try {
+        const { syncEngine } = await import("../../../lib/syncEngine");
+        const { offlineDb } = await import("../../../lib/offlineDb");
+        await syncEngine.ensureSampleStudyPackSeededForTestStudent();
+        const localQuizzes = await offlineDb.getAllQuizzes();
+        const { packs } = await syncEngine.fetchStudyPacksCatalog();
+        const catalogQuizzes = packs.flatMap((p: any) =>
+          (p.quizzes || []).map((q: any) => ({
+            ...q,
+            subject_id: p.subject_id,
+            subject_name: p.subject_name,
+            class_label: p.class_label,
+            term: p.term === "first-term" ? 1 : p.term === "third-term" ? 3 : 2,
+            curriculum: p.curriculum || "NERDC",
+          }))
+        );
+
+        const seedQuizMap = new Map<string, any>();
+        for (const cq of catalogQuizzes) {
+          seedQuizMap.set(cq.id, cq);
+        }
+
+        if (loadedQuizzes.length === 0) {
+          const sourceQuizzes = catalogQuizzes.length > 0 ? catalogQuizzes : localQuizzes;
+          loadedQuizzes = sourceQuizzes.map((q: any) => {
+            const seed = seedQuizMap.get(q.id) || q;
+            const parsedQuestions = parseQuizQuestions(q.questions ?? seed.questions);
+            const qCount = parsedQuestions.length || q.questionsCount || 3;
+            const subjId = q.subject_id || seed.subject_id || "mathematics";
+            const subjName =
+              q.subject_name ||
+              seed.subject_name ||
+              subjId.charAt(0).toUpperCase() + subjId.slice(1);
+            return {
+              id: q.id,
+              title: q.title,
+              duration: q.duration || q.duration_min || 10,
+              questions: parsedQuestions,
+              questionsCount: qCount,
+              bestScore: 85,
+              bestTotal: 100,
+              isNew: false,
+              isMastered: false,
+              note: {
+                topic: {
+                  id: q.topic_id || q.id,
+                  term: q.term || seed.term || 2,
+                  subjectId: subjId,
+                  subject: { id: subjId, name: subjName },
+                  class: {
+                    name: q.class_label || seed.class_label || "JSS 2",
+                    school: { curriculum: q.curriculum || seed.curriculum || "NERDC" },
+                  },
+                },
               },
-              class: { name: "JSS 2", school: { curriculum: "NERDC" } },
-            },
-          },
-        }));
+            };
+          });
+        } else {
+          loadedQuizzes = loadedQuizzes.map((q: any) => {
+            const seed = seedQuizMap.get(q.id);
+            const parsedQuestions = parseQuizQuestions(
+              q.questions ?? q.Questions ?? seed?.questions
+            );
+            const qCount =
+              parsedQuestions.length || q.questionsCount || seed?.questions?.length || 3;
+            const subjId =
+              q.subject_id ||
+              q.note?.topic?.subjectId ||
+              seed?.subject_id ||
+              "mathematics";
+            const subjName =
+              q.note?.topic?.subject?.name ||
+              seed?.subject_name ||
+              subjId.charAt(0).toUpperCase() + subjId.slice(1);
+            return {
+              ...q,
+              duration: q.duration || q.duration_min || seed?.duration_min || 10,
+              questions: parsedQuestions,
+              questionsCount: qCount,
+              bestScore: q.bestScore ?? 85,
+              bestTotal: q.bestTotal || 100,
+              note: q.note || {
+                topic: {
+                  id: q.topic_id || q.id,
+                  term: seed?.term || 2,
+                  subjectId: subjId,
+                  subject: {
+                    id: subjId,
+                    name: subjName,
+                  },
+                  class: {
+                    name: seed?.class_label || "JSS 2",
+                    school: { curriculum: seed?.curriculum || "NERDC" },
+                  },
+                },
+              },
+            };
+          });
+        }
+      } catch {
+        // ignore
+      }
+
+      if (loadedSubjects.length === 0) {
+        loadedSubjects = [
+          { id: "mathematics", name: "Mathematics" },
+          { id: "physics", name: "Physics" },
+        ];
       }
 
       setQuizzes(loadedQuizzes);
@@ -167,7 +238,7 @@ export default function QuizzesPage() {
     <div className="flex-1 pb-12">
       
       
-      <main className="p-8 space-y-8">
+      <main className="py-2 w-full flex flex-col gap-6" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2 font-display">Practice Quizzes</h2>
@@ -327,19 +398,19 @@ export default function QuizzesPage() {
 
                 <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-emerald-600 transition-colors">{quiz.title}</h3>
                 <p className="text-xs text-gray-500 mb-6">
-                    {quiz.note?.topic?.subject?.name || "General"} • {quiz.questions?.length || 0} Questions
+                    {quiz.note?.topic?.subject?.name || "General"} • {(Array.isArray(quiz.questions) ? quiz.questions.length : 0) || quiz.questionsCount || 3} Questions
                 </p>
 
                 <div className="flex items-center justify-between pt-6 border-t border-white/5">
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1 text-[10px] text-gray-500 font-bold">
-                      <Clock className="w-3 h-3" /> 15 min
+                      <Clock className="w-3 h-3" /> {quiz.duration || quiz.duration_min || 10} min
                     </div>
                     <div className={cn(
                       "flex items-center gap-1 text-[10px] font-bold",
                       quiz.isMastered ? "text-emerald-600" : "text-amber-600"
                     )}>
-                      <Trophy className="w-3 h-3" /> {quiz.bestTotal > 0 ? Math.round((quiz.bestScore / quiz.bestTotal) * 100) : 0}%
+                      <Trophy className="w-3 h-3" /> {quiz.bestTotal > 0 ? Math.round((quiz.bestScore / quiz.bestTotal) * 100) : (quiz.bestScore ?? 85)}%
                     </div>
                   </div>
                   <Link href={`/dashboard/quizzes/${quiz.id}`}>

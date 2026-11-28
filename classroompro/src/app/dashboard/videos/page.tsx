@@ -117,7 +117,7 @@ export default function VideosListPage() {
   }
 
   return (
-    <div className="space-y-8 py-4">
+    <div className="flex flex-col gap-6 py-2" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {/* Header */}
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>

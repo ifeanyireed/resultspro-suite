@@ -15,12 +15,12 @@ import {
   IconCreditCard as CreditCard,
   IconShieldCheck as ShieldCheck,
 } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
-import { useAuthStore } from "@/store/useAuthStore";
-import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
-import api, { getCampusParentWards } from "@/lib/api";
-import { syncEngine } from "@/lib/syncEngine";
-import { offlineDb, OfflineBadgeRecord } from "@/lib/offlineDb";
+import { Button } from "../../../components/ui/button";
+import { useAuthStore } from "../../../store/useAuthStore";
+import { MotionRise, MotionStagger } from "../../../components/ScrollRiseProvider";
+import api, { getCampusParentWards } from "../../../lib/api";
+import { syncEngine } from "../../../lib/syncEngine";
+import { offlineDb, OfflineBadgeRecord } from "../../../lib/offlineDb";
 
 export default function ParentLearningHub() {
   const user = useAuthStore((state) => state.user);
@@ -123,7 +123,7 @@ export default function ParentLearningHub() {
   };
 
   return (
-    <div className="space-y-8 py-4">
+    <div className="flex flex-col gap-5 py-2" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
       {/* Header */}
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>

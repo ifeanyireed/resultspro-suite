@@ -267,6 +267,13 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
             correct_index: 2,
             explanation: 'A fraction is undefined when its denominator equals zero: y - 5 = 0 => y = 5.',
           },
+          {
+            id: 'q3',
+            question: 'Find the LCM of the denominators 3a and 4a².',
+            options: ['7a²', '12a', '12a²', '12a³'],
+            correct_index: 2,
+            explanation: 'LCM of 3 and 4 is 12; highest power of a is a², giving 12a².',
+          },
         ],
       },
       {
@@ -281,6 +288,20 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
             options: ['12', '18', '24', '28'],
             correct_index: 2,
             explanation: '(n/3) + (n/4) = 14 => 7n/12 = 14 => n = 24.',
+          },
+          {
+            id: 'q2',
+            question: 'A trader sold 2/5 of a bale of cloth in the morning and 1/4 in the afternoon. What fraction was sold altogether?',
+            options: ['3/9', '13/20', '7/20', '3/20'],
+            correct_index: 1,
+            explanation: '(2/5) + (1/4) = (8 + 5)/20 = 13/20.',
+          },
+          {
+            id: 'q3',
+            question: 'Solve for x: (x / 2) - (x / 5) = 6',
+            options: ['10', '15', '20', '30'],
+            correct_index: 2,
+            explanation: 'Multiply by LCM 10: 5x - 2x = 60 => 3x = 60 => x = 20.',
           },
         ],
       },
@@ -303,6 +324,13 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
             options: ['x >= -5', 'x <= -5', 'x <= 5', 'x >= 5'],
             correct_index: 1,
             explanation: 'Dividing by -4 reverses the inequality symbol from >= to <=: x <= -5.',
+          },
+          {
+            id: 'q3',
+            question: 'Which circle represents x >= 4 on a number line?',
+            options: ['Open circle at 4', 'Shaded (closed) circle at 4', 'No circle at 4', 'Dotted line at 0'],
+            correct_index: 1,
+            explanation: 'Because 4 is included in x >= 4, a shaded (closed) circle is drawn at 4.',
           },
         ],
       },
@@ -484,6 +512,20 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
         back: 'H = (u² sin² θ) / (2g)',
         hint: 'Use v² = u_y² - 2gH at v = 0.',
       },
+      {
+        id: 'fc-sss2-phy-3',
+        topic_id: 'nerdc-sss2-phy-t2-w04',
+        front: 'State the formula for the Time of Flight (T) of a projectile on level ground.',
+        back: 'T = (2u sin θ) / g',
+        hint: 'Double the time to reach maximum height.',
+      },
+      {
+        id: 'fc-sss2-phy-4',
+        topic_id: 'nerdc-sss2-phy-t2-w04',
+        front: "State Snell's Law of Refraction.",
+        back: 'The ratio of the sine of the angle of incidence to the sine of the angle of refraction is constant (n = sin i / sin r).',
+        hint: 'Relates sin(i) and sin(r) to refractive index n.',
+      },
     ],
     quizzes: [
       {
@@ -498,6 +540,20 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
             options: ['30.0°', '41.8°', '48.6°', '60.0°'],
             correct_index: 1,
             explanation: 'sin(C) = 1 / 1.5 = 0.6667 => C = 41.8°.',
+          },
+          {
+            id: 'q2',
+            question: 'At what angle of projection is the horizontal range of a projectile maximum?',
+            options: ['30°', '45°', '60°', '90°'],
+            correct_index: 1,
+            explanation: 'Range R = (u² sin 2θ)/g is maximum when sin 2θ = 1 => θ = 45°.',
+          },
+          {
+            id: 'q3',
+            question: 'A projectile is launched with initial speed 20 m/s at 30° to the horizontal (g = 10 m/s²). Find its time of flight.',
+            options: ['1.0 s', '2.0 s', '3.0 s', '4.0 s'],
+            correct_index: 1,
+            explanation: 'T = (2 * 20 * sin 30°) / 10 = 2.0 s.',
           },
         ],
       },
@@ -520,6 +576,20 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
             options: ['1.0 s', '2.0 s', '3.5 s', '4.0 s'],
             correct_index: 1,
             explanation: 'T = (2 u sin 30°)/g = (2 * 20 * 0.5) / 10 = 2.0 s.',
+          },
+          {
+            id: 'phy-ex-2',
+            question: 'Calculate the maximum height reached by the projectile in Question 1.',
+            options: ['5.0 m', '10.0 m', '15.0 m', '20.0 m'],
+            correct_index: 0,
+            explanation: 'H = (u² sin² 30°)/(2g) = (400 * 0.25)/20 = 5.0 m.',
+          },
+          {
+            id: 'phy-ex-3',
+            question: 'What is the horizontal range of a projectile fired at 45° with speed 10 m/s (g = 10 m/s²)?',
+            options: ['5.0 m', '10.0 m', '15.0 m', '20.0 m'],
+            correct_index: 1,
+            explanation: 'R = (u² sin 90°)/g = 100 / 10 = 10.0 m.',
           },
         ],
       },
@@ -656,6 +726,13 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
             correct_index: 1,
             explanation: 'L (50) + XX (20) + IV (4) = 74.',
           },
+          {
+            id: 'q3',
+            question: 'Write Six Hundred and Five Thousand, Two Hundred and Nine in figures.',
+            options: ['650,209', '605,209', '605,290', '65,209'],
+            correct_index: 1,
+            explanation: '600,000 + 5,000 + 200 + 9 = 605,209.',
+          },
         ],
       },
     ],
@@ -665,7 +742,7 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
         topic_id: 'nerdc-pri4-math-t1-w01',
         front: 'What is the value of the digit 7 in 725,410?',
         back: '700,000 (Seven Hundred Thousand)',
-        hint: 'Count seven digits from the right.',
+        hint: 'Count six digits from the right.',
       },
       {
         id: 'fc-pri4-math-2',
@@ -674,8 +751,57 @@ export const FALLBACK_NERDC_PACKAGES: any[] = [
         back: '40 (10 subtracted from 50)',
         hint: 'X before L means subtract 10 from 50.',
       },
+      {
+        id: 'fc-pri4-math-3',
+        topic_id: 'nerdc-pri4-math-t1-w02',
+        front: 'What does the Roman numeral XC represent?',
+        back: '90 (10 subtracted from 100)',
+        hint: 'X before C means subtract 10 from 100.',
+      },
+      {
+        id: 'fc-pri4-math-4',
+        topic_id: 'nerdc-pri4-math-t1-w01',
+        front: 'How many columns are on a Place Value Abacus up to One Million?',
+        back: '7 columns (U, T, H, Th, TTh, HTh, M)',
+        hint: 'From Units up to Millions.',
+      },
     ],
-    exams: [],
+    exams: [
+      {
+        id: 'exam-pri4-math-t1-mock',
+        pack_id: 'pkg-nerdc-pri4-math-t1',
+        week: 2,
+        exam_type: 'COMMON_ENTRANCE_MOCK',
+        title: 'NERDC Primary 4 First Term Mathematics CBT Mock Exam',
+        instructions: 'Answer all questions on Place Value up to 1,000,000 and Roman Numerals.',
+        duration_min: 20,
+        pass_score_pct: 60,
+        sync_to_campuspro_component: 'CA1',
+        questions: [
+          {
+            id: 'pri4-ex-1',
+            question: 'What is the place value of 6 in 648,392?',
+            options: ['Sixty Thousand', 'Six Hundred Thousand', 'Six Million', 'Six Thousand'],
+            correct_index: 1,
+            explanation: '6 is in the Hundred Thousands column = 600,000.',
+          },
+          {
+            id: 'pri4-ex-2',
+            question: 'Write 94 in Roman Numerals.',
+            options: ['XCIV', 'XCVI', 'LXXXXIV', 'ICV'],
+            correct_index: 0,
+            explanation: '90 is XC and 4 is IV, so 94 is XCIV.',
+          },
+          {
+            id: 'pri4-ex-3',
+            question: 'Which fraction is equivalent to 2/3?',
+            options: ['4/9', '6/9', '3/6', '5/9'],
+            correct_index: 1,
+            explanation: 'Multiplying numerator and denominator of 2/3 by 3 gives 6/9.',
+          },
+        ],
+      },
+    ],
     badges: [
       {
         badge_id: 'badge-pri4-math-gold',
@@ -869,10 +995,19 @@ class OfflineSyncEngine {
     await this.enforceRevokedPacksPurge([packId]);
   }
 
-  // Study Packs are standalone database-persisted entities and are NOT pre-linked to a student.
-  // They are related to a student on request (when a student or parent claims, purchases, or downloads a pack).
+  // Ensures the default Free NERDC Study Pack is seeded into IndexedDB so counts and materials are never 0 on first visit.
   async ensureSampleStudyPackSeededForTestStudent(): Promise<void> {
-    // No-op: packs remain in the database catalog until requested/downloaded by a student or parent.
+    if (typeof window === 'undefined') return;
+    try {
+      const existingPkgs = await offlineDb.getAllPackages();
+      const existingQuizzes = await offlineDb.getAllQuizzes();
+      const existingFlashcards = await offlineDb.getAllFlashcards();
+      if (existingPkgs.length === 0 || existingQuizzes.length === 0 || existingFlashcards.length === 0) {
+        await this.downloadPackage('pkg-nerdc-jss2-math-t2');
+      }
+    } catch {
+      // Ignore IndexedDB unavailability in SSR
+    }
   }
 
   async fetchStudyPacksCatalog(filters?: {
@@ -901,12 +1036,40 @@ class OfflineSyncEngine {
       }
     }
 
+    const fallbackById = new Map<string, any>(
+      FALLBACK_NERDC_PACKAGES.map((fp) => [fp.package_id || fp.pack_id, fp])
+    );
+
     const localCreated = this.getLocalCreatedPacks();
     const combinedMap = new Map<string, any>();
     for (const p of [...localCreated, ...serverPacks, ...FALLBACK_NERDC_PACKAGES]) {
       const id = p.pack_id || p.package_id;
       if (!combinedMap.has(id)) {
-        combinedMap.set(id, { ...p, pack_id: id, package_id: id });
+        const seed = fallbackById.get(id);
+        const lessons = Array.isArray(p.lessons) && p.lessons.length > 0 ? p.lessons : seed?.lessons || [];
+        const videos = Array.isArray(p.videos) && p.videos.length > 0 ? p.videos : seed?.videos || [];
+        const flashcards = Array.isArray(p.flashcards) && p.flashcards.length > 0 ? p.flashcards : seed?.flashcards || [];
+        const quizzes = Array.isArray(p.quizzes) && p.quizzes.length > 0 ? p.quizzes : seed?.quizzes || [];
+        const exams = Array.isArray(p.exams) && p.exams.length > 0 ? p.exams : seed?.exams || [];
+        const badges = Array.isArray(p.badges) && p.badges.length > 0 ? p.badges : seed?.badges || [];
+        const schemeOfWork =
+          Array.isArray(p.scheme_of_work) && p.scheme_of_work.length > 0
+            ? p.scheme_of_work
+            : seed?.scheme_of_work || [];
+
+        combinedMap.set(id, {
+          ...(seed || {}),
+          ...p,
+          pack_id: id,
+          package_id: id,
+          scheme_of_work: schemeOfWork,
+          lessons,
+          videos,
+          flashcards,
+          quizzes,
+          exams,
+          badges,
+        });
       }
     }
 
@@ -962,12 +1125,12 @@ class OfflineSyncEngine {
           entitled,
           is_revoked: isRevoked,
           ward_entitlements: wardEntitlements,
-          notes_count: pkg.notes_count ?? (pkg.lessons?.length || 0),
-          videos_count: pkg.videos_count ?? (pkg.videos?.length || 0),
-          flashcards_count: pkg.flashcards_count ?? (pkg.flashcards?.length || 0),
-          quizzes_count: pkg.quizzes_count ?? (pkg.quizzes?.length || 0),
-          exams_count: pkg.exams_count ?? (pkg.exams?.length || 0),
-          badges_count: pkg.badges_count ?? (pkg.badges?.length || 0),
+          notes_count: Math.max(pkg.notes_count || 0, pkg.lessons?.length || 0),
+          videos_count: Math.max(pkg.videos_count || 0, pkg.videos?.length || 0),
+          flashcards_count: Math.max(pkg.flashcards_count || 0, pkg.flashcards?.length || 0),
+          quizzes_count: Math.max(pkg.quizzes_count || 0, pkg.quizzes?.length || 0),
+          exams_count: Math.max(pkg.exams_count || 0, pkg.exams?.length || 0),
+          badges_count: Math.max(pkg.badges_count || 0, pkg.badges?.length || 0),
           local_version: local?.package_version ?? null,
           sync_state: syncState,
           downloaded_at: local?.downloaded_at ?? null,

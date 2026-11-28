@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "../../landing_page/src";
 
 @font-face {
   font-family: 'Varela Round';

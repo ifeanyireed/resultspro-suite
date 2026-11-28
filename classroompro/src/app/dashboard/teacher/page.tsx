@@ -11,10 +11,10 @@ import {
   IconChevronRight as ChevronRight,
   IconCheck as Check,
 } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
-import { useAuthStore } from "@/store/useAuthStore";
-import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
-import { syncEngine } from "@/lib/syncEngine";
+import { Button } from "../../../components/ui/button";
+import { useAuthStore } from "../../../store/useAuthStore";
+import { MotionRise, MotionStagger } from "../../../components/ScrollRiseProvider";
+import { syncEngine } from "../../../lib/syncEngine";
 
 export default function TeacherDashboard() {
   const user = useAuthStore((state) => state.user);
@@ -26,7 +26,7 @@ export default function TeacherDashboard() {
     const load = async () => {
       const [{ packs: list }, scoresData] = await Promise.all([
         syncEngine.fetchStudyPacksCatalog(),
-        import("@/lib/api")
+        import("../../../lib/api")
           .then((m) => m.getCampusOfficialExamScores())
           .catch(() => ({ official_scores: [] })),
       ]);
@@ -82,7 +82,7 @@ export default function TeacherDashboard() {
   ];
 
   return (
-    <div className="space-y-8 py-4">
+    <div className="flex flex-col gap-5 py-2" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
       {/* Header */}
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
@@ -112,7 +112,7 @@ export default function TeacherDashboard() {
       </MotionRise>
 
       {/* Stats Grid */}
-      <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" style={{ gap: "1.25rem" }}>
         {teacherStats.map((stat, idx) => (
           <MotionRise
             key={idx}
@@ -131,7 +131,7 @@ export default function TeacherDashboard() {
         ))}
       </MotionStagger>
 
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-3 gap-5" style={{ gap: "1.25rem" }}>
         {/* Active Teacher Study Packs */}
         <MotionRise className="lg:col-span-2 bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-5">
           <div className="flex items-center justify-between">

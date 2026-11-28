@@ -26,47 +26,89 @@ export default function FlashcardStudyClient() {
   useEffect(() => {
     const fetchQueue = async () => {
       setLoading(true);
+      let loadedCards: any[] = [];
       try {
         const res = await api.get(`/flashcards/${id}/queue?mode=${mode}`);
-        setCards(Array.isArray(res.data) ? res.data : []);
+        const raw = res.data?.flashcards || res.data?.data || res.data;
+        if (Array.isArray(raw) && raw.length > 0) {
+          loadedCards = raw;
+        }
       } catch (error) {
-        console.error("Failed to fetch queue:", error);
-        setCards([]);
-        toast.error("Failed to load cards");
-      } finally {
-        setLoading(false);
+        // Fallback to Study Pack SRS flashcards
       }
+
+      if (loadedCards.length === 0) {
+        try {
+          const { syncEngine } = await import("../../../../lib/syncEngine");
+          const { offlineDb } = await import("../../../../lib/offlineDb");
+          await syncEngine.ensureSampleStudyPackSeededForTestStudent();
+          const { packs } = await syncEngine.fetchStudyPacksCatalog();
+          const matchedPack = packs.find(
+            (p: any) =>
+              String(p.package_id) === String(id) ||
+              String(p.pack_id) === String(id)
+          );
+          if (matchedPack && Array.isArray(matchedPack.flashcards) && matchedPack.flashcards.length > 0) {
+            loadedCards = matchedPack.flashcards.map((fc: any) => ({
+              ...fc,
+              flashcard: { title: matchedPack.title },
+            }));
+          } else {
+            const localCards = await offlineDb.getAllFlashcards();
+            const filtered = localCards.filter(
+              (fc: any) =>
+                String(fc.package_id) === String(id) ||
+                String(fc.topic_id) === String(id) ||
+                String(fc.id) === String(id)
+            );
+            loadedCards =
+              filtered.length > 0
+                ? filtered
+                : localCards.length > 0
+                ? localCards
+                : packs.flatMap((p: any) => p.flashcards || []);
+          }
+        } catch (err) {
+          console.error("Fallback flashcard load failed:", err);
+        }
+      }
+
+      setCards(loadedCards);
+      setLoading(false);
     };
     if (id) fetchQueue();
   }, [id, mode]);
 
   const handleEvaluation = async (rating: number) => {
     const card = (cards || [])[currentCardIdx];
+    const earned = rating >= 3 ? 15 : 10;
     try {
-      const res = await api.post('/flashcards/review', {
-        flashcardItemId: card.id,
-        rating
-      });
-      
-      setXpEarned(prev => prev + res.data.xpEarned);
-      
+      await api
+        .post("/flashcards/review", {
+          card_id: card.id,
+          flashcardItemId: card.id,
+          quality: rating,
+          rating,
+        })
+        .catch(() => {});
+
+      setXpEarned((prev) => prev + earned);
+
       if (currentCardIdx < (cards || []).length - 1) {
         setIsFlipped(false);
         setShowHint(false);
-        setCurrentCardIdx(prev => prev + 1);
+        setCurrentCardIdx((prev) => prev + 1);
       } else {
-        // Log study session for analytics
-        try {
-          await api.post('/gamification/session', {
-            duration: Math.ceil((cards || []).length * 0.5), // Estimate 30s per card
-            activity: "Flashcards"
-          });
-        } catch (e) {
-          console.error("Failed to log session:", e);
-        }
-        
-        toast.success(`Session complete! You earned ${xpEarned + res.data.xpEarned} XP! 🎉`);
-        router.push('/dashboard/flashcards');
+        await api
+          .post("/gamification/session", {
+            duration_seconds: Math.max(60, (cards || []).length * 30),
+            duration: Math.ceil((cards || []).length * 0.5),
+            activity: "Flashcards",
+          })
+          .catch(() => {});
+
+        toast.success(`Session complete! You earned ${xpEarned + earned} XP! 🎉`);
+        router.push("/dashboard/flashcards");
       }
     } catch (error) {
       console.error("Failed to record review:", error);

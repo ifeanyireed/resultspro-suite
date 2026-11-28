@@ -90,7 +90,7 @@ export default function TeacherCreateVideoPage() {
   };
 
   return (
-    <div className="space-y-6 py-4 max-w-4xl mx-auto">
+    <div className="flex flex-col gap-6 py-2 max-w-4xl mx-auto">
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#146ef5] text-white text-[10px] font-black uppercase tracking-wider mb-2">

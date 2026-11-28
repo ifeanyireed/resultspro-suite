@@ -7,12 +7,12 @@ import {
   IconArrowLeft as ArrowLeft,
   IconCalendar as Calendar,
 } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../../../components/ui/button";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
-import api, { getCampusParentWards, getCampusOfficialExamScores } from "@/lib/api";
+import { Skeleton } from "../../../../components/ui/skeleton";
+import { MotionRise, MotionStagger } from "../../../../components/ScrollRiseProvider";
+import api, { getCampusParentWards, getCampusOfficialExamScores } from "../../../../lib/api";
 
 export default function ChildProgressReport() {
   const [wards, setWards] = useState<any[]>([]);
@@ -71,7 +71,7 @@ export default function ChildProgressReport() {
             <Skeleton className="h-6 w-48 rounded" />
           </div>
         </div>
-        <main className="p-8 max-w-7xl mx-auto space-y-10">
+        <main className="py-4 w-full flex flex-col gap-7">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
               <Skeleton key={i} className="h-32 rounded-[32px]" />
@@ -117,7 +117,7 @@ export default function ChildProgressReport() {
         </div>
       </MotionRise>
 
-      <main className="p-8 max-w-7xl mx-auto space-y-10">
+      <main className="py-4 w-full flex flex-col gap-7">
         {!activeWard ? (
           <div className="p-12 rounded-3xl bg-white border border-gray-100 text-center text-sm text-gray-500">
             No linked wards found on <code>service_campuspro</code> for this parent account.

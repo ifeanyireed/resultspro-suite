@@ -1,6 +1,7 @@
 @import "./nets.css";
 
 @import "tailwindcss";
+@source "../../landing_page/src";
 
 @font-face {
   font-family: 'Dropa';

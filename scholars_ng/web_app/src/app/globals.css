@@ -1,4 +1,9 @@
 @import "tailwindcss";
+@source "../../../classroompro/src";
+@source "../../../resultspro/src";
+@source "../../../tutorspro/src";
+@source "../../../puzzlepro/src";
+@source "../../../landing_page/src";
 
 @font-face {
   font-family: 'Dropa';

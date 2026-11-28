@@ -8,7 +8,7 @@ import { Label } from "../../../../components/ui/label";
 import Link from "next/link";
 import { cn } from "../../../../lib/utils";
 import { Skeleton } from "../../../../components/ui/skeleton";
-import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
+import { MotionRise, MotionStagger } from "../../../../components/ScrollRiseProvider";
 import api, { getCampusBranches, getCampusClasses } from "../../../../lib/api";
 
 interface Question {
@@ -132,7 +132,7 @@ export default function CreateQuizPage() {
 
   return (
     <div className="flex-1">
-      <main className="p-4 md:p-8 max-w-6xl mx-auto space-y-6">
+      <main className="py-2 w-full flex flex-col gap-6">
         <MotionRise className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <Link
             href="/dashboard/teacher"

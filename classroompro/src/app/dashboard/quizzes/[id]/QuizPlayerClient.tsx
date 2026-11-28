@@ -23,26 +23,95 @@ export default function QuizPlayerClient() {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
+    const normalizeQuestions = (rawQuestions: any): any[] => {
+      let arr: any[] = [];
+      if (Array.isArray(rawQuestions)) {
+        arr = rawQuestions;
+      } else if (typeof rawQuestions === "string" && rawQuestions.trim()) {
+        try {
+          const parsed = JSON.parse(rawQuestions);
+          arr = Array.isArray(parsed) ? parsed : [];
+        } catch {
+          arr = [];
+        }
+      }
+      return arr.map((q: any, idx: number) => {
+        const opts = Array.isArray(q.options)
+          ? q.options
+          : q.optionsJson
+          ? typeof q.optionsJson === "string"
+            ? JSON.parse(q.optionsJson)
+            : q.optionsJson
+          : [];
+        const correctIdx =
+          typeof q.correct_index === "number" ? q.correct_index : 0;
+        return {
+          ...q,
+          id: q.id || `q-${idx + 1}`,
+          text: q.text || q.question || "",
+          question: q.question || q.text || "",
+          options: opts,
+          correctAnswer:
+            q.correctAnswer ??
+            (typeof correctIdx === "number" && opts[correctIdx]
+              ? opts[correctIdx]
+              : opts[0] || ""),
+        };
+      });
+    };
+
     const fetchQuiz = async () => {
       try {
         const res = await api.get(`/quizzes/${id}`);
-        const quizData = res.data;
-        
-        // Parse optionsJson if it's a string
-        quizData.questions = quizData.questions.map((q: any) => ({
-          ...q,
-          options: q.optionsJson ? (typeof q.optionsJson === 'string' ? JSON.parse(q.optionsJson) : q.optionsJson) : []
-        }));
-        
-        setQuiz(quizData);
-
-        // Check if bookmarked
-        const bookmarksRes = await api.get('/bookmarks?type=QUIZ');
-        const bookmarks = Array.isArray(bookmarksRes.data) ? bookmarksRes.data : [];
-        setIsBookmarked(bookmarks.some((b: any) => b.contentId === id));
+        const quizData = res.data?.quiz || res.data;
+        if (quizData) {
+          const normalized = normalizeQuestions(
+            quizData.questions ?? quizData.Questions
+          );
+          if (normalized.length > 0) {
+            setQuiz({
+              ...quizData,
+              questions: normalized,
+            });
+            setTimeLeft((quizData.duration_min || quizData.duration || 15) * 60);
+            try {
+              const bookmarksRes = await api.get("/bookmarks?type=QUIZ");
+              const bookmarks = Array.isArray(bookmarksRes.data)
+                ? bookmarksRes.data
+                : [];
+              setIsBookmarked(bookmarks.some((b: any) => b.contentId === id));
+            } catch {
+              // ignore bookmark check failure
+            }
+            setLoading(false);
+            return;
+          }
+        }
       } catch (error) {
-        console.error("Failed to fetch quiz:", error);
-        toast.error("Failed to load quiz");
+        // Fallback to local IndexedDB & Study Pack catalog
+      }
+
+      try {
+        const { syncEngine } = await import("../../../../lib/syncEngine");
+        const { offlineDb } = await import("../../../../lib/offlineDb");
+        await syncEngine.ensureSampleStudyPackSeededForTestStudent();
+        const localQuizzes = await offlineDb.getAllQuizzes();
+        const { packs } = await syncEngine.fetchStudyPacksCatalog();
+        const catalogQuizzes = packs.flatMap((p: any) => p.quizzes || []);
+        const allQuizzes = [...localQuizzes, ...catalogQuizzes];
+        const found =
+          allQuizzes.find((q: any) => String(q.id) === String(id)) ||
+          allQuizzes[0];
+        if (found) {
+          const normalized = normalizeQuestions(found.questions);
+          setQuiz({
+            ...found,
+            questions: normalized,
+          });
+          setTimeLeft((found.duration_min || found.duration || 12) * 60);
+        }
+      } catch (err) {
+        console.error("Failed to load fallback quiz:", err);
       } finally {
         setLoading(false);
       }

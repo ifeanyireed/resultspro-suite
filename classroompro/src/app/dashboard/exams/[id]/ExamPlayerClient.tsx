@@ -21,22 +21,84 @@ export default function ExamPlayerClient() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    const normalizeQuestions = (rawQuestions: any): any[] => {
+      let arr: any[] = [];
+      if (Array.isArray(rawQuestions)) {
+        arr = rawQuestions;
+      } else if (typeof rawQuestions === "string" && rawQuestions.trim()) {
+        try {
+          const parsed = JSON.parse(rawQuestions);
+          arr = Array.isArray(parsed) ? parsed : [];
+        } catch {
+          arr = [];
+        }
+      }
+      return arr.map((q: any, idx: number) => {
+        const opts = Array.isArray(q.options)
+          ? q.options
+          : q.optionsJson
+          ? typeof q.optionsJson === "string"
+            ? JSON.parse(q.optionsJson)
+            : q.optionsJson
+          : [];
+        const correctIdx =
+          typeof q.correct_index === "number" ? q.correct_index : 0;
+        return {
+          ...q,
+          id: q.id || `ex-q-${idx + 1}`,
+          text: q.text || q.question || "",
+          question: q.question || q.text || "",
+          options: opts,
+          correctAnswer:
+            q.correctAnswer ??
+            (typeof correctIdx === "number" && opts[correctIdx]
+              ? opts[correctIdx]
+              : opts[0] || ""),
+        };
+      });
+    };
+
     const fetchExam = async () => {
       try {
         const res = await api.get(`/exams/${id}`);
-        const examData = res.data;
-        
-        // Parse optionsJson for multiple choice questions
-        examData.questions = examData.questions.map((q: any) => ({
-          ...q,
-          options: q.optionsJson ? JSON.parse(q.optionsJson) : []
-        }));
-        
-        setExam(examData);
-        setTimeLeft(examData.duration * 60); // Set timer based on exam duration
+        const examData = res.data?.exam || res.data;
+        if (examData) {
+          const normalized = normalizeQuestions(examData.questions);
+          if (normalized.length > 0) {
+            setExam({
+              ...examData,
+              questions: normalized,
+            });
+            setTimeLeft((examData.duration || examData.duration_min || 30) * 60);
+            setLoading(false);
+            return;
+          }
+        }
       } catch (error) {
-        console.error("Failed to fetch exam:", error);
-        toast.error("Failed to load exam. Please try again.");
+        // Fallback to Study Pack CBT exams
+      }
+
+      try {
+        const { syncEngine } = await import("@/lib/syncEngine");
+        const { offlineDb } = await import("@/lib/offlineDb");
+        await syncEngine.ensureSampleStudyPackSeededForTestStudent();
+        const localExams = await offlineDb.getAllExams();
+        const { packs } = await syncEngine.fetchStudyPacksCatalog();
+        const catalogExams = packs.flatMap((p: any) => p.exams || []);
+        const allExams = [...localExams, ...catalogExams];
+        const found =
+          allExams.find((ex: any) => String(ex.id) === String(id)) ||
+          allExams[0];
+        if (found) {
+          const normalized = normalizeQuestions(found.questions);
+          setExam({
+            ...found,
+            questions: normalized,
+          });
+          setTimeLeft((found.duration_min || found.duration || 30) * 60);
+        }
+      } catch (err) {
+        console.error("Failed to load fallback exam:", err);
       } finally {
         setLoading(false);
       }

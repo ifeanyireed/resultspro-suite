@@ -15,9 +15,9 @@ import {
   IconCertificate as GraduationCap,
   IconAward as Award,
 } from "@tabler/icons-react";
-import { useAuthStore } from "@/store/useAuthStore";
-import { Button } from "@/components/ui/button";
-import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
+import { useAuthStore } from "../../store/useAuthStore";
+import { Button } from "../../components/ui/button";
+import { MotionRise, MotionStagger } from "../../components/ScrollRiseProvider";
 import {
   offlineDb,
   OfflinePackageRecord,
@@ -27,8 +27,8 @@ import {
   OfflineFlashcardRecord,
   OfflineExamRecord,
   OfflineBadgeRecord,
-} from "@/lib/offlineDb";
-import { syncEngine } from "@/lib/syncEngine";
+} from "../../lib/offlineDb";
+import { syncEngine } from "../../lib/syncEngine";
 
 export default function StudentDashboard() {
   const { user } = useAuthStore();
@@ -46,6 +46,7 @@ export default function StudentDashboard() {
   const [catalogPacks, setCatalogPacks] = useState<any[]>([]);
 
   const loadStudentPackData = async () => {
+    await syncEngine.ensureSampleStudyPackSeededForTestStudent();
     const [{ packs: catalog }, pkgs, lsns, vids, qzs, fcs, exs, bdgs, progs] = await Promise.all([
       syncEngine.fetchStudyPacksCatalog(),
       offlineDb.getAllPackages(),
@@ -181,7 +182,7 @@ export default function StudentDashboard() {
   ];
 
   return (
-    <div className="space-y-8 py-2">
+    <div className="flex flex-col gap-5 py-2" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
       {/* Welcome Banner */}
       <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div>
@@ -217,7 +218,7 @@ export default function StudentDashboard() {
       </MotionRise>
 
       {/* Top Metric Cards */}
-      <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <MotionStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" style={{ gap: "1.25rem" }}>
         {metrics.map((m, idx) =>
           m.primary ? (
             <MotionRise
@@ -260,7 +261,7 @@ export default function StudentDashboard() {
         )}
       </MotionStagger>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5" style={{ gap: "1.25rem" }}>
         {/* Multi-Modal Learning Stream Powered by the Active Study Pack */}
         <MotionRise className="lg:col-span-2 bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-5">
           <div className="flex items-center justify-between">
@@ -312,7 +313,7 @@ export default function StudentDashboard() {
         </MotionRise>
 
         {/* Right Column: Pack Badges & Offline Sync Status */}
-        <div className="space-y-6">
+        <div className="flex flex-col gap-5" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           <MotionRise className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 text-[10px] font-black uppercase tracking-wider">
               <Award className="w-3.5 h-3.5" />

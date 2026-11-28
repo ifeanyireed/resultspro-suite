@@ -34,7 +34,7 @@ import {
 } from "../../../components/ui/select";
 import { Button } from "../../../components/ui/button";
 import { Skeleton } from "../../../components/ui/skeleton";
-import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
+import { MotionRise, MotionStagger } from "../../../components/ScrollRiseProvider";
 
 export default function NotesListPage() {
   const user = useAuthStore((state) => state.user);
@@ -197,7 +197,7 @@ export default function NotesListPage() {
     return (
       <div className="flex-1 pb-12 animate-in fade-in duration-500">
         
-        <div className="p-8 max-w-7xl mx-auto space-y-10">
+        <div className="py-2 w-full flex flex-col gap-6" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-24 rounded-[32px]" />)}
           </div>
@@ -225,7 +225,7 @@ export default function NotesListPage() {
     <div className="flex-1 pb-12">
       
       
-      <div className="p-8 max-w-7xl mx-auto space-y-10">
+      <div className="py-2 w-full flex flex-col gap-6" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         {/* Stats Row */}
         <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
            <div className="bg-white shadow-sm border border-gray-100 p-6 rounded-[32px] flex items-center gap-4 relative overflow-hidden group">

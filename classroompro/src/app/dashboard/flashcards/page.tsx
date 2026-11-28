@@ -17,7 +17,7 @@ import {
 } from "../../../components/ui/select";
 
 import { Skeleton } from "../../../components/ui/skeleton";
-import { MotionRise, MotionStagger } from "@/components/ScrollRiseProvider";
+import { MotionRise, MotionStagger } from "../../../components/ScrollRiseProvider";
 
 export default function FlashcardsPage() {
   const user = useAuthStore((state) => state.user);
@@ -42,6 +42,7 @@ export default function FlashcardsPage() {
       setLoading(true);
       let setsData: any[] = [];
       let subjectsData: any[] = [];
+      let rawApiCards: any[] = [];
       try {
         const [setsRes, subjectsRes, profileRes] = await Promise.all([
           api.get(`/flashcards?${user?.class_id ? `classId=${user.class_id}` : ''}`),
@@ -51,25 +52,16 @@ export default function FlashcardsPage() {
 
         const rawCards = setsRes.data?.data || setsRes.data?.flashcards || setsRes.data || [];
         if (Array.isArray(rawCards) && rawCards.length > 0) {
-          setsData = rawCards[0]?.front
-            ? [
-                {
-                  id: "fc-pack-deck-1",
-                  title: "NERDC Scheme-of-Work SRS Flashcard Deck",
-                  cardsCount: rawCards.length,
-                  mastery: 86,
-                  lastStudied: new Date().toISOString(),
-                  note: {
-                    topic: {
-                      id: rawCards[0].topic_id || "nerdc-jss2-math-t2-w01",
-                      term: 2,
-                      subjectId: rawCards[0].subject_id || "mathematics",
-                      subject: { id: "mathematics", name: "Mathematics" },
-                    },
-                  },
-                },
-              ]
-            : rawCards;
+          if (rawCards[0]?.front) {
+            rawApiCards = rawCards;
+          } else {
+            setsData = rawCards.map((s: any) => ({
+              ...s,
+              items: Array.isArray(s.items) ? s.items : [],
+              cardsCount: s.cardsCount || s.items?.length || 0,
+              dueCount: s.dueCount ?? s.items?.length ?? s.cardsCount ?? 1,
+            }));
+          }
         }
         subjectsData = Array.isArray(subjectsRes.data) ? subjectsRes.data : [];
         setGamificationProfile(profileRes.data?.profile || null);
@@ -80,29 +72,59 @@ export default function FlashcardsPage() {
       if (setsData.length === 0) {
         try {
           const { syncEngine } = await import("../../../lib/syncEngine");
+          await syncEngine.ensureSampleStudyPackSeededForTestStudent();
           const { packs } = await syncEngine.fetchStudyPacksCatalog();
-          setsData = packs.map((pkg: any) => ({
-            id: pkg.package_id,
-            title: `${pkg.title || pkg.subject_name} — SRS Flashcard Deck`,
-            cardsCount: pkg.flashcards_count || pkg.flashcards?.length || 0,
-            mastery: 86,
-            lastStudied: pkg.updated_at || new Date().toISOString(),
-            note: {
-              topic: {
-                id: pkg.package_id,
-                term: pkg.term === "first-term" ? 1 : 2,
-                subjectId: pkg.subject_id,
-                subject: { id: pkg.subject_id, name: pkg.subject_name },
+          setsData = packs.map((pkg: any) => {
+            const packCards =
+              Array.isArray(pkg.flashcards) && pkg.flashcards.length > 0
+                ? pkg.flashcards
+                : rawApiCards.filter(
+                    (c: any) =>
+                      c.subject_id === pkg.subject_id ||
+                      (c.topic_id && String(c.topic_id).includes(pkg.class_code))
+                  );
+            const count = packCards.length || pkg.flashcards_count || 0;
+            return {
+              id: pkg.package_id,
+              title: `${pkg.title || pkg.subject_name} — SRS Flashcard Deck`,
+              items: packCards,
+              cardsCount: count,
+              dueCount: count,
+              mastery: 86,
+              lastStudied: pkg.updated_at || new Date().toISOString(),
+              author: {
+                name: pkg.creator_name || "NERDC Curriculum Team",
+                role: pkg.creator_role || "TEACHER",
               },
-            },
-          }));
+              note: {
+                topic: {
+                  id: pkg.package_id,
+                  term: pkg.term === "first-term" ? 1 : pkg.term === "third-term" ? 3 : 2,
+                  subjectId: pkg.subject_id,
+                  subject: { id: pkg.subject_id, name: pkg.subject_name },
+                },
+              },
+            };
+          });
         } catch {
           // ignore
         }
       }
 
+      if (subjectsData.length === 0) {
+        subjectsData = [
+          { id: "mathematics", name: "Mathematics" },
+          { id: "physics", name: "Physics" },
+        ];
+      }
+
+      const totalCardsSum = setsData.reduce(
+        (acc, s) => acc + (s.items?.length || s.cardsCount || 0),
+        0
+      );
+
       setFlashcardSets(setsData);
-      setTotalCount(setsData.length);
+      setTotalCount(totalCardsSum);
       setSubjects(subjectsData);
       setLoading(false);
     };
@@ -190,7 +212,7 @@ export default function FlashcardsPage() {
     <div className="flex-1 pb-12">
       
       
-      <main className="p-8 space-y-8">
+      <main className="py-2 w-full flex flex-col gap-6" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         <MotionRise className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2 font-display">Study Sets</h2>
@@ -335,7 +357,7 @@ export default function FlashcardsPage() {
                       <Layers className="w-5 h-5" />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">{set.items?.length || 0} Cards</span>
+                      <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">{set.items?.length || set.cardsCount || 0} Cards</span>
                       <div className="flex items-center gap-2 mt-1">
                         <span className={cn(
                           "text-[9px] font-bold px-1.5 py-0.5 rounded border border-gray-100 w-fit uppercase tracking-wider",

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { SparklesIcon } from '@heroicons/react/24/outline';
 import { useAppHost } from './AppHostContext';
 import { MotionRise } from '@/components/ScrollRiseProvider';
 
@@ -8,6 +9,7 @@ export interface AppSubtab {
   id: string;
   label: string;
   icon: any;
+  badge?: string;
   component: React.ComponentType<any>;
 }
 
@@ -17,8 +19,9 @@ interface SpecialistAppContainerProps {
   tabs: AppSubtab[];
   defaultTabId?: string;
   appBadge?: string;
-  accentColor?: string; // e.g. '#2563eb', '#10b981', '#7c3aed', '#f59e0b'
+  accentColor?: string; // e.g. '#146ef5', '#10b981', '#0D1060', '#f59e0b'
   contextProps?: any;
+  headerActions?: React.ReactNode;
 }
 
 export function SpecialistAppContainer({
@@ -27,8 +30,9 @@ export function SpecialistAppContainer({
   tabs,
   defaultTabId,
   appBadge,
-  accentColor = '#2563eb',
+  accentColor = '#146ef5',
   contextProps = {},
+  headerActions,
 }: SpecialistAppContainerProps) {
   const [activeTab, setActiveTab] = useState(defaultTabId || tabs[0]?.id || '');
   const { tenant, user, token, standalone } = useAppHost();
@@ -45,39 +49,45 @@ export function SpecialistAppContainer({
   };
 
   return (
-    <div className="w-full bg-slate-50 min-h-screen">
-      {/* ── App Header ── */}
-      <MotionRise className="bg-white border-b border-slate-200 px-6 py-5 flex items-center justify-between">
+    <div className="min-w-0 w-full max-w-full space-y-6">
+      {/* ── Top Header Area Above the Toggle Bar (Matches /student/campus-os) ── */}
+      <MotionRise className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mt-2">
         <div>
-          <div className="flex items-center gap-2.5">
-            <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">{appTitle}</h1>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{appTitle}</h1>
             {appBadge && (
-              <span 
-                className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border"
-                style={{ 
-                  backgroundColor: `${accentColor}15`, 
-                  borderColor: `${accentColor}40`,
-                  color: accentColor 
+              <span
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border"
+                style={{
+                  backgroundColor: `${accentColor}12`,
+                  borderColor: `${accentColor}35`,
+                  color: accentColor,
                 }}
               >
+                <SparklesIcon className="w-3.5 h-3.5" />
                 {appBadge}
               </span>
             )}
+            {tenant?.name && (
+              <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-semibold">
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: accentColor }} />
+                {tenant.name}
+              </span>
+            )}
           </div>
-          <p className="text-xs text-slate-500 mt-1">{appSubtitle}</p>
+          <p className="text-sm text-gray-500 mt-1">{appSubtitle}</p>
         </div>
 
-        {tenant && (
-          <div className="hidden sm:flex items-center gap-2 text-xs font-semibold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
-            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: accentColor }} />
-            <span>{tenant.name}</span>
+        {headerActions && (
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            {headerActions}
           </div>
         )}
       </MotionRise>
 
-      {/* ── Horizontal Subtabs Navigation (Admin Pattern) ── */}
-      <MotionRise delay={0.05} className="bg-white border-b border-slate-200 px-6 pt-3">
-        <div className="flex space-x-2 overflow-x-auto pb-px scrollbar-hide">
+      {/* ── Sticky Horizontal Pill Toggle Bar (Matches /student/campus-os) ── */}
+      <div className="sticky top-20 z-20 w-full min-w-0 max-w-full">
+        <div className="w-full bg-white/95 backdrop-blur-md rounded-full p-1.5 shadow-sm border border-gray-200/80 overflow-x-auto custom-scrollbar flex items-center gap-1.5">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -85,30 +95,39 @@ export function SpecialistAppContainer({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-4 py-3 border-b-2 font-medium text-xs transition-all whitespace-nowrap ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 transition-all cursor-pointer ${
                   isActive
-                    ? 'font-bold'
-                    : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
+                    ? 'text-white shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
                 }`}
                 style={
                   isActive
                     ? {
-                        borderColor: accentColor,
-                        color: accentColor,
+                        backgroundColor: accentColor,
+                        boxShadow: `0 1px 3px ${accentColor}40`,
                       }
                     : {}
                 }
               >
-                {Icon && <Icon className="w-4 h-4 stroke-[2]" />}
+                {Icon && <Icon className="w-4 h-4 shrink-0" />}
                 <span>{tab.label}</span>
+                {tab.badge && (
+                  <span
+                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                      isActive ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-600'
+                    }`}
+                  >
+                    {tab.badge}
+                  </span>
+                )}
               </button>
             );
           })}
         </div>
-      </MotionRise>
+      </div>
 
       {/* ── Mounted Feature Slice Content ── */}
-      <MotionRise key={activeTab} delay={0.08} className="p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto">
+      <MotionRise key={activeTab} delay={0.04} className="w-full pt-1">
         {ActiveComponent ? (
           <ActiveComponent {...mergedProps} />
         ) : (

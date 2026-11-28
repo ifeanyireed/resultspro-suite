@@ -43,6 +43,7 @@ import {
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import api from '@/lib/api';
 import { MotionRise, MotionStagger } from '@/components/ScrollRiseProvider';
+import { ParentLearningHubView } from '@classroompro/modules';
 
 export type ParentDashboardTab = 'overview' | 'modular' | 'campuspro';
 export type ModularSubtab = 'classroompro' | 'tutorspro' | 'puzzlepro' | 'resultspro';
@@ -846,62 +847,8 @@ export default function ParentDashboard() {
             })}
           </div>
 
-          {/* Subtab 1: ClassroomPRO */}
-          {modularSubtab === 'classroompro' && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white p-5 rounded-2xl border border-gray-200">
-                  <span className="text-xs text-gray-500 font-bold uppercase">Enrolled Subjects</span>
-                  <div className="text-3xl font-black text-gray-900 mt-1">
-                    {modular.classroompro?.active_courses || 9} Subjects
-                  </div>
-                  <div className="text-xs text-emerald-600 font-semibold mt-1">100% Curriculum Coverage</div>
-                </div>
-                <div className="bg-white p-5 rounded-2xl border border-gray-200">
-                  <span className="text-xs text-gray-500 font-bold uppercase">Syllabus Completion</span>
-                  <div className="text-3xl font-black text-blue-600 mt-1">
-                    {modular.classroompro?.syllabus_completion || 78.4}%
-                  </div>
-                  <div className="text-xs text-gray-500 mt-1">Term 1 Milestone Met</div>
-                </div>
-                <div className="bg-white p-5 rounded-2xl border border-gray-200">
-                  <span className="text-xs text-gray-500 font-bold uppercase">Homework Completion</span>
-                  <div className="text-3xl font-black text-emerald-600 mt-1">92.5%</div>
-                  <div className="text-xs text-gray-500 mt-1">Top Tier Student Punctuality</div>
-                </div>
-              </div>
-
-              {/* Homework & Assignments List */}
-              <div className="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm">
-                <h3 className="text-base font-bold text-gray-900 mb-4">Daily Homework & Class Assignments</h3>
-                <div className="divide-y divide-gray-100">
-                  {modular.classroompro?.homework_due?.map((hw: any) => (
-                    <div key={hw.id} className="py-4 flex items-center justify-between gap-4">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-bold text-blue-600 uppercase">{hw.subject}</span>
-                          <span
-                            className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                              hw.status === 'SUBMITTED'
-                                ? 'bg-emerald-100 text-emerald-800'
-                                : 'bg-amber-100 text-amber-800'
-                            }`}
-                          >
-                            {hw.status}
-                          </span>
-                        </div>
-                        <h4 className="text-sm font-bold text-gray-900">{hw.title}</h4>
-                        <div className="text-xs text-gray-500">📅 Due Date: {hw.due}</div>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-xs font-semibold text-gray-500">{hw.score}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Subtab 1: ClassroomPRO (Direct single-codebase mount from @classroompro/modules) */}
+          {modularSubtab === 'classroompro' && <ParentLearningHubView />}
 
           {/* Subtab 2: TutorsPRO */}
           {modularSubtab === 'tutorspro' && (
